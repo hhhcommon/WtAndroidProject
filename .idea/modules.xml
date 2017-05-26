@@ -5,6 +5,7 @@
       <module fileurl="file://$PROJECT_DIR$/CommonPlat/CommonPlat.iml" filepath="$PROJECT_DIR$/CommonPlat/CommonPlat.iml" />
       <module fileurl="file://$PROJECT_DIR$/WtAppProject.iml" filepath="$PROJECT_DIR$/WtAppProject.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/hardware/hardware.iml" filepath="$PROJECT_DIR$/hardware/hardware.iml" />
     </modules>
   </component>
 </project>

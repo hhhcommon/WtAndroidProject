@@ -1,1 +1,1 @@
-include ':app', ':CommonPlat'
+include ':app', ':CommonPlat', ':hardware'
