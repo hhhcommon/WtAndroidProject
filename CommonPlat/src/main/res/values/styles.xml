@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!--启动页主题-->
+    <style name="SplashTheme" parent="@android:style/Theme.Light.NoTitleBar.Fullscreen">
+        <item name="android:windowBackground">@drawable/wt_splash_background</item>
+    </style>
+
+    <style name="MatchParentWrapContent">
+        <item name="@android:layout_width">match_parent</item>
+        <item name="@android:layout_height">wrap_content</item>
+    </style>
+
+    <style name="WrapContentMatchParent">
+        <item name="@android:layout_width">wrap_content</item>
+        <item name="@android:layout_height">match_parent</item>
+    </style>
+
+    <style name="MatchParent">
+        <item name="@android:layout_width">match_parent</item>
+        <item name="@android:layout_height">match_parent</item>
+    </style>
+
+    <style name="WrapContent">
+        <item name="@android:layout_width">wrap_content</item>
+        <item name="@android:layout_height">wrap_content</item>
+    </style>
+
+</resources>
