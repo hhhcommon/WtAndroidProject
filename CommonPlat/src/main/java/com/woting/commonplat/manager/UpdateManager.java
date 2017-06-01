@@ -136,7 +136,7 @@ public class UpdateManager {
 
     // 新版本样式
     private void showDownloadDialog() {
-        View progressView = LayoutInflater.from(mContext).inflate(R.layout.progress_dialog_view, null);
+        View progressView = LayoutInflater.from(mContext).inflate(R.layout.dialog_download_view, null);
         textProgress = (TextView) progressView.findViewById(R.id.text_progress);
         progressBar = (ProgressBar) progressView.findViewById(R.id.pb_progressbar);
         pd = new ProgressDialog(mContext);

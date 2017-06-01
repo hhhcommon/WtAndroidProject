@@ -18,11 +18,11 @@ public class GlobalUrlConfig {
     /**
      * socket请求ip
      */
-    public static String socketUrl;//测试服务器地址
+    public static String socketUrl;//服务器地址
     /**
      * http请求总url
      */
-    public static String baseUrl;//测试服务器地址
+    public static String baseUrl;//服务器地址
     /**
      * "我的上传" 相关接口
      */

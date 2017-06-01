@@ -1,11 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <!--启动页主题-->
-    <style name="SplashTheme" parent="@android:style/Theme.Light.NoTitleBar.Fullscreen">
-        <item name="android:windowBackground">@drawable/wt_splash_background</item>
-    </style>
-
     <style name="MatchParentWrapContent">
         <item name="@android:layout_width">match_parent</item>
         <item name="@android:layout_height">wrap_content</item>
@@ -34,6 +29,6 @@
         <item name="android:indeterminateDrawable">
             @android:drawable/progress_indeterminate_horizontal
         </item>
-        <item name="android:progressDrawable">@drawable/shape_progressbar_mini</item>
+        <item name="android:progressDrawable">@drawable/wt_download_progressbar_mini</item>
     </style>
 </resources>

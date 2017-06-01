@@ -26,7 +26,11 @@ public abstract class VolleyNewCallback {
             @Override
             public void onResponse(String result) {
                 requestSuccess(result);
-                Log.i("请求成功返回的数据", result.toString());
+                try {
+                    Log.i("请求成功返回的数据", result.toString());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         };
     }
@@ -43,7 +47,11 @@ public abstract class VolleyNewCallback {
             public void onErrorResponse(VolleyError error) {
                 requestError(error);
 
-                Log.i("请求失败返回的信息", error.toString());
+                try {
+                    Log.i("请求失败返回的信息", error.toString());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         };
     }

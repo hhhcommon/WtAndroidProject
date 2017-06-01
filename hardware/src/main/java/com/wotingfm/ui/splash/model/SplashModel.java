@@ -3,6 +3,7 @@ package com.wotingfm.ui.splash.model;
 import com.android.volley.VolleyError;
 import com.woting.commonplat.net.volley.VolleyCallback;
 import com.woting.commonplat.net.volley.VolleyRequest;
+import com.wotingfm.common.config.GlobalUrlConfig;
 import com.wotingfm.ui.base.baseinterface.OnLoadInterface;
 import com.wotingfm.ui.base.model.CommonModel;
 import com.wotingfm.ui.base.model.UserInfo;
@@ -36,7 +37,7 @@ public class SplashModel extends UserInfo  {
      * @param listener 监听
      */
     public void loadNews(String url, String tag, JSONObject js, final OnLoadInterface listener) {
-        VolleyRequest.requestPost(url, tag, js, new VolleyCallback() {
+        VolleyRequest.requestPost(GlobalUrlConfig.baseUrl+url, tag, js, new VolleyCallback() {
             @Override
             protected void requestSuccess(JSONObject result) {
                 listener.onSuccess(result);
