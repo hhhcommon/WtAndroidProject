@@ -3,7 +3,7 @@ package com.wotingfm.ui.splash.presenter;
 import android.content.Intent;
 
 import com.woting.commonplat.config.GlobalNetWorkConfig;
-import com.wotingfm.ui.MainActivity;
+import com.wotingfm.ui.main.view.MainActivity;
 import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.ui.base.baseinterface.OnLoadInterface;
 import com.wotingfm.ui.base.basepresenter.BasePresenter;

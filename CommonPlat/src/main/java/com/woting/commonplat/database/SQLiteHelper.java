@@ -9,7 +9,7 @@ import android.database.sqlite.SQLiteOpenHelper;
  * 2016/12/28 11:21
  * 邮箱：645700751@qq.com
  */
-public class SQLiteHelper extends SQLiteOpenHelper {
+public class  SQLiteHelper extends SQLiteOpenHelper {
 
     public SQLiteHelper(Context paramContext,String dbVersionName ,int dbVersionCode) {
         super(paramContext, dbVersionName, null, dbVersionCode);

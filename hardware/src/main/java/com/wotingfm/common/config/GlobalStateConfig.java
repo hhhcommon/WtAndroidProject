@@ -44,4 +44,8 @@ public class GlobalStateConfig {
      * PersonClientDevice(个人客户端设备) 终端类型1=app,2=设备，3=pc
      */
     public static int PCDType;
+    /**
+     * 此时的界面
+     */
+    public static int activityType =1;
 }
