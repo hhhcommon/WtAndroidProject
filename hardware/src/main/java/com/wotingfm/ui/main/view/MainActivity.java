@@ -3,8 +3,10 @@ package com.wotingfm.ui.main.view;
 import android.app.TabActivity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.WindowManager;
 import android.widget.TabHost;
 import com.wotingfm.R;
+import com.wotingfm.ui.intercom.main.InterPhoneActivity;
 import com.wotingfm.ui.main.presenter.MainPresenter;
 import com.wotingfm.ui.test.DuiJiangActivity;
 import com.wotingfm.ui.test.MineActivity;
@@ -19,6 +21,8 @@ public class MainActivity extends TabActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);        // 透明状态栏
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);    // 透明导航栏
         InitTextView();
         mainPresenter = new MainPresenter(this);
     }
@@ -29,7 +33,7 @@ public class MainActivity extends TabActivity {
         tabHost.addTab(tabHost.newTabSpec("one").setIndicator("one")
                 .setContent(new Intent(this, PlayerActivity.class)));
         tabHost.addTab(tabHost.newTabSpec("two").setIndicator("two")
-                .setContent(new Intent(this, DuiJiangActivity.class)));
+                .setContent(new Intent(this, InterPhoneActivity.class)));
         tabHost.addTab(tabHost.newTabSpec("three").setIndicator("three")
                 .setContent(new Intent(this, MineActivity.class)));
     }

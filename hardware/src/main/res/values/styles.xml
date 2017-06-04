@@ -8,7 +8,10 @@
     <style name="SplashTheme" parent="@android:style/Theme.Light.NoTitleBar.Fullscreen">
         <item name="android:windowBackground">@drawable/background_splash</item>
     </style>
-
+    <!--启动页主题-->
+    <style name="GuideTheme" parent="@android:style/Theme.Light.NoTitleBar.Fullscreen">
+        <item name="android:windowBackground">@drawable/background_guide</item>
+    </style>
     <!-- Application theme. -->
     <style name="AppTheme" parent="AppBaseTheme">
         <!-- All customizations that are NOT specific to a particular API-level can go here. -->
@@ -18,6 +21,25 @@
     <style name="MyAppTheme" parent="AppTheme">
         <item name="android:windowNoTitle">true</item>
         <item name="windowActionBar">false</item>
+    </style>
+
+
+    <!--左上角返回图片 Style-->
+    <style name="LeftImageStyle">
+        <item name="android:layout_width">44dp</item>
+        <item name="android:layout_height">44dp</item>
+        <item name="android:layout_marginLeft">2dp</item>
+        <item name="android:src">@mipmap/nav_icon_back_black</item>
+    </style>
+
+    <!--标头中间字体 Style-->
+    <style name="HeadWordStyle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textColor">@color/black_head_word</item>
+        <item name="android:textSize">17sp</item>
+        android:=""
     </style>
 
 </resources>

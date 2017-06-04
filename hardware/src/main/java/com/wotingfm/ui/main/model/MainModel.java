@@ -7,7 +7,7 @@ import com.wotingfm.common.config.GlobalUrlConfig;
 import com.wotingfm.ui.base.baseinterface.OnLoadInterface;
 import com.wotingfm.ui.base.model.CommonModel;
 import com.wotingfm.ui.base.model.UserInfo;
-import com.wotingfm.ui.splash.view.SplashActivity;
+import com.wotingfm.ui.user.splash.SplashActivity;
 
 import org.json.JSONObject;
 

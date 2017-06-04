@@ -6,8 +6,8 @@ android {
 
     defaultConfig {
         applicationId "com.wotingfm"
-        minSdkVersion 14
-        targetSdkVersion 23
+        minSdkVersion 11
+        targetSdkVersion 21
         versionCode 1
         versionName "1.0"
     }

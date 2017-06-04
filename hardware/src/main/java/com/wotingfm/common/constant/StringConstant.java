@@ -10,7 +10,6 @@ public class StringConstant {
     public static final String USERID = "USER_ID";                                 // 用户ID
 //    public static final String USERNAME = "USER_NAME";                             // 昵称
     public static final String ISLOGIN = "IS_LOGIN";                               // 是否登录
-    public static final String FIRST = "FIRST";                                    // 引导页
     public static final String PREFERENCE = "PREFERENCE";                          // 偏好设置页
     public static final String PORTRAIT = "PORTRAIT";                             // 头像Image地址
     public static final String USER_PHONE_NUMBER = "USER_PHONE_NUMBER";            // 用户注册手机号
