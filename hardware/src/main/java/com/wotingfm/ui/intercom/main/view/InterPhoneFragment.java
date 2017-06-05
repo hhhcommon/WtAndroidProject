@@ -1,4 +1,4 @@
-package com.wotingfm.ui.intercom.main;
+package com.wotingfm.ui.intercom.main.view;
 
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
@@ -6,20 +6,19 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.wotingfm.R;
 import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.ui.base.baseadapter.MyFragmentPagerAdapter;
-import com.wotingfm.ui.intercom.find.FindActivity;
-import com.wotingfm.ui.intercom.group.CreateGroupActivity;
+import com.wotingfm.ui.intercom.add.find.FindFragment;
+import com.wotingfm.ui.intercom.group.creat.CreateGroupActivity;
 import com.wotingfm.ui.intercom.main.chat.fragment.ChatFragment;
 import com.wotingfm.ui.intercom.main.contacts.fragment.ContactsFragment;
 import com.wotingfm.ui.scanning.activity.CaptureActivity;
@@ -33,30 +32,40 @@ import java.util.ArrayList;
  * 邮箱：645700751@qq.com
  */
 
-public class InterPhoneActivity extends FragmentActivity implements View.OnClickListener {
+public class InterPhoneFragment extends Fragment implements View.OnClickListener {
     private static TextView tv_chat, tv_linkman, line_chat, line_linkman;
     private PopupWindow addDialog;
     private static ViewPager mPager;
     private ImageView img_more;
+    private View rootView;
+    private FragmentActivity context;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate( Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_intercom);
-        InitTextView();  // 初始化视图
-        InitViewPager(); // 初始化 ViewPager
-        dialog();        // 初始化功能弹出框
+        context = getActivity();
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        if (rootView == null) {
+            rootView = inflater.inflate(R.layout.fragment_intercom, container, false);
+            InitTextView();  // 初始化视图
+            InitViewPager(); // 初始化 ViewPager
+            dialog();        // 初始化功能弹出框
+        }
+        return rootView;
     }
 
     // 初始化视图
     private void InitTextView() {
-        img_more = (ImageView) findViewById(R.id.img_more);
+        img_more = (ImageView) rootView.findViewById(R.id.img_more);
         img_more.setOnClickListener(this);
 
-        tv_chat = (TextView) findViewById(R.id.tv_chat);
-        line_chat = (TextView) findViewById(R.id.line_chat);
-        tv_linkman = (TextView) findViewById(R.id.tv_linkman);
-        line_linkman = (TextView) findViewById(R.id.line_linkman);
+        tv_chat = (TextView) rootView.findViewById(R.id.tv_chat);
+        line_chat = (TextView)rootView. findViewById(R.id.line_chat);
+        tv_linkman = (TextView) rootView.findViewById(R.id.tv_linkman);
+        line_linkman = (TextView) rootView.findViewById(R.id.line_linkman);
 
         tv_chat.setOnClickListener(new txListener(0));
         tv_linkman.setOnClickListener(new txListener(1));
@@ -65,21 +74,21 @@ public class InterPhoneActivity extends FragmentActivity implements View.OnClick
 
     // 初始化ViewPager
     public void InitViewPager() {
-        mPager = (ViewPager) findViewById(R.id.viewpager);
+        mPager = (ViewPager) rootView.findViewById(R.id.viewpager);
         mPager.setOffscreenPageLimit(1);
         ArrayList<Fragment> fragmentList = new ArrayList<>();
         Fragment ctFragment = new ChatFragment();// 电台首页
         Fragment cFragment = new ContactsFragment();// 通讯录
         fragmentList.add(ctFragment);
         fragmentList.add(cFragment);
-        mPager.setAdapter(new MyFragmentPagerAdapter(getSupportFragmentManager(), fragmentList));
+        mPager.setAdapter(new MyFragmentPagerAdapter(getChildFragmentManager(), fragmentList));
         mPager.setOnPageChangeListener(new MyOnPageChangeListener());// 页面变化时的监听器
         update(0);
     }
 
     // "更多" 对话框
     private void dialog() {
-        View dialog = LayoutInflater.from(this).inflate(R.layout.dialog_intercom, null);
+        View dialog = LayoutInflater.from(context).inflate(R.layout.dialog_intercom, null);
         TextView tv_addFriend = (TextView) dialog.findViewById(R.id.tv_addFriend);        // 添加好友
         TextView tv_addGroup = (TextView) dialog.findViewById(R.id.tv_addGroup);          // 加入群组
         TextView tv_createGroup = (TextView) dialog.findViewById(R.id.tv_createGroup);    // 创建群组
@@ -117,41 +126,41 @@ public class InterPhoneActivity extends FragmentActivity implements View.OnClick
                 break;
             case R.id.tv_addFriend:// 跳转到添加好友
                 if (isLogin()) {
-                    Intent Intent = new Intent(this, FindActivity.class);
+                    Intent Intent = new Intent(context, FindFragment.class);
                     Bundle bundle = new Bundle();
                     bundle.putString("type", "friend");
                     Intent.putExtras(bundle);
                     startActivity(Intent);
                 } else {
-                    startActivity(new Intent(this, LoginActivity.class));
+                    startActivity(new Intent(context, LoginActivity.class));
                 }
                 addDialog.dismiss();
                 break;
             case R.id.tv_addGroup:        // 跳转到加入群组
                 if (isLogin()) {
-                    Intent Intent = new Intent(this, FindActivity.class);
+                    Intent Intent = new Intent(context, FindFragment.class);
                     Bundle bundle = new Bundle();
                     bundle.putString("type", "group");
                     Intent.putExtras(bundle);
                     startActivity(Intent);
                 } else {
-                    startActivity(new Intent(this, LoginActivity.class));
+                    startActivity(new Intent(context, LoginActivity.class));
                 }
                 addDialog.dismiss();
                 break;
             case R.id.tv_createGroup:// 跳转到创建讨论组
                 if (isLogin()) {
-                    startActivity(new Intent(this, CreateGroupActivity.class));
+                    startActivity(new Intent(context, CreateGroupActivity.class));
                 } else {
-                    startActivity(new Intent(this, LoginActivity.class));
+                    startActivity(new Intent(context, LoginActivity.class));
                 }
                 addDialog.dismiss();
                 break;
             case R.id.tv_scanning:
                 if (isLogin()) {
-                    startActivity(new Intent(this, CaptureActivity.class));
+                    startActivity(new Intent(context, CaptureActivity.class));
                 } else {
-                    startActivity(new Intent(this, LoginActivity.class));
+                    startActivity(new Intent(context, LoginActivity.class));
                 }
                 addDialog.dismiss();
                 break;
@@ -220,25 +229,5 @@ public class InterPhoneActivity extends FragmentActivity implements View.OnClick
         }
     }
 
-    /*
-     * 手机实体返回按键的处理
-     */
-    long waitTime = 2000;
-    long touchTime = 0;
 
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (event.getAction() == KeyEvent.ACTION_DOWN && KeyEvent.KEYCODE_BACK == keyCode) {
-            long currentTime = System.currentTimeMillis();
-            if ((currentTime - touchTime) >= waitTime) {
-                Toast.makeText(this, "再按一次退出", Toast.LENGTH_LONG).show();
-                touchTime = currentTime;
-            } else {
-                finish();
-                android.os.Process.killProcess(android.os.Process.myPid());
-            }
-            return true;
-        }
-        return super.onKeyDown(keyCode, event);
-    }
 }

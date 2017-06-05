@@ -1,4 +1,4 @@
-package com.wotingfm.ui.intercom.find;
+package com.wotingfm.ui.intercom.group.creat;
 
 import com.wotingfm.ui.base.baseactivity.BaseActivity;
 
@@ -6,5 +6,5 @@ import com.wotingfm.ui.base.baseactivity.BaseActivity;
  * 作者：xinLong on 2017/6/5 01:30
  * 邮箱：645700751@qq.com
  */
-public class FindActivity extends BaseActivity{
+public class CreateGroupActivity extends BaseActivity {
 }

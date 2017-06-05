@@ -93,7 +93,7 @@
 
         <!-- 对讲主页 -->
         <activity
-            android:name="com.wotingfm.ui.intercom.main.InterPhoneActivity"
+            android:name=".ui.intercom.main.view.InterPhoneActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar" />
 

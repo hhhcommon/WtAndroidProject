@@ -6,9 +6,8 @@ import android.os.Bundle;
 import android.view.WindowManager;
 import android.widget.TabHost;
 import com.wotingfm.R;
-import com.wotingfm.ui.intercom.main.InterPhoneActivity;
+import com.wotingfm.ui.intercom.main.view.InterPhoneActivity;
 import com.wotingfm.ui.main.presenter.MainPresenter;
-import com.wotingfm.ui.test.DuiJiangActivity;
 import com.wotingfm.ui.test.MineActivity;
 import com.wotingfm.ui.test.PlayerActivity;
 
