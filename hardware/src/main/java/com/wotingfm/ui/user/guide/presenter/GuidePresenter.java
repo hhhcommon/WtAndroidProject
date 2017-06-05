@@ -19,27 +19,27 @@ import org.json.JSONTokener;
  * 邮箱：645700751@qq.com
  */
 public class GuidePresenter extends BasePresenter {
-    private final GuideModel guideModel;
-    private GuideActivity guideActivity;
+    private final GuideModel model;
+    private GuideActivity activity;
 
-    public GuidePresenter(GuideActivity guideActivity) {
-        this.guideActivity = guideActivity;
-        this.guideModel = new GuideModel();
+    public GuidePresenter(GuideActivity activity) {
+        this.activity = activity;
+        this.model = new GuideModel();
     }
 
     // 界面跳转
     private void close() {
-        guideActivity.startActivity(new Intent(guideActivity, PreferenceActivity.class));       // 跳转到引导页  PreferenceActivity
-        guideActivity.finish();
+        activity.startActivity(new Intent(activity, PreferenceActivity.class));       // 跳转到引导页  PreferenceActivity
+        activity.finish();
     }
 
     // 获取每次打开应用后的数据
     private void send() {
-        JSONObject js = guideModel.assemblyData(guideActivity);
-        guideModel.loadNews(GlobalUrlConfig.splashUrl, guideActivity.getTag(), js, new OnLoadInterface() {
+        JSONObject js = model.assemblyData(activity);
+        model.loadNews(GlobalUrlConfig.splashUrl, activity.getTag(), js, new OnLoadInterface() {
             @Override
             public void onSuccess(JSONObject result) {
-                if (guideActivity.getCancelRequest()) return;
+                if (activity.getCancelRequest()) return;
                 dealLoginSuccess(result);
                 close();    // 界面跳转
             }
@@ -59,20 +59,20 @@ public class GuidePresenter extends BasePresenter {
                     JSONObject ui = (JSONObject) new JSONTokener(result.getString("UserInfo")).nextValue();
                     if (ui != null) {
                         // 保存用户数据
-                        guideModel.saveUserInfo(ui);
+                        model.saveUserInfo(ui);
                     } else {
-                        guideModel.unRegisterLogin();
+                        model.unRegisterLogin();
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
-                    guideModel.unRegisterLogin();
+                    model.unRegisterLogin();
                 }
             } else {
-                guideModel.unRegisterLogin();
+                model.unRegisterLogin();
             }
         } catch (Exception e1) {
             e1.printStackTrace();
-            guideModel.unRegisterLogin();
+            model.unRegisterLogin();
         }
     }
 

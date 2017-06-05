@@ -7,8 +7,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import com.wotingfm.R;
 import com.wotingfm.ui.base.baseactivity.BaseActivity;
-import com.wotingfm.ui.user.login.LoginActivity;
-import com.wotingfm.ui.user.register.RegisterActivity;
+import com.wotingfm.ui.user.login.view.LoginActivity;
+import com.wotingfm.ui.user.register.view.RegisterActivity;
 
 /**
  * 作者：xinLong on 2017/6/4 19:48

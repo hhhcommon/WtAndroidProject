@@ -61,19 +61,19 @@
 
         <!-- 登录页 -->
         <activity
-            android:name="com.wotingfm.ui.user.login.LoginActivity"
+            android:name=".ui.user.login.view.LoginActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar" />
 
         <!-- 注册页 -->
         <activity
-            android:name="com.wotingfm.ui.user.register.RegisterActivity"
+            android:name=".ui.user.register.view.RegisterActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar" />
 
         <!-- 忘记密码页 -->
         <activity
-            android:name="com.wotingfm.ui.user.retrievepassword.RetrievePassWordActivity"
+            android:name=".ui.user.retrievepassword.view.RetrievePassWordActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar" />
 

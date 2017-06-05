@@ -23,7 +23,7 @@ import com.wotingfm.ui.intercom.group.CreateGroupActivity;
 import com.wotingfm.ui.intercom.main.chat.fragment.ChatFragment;
 import com.wotingfm.ui.intercom.main.contacts.fragment.ContactsFragment;
 import com.wotingfm.ui.scanning.activity.CaptureActivity;
-import com.wotingfm.ui.user.login.LoginActivity;
+import com.wotingfm.ui.user.login.view.LoginActivity;
 
 import java.util.ArrayList;
 
