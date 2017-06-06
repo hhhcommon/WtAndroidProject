@@ -51,19 +51,6 @@ public class SplashPresenter extends BasePresenter {
     // 获取每次打开应用后的数据
     private void send() {
         JSONObject js = splashModel.assemblyData(splashActivity);
-        splashModel.loadNews(GlobalUrlConfig.splashUrl, splashActivity.getTag(), js, new OnLoadInterface() {
-            @Override
-            public void onSuccess(JSONObject result) {
-                if (splashActivity.getCancelRequest()) return;
-                dealLoginSuccess(result);
-                close();    // 界面跳转
-            }
-
-            @Override
-            public void onFailure(String msg) {
-                close();    // 界面跳转
-            }
-        });
     }
 
     private void dealLoginSuccess(JSONObject result) {

@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 
-import com.woting.commonplat.net.volley.VolleyRequest;
 import com.wotingfm.ui.splash.presenter.SplashPresenter;
 import java.lang.ref.WeakReference;
 
@@ -71,7 +70,6 @@ public class SplashActivity extends Activity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        isCancelRequest = VolleyRequest.cancelRequest(tag);
         mHandler.removeCallbacksAndMessages(null);
     }
 }
