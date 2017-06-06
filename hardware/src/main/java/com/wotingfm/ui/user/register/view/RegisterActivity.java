@@ -1,5 +1,6 @@
 package com.wotingfm.ui.user.register.view;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.InputType;
@@ -11,6 +12,7 @@ import android.widget.TextView;
 
 import com.wotingfm.R;
 import com.wotingfm.ui.base.baseactivity.BaseActivity;
+import com.wotingfm.ui.main.view.MainActivity;
 import com.wotingfm.ui.user.register.presenter.RegisterPresenter;
 
 /**
@@ -71,6 +73,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
                 break;
             case R.id.tv_confirm:
                 register();
+                startActivity(new Intent(this, MainActivity.class));
                 break;
         }
     }

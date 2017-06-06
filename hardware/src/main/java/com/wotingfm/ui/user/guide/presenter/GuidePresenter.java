@@ -81,11 +81,12 @@ public class GuidePresenter extends BasePresenter {
      * 界面延时操作的功能
      */
     public void todo() {
-        if (GlobalNetWorkConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
-            send();
-        } else {
-            close();    // 界面跳转
-        }
+//        if (GlobalNetWorkConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
+//            send();
+//        } else {
+//            close();    // 界面跳转
+//        }
+        close();    // 界面跳转
     }
 
 }
