@@ -2,13 +2,10 @@ package com.woting.commonplat.gather;
 
 import android.util.Log;
 
-import com.android.volley.VolleyError;
 import com.woting.commonplat.constant.IntegerConstants;
 import com.woting.commonplat.gather.model.DataModel;
 import com.woting.commonplat.gather.thread.GivenUploadDataThread;
 import com.woting.commonplat.gather.thread.ImmUploadDataThread;
-import com.woting.commonplat.net.volley.VolleyCallback;
-import com.woting.commonplat.net.volley.VolleyRequest;
 
 import org.json.JSONObject;
 
@@ -64,14 +61,14 @@ public class GatherData {
     public static void collectData(int uploadType, DataModel data) {
         switch (uploadType) {
             case IntegerConstants.DATA_UPLOAD_TYPE_IMM:// 即时上传
-                try{
+                try {
                     immQueue.add(data);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
                 break;
             case IntegerConstants.DATA_UPLOAD_TYPE_GIVEN:// 定时检查上传
-                try{
+                try {
                     givenList.add(data);
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -91,6 +88,7 @@ public class GatherData {
 
     /**
      * 上传数据
+     *
      * @param data 数据
      */
     public static void updateData(String data) {
@@ -101,18 +99,6 @@ public class GatherData {
             e.printStackTrace();
         }
 
-        // 数据上传结果回调  用户不需要知道有数据收集
-        VolleyRequest.requestPost(url, null, jsonObject, new VolleyCallback() {
-            @Override
-            protected void requestSuccess(JSONObject result) {
-                Log.v("TAG", "数据上传成功!");
-            }
-
-            @Override
-            protected void requestError(VolleyError error) {
-                Log.v("TAG", "数据上传失败!");
-            }
-        });
 
     }
 }
