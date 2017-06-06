@@ -24,7 +24,6 @@ import android.widget.LinearLayout;
 
 import com.woting.commonplat.R;
 
-
 /**
  * Created by amine on 16/3/3.
  */
