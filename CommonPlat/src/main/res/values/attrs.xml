@@ -3,11 +3,11 @@
 
     <!--提示View-->
     <declare-styleable name="TipView">
-        <attr name="tipText" format="string"/>
-        <attr name="tipTextSize" format="dimension"/>
-        <attr name="tipColor" format="color"/>
-        <attr name="drawableTop" format="reference"/>
-        <attr name="drawablePadding" format="dimension"/>
+        <attr name="tipText" format="string" />
+        <attr name="tipTextSize" format="dimension" />
+        <attr name="tipColor" format="color" />
+        <attr name="drawableTop" format="reference" />
+        <attr name="drawablePadding" format="dimension" />
     </declare-styleable>
 
     <!--PagerSlidingTabStrip-->
@@ -22,11 +22,24 @@
         <attr name="pstsScrollOffset" format="dimension" />
         <attr name="pstsTabBackground" format="reference" />
         <attr name="pstsShouldExpand" format="boolean" />
-        <attr name="pstsTextAllCaps"  format="boolean" />
-        <attr name="zmsTabTextSize"   format="dimension" />
-        <attr name="zmsTabTextColor"  format="color" />
-        <attr name="zmsSelectedTabTextSize"   format="dimension" />
+        <attr name="pstsTextAllCaps" format="boolean" />
+        <attr name="zmsTabTextSize" format="dimension" />
+        <attr name="zmsTabTextColor" format="color" />
+        <attr name="zmsSelectedTabTextSize" format="dimension" />
         <attr name="zmsSelectedTabTextColor" format="color" />
     </declare-styleable>
-
+    <declare-styleable name="ARecyclerView">
+        <attr name="refreshHeaderLayout" format="reference" />
+        <attr name="loadMoreFooterLayout" format="reference" />
+        <attr name="refreshEnabled" format="boolean" />
+        <attr name="loadMoreEnabled" format="boolean" />
+        <attr name="refreshFinalMoveOffset" format="dimension" />
+    </declare-styleable>
+    <declare-styleable name="LoadFrameLayout">
+        <attr name="emptyView" format="reference" />
+        <attr name="errorView" format="reference" />
+        <attr name="loadingView" format="reference" />
+        <attr name="errorbase" format="reference" />
+        <attr name="nowifiView" format="reference" />
+    </declare-styleable>
 </resources>
