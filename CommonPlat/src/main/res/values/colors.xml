@@ -15,7 +15,7 @@
     <color name="app_basic">#fd8548</color>
 
     <!-- 线条颜色 -->
-    <color name="line_color">#e9e8e6</color>
+    <color name="line_color">#efefef</color>
 
     <!-- 一般情况下的背景色 -->
     <color name="background_color">#f5ffffff</color>
