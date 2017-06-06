@@ -7,13 +7,14 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.WindowManager;
 
 /**
  * App
  * Created by Administrator on 9/6/2016.
  */
-public abstract class BaseActivity extends Activity {
+public abstract class BaseActivity extends AppCompatActivity {
     protected Context context;
 
     @TargetApi(Build.VERSION_CODES.KITKAT)
