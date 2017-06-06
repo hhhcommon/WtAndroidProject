@@ -21,7 +21,6 @@ public class RetrievePasswordPresenter {
     public RetrievePasswordPresenter(RetrievePassWordActivity activity) {
         this.activity = activity;
         this.model = new RetrievePasswordModel();
-        setEye();// 设置密码
     }
 
     // 再次获取验证码时间

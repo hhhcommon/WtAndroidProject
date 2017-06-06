@@ -31,8 +31,9 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         setContentView(R.layout.activity_login);
         inItView();
         inItListener();
-        loginPresenter = new LoginPresenter(this);
         setEditListener();
+        loginPresenter = new LoginPresenter(this);
+        loginPresenter.setEye();
     }
 
     private void inItView() {

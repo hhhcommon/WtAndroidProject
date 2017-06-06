@@ -24,7 +24,6 @@ public class RegisterPresenter {
     public RegisterPresenter(RegisterActivity activity) {
         this.activity = activity;
         this.model = new RegisterModel();
-        setEye();// 设置密码
     }
 
     // 再次获取验证码时间

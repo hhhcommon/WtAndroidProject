@@ -51,69 +51,69 @@
         <activity
             android:name="com.wotingfm.ui.user.preference.PreferenceActivity"
             android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Light.NoTitleBar" />
+            android:theme="@style/AppTheme" />
 
         <!-- 登录主页 -->
         <activity
             android:name="com.wotingfm.ui.user.logo.LogoActivity"
             android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Light.NoTitleBar" />
+            android:theme="@style/AppTheme" />
 
         <!-- 登录页 -->
         <activity
             android:name=".ui.user.login.view.LoginActivity"
             android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Light.NoTitleBar" />
+            android:theme="@style/AppTheme" />
 
         <!-- 注册页 -->
         <activity
             android:name=".ui.user.register.view.RegisterActivity"
             android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Light.NoTitleBar" />
+            android:theme="@style/AppTheme" />
 
         <!-- 忘记密码页 -->
         <activity
             android:name=".ui.user.retrievepassword.view.RetrievePassWordActivity"
             android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Light.NoTitleBar" />
+            android:theme="@style/AppTheme" />
 
 
         <!-- 扫一扫 -->
         <activity
             android:name="com.wotingfm.ui.scanning.activity.CaptureActivity"
             android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Light.NoTitleBar" />
+            android:theme="@style/AppTheme" />
 
 
         <!-- 扫一扫结果 -->
         <activity
             android:name="com.wotingfm.ui.scanning.activity.ResultActivity"
             android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Light.NoTitleBar" />
+            android:theme="@style/AppTheme" />
 
         <!-- 对讲主页 -->
         <activity
             android:name=".ui.intercom.main.view.InterPhoneActivity"
             android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Light.NoTitleBar" />
+            android:theme="@style/AppTheme" />
 
         <!--  -->
         <activity
             android:name=".ui.test.PlayerActivity"
             android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Light.NoTitleBar" />
+            android:theme="@style/AppTheme" />
 
         <!--  -->
         <activity
             android:name=".ui.test.DuiJiangActivity"
             android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Light.NoTitleBar" />
+            android:theme="@style/AppTheme" />
 
         <!--  -->
         <activity
             android:name=".ui.test.MineActivity"
             android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Light.NoTitleBar" />
+            android:theme="@style/AppTheme" />
 
         <service android:name=".common.service.FloatingWindowService" />
 

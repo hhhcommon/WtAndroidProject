@@ -1,12 +1,20 @@
 package com.wotingfm.ui.user.guide.model;
 
+import com.wotingfm.common.bean.HomeBanners;
 import com.wotingfm.common.config.GlobalUrlConfig;
+import com.wotingfm.common.net.RetrofitUtils;
 import com.wotingfm.ui.base.baseinterface.OnLoadInterface;
 import com.wotingfm.ui.base.model.CommonModel;
 import com.wotingfm.ui.base.model.UserInfo;
 import com.wotingfm.ui.user.guide.view.GuideActivity;
 
 import org.json.JSONObject;
+
+import java.util.List;
+
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
+import rx.schedulers.Schedulers;
 
 /**
  * 作者：xinLong on 2017/5/16 14:28
@@ -34,7 +42,18 @@ public class GuideModel extends UserInfo  {
      * @param listener 监听
      */
     public void loadNews(String url, String tag, JSONObject js, final OnLoadInterface listener) {
-
+        RetrofitUtils.getInstance().getHomeBanners()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Action1<List<HomeBanners.Banner>>() {
+                    @Override
+                    public void call(List<HomeBanners.Banner> banners) {
+                    }
+                }, new Action1<Throwable>() {
+                    @Override
+                    public void call(Throwable throwable) {
+                    }
+                });
     }
 
 }

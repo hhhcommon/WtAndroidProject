@@ -29,8 +29,9 @@ public class RetrievePassWordActivity extends BaseActivity implements View.OnCli
         setContentView(R.layout.activity_retrieve_password);
         inItView();
         inItListener();
-        presenter= new RetrievePasswordPresenter(this);
         setEditListener();
+        presenter= new RetrievePasswordPresenter(this);
+        presenter.setEye();// 设置密码
     }
 
     // 设置界面

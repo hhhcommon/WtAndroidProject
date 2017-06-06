@@ -31,8 +31,9 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
         setContentView(R.layout.activity_register);
         inItView();
         inItListener();
-        registerPresenter=new RegisterPresenter(this);
         setEditListener();
+        registerPresenter=new RegisterPresenter(this);
+        registerPresenter.setEye();
     }
 
     // 设置界面

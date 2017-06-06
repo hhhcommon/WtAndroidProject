@@ -21,7 +21,6 @@ public class LoginPresenter {
     public LoginPresenter(LoginActivity activity) {
         this.activity = activity;
         this.model = new LoginModel();
-        setEye();// 设置密码
     }
 
     /**
