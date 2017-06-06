@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 
-import com.woting.commonplat.net.volley.VolleyRequest;
 import com.wotingfm.ui.user.guide.presenter.GuidePresenter;
 
 import java.lang.ref.WeakReference;
@@ -72,7 +71,6 @@ public class GuideActivity extends Activity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        isCancelRequest = VolleyRequest.cancelRequest(tag);
         mHandler.removeCallbacksAndMessages(null);
     }
 }
