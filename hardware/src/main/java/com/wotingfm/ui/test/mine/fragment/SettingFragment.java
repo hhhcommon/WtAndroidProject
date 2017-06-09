@@ -6,23 +6,24 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.wotingfm.R;
 import com.wotingfm.ui.test.mine.MineActivity;
 
 /**
- * 个人中心主界面
- * Created by Administrator on 2017/6/7.
+ * 设置
+ * Created by Administrator on 2017/6/9.
  */
-public class MineFragment extends Fragment implements View.OnClickListener {
+public class SettingFragment extends Fragment implements View.OnClickListener {
+
     private View rootView;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         if (rootView == null) {
-            rootView = inflater.inflate(R.layout.fragment_mine, container, false);
-            rootView.setOnClickListener(this);
+            rootView = inflater.inflate(R.layout.fragment_setting, container, false);
 
             initView();
             initEvent();
@@ -32,13 +33,13 @@ public class MineFragment extends Fragment implements View.OnClickListener {
 
     // 初始化视图
     private void initView() {
-
+        TextView textTitle = (TextView) rootView.findViewById(R.id.tv_center);// 标题
+        textTitle.setText(getString(R.string.setting));
     }
 
     // 初始化点击事件
     private void initEvent() {
-        rootView.findViewById(R.id.fm_set).setOnClickListener(this);// FM 设置
-        rootView.findViewById(R.id.setting).setOnClickListener(this);// 设置
+        rootView.findViewById(R.id.head_left_btn).setOnClickListener(this);// 返回
     }
 
     @Override
@@ -52,11 +53,8 @@ public class MineFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.fm_set:// FM 设置
-                MineActivity.open(new FMSetFragment());
-                break;
-            case R.id.setting:// 设置
-                MineActivity.open(new SettingFragment());
+            case R.id.head_left_btn:// 返回
+                MineActivity.close();
                 break;
         }
     }

@@ -7,13 +7,21 @@
     <RelativeLayout
         android:id="@+id/view_login"
         android:layout_width="match_parent"
-        android:layout_height="294dp">
+        android:layout_height="270dp">
+
+        <ImageView
+            android:id="@+id/head_left_btn"
+            style="@style/LeftImageStyle"
+            android:layout_marginTop="16dp"
+            android:src="@mipmap/nav_icon_back_white"/>
 
         <ImageView
             android:id="@+id/image_info"
             android:layout_width="32dp"
             android:layout_height="32dp"
             android:src="@mipmap/nav_icon_qr_code_n"
+            android:layout_toLeftOf="@+id/image_qr_code"
+            android:layout_marginRight="10dp"
             android:layout_marginTop="16dp"
             android:layout_marginLeft="16dp"/>
 
@@ -36,7 +44,23 @@
 
         <TextView
             android:id="@+id/text_user_name"
-            style="@style/WrapContent"/>
+            style="@style/WrapContent"
+            android:text="莉莉"
+            android:layout_below="@id/image_head"
+            android:layout_centerHorizontal="true"
+            android:textColor="@color/white"
+            android:textSize="22sp"
+            android:layout_marginTop="20dp"/>
+
+        <TextView
+            android:id="@+id/text_user_number"
+            style="@style/WrapContent"
+            android:text="我听号：12345678"
+            android:layout_below="@id/text_user_name"
+            android:layout_centerHorizontal="true"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            android:layout_marginTop="10dp"/>
 
     </RelativeLayout>
 
@@ -50,7 +74,7 @@
 
             <TextView
                 style="@style/MineIdentifyingTextStyle"
-                android:text="连接汽车音响系统"/>
+                android:text="@string/connect_car_audio_system"/>
 
             <RelativeLayout
                 android:id="@+id/fm_set"
@@ -63,7 +87,7 @@
 
                 <TextView
                     style="@style/MineTextStyle"
-                    android:text="FM设置"
+                    android:text="@string/fm_settings"
                     android:layout_toRightOf="@id/image_fm" />
 
                 <ImageView
@@ -82,7 +106,7 @@
 
                 <TextView
                     style="@style/MineTextStyle"
-                    android:text="蓝牙设置"
+                    android:text="@string/bluetooth_settings"
                     android:layout_toRightOf="@id/image_bluetooth" />
 
                 <ImageView
@@ -92,7 +116,7 @@
 
             <TextView
                 style="@style/MineIdentifyingTextStyle"
-                android:text="连接设备"/>
+                android:text="@string/connection_device"/>
 
             <RelativeLayout
                 android:id="@+id/wifi_set"
@@ -106,7 +130,7 @@
                 <TextView
                     android:id="@+id/text_wifi_set"
                     style="@style/MineTextStyle"
-                    android:text="无线局域网"
+                    android:text="@string/wlan"
                     android:layout_toRightOf="@id/image_wifi"/>
 
                 <ImageView
@@ -122,7 +146,7 @@
                     android:textColor="@color/tip_color"
                     android:layout_toLeftOf="@id/image_wifi_set"
                     android:maxLines="1"
-                    android:text="已连接" />
+                    android:text="@string/connected" />
 
             </RelativeLayout>
 
@@ -138,7 +162,7 @@
                 <TextView
                     android:id="@+id/text_flow_set"
                     style="@style/MineTextStyle"
-                    android:text="流量管理"
+                    android:text="@string/flow_management"
                     android:layout_toRightOf="@id/image_flow" />
 
                 <ImageView style="@style/MineRightImageStyle"  />
@@ -146,7 +170,7 @@
             </RelativeLayout>
 
             <RelativeLayout
-                android:id="@+id/lin_set"
+                android:id="@+id/setting"
                 style="@style/MineRelativeStyle"
                 android:layout_marginBottom="40dp"
                 android:layout_marginTop="27dp">
@@ -158,7 +182,7 @@
 
                 <TextView
                     style="@style/MineTextStyle"
-                    android:text="设置"
+                    android:text="@string/setting"
                     android:layout_toRightOf="@id/image_set" />
 
                 <ImageView style="@style/MineRightImageStyle" />

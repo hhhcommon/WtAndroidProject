@@ -1,15 +1,9 @@
 package com.wotingfm.ui.test;
 
-import android.os.Bundle;
-import android.os.Handler;
-import android.support.annotation.UiThread;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PagerSnapHelper;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AbsListView;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
@@ -20,38 +14,22 @@ import com.woting.commonplat.player.baidu.BDPlayer;
 import com.woting.commonplat.widget.LoadFrameLayout;
 import com.wotingfm.R;
 import com.wotingfm.common.adapter.PlayerAdapter;
-import com.wotingfm.common.bean.HomeBanners;
 import com.wotingfm.common.bean.Player;
 import com.wotingfm.common.net.RetrofitUtils;
-import com.wotingfm.common.utils.L;
 import com.wotingfm.common.utils.TimeUtils;
 import com.wotingfm.common.view.MenuDialog;
 import com.wotingfm.common.view.PlayerDialog;
-import com.wotingfm.ui.base.baseactivity.BaseActivity;
 import com.wotingfm.ui.base.baseactivity.NoTitleBarBaseActivity;
 
-import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import rx.Observable;
-import rx.Observer;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.schedulers.Schedulers;
-
-import static com.loc.a.t;
-import static com.loc.e.m;
-import static com.wotingfm.R.id.ivBefore;
-import static com.wotingfm.R.id.ivMore;
-import static com.wotingfm.R.id.ivNext;
-import static com.wotingfm.R.id.ivPlayList;
-import static com.wotingfm.R.id.relatiBottom;
 
 /**
  * 作者：xinLong on 2017/6/2 12:15
@@ -290,16 +268,16 @@ public class PlayerActivity extends NoTitleBarBaseActivity implements View.OnCli
                     @Override
                     public void call(List<Player.DataBean.SinglesBean> singls) {
                         if (singls != null && !singls.isEmpty()) {
-                            loadLayout.showContentView();
-                            singLesBeans.clear();
-                            singLesBeans.addAll(singls);
-                            mPlayerAdapter.notifyDataSetChanged();
-                            postionPlayer = 0;
-                            bdPlayer.setVideoPath(singls.get(0).single_file_url);
-                            bdPlayer.start();
-                            relatiBottom.setVisibility(View.VISIBLE);
-                            setBarProgrees();
-                            setBeforeOrNext();
+//                            loadLayout.showContentView();
+//                            singLesBeans.clear();
+//                            singLesBeans.addAll(singls);
+//                            mPlayerAdapter.notifyDataSetChanged();
+//                            postionPlayer = 0;
+//                            bdPlayer.setVideoPath(singls.get(0).single_file_url);
+//                            bdPlayer.start();
+//                            relatiBottom.setVisibility(View.VISIBLE);
+//                            setBarProgrees();
+//                            setBeforeOrNext();
                         } else {
                             loadLayout.showEmptyView();
                         }
