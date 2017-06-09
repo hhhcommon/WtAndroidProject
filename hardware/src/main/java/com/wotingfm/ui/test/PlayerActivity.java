@@ -123,10 +123,10 @@ public class PlayerActivity extends NoTitleBarBaseActivity implements View.OnCli
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 LinearLayoutManager manager = (LinearLayoutManager) recyclerView.getLayoutManager();
-                int postion = manager.findLastVisibleItemPosition();
+                int postion = manager.findLastCompletelyVisibleItemPosition();
                 if (newState == RecyclerView.SCROLL_STATE_IDLE && postion != postionPlayer) {
                     seekbarVideo.setProgress(0);
-                    postionPlayer = postion - 1;
+                    postionPlayer = postion;
                     bdPlayer.stopPlayback();
                     bdPlayer.setVideoPath(singLesBeans.get(postionPlayer).single_file_url);
                     bdPlayer.start();
