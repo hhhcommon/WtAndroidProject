@@ -38,7 +38,7 @@ public class BDPlayer extends FrameLayout {
     // 播放器参数
     private int mCacheTimeInMilliSeconds = 0;                       // 播放缓冲时间
     private int mDecodeMode = BDCloudMediaPlayer.DECODE_AUTO;       // 解码模式
-    private boolean mLogEnabled = false;                            // 是否打印日志，一般不打印
+    private boolean mLogEnabled = true;                            // 是否打印日志，一般不打印
     private long mInitPlayPositionInMilliSec = 0;                   // 播放位置
     private int mWakeMode = 0;                                      // 唤醒模式????????
     private float mLeftVolume = -1f;                                // 左声道音量
@@ -292,7 +292,7 @@ public class BDPlayer extends FrameLayout {
 
         @Override
         public void onSeekComplete(IMediaPlayer mp) {
-            Log.e(TAG, "onSeekComplete");
+             Log.e(TAG, "onSeekComplete");
             if (mOnSeekCompleteListener != null) {
                 mOnSeekCompleteListener.onSeekComplete(mp);
             }
@@ -497,7 +497,7 @@ public class BDPlayer extends FrameLayout {
      *
      * @param msec
      */
-    public void seekTo(int msec) {
+    public void seekTo(long msec) {
         if (isInPlaybackState()) {
             mMediaPlayer.seekTo(msec);
         }
