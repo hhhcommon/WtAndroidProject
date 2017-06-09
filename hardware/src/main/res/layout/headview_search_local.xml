@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/tv_newsP"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:gravity="center_vertical"
+        android:paddingLeft="16dp"
+        android:text="联系人"
+        android:textColor="#959698"
+        android:textSize="16sp" />
+
+    <ListView
+        android:id="@+id/head_listView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"></ListView>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="10dp"
+        android:background="@color/line_color" />
+
+    <TextView
+        android:id="@+id/tv_newsG"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:gravity="center_vertical"
+        android:paddingLeft="16dp"
+        android:text="群聊"
+        android:textColor="#959698"
+        android:textSize="16sp" />
+</LinearLayout>

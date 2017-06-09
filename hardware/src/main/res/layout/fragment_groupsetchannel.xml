@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background_color"
+    android:orientation="vertical">
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="44dp">
+
+        <ImageView
+            android:id="@+id/head_left_btn"
+            style="@style/LeftImageStyle" />
+
+        <TextView
+            android:id="@+id/tv_center"
+            style="@style/HeadWordStyle"
+            android:layout_centerInParent="true"
+            android:text="选择备用频道" />
+
+    </RelativeLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="@color/line_color" />
+
+
+    <LinearLayout
+        android:id="@+id/lin_channel1"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginLeft="40dp"
+        android:layout_marginRight="40dp"
+        android:layout_marginTop="30dp"
+        android:background="@drawable/background_creatgroup_gray"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/tv_channel1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="18dp"
+            android:layout_weight="1"
+            android:background="@color/transparent_background"
+            android:hint="备用频道一"
+            android:textColor="#959698"
+            android:textSize="14sp" />
+
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginRight="12dp"
+            android:src="@mipmap/setup_fm_icon_dropdown_n" />
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/lin_channel2"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginLeft="40dp"
+        android:layout_marginRight="40dp"
+        android:layout_marginTop="12dp"
+        android:background="@drawable/background_creatgroup_gray"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/tv_channel2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="18dp"
+            android:layout_weight="1"
+            android:background="@color/transparent_background"
+            android:hint="备用频道二"
+            android:textColor="#959698"
+            android:textSize="14sp" />
+
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginRight="12dp"
+            android:src="@mipmap/setup_fm_icon_dropdown_n" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tv_send"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="40dp"
+        android:layout_marginRight="40dp"
+        android:layout_marginTop="50dp"
+        android:text="完成"
+        android:gravity="center"
+        android:background="@drawable/background_circle_orange"
+        android:textColor="@color/white"
+        android:textSize="14sp" />
+</LinearLayout>
