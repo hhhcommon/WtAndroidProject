@@ -28,8 +28,7 @@
         <activity
             android:name="com.wotingfm.ui.user.guide.view.GuideActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/GuideTheme">
-        </activity>
+            android:theme="@style/GuideTheme"></activity>
 
         <!-- 主页 -->
         <activity
@@ -74,6 +73,11 @@
         <!-- 忘记密码页 -->
         <activity
             android:name=".ui.user.retrievepassword.view.RetrievePassWordActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" />
+        <!-- 播放历史 -->
+        <activity
+            android:name=".ui.play.activity.PlayerHistoryActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
 

@@ -17,13 +17,10 @@ import android.view.WindowManager;
 public abstract class BaseActivity extends AppCompatActivity {
     protected Context context;
 
-    @TargetApi(Build.VERSION_CODES.KITKAT)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         context = this;
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);        // 透明状态栏
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);    // 透明导航栏
     }
 
     // 设置android app 的字体大小不受系统字体大小改变的影响

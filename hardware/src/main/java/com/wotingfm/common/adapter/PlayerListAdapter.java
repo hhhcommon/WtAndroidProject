@@ -34,7 +34,7 @@ public class PlayerListAdapter extends CommonAdapter<Player.DataBean.SinglesBean
         textViewTitle.setText(s.single_title);
         ImageView ivTop = (ImageView) holder.itemView.findViewById(R.id.ivTop);
         ImageView ivClose = (ImageView) holder.itemView.findViewById(R.id.ivClose);
-        if (s.isPlay == true || s.id.equals(playId)) {
+        if (s.isPlay==true || s.id.equals(playId)) {
             ivTop.setVisibility(View.VISIBLE);
             textViewTitle.setTextColor(Color.parseColor("#fd8548"));
         } else {

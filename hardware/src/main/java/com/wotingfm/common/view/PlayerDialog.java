@@ -62,12 +62,12 @@ public class PlayerDialog extends Dialog implements View.OnClickListener {
                     if (popPlay != null) {
                         for (int i = 0, size = singLesBeans.size(); i < size; i++) {
                             Player.DataBean.SinglesBean p = singLesBeans.get(i);
-                            p.isPlay = false;
+                            p.isPlay =false;
                             singLesBeans.set(i, p);
                         }
                         playerListAdapter.setPlayId(singlesBean.id);
                         popPlay.play(singlesBean, postion);
-                        singlesBean.isPlay = true;
+                        singlesBean.isPlay =true;
                         singLesBeans.set(postion, singlesBean);
                         playerListAdapter.notifyDataSetChanged();
                     }
