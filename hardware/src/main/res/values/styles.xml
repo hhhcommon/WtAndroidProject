@@ -37,7 +37,7 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:gravity">center</item>
         <item name="android:textColor">@color/black_head_word</item>
-        <item name="android:textSize">17sp</item>
+        <item name="android:textSize">22sp</item>
     </style>
 
     <!--个人中心标识文字-->
@@ -55,9 +55,10 @@
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">59dp</item>
         <item name="android:background">@drawable/wt_view_click_background</item>
+        <item name="android:clickable">true</item>
     </style>
 
-    <!-- 个人中心 Relative -->
+    <!-- 个人中心 LeftImage -->
     <style name="MineLeftImageStyle">
         <item name="android:layout_width">32dp</item>
         <item name="android:layout_height">32dp</item>

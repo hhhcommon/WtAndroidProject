@@ -11,17 +11,17 @@ import com.wotingfm.R;
 import com.wotingfm.ui.test.mine.MineActivity;
 
 /**
- * 个人中心主界面
- * Created by Administrator on 2017/6/7.
+ * FM 设置
+ * Created by Administrator on 2017/6/9.
  */
-public class MineFragment extends Fragment implements View.OnClickListener {
+public class FMSetFragment extends Fragment implements View.OnClickListener {
     private View rootView;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         if (rootView == null) {
-            rootView = inflater.inflate(R.layout.fragment_mine, container, false);
+            rootView = inflater.inflate(R.layout.fragment_fm_set, container, false);
             rootView.setOnClickListener(this);
 
             initView();
@@ -37,7 +37,7 @@ public class MineFragment extends Fragment implements View.OnClickListener {
 
     // 初始化点击事件
     private void initEvent() {
-        rootView.findViewById(R.id.fm_set).setOnClickListener(this);// FM 设置
+        rootView.findViewById(R.id.image_back).setOnClickListener(this);// 返回
     }
 
     @Override
@@ -51,8 +51,8 @@ public class MineFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.fm_set:// FM 设置
-                MineActivity.open(new FMSetFragment());
+            case R.id.image_back:
+                MineActivity.close();
                 break;
         }
     }
