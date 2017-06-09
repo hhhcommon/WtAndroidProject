@@ -45,4 +45,7 @@
     <color name="yellow">#FFFF00</color>
 
     <color name="background_tab_pressed">#6633B5E5</color>
+
+    <!--灰色-->
+    <color name="gray">#66919697</color>
 </resources>

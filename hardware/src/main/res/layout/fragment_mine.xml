@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/LinearLayoutStyle">
+
+    <!--登录状态-->
+    <RelativeLayout
+        android:id="@+id/view_login"
+        android:layout_width="match_parent"
+        android:layout_height="294dp">
+
+        <ImageView
+            android:id="@+id/image_info"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:src="@mipmap/nav_icon_qr_code_n"
+            android:layout_marginTop="16dp"
+            android:layout_marginLeft="16dp"/>
+
+        <ImageView
+            android:id="@+id/image_qr_code"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_alignParentRight="true"
+            android:src="@mipmap/nav_icon_qr_code_n_copy_2"
+            android:layout_marginTop="16dp"
+            android:layout_marginRight="16dp"/>
+
+        <com.woting.commonplat.widget.RoundImageView
+            android:id="@+id/image_head"
+            android:layout_width="94dp"
+            android:layout_height="94dp"
+            android:src="@mipmap/app_logo"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="70dp"/>
+
+        <TextView
+            android:id="@+id/text_user_name"
+            style="@style/WrapContent"/>
+
+    </RelativeLayout>
+
+    <ScrollView
+        style="@style/ScrollViewStyle">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                style="@style/MineIdentifyingTextStyle"
+                android:text="连接汽车音响系统"/>
+
+            <RelativeLayout
+                android:id="@+id/fm_set"
+                style="@style/MineRelativeStyle">
+
+                <ImageView
+                    android:id="@+id/image_fm"
+                    style="@style/MineLeftImageStyle"
+                    android:src="@mipmap/icon_fm_n" />
+
+                <TextView
+                    style="@style/MineTextStyle"
+                    android:text="FM设置"
+                    android:layout_toRightOf="@id/image_fm" />
+
+                <ImageView
+                    style="@style/MineRightImageStyle" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/bluetooth_set"
+                style="@style/MineRelativeStyle">
+
+                <ImageView
+                    android:id="@+id/image_bluetooth"
+                    style="@style/MineLeftImageStyle"
+                    android:src="@mipmap/icon_bluetooth_n" />
+
+                <TextView
+                    style="@style/MineTextStyle"
+                    android:text="蓝牙设置"
+                    android:layout_toRightOf="@id/image_bluetooth" />
+
+                <ImageView
+                    style="@style/MineRightImageStyle" />
+
+            </RelativeLayout>
+
+            <TextView
+                style="@style/MineIdentifyingTextStyle"
+                android:text="连接设备"/>
+
+            <RelativeLayout
+                android:id="@+id/wifi_set"
+                style="@style/MineRelativeStyle">
+
+                <ImageView
+                    android:id="@+id/image_wifi"
+                    style="@style/MineLeftImageStyle"
+                    android:src="@mipmap/icon_wifi_n" />
+
+                <TextView
+                    android:id="@+id/text_wifi_set"
+                    style="@style/MineTextStyle"
+                    android:text="无线局域网"
+                    android:layout_toRightOf="@id/image_wifi"/>
+
+                <ImageView
+                    android:id="@+id/image_wifi_set"
+                    style="@style/MineRightImageStyle" />
+
+                <TextView
+                    android:id="@+id/text_wifi_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="5dp"
+                    android:textColor="@color/tip_color"
+                    android:layout_toLeftOf="@id/image_wifi_set"
+                    android:maxLines="1"
+                    android:text="已连接" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/flow_set"
+                style="@style/MineRelativeStyle">
+
+                <ImageView
+                    android:id="@+id/image_flow"
+                    style="@style/MineLeftImageStyle"
+                    android:src="@mipmap/icon_flow_n" />
+
+                <TextView
+                    android:id="@+id/text_flow_set"
+                    style="@style/MineTextStyle"
+                    android:text="流量管理"
+                    android:layout_toRightOf="@id/image_flow" />
+
+                <ImageView style="@style/MineRightImageStyle"  />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/lin_set"
+                style="@style/MineRelativeStyle"
+                android:layout_marginBottom="40dp"
+                android:layout_marginTop="27dp">
+
+                <ImageView
+                    android:id="@+id/image_set"
+                    style="@style/MineLeftImageStyle"
+                    android:src="@mipmap/icon_set_n" />
+
+                <TextView
+                    style="@style/MineTextStyle"
+                    android:text="设置"
+                    android:layout_toRightOf="@id/image_set" />
+
+                <ImageView style="@style/MineRightImageStyle" />
+
+            </RelativeLayout>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</LinearLayout>

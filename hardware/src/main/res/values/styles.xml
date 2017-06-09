@@ -23,7 +23,6 @@
         <item name="windowActionBar">false</item>
     </style>
 
-
     <!--左上角返回图片 Style-->
     <style name="LeftImageStyle">
         <item name="android:layout_width">44dp</item>
@@ -39,7 +38,48 @@
         <item name="android:gravity">center</item>
         <item name="android:textColor">@color/black_head_word</item>
         <item name="android:textSize">17sp</item>
-        android:=""
+    </style>
+
+    <!--个人中心标识文字-->
+    <style name="MineIdentifyingTextStyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">47dp</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:textColor">@color/black_head_word</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:paddingLeft">16dp</item>
+    </style>
+
+    <!-- 个人中心 Relative -->
+    <style name="MineRelativeStyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">59dp</item>
+        <item name="android:background">@drawable/wt_view_click_background</item>
+    </style>
+
+    <!-- 个人中心 Relative -->
+    <style name="MineLeftImageStyle">
+        <item name="android:layout_width">32dp</item>
+        <item name="android:layout_height">32dp</item>
+        <item name="android:layout_marginLeft">16dp</item>
+        <item name="android:layout_centerVertical">true</item>
+    </style>
+
+    <!-- 个人中心 TextView -->
+    <style name="MineTextStyle" parent="WrapContent">
+        <item name="android:layout_marginLeft">14dp</item>
+        <item name="android:layout_centerVertical">true</item>
+        <item name="android:textColor">@color/black_head_word</item>
+    </style>
+
+    <!-- 个人中心 RightImage -->
+    <style name="MineRightImageStyle">
+        <item name="android:layout_width">32dp</item>
+        <item name="android:layout_height">32dp</item>
+        <item name="android:layout_marginRight">10dp</item>
+        <item name="android:layout_centerVertical">true</item>
+        <item name="android:layout_alignParentRight">true</item>
+        <item name="android:src">@mipmap/chat_icon_next</item>
     </style>
 
 </resources>

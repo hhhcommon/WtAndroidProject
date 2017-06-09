@@ -2,23 +2,38 @@
 <resources>
 
     <style name="MatchParentWrapContent">
-        <item name="@android:layout_width">match_parent</item>
-        <item name="@android:layout_height">wrap_content</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
     </style>
 
     <style name="WrapContentMatchParent">
-        <item name="@android:layout_width">wrap_content</item>
-        <item name="@android:layout_height">match_parent</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">match_parent</item>
     </style>
 
     <style name="MatchParent">
-        <item name="@android:layout_width">match_parent</item>
-        <item name="@android:layout_height">match_parent</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
     </style>
 
     <style name="WrapContent">
-        <item name="@android:layout_width">wrap_content</item>
-        <item name="@android:layout_height">wrap_content</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <style name="LinearLayoutStyle" parent="MatchParent">
+        <item name="android:clipToPadding">true</item>
+        <item name="android:fitsSystemWindows">true</item>
+        <item name="android:background">@color/app_basic</item>
+        <item name="android:orientation">vertical</item>
+    </style>
+
+    <style name="ScrollViewStyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:scrollbars">none</item>
+        <item name="android:orientation">vertical</item>
+        <item name="android:background">@color/background_color</item>
     </style>
 
     <!--下载主题-->

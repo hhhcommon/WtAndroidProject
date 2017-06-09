@@ -8,7 +8,7 @@ import android.widget.TextView;
 
 import com.wotingfm.R;
 import com.wotingfm.ui.base.baseactivity.BaseActivity;
-import com.wotingfm.ui.user.logo.LogoActivity;
+import com.wotingfm.ui.main.view.MainActivity;
 
 /**
  * 作者：xinLong on 2017/6/4 22:16
@@ -74,8 +74,8 @@ public class PreferenceActivity extends BaseActivity implements View.OnClickList
                 finish();
                 break;
             case R.id.tv_enter:
-//                startActivity(new Intent(this, MainActivity.class));
-                startActivity(new Intent(this, LogoActivity.class));
+                startActivity(new Intent(this, MainActivity.class));
+//                startActivity(new Intent(this, LogoActivity.class));
                 break;
             case R.id.tv_RAWY:
                 setBackground(1,type1);
