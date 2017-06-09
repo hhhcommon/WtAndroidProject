@@ -56,7 +56,7 @@
     <!-- 个人中心 Relative -->
     <style name="MineRelativeStyle">
         <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">59dp</item>
+        <item name="android:layout_height">58dp</item>
         <item name="android:background">@drawable/wt_view_click_background</item>
         <item name="android:clickable">true</item>
     </style>
@@ -74,6 +74,7 @@
         <item name="android:layout_marginLeft">14dp</item>
         <item name="android:layout_centerVertical">true</item>
         <item name="android:textColor">@color/black_head_word</item>
+        <item name="android:textSize">20sp</item>
     </style>
 
     <!-- 个人中心 RightImage -->

@@ -46,6 +46,8 @@
 
     <color name="background_tab_pressed">#6633B5E5</color>
 
+    <color name="exhibition_world_color">#959698</color>
+
     <!--灰色-->
     <color name="gray">#66919697</color>
 </resources>

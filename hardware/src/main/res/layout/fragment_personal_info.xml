@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <include
+        android:id="@+id/view_head"
+        layout="@layout/activity_common_head"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <RelativeLayout
+        android:id="@+id/view_head_portrait"
+        style="@style/MineRelativeStyle"
+        android:layout_height="70dp">
+
+        <TextView
+            style="@style/MineTextStyle"
+            android:text="@string/head_portrait" />
+
+        <ImageView
+            android:id="@+id/image_right_1"
+            style="@style/MineRightImageStyle" />
+
+        <com.woting.commonplat.widget.RoundImageView
+            android:id="@+id/image_head"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:layout_toLeftOf="@+id/image_right_1"
+            android:layout_centerVertical="true"
+            android:src="@mipmap/app_logo"/>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/view_nickname"
+        style="@style/MineRelativeStyle"
+        android:layout_height="44dp">
+
+        <TextView
+            style="@style/MineTextStyle"
+            android:text="@string/nickname" />
+
+        <ImageView
+            android:id="@+id/image_right_2"
+            style="@style/MineRightImageStyle" />
+
+        <TextView
+            android:id="@+id/text_nickname"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toLeftOf="@+id/image_right_2"
+            android:layout_centerVertical="true"
+            android:text="莉莉"
+            android:textColor="@color/exhibition_world_color"
+            android:textSize="14sp"
+            android:src="@mipmap/app_logo"/>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/view_brief_introduction"
+        style="@style/MineRelativeStyle"
+        android:layout_height="44dp">
+
+        <TextView
+            style="@style/MineTextStyle"
+            android:text="@string/brief_introduction" />
+
+        <ImageView
+            android:id="@+id/image_right_3"
+            style="@style/MineRightImageStyle" />
+
+        <TextView
+            android:id="@+id/text_brief_introduction"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toLeftOf="@+id/image_right_3"
+            android:layout_centerVertical="true"
+            android:text="未填写"
+            android:textColor="@color/exhibition_world_color"
+            android:textSize="14sp"
+            android:src="@mipmap/app_logo"/>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/view_gender"
+        style="@style/MineRelativeStyle"
+        android:layout_marginTop="8dp"
+        android:layout_height="44dp">
+
+        <TextView
+            style="@style/MineTextStyle"
+            android:text="@string/gender" />
+
+        <ImageView
+            android:id="@+id/image_right_4"
+            style="@style/MineRightImageStyle" />
+
+        <TextView
+            android:id="@+id/text_gender"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toLeftOf="@+id/image_right_4"
+            android:layout_centerVertical="true"
+            android:text="@string/man"
+            android:textColor="@color/exhibition_world_color"
+            android:textSize="14sp"
+            android:src="@mipmap/app_logo"/>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/view_region"
+        style="@style/MineRelativeStyle"
+        android:layout_height="44dp">
+
+        <TextView
+            style="@style/MineTextStyle"
+            android:text="@string/region" />
+
+        <ImageView
+            android:id="@+id/image_right_5"
+            style="@style/MineRightImageStyle" />
+
+        <TextView
+            android:id="@+id/text_region"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toLeftOf="@+id/image_right_5"
+            android:layout_centerVertical="true"
+            android:text="@string/man"
+            android:textColor="@color/exhibition_world_color"
+            android:textSize="14sp"
+            android:src="@mipmap/app_logo"/>
+
+    </RelativeLayout>
+
+</LinearLayout>

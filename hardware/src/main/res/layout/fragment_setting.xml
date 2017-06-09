@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <include
+        android:id="@+id/view_head"
+        layout="@layout/activity_common_head"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <RelativeLayout
+        android:id="@+id/view_personal_info"
+        style="@style/MineRelativeStyle">
+
+        <TextView
+            style="@style/MineTextStyle"
+            android:text="@string/personal_info" />
+
+        <ImageView style="@style/MineRightImageStyle" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/view_my_concern"
+        style="@style/MineRelativeStyle">
+
+        <TextView
+            style="@style/MineTextStyle"
+            android:text="@string/my_concern" />
+
+        <ImageView style="@style/MineRightImageStyle" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/view_preference_setting"
+        style="@style/MineRelativeStyle">
+
+        <TextView
+            style="@style/MineTextStyle"
+            android:text="@string/preference_setting" />
+
+        <ImageView style="@style/MineRightImageStyle" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/view_message_settings"
+        style="@style/MineRelativeStyle">
+
+        <TextView
+            style="@style/MineTextStyle"
+            android:text="@string/message_settings" />
+
+        <ImageView style="@style/MineRightImageStyle" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/view_clear_cache"
+        style="@style/MineRelativeStyle">
+
+        <TextView
+            style="@style/MineTextStyle"
+            android:text="@string/clear_cache" />
+
+        <ImageView
+            android:id="@+id/image_clear_cache_right"
+            style="@style/MineRightImageStyle" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/clear_cache"
+            android:layout_toLeftOf="@id/image_clear_cache_right"
+            android:layout_centerVertical="true"
+            android:textSize="18sp"/>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/view_account_security"
+        style="@style/MineRelativeStyle"
+        android:layout_marginTop="10dp">
+
+        <TextView
+            style="@style/MineTextStyle"
+            android:text="@string/account_security" />
+
+        <ImageView style="@style/MineRightImageStyle" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/view_feedback"
+        style="@style/MineRelativeStyle"
+        android:layout_marginTop="10dp">
+
+        <TextView
+            style="@style/MineTextStyle"
+            android:text="@string/feedback" />
+
+        <ImageView style="@style/MineRightImageStyle" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/view_about"
+        style="@style/MineRelativeStyle"
+        android:layout_marginBottom="40dp">
+
+        <TextView
+            style="@style/MineTextStyle"
+            android:text="@string/about" />
+
+        <ImageView style="@style/MineRightImageStyle" />
+
+    </RelativeLayout>
+
+</LinearLayout>
