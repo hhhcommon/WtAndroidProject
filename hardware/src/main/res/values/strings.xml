@@ -26,4 +26,11 @@
     <string name="account_security">账号安全</string>
     <string name="feedback">意见反馈</string>
     <string name="about">关于</string>
+
+    <string name="receive_message_push">接收消息推送</string>
+    <string name="feed_back">反馈</string>
+    <string name="edit_information">请输入您的手机号/邮箱/QQ</string>
+    <string name="edit_feedback">您的反馈是我们进步的最大动力...</string>
+
+    <string name="commit">提交</string>
 </resources>

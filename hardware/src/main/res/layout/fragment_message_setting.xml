@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <include
+        android:id="@+id/view_head"
+        layout="@layout/activity_common_head"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <RelativeLayout
+        android:id="@+id/fm_set"
+        android:layout_width="match_parent"
+        android:layout_height="58dp"
+        android:background="@drawable/wt_view_click_background"
+        android:clickable="true">
+
+        <TextView
+            android:id="@+id/text_fm_set"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="16dp"
+            android:text="@string/receive_message_push"
+            android:textColor="@color/black_head_word"
+            android:textSize="20sp"/>
+
+        <ImageView
+            android:id="@+id/image_fm_set"
+            android:layout_width="34dp"
+            android:layout_height="24dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="16dp"
+            android:src="@mipmap/on_switch"/>
+
+    </RelativeLayout>
+
+</LinearLayout>
