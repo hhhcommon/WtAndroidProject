@@ -33,4 +33,13 @@
     <string name="edit_feedback">您的反馈是我们进步的最大动力...</string>
 
     <string name="commit">提交</string>
+
+    <string name="head_portrait">头像</string>
+    <string name="nickname">昵称</string>
+    <string name="brief_introduction">简介</string>
+    <string name="gender">性别</string>
+    <string name="region">地区</string>
+    <string name="man">男</string>
+    <string name="woman">女</string>
+    <string name="beijing">北京</string>
 </resources>
