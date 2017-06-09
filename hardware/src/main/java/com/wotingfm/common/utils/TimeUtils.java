@@ -7,7 +7,7 @@ import java.util.TimeZone;
  * Created by amine on 2017/6/7.
  */
 
-public class TimeUtil {
+public class TimeUtils {
     public static String formatterTime(long ms) {
         SimpleDateFormat formatter = new SimpleDateFormat("HH:mm:ss");
         formatter.setTimeZone(TimeZone.getTimeZone("GMT+00:00"));
