@@ -15,14 +15,18 @@ import android.widget.TextView;
 
 import com.wotingfm.R;
 import com.wotingfm.common.application.BSApplication;
+import com.wotingfm.common.config.GlobalStateConfig;
+import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.ui.base.baseadapter.MyFragmentPagerAdapter;
 import com.wotingfm.ui.intercom.add.find.FindFragment;
-import com.wotingfm.ui.intercom.group.creat.CreateGroupActivity;
+import com.wotingfm.ui.intercom.group.creat.CreatGroupMainFragment;
 import com.wotingfm.ui.intercom.main.chat.fragment.ChatFragment;
 import com.wotingfm.ui.intercom.main.contacts.fragment.ContactsFragment;
-import com.wotingfm.ui.scanning.activity.CaptureActivity;
-import com.wotingfm.ui.user.login.view.LoginActivity;
+import com.wotingfm.ui.intercom.main.simulation.SimulationInterphoneFragment;
+import com.wotingfm.ui.main.view.MainActivity;
+import com.wotingfm.ui.intercom.scanning.activity.CaptureActivity;
+import com.wotingfm.ui.user.logo.LogoActivity;
 
 import java.util.ArrayList;
 
@@ -39,6 +43,7 @@ public class InterPhoneFragment extends Fragment implements View.OnClickListener
     private ImageView img_more;
     private View rootView;
     private FragmentActivity context;
+    private ImageView img_person;
 
     @Override
     public void onCreate( Bundle savedInstanceState) {
@@ -62,6 +67,8 @@ public class InterPhoneFragment extends Fragment implements View.OnClickListener
         img_more = (ImageView) rootView.findViewById(R.id.img_more);
         img_more.setOnClickListener(this);
 
+        img_person = (ImageView) rootView.findViewById(R.id.img_person);
+        img_person.setOnClickListener(this);
         tv_chat = (TextView) rootView.findViewById(R.id.tv_chat);
         line_chat = (TextView)rootView. findViewById(R.id.line_chat);
         tv_linkman = (TextView) rootView.findViewById(R.id.tv_linkman);
@@ -126,33 +133,33 @@ public class InterPhoneFragment extends Fragment implements View.OnClickListener
                 break;
             case R.id.tv_addFriend:// 跳转到添加好友
                 if (isLogin()) {
-                    Intent Intent = new Intent(context, FindFragment.class);
+                    FindFragment fragment = new FindFragment();
                     Bundle bundle = new Bundle();
                     bundle.putString("type", "friend");
-                    Intent.putExtras(bundle);
-                    startActivity(Intent);
+                    fragment.setArguments(bundle);
+                    InterPhoneActivity.open(fragment);
                 } else {
-                    startActivity(new Intent(context, LoginActivity.class));
+                    startActivity(new Intent(context, LogoActivity.class));
                 }
                 addDialog.dismiss();
                 break;
             case R.id.tv_addGroup:        // 跳转到加入群组
                 if (isLogin()) {
-                    Intent Intent = new Intent(context, FindFragment.class);
+                    FindFragment fragment = new FindFragment();
                     Bundle bundle = new Bundle();
                     bundle.putString("type", "group");
-                    Intent.putExtras(bundle);
-                    startActivity(Intent);
+                    fragment.setArguments(bundle);
+                    InterPhoneActivity.open(fragment);
                 } else {
-                    startActivity(new Intent(context, LoginActivity.class));
+                    startActivity(new Intent(context, LogoActivity.class));
                 }
                 addDialog.dismiss();
                 break;
             case R.id.tv_createGroup:// 跳转到创建讨论组
                 if (isLogin()) {
-                    startActivity(new Intent(context, CreateGroupActivity.class));
+                    InterPhoneActivity.open(new CreatGroupMainFragment());
                 } else {
-                    startActivity(new Intent(context, LoginActivity.class));
+                    startActivity(new Intent(context, LogoActivity.class));
                 }
                 addDialog.dismiss();
                 break;
@@ -160,11 +167,24 @@ public class InterPhoneFragment extends Fragment implements View.OnClickListener
                 if (isLogin()) {
                     startActivity(new Intent(context, CaptureActivity.class));
                 } else {
-                    startActivity(new Intent(context, LoginActivity.class));
+                    startActivity(new Intent(context, LogoActivity.class));
                 }
                 addDialog.dismiss();
                 break;
             case R.id.tv_intercom:
+                InterPhoneActivity.open(new SimulationInterphoneFragment());
+                addDialog.dismiss();
+                break;
+            case R.id.img_person:
+                GlobalStateConfig.mineFromType=2;
+                GlobalStateConfig.activityA="A";
+                GlobalStateConfig.activityB="C";
+                MainActivity.changeThree();
+                Intent push = new Intent(BroadcastConstants.MINE_ACTIVITY_CHANGE);
+                Bundle bundle = new Bundle();
+                bundle.putInt("viewType", 3);
+                push.putExtras(bundle);
+                context.sendBroadcast(push);
                 break;
         }
 
@@ -215,15 +235,15 @@ public class InterPhoneFragment extends Fragment implements View.OnClickListener
         if (arg0 == 0) {
             tv_chat.setTextColor(this.getResources().getColor(R.color.app_basic));
             tv_linkman.setTextColor(this.getResources().getColor(R.color.black_head_word));
-            line_chat.setTextColor(this.getResources().getColor(R.color.gray_edit_hint_word));
-            line_linkman.setTextColor(this.getResources().getColor(R.color.app_basic));
+//            line_chat.setBackgroundResource(R.color.app_basic);
+//            line_linkman.setBackgroundResource(R.color.gray_edit_hint_word);
             line_chat.setVisibility(View.VISIBLE);
             line_linkman.setVisibility(View.INVISIBLE);
         } else if (arg0 == 1) {
             tv_chat.setTextColor(this.getResources().getColor(R.color.black_head_word));
             tv_linkman.setTextColor(this.getResources().getColor(R.color.app_basic));
-            line_chat.setTextColor(this.getResources().getColor(R.color.gray_edit_hint_word));
-            line_linkman.setTextColor(this.getResources().getColor(R.color.app_basic));
+//            line_chat.setBackgroundResource(R.color.gray_edit_hint_word);
+//            line_linkman.setBackgroundResource(R.color.app_basic);
             line_chat.setVisibility(View.INVISIBLE);
             line_linkman.setVisibility(View.VISIBLE);
         }

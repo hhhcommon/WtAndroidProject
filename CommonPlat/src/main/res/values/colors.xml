@@ -7,6 +7,8 @@
 
     <!-- 黑色  标头字体 -->
     <color name="black_head_word">#16181a</color>
+    <!-- 偏好设置字体 -->
+    <color name="color_preference_word">#959698</color>
 
     <!-- 输入框默认提示字体 -->
     <color name="gray_edit_hint_word">#cccccd</color>
@@ -18,7 +20,7 @@
     <color name="line_color">#efefef</color>
 
     <!-- 一般情况下的背景色 -->
-    <color name="background_color">#f5ffffff</color>
+    <color name="background_color">#f7f7f7</color>
 
     <!-- 正常字体颜色 -->
     <color name="typeface_color">#3d3d3d</color>

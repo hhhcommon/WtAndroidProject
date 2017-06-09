@@ -6,7 +6,8 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="44dp">
-        <TextView
+        <EditText
+            android:id="@+id/et_search"
             android:layout_width="match_parent"
             android:layout_height="28dp"
             android:layout_marginBottom="8dp"
@@ -17,8 +18,9 @@
             android:gravity="center|left"
             android:paddingLeft="14dp"
             android:layout_toLeftOf="@+id/tv_clear"
-            android:text="搜索"
-            android:textColor="#959698"
+            android:hint="搜索"
+            android:textColor="@color/black_head_word"
+            android:textColorHint="#959698"
             android:textSize="12sp" />
         <TextView
             android:id="@+id/tv_clear"
@@ -31,6 +33,7 @@
             android:textSize="14sp"
             android:layout_height="wrap_content" />
         <ImageView
+            android:id="@+id/img_search"
             android:layout_width="24dp"
             android:layout_centerVertical="true"
             android:layout_alignParentRight="true"
@@ -38,8 +41,12 @@
             android:src="@mipmap/chat_icon_call_copy"
             android:layout_height="24dp" />
     </RelativeLayout>
-    <TextView
+    <include
+        layout="@layout/common_line"
         android:layout_width="match_parent"
-        android:layout_height="0.5dp"
-        android:background="@color/line_color" />
+        android:layout_height="0.5dp"/>
+    <ListView
+        android:id="@+id/listView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"></ListView>
 </LinearLayout>

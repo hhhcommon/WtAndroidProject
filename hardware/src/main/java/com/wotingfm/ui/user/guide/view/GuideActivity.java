@@ -19,7 +19,6 @@ public class GuideActivity extends Activity {
     private final InnerHandler mHandler = new InnerHandler(this);
     private GuidePresenter guidePresenter;
     private String tag = "SPLASH_VOLLEY_REQUEST_CANCEL_TAG";
-    private boolean isCancelRequest;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,15 +56,6 @@ public class GuideActivity extends Activity {
      */
     public String getTag() {
         return tag;
-    }
-
-    /**
-     * 获取当前页面的加载状态
-     *
-     * @return
-     */
-    public boolean getCancelRequest() {
-        return isCancelRequest;
     }
 
     @Override

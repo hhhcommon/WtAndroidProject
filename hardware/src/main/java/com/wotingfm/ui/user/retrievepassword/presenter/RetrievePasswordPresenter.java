@@ -3,8 +3,10 @@ package com.wotingfm.ui.user.retrievepassword.presenter;
 import android.os.CountDownTimer;
 import android.widget.Toast;
 
+import com.wotingfm.ui.user.login.model.Login;
+import com.wotingfm.ui.user.register.model.RegisterModel;
 import com.wotingfm.ui.user.retrievepassword.model.RetrievePasswordModel;
-import com.wotingfm.ui.user.retrievepassword.view.RetrievePassWordActivity;
+import com.wotingfm.ui.user.retrievepassword.view.RetrievePassWordFragment;
 
 /**
  * 作者：xinLong on 2017/6/5 13:55
@@ -12,13 +14,13 @@ import com.wotingfm.ui.user.retrievepassword.view.RetrievePassWordActivity;
  */
 public class RetrievePasswordPresenter {
 
-    private final RetrievePassWordActivity activity;
+    private final RetrievePassWordFragment activity;
     private final RetrievePasswordModel model;
     private boolean eyeShow = false;
     private CountDownTimer mCountDownTimer;
 
 
-    public RetrievePasswordPresenter(RetrievePassWordActivity activity) {
+    public RetrievePasswordPresenter(RetrievePassWordFragment activity) {
         this.activity = activity;
         this.model = new RetrievePasswordModel();
     }
@@ -45,15 +47,15 @@ public class RetrievePasswordPresenter {
     // 检查数据的正确性  检查通过则进行登录
     private boolean checkData(String userName, String password, String yzm) {
         if (userName == null || userName.trim().equals("")) {
-            Toast.makeText(activity, "登录账号不能为空", Toast.LENGTH_LONG).show();
+            Toast.makeText(activity.getActivity(), "登录账号不能为空", Toast.LENGTH_LONG).show();
             return false;
         }
         if (yzm == null || yzm.trim().equals("")) {
-            Toast.makeText(activity, "验证码不能为空", Toast.LENGTH_LONG).show();
+            Toast.makeText(activity.getActivity(), "验证码不能为空", Toast.LENGTH_LONG).show();
             return false;
         }
         if (password == null || password.trim().equals("")) {
-            Toast.makeText(activity, "密码不能为空", Toast.LENGTH_LONG).show();
+            Toast.makeText(activity.getActivity(), "密码不能为空", Toast.LENGTH_LONG).show();
             return false;
         }
         return true;
@@ -74,9 +76,7 @@ public class RetrievePasswordPresenter {
      */
     public void confirm(String userName, String password, String yzm) {
         if (checkData(userName, password, yzm)) {
-//            loginView.showDialog();
-//            JSONObject js = LoginModel.assemblyData(userName, password, loginActivity);
-//            send(GlobalConfig.loginUrl, js);
+            send(userName, password, yzm);
         }
     }
 
@@ -128,4 +128,51 @@ public class RetrievePasswordPresenter {
         }
         activity.setConfirmBackground(bt);
     }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    // 发送网络请求
+    private void send(String userName, String password, String yzm) {
+        model.loadNews(userName, password, yzm, new RetrievePasswordModel.OnLoadInterface() {
+            @Override
+            public void onSuccess(Login result) {
+//                loginView.removeDialog();
+                dealLoginSuccess(result);
+            }
+
+            @Override
+            public void onFailure(String msg) {
+//                loginView.removeDialog();
+//                ToastUtils.showVolleyError(loginView);
+            }
+        });
+    }
+
+
+    // 处理返回数据
+    private void dealLoginSuccess(Login result) {
+//        try {
+//            String ReturnType = result.getString("ReturnType");
+//            if (ReturnType != null && ReturnType.equals("1001")) {
+//                try {
+//                    JSONObject ui = (JSONObject) new JSONTokener(result.getString("UserInfo")).nextValue();
+//                    if (ui != null) {
+//                        // 保存用户数据
+//                        model.saveUserInfo(ui);
+//                        // 关闭当前界面
+//                        activity.close();
+//                    } else {
+//                        ToastUtils.show_always(activity.getActivity(), "登录失败，请您稍后再试");
+//                    }
+//
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                    ToastUtils.show_always(activity.getActivity(), "登录失败，请您稍后再试");
+//                }
+//
+//            }
+//        } catch (Exception e1) {
+//            e1.printStackTrace();
+//        }
+    }
+
 }
