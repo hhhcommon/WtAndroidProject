@@ -2,6 +2,7 @@ package com.wotingfm.common.net;
 
 
 import com.wotingfm.common.bean.HomeBanners;
+import com.wotingfm.common.bean.Player;
 
 import retrofit2.http.GET;
 import rx.Observable;
@@ -18,13 +19,16 @@ public interface RetrofitService {
      */
     boolean isOfficialServer = true;
     //是否输出日志
-    boolean isLOG = false;
+    boolean isLOG = true;
     String HOST = "http://woting.suitingwei.com/";
     String TEST_HOST = "http://woting.suitingwei.com/";
     String BASE_URL = (isOfficialServer ? HOST : TEST_HOST);
 
 
-    @GET(Api.URL_BANNER)
+    @GET("api/listenings/player")
+    Observable<Player> getPlayerList();
+
+    @GET("api/listenings/player")
     Observable<HomeBanners> getHomeBanners();
 }
 

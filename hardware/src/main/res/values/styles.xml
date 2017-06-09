@@ -1,8 +1,7 @@
 <resources>
 
 
-    <style name="AppBaseTheme" parent="Theme.AppCompat.NoActionBar">
-    </style>
+    <style name="AppBaseTheme" parent="Theme.AppCompat.NoActionBar"></style>
 
     <!--启动页主题-->
     <style name="SplashTheme" parent="@android:style/Theme.Light.NoTitleBar.Fullscreen">
@@ -23,7 +22,10 @@
         <item name="windowActionBar">false</item>
     </style>
 
-
+    <declare-styleable name="MaxHeightView">
+        <attr name="mhv_HeightRatio" format="reference|float" />
+        <attr name="mhv_HeightDimen" format="reference|dimension" />
+    </declare-styleable>
     <!--左上角返回图片 Style-->
     <style name="LeftImageStyle">
         <item name="android:layout_width">44dp</item>
@@ -42,4 +44,15 @@
         android:=""
     </style>
 
+    <style name="BottomDialog" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowActionBar">false</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:backgroundDimEnabled">true</item>
+        <item name="android:windowBackground">@null</item>
+        <item name="android:windowFrame">@null</item>
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowAnimationStyle">@style/Animation.Design.BottomSheetDialog</item>
+    </style>
 </resources>

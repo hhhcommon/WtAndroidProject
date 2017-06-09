@@ -1,8 +1,8 @@
 package com.wotingfm.common.net;
 
 
-
 import com.wotingfm.common.bean.HomeBanners;
+import com.wotingfm.common.bean.Player;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -86,12 +86,6 @@ public class RetrofitUtils {
                 .subscribe(s);
     }
 
-
-    /**
-     * banner
-     *
-     * @return
-     */
     public Observable<List<HomeBanners.Banner>> getHomeBanners() {
         return retrofitService.getHomeBanners()
                 .map(new Func1<HomeBanners, List<HomeBanners.Banner>>() {
@@ -101,6 +95,24 @@ public class RetrofitUtils {
                             throw new IllegalStateException(homeBanners.message);
                         }
                         return homeBanners.banners;
+                    }
+                });
+    }
+
+    /**
+     * banner
+     *
+     * @return
+     */
+    public Observable<List<Player.DataBean.SinglesBean>> getPlayerList() {
+        return retrofitService.getPlayerList()
+                .map(new Func1<Player, List<Player.DataBean.SinglesBean>>() {
+                    @Override
+                    public List<Player.DataBean.SinglesBean> call(Player player) {
+                        if (player.ret != 0) {
+                            throw new IllegalStateException(player.msg);
+                        }
+                        return player.data.singles;
                     }
                 });
     }
