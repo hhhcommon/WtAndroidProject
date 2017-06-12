@@ -16,6 +16,7 @@
 
     <!-- App基本色调 -->
     <color name="app_basic">#fd8548</color>
+    <color name="color_efefef">#efefef</color>
 
     <!-- 线条颜色 -->
     <color name="line_color">#e9e8e6</color>

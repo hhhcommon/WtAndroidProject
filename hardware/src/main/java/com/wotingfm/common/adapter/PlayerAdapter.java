@@ -21,6 +21,7 @@ import static com.woting.commonplat.gather.GatherData.url;
 
 /**
  * Created by amine on 2017/6/7.
+ * 播放弹出列表
  */
 
 public class PlayerAdapter extends CommonAdapter<Player.DataBean.SinglesBean> {

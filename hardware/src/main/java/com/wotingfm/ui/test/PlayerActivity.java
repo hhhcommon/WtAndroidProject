@@ -1,7 +1,7 @@
 package com.wotingfm.ui.test;
 
+import android.content.ContentValues;
 import android.content.Intent;
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PagerSnapHelper;
 import android.support.v7.widget.RecyclerView;
@@ -17,14 +17,13 @@ import com.woting.commonplat.widget.LoadFrameLayout;
 import com.wotingfm.R;
 import com.wotingfm.common.adapter.PlayerAdapter;
 import com.wotingfm.common.bean.Player;
-import com.wotingfm.common.config.GlobalStateConfig;
-import com.wotingfm.common.constant.BroadcastConstants;
+import com.wotingfm.common.config.DbConfig;
+import com.wotingfm.common.database.HistoryHelper;
 import com.wotingfm.common.net.RetrofitUtils;
-import com.wotingfm.common.utils.TimeUtil;
+import com.wotingfm.common.utils.TimeUtils;
 import com.wotingfm.common.view.MenuDialog;
 import com.wotingfm.common.view.PlayerDialog;
 import com.wotingfm.ui.base.baseactivity.NoTitleBarBaseActivity;
-import com.wotingfm.ui.main.view.MainActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,6 +34,8 @@ import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.schedulers.Schedulers;
+
+import static com.wotingfm.common.database.SQLite.helper;
 
 /**
  * 作者：xinLong on 2017/6/2 12:15
@@ -62,6 +63,7 @@ public class PlayerActivity extends NoTitleBarBaseActivity implements View.OnCli
         return R.layout.activity_player;
     }
 
+
     @Override
     public void initView() {
 
@@ -83,12 +85,14 @@ public class PlayerActivity extends NoTitleBarBaseActivity implements View.OnCli
         mRecyclerView.setAdapter(mPlayerAdapter);
         bdPlayer = new BDPlayer(getApplicationContext());
         setListener();
-
+        historyHelper = new HistoryHelper(this);
         getPlayerList();
 
     }
 
-    private void setBeforeOrNext() {
+    private HistoryHelper historyHelper;
+
+    private void setBeforeOrNext(Player.DataBean.SinglesBean sb) {
         if (postionPlayer != 0) {
             ivBefore.setImageResource(R.mipmap.music_play_icon_before);
         } else {
@@ -99,7 +103,19 @@ public class PlayerActivity extends NoTitleBarBaseActivity implements View.OnCli
         } else {
             ivNext.setImageResource(R.mipmap.music_play_icon_next);
         }
+        if (sb != null) {
+            ContentValues contentValues = new ContentValues();
+            contentValues.put("id", sb.id);
+            contentValues.put("isPlay", sb.isPlay);
+            contentValues.put("single_title", sb.single_title);
+            contentValues.put("play_time", System.currentTimeMillis());
+            contentValues.put("single_logo_url", sb.single_logo_url);
+            contentValues.put("single_file_url", sb.single_file_url);
+            contentValues.put("album_title", sb.album_title);
+            historyHelper.insertTotable(sb.id, contentValues);
+        }
     }
+
 
     private void setListener() {
         mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -113,7 +129,7 @@ public class PlayerActivity extends NoTitleBarBaseActivity implements View.OnCli
                     bdPlayer.stopPlayback();
                     bdPlayer.setVideoPath(singLesBeans.get(postionPlayer).single_file_url);
                     bdPlayer.start();
-                    setBeforeOrNext();
+                    setBeforeOrNext(singLesBeans.get(postionPlayer));
                 }
             }
         });
@@ -137,7 +153,7 @@ public class PlayerActivity extends NoTitleBarBaseActivity implements View.OnCli
             @Override
             public void onPrepared(IMediaPlayer iMediaPlayer) {
                 seekbarVideo.setMax(bdPlayer.getDuration());
-                txtVideoTotaltime.setText(TimeUtil.formatterTime((bdPlayer.getDuration())) + "");
+                txtVideoTotaltime.setText(TimeUtils.formatterTime((bdPlayer.getDuration())) + "");
                 setBarProgrees();
             }
         });
@@ -152,7 +168,7 @@ public class PlayerActivity extends NoTitleBarBaseActivity implements View.OnCli
                     bdPlayer.start();
                     ivPause.setImageResource(R.mipmap.music_play_icon_pause);
                     seekbarVideo.setProgress(0);
-                    setBeforeOrNext();
+                    setBeforeOrNext(singLesBeans.get(postionPlayer));
                 }
             }
         });
@@ -184,15 +200,6 @@ public class PlayerActivity extends NoTitleBarBaseActivity implements View.OnCli
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.ivPlayerCenter:
-                GlobalStateConfig.mineFromType=1;
-                GlobalStateConfig.activityA="C";
-                GlobalStateConfig.activityB="B";
-                MainActivity.changeThree();
-                Intent push = new Intent(BroadcastConstants.MINE_ACTIVITY_CHANGE);
-                Bundle bundle = new Bundle();
-                bundle.putInt("viewType", 3);
-                push.putExtras(bundle);
-                sendBroadcast(push);
                 break;
             case R.id.ivPlayerFind:
 
@@ -206,7 +213,7 @@ public class PlayerActivity extends NoTitleBarBaseActivity implements View.OnCli
                     bdPlayer.start();
                     seekbarVideo.setProgress(0);
                     ivPause.setImageResource(R.mipmap.music_play_icon_pause);
-                    setBeforeOrNext();
+                    setBeforeOrNext(singLesBeans.get(postionPlayer));
                 }
                 break;
             case R.id.ivPause:
@@ -228,7 +235,7 @@ public class PlayerActivity extends NoTitleBarBaseActivity implements View.OnCli
                     bdPlayer.start();
                     ivPause.setImageResource(R.mipmap.music_play_icon_pause);
                     seekbarVideo.setProgress(0);
-                    setBeforeOrNext();
+                    setBeforeOrNext(singLesBeans.get(postionPlayer));
                 }
                 break;
             case R.id.ivPlayList:
@@ -249,7 +256,7 @@ public class PlayerActivity extends NoTitleBarBaseActivity implements View.OnCli
                         public void close(Player.DataBean.SinglesBean singlesBean) {
                             singLesBeans.remove(singlesBean);
                             mPlayerAdapter.notifyDataSetChanged();
-                            setBeforeOrNext();
+                            setBeforeOrNext(null);
                         }
                     });
                     playerDialog.show();
@@ -282,16 +289,17 @@ public class PlayerActivity extends NoTitleBarBaseActivity implements View.OnCli
                     @Override
                     public void call(List<Player.DataBean.SinglesBean> singls) {
                         if (singls != null && !singls.isEmpty()) {
-//                            loadLayout.showContentView();
-//                            singLesBeans.clear();
-//                            singLesBeans.addAll(singls);
-//                            mPlayerAdapter.notifyDataSetChanged();
-//                            postionPlayer = 0;
-//                            bdPlayer.setVideoPath(singls.get(0).single_file_url);
-//                            bdPlayer.start();
-//                            relatiBottom.setVisibility(View.VISIBLE);
-//                            setBarProgrees();
-//                            setBeforeOrNext();
+                            loadLayout.showContentView();
+                            singLesBeans.clear();
+                            singLesBeans.addAll(singls);
+                            mPlayerAdapter.notifyDataSetChanged();
+                            postionPlayer = 0;
+                            Player.DataBean.SinglesBean sb = singls.get(0);
+                            bdPlayer.setVideoPath(sb.single_file_url);
+                            bdPlayer.start();
+                            relatiBottom.setVisibility(View.VISIBLE);
+
+                            setBeforeOrNext(sb);
                         } else {
                             loadLayout.showEmptyView();
                         }
@@ -318,8 +326,31 @@ public class PlayerActivity extends NoTitleBarBaseActivity implements View.OnCli
                             return;
                         }
                         seekbarVideo.setProgress(bdPlayer.getCurrentPosition());
-                        txtVideoStarttime.setText(TimeUtil.formatterTime(bdPlayer.getCurrentPosition()) + "");
+                        txtVideoStarttime.setText(TimeUtils.formatterTime(bdPlayer.getCurrentPosition()) + "");
                     }
                 });//每隔一秒发送数据
+    }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        //播放历史
+        if (requestCode == 9090 && resultCode == RESULT_OK && data != null) {
+            Player.DataBean.SinglesBean sb = (Player.DataBean.SinglesBean) data.getSerializableExtra("singlesBean");
+            if (sb != null && singLesBeans != null && !singLesBeans.isEmpty()) {
+                for (int i = 0, size = singLesBeans.size(); i < size; i++) {
+                    if (sb.id.equals(singLesBeans.get(i).id)) {
+                        postionPlayer = i;
+                        seekbarVideo.setProgress(0);
+                        bdPlayer.stopPlayback();
+                        bdPlayer.setVideoPath(singLesBeans.get(postionPlayer).single_file_url);
+                        bdPlayer.start();
+                        mRecyclerView.smoothScrollToPosition(postionPlayer);
+                        setBeforeOrNext(singLesBeans.get(postionPlayer));
+                        return;
+                    }
+                }
+            }
+        }
     }
 }

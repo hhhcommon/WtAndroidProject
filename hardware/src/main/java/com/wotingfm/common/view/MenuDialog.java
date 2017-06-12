@@ -1,5 +1,6 @@
 package com.wotingfm.common.view;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -13,6 +14,7 @@ import android.widget.TextView;
 import com.wotingfm.R;
 import com.wotingfm.common.adapter.PlayerListAdapter;
 import com.wotingfm.common.bean.Player;
+import com.wotingfm.ui.play.activity.PlayerHistoryActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,9 +25,11 @@ import static com.wotingfm.R.id.mRecyclerViewList;
 public class MenuDialog extends Dialog implements View.OnClickListener {
 
     private View tvClose, tvLike, tvAlbums, tvAnchor, tvReport, tvDownload, tvAgo, tvSubscription, tvLocal;
+    private Activity activity;
 
-    public MenuDialog(@NonNull Context context) {
+    public MenuDialog(@NonNull Activity context) {
         super(context, R.style.BottomDialog);
+        this.activity = context;
         setContentView(R.layout.player_menu_dialog);
         getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         getWindow().setGravity(Gravity.BOTTOM);
@@ -55,9 +59,12 @@ public class MenuDialog extends Dialog implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
+        dismiss();
         switch (v.getId()) {
+            case R.id.tvAgo:
+                PlayerHistoryActivity.start(activity);
+                break;
             case R.id.tvClose:
-                dismiss();
                 break;
         }
     }

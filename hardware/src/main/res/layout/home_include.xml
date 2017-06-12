@@ -8,6 +8,7 @@
     android:layout_gravity="center"
     android:background="#16181a"
     app:errorView="@layout/layout_error_view"
+    app:emptyView="@layout/layout_empty_view"
     app:loadingView="@layout/layout_loading_view">
 
     <LinearLayout
