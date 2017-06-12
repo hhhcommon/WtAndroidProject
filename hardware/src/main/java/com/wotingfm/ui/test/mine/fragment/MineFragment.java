@@ -26,7 +26,7 @@ public class MineFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        context=getActivity();
+        context = getActivity();
     }
 
     @Nullable
@@ -71,19 +71,19 @@ public class MineFragment extends Fragment implements View.OnClickListener {
             case R.id.setting:// 设置
                 MineActivity.open(new SettingFragment());
                 break;
-            case R.id.head_left_btn://
-                if(GlobalStateConfig.mineFromType==1){
-                    GlobalStateConfig.mineFromType=0;
-                    GlobalStateConfig.activityA="A";
+            case R.id.head_left_btn:
+                if (GlobalStateConfig.mineFromType == 1) {
+                    GlobalStateConfig.mineFromType = 0;
+                    GlobalStateConfig.activityA = "A";
                     MainActivity.changeOne();
                     Intent push = new Intent(BroadcastConstants.MINE_ACTIVITY_CHANGE);
                     Bundle bundle = new Bundle();
                     bundle.putInt("viewType", 1);
                     push.putExtras(bundle);
                     context.sendBroadcast(push);
-                }else if(GlobalStateConfig.mineFromType==2){
-                    GlobalStateConfig.mineFromType=0;
-                    GlobalStateConfig.activityB="B";
+                } else if (GlobalStateConfig.mineFromType == 2) {
+                    GlobalStateConfig.mineFromType = 0;
+                    GlobalStateConfig.activityB = "B";
                     MainActivity.changeTwo();
                     Intent push = new Intent(BroadcastConstants.MINE_ACTIVITY_CHANGE);
                     Bundle bundle = new Bundle();
@@ -92,7 +92,6 @@ public class MineFragment extends Fragment implements View.OnClickListener {
                     context.sendBroadcast(push);
                 }
                 break;
-
         }
     }
 }
