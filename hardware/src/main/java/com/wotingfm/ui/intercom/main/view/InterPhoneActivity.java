@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.widget.Toast;
-
 import com.woting.commonplat.utils.SequenceUUID;
 import com.wotingfm.R;
 
@@ -21,7 +20,7 @@ public class InterPhoneActivity extends FragmentActivity  {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_intercom);
+        setContentView(R.layout.fragment_main);
         context = this;
         open(new InterPhoneFragment());
     }

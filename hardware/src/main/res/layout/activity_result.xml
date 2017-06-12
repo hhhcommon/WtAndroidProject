@@ -11,7 +11,7 @@
 
     <include
         android:id="@+id/view_head"
-        layout="@layout/activity_common_head"
+        layout="@layout/common_head"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 

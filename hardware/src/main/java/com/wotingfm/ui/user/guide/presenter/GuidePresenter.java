@@ -2,14 +2,13 @@ package com.wotingfm.ui.user.guide.presenter;
 
 import android.content.Intent;
 
-import com.woting.commonplat.config.GlobalNetWorkConfig;
 import com.wotingfm.common.config.GlobalUrlConfig;
 import com.wotingfm.ui.base.baseinterface.OnLoadInterface;
 import com.wotingfm.ui.base.basepresenter.BasePresenter;
+import com.wotingfm.ui.main.view.MainActivity;
 import com.wotingfm.ui.user.guide.model.GuideModel;
 import com.wotingfm.ui.user.guide.view.GuideActivity;
-import com.wotingfm.ui.main.view.MainActivity;
-import com.wotingfm.ui.user.preference.PreferenceActivity;
+import com.wotingfm.ui.user.preference.PreferenceFragment;
 
 import org.json.JSONObject;
 import org.json.JSONTokener;
@@ -29,7 +28,7 @@ public class GuidePresenter extends BasePresenter {
 
     // 界面跳转
     private void close() {
-        activity.startActivity(new Intent(activity, PreferenceActivity.class));       // 跳转到引导页  PreferenceActivity
+        activity.startActivity(new Intent(activity, MainActivity.class));       // 跳转到引导页  PreferenceActivity
         activity.finish();
     }
 
@@ -39,7 +38,6 @@ public class GuidePresenter extends BasePresenter {
         model.loadNews(GlobalUrlConfig.splashUrl, activity.getTag(), js, new OnLoadInterface() {
             @Override
             public void onSuccess(JSONObject result) {
-                if (activity.getCancelRequest()) return;
                 dealLoginSuccess(result);
                 close();    // 界面跳转
             }

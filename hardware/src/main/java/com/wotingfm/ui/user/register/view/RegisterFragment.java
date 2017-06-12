@@ -1,54 +1,58 @@
 package com.wotingfm.ui.user.register.view;
 
-import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.wotingfm.R;
-import com.wotingfm.ui.base.baseactivity.BaseActivity;
-import com.wotingfm.ui.main.view.MainActivity;
+import com.wotingfm.ui.user.logo.LogoActivity;
 import com.wotingfm.ui.user.register.presenter.RegisterPresenter;
 
 /**
  * 作者：xinLong on 2017/6/4 19:45
  * 邮箱：645700751@qq.com
  */
-public class RegisterActivity extends BaseActivity implements View.OnClickListener {
+public class RegisterFragment extends Fragment implements View.OnClickListener {
     private TextView tv_yzm, tv_confirm;
     private ImageView left, img_eye;
     private EditText et_phoneNumber, et_passWord,et_yzm;
     private RegisterPresenter registerPresenter;
+    private View rootView;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_register);
-        inItView();
-        inItListener();
-        setEditListener();
-        registerPresenter=new RegisterPresenter(this);
-        registerPresenter.setEye();
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        if (rootView == null) {
+            rootView = inflater.inflate(R.layout.fragment_register, container, false);
+            inItView();
+            inItListener();
+            setEditListener();
+            registerPresenter=new RegisterPresenter(this);
+            registerPresenter.setEye();
+        }
+        return rootView;
     }
 
     // 设置界面
     private void inItView() {
-        img_eye = (ImageView) findViewById(R.id.img_eye);                 // 密码显示
-        left = (ImageView) findViewById(R.id.head_left_btn);              // 删除按钮
-        TextView tv_center = (TextView) findViewById(R.id.tv_center);     // 标头
+        img_eye = (ImageView) rootView.findViewById(R.id.img_eye);                 // 密码显示
+        left = (ImageView)rootView. findViewById(R.id.head_left_btn);              // 删除按钮
+        TextView tv_center = (TextView) rootView.findViewById(R.id.tv_center);     // 标头
         tv_center.setText("注册");
 
-        et_phoneNumber = (EditText) findViewById(R.id.et_phoneNumber);    // 手机号输入框
-        et_yzm = (EditText) findViewById(R.id.et_yzm);                    // 验证码输入框
-        et_passWord = (EditText) findViewById(R.id.et_passWord);          // 密码输入框
+        et_phoneNumber = (EditText) rootView.findViewById(R.id.et_phoneNumber);    // 手机号输入框
+        et_yzm = (EditText)rootView. findViewById(R.id.et_yzm);                    // 验证码输入框
+        et_passWord = (EditText) rootView.findViewById(R.id.et_passWord);          // 密码输入框
 
-        tv_yzm= (TextView) findViewById(R.id.tv_yzm);                     // 获取验证码
-        tv_confirm = (TextView) findViewById(R.id.tv_confirm);            // 注册
+        tv_yzm= (TextView)rootView. findViewById(R.id.tv_yzm);                     // 获取验证码
+        tv_confirm = (TextView)rootView. findViewById(R.id.tv_confirm);            // 注册
     }
 
     // 设置监听
@@ -64,17 +68,17 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.head_left_btn:
-                finish();
+                LogoActivity.close();
                 break;
             case R.id.tv_yzm:
-                registerPresenter.getYzm();
+                String userName = et_phoneNumber.getText().toString().trim();
+                registerPresenter.getYzm(userName);
                 break;
             case R.id.img_eye:
                 registerPresenter.setEye();
                 break;
             case R.id.tv_confirm:
                 register();
-                startActivity(new Intent(this, MainActivity.class));
                 break;
         }
     }
@@ -158,7 +162,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
             et_passWord.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
         } else {
             img_eye.setImageResource(R.mipmap.login_icon_password_unlook);
-            et_passWord.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD);
+            et_passWord.setInputType(InputType.TYPE_CLASS_TEXT |InputType.TYPE_TEXT_VARIATION_PASSWORD);
         }
     }
 

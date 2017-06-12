@@ -1,14 +1,10 @@
 package com.wotingfm.ui.user.register.model;
 
-
-import com.wotingfm.common.config.GlobalUrlConfig;
-import com.wotingfm.ui.base.baseinterface.OnLoadInterface;
-import com.wotingfm.ui.base.model.CommonModel;
 import com.wotingfm.ui.base.model.UserInfo;
-import com.wotingfm.ui.user.login.view.LoginActivity;
-import com.wotingfm.ui.user.register.view.RegisterActivity;
-
-import org.json.JSONObject;
+import com.wotingfm.ui.user.login.model.Login;
+import rx.Subscriber;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 /**
  * 作者：xinLong on 2017/5/16 14:28
@@ -17,26 +13,67 @@ import org.json.JSONObject;
 public class RegisterModel extends UserInfo {
 
     /**
-     * 组装数据
+     * 进行数据交互
      *
-     * @param activity
-     * @return
+     * @param userName
+     * @param password
+     * @param yzm
+     * @param listener 监听
      */
-    public JSONObject assemblyData(RegisterActivity activity) {
-        JSONObject jsonObject = CommonModel.getJsonObject(activity);
-        return jsonObject;
+    public void loadNews(String userName, String password,String yzm, final OnLoadInterface listener) {
+        getRetrofitService().register(userName, password,yzm)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<Login>() {
+                    @Override
+                    public void onCompleted() {
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        listener.onFailure("");
+                    }
+
+                    @Override
+                    public void onNext(Login login) {
+                        //填充UI
+                        listener.onSuccess(login);
+                    }
+                });
     }
 
     /**
      * 进行数据交互
      *
-     * @param url      请求地址
-     * @param tag      地址标签
-     * @param js       请求参数
+     * @param userName
      * @param listener 监听
      */
-    public void loadNews(String url, String tag, JSONObject js, final OnLoadInterface listener) {
+    public void loadNewsForYzm(String userName, final OnLoadInterface listener) {
+        getRetrofitService().registerForYzm(userName)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<Login>() {
+                    @Override
+                    public void onCompleted() {
+                    }
 
+                    @Override
+                    public void onError(Throwable e) {
+                        listener.onFailure("");
+                    }
+
+                    @Override
+                    public void onNext(Login login) {
+                        //填充UI
+                        listener.onSuccess(login);
+                    }
+                });
+    }
+
+    public interface OnLoadInterface {
+        void onSuccess(Login login);
+
+        void onFailure(String msg);
     }
 
 }

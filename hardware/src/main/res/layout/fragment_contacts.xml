@@ -1,6 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-</LinearLayout>
+    <ListView
+        android:id="@+id/listView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+    <TextView
+        android:id="@+id/dialog"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_gravity="center"
+        android:background="@drawable/background_circle_orange"
+        android:gravity="center"
+        android:text="A"
+        android:textColor="@color/white"
+        android:textSize="30sp"
+        android:visibility="invisible"/>
+
+    <com.wotingfm.ui.intercom.main.contacts.view.SideBar
+        android:id="@+id/sidrbar"
+        android:layout_width="20dp"
+        android:layout_height="fill_parent"
+        android:layout_gravity="right|center"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="8dp"/>
+
+</RelativeLayout>

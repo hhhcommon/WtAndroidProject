@@ -51,17 +51,18 @@ public class MainPresenter extends BasePresenter {
         mainActivity.registerReceiver(netWorkChangeReceiver, n);
     }
 
-
-    //接收定时服务发送过来的广播  用于结束应用
+    //接收定时服务发送过来的广播  用于界面更改
     private BroadcastReceiver endApplicationBroadcast = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
             if (action.equals(BroadcastConstants.ACTIVITY_CHANGE)) {
                 // 按钮切换-----档位切换广播
-                if (GlobalStateConfig.activityType == 1) {
+                int viewType = intent.getIntExtra("viewType",1);
+                Log.e("界面显示状态", viewType + "");
+                if (viewType == 1) {
                     mainActivity.changeOne();
-                } else if (GlobalStateConfig.activityType == 2) {
+                } else if (viewType==2) {
                     mainActivity.changeTwo();
                 } else {
                     mainActivity.changeThree();
@@ -78,6 +79,7 @@ public class MainPresenter extends BasePresenter {
     public void stop() {
         mainActivity.stopService(FloatingWindow);
         mainActivity.unregisterReceiver(netWorkChangeReceiver);
+        mainActivity.unregisterReceiver(endApplicationBroadcast);
         Log.e("app退出", "app退出");
     }
 
