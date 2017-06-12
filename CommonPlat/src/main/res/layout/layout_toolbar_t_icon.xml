@@ -17,5 +17,5 @@
         android:gravity="center"
         android:padding="10dp"
         android:text="保存"
-        android:textColor="@color/app_basic" />
+        android:textColor="#16181a" />
 </com.woting.commonplat.widget.WTToolbar>

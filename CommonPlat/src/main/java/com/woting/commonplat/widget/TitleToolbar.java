@@ -66,7 +66,7 @@ public class TitleToolbar extends Toolbar {
         mTitleTextView.setTextSize(17);
         mTitleTextView.setEllipsize(TextUtils.TruncateAt.END);
         mTitleTextView.setSingleLine(true);
-        mTitleTextView.setTextColor(Color.parseColor("#ffffff"));
+        mTitleTextView.setTextColor(Color.parseColor("#16181a"));
         addView(mTitleTextView);
     }
 
