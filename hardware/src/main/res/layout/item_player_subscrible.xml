@@ -83,11 +83,11 @@
 
         <TextView
             android:id="@+id/btnDelete"
-            android:layout_width="66dp"
+            android:layout_width="100dp"
             android:layout_height="85dp"
             android:background="#ed4a4a"
             android:gravity="center"
-            android:text="删除"
+            android:text="取消订阅"
             android:textColor="@color/white"
             android:textSize="16sp" />
     </com.mcxtzhang.swipemenulib.SwipeMenuLayout>

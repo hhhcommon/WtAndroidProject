@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <include layout="@layout/layout_toolbar" />
 
     <com.woting.commonplat.widget.LoadFrameLayout xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/loadLayout"
@@ -20,5 +19,27 @@
             android:id="@+id/mRecyclerView"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
+
     </com.woting.commonplat.widget.LoadFrameLayout>
-</LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/toolbar_height"
+        android:background="#00000000">
+
+        <ImageView
+            android:id="@+id/ivBack"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:src="@mipmap/nav_icon_back_white" />
+
+        <ImageView
+            android:id="@+id/ivMore"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:src="@mipmap/nav_icon_more_white" />
+    </RelativeLayout>
+</FrameLayout>

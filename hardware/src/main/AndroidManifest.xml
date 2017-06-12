@@ -80,6 +80,21 @@
             android:name=".ui.play.activity.PlayerHistoryActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
+        <!-- 我的订阅 -->
+        <activity
+            android:name=".ui.play.activity.MeSubscribeListActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" />
+        <!-- 界面举报 -->
+        <activity
+            android:name=".ui.play.activity.ReportsPlayerActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" />
+        <!-- 主播个人中心 -->
+        <activity
+            android:name=".ui.play.activity.AnchorPersonalCenterActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" />
 
 
         <!-- 扫一扫 -->

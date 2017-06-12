@@ -266,6 +266,14 @@ public class PlayerActivity extends NoTitleBarBaseActivity implements View.OnCli
                 if (menuDialog == null) {
                     menuDialog = new MenuDialog(this);
                 }
+                if (singLesBeans != null && !singLesBeans.isEmpty())
+                    menuDialog.setMenuData(singLesBeans.get(postionPlayer), new MenuDialog.FollowCallBack() {
+                        @Override
+                        public void followPlayer(Player.DataBean.SinglesBean psb) {
+                            singLesBeans.set(postionPlayer, psb);
+                            mPlayerAdapter.notifyDataSetChanged();
+                        }
+                    });
                 menuDialog.show();
                 break;
         }

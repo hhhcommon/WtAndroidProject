@@ -15,6 +15,7 @@ import com.wotingfm.common.adapter.PlayerHistoryListAdapter;
 import com.wotingfm.common.bean.Player;
 import com.wotingfm.common.config.DbConfig;
 import com.wotingfm.common.database.HistoryHelper;
+import com.wotingfm.common.utils.T;
 import com.wotingfm.common.view.RecyclerViewDivider;
 import com.wotingfm.ui.base.baseactivity.BaseToolBarActivity;
 
@@ -60,11 +61,11 @@ public class PlayerHistoryActivity extends BaseToolBarActivity {
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         mRecyclerView.setLayoutManager(layoutManager);
-        mRecyclerView.addItemDecoration(new RecyclerViewDivider(
-                this, LinearLayoutManager.VERTICAL, 1, R.color.color_efefef));
-        HistoryHelper historyHelper = new HistoryHelper(getApplicationContext());
+/*        mRecyclerView.addItemDecoration(new RecyclerViewDivider(
+                this, LinearLayoutManager.VERTICAL, 1, R.color.color_efefef));*/
+        final HistoryHelper historyHelper = new HistoryHelper(getApplicationContext());
         if (historyHelper != null) {
-            List<Player.DataBean.SinglesBean> list = historyHelper.findPlayHistoryList();
+            final List<Player.DataBean.SinglesBean> list = historyHelper.findPlayHistoryList();
             if (list != null && !list.isEmpty()) {
                 playerHistoryListAdapter = new PlayerHistoryListAdapter(this, list, new PlayerHistoryListAdapter.PlayerHistoryClick() {
                     @Override
@@ -73,6 +74,14 @@ public class PlayerHistoryActivity extends BaseToolBarActivity {
                         intent.putExtra("singlesBean", singlesBean);
                         setResult(RESULT_OK, intent);
                         finish();
+                    }
+
+                    @Override
+                    public void delete(Player.DataBean.SinglesBean singlesBean) {
+                        T.getInstance().equals("删除成功");
+                        list.remove(singlesBean);
+                        historyHelper.deleteTable(singlesBean.id);
+                        playerHistoryListAdapter.notifyDataSetChanged();
                     }
                 });
                 mRecyclerView.setAdapter(playerHistoryListAdapter);

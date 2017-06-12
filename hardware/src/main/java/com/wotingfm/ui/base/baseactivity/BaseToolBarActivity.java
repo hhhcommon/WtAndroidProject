@@ -150,6 +150,19 @@ public abstract class BaseToolBarActivity extends BaseActivity implements View.O
         this.initView();
     }
 
+    private LoadingDialog mLdDialog;
+
+    public void showLodingDialog() {
+        mLdDialog = ProgressDialogUtils.instance(this).getLoadingDialog();
+        if (!mLdDialog.isShowing()) {
+            mLdDialog.show();
+        }
+    }
+
+    public void dissmisDialog() {
+        if (mLdDialog != null)
+            mLdDialog.dismiss();
+    }
 
     /*********************
      * 子类实现

@@ -38,6 +38,8 @@ public class Player implements Serializable {
             @DatabaseField
             public boolean isPlay;
             @DatabaseField
+            public boolean had_liked;
+            @DatabaseField
             public String single_title;
             @DatabaseField
             public long play_time;
