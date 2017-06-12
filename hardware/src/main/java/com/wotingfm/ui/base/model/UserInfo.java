@@ -5,6 +5,7 @@ import android.util.Log;
 
 import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.constant.StringConstant;
+import com.wotingfm.common.net.BaseApi;
 
 import org.json.JSONObject;
 
@@ -12,7 +13,7 @@ import org.json.JSONObject;
  * 作者：xinLong on 2017/5/31 12:08
  * 邮箱：645700751@qq.com
  */
-public class UserInfo {
+public class UserInfo extends BaseApi {
 
     /**
      * 保存用户信息到本地

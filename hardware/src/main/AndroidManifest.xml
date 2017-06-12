@@ -9,7 +9,7 @@
         android:allowBackup="false"
         android:hardwareAccelerated="true"
         android:icon="@mipmap/app_logo"
-        android:label="@string/app_name"
+        android:label="@string/app_name">
         android:supportsRtl="false">
 
         <!-- 启动页 -->
@@ -46,48 +46,16 @@
             </intent-filter>
         </activity>
 
-
-        <!-- 偏好设置 -->
-        <activity
-            android:name="com.wotingfm.ui.user.preference.PreferenceActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme" />
-
-        <!-- 登录主页 -->
-        <activity
-            android:name="com.wotingfm.ui.user.logo.LogoActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme" />
-
-        <!-- 登录页 -->
-        <activity
-            android:name=".ui.user.login.view.LoginActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme" />
-
-        <!-- 注册页 -->
-        <activity
-            android:name=".ui.user.register.view.RegisterActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme" />
-
-        <!-- 忘记密码页 -->
-        <activity
-            android:name=".ui.user.retrievepassword.view.RetrievePassWordActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme" />
-
-
         <!-- 扫一扫 -->
         <activity
-            android:name="com.wotingfm.ui.scanning.activity.CaptureActivity"
+            android:name=".ui.intercom.scanning.activity.CaptureActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
 
 
         <!-- 扫一扫结果 -->
         <activity
-            android:name="com.wotingfm.ui.scanning.activity.ResultActivity"
+            android:name=".ui.intercom.scanning.activity.ResultActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
 
@@ -105,13 +73,13 @@
 
         <!--  -->
         <activity
-            android:name=".ui.test.DuiJiangActivity"
+            android:name=".ui.test.mine.MineActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
 
         <!--  -->
         <activity
-            android:name=".ui.test.mine.MineActivity"
+            android:name="com.wotingfm.ui.user.logo.LogoActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
 

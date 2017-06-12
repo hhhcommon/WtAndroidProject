@@ -1,52 +1,58 @@
 package com.wotingfm.ui.user.retrievepassword.view;
 
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.wotingfm.R;
-import com.wotingfm.ui.base.baseactivity.BaseActivity;
+import com.wotingfm.ui.user.logo.LogoActivity;
 import com.wotingfm.ui.user.retrievepassword.presenter.RetrievePasswordPresenter;
 
 /**
  * 作者：xinLong on 2017/6/4 19:45
  * 邮箱：645700751@qq.com
  */
-public class RetrievePassWordActivity extends BaseActivity implements View.OnClickListener {
+public class RetrievePassWordFragment extends Fragment implements View.OnClickListener {
     private TextView tv_confirm, tv_yzm;
     private ImageView left, img_eye;
     private EditText et_phoneNumber, et_newPassWord,et_yzm;
     private RetrievePasswordPresenter presenter;
+    private View rootView;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_retrieve_password);
-        inItView();
-        inItListener();
-        setEditListener();
-        presenter= new RetrievePasswordPresenter(this);
-        presenter.setEye();// 设置密码
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        if (rootView == null) {
+            rootView = inflater.inflate(R.layout.fragment_retrieve_password, container, false);
+            inItView();
+            inItListener();
+            setEditListener();
+            presenter= new RetrievePasswordPresenter(this);
+            presenter.setEye();// 设置密码
+        }
+        return rootView;
     }
 
     // 设置界面
     private void inItView() {
-        img_eye = (ImageView) findViewById(R.id.img_eye);                // 密码显示
-        left = (ImageView) findViewById(R.id.head_left_btn);             // 返回按钮
-        TextView tv_center = (TextView) findViewById(R.id.tv_center);    // 标头
+        img_eye = (ImageView) rootView.findViewById(R.id.img_eye);                // 密码显示
+        left = (ImageView) rootView.findViewById(R.id.head_left_btn);             // 返回按钮
+        TextView tv_center = (TextView) rootView.findViewById(R.id.tv_center);    // 标头
         tv_center.setText("找回密码");
 
-        et_phoneNumber = (EditText) findViewById(R.id.et_phoneNumber);   // 手机号输入框
-        et_yzm = (EditText) findViewById(R.id.et_yzm);                   // 验证码输入框
-        et_newPassWord = (EditText) findViewById(R.id.et_newPassWord);   // 新密码输入框
+        et_phoneNumber = (EditText) rootView.findViewById(R.id.et_phoneNumber);   // 手机号输入框
+        et_yzm = (EditText) rootView.findViewById(R.id.et_yzm);                   // 验证码输入框
+        et_newPassWord = (EditText) rootView.findViewById(R.id.et_newPassWord);   // 新密码输入框
 
-        tv_yzm = (TextView) findViewById(R.id.tv_yzm);                   // 获取验证码
-        tv_confirm = (TextView) findViewById(R.id.tv_confirm);           // 确定
+        tv_yzm = (TextView)rootView. findViewById(R.id.tv_yzm);                   // 获取验证码
+        tv_confirm = (TextView) rootView.findViewById(R.id.tv_confirm);           // 确定
     }
 
     // 设置监听
@@ -62,7 +68,7 @@ public class RetrievePassWordActivity extends BaseActivity implements View.OnCli
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.head_left_btn:
-                finish();
+                LogoActivity.close();
                 break;
             case R.id.img_eye:
                 presenter.setEye();
@@ -156,7 +162,7 @@ public class RetrievePassWordActivity extends BaseActivity implements View.OnCli
             et_newPassWord.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
         } else {
             img_eye.setImageResource(R.mipmap.login_icon_password_unlook);
-            et_newPassWord.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD);
+            et_newPassWord.setInputType(InputType.TYPE_CLASS_TEXT |InputType.TYPE_TEXT_VARIATION_PASSWORD);
         }
     }
 

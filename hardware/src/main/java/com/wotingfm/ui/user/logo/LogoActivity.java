@@ -1,60 +1,74 @@
 package com.wotingfm.ui.user.logo;
 
-import android.content.Intent;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+import android.widget.Toast;
+
+import com.woting.commonplat.utils.SequenceUUID;
 import com.wotingfm.R;
-import com.wotingfm.ui.base.baseactivity.BaseActivity;
-import com.wotingfm.ui.user.login.view.LoginActivity;
-import com.wotingfm.ui.user.register.view.RegisterActivity;
+import com.wotingfm.ui.intercom.main.view.InterPhoneFragment;
 
 /**
- * 作者：xinLong on 2017/6/4 19:48
+ * 对讲模块主页
+ * 作者：xinLong on 2017/6/4 23:20
  * 邮箱：645700751@qq.com
  */
-public class LogoActivity extends BaseActivity implements View.OnClickListener {
 
-    private RelativeLayout rl_close;
-    private TextView tv_register, tv_login;
-
+public class LogoActivity extends FragmentActivity  {
+    private static LogoActivity context;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login_main);
-        inItView();
-        inItListener();
+        setContentView(R.layout.fragment_main);
+        context = this;
+        open(new LogoFragment());
     }
 
-    // 设置界面
-    private void inItView() {
-        rl_close = (RelativeLayout) findViewById(R.id.rl_close);  // 关闭
-        tv_register = (TextView) findViewById(R.id.tv_register);  // 注册
-        tv_login = (TextView) findViewById(R.id.tv_login);        // 登录
-    }
-
-    // 设置监听
-    private void inItListener() {
-        rl_close.setOnClickListener(this);
-        tv_register.setOnClickListener(this);
-        tv_login.setOnClickListener(this);
-    }
-
-    // 监听
+    // 设置android app 的字体大小不受系统字体大小改变的影响
     @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.rl_close:
-                finish();
-                break;
-            case R.id.tv_register:
-                startActivity(new Intent(this, RegisterActivity.class));
-                break;
-            case R.id.tv_login:
-                startActivity(new Intent(this, LoginActivity.class));
-                break;
+    public Resources getResources() {
+        Resources res = super.getResources();
+        Configuration config = new Configuration();
+        config.setToDefaults();
+        res.updateConfiguration(config, res.getDisplayMetrics());
+        return res;
+    }
+
+    // 打开新的 Fragment
+    public static void open(Fragment frg) {
+        context.getSupportFragmentManager().beginTransaction()
+                .add(R.id.fragment_content, frg)
+                .addToBackStack(SequenceUUID.getUUID())
+                .commitAllowingStateLoss();
+    }
+
+    // 关闭已经打开的 Fragment
+    public static void close() {
+        context.getSupportFragmentManager().popBackStackImmediate();// 立即删除回退栈中的数据
+    }
+
+    // 关闭activity
+    public static void closeActivity() {
+        context.finish();
+    }
+
+    private long tempTime;
+
+    @Override
+    public void onBackPressed() {
+        if (getSupportFragmentManager().getBackStackEntryCount() == 1) {
+            long time = System.currentTimeMillis();
+            if (time - tempTime <= 2000) {
+                android.os.Process.killProcess(android.os.Process.myPid());
+            } else {
+                tempTime = time;
+                Toast.makeText(this, "再按一次退出", Toast.LENGTH_LONG).show();
+            }
+        } else {
+            close();
         }
     }
-
 }

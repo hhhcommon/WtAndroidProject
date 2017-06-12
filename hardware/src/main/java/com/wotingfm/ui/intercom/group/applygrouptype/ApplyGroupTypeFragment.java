@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 import com.wotingfm.R;
 
 /**
- * 加群方式
+ * 加群方式(待定)
  * 作者：xinLong on 2017/6/5 01:30
  * 邮箱：645700751@qq.com
  */
@@ -24,7 +24,7 @@ public class ApplyGroupTypeFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        rootView = inflater.inflate(R.layout.fragment_chat, container, false);
+        rootView = inflater.inflate(R.layout.fragment_applygrouptype, container, false);
         return rootView;
     }
 

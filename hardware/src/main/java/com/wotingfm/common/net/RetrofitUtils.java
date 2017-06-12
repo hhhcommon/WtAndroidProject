@@ -27,17 +27,15 @@ import static com.wotingfm.common.net.RetrofitService.BASE_URL;
 public class RetrofitUtils {
 
     private static final int DEFAULT_TIMEOUT = 20;
-    private Retrofit retrofit;
     public RetrofitService retrofitService;
     public static RetrofitUtils INSTANCE;
-    private OkHttpClient.Builder builder;
     private String token = "";
 
 
     private RetrofitUtils() {
-        builder = new OkHttpClient.Builder();
+        OkHttpClient.Builder builder = new OkHttpClient.Builder();
         builder.connectTimeout(DEFAULT_TIMEOUT, TimeUnit.SECONDS);
-        retrofit = new Retrofit.Builder()
+        Retrofit retrofit = new Retrofit.Builder()
                 .client(builder.build())
                 .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())

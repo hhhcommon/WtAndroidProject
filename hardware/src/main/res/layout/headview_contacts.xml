@@ -6,6 +6,7 @@
     android:orientation="vertical">
 
     <TextView
+        android:id="@+id/tv_search"
         android:layout_width="match_parent"
         android:layout_height="28dp"
         android:layout_marginBottom="8dp"
@@ -55,6 +56,7 @@
             android:src="@mipmap/chat_icon_next" />
 
         <TextView
+            android:id="@+id/tv_newFriendNum"
             android:layout_width="16dp"
             android:layout_height="16dp"
             android:layout_centerVertical="true"
@@ -103,6 +105,7 @@
             android:src="@mipmap/chat_icon_next" />
 
         <TextView
+            android:id="@+id/tv_newGroupNum"
             android:layout_width="16dp"
             android:layout_height="16dp"
             android:layout_centerVertical="true"

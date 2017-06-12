@@ -7,7 +7,16 @@ package com.wotingfm.common.config;
  * 邮箱：645700751@qq.com
  */
 public class GlobalStateConfig {
-
+    /**
+     * 用于档位切换的参数
+     * A：播放模块
+     * B: 对讲模块
+     * C：个人中心模块
+     */
+    public static int destination=0 ;  // 此时所处的档位 0，第一个档位，1,第二个档位
+    public static int mineFromType=0 ; // 个人中心跳转来源 0,关闭状态 ，1，第一个档位，2,第二个档位
+    public static String activityA="A";// 第一个档位页面的展示状态
+    public static String activityB="B";// 第二个档位页面的展示状态
     /**
      * 版本号
      */
@@ -44,8 +53,5 @@ public class GlobalStateConfig {
      * PersonClientDevice(个人客户端设备) 终端类型1=app,2=设备，3=pc
      */
     public static int PCDType;
-    /**
-     * 此时的界面
-     */
-    public static int activityType =1;
+
 }

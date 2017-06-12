@@ -24,7 +24,7 @@ public class EditGroupIntroduceFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        rootView = inflater.inflate(R.layout.fragment_chat, container, false);
+        rootView = inflater.inflate(R.layout.fragment_editgroupintroduce, container, false);
         return rootView;
     }
 

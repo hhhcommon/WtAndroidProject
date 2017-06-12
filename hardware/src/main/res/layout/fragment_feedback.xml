@@ -16,7 +16,7 @@
 
         <TextView
             android:id="@+id/tv_center"
-            android:text="@string/feed_back"
+android:text="@string/feedback"
             android:layout_centerInParent="true"
             android:textColor="@color/black_head_word"
             style="@style/HeadWordStyle"/>
