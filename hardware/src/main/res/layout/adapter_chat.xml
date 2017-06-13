@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.wotingfm.common.view.slidingbutton.SlidingButtonView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="1dp"
+    android:background="@color/white">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/tv_delete"
+            android:layout_width="73dp"
+            android:layout_height="73dp"
+            android:layout_toRightOf="@+id/layout_content"
+            android:background="@color/red"
+            android:gravity="center"
+            android:text="删 除"
+            android:textColor="@color/white"
+            android:textSize="15sp"
+            android:visibility="visible" />
+
+        <RelativeLayout
+            android:id="@+id/layout_content"
+            android:layout_width="match_parent"
+            android:layout_height="73dp">
+
+            <ImageView
+                android:id="@+id/img_url"
+                android:layout_width="52dp"
+                android:layout_height="52dp"
+                android:layout_centerVertical="true"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="12dp"
+                android:src="@mipmap/test" />
+
+            <include
+                android:id="@+id/view_head"
+                layout="@layout/include_chat"
+                android:layout_width="match_parent"
+                android:layout_height="73dp"
+                android:layout_marginLeft="12dp"
+                android:layout_toRightOf="@id/img_url" />
+
+
+            <ImageView
+                android:id="@+id/img_voice"
+                android:layout_width="24dp"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="12dp"
+                android:layout_centerVertical="true"
+                android:src="@mipmap/chat_icon_call"
+                android:layout_height="24dp" />
+        </RelativeLayout>
+
+
+    </RelativeLayout>
+    >
+</com.wotingfm.common.view.slidingbutton.SlidingButtonView>

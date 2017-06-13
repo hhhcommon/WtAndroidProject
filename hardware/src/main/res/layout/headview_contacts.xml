@@ -44,7 +44,8 @@
             android:layout_marginLeft="12dp"
             android:layout_toRightOf="@+id/image_newFriend"
             android:text="新的朋友"
-            android:textColor="@color/black_head_word" />
+            android:textColor="@color/black_head_word"
+            android:textSize="16sp" />
 
         <ImageView
             android:id="@+id/image_newFriend_back"
@@ -52,7 +53,7 @@
             android:layout_height="24dp"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:layout_marginRight="7dp"
+            android:layout_marginRight="8dp"
             android:src="@mipmap/chat_icon_next" />
 
         <TextView
@@ -65,7 +66,8 @@
             android:gravity="center"
             android:text="1"
             android:textColor="@color/white"
-            android:textSize="11sp" />
+            android:textSize="11sp"
+            android:visibility="invisible" />
     </RelativeLayout>
 
     <TextView
@@ -93,7 +95,8 @@
             android:layout_marginLeft="12dp"
             android:layout_toRightOf="@+id/image_newGroup"
             android:text="群聊"
-            android:textColor="@color/black_head_word" />
+            android:textColor="@color/black_head_word"
+            android:textSize="16sp" />
 
         <ImageView
             android:id="@+id/image_newGroup_back"
@@ -101,7 +104,7 @@
             android:layout_height="24dp"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:layout_marginRight="7dp"
+            android:layout_marginRight="8dp"
             android:src="@mipmap/chat_icon_next" />
 
         <TextView
@@ -114,7 +117,8 @@
             android:gravity="center"
             android:text="1"
             android:textColor="@color/white"
-            android:textSize="11sp" />
+            android:textSize="11sp"
+            android:visibility="invisible" />
 
 
     </RelativeLayout>

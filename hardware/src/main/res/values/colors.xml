@@ -3,46 +3,5 @@
     <!-- 透明色值 -->
     <!-- 00%=FF（不透明）    5%=F2    10%=E5    15%=D8    20%=CC    25%=BF    30%=B2    35%=A5    40%=99    45%=8c    50%=7F
          55%=72    60%=66    65%=59    70%=4c    75%=3F    80%=33    85%=21    90%=19    95%=0c    100%=00（全透明）-->
-    <color name="transparent_background">#00000000</color>
 
-    <!-- 黑色  标头字体 -->
-    <color name="black_head_word">#16181a</color>
-
-    <!-- 输入框默认提示字体 -->
-    <color name="gray_edit_hint_word">#cccccd</color>
-
-    <!-- 一般情况下的背景色 -->
-    <color name="background_color">#f5ffffff</color>
-
-    <!-- App基本色调 -->
-    <color name="app_basic">#fd8548</color>
-
-    <!-- 线条颜色 -->
-    <color name="line_color">#e9e8e6</color>
-
-    <!-- 正常字体颜色 -->
-    <color name="typeface_color">#3d3d3d</color>
-
-    <!-- 提示性字体颜色 -->
-    <color name="tip_color">#babac1</color>
-
-    <!-- 白色 -->
-    <color name="white">#FFFFFF</color>
-
-    <!-- 黑色 -->
-    <color name="black">#000000</color>
-
-    <!-- 红色 -->
-    <color name="red">#FF0000</color>
-
-    <!-- 绿色 -->
-    <color name="green">#00FF00</color>
-
-    <!-- 蓝色 -->
-    <color name="blue">#0000FF</color>
-
-    <!-- 黄色 -->
-    <color name="yellow">#FFFF00</color>
-
-    <color name="background_tab_pressed">#6633B5E5</color>
 </resources>

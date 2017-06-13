@@ -30,11 +30,9 @@ android {
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
-    testCompile 'junit:junit:4.12'
     compile 'com.android.support:multidex:1.0.1'
     compile 'com.android.support:design:25+'
     androidTestCompile 'com.android.support:multidex-instrumentation:1.0.1'
-    compile 'com.android.support:recyclerview-v7:25+'
     compile 'com.jakewharton:butterknife:8.6.0'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.6.0'
     compile project(':CommonPlat')

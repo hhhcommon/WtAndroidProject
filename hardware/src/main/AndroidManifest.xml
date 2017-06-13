@@ -28,8 +28,7 @@
         <activity
             android:name="com.wotingfm.ui.user.guide.view.GuideActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/GuideTheme">
-        </activity>
+            android:theme="@style/GuideTheme"></activity>
 
         <!-- 主页 -->
         <activity
@@ -64,6 +63,12 @@
             android:name=".ui.intercom.main.view.InterPhoneActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
+
+        <!-- 图片剪切 -->
+        <activity
+            android:name="com.wotingfm.ui.photocut.PhotoCutActivity"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Light.NoTitleBar" />
 
         <!--  -->
         <activity

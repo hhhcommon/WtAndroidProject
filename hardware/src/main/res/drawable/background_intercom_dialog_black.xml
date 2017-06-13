@@ -4,12 +4,12 @@
      > 
      
      <!-- 实心    --> 
-    <solid android:color="#313131"/> 
+    <solid android:color="@color/transparent_10_black"/>
     <!-- 描边 -->  
      
     <stroke   
         android:width="2px"   
-        android:color="#313131" /> 
+        android:color="@color/transparent_10_black" />
     <!-- 圆角 --> 
     <corners
         android:radius="2dp"/>  

@@ -40,7 +40,7 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:gravity">center</item>
         <item name="android:textColor">@color/black_head_word</item>
-        <item name="android:textSize">22sp</item>
+        <item name="android:textSize">17sp</item>
     </style>
 
     <!--个人中心标识文字-->

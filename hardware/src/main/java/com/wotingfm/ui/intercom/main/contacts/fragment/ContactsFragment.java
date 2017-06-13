@@ -13,14 +13,14 @@ import android.widget.TextView;
 
 import com.wotingfm.R;
 import com.wotingfm.ui.intercom.add.search.local.view.SearchContactsForLocalFragment;
-import com.wotingfm.ui.intercom.group.groupchat.GroupChatFragment;
+import com.wotingfm.ui.intercom.group.groupchat.view.GroupChatFragment;
 import com.wotingfm.ui.intercom.main.contacts.adapter.ContactsAdapter;
 import com.wotingfm.ui.intercom.main.contacts.adapter.NoAdapter;
 import com.wotingfm.ui.intercom.main.contacts.model.Contact;
 import com.wotingfm.ui.intercom.main.contacts.presenter.ContactsPresenter;
 import com.wotingfm.ui.intercom.main.contacts.view.SideBar;
 import com.wotingfm.ui.intercom.main.view.InterPhoneActivity;
-import com.wotingfm.ui.intercom.person.newfriend.NewFriendFragment;
+import com.wotingfm.ui.intercom.person.newfriend.view.NewFriendFragment;
 
 import java.util.List;
 
