@@ -67,12 +67,11 @@ public class PlayerActivity extends NoTitleBarBaseActivity implements View.OnCli
     @Override
     public void initView() {
 
-        loadLayout.showLoadingView();
         loadLayout.findViewById(R.id.btnTryAgain).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 loadLayout.showLoadingView();
-                getPlayerList();
+                getPlayerList("");
             }
         });
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
@@ -86,7 +85,8 @@ public class PlayerActivity extends NoTitleBarBaseActivity implements View.OnCli
         bdPlayer = new BDPlayer(getApplicationContext());
         setListener();
         historyHelper = new HistoryHelper(this);
-        getPlayerList();
+        loadLayout.showLoadingView();
+        getPlayerList("");
 
     }
 
@@ -289,8 +289,8 @@ public class PlayerActivity extends NoTitleBarBaseActivity implements View.OnCli
     //菜单dialohg
     private MenuDialog menuDialog;
 
-    private void getPlayerList() {
-        RetrofitUtils.getInstance().getPlayerList()
+    private void getPlayerList(String albums) {
+        RetrofitUtils.getInstance().getPlayerList(albums)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Action1<List<Player.DataBean.SinglesBean>>() {
@@ -303,6 +303,7 @@ public class PlayerActivity extends NoTitleBarBaseActivity implements View.OnCli
                             mPlayerAdapter.notifyDataSetChanged();
                             postionPlayer = 0;
                             Player.DataBean.SinglesBean sb = singls.get(0);
+                            bdPlayer.stopPlayback();
                             bdPlayer.setVideoPath(sb.single_file_url);
                             bdPlayer.start();
                             relatiBottom.setVisibility(View.VISIBLE);
@@ -359,6 +360,14 @@ public class PlayerActivity extends NoTitleBarBaseActivity implements View.OnCli
                     }
                 }
             }
+        }
+        //选择专辑
+        else if (requestCode == 8080 && resultCode == RESULT_OK && data != null) {
+            String albumsId = data.getStringExtra("albumsId");
+            if (bdPlayer != null)
+                bdPlayer.stopPlayback();
+            loadLayout.showLoadingView();
+            getPlayerList(albumsId);
         }
     }
 }

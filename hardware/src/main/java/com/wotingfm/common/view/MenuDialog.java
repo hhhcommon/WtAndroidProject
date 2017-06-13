@@ -2,6 +2,7 @@ package com.wotingfm.common.view;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.ContentValues;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
@@ -18,23 +19,33 @@ import com.wotingfm.R;
 import com.wotingfm.common.adapter.PlayerListAdapter;
 import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.bean.Player;
+import com.wotingfm.common.config.DbConfig;
+import com.wotingfm.common.database.DownloadHelper;
+import com.wotingfm.common.database.HistoryHelper;
 import com.wotingfm.common.net.RetrofitUtils;
+import com.wotingfm.common.utils.SDCardUtils;
+import com.wotingfm.common.utils.T;
 import com.wotingfm.ui.play.activity.AnchorPersonalCenterActivity;
 import com.wotingfm.ui.play.activity.MeSubscribeListActivity;
 import com.wotingfm.ui.play.activity.PlayerHistoryActivity;
 import com.wotingfm.ui.play.activity.ReportsPlayerActivity;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import cn.finalteam.okhttpfinal.FileDownloadCallback;
+import cn.finalteam.okhttpfinal.HttpRequest;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 
 import static android.R.attr.data;
+import static android.icu.lang.UCharacter.GraphemeClusterBreak.T;
+import static com.woting.commonplat.gather.GatherData.url;
 import static com.wotingfm.R.id.mRecyclerViewList;
 
-
+//首页菜单dialog
 public class MenuDialog extends Dialog implements View.OnClickListener {
 
     private TextView tvClose, tvLike, tvAlbums, tvAnchor, tvReport, tvDownload, tvAgo, tvSubscription, tvLocal;
@@ -97,10 +108,67 @@ public class MenuDialog extends Dialog implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.tvDownload:
+                if (pdsBase != null) {
+                    final DownloadHelper downloadHelper = new DownloadHelper(BSApplication.getInstance());
+                    if (downloadHelper != null) {
+                        List<Player.DataBean.SinglesBean> singlesBeens = downloadHelper.findPlayHistoryList();
+                        if (singlesBeens != null && !singlesBeens.isEmpty()) {
+                            for (Player.DataBean.SinglesBean s : singlesBeens) {
+                                if (s.id.equals(pdsBase.id)) {
+                                    com.wotingfm.common.utils.T.getInstance().equals("已下载");
+                                    return;
+                                }
+                            }
+                        }
+                        File saveFile = new File(SDCardUtils.getSDPath() + DbConfig.ALBUMS + "/" + pdsBase.single_file_url);
+                        HttpRequest.download(pdsBase.single_file_url, saveFile, new FileDownloadCallback() {
+                            //开始下载
+                            @Override
+                            public void onStart() {
+                                super.onStart();
+                                ContentValues contentValues = new ContentValues();
+                                contentValues.put("id", pdsBase.id);
+                                contentValues.put("isPlay", pdsBase.isPlay);
+                                contentValues.put("single_title", pdsBase.single_title);
+                                contentValues.put("play_time", System.currentTimeMillis());
+                                contentValues.put("single_logo_url", pdsBase.single_logo_url);
+                                contentValues.put("single_file_url", pdsBase.single_file_url);
+                                contentValues.put("album_title", pdsBase.album_title);
+                                downloadHelper.insertTotable(pdsBase.id, contentValues);
+
+                            }
+
+                            //下载进度
+                            @Override
+                            public void onProgress(int progress, long networkSpeed) {
+                                super.onProgress(progress, networkSpeed);
+                                //String speed = FileUtils.generateFileSize(networkSpeed);
+                            }
+
+                            //下载失败
+                            @Override
+                            public void onFailure() {
+                                super.onFailure();
+                                com.wotingfm.common.utils.T.getInstance().showToast("下载失败");
+                            }
+
+                            //下载完成（下载成功）
+                            @Override
+                            public void onDone() {
+                                super.onDone();
+                                com.wotingfm.common.utils.T.getInstance().showToast("下载成功");
+                            }
+                        });
+                    }
+                }
+                break;
             case R.id.tvAnchor:
                 //测试userid
-                dismiss();
-                AnchorPersonalCenterActivity.start(activity, "00163e00693b");
+                if (pdsBase != null) {
+                    dismiss();
+                    AnchorPersonalCenterActivity.start(activity, pdsBase.creator_id);
+                }
                 break;
             case R.id.tvSubscription:
                 dismiss();
@@ -109,7 +177,7 @@ public class MenuDialog extends Dialog implements View.OnClickListener {
             case R.id.tvReport:
                 if (pdsBase != null) {
                     dismiss();
-                    ReportsPlayerActivity.start(activity, pdsBase.id);
+                    ReportsPlayerActivity.start(activity, pdsBase.id, "REPORT_SINGLE");
                 }
                 break;
             case R.id.tvAgo:

@@ -17,6 +17,7 @@ import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+import retrofit2.Call;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -112,8 +113,8 @@ public class RetrofitUtils {
      *
      * @return
      */
-    public Observable<List<Player.DataBean.SinglesBean>> getPlayerList() {
-        return retrofitService.getPlayerList()
+    public Observable<List<Player.DataBean.SinglesBean>> getPlayerList(String albums) {
+        return retrofitService.getPlayerList(albums)
                 .map(new Func1<Player, List<Player.DataBean.SinglesBean>>() {
                     @Override
                     public List<Player.DataBean.SinglesBean> call(Player player) {
@@ -139,8 +140,21 @@ public class RetrofitUtils {
                 });
     }
 
-    public Observable<List<Reports.DataBean.Reasons>> getPlayerReports() {
-        return retrofitService.getPlayerReports()
+    public Observable<List<Subscrible.DataBean.AlbumsBean>> getAlbumsList(String pid, int page) {
+        return retrofitService.albumsList(pid, page)
+                .map(new Func1<Subscrible, List<Subscrible.DataBean.AlbumsBean>>() {
+                    @Override
+                    public List<Subscrible.DataBean.AlbumsBean> call(Subscrible player) {
+                        if (player.ret != 0) {
+                            throw new IllegalStateException(player.msg);
+                        }
+                        return player.data.albums;
+                    }
+                });
+    }
+
+    public Observable<List<Reports.DataBean.Reasons>> getPlayerReports(String type) {
+        return retrofitService.getPlayerReports(type)
                 .map(new Func1<Reports, List<Reports.DataBean.Reasons>>() {
                     @Override
                     public List<Reports.DataBean.Reasons> call(Reports player) {
@@ -148,6 +162,26 @@ public class RetrofitUtils {
                             throw new IllegalStateException(player.msg);
                         }
                         return player.data.reasons;
+                    }
+                });
+    }
+
+    public Observable<Object> followAnchor(String uid, String oldid) {
+        return retrofitService.followAnchor(uid, oldid)
+                .map(new Func1<Object, Object>() {
+                    @Override
+                    public Object call(Object s) {
+                        return s;
+                    }
+                });
+    }
+
+    public Observable<Object> unFollowAnchor(String uid, String oldid) {
+        return retrofitService.unFollowAnchor(uid, oldid)
+                .map(new Func1<Object, Object>() {
+                    @Override
+                    public Object call(Object s) {
+                        return s;
                     }
                 });
     }
@@ -192,6 +226,16 @@ public class RetrofitUtils {
                 });
     }
 
+    public Observable<Object> reportsUser(String pid, String report_reason, String content) {
+        return retrofitService.reportsUser(pid, report_reason, content)
+                .map(new Func1<Object, Object>() {
+                    @Override
+                    public Object call(Object s) {
+                        return s;
+                    }
+                });
+    }
+
     public Observable<AnchorInfo> getAnchorInfo(String uid) {
         return retrofitService.getAnchorInfo(uid)
                 .map(new Func1<AnchorInfo, AnchorInfo>() {
@@ -205,4 +249,6 @@ public class RetrofitUtils {
                     }
                 });
     }
+
+
 }

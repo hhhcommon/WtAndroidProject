@@ -24,7 +24,7 @@ import static android.R.attr.id;
 import static android.media.CamcorderProfile.get;
 import static com.wotingfm.R.id.mRecyclerView;
 
-
+//播放节目选择dialog
 public class PlayerDialog extends Dialog implements View.OnClickListener {
 
     private RecyclerView mRecyclerViewList;

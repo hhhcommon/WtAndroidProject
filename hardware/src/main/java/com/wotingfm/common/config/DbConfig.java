@@ -6,4 +6,5 @@ package com.wotingfm.common.config;
 
 public class DbConfig {
     public static final String TABLE_CUSTOMER = "db_history";
+    public static final String ALBUMS= "woting_albums";
 }

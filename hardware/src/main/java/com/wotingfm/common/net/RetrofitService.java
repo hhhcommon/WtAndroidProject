@@ -35,7 +35,7 @@ public interface RetrofitService {
 
     //首页播放fm列表
     @GET("api/listenings/player")
-    Observable<Player> getPlayerList();
+    Observable<Player> getPlayerList(@Query("album_id") String album_id);
 
     //获取用户订阅的专辑
     @GET("api/users/{id}/subscriptions/albums")
@@ -47,7 +47,7 @@ public interface RetrofitService {
 
     //获得举报内容列表
     @GET("api/reports/reasons")
-    Observable<Reports> getPlayerReports();
+    Observable<Reports> getPlayerReports(@Query("type") String type);
 
     @GET("api/listenings/player")
     Observable<HomeBanners> getHomeBanners();
@@ -56,9 +56,25 @@ public interface RetrofitService {
     @POST("api/listenings/singles/{id}/likes")
     Observable<Object> followUsers(@Path("id") String id);
 
+    //发布的专辑列表
+    @GET("api/users/{id}/albums")
+    Observable<Subscrible> albumsList(@Path("id") String id, @Query("page") int page);
+
+    //关注主播
+    @POST("api/fans")
+    Observable<Object> followAnchor(@Query("user_id") String user_id, @Query("idol_id") String idol_id);
+
+    //取消关注主播
+    @DELETE("api/fans")
+    Observable<Object> unFollowAnchor(@Query("user_id") String user_id, @Query("idol_id") String idol_id);
+
     //举报某一个节目
     @POST("api/listenings/singles/{id}/reports")
     Observable<Object> reportsPlayer(@Path("id") String id, @Query("report_reason") String report_reason, @Query("content") String content);
+
+    //举报个人
+    @POST("api/users/{userId}/reports")
+    Observable<Object> reportsUser(@Path("userId") String userId, @Query("report_reason") String report_reason, @Query("content") String content);
 
     //取消喜欢（收藏）节目
     @DELETE("api/listenings/singles/{id}/likes")

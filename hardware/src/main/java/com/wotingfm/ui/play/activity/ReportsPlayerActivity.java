@@ -27,6 +27,8 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 
+import static android.R.attr.type;
+import static com.loc.e.i;
 import static com.loc.e.l;
 
 /**
@@ -38,11 +40,18 @@ public class ReportsPlayerActivity extends BaseToolBarActivity {
     @BindView(R.id.edContent)
     EditText edContent;
 
-    public static void start(Context activity, String playerId) {
+    /**
+     * @param activity
+     * @param playerId 举报的id(节目的id或者个人的userid)
+     * @param type     REPORT_USER:举报用户; REPORT_ALBUM:举报专辑;REPORT_CHAT_GROUP:举报群聊;REPORT_SINGLE:举报节目
+     */
+    public static void start(Context activity, String playerId, String type) {
         Intent intent = new Intent(activity, ReportsPlayerActivity.class);
         intent.putExtra("playerId", playerId);
+        intent.putExtra("type", type);
         activity.startActivity(intent);
     }
+
 
     @BindView(R.id.mRecyclerView)
     RecyclerView mRecyclerView;
@@ -52,6 +61,7 @@ public class ReportsPlayerActivity extends BaseToolBarActivity {
     LoadFrameLayout loadLayout;
     private PlayerReportsListAdapter playerReportsListAdapter;
     private String playerId;
+    private String type;
 
     @Override
     public int getLayoutId() {
@@ -62,11 +72,14 @@ public class ReportsPlayerActivity extends BaseToolBarActivity {
     public void initView() {
         setTitle("举报");
         tvSubmit.setText("提交");
-        playerId = getIntent().getStringExtra("playerId");
+        Intent intent = getIntent();
+        type = intent.getStringExtra("type");
+        playerId = intent.getStringExtra("playerId");
         loadLayout.findViewById(R.id.btnTryAgain).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 loadLayout.showLoadingView();
+                getPlayerReports(type);
             }
         });
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
@@ -83,11 +96,15 @@ public class ReportsPlayerActivity extends BaseToolBarActivity {
         });
         mRecyclerView.setAdapter(playerReportsListAdapter);
         loadLayout.showLoadingView();
-        getPlayerReports();
+        getPlayerReports(type);
         tvSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                reportsPlayer();
+                if ("REPORT_SINGLE".equals(type)) {
+                    reportsPlayer();
+                } else if ("REPORT_USER".equals(type)) {
+                    reportsPersonal();
+                }
             }
         });
     }
@@ -95,8 +112,8 @@ public class ReportsPlayerActivity extends BaseToolBarActivity {
     private List<Reports.DataBean.Reasons> reports = new ArrayList<>();
     private Reports.DataBean.Reasons reasonsBase;
 
-    private void getPlayerReports() {
-        RetrofitUtils.getInstance().getPlayerReports()
+    private void getPlayerReports(String type) {
+        RetrofitUtils.getInstance().getPlayerReports(type)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Action1<List<Reports.DataBean.Reasons>>() {
@@ -119,6 +136,7 @@ public class ReportsPlayerActivity extends BaseToolBarActivity {
                 });
     }
 
+    //举报节目
     private void reportsPlayer() {
         String report_reason = null;
         if (reasonsBase != null)
@@ -148,4 +166,33 @@ public class ReportsPlayerActivity extends BaseToolBarActivity {
                 });
     }
 
+    //举报个人
+    private void reportsPersonal() {
+        String report_reason = null;
+        if (reasonsBase != null)
+            report_reason = reasonsBase.title;
+        String content = edContent.getText().toString().trim();
+        if (TextUtils.isEmpty(report_reason) && TextUtils.isEmpty(content)) {
+            T.getInstance().equals("请选择举报原因");
+            return;
+        }
+        showLodingDialog();
+        RetrofitUtils.getInstance().reportsUser(playerId, report_reason, content)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Action1<Object>() {
+                    @Override
+                    public void call(Object s) {
+                        dissmisDialog();
+                        T.getInstance().equals("举报成功");
+                        finish();
+                    }
+                }, new Action1<Throwable>() {
+                    @Override
+                    public void call(Throwable throwable) {
+                        dissmisDialog();
+                        T.getInstance().equals("举报失败");
+                    }
+                });
+    }
 }

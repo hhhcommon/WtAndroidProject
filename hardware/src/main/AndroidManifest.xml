@@ -95,6 +95,11 @@
             android:name=".ui.play.activity.AnchorPersonalCenterActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
+        <!-- 个人专辑列表 -->
+        <activity
+            android:name=".ui.play.activity.albums.AlbumsListActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" />
 
 
         <!-- 扫一扫 -->

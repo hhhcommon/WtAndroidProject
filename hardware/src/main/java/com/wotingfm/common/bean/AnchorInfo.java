@@ -74,12 +74,13 @@ public class AnchorInfo implements Serializable {
                      * channel : {}
                      */
 
-                    public int id;
+                    public String id;
                     public String title;
                     public String cover;
                     public String logo_url;
                     public String play_count;
                     public String lastest_news;
+                    public String single_logo_url;
                     public String single_title;
                     public String album_title;
                     public String published_at;
