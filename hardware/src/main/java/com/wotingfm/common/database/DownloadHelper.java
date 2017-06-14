@@ -6,6 +6,7 @@ import android.database.sqlite.SQLiteDatabase;
 
 import com.j256.ormlite.stmt.QueryBuilder;
 import com.wotingfm.common.bean.Player;
+import com.wotingfm.common.bean.SinglesDownload;
 
 import java.util.List;
 
@@ -22,11 +23,11 @@ public class DownloadHelper extends DBHelper {
      *
      * @return
      */
-    public List<Player.DataBean.SinglesBean> findPlayHistoryList() {
-        List<Player.DataBean.SinglesBean> chooseCarBeanList = null;
-        QueryBuilder<Player.DataBean.SinglesBean, ?> builder = getRuntimeExceptionDao(Player.DataBean.SinglesBean.class).queryBuilder();
+    public List<SinglesDownload> findPlayHistoryList() {
+        List<SinglesDownload> chooseCarBeanList = null;
+        QueryBuilder<SinglesDownload, ?> builder = getRuntimeExceptionDao(SinglesDownload.class).queryBuilder();
         builder.orderBy("_id", false);
-      //  builder.limit(10);
+        //  builder.limit(10);
         try {
             chooseCarBeanList = builder.query();
         } catch (java.sql.SQLException e) {

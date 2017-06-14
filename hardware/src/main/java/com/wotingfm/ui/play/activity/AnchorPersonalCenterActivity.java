@@ -118,6 +118,7 @@ public class AnchorPersonalCenterActivity extends NoTitleBarBaseActivity impleme
         tvContent = (TextView) headview.findViewById(R.id.tvContent);
         mHeaderAndFooterWrapper.addHeaderView(headview);
         mRecyclerView.setAdapter(mHeaderAndFooterWrapper);
+        L.i("mingku","uid="+uid);
         reportsPlayer(uid);
         mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override

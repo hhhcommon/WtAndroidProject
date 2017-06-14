@@ -7,6 +7,7 @@ import com.wotingfm.common.bean.AnchorInfo;
 import com.wotingfm.common.bean.HomeBanners;
 import com.wotingfm.common.bean.Player;
 import com.wotingfm.common.bean.Reports;
+import com.wotingfm.common.bean.SinglesBase;
 import com.wotingfm.common.bean.Subscrible;
 
 import java.io.IOException;
