@@ -47,7 +47,7 @@ public class BDPlayer extends FrameLayout {
     private int mMaxProbeTimeInMs = 0;                              // 最大探测时长??????
     private int mMaxProbeSizeInBytes = 0;                           // 大探测的数据大小??????
     private int mMaxCacheSizeInBytes = 0;                           // 最大缓存数据大小
-    private boolean mLooping = true;                                // 是否循环播放
+    private boolean mLooping = false;                                // 是否循环播放
     private int mBufferSizeInBytes = 0;                             // 设置"加载中"触发时，需要缓冲多大的数据才结束
 
     /**
