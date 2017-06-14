@@ -84,10 +84,10 @@ public class SettingFragment extends Fragment implements View.OnClickListener {
 
                 break;
             case R.id.view_feedback:// 意见反馈
-                MineActivity.open(new PersonalInfoFragment());
+                MineActivity.open(new FeedbackFragment());
                 break;
             case R.id.view_about:// 关于
-                MineActivity.open(new PersonalInfoFragment());
+
                 break;
         }
     }
