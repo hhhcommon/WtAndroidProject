@@ -21,6 +21,8 @@ public class DBHelper extends OrmLiteSqliteOpenHelper {
         try {
 
             TableUtils.createTable(connectionSource, Player.DataBean.SinglesBean.class);
+
+            TableUtils.createTable(connectionSource, Player.DataBean.SinglesBean.class);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -31,6 +33,7 @@ public class DBHelper extends OrmLiteSqliteOpenHelper {
         if (oldVersion < newVersion) {
             if (oldVersion == 1) {
                 try {
+                    TableUtils.createTable(connectionSource, Player.DataBean.SinglesBean.class);
                     TableUtils.createTable(connectionSource, Player.DataBean.SinglesBean.class);
                 } catch (SQLException e) {
                     throw new RuntimeException(e);

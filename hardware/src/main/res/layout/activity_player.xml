@@ -8,7 +8,7 @@
     <RelativeLayout
         android:id="@+id/relatTop"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="@dimen/toolbar_height">
 
         <ImageView
             android:id="@+id/ivPlayerCenter"
@@ -40,10 +40,10 @@
         android:id="@+id/relatiBottom"
         android:layout_width="match_parent"
         android:layout_height="44dp"
-        android:visibility="gone"
-        android:background="#16181a"
         android:layout_alignParentBottom="true"
-        android:layout_gravity="bottom">
+        android:layout_gravity="bottom"
+        android:background="#16181a"
+        android:visibility="gone">
 
         <TextView
             android:id="@+id/ivPlayList"

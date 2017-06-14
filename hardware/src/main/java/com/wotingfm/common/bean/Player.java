@@ -34,9 +34,13 @@ public class Player implements Serializable {
             @DatabaseField(generatedId = true)
             public int _id;
             @DatabaseField
+            public String creator_id;
+            @DatabaseField
             public String id;
             @DatabaseField
             public boolean isPlay;
+            @DatabaseField
+            public boolean had_liked;
             @DatabaseField
             public String single_title;
             @DatabaseField
@@ -47,6 +51,8 @@ public class Player implements Serializable {
             public String single_file_url;
             @DatabaseField
             public String album_title;
+            @DatabaseField
+            public String album_logo_url;
 
         }
     }

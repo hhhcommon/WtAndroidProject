@@ -1,13 +1,23 @@
 package com.wotingfm.common.net;
 
 
+import android.text.TextUtils;
+
+import com.wotingfm.common.bean.AnchorInfo;
 import com.wotingfm.common.bean.HomeBanners;
 import com.wotingfm.common.bean.Player;
+import com.wotingfm.common.bean.Reports;
+import com.wotingfm.common.bean.Subscrible;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
+import retrofit2.Call;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -29,14 +39,15 @@ public class RetrofitUtils {
     private static final int DEFAULT_TIMEOUT = 20;
     public RetrofitService retrofitService;
     public static RetrofitUtils INSTANCE;
-    private String token = "";
-
+    public static String TEST_USERID = "00163e00693b";
+    private String token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIwMDE2M2UwMDY5M2IiLCJpc3MiOiJodHRwOlwvXC93b3Rpbmcuc3VpdGluZ3dlaS5jb21cL2FwaVwvYWNjb3VudHNcL2xvZ2luIiwiaWF0IjoxNDk2NzE5OTI0LCJleHAiOjE1MDE5MDM5MjQsIm5iZiI6MTQ5NjcxOTkyNCwianRpIjoiZWQ1YmZmMWI4NzM4ZDVmYmQwZjk4ZTU4NjEwZjdkOTMifQ.jobc9DSVQTZUQp57NEOowz-cf1zZG2s05RTekOUd9Yw";
+    private OkHttpClient.Builder builder;
 
     private RetrofitUtils() {
-        OkHttpClient.Builder builder = new OkHttpClient.Builder();
+        builder = new OkHttpClient.Builder();
         builder.connectTimeout(DEFAULT_TIMEOUT, TimeUnit.SECONDS);
         Retrofit retrofit = new Retrofit.Builder()
-                .client(builder.build())
+                .client(genericClient())
                 .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .baseUrl(BASE_URL)
@@ -44,28 +55,28 @@ public class RetrofitUtils {
         retrofitService = retrofit.create(RetrofitService.class);
     }
 
-    /* public OkHttpClient genericClient() {
-         if (sp == null) {
-             return builder.build();
-         }
+    public OkHttpClient genericClient() {
+        if (!TextUtils.isEmpty(token)) {
+            return new OkHttpClient.Builder()
+                    .addInterceptor(new Interceptor() {
+                        @Override
+                        public Response intercept(Chain chain) throws IOException {
+                            Request request = chain.request()
+                                    .newBuilder()
+                                    .addHeader("Authorization", "Bearer {" + token + "}")
+                                    .build();
+                            return chain.proceed(request);
+                        }
 
-         return new OkHttpClient.Builder()
-                 .addInterceptor(new Interceptor() {
-                     @Override
-                     public Response intercept(Chain chain) throws IOException {
-                         Request request = chain.request()
-                                 .newBuilder()
-                                 .addHeader("Authorization", "Bearer {" + token + "}")
-                                 .addHeader("app-os", "android")
-                                 .build();
-                         Log.e(TAG, "intercept: " + token);
-                         return chain.proceed(request);
-                     }
+                    })
+                    .build();
+        } else {
+            if (builder == null)
+                builder = new OkHttpClient.Builder();
+            return builder.build();
+        }
+    }
 
-                 })
-                 .build();
-     }
- */
     public static RetrofitUtils getInstance() {
         if (INSTANCE == null) {
             synchronized (RetrofitUtils.class) {
@@ -102,8 +113,8 @@ public class RetrofitUtils {
      *
      * @return
      */
-    public Observable<List<Player.DataBean.SinglesBean>> getPlayerList() {
-        return retrofitService.getPlayerList()
+    public Observable<List<Player.DataBean.SinglesBean>> getPlayerList(String albums) {
+        return retrofitService.getPlayerList(albums)
                 .map(new Func1<Player, List<Player.DataBean.SinglesBean>>() {
                     @Override
                     public List<Player.DataBean.SinglesBean> call(Player player) {
@@ -114,5 +125,130 @@ public class RetrofitUtils {
                     }
                 });
     }
+
+    //订阅列表，我的
+    public Observable<List<Subscrible.DataBean.AlbumsBean>> getSubscriptionsList(String pid) {
+        return retrofitService.getSubscriptionsList(pid)
+                .map(new Func1<Subscrible, List<Subscrible.DataBean.AlbumsBean>>() {
+                    @Override
+                    public List<Subscrible.DataBean.AlbumsBean> call(Subscrible player) {
+                        if (player.ret != 0) {
+                            throw new IllegalStateException(player.msg);
+                        }
+                        return player.data.albums;
+                    }
+                });
+    }
+
+    public Observable<List<Subscrible.DataBean.AlbumsBean>> getAlbumsList(String pid, int page) {
+        return retrofitService.albumsList(pid, page)
+                .map(new Func1<Subscrible, List<Subscrible.DataBean.AlbumsBean>>() {
+                    @Override
+                    public List<Subscrible.DataBean.AlbumsBean> call(Subscrible player) {
+                        if (player.ret != 0) {
+                            throw new IllegalStateException(player.msg);
+                        }
+                        return player.data.albums;
+                    }
+                });
+    }
+
+    public Observable<List<Reports.DataBean.Reasons>> getPlayerReports(String type) {
+        return retrofitService.getPlayerReports(type)
+                .map(new Func1<Reports, List<Reports.DataBean.Reasons>>() {
+                    @Override
+                    public List<Reports.DataBean.Reasons> call(Reports player) {
+                        if (player.ret != 0) {
+                            throw new IllegalStateException(player.msg);
+                        }
+                        return player.data.reasons;
+                    }
+                });
+    }
+
+    public Observable<Object> followAnchor(String uid, String oldid) {
+        return retrofitService.followAnchor(uid, oldid)
+                .map(new Func1<Object, Object>() {
+                    @Override
+                    public Object call(Object s) {
+                        return s;
+                    }
+                });
+    }
+
+    public Observable<Object> unFollowAnchor(String uid, String oldid) {
+        return retrofitService.unFollowAnchor(uid, oldid)
+                .map(new Func1<Object, Object>() {
+                    @Override
+                    public Object call(Object s) {
+                        return s;
+                    }
+                });
+    }
+
+    public Observable<Object> postFollowUser(String pid) {
+        return retrofitService.followUsers(pid)
+                .map(new Func1<Object, Object>() {
+                    @Override
+                    public Object call(Object s) {
+                        return s;
+                    }
+                });
+    }
+
+    public Observable<Object> postUnfollowUser(String pid) {
+        return retrofitService.unfollowUsers(pid)
+                .map(new Func1<Object, Object>() {
+                    @Override
+                    public Object call(Object s) {
+                        return s;
+                    }
+                });
+    }
+
+    public Observable<Object> unSubscriptions(String pid) {
+        return retrofitService.unSubscriptions(pid)
+                .map(new Func1<Object, Object>() {
+                    @Override
+                    public Object call(Object s) {
+                        return s;
+                    }
+                });
+    }
+
+    public Observable<Object> reportsPlayer(String pid, String report_reason, String content) {
+        return retrofitService.reportsPlayer(pid, report_reason, content)
+                .map(new Func1<Object, Object>() {
+                    @Override
+                    public Object call(Object s) {
+                        return s;
+                    }
+                });
+    }
+
+    public Observable<Object> reportsUser(String pid, String report_reason, String content) {
+        return retrofitService.reportsUser(pid, report_reason, content)
+                .map(new Func1<Object, Object>() {
+                    @Override
+                    public Object call(Object s) {
+                        return s;
+                    }
+                });
+    }
+
+    public Observable<AnchorInfo> getAnchorInfo(String uid) {
+        return retrofitService.getAnchorInfo(uid)
+                .map(new Func1<AnchorInfo, AnchorInfo>() {
+
+                    @Override
+                    public AnchorInfo call(AnchorInfo anchorInfo) {
+                        if (anchorInfo != null && anchorInfo.ret != 0) {
+                            throw new IllegalStateException(anchorInfo.msg);
+                        }
+                        return anchorInfo;
+                    }
+                });
+    }
+
 
 }
