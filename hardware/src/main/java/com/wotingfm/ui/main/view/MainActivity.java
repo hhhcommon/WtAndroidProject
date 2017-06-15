@@ -36,8 +36,6 @@ public class MainActivity extends TabActivity {
                 .setContent(new Intent(this, InterPhoneActivity.class)));
         tabHost.addTab(tabHost.newTabSpec("three").setIndicator("three")
                 .setContent(new Intent(this, MineActivity.class)));
-
-        changeThree();
     }
 
     private TabHost extracted() {
