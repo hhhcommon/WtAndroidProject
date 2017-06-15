@@ -37,7 +37,7 @@ public class SearchContactsForLocalPresenter {
      * 获取数据
      */
     public void getFriends() {
-        srcList_p= model.getDataForPerson();
+        srcList_p=filledData(model.getDataForPerson());
         srcList_G=  model.getDataForGroup();
     }
 
@@ -55,7 +55,7 @@ public class SearchContactsForLocalPresenter {
 
     // 此时没有搜索关键词的时候的数据
     private void searchForNoData(){
-        activity.setViewForOnce(srcList_p,srcList_G);
+        activity.setViewOne();
     }
 
     // 此时有搜索关键词的时候的数据
@@ -139,7 +139,6 @@ public class SearchContactsForLocalPresenter {
     // 根据输入框中的值来过滤数据并更新 ListView
     private List<Contact.user> filterData(String filterStr) {
         List<Contact.user> filterDateList = new ArrayList<>();
-        filterDateList.clear();
         for (Contact.user sortModel : srcList_p) {
             String name = sortModel.getName();
             if (name.contains(filterStr) || characterParser.getSelling(name).startsWith(filterStr)) {

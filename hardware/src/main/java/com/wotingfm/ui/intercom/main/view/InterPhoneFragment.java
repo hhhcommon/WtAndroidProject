@@ -14,14 +14,12 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.wotingfm.R;
-import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.config.GlobalStateConfig;
 import com.wotingfm.common.constant.BroadcastConstants;
-import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.ui.base.baseadapter.MyFragmentPagerAdapter;
 import com.wotingfm.ui.intercom.add.find.FindFragment;
-import com.wotingfm.ui.intercom.group.creat.CreatGroupMainFragment;
-import com.wotingfm.ui.intercom.main.chat.fragment.ChatFragment;
+import com.wotingfm.ui.intercom.group.creat.view.CreateGroupMainFragment;
+import com.wotingfm.ui.intercom.main.chat.view.ChatFragment;
 import com.wotingfm.ui.intercom.main.contacts.fragment.ContactsFragment;
 import com.wotingfm.ui.intercom.main.simulation.SimulationInterphoneFragment;
 import com.wotingfm.ui.main.view.MainActivity;
@@ -157,7 +155,7 @@ public class InterPhoneFragment extends Fragment implements View.OnClickListener
                 break;
             case R.id.tv_createGroup:// 跳转到创建讨论组
                 if (isLogin()) {
-                    InterPhoneActivity.open(new CreatGroupMainFragment());
+                    InterPhoneActivity.open(new CreateGroupMainFragment());
                 } else {
                     startActivity(new Intent(context, LogoActivity.class));
                 }
@@ -221,12 +219,13 @@ public class InterPhoneFragment extends Fragment implements View.OnClickListener
     }
 
     private boolean isLogin() {
-        String login = BSApplication.SharedPreferences.getString(StringConstant.ISLOGIN, "false");// 是否登录
-        if (!login.trim().equals("") && login.equals("true")) {
-            return true;
-        } else {
-            return false;
-        }
+//        String login = BSApplication.SharedPreferences.getString(StringConstant.ISLOGIN, "false");// 是否登录
+//        if (!login.trim().equals("") && login.equals("true")) {
+//            return true;
+//        } else {
+//            return false;
+//        }
+        return true;
     }
 
     // 设置头部样式

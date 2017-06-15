@@ -7,20 +7,23 @@ import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.wotingfm.R;
+import com.wotingfm.ui.intercom.add.find.FindFragment;
 import com.wotingfm.ui.intercom.add.search.local.view.SearchContactsForLocalFragment;
-import com.wotingfm.ui.intercom.group.groupchat.GroupChatFragment;
+import com.wotingfm.ui.intercom.group.groupchat.view.GroupChatFragment;
 import com.wotingfm.ui.intercom.main.contacts.adapter.ContactsAdapter;
 import com.wotingfm.ui.intercom.main.contacts.adapter.NoAdapter;
 import com.wotingfm.ui.intercom.main.contacts.model.Contact;
 import com.wotingfm.ui.intercom.main.contacts.presenter.ContactsPresenter;
 import com.wotingfm.ui.intercom.main.contacts.view.SideBar;
 import com.wotingfm.ui.intercom.main.view.InterPhoneActivity;
-import com.wotingfm.ui.intercom.person.newfriend.NewFriendFragment;
+import com.wotingfm.ui.intercom.person.newfriend.view.NewFriendFragment;
+import com.wotingfm.ui.intercom.person.personmessage.PersonMessageFragment;
 
 import java.util.List;
 
@@ -51,11 +54,13 @@ public class ContactsFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        rootView = inflater.inflate(R.layout.fragment_contacts, container, false);
-        initViews();// 设置界面
-        setEditListener();
-        presenter = new ContactsPresenter(this);
-        presenter.getFriends();// 获取数据
+        if (rootView == null) {
+            rootView = inflater.inflate(R.layout.fragment_contacts, container, false);
+            initViews();// 设置界面
+            setEditListener();
+            presenter = new ContactsPresenter(this);
+            presenter.getFriends();// 获取数据
+        }
         return rootView;
     }
 
@@ -97,6 +102,22 @@ public class ContactsFragment extends Fragment implements View.OnClickListener {
         });
     }
 
+    // 设置右侧触摸监听
+    private void setClickListener() {
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                // 此处数据+1
+                PersonMessageFragment fragment = new PersonMessageFragment();
+                Bundle bundle = new Bundle();
+                bundle.putString("type", "true");
+                fragment.setArguments(bundle);
+                InterPhoneActivity.open(fragment);
+            }
+        });
+
+    }
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -122,6 +143,7 @@ public class ContactsFragment extends Fragment implements View.OnClickListener {
             listView.setAdapter(adapter);
         }
         setTouchListener();
+        setClickListener();
     }
 
     // 无参方法 设置界面

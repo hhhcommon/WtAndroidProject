@@ -1,5 +1,6 @@
 package com.wotingfm.ui.intercom.main.contacts.presenter;
 
+import com.wotingfm.common.utils.GetTestData;
 import com.wotingfm.ui.intercom.main.contacts.fragment.ContactsFragment;
 import com.wotingfm.ui.intercom.main.contacts.model.Contact;
 import com.wotingfm.ui.intercom.main.contacts.model.ContactsModel;
@@ -33,21 +34,41 @@ public class ContactsPresenter {
      * 发送网络请求,获取好友
      */
     public void getFriends() {
-        String s="";
-        model.loadNews(s, new ContactsModel.OnLoadInterface  () {
-            @Override
-            public void onSuccess(Contact result) {
-//                loginView.removeDialog();
-                dealSuccess(result);
+        try {
+            List<Contact.user> userList = GetTestData.getFriendList();
+            if(userList!=null&&userList.size()>0){
+                // 根据 a - z 进行排序源数据
+                List<Contact.user> srcList=filledData(userList);
+                Collections.sort(srcList, pinyinComparator);
+                activity.setData(srcList);
+            }else{
+                activity.setData();
             }
-
-            @Override
-            public void onFailure(String msg) {
-//                loginView.removeDialog();
-//                ToastUtils.showVolleyError(loginView);
-            }
-        });
+        } catch (Exception e) {
+            e.printStackTrace();
+            activity.setData();
+        }
     }
+
+//    /**
+//     * 发送网络请求,获取好友
+//     */
+//    public void getFriends() {
+//        String s="";
+//        model.loadNews(s, new ContactsModel.OnLoadInterface  () {
+//            @Override
+//            public void onSuccess(Contact result) {
+////                loginView.removeDialog();
+//                dealSuccess(result);
+//            }
+//
+//            @Override
+//            public void onFailure(String msg) {
+////                loginView.removeDialog();
+////                ToastUtils.showVolleyError(loginView);
+//            }
+//        });
+//    }
 
     // 处理返回数据
     private void dealSuccess(Contact result) {

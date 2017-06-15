@@ -35,7 +35,7 @@ public class SimulationInterphoneFragment extends Fragment implements View.OnCli
             context = getActivity();
             list = FrequencyUtil.getFrequencyList();
             setView();                                     // 设置界面
-            initEmp();                                     // 初始化模拟对讲
+//            initEmp();                                     // 初始化模拟对讲
         }
         return rootView;
     }

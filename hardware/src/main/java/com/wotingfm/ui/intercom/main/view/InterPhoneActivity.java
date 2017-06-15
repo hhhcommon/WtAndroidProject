@@ -5,6 +5,7 @@ import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 import com.woting.commonplat.utils.SequenceUUID;
 import com.wotingfm.R;
@@ -15,8 +16,8 @@ import com.wotingfm.R;
  * 邮箱：645700751@qq.com
  */
 
-public class InterPhoneActivity extends FragmentActivity  {
-    private static InterPhoneActivity context;
+public class InterPhoneActivity extends AppCompatActivity {
+    public static InterPhoneActivity context;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

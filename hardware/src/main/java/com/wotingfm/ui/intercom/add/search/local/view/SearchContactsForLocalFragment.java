@@ -1,28 +1,25 @@
 package com.wotingfm.ui.intercom.add.search.local.view;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.woting.commonplat.widget.HeightListView;
 import com.wotingfm.R;
-import com.wotingfm.ui.base.model.UserInfo;
 import com.wotingfm.ui.intercom.add.search.local.adapter.GroupsAdapter;
 import com.wotingfm.ui.intercom.add.search.local.presenter.SearchContactsForLocalPresenter;
 import com.wotingfm.ui.intercom.group.groupnews.GroupNewsForAddFragment;
-import com.wotingfm.ui.intercom.main.chat.fragment.ChatFragment;
 import com.wotingfm.ui.intercom.main.contacts.adapter.ContactsAdapter;
 import com.wotingfm.ui.intercom.main.contacts.adapter.NoAdapter;
 import com.wotingfm.ui.intercom.main.contacts.model.Contact;
@@ -37,7 +34,7 @@ import java.util.List;
  * 作者：xinLong on 2017/6/5 01:30
  * 邮箱：645700751@qq.com
  */
-public class SearchContactsForLocalFragment extends Fragment {
+public class SearchContactsForLocalFragment extends Fragment implements View.OnClickListener{
     private View rootView;
     private FragmentActivity context;
     private ListView listViewG, listViewP;
@@ -48,6 +45,8 @@ public class SearchContactsForLocalFragment extends Fragment {
     private SearchContactsForLocalPresenter presenter;
     private GroupsAdapter gAdapter;
     private ContactsAdapter pAdapter;
+    private LinearLayout lin_background;
+    private TextView tv_ts;// 提示性界面，临时使用，需替换
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -58,8 +57,10 @@ public class SearchContactsForLocalFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         if (rootView == null) {
             rootView = inflater.inflate(R.layout.fragment_search_local, container, false);
+            rootView.setOnClickListener(this);
             initViews();// 设置界面
             setEditListener();
+            setViewOne();
             presenter = new SearchContactsForLocalPresenter(this);
             presenter.getFriends();
         }
@@ -68,9 +69,12 @@ public class SearchContactsForLocalFragment extends Fragment {
 
     // 初始化视图
     private void initViews() {
+        lin_background = (LinearLayout) rootView.findViewById(R.id.lin_background);
+        tv_ts = (TextView) rootView.findViewById(R.id.tv_ts);
         listViewG = (ListView) rootView.findViewById(R.id.listView);
 
         tv_clear = (TextView) rootView.findViewById(R.id.tv_clear);
+        tv_clear.setOnClickListener(this);
         et_search = (EditText) rootView.findViewById(R.id.et_search);
         img_search = (ImageView) rootView.findViewById(R.id.img_search);
 
@@ -105,13 +109,24 @@ public class SearchContactsForLocalFragment extends Fragment {
         });
     }
 
+    // 第一次进入时候的界面展示
+    public void setViewOne() {
+        lin_background.setVisibility(View.VISIBLE);
+        tv_ts.setText("请输入您想要搜索的关键词");
+        listViewG.setVisibility(View.GONE);
+    }
+
     // 此时没有数据
     public void setView() {
-
+        lin_background.setVisibility(View.VISIBLE);
+        tv_ts.setText("暂没有数据");
+        listViewG.setVisibility(View.GONE);
     }
 
     // 此时个人有数据
     public void setViewForPerson(List<Contact.user> person) {
+        lin_background.setVisibility(View.GONE);
+        listViewG.setVisibility(View.VISIBLE);
         if (pAdapter == null) {
             pAdapter = new ContactsAdapter(context, person);
             listViewP.setAdapter(pAdapter);
@@ -122,11 +137,12 @@ public class SearchContactsForLocalFragment extends Fragment {
         setListViewListener(person);
         NoAdapter adapters = new NoAdapter(context);
         listViewG.setAdapter(adapters);
-
     }
 
     // 此时群组有数据
     public void setViewForGroup(List<Contact.group> group) {
+        lin_background.setVisibility(View.GONE);
+        listViewG.setVisibility(View.VISIBLE);
         if (gAdapter == null) {
             gAdapter = new GroupsAdapter(context, group);
             listViewG.setAdapter(gAdapter);
@@ -138,6 +154,8 @@ public class SearchContactsForLocalFragment extends Fragment {
 
     // 此时群组、个人都有数据
     public void setViewForAll(List<Contact.user> person, List<Contact.group> group) {
+        lin_background.setVisibility(View.GONE);
+        listViewG.setVisibility(View.VISIBLE);
         if (pAdapter == null) {
             pAdapter = new ContactsAdapter(context, person);
             listViewP.setAdapter(pAdapter);
@@ -151,32 +169,31 @@ public class SearchContactsForLocalFragment extends Fragment {
         setGroupListViewListener(group);
     }
 
-    // 原始数据界面
-    public void setViewForOnce(List<Contact.user> person, List<Contact.group> group) {
-
-        if (person != null && person.size() != 0) {
-            if (pAdapter == null) {
-                pAdapter = new ContactsAdapter(context, person);
-                listViewP.setAdapter(pAdapter);
-            } else {
-                pAdapter.ChangeDate(person);
-            }
-            new HeightListView(context).setListViewHeightBasedOnChildren(listViewP);
-            setListViewListener(person);
-            listViewP.setVisibility(View.VISIBLE);
-        } else {
-            listViewP.setVisibility(View.GONE);
-        }
-        if (group == null || group.size() == 0) {
-            NoAdapter adapters = new NoAdapter(context);
-            listViewG.setAdapter(adapters);
-        } else {
-            gAdapter = new GroupsAdapter(context, group);
-            listViewG.setAdapter(gAdapter);
-            setGroupListViewListener(group);
-
-        }
-    }
+//    // 原始数据界面
+//    public void setViewForOnce(List<Contact.user> person, List<Contact.group> group) {
+//        if (person != null && person.size() != 0) {
+//            if (pAdapter == null) {
+//                pAdapter = new ContactsAdapter(context, person);
+//                listViewP.setAdapter(pAdapter);
+//            } else {
+//                pAdapter.ChangeDate(person);
+//            }
+//            new HeightListView(context).setListViewHeightBasedOnChildren(listViewP);
+//            setListViewListener(person);
+//            listViewP.setVisibility(View.VISIBLE);
+//        } else {
+//            listViewP.setVisibility(View.GONE);
+//        }
+//        if (group == null || group.size() == 0) {
+//            NoAdapter adapters = new NoAdapter(context);
+//            listViewG.setAdapter(adapters);
+//        } else {
+//            gAdapter = new GroupsAdapter(context, group);
+//            listViewG.setAdapter(gAdapter);
+//            setGroupListViewListener(group);
+//
+//        }
+//    }
 
     // listView 的监听
     private void setListViewListener(List<Contact.user> person) {
@@ -230,6 +247,14 @@ public class SearchContactsForLocalFragment extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
+    }
 
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.tv_clear:
+                InterPhoneActivity.close();
+                break;
+        }
     }
 }
