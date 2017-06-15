@@ -17,13 +17,18 @@ import com.woting.commonplat.widget.LoadFrameLayout;
 import com.wotingfm.R;
 import com.wotingfm.common.adapter.PlayerAdapter;
 import com.wotingfm.common.bean.Player;
+import com.wotingfm.common.bean.SinglesBase;
+import com.wotingfm.common.bean.SinglesDownload;
 import com.wotingfm.common.config.DbConfig;
 import com.wotingfm.common.database.HistoryHelper;
 import com.wotingfm.common.net.RetrofitUtils;
+import com.wotingfm.common.utils.L;
 import com.wotingfm.common.utils.TimeUtils;
 import com.wotingfm.common.view.MenuDialog;
 import com.wotingfm.common.view.PlayerDialog;
 import com.wotingfm.ui.base.baseactivity.NoTitleBarBaseActivity;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -66,7 +71,6 @@ public class PlayerActivity extends NoTitleBarBaseActivity implements View.OnCli
 
     @Override
     public void initView() {
-
         loadLayout.findViewById(R.id.btnTryAgain).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -92,7 +96,7 @@ public class PlayerActivity extends NoTitleBarBaseActivity implements View.OnCli
 
     private HistoryHelper historyHelper;
 
-    private void setBeforeOrNext(Player.DataBean.SinglesBean sb) {
+    private void setBeforeOrNext(SinglesBase sb) {
         if (postionPlayer != 0) {
             ivBefore.setImageResource(R.mipmap.music_play_icon_before);
         } else {
@@ -123,7 +127,8 @@ public class PlayerActivity extends NoTitleBarBaseActivity implements View.OnCli
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 LinearLayoutManager manager = (LinearLayoutManager) recyclerView.getLayoutManager();
                 int postion = manager.findLastCompletelyVisibleItemPosition();
-                if (newState == RecyclerView.SCROLL_STATE_IDLE && postion != postionPlayer) {
+                L.i("mingku", "postion=" + postion);
+                if (newState == RecyclerView.SCROLL_STATE_IDLE && postion != postionPlayer && postion >= 0) {
                     seekbarVideo.setProgress(0);
                     postionPlayer = postion;
                     bdPlayer.stopPlayback();
@@ -245,7 +250,7 @@ public class PlayerActivity extends NoTitleBarBaseActivity implements View.OnCli
                 if (singLesBeans != null && !singLesBeans.isEmpty()) {
                     playerDialog.showPlayDialo(singLesBeans, singLesBeans.get(postionPlayer).id, new PlayerDialog.PopPlayCallBack() {
                         @Override
-                        public void play(Player.DataBean.SinglesBean singlesBean, int postion) {
+                        public void play(SinglesBase singlesBean, int postion) {
                             bdPlayer.stopPlayback();
                             bdPlayer.setVideoPath(singlesBean.single_file_url);
                             postionPlayer = postion;
@@ -253,7 +258,7 @@ public class PlayerActivity extends NoTitleBarBaseActivity implements View.OnCli
                         }
 
                         @Override
-                        public void close(Player.DataBean.SinglesBean singlesBean) {
+                        public void close(SinglesBase singlesBean) {
                             singLesBeans.remove(singlesBean);
                             mPlayerAdapter.notifyDataSetChanged();
                             setBeforeOrNext(null);
@@ -269,7 +274,7 @@ public class PlayerActivity extends NoTitleBarBaseActivity implements View.OnCli
                 if (singLesBeans != null && !singLesBeans.isEmpty())
                     menuDialog.setMenuData(singLesBeans.get(postionPlayer), new MenuDialog.FollowCallBack() {
                         @Override
-                        public void followPlayer(Player.DataBean.SinglesBean psb) {
+                        public void followPlayer(SinglesBase psb) {
                             singLesBeans.set(postionPlayer, psb);
                             mPlayerAdapter.notifyDataSetChanged();
                         }
@@ -283,7 +288,7 @@ public class PlayerActivity extends NoTitleBarBaseActivity implements View.OnCli
     private int postionPlayer = 0;
     private BDPlayer bdPlayer;
     private PlayerAdapter mPlayerAdapter;
-    private List<Player.DataBean.SinglesBean> singLesBeans = new ArrayList<>();
+    private List<SinglesBase> singLesBeans = new ArrayList<>();
     //数据源dialog
     private PlayerDialog playerDialog;
     //菜单dialohg
@@ -302,7 +307,7 @@ public class PlayerActivity extends NoTitleBarBaseActivity implements View.OnCli
                             singLesBeans.addAll(singls);
                             mPlayerAdapter.notifyDataSetChanged();
                             postionPlayer = 0;
-                            Player.DataBean.SinglesBean sb = singls.get(0);
+                            SinglesBase sb = singls.get(0);
                             bdPlayer.stopPlayback();
                             bdPlayer.setVideoPath(sb.single_file_url);
                             bdPlayer.start();
@@ -368,6 +373,24 @@ public class PlayerActivity extends NoTitleBarBaseActivity implements View.OnCli
                 bdPlayer.stopPlayback();
             loadLayout.showLoadingView();
             getPlayerList(albumsId);
+        }
+        //缓存数据 专辑
+        else if (requestCode == 6060 && resultCode == RESULT_OK && data != null) {
+            if (bdPlayer != null)
+                bdPlayer.stopPlayback();
+            if (singLesBeans != null)
+                singLesBeans.clear();
+            List<SinglesDownload> singlesBeanList = (List<SinglesDownload>) data.getSerializableExtra("singles");
+            singLesBeans.addAll(singlesBeanList);
+            mPlayerAdapter.notifyDataSetChanged();
+            if (singLesBeans != null && !singLesBeans.isEmpty()) {
+                postionPlayer = 0;
+                SinglesBase sb = singLesBeans.get(0);
+                bdPlayer.stopPlayback();
+                bdPlayer.setVideoPath(sb.single_file_url);
+                bdPlayer.start();
+                setBeforeOrNext(sb);
+            }
         }
     }
 }

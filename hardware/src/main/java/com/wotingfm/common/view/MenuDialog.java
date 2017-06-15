@@ -15,20 +15,26 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.woting.commonplat.utils.FileSizeUtil;
 import com.wotingfm.R;
 import com.wotingfm.common.adapter.PlayerListAdapter;
 import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.bean.Player;
+import com.wotingfm.common.bean.SinglesBase;
+import com.wotingfm.common.bean.SinglesDownload;
 import com.wotingfm.common.config.DbConfig;
 import com.wotingfm.common.database.DownloadHelper;
-import com.wotingfm.common.database.HistoryHelper;
 import com.wotingfm.common.net.RetrofitUtils;
+import com.wotingfm.common.utils.L;
 import com.wotingfm.common.utils.SDCardUtils;
 import com.wotingfm.common.utils.T;
 import com.wotingfm.ui.play.activity.AnchorPersonalCenterActivity;
 import com.wotingfm.ui.play.activity.MeSubscribeListActivity;
 import com.wotingfm.ui.play.activity.PlayerHistoryActivity;
 import com.wotingfm.ui.play.activity.ReportsPlayerActivity;
+import com.wotingfm.ui.play.activity.download.DownloadProgramActivity;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -36,12 +42,15 @@ import java.util.List;
 
 import cn.finalteam.okhttpfinal.FileDownloadCallback;
 import cn.finalteam.okhttpfinal.HttpRequest;
+import cn.finalteam.toolsfinal.io.FileUtils;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 
+import static android.R.attr.breadCrumbShortTitle;
 import static android.R.attr.data;
 import static android.icu.lang.UCharacter.GraphemeClusterBreak.T;
+import static com.loc.e.m;
 import static com.woting.commonplat.gather.GatherData.url;
 import static com.wotingfm.R.id.mRecyclerViewList;
 
@@ -80,10 +89,10 @@ public class MenuDialog extends Dialog implements View.OnClickListener {
         tvLocal.setOnClickListener(this);
     }
 
-    private Player.DataBean.SinglesBean pdsBase;
+    private SinglesBase pdsBase;
     private FollowCallBack followCallBack;
 
-    public void setMenuData(Player.DataBean.SinglesBean pds, FollowCallBack followCallBack) {
+    public void setMenuData(SinglesBase pds, FollowCallBack followCallBack) {
         this.followCallBack = followCallBack;
         if (pds != null) {
             pdsBase = pds;
@@ -112,30 +121,38 @@ public class MenuDialog extends Dialog implements View.OnClickListener {
                 if (pdsBase != null) {
                     final DownloadHelper downloadHelper = new DownloadHelper(BSApplication.getInstance());
                     if (downloadHelper != null) {
-                        List<Player.DataBean.SinglesBean> singlesBeens = downloadHelper.findPlayHistoryList();
+                        dismiss();
+                        List<SinglesDownload> singlesBeens = downloadHelper.findPlayHistoryList();
                         if (singlesBeens != null && !singlesBeens.isEmpty()) {
-                            for (Player.DataBean.SinglesBean s : singlesBeens) {
+                            for (SinglesDownload s : singlesBeens) {
                                 if (s.id.equals(pdsBase.id)) {
                                     com.wotingfm.common.utils.T.getInstance().equals("已下载");
                                     return;
                                 }
                             }
                         }
-                        File saveFile = new File(SDCardUtils.getSDPath() + DbConfig.ALBUMS + "/" + pdsBase.single_file_url);
+                        final File saveFile = new File(SDCardUtils.getSDPath() + DbConfig.ALBUMS + "/" + pdsBase.single_file_url);
                         HttpRequest.download(pdsBase.single_file_url, saveFile, new FileDownloadCallback() {
                             //开始下载
                             @Override
                             public void onStart() {
                                 super.onStart();
-                                ContentValues contentValues = new ContentValues();
-                                contentValues.put("id", pdsBase.id);
-                                contentValues.put("isPlay", pdsBase.isPlay);
-                                contentValues.put("single_title", pdsBase.single_title);
-                                contentValues.put("play_time", System.currentTimeMillis());
-                                contentValues.put("single_logo_url", pdsBase.single_logo_url);
-                                contentValues.put("single_file_url", pdsBase.single_file_url);
-                                contentValues.put("album_title", pdsBase.album_title);
-                                downloadHelper.insertTotable(pdsBase.id, contentValues);
+                                L.i("mingku", "downloadStart");
+                                if (pdsBase != null && downloadHelper != null) {
+                                    com.wotingfm.common.utils.T.getInstance().equals("开始下载");
+                                    ContentValues contentValues = new ContentValues();
+                                    contentValues.put("id", pdsBase.id);
+                                    contentValues.put("single_title", pdsBase.single_title);
+                                    contentValues.put("single_logo_url", pdsBase.single_logo_url);
+                                    contentValues.put("single_file_url", saveFile.getAbsolutePath());
+                                    contentValues.put("album_title", pdsBase.album_title);
+                                    contentValues.put("album_logo_url", pdsBase.album_logo_url);
+                                    contentValues.put("had_liked", pdsBase.had_liked);
+                                    contentValues.put("album_id", pdsBase.album_id);
+                                    contentValues.put("creator_id", pdsBase.creator_id);
+                                    contentValues.put("isDownloadOver", false);
+                                    downloadHelper.insertTotable(pdsBase.id, contentValues);
+                                }
 
                             }
 
@@ -150,14 +167,33 @@ public class MenuDialog extends Dialog implements View.OnClickListener {
                             @Override
                             public void onFailure() {
                                 super.onFailure();
-                                com.wotingfm.common.utils.T.getInstance().showToast("下载失败");
+                                L.i("mingku", "downloadFailure");
+                                if (pdsBase != null && downloadHelper != null)
+                                    downloadHelper.deleteTable(pdsBase.id);
                             }
 
                             //下载完成（下载成功）
                             @Override
                             public void onDone() {
                                 super.onDone();
-                                com.wotingfm.common.utils.T.getInstance().showToast("下载成功");
+                                L.i("mingku", "downloadDone");
+                                if (pdsBase != null && downloadHelper != null) {
+                                    ContentValues contentValues = new ContentValues();
+                                    contentValues.put("id", pdsBase.id);
+                                    contentValues.put("single_title", pdsBase.single_title);
+                                    contentValues.put("single_logo_url", pdsBase.single_logo_url);
+                                    contentValues.put("single_file_url", saveFile.getAbsolutePath());
+                                    contentValues.put("album_title", pdsBase.album_title);
+                                    contentValues.put("album_logo_url", pdsBase.album_logo_url);
+                                    contentValues.put("had_liked", pdsBase.had_liked);
+                                    contentValues.put("album_id", pdsBase.album_id);
+                                    contentValues.put("creator_id", pdsBase.creator_id);
+                                    contentValues.put("isDownloadOver", true);
+                                    contentValues.put("albumSize", FileSizeUtil.getFileOrFilesSize(saveFile.getAbsolutePath(), FileSizeUtil.SIZETYPE_MB));
+                                    downloadHelper.insertTotable(pdsBase.id, contentValues);
+                                    //下载完成发送消息
+                                    EventBus.getDefault().postSticky(pdsBase.id);
+                                }
                             }
                         });
                     }
@@ -195,6 +231,10 @@ public class MenuDialog extends Dialog implements View.OnClickListener {
                         followPlayer();
                     }
                 }
+                break;
+            case R.id.tvLocal:
+                dismiss();
+                DownloadProgramActivity.start(activity);
                 break;
         }
     }
@@ -248,7 +288,7 @@ public class MenuDialog extends Dialog implements View.OnClickListener {
     }
 
     public interface FollowCallBack {
-        void followPlayer(Player.DataBean.SinglesBean psb);
+        void followPlayer(SinglesBase psb);
     }
 
 }

@@ -22,6 +22,14 @@
         <item name="windowActionBar">false</item>
     </style>
 
+    <style name="progressbar_style1">
+        <item name="android:maxWidth">24.0dip</item>
+        <item name="android:maxHeight">24.0dip</item>
+        <item name="android:indeterminateDrawable">@anim/anim_loading1</item>
+        <item name="android:minWidth">24.0dip</item>
+        <item name="android:minHeight">24.0dip</item>
+    </style>
+
     <declare-styleable name="MaxHeightView">
         <attr name="mhv_HeightRatio" format="reference|float" />
         <attr name="mhv_HeightDimen" format="reference|dimension" />
