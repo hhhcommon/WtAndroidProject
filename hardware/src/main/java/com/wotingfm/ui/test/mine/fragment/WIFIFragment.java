@@ -98,11 +98,10 @@ public class WIFIFragment extends Fragment implements View.OnClickListener {
             imageWiFiSet.setImageResource(R.mipmap.close_switch);
         }
         scanResultList = wifiManager.getScanResults();
-        if (scanResultList != null && scanResultList.size() > 0) {// 判断附近是否有可用 WiFi
-            wifiListView.setAdapter(adapter = new WiFiListAdapter(context, scanResultList));
-        } else {
-            wifiListView.setAdapter(adapter = new WiFiListAdapter(context, scanResultList = new ArrayList<>()));
+        if (scanResultList == null) {// 判断附近是否有可用 WiFi
+            scanResultList = new ArrayList<>();
         }
+        wifiListView.setAdapter(adapter = new WiFiListAdapter(context, scanResultList));
         setItemListener();
     }
 
