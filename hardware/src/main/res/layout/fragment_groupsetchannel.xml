@@ -46,7 +46,7 @@
             android:layout_marginLeft="18dp"
             android:layout_weight="1"
             android:background="@color/transparent_background"
-            android:hint="备用频道一"
+            android:text="备用频道一"
             android:textColor="#959698"
             android:textSize="14sp" />
 
@@ -76,7 +76,7 @@
             android:layout_marginLeft="18dp"
             android:layout_weight="1"
             android:background="@color/transparent_background"
-            android:hint="备用频道二"
+            android:text="备用频道二"
             android:textColor="#959698"
             android:textSize="14sp" />
 

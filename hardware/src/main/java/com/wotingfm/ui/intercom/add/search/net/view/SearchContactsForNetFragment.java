@@ -58,12 +58,14 @@ public class SearchContactsForNetFragment extends Fragment implements View.OnCli
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        rootView = inflater.inflate(R.layout.fragment_search_net, container, false);
-        rootView.setOnClickListener(this);
-        initViews();// 设置界面
-        setEditListener();
-        presenter = new SearchContactsForNetPresenter(this);
-        presenter.getFriends();
+        if (rootView == null) {
+            rootView = inflater.inflate(R.layout.fragment_search_net, container, false);
+            rootView.setOnClickListener(this);
+            initViews();// 设置界面
+            setEditListener();
+            presenter = new SearchContactsForNetPresenter(this);
+            presenter.getFriends();
+        }
         return rootView;
     }
 

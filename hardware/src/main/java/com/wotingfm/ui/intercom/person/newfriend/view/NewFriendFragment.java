@@ -38,10 +38,12 @@ public class NewFriendFragment extends Fragment implements NewFriendAdapter.IonS
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        rootView = inflater.inflate(R.layout.fragment_newfriend, container, false);
-        inItView();
-        presenter = new NewFriendPresenter(this);
-        presenter.getData();
+        if (rootView == null) {
+            rootView = inflater.inflate(R.layout.fragment_newfriend, container, false);
+            inItView();
+            presenter = new NewFriendPresenter(this);
+            presenter.getData();
+        }
         return rootView;
     }
 

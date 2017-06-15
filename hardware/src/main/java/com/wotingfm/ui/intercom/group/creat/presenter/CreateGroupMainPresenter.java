@@ -13,6 +13,8 @@ import com.woting.commonplat.utils.BitmapUtils;
 import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.ui.intercom.group.creat.model.CreateGroupMainModel;
 import com.wotingfm.ui.intercom.group.creat.view.CreateGroupMainFragment;
+import com.wotingfm.ui.intercom.group.standbychannel.view.StandbyChannelFragment;
+import com.wotingfm.ui.intercom.main.view.InterPhoneActivity;
 import com.wotingfm.ui.intercom.person.newfriend.model.NewFriendModel;
 import com.wotingfm.ui.intercom.person.newfriend.view.NewFriendFragment;
 import com.wotingfm.ui.photocut.PhotoCutActivity;
@@ -54,8 +56,6 @@ public class CreateGroupMainPresenter {
         }
     }
 
-
-
     /**
      * 提交数据
      * @param type
@@ -63,6 +63,8 @@ public class CreateGroupMainPresenter {
      * @param password
      */
     public void send(int type, String name, String password) {
+        // 临时测试数据
+        InterPhoneActivity.open(new StandbyChannelFragment());
         if (checkData(name, password, type)) {
             send(name, password, type);
         }
@@ -187,7 +189,6 @@ public class CreateGroupMainPresenter {
             }
         });
     }
-
 
     // 处理返回数据
     private void dealLoginSuccess(Login result) {

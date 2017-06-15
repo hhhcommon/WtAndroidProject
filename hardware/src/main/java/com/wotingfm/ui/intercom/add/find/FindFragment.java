@@ -34,9 +34,11 @@ public class FindFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        rootView = inflater.inflate(R.layout.fragment_find, container, false);
-        rootView.setOnClickListener(this);
-        initViews();// 设置界面
+        if (rootView == null) {
+            rootView = inflater.inflate(R.layout.fragment_find, container, false);
+            rootView.setOnClickListener(this);
+            initViews();// 设置界面
+        }
         return rootView;
     }
 

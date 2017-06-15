@@ -17,6 +17,7 @@ import com.wotingfm.R;
 import com.wotingfm.ui.intercom.group.groupchat.adapter.GroupChatAdapter;
 import com.wotingfm.ui.intercom.group.groupchat.model.GroupChat;
 import com.wotingfm.ui.intercom.group.groupchat.presenter.GroupChatPresenter;
+import com.wotingfm.ui.intercom.group.groupnews.GroupNewsForNoAddFragment;
 import com.wotingfm.ui.intercom.main.view.InterPhoneActivity;
 
 import java.util.List;
@@ -41,10 +42,12 @@ public class GroupChatFragment extends Fragment implements View.OnClickListener 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        rootView = inflater.inflate(R.layout.fragment_mychat, container, false);
-        inItView();
-        presenter=new GroupChatPresenter(this);
-        presenter.getData();
+        if (rootView == null) {
+            rootView = inflater.inflate(R.layout.fragment_mychat, container, false);
+            inItView();
+            presenter = new GroupChatPresenter(this);
+            presenter.getData();
+        }
         return rootView;
     }
 
@@ -64,6 +67,17 @@ public class GroupChatFragment extends Fragment implements View.OnClickListener 
 
         spListView.setGroupIndicator(null);
         spListView.setSelector(new ColorDrawable(Color.TRANSPARENT));
+        setListener();
+    }
+
+    private void setListener() {
+        spListView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
+            @Override
+            public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
+                InterPhoneActivity.open(new GroupNewsForNoAddFragment());
+                return false;
+            }
+        });
     }
 
     @Override

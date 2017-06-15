@@ -40,11 +40,13 @@ public class ChatFragment extends Fragment implements ChatAdapter.IonSlidingView
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        rootView = inflater.inflate(R.layout.fragment_chat, container, false);
-        rootView.setOnClickListener(this);
-        inItView();
-        presenter = new ChatPresenter(this);
-        presenter.getData();
+        if (rootView == null) {
+            rootView = inflater.inflate(R.layout.fragment_chat, container, false);
+            rootView.setOnClickListener(this);
+            inItView();
+            presenter = new ChatPresenter(this);
+            presenter.getData();
+        }
         return rootView;
     }
 
