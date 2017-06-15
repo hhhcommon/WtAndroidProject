@@ -2,6 +2,7 @@ package com.wotingfm.ui.test;
 
 import android.content.ContentValues;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PagerSnapHelper;
 import android.support.v7.widget.RecyclerView;
@@ -20,6 +21,8 @@ import com.wotingfm.common.bean.Player;
 import com.wotingfm.common.bean.SinglesBase;
 import com.wotingfm.common.bean.SinglesDownload;
 import com.wotingfm.common.config.DbConfig;
+import com.wotingfm.common.config.GlobalStateConfig;
+import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.common.database.HistoryHelper;
 import com.wotingfm.common.net.RetrofitUtils;
 import com.wotingfm.common.utils.L;
@@ -27,6 +30,7 @@ import com.wotingfm.common.utils.TimeUtils;
 import com.wotingfm.common.view.MenuDialog;
 import com.wotingfm.common.view.PlayerDialog;
 import com.wotingfm.ui.base.baseactivity.NoTitleBarBaseActivity;
+import com.wotingfm.ui.main.view.MainActivity;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -205,6 +209,15 @@ public class PlayerActivity extends NoTitleBarBaseActivity implements View.OnCli
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.ivPlayerCenter:
+                GlobalStateConfig.mineFromType=1;
+                GlobalStateConfig.activityA="C";
+                GlobalStateConfig.activityB="B";
+                MainActivity.changeThree();
+                Intent push = new Intent(BroadcastConstants.MINE_ACTIVITY_CHANGE);
+                Bundle bundle = new Bundle();
+                bundle.putInt("viewType", 3);
+                push.putExtras(bundle);
+                sendBroadcast(push);
                 break;
             case R.id.ivPlayerFind:
 
