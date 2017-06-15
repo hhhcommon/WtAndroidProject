@@ -33,7 +33,7 @@
         <item name="android:layout_height">match_parent</item>
         <item name="android:scrollbars">none</item>
         <item name="android:orientation">vertical</item>
-        <item name="android:background">@color/white</item>
+        <item name="android:background">@color/background_color</item>
     </style>
 
     <!--下载主题-->

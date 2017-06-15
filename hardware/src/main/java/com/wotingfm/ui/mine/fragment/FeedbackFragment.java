@@ -1,4 +1,4 @@
-package com.wotingfm.ui.test.mine.fragment;
+package com.wotingfm.ui.mine.fragment;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -8,7 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.wotingfm.R;
-import com.wotingfm.ui.test.mine.MineActivity;
+import com.wotingfm.ui.mine.MineActivity;
 
 /**
  * 意见反馈

@@ -1,29 +1,33 @@
-package com.wotingfm.ui.test.mine.adapter;
+package com.wotingfm.ui.mine.adapter;
 
 import android.content.Context;
+import android.net.wifi.ScanResult;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.wotingfm.R;
-import com.wotingfm.ui.test.mine.model.FMInfo;
 
 import java.util.List;
 
 /**
- * FM列表
- * Created by Administrator on 9/10/2016.
+ * WiFi列表
+ * Created by Administrator on 9/9/2016.
  */
-public class FMListAdapter extends BaseAdapter {
+public class WiFiListAdapter extends BaseAdapter {
     private Context context;
-    private List<FMInfo> list;
+    private List<ScanResult> list;
 
-    public FMListAdapter(Context context, List<FMInfo> list){
+    public WiFiListAdapter(Context context, List<ScanResult> list) {
         this.context = context;
         this.list = list;
+    }
+
+    public void setList(List<ScanResult> list) {
+        this.list = list;
+        notifyDataSetChanged();
     }
 
     @Override
@@ -44,22 +48,20 @@ public class FMListAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder holder;
-        if(convertView == null) {
+        if (convertView == null) {
             holder = new ViewHolder();
-            convertView = LayoutInflater.from(context).inflate(R.layout.adapter_fm_list, parent, false);
-            holder.imageSignal = (ImageView) convertView.findViewById(R.id.image_signal);
-            holder.textFmFrequency = (TextView) convertView.findViewById(R.id.text_fm_frequency);
+            convertView = LayoutInflater.from(context).inflate(R.layout.adapter_wifi_list, parent, false);
+            holder.textWiFiName = (TextView) convertView.findViewById(R.id.text_wifi_name);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-        FMInfo fmInfo = list.get(position);
-        holder.textFmFrequency.setText(fmInfo.getFmName());// 频率
+        ScanResult result = list.get(position);
+        holder.textWiFiName.setText(result.SSID);
         return convertView;
     }
 
     class ViewHolder {
-        ImageView imageSignal;// 信号图标
-        TextView textFmFrequency;// FM
+        TextView textWiFiName;// WiFi Name
     }
 }

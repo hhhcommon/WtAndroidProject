@@ -1,4 +1,4 @@
-package com.wotingfm.ui.test.mine.fragment;
+package com.wotingfm.ui.mine.fragment;
 
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -26,10 +26,10 @@ import com.wotingfm.R;
 import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.common.utils.L;
 import com.wotingfm.common.utils.ToastUtils;
-import com.wotingfm.ui.test.mine.MineActivity;
-import com.wotingfm.ui.test.mine.adapter.PairBluetoothAdapter;
-import com.wotingfm.ui.test.mine.adapter.UserBluetoothAdapter;
-import com.wotingfm.ui.test.mine.model.BluetoothInfo;
+import com.wotingfm.ui.mine.MineActivity;
+import com.wotingfm.ui.mine.adapter.PairBluetoothAdapter;
+import com.wotingfm.ui.mine.adapter.UserBluetoothAdapter;
+import com.wotingfm.ui.mine.model.BluetoothInfo;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;

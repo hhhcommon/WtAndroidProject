@@ -1,4 +1,4 @@
-package com.wotingfm.ui.test.mine.model;
+package com.wotingfm.ui.mine.model;
 
 /**
  * FM

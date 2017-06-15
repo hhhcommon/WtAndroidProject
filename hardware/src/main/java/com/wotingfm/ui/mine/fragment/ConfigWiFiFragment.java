@@ -1,4 +1,4 @@
-package com.wotingfm.ui.test.mine.fragment;
+package com.wotingfm.ui.mine.fragment;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -11,7 +11,7 @@ import android.widget.TextView;
 
 import com.wotingfm.R;
 import com.wotingfm.common.constant.StringConstant;
-import com.wotingfm.ui.test.mine.MineActivity;
+import com.wotingfm.ui.mine.MineActivity;
 
 /**
  * 连接无线网络配置

@@ -1,4 +1,4 @@
-package com.wotingfm.ui.test.mine.fragment;
+package com.wotingfm.ui.mine.fragment;
 
 import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
@@ -14,7 +14,7 @@ import com.wotingfm.R;
 import com.wotingfm.common.config.GlobalStateConfig;
 import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.ui.main.view.MainActivity;
-import com.wotingfm.ui.test.mine.MineActivity;
+import com.wotingfm.ui.mine.MineActivity;
 
 /**
  * 个人中心主界面

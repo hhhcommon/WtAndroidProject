@@ -1,4 +1,4 @@
-package com.wotingfm.ui.test.mine.fragment;
+package com.wotingfm.ui.mine.fragment;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -10,9 +10,9 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.wotingfm.R;
-import com.wotingfm.ui.test.mine.MineActivity;
-import com.wotingfm.ui.test.mine.adapter.FMListAdapter;
-import com.wotingfm.ui.test.mine.model.FMInfo;
+import com.wotingfm.ui.mine.MineActivity;
+import com.wotingfm.ui.mine.adapter.FMListAdapter;
+import com.wotingfm.ui.mine.model.FMInfo;
 
 import java.util.ArrayList;
 import java.util.List;

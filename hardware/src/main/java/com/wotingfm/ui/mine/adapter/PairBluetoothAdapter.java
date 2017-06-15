@@ -1,4 +1,4 @@
-package com.wotingfm.ui.test.mine.adapter;
+package com.wotingfm.ui.mine.adapter;
 
 import android.content.Context;
 import android.util.Log;
@@ -9,7 +9,7 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.wotingfm.R;
-import com.wotingfm.ui.test.mine.model.BluetoothInfo;
+import com.wotingfm.ui.mine.model.BluetoothInfo;
 
 import java.util.List;
 

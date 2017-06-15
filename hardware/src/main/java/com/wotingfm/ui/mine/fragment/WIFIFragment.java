@@ -1,4 +1,4 @@
-package com.wotingfm.ui.test.mine.fragment;
+package com.wotingfm.ui.mine.fragment;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -27,8 +27,8 @@ import com.wotingfm.R;
 import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.common.utils.L;
-import com.wotingfm.ui.test.mine.MineActivity;
-import com.wotingfm.ui.test.mine.adapter.WiFiListAdapter;
+import com.wotingfm.ui.mine.MineActivity;
+import com.wotingfm.ui.mine.adapter.WiFiListAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
