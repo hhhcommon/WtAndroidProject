@@ -134,6 +134,9 @@ public class StringConstant {
 
     public static final String OBJTYPE_ANCHOR= "ANCHOR";        //ANCHOR
 
+    // 蓝牙连接 UUID
+    public static final String SPP_UUID = "00001101-0000-1000-8000-00805F9B34FB";
 
-
+    // WIFI_NAME
+    public static final String WIFI_NAME = "WIFI_NAME";
 }

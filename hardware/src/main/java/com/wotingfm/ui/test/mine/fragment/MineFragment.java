@@ -1,5 +1,6 @@
 package com.wotingfm.ui.test.mine.fragment;
 
+import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -20,6 +21,8 @@ import com.wotingfm.ui.test.mine.MineActivity;
  * Created by Administrator on 2017/6/7.
  */
 public class MineFragment extends Fragment implements View.OnClickListener {
+    public static BluetoothAdapter blueAdapter = BluetoothAdapter.getDefaultAdapter();
+
     private View rootView;
     private FragmentActivity context;
 
@@ -49,9 +52,14 @@ public class MineFragment extends Fragment implements View.OnClickListener {
 
     // 初始化点击事件
     private void initEvent() {
+        rootView.findViewById(R.id.head_left_btn).setOnClickListener(this);// 返回按钮
         rootView.findViewById(R.id.fm_set).setOnClickListener(this);// FM 设置
         rootView.findViewById(R.id.setting).setOnClickListener(this);// 设置
-        rootView.findViewById(R.id.head_left_btn).setOnClickListener(this);// 返回按钮
+        rootView.findViewById(R.id.bluetooth_set).setOnClickListener(this);// 蓝牙设置
+        rootView.findViewById(R.id.wifi_set).setOnClickListener(this);// 无线局域网
+        rootView.findViewById(R.id.flow_set).setOnClickListener(this);// 流量管理
+        rootView.findViewById(R.id.image_info).setOnClickListener(this);// 消息中心
+        rootView.findViewById(R.id.image_qr_code).setOnClickListener(this);// 二维码
     }
 
     @Override
@@ -65,12 +73,6 @@ public class MineFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.fm_set:// FM 设置
-                MineActivity.open(new FMSetFragment());
-                break;
-            case R.id.setting:// 设置
-                MineActivity.open(new SettingFragment());
-                break;
             case R.id.head_left_btn:
                 if (GlobalStateConfig.mineFromType == 1) {
                     GlobalStateConfig.mineFromType = 0;
@@ -91,6 +93,27 @@ public class MineFragment extends Fragment implements View.OnClickListener {
                     push.putExtras(bundle);
                     context.sendBroadcast(push);
                 }
+                break;
+            case R.id.fm_set:// FM 设置
+                MineActivity.open(new FMSetFragment());
+                break;
+            case R.id.setting:// 设置
+                MineActivity.open(new SettingFragment());
+                break;
+            case R.id.bluetooth_set:// 蓝牙设置
+                MineActivity.open(new BluetoothFragment());
+                break;
+            case R.id.wifi_set:// 无线局域网
+                MineActivity.open(new WIFIFragment());
+                break;
+            case R.id.flow_set:// 流量管理
+
+                break;
+            case R.id.image_info:// 消息中心
+
+                break;
+            case R.id.image_qr_code:// 二维码
+
                 break;
         }
     }

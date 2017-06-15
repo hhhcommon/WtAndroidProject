@@ -22,7 +22,7 @@ public class DBHelper extends OrmLiteSqliteOpenHelper {
 
             TableUtils.createTable(connectionSource, Player.DataBean.SinglesBean.class);
 
-            TableUtils.createTable(connectionSource, Player.DataBean.SinglesBean.class);
+//            TableUtils.createTable(connectionSource, Player.DataBean.SinglesBean.class);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

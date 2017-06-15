@@ -5,11 +5,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.WindowManager;
 import android.widget.TabHost;
+
 import com.wotingfm.R;
 import com.wotingfm.ui.intercom.main.view.InterPhoneActivity;
 import com.wotingfm.ui.main.presenter.MainPresenter;
 import com.wotingfm.ui.test.mine.MineActivity;
-import com.wotingfm.ui.test.PlayerActivity;
 
 
 public class MainActivity extends TabActivity {
@@ -29,12 +29,14 @@ public class MainActivity extends TabActivity {
     // 初始化视图,主页跳转的3个界面
     private void InitTextView() {
         tabHost = extracted();
-        tabHost.addTab(tabHost.newTabSpec("one").setIndicator("one")
-                .setContent(new Intent(this, PlayerActivity.class)));
+//        tabHost.addTab(tabHost.newTabSpec("one").setIndicator("one")
+//                .setContent(new Intent(this, PlayerActivity.class)));
         tabHost.addTab(tabHost.newTabSpec("two").setIndicator("two")
                 .setContent(new Intent(this, InterPhoneActivity.class)));
         tabHost.addTab(tabHost.newTabSpec("three").setIndicator("three")
                 .setContent(new Intent(this, MineActivity.class)));
+
+        changeThree();
     }
 
     private TabHost extracted() {
