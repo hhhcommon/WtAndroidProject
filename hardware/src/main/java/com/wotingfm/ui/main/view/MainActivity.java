@@ -6,11 +6,12 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.WindowManager;
 import android.widget.TabHost;
+
 import com.wotingfm.R;
 import com.wotingfm.ui.intercom.main.view.InterPhoneActivity;
 import com.wotingfm.ui.main.presenter.MainPresenter;
-import com.wotingfm.ui.test.mine.MineActivity;
 import com.wotingfm.ui.test.PlayerActivity;
+import com.wotingfm.ui.test.mine.MineActivity;
 
 
 public class MainActivity extends TabActivity {
@@ -36,6 +37,8 @@ public class MainActivity extends TabActivity {
                 .setContent(new Intent(this, InterPhoneActivity.class)));
         tabHost.addTab(tabHost.newTabSpec("three").setIndicator("three")
                 .setContent(new Intent(this, MineActivity.class)));
+
+        changeThree();
     }
 
     private TabHost extracted() {
