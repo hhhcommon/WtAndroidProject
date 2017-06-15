@@ -12,6 +12,7 @@ import com.woting.commonplat.widget.GlideCircleTransform;
 import com.wotingfm.R;
 import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.bean.Player;
+import com.wotingfm.common.bean.SinglesBase;
 import com.zhy.adapter.recyclerview.CommonAdapter;
 import com.zhy.adapter.recyclerview.base.ViewHolder;
 
@@ -21,14 +22,15 @@ import static com.woting.commonplat.gather.GatherData.url;
 
 /**
  * Created by amine on 2017/6/7.
+ * 播放弹出列表
  */
 
-public class PlayerAdapter extends CommonAdapter<Player.DataBean.SinglesBean> {
-    private List<Player.DataBean.SinglesBean> datas;
+public class PlayerAdapter extends CommonAdapter<SinglesBase> {
+    private List<SinglesBase> datas;
     private int with;
     private LinearLayout.LayoutParams layoutParams;
 
-    public PlayerAdapter(Context context, List<Player.DataBean.SinglesBean> datas) {
+    public PlayerAdapter(Context context, List<SinglesBase> datas) {
         super(context, R.layout.item_player_photo, datas);
         this.datas = datas;
         with = DementionUtil.getScreenWidthInPx(context) - DementionUtil.dip2px(context, 100);
@@ -36,7 +38,7 @@ public class PlayerAdapter extends CommonAdapter<Player.DataBean.SinglesBean> {
     }
 
     @Override
-    protected void convert(ViewHolder holder, Player.DataBean.SinglesBean s, int position) {
+    protected void convert(ViewHolder holder, SinglesBase s, int position) {
         holder.setText(R.id.tvTitle, s.single_title);
         holder.setText(R.id.tvContent, s.album_title);
         View view = holder.itemView.findViewById(R.id.view);

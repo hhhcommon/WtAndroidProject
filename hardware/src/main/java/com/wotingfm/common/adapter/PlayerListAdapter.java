@@ -11,6 +11,7 @@ import com.woting.commonplat.widget.GlideCircleTransform;
 import com.wotingfm.R;
 import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.bean.Player;
+import com.wotingfm.common.bean.SinglesBase;
 import com.zhy.adapter.recyclerview.CommonAdapter;
 import com.zhy.adapter.recyclerview.base.ViewHolder;
 
@@ -20,21 +21,21 @@ import java.util.List;
  * Created by amine on 2017/6/7.
  */
 
-public class PlayerListAdapter extends CommonAdapter<Player.DataBean.SinglesBean> {
+public class PlayerListAdapter extends CommonAdapter<SinglesBase> {
     private PlayerClick playerClick;
 
-    public PlayerListAdapter(Context context, List<Player.DataBean.SinglesBean> datas) {
+    public PlayerListAdapter(Context context, List<SinglesBase> datas) {
         super(context, R.layout.item_pop_player, datas);
     }
 
     @Override
-    protected void convert(ViewHolder holder, final Player.DataBean.SinglesBean s, final int position) {
+    protected void convert(ViewHolder holder, final SinglesBase s, final int position) {
         holder.setText(R.id.tvContent, s.album_title);
         TextView textViewTitle = (TextView) holder.itemView.findViewById(R.id.tvTitle);
         textViewTitle.setText(s.single_title);
         ImageView ivTop = (ImageView) holder.itemView.findViewById(R.id.ivTop);
         ImageView ivClose = (ImageView) holder.itemView.findViewById(R.id.ivClose);
-        if (s.isPlay == true || s.id.equals(playId)) {
+        if (s.isPlay==true || s.id.equals(playId)) {
             ivTop.setVisibility(View.VISIBLE);
             textViewTitle.setTextColor(Color.parseColor("#fd8548"));
         } else {
@@ -71,9 +72,9 @@ public class PlayerListAdapter extends CommonAdapter<Player.DataBean.SinglesBean
     }
 
     public interface PlayerClick {
-        void player(Player.DataBean.SinglesBean singlesBean, int postion);
+        void player(SinglesBase singlesBean, int postion);
 
-        void close(Player.DataBean.SinglesBean singlesBean);
+        void close(SinglesBase singlesBean);
     }
 
 }

@@ -16,6 +16,7 @@ import com.wotingfm.R;
 import com.wotingfm.common.adapter.PlayerAdapter;
 import com.wotingfm.common.adapter.PlayerListAdapter;
 import com.wotingfm.common.bean.Player;
+import com.wotingfm.common.bean.SinglesBase;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +25,7 @@ import static android.R.attr.id;
 import static android.media.CamcorderProfile.get;
 import static com.wotingfm.R.id.mRecyclerView;
 
-
+//播放节目选择dialog
 public class PlayerDialog extends Dialog implements View.OnClickListener {
 
     private RecyclerView mRecyclerViewList;
@@ -49,32 +50,32 @@ public class PlayerDialog extends Dialog implements View.OnClickListener {
     }
 
     private PlayerListAdapter playerListAdapter;
-    private List<Player.DataBean.SinglesBean> singLesBeans = new ArrayList<>();
+    private List<SinglesBase> singLesBeans = new ArrayList<>();
 
 
-    public void showPlayDialo(final List<Player.DataBean.SinglesBean> singLesBeansBase, String pid, final PopPlayCallBack popPlay) {
+    public void showPlayDialo(final List<SinglesBase> singLesBeansBase, String pid, final PopPlayCallBack popPlay) {
         singLesBeans.clear();
         if (singLesBeansBase != null) {
             singLesBeans.addAll(singLesBeansBase);
             playerListAdapter.setPlayerClick(new PlayerListAdapter.PlayerClick() {
                 @Override
-                public void player(Player.DataBean.SinglesBean singlesBean, int postion) {
+                public void player(SinglesBase singlesBean, int postion) {
                     if (popPlay != null) {
                         for (int i = 0, size = singLesBeans.size(); i < size; i++) {
-                            Player.DataBean.SinglesBean p = singLesBeans.get(i);
-                            p.isPlay = false;
+                            SinglesBase p = singLesBeans.get(i);
+                            p.isPlay =false;
                             singLesBeans.set(i, p);
                         }
                         playerListAdapter.setPlayId(singlesBean.id);
                         popPlay.play(singlesBean, postion);
-                        singlesBean.isPlay = true;
+                        singlesBean.isPlay =true;
                         singLesBeans.set(postion, singlesBean);
                         playerListAdapter.notifyDataSetChanged();
                     }
                 }
 
                 @Override
-                public void close(Player.DataBean.SinglesBean singlesBean) {
+                public void close(SinglesBase singlesBean) {
                     singLesBeans.remove(singlesBean);
                     if(popPlay!=null)
                         popPlay.close(singlesBean);
@@ -86,9 +87,9 @@ public class PlayerDialog extends Dialog implements View.OnClickListener {
     }
 
     public interface PopPlayCallBack {
-        void play(Player.DataBean.SinglesBean singlesBean, int postion);
+        void play(SinglesBase singlesBean, int postion);
 
-        void close(Player.DataBean.SinglesBean singlesBean);
+        void close(SinglesBase singlesBean);
     }
 
     @Override

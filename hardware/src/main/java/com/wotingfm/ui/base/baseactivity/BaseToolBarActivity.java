@@ -1,7 +1,11 @@
 package com.wotingfm.ui.base.baseactivity;
 
+import android.annotation.TargetApi;
+import android.content.Context;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
+import android.os.Bundle;
 import android.support.annotation.ColorInt;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
@@ -9,9 +13,15 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 
+import com.woting.commonplat.widget.LoadingDialog;
 import com.woting.commonplat.widget.WTToolbar;
 import com.wotingfm.R;
+import com.wotingfm.common.utils.ProgressDialogUtils;
+
+import butterknife.ButterKnife;
 
 
 /**
@@ -131,5 +141,36 @@ public abstract class BaseToolBarActivity extends BaseActivity implements View.O
         super.onContentChanged();
     }
 
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        context = this;
+        setContentView(getLayoutId());
+        ButterKnife.bind(this);
+        this.initView();
+    }
+
+    private LoadingDialog mLdDialog;
+
+    public void showLodingDialog() {
+        mLdDialog = ProgressDialogUtils.instance(this).getLoadingDialog();
+        if (!mLdDialog.isShowing()) {
+            mLdDialog.show();
+        }
+    }
+
+    public void dissmisDialog() {
+        if (mLdDialog != null)
+            mLdDialog.dismiss();
+    }
+
+    /*********************
+     * 子类实现
+     *****************************/
+    //获取布局文件
+    public abstract int getLayoutId();
+
+    //初始化view
+    public abstract void initView();
 
 }

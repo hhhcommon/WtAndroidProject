@@ -26,6 +26,13 @@ android {
         jumboMode true
         javaMaxHeapSize "4g"
     }
+    allprojects {
+        repositories {
+            mavenCentral()
+            jcenter() // If not already there
+            maven { url "https://jitpack.io" }
+        }
+    }
 }
 
 dependencies {
@@ -37,4 +44,8 @@ dependencies {
     compile 'com.jakewharton:butterknife:8.6.0'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.6.0'
     compile project(':CommonPlat')
+    compile 'com.github.mcxtzhang:SwipeDelMenuLayout:V1.2.5'
+    compile 'com.afollestad.material-dialogs:core:0.9.4.4'
+
+
 }
