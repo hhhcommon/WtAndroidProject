@@ -2,7 +2,10 @@
 <resources>
 
     <declare-styleable name="LineEditText">
-        <attr name="lineColorEt" format="color"/>
+        <attr name="lineColorEt" format="color" />
     </declare-styleable>
-
+    <declare-styleable name="FlowLayout">
+        <attr name="lineSpacing" format="dimension" />
+        <attr name="maxLine" format="integer" />
+    </declare-styleable>
 </resources>

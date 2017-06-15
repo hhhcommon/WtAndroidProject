@@ -79,7 +79,7 @@ public class AnchorPersonalCenterActivity extends NoTitleBarBaseActivity impleme
     public void initView() {
         ivMore.setOnClickListener(this);
         ivBack.setOnClickListener(this);
-        height = DementionUtil.dip2px(this, 220);
+        height = DementionUtil.dip2px(this, 200);
         uid = getIntent().getStringExtra("uid");
         loadLayout.findViewById(R.id.btnTryAgain).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -118,7 +118,7 @@ public class AnchorPersonalCenterActivity extends NoTitleBarBaseActivity impleme
         tvContent = (TextView) headview.findViewById(R.id.tvContent);
         mHeaderAndFooterWrapper.addHeaderView(headview);
         mRecyclerView.setAdapter(mHeaderAndFooterWrapper);
-        L.i("mingku","uid="+uid);
+        L.i("mingku", "uid=" + uid);
         reportsPlayer(uid);
         mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override

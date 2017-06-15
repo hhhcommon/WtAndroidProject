@@ -393,4 +393,13 @@ public class PlayerActivity extends NoTitleBarBaseActivity implements View.OnCli
             }
         }
     }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        if (bdPlayer != null) {
+            bdPlayer.stopPlayback();
+            bdPlayer.release();
+        }
+    }
 }

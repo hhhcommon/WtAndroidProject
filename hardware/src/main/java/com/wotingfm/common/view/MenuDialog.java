@@ -32,6 +32,7 @@ import com.wotingfm.ui.play.activity.AnchorPersonalCenterActivity;
 import com.wotingfm.ui.play.activity.MeSubscribeListActivity;
 import com.wotingfm.ui.play.activity.PlayerHistoryActivity;
 import com.wotingfm.ui.play.activity.ReportsPlayerActivity;
+import com.wotingfm.ui.play.activity.albums.AlbumsInfoActivity;
 import com.wotingfm.ui.play.activity.download.DownloadProgramActivity;
 
 import org.greenrobot.eventbus.EventBus;
@@ -200,10 +201,15 @@ public class MenuDialog extends Dialog implements View.OnClickListener {
                 }
                 break;
             case R.id.tvAnchor:
-                //测试userid
                 if (pdsBase != null) {
                     dismiss();
                     AnchorPersonalCenterActivity.start(activity, pdsBase.creator_id);
+                }
+                break;
+            case R.id.tvAlbums:
+                if (pdsBase != null) {
+                    dismiss();
+                    AlbumsInfoActivity.start(activity, pdsBase.album_id);
                 }
                 break;
             case R.id.tvSubscription:
