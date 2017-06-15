@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@color/white">
+
+    <RelativeLayout
+        android:id="@+id/bluetooth_set"
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:clickable="true"
+        android:background="@drawable/wt_view_click_background">
+
+        <TextView
+            android:id="@+id/text_bluetooth_set"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/bluetooth_settings"
+            android:textColor="@color/black_head_word"
+            android:layout_marginLeft="12dp"
+            android:drawablePadding="6dp"
+            android:gravity="center"
+            android:textSize="16sp"
+            android:layout_centerVertical="true"/>
+
+        <ImageView
+            android:id="@+id/image_bluetooth_set"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/on_switch"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="14dp"/>
+
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/text_pair_device"
+        android:layout_width="match_parent"
+        android:layout_height="36dp"
+        android:textSize="14sp"
+        android:text="@string/my_equipment"
+        android:textColor="@color/black_head_word"
+        android:background="@color/background_color"
+        android:gravity="center_vertical"
+        android:paddingLeft="12dp"/>
+
+    <ListView
+        android:id="@+id/list_pair_bluetooth"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scrollbars="none"/>
+
+</LinearLayout>

@@ -24,7 +24,9 @@ public class ApplyGroupTypeFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        rootView = inflater.inflate(R.layout.fragment_applygrouptype, container, false);
+        if (rootView == null) {
+            rootView = inflater.inflate(R.layout.fragment_applygrouptype, container, false);
+        }
         return rootView;
     }
 

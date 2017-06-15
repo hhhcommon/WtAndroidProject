@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">Hardware</string>
+    <string name="app_local_path">/woTingFM/</string>
 
 
     <!--个人中心-->
@@ -9,9 +10,16 @@
     <string name="connection_device">连接设备</string>
     <string name="wlan">无线局域网</string>
     <string name="connected">已连接</string>
+    <string name="connect">连接</string>
     <string name="not_connected">未连接</string>
     <string name="flow_management">流量管理</string>
     <string name="setting">设置</string>
+    <string name="connection_success">连接成功</string>
+    <string name="my_equipment">我的设备</string>
+    <string name="select_available_device">选取可用设备</string>
+    <string name="select_network">选取网络</string>
+    <string name="please_input_password">请输入密码</string>
+    <string name="cancel">取消</string>
 
     <!--FM设置-->
     <string name="recommended_frequency">推荐可用频率</string>

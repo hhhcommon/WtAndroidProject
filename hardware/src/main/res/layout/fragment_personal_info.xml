@@ -133,7 +133,7 @@
             android:layout_height="wrap_content"
             android:layout_toLeftOf="@+id/image_right_5"
             android:layout_centerVertical="true"
-            android:text="@string/man"
+            android:text="@string/beijing"
             android:textColor="@color/exhibition_world_color"
             android:textSize="14sp"
             android:src="@mipmap/app_logo"/>

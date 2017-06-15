@@ -46,35 +46,13 @@
         </activity>
 
 
-        <!-- 偏好设置 -->
-        <activity
-            android:name="com.wotingfm.ui.user.preference.PreferenceActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme" />
-
         <!-- 登录主页 -->
         <activity
             android:name="com.wotingfm.ui.user.logo.LogoActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
 
-        <!-- 登录页 -->
-        <activity
-            android:name=".ui.user.login.view.LoginActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme" />
 
-        <!-- 注册页 -->
-        <activity
-            android:name=".ui.user.register.view.RegisterActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme" />
-
-        <!-- 忘记密码页 -->
-        <activity
-            android:name=".ui.user.retrievepassword.view.RetrievePassWordActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme" />
         <!-- 播放历史 -->
         <activity
             android:name=".ui.play.activity.PlayerHistoryActivity"
@@ -114,14 +92,14 @@
 
         <!-- 扫一扫 -->
         <activity
-            android:name="com.wotingfm.ui.scanning.activity.CaptureActivity"
+            android:name="com.wotingfm.ui.intercom.scanning.activity.CaptureActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
 
 
         <!-- 扫一扫结果 -->
         <activity
-            android:name="com.wotingfm.ui.scanning.activity.ResultActivity"
+            android:name="com.wotingfm.ui.intercom.scanning.activity.ResultActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
 
@@ -131,6 +109,12 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
 
+        <!-- 图片剪切 -->
+        <activity
+            android:name="com.wotingfm.ui.photocut.PhotoCutActivity"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Light.NoTitleBar" />
+
         <!--  -->
         <activity
             android:name=".ui.test.PlayerActivity"
@@ -139,13 +123,7 @@
 
         <!--  -->
         <activity
-            android:name=".ui.test.DuiJiangActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme" />
-
-        <!--  -->
-        <activity
-            android:name=".ui.test.mine.MineActivity"
+            android:name=".ui.mine.MineActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
 

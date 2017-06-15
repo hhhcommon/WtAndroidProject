@@ -29,8 +29,8 @@ public class MainPresenter extends BasePresenter {
         this.mainActivity = mainActivity;
         this.mainModel = new MainModel();
         SpeechUtility.createUtility(mainActivity, "appid=58116950");// 初始化讯飞
-        //   createService();
-        //     registerReceiver();
+        createService();
+        registerReceiver();
     }
 
     private void createService() {
@@ -58,11 +58,11 @@ public class MainPresenter extends BasePresenter {
             String action = intent.getAction();
             if (action.equals(BroadcastConstants.ACTIVITY_CHANGE)) {
                 // 按钮切换-----档位切换广播
-                int viewType = intent.getIntExtra("viewType", 1);
+                int viewType = intent.getIntExtra("viewType",1);
                 Log.e("界面显示状态", viewType + "");
                 if (viewType == 1) {
                     mainActivity.changeOne();
-                } else if (viewType == 2) {
+                } else if (viewType==2) {
                     mainActivity.changeTwo();
                 } else {
                     mainActivity.changeThree();
@@ -77,11 +77,9 @@ public class MainPresenter extends BasePresenter {
      * app退出时执行该操作
      */
     public void stop() {
-        if (mainActivity != null && FloatingWindow != null && netWorkChangeReceiver != null && endApplicationBroadcast != null) {
-            mainActivity.stopService(FloatingWindow);
-            mainActivity.unregisterReceiver(netWorkChangeReceiver);
-            mainActivity.unregisterReceiver(endApplicationBroadcast);
-        }
+        mainActivity.stopService(FloatingWindow);
+        mainActivity.unregisterReceiver(netWorkChangeReceiver);
+        mainActivity.unregisterReceiver(endApplicationBroadcast);
         Log.e("app退出", "app退出");
     }
 

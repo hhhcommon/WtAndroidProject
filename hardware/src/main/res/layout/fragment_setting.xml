@@ -78,6 +78,7 @@
             android:text="@string/clear_cache"
             android:layout_toLeftOf="@id/image_clear_cache_right"
             android:layout_centerVertical="true"
+            android:textColor="@color/gray_edit_hint_word"
             android:textSize="18sp"/>
 
     </RelativeLayout>

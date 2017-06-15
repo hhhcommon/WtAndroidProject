@@ -4,14 +4,19 @@
     android:layout_height="match_parent"
     android:clipToPadding="true"
     android:fitsSystemWindows="true"
-    android:background="@color/background_color">
+    android:background="@color/white">
 
     <include
         android:id="@+id/view_head"
         layout="@layout/activity_common_head"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
-
+    <TextView
+        android:id="@+id/tv_line"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@+id/view_head"
+        android:background="@color/line_color" />
     <RelativeLayout
         android:id="@+id/lin_phoneNumber"
         android:layout_width="match_parent"
@@ -39,7 +44,7 @@
 
             android:layout_centerVertical="true"
             android:layout_toRightOf="@+id/img_icon_phone"
-            android:background="@color/background_color"
+            android:background="@color/white"
             android:hint="请输入手机号码"
             android:textColor="@color/black_head_word"
             android:textColorHint="@color/gray_edit_hint_word"
@@ -66,7 +71,7 @@
             android:layout_marginLeft="15dp"
             android:layout_marginRight="20dp"
 
-            android:background="@color/background_color"
+            android:background="@color/white"
             android:hint="请输入验证码"
             android:textColor="@color/black_head_word"
             android:textColorHint="@color/gray_edit_hint_word"
@@ -108,7 +113,7 @@
             android:layout_width="0dp"
             android:layout_height="24dp"
             android:layout_weight="1"
-            android:background="@color/background_color"
+            android:background="@color/white"
             android:hint="请输入密码(6-20位)"
             android:textColor="@color/black_head_word"
             android:textColorHint="@color/gray_edit_hint_word"
