@@ -3,12 +3,13 @@ package com.wotingfm.common.net;
 
 import android.text.TextUtils;
 
+import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.bean.AnchorInfo;
 import com.wotingfm.common.bean.HomeBanners;
 import com.wotingfm.common.bean.Player;
 import com.wotingfm.common.bean.Reports;
-import com.wotingfm.common.bean.SinglesBase;
 import com.wotingfm.common.bean.Subscrible;
+import com.wotingfm.common.constant.StringConstant;
 
 import java.io.IOException;
 import java.util.List;
@@ -18,7 +19,6 @@ import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
-import retrofit2.Call;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -38,46 +38,61 @@ import static com.wotingfm.common.net.RetrofitService.BASE_URL;
 public class RetrofitUtils {
 
     private static final int DEFAULT_TIMEOUT = 20;
-    public RetrofitService retrofitService;
+    private RetrofitService retrofitService;
     public static RetrofitUtils INSTANCE;
     public static String TEST_USERID = "00163e00693b";
     private String token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIwMDE2M2UwMDY5M2IiLCJpc3MiOiJodHRwOlwvXC93b3Rpbmcuc3VpdGluZ3dlaS5jb21cL2FwaVwvYWNjb3VudHNcL2xvZ2luIiwiaWF0IjoxNDk2NzE5OTI0LCJleHAiOjE1MDE5MDM5MjQsIm5iZiI6MTQ5NjcxOTkyNCwianRpIjoiZWQ1YmZmMWI4NzM4ZDVmYmQwZjk4ZTU4NjEwZjdkOTMifQ.jobc9DSVQTZUQp57NEOowz-cf1zZG2s05RTekOUd9Yw";
     private OkHttpClient.Builder builder;
 
     private RetrofitUtils() {
-        builder = new OkHttpClient.Builder();
-        builder.connectTimeout(DEFAULT_TIMEOUT, TimeUnit.SECONDS);
+        // 创建网络连接
+        createService();
+    }
+
+    private void createService() {
         Retrofit retrofit = new Retrofit.Builder()
+                //设置OKHttpClient为网络客户端
                 .client(genericClient())
+                //配置转化库，默认是GSON
                 .addConverterFactory(GsonConverterFactory.create())
+                //配置回调库，采用RxJava
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+                //配置服务器路径
                 .baseUrl(BASE_URL)
                 .build();
         retrofitService = retrofit.create(RetrofitService.class);
     }
 
-    public OkHttpClient genericClient() {
-        if (!TextUtils.isEmpty(token)) {
+    private OkHttpClient genericClient() {
+      final String _token= BSApplication.SharedPreferences.getString(StringConstant.TOKEN,token);
+        if (!TextUtils.isEmpty(_token)) {
             return new OkHttpClient.Builder()
                     .addInterceptor(new Interceptor() {
                         @Override
                         public Response intercept(Chain chain) throws IOException {
                             Request request = chain.request()
                                     .newBuilder()
-                                    .addHeader("Authorization", "Bearer {" + token + "}")
+                                    .addHeader("Authorization", "Bearer {" + _token + "}")
                                     .build();
                             return chain.proceed(request);
                         }
-
-                    })
-                    .build();
+                    }).build();
         } else {
-            if (builder == null)
+            if (builder == null) {
                 builder = new OkHttpClient.Builder();
+                builder.connectTimeout(DEFAULT_TIMEOUT, TimeUnit.SECONDS);
+            }
             return builder.build();
         }
     }
 
+    //<以下为对外提供接口>////////////////////////////////////////////////////////////////////////////
+
+    /**
+     * 单例模式创建网络连接
+     *
+     * @return
+     */
     public static RetrofitUtils getInstance() {
         if (INSTANCE == null) {
             synchronized (RetrofitUtils.class) {
@@ -88,6 +103,7 @@ public class RetrofitUtils {
         }
         return INSTANCE;
     }
+
 
     private <T> void toSubscribe(Observable<T> o, Subscriber<T> s) {
         o.subscribeOn(Schedulers.io())
@@ -252,4 +268,58 @@ public class RetrofitUtils {
     }
 
 
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+
+    /**
+     * 获取验证码
+     *
+     * @param userName 手机号
+     * @return Object
+     */
+    public Observable<Object> registerForYzm(String userName) {
+        return retrofitService.registerForYzm(userName)
+                .map(new Func1<Object, Object>() {
+                    @Override
+                    public Object call(Object O) {
+                        return O;
+                    }
+                });
+    }
+
+    /**
+     * 注册
+     * @param userName 用户名
+     * @param password 手机号
+     * @param yzm 验证码
+     * @return Object
+     */
+    public Observable<Object> register(String userName, String password, String yzm) {
+        return retrofitService.register(userName, password, yzm)
+                .map(new Func1<Object, Object>() {
+                    @Override
+                    public Object call(Object O) {
+                        return O;
+                    }
+                });
+    }
+
+    public Observable<Object> resetPasswords(String userName, String password, String yzm) {
+        return retrofitService.resetPasswords(userName, password, yzm)
+                .map(new Func1<Object, Object>() {
+                    @Override
+                    public Object call(Object O) {
+                        return O;
+                    }
+                });
+    }
+
+    public Observable<Object> login(String userName, String password) {
+        return retrofitService.login(userName, password)
+                .map(new Func1<Object, Object>() {
+                    @Override
+                    public Object call(Object O) {
+                        return O;
+                    }
+                });
+    }
 }

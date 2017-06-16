@@ -1,12 +1,17 @@
 package com.wotingfm.ui.user.retrievepassword.presenter;
 
 import android.os.CountDownTimer;
+import android.util.Log;
 import android.widget.Toast;
 
+import com.wotingfm.common.utils.ToastUtils;
 import com.wotingfm.ui.user.login.model.Login;
 import com.wotingfm.ui.user.register.model.RegisterModel;
 import com.wotingfm.ui.user.retrievepassword.model.RetrievePasswordModel;
 import com.wotingfm.ui.user.retrievepassword.view.RetrievePassWordFragment;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 /**
  * 作者：xinLong on 2017/6/5 13:55
@@ -62,8 +67,20 @@ public class RetrievePasswordPresenter {
     }
 
     // 获取网络数据
-   private void getYzmData(){
+   private void getYzmData(String userName){
+       model.loadNewsForYzm(userName, new RetrievePasswordModel.OnLoadInterface() {
+           @Override
+           public void onSuccess(Object o) {
+//                loginView.removeDialog();
+               dealGetYzmSuccess(o);
+           }
 
+           @Override
+           public void onFailure(String msg) {
+//                loginView.removeDialog();
+//                ToastUtils.showVolleyError(loginView);
+           }
+       });
    }
 
     ///////////////////////////////////////////////////////////////////////////////////////////////
@@ -83,10 +100,14 @@ public class RetrievePasswordPresenter {
     /**
      * 获取验证码
      */
-    public void getYzm() {
-        if (mCountDownTimer == null) {
-            timerDown();
-            getYzmData();
+    public void getYzm(String userName) {
+        if(userName!=null&&!userName.equals("")){
+            if (mCountDownTimer == null) {
+                timerDown();
+                getYzmData(userName);
+            }
+        }else{
+            ToastUtils.show_always(activity.getActivity(),"手机号不能为空");
         }
     }
 
@@ -134,7 +155,7 @@ public class RetrievePasswordPresenter {
     private void send(String userName, String password, String yzm) {
         model.loadNews(userName, password, yzm, new RetrievePasswordModel.OnLoadInterface() {
             @Override
-            public void onSuccess(Login result) {
+            public void onSuccess(Object result) {
 //                loginView.removeDialog();
                 dealLoginSuccess(result);
             }
@@ -149,30 +170,24 @@ public class RetrievePasswordPresenter {
 
 
     // 处理返回数据
-    private void dealLoginSuccess(Login result) {
-//        try {
-//            String ReturnType = result.getString("ReturnType");
-//            if (ReturnType != null && ReturnType.equals("1001")) {
-//                try {
-//                    JSONObject ui = (JSONObject) new JSONTokener(result.getString("UserInfo")).nextValue();
-//                    if (ui != null) {
-//                        // 保存用户数据
-//                        model.saveUserInfo(ui);
-//                        // 关闭当前界面
-//                        activity.close();
-//                    } else {
-//                        ToastUtils.show_always(activity.getActivity(), "登录失败，请您稍后再试");
-//                    }
-//
-//                } catch (Exception e) {
-//                    e.printStackTrace();
-//                    ToastUtils.show_always(activity.getActivity(), "登录失败，请您稍后再试");
-//                }
-//
-//            }
-//        } catch (Exception e1) {
-//            e1.printStackTrace();
-//        }
+    private void dealLoginSuccess(Object o) {
+        try {
+            JSONObject js=new JSONObject(o.toString());
+            String ret= js.getString("ret");
+            Log.e("ret",ret.toString());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
+    // 处理返回数据
+    private void dealGetYzmSuccess(Object o) {
+        try {
+            JSONObject js=new JSONObject(o.toString());
+            String ret= js.getString("ret");
+            Log.e("ret",ret.toString());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
 }

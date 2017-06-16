@@ -6,6 +6,7 @@
     <ListView
         android:id="@+id/listView"
         android:layout_width="match_parent"
+        android:divider="@color/white"
         android:layout_height="match_parent" />
     <TextView
         android:id="@+id/dialog"

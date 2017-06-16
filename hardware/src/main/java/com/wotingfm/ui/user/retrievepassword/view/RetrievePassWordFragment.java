@@ -74,7 +74,8 @@ public class RetrievePassWordFragment extends Fragment implements View.OnClickLi
                 presenter.setEye();
                 break;
             case R.id.tv_yzm:
-                presenter.getYzm();
+                String userName = et_phoneNumber.getText().toString().trim();
+                presenter.getYzm(userName);
                 break;
             case R.id.tv_confirm:
                 confirm();

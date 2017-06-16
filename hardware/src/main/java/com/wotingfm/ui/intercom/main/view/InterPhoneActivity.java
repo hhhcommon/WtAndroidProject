@@ -2,13 +2,18 @@ package com.wotingfm.ui.intercom.main.view;
 
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
+import android.view.WindowManager;
 import android.widget.Toast;
 import com.woting.commonplat.utils.SequenceUUID;
 import com.wotingfm.R;
+import com.wotingfm.common.utils.StatusBarUtil;
 
 /**
  * 对讲模块主页
@@ -65,4 +70,8 @@ public class InterPhoneActivity extends AppCompatActivity {
             close();
         }
     }
+
+
+
+
 }

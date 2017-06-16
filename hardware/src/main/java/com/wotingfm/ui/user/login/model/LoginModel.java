@@ -1,10 +1,14 @@
 package com.wotingfm.ui.user.login.model;
 
+import android.util.Log;
+
+import com.wotingfm.common.net.RetrofitUtils;
 import com.wotingfm.ui.base.model.UserInfo;
 
 import rx.Observable;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 
 /**
@@ -21,30 +25,33 @@ public class LoginModel extends UserInfo {
      * @param listener 监听
      */
     public void loadNews(String userName, String password, final OnLoadInterface listener) {
-        getRetrofitService().login(userName, password)
+        RetrofitUtils.getInstance().login(userName, password)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<Login>() {
+                .subscribe(new Action1<Object>() {
                     @Override
-                    public void onCompleted() {
+                    public void call(Object o) {
+                        try {
+                            Log.e("登录返回数据",o.toString());
+                            //填充UI
+                            listener.onSuccess(o);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            listener.onFailure("");
+                        }
                     }
-
+                }, new Action1<Throwable>() {
                     @Override
-                    public void onError(Throwable e) {
+                    public void call(Throwable throwable) {
+                        throwable.printStackTrace();
                         listener.onFailure("");
-                    }
-
-                    @Override
-                    public void onNext(Login login) {
-                        //填充UI
-                        listener.onSuccess(login);
                     }
                 });
     }
 
-    public interface OnLoadInterface {
-        void onSuccess(Login login);
 
+    public interface OnLoadInterface {
+        void onSuccess(Object o);
         void onFailure(String msg);
     }
 

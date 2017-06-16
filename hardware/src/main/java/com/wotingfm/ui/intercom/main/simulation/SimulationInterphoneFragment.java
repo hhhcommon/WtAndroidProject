@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.wotingfm.R;
 import com.wotingfm.common.service.SimulationService;
 import com.wotingfm.common.utils.FrequencyUtil;
+import com.wotingfm.ui.intercom.main.view.InterPhoneActivity;
 
 import java.util.List;
 
@@ -65,7 +66,9 @@ public class SimulationInterphoneFragment extends Fragment implements View.OnCli
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.img_close:                                       // 退出
+            case R.id.img_close:
+                // 退出
+                InterPhoneActivity.close();
                 break;
             case R.id.tv_set:                                        // 频率设置
                 SimulationService.setFrequence("");
@@ -76,7 +79,7 @@ public class SimulationInterphoneFragment extends Fragment implements View.OnCli
     @Override
     public void onDestroy() {
         super.onDestroy();
-        SimulationService.onOpenDevice(false);
+//        SimulationService.onOpenDevice(false);
     }
 
 }

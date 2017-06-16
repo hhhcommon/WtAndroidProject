@@ -1,9 +1,19 @@
 package com.wotingfm.ui.user.login.presenter;
 
+import android.util.Log;
 import android.widget.Toast;
-import com.wotingfm.ui.user.login.model.Login;
+
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import com.wotingfm.common.utils.ToastUtils;
 import com.wotingfm.ui.user.login.model.LoginModel;
 import com.wotingfm.ui.user.login.view.LoginFragment;
+import com.wotingfm.ui.user.logo.LogoActivity;
+
+import org.json.JSONObject;
+import org.json.JSONTokener;
+
+import java.util.List;
 
 /**
  * 作者：xinLong on 2017/6/5 13:55
@@ -70,12 +80,12 @@ public class LoginPresenter {
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     // 发送网络请求
-    private void send(String userName,String password) {
-        model.loadNews(userName, password,  new LoginModel.OnLoadInterface  () {
+    private void send(String userName, String password) {
+        model.loadNews(userName, password, new LoginModel.OnLoadInterface() {
             @Override
-            public void onSuccess(Login result) {
+            public void onSuccess(Object o) {
 //                loginView.removeDialog();
-                dealLoginSuccess(result);
+                dealLoginSuccess(o);
             }
 
             @Override
@@ -86,32 +96,35 @@ public class LoginPresenter {
         });
     }
 
-
     // 处理返回数据
-    private void dealLoginSuccess(Login result) {
-//        try {
-//            String ReturnType = result.getString("ReturnType");
-//            if (ReturnType != null && ReturnType.equals("1001")) {
-//                try {
-//                    JSONObject ui = (JSONObject) new JSONTokener(result.getString("UserInfo")).nextValue();
-//                    if (ui != null) {
-//                        // 保存用户数据
-//                        model.saveUserInfo(ui);
-//                        // 关闭当前界面
-//                        activity.close();
-//                    } else {
-//                        ToastUtils.show_always(activity.getActivity(), "登录失败，请您稍后再试");
-//                    }
-//
-//                } catch (Exception e) {
-//                    e.printStackTrace();
-//                    ToastUtils.show_always(activity.getActivity(), "登录失败，请您稍后再试");
-//                }
-//
-//            }
-//        } catch (Exception e1) {
-//            e1.printStackTrace();
-//        }
+    private void dealLoginSuccess(Object o) {
+        try {
+            String s = new Gson().toJson(o);
+            JSONObject js = new JSONObject(s);
+            int ret = js.getInt("ret");
+            Log.e("ret", String.valueOf(ret));
+            if (ret == 0) {
+                String msg = js.getString("data");
+                JSONTokener jsonParser = new JSONTokener(msg);
+                JSONObject arg1 = (JSONObject) jsonParser.nextValue();
+                String token = arg1.getString("token");
+
+                JSONObject ui = (JSONObject) new JSONTokener(arg1.getString("user")).nextValue();
+                if (ui != null) {
+                    // 保存用户数据
+                    model.saveUserInfo(ui);
+                }
+                ToastUtils.show_always(activity.getActivity(), token);
+                ToastUtils.show_always(activity.getActivity(), "登录成功");
+                LogoActivity.closeActivity();
+            } else {
+                String msg = js.getString("msg");
+                ToastUtils.show_always(activity.getActivity(), msg);
+                ToastUtils.show_always(activity.getActivity(), "登录失败，请稍后再试");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     /*

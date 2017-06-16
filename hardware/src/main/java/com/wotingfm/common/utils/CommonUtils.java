@@ -3,7 +3,6 @@ package com.wotingfm.common.utils;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import com.woting.commonplat.config.GlobalAddressConfig;
 import com.woting.commonplat.manager.PhoneMsgManager;
 import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.constant.StringConstant;
@@ -24,7 +23,7 @@ public class CommonUtils {
      */
     public static String getUserId(Context context) {
         SharedPreferences sp = BSApplication.SharedPreferences;
-        String UserId = sp.getString(StringConstant.USERID, "");
+        String UserId = sp.getString(StringConstant.USER_ID, "");
         if (UserId == null || UserId.equals("")) {
             return PhoneMsgManager.imei;
         } else {
@@ -40,7 +39,7 @@ public class CommonUtils {
      */
     public static String getUserIdNoImei(Context context) {
         SharedPreferences sp = BSApplication.SharedPreferences;
-        String UserId = sp.getString(StringConstant.USERID, "");
+        String UserId = sp.getString(StringConstant.USER_ID, "");
         if (UserId == null || UserId.equals("") ) {
             return "";
         } else {
@@ -58,7 +57,7 @@ public class CommonUtils {
     public static String getSocketUserId() {
         try {
             SharedPreferences sp = BSApplication.SharedPreferences;
-            String UserId = sp.getString(StringConstant.USERID, "");
+            String UserId = sp.getString(StringConstant.USER_ID, "");
             if (UserId == null || UserId.equals("") ) {
                 return null;
             } else {

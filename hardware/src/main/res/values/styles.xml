@@ -1,26 +1,41 @@
 <resources>
 
+    <!-- Base application theme. -->
+    <style name="AppBlackTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/white</item>
+        <item name="colorPrimaryDark">@color/white</item>
+        <item name="colorAccent">@color/app_basic</item>
+    </style>
+    <style name="NoActionBar" parent="Theme.AppCompat.Light.NoActionBar" > </style>
 
-    <style name="AppBaseTheme" parent="Theme.AppCompat.NoActionBar"></style>
 
-    <!--启动页主题-->
-    <style name="SplashTheme" parent="@android:style/Theme.Light.NoTitleBar.Fullscreen">
-        <item name="android:windowBackground">@drawable/background_splash</item>
+    <!--1.colorPrimary 应用的主要色调，actionBar默认使用该颜色，Toolbar导航栏的底色-->
+    <!--2.colorPrimaryDark 应用的主要暗色调，statusBarColor默认使用该颜色-->
+    <style name="BaseAppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">@color/white</item>
+        <item name="colorPrimaryDark">@color/white</item>
+        <item name="colorAccent">@color/app_basic</item>
     </style>
-    <!--启动页主题-->
-    <style name="GuideTheme" parent="@android:style/Theme.Light.NoTitleBar.Fullscreen">
-        <item name="android:windowBackground">@drawable/background_guide</item>
-    </style>
-    <!-- Application theme. -->
-    <style name="AppTheme" parent="AppBaseTheme">
-        <!-- All customizations that are NOT specific to a particular API-level can go here. -->
-    </style>
+
+    <style name="AppTheme" parent="@style/BaseAppTheme" />
 
     <!-- Activity无标题栏 开始 -->
     <style name="MyAppTheme" parent="AppTheme">
         <item name="android:windowNoTitle">true</item>
         <item name="windowActionBar">false</item>
     </style>
+
+    <!--启动页主题-->
+    <style name="SplashTheme" parent="@android:style/Theme.Light.NoTitleBar.Fullscreen">
+        <item name="android:windowBackground">@drawable/background_splash</item>
+    </style>
+
+    <!--启动页主题-->
+    <style name="GuideTheme" parent="@android:style/Theme.Light.NoTitleBar.Fullscreen">
+        <item name="android:windowBackground">@drawable/background_guide</item>
+    </style>
+
 
     <style name="progressbar_style1">
         <item name="android:maxWidth">24.0dip</item>

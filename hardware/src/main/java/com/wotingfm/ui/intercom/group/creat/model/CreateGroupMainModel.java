@@ -1,5 +1,6 @@
 package com.wotingfm.ui.intercom.group.creat.model;
 
+import com.wotingfm.common.net.RetrofitUtils;
 import com.wotingfm.ui.base.model.UserInfo;
 import com.wotingfm.ui.user.login.model.Login;
 
@@ -21,25 +22,25 @@ public class CreateGroupMainModel extends UserInfo {
      * @param listener 监听
      */
     public void loadNews(String userName, String password,int type, final OnLoadInterface listener) {
-        getRetrofitService().login(userName, password)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<Login>() {
-                    @Override
-                    public void onCompleted() {
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        listener.onFailure("");
-                    }
-
-                    @Override
-                    public void onNext(Login login) {
-                        //填充UI
-                        listener.onSuccess(login);
-                    }
-                });
+//        RetrofitUtils.getInstance().retrofitService.login(userName, password)
+//                .subscribeOn(Schedulers.io())
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribe(new Subscriber<Login>() {
+//                    @Override
+//                    public void onCompleted() {
+//                    }
+//
+//                    @Override
+//                    public void onError(Throwable e) {
+//                        listener.onFailure("");
+//                    }
+//
+//                    @Override
+//                    public void onNext(Login login) {
+//                        //填充UI
+//                        listener.onSuccess(login);
+//                    }
+//                });
     }
 
     public interface OnLoadInterface {

@@ -84,24 +84,24 @@ public interface RetrofitService {
     @DELETE(" api/listenings/albums/{id}/subscriptions")
     Observable<Object> unSubscriptions(@Path("id") String id);
 
+    // 登录
     @POST(Api.URL_LOGIN)
-// 登录
-    Observable<Login> login(@Query("phone") String phone, @Query("password") String password);
+    Observable<Object> login(@Query("phone") String phone, @Query("password") String password);
 
+    // 注册
     @POST(Api.URL_REGISTER)
-// 注册
-    Observable<Login> register(@Query("phone") String phone, @Query("password") String password, @Query("code") String code);
+    Observable<Object> register(@Query("phone") String phone, @Query("password") String password, @Query("code") String code);
 
+    // 获取验证码
     @POST(Api.URL_REGISTER_YZM)
-// 获取验证码
-    Observable<Login> registerForYzm(@Query("phone") String phone);
+    Observable<Object> registerForYzm(@Query("phone") String phone);
 
+    // 忘记密码重置
     @POST(Api.URL_RESET_PASSWORDS)
-// 忘记密码重置
     Observable<Login> resetPasswords(@Query("phone") String phone, @Query("password") String password, @Query("code") String code);
 
+    // 好友列表
     @POST(Api.URL_GET_FRIENDS)
-// 好友列表
     Observable<Contact> getFriends(@Query("token") String token);
 
 

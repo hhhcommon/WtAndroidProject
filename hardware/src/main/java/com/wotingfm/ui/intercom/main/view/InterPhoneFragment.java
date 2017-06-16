@@ -1,11 +1,13 @@
 package com.wotingfm.ui.intercom.main.view;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
+import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,8 +16,10 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.wotingfm.R;
+import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.config.GlobalStateConfig;
 import com.wotingfm.common.constant.BroadcastConstants;
+import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.ui.base.baseadapter.MyFragmentPagerAdapter;
 import com.wotingfm.ui.intercom.add.find.FindFragment;
 import com.wotingfm.ui.intercom.group.creat.view.CreateGroupMainFragment;
@@ -219,13 +223,12 @@ public class InterPhoneFragment extends Fragment implements View.OnClickListener
     }
 
     private boolean isLogin() {
-//        String login = BSApplication.SharedPreferences.getString(StringConstant.ISLOGIN, "false");// 是否登录
-//        if (!login.trim().equals("") && login.equals("true")) {
-//            return true;
-//        } else {
-//            return false;
-//        }
-        return true;
+        String login = BSApplication.SharedPreferences.getString(StringConstant.IS_LOGIN, "false");// 是否登录
+        if (!login.trim().equals("") && login.equals("true")) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     // 设置头部样式

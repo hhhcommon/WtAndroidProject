@@ -1,5 +1,6 @@
 package com.wotingfm.ui.intercom.group.standbychannel.model;
 
+import com.wotingfm.common.net.RetrofitUtils;
 import com.wotingfm.common.utils.FrequencyUtil;
 import com.wotingfm.ui.base.model.UserInfo;
 import com.wotingfm.ui.user.login.model.Login;
@@ -8,6 +9,7 @@ import java.util.List;
 
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 
 /**
@@ -29,25 +31,22 @@ public class ChannelModel extends UserInfo {
      * @param listener 监听
      */
     public void loadNews(String userName, String password, final OnLoadInterface listener) {
-        getRetrofitService().login(userName, password)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<Login>() {
-                    @Override
-                    public void onCompleted() {
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        listener.onFailure("");
-                    }
-
-                    @Override
-                    public void onNext(Login login) {
-                        //填充UI
-                        listener.onSuccess(login);
-                    }
-                });
+//        RetrofitUtils.getInstance().register(userName, password,yzm)
+//                .subscribeOn(Schedulers.io())
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribe(new Action1<Object>() {
+//                    @Override
+//                    public void call(Object o) {
+//                        //填充UI
+//                        listener.onSuccess(o);
+//                    }
+//                }, new Action1<Throwable>() {
+//                    @Override
+//                    public void call(Throwable throwable) {
+//                        throwable.printStackTrace();
+//                        listener.onFailure("");
+//                    }
+//                });
     }
 
     public interface OnLoadInterface {
