@@ -35,11 +35,13 @@ public class PlayerListAdapter extends CommonAdapter<SinglesBase> {
         textViewTitle.setText(s.single_title);
         ImageView ivTop = (ImageView) holder.itemView.findViewById(R.id.ivTop);
         ImageView ivClose = (ImageView) holder.itemView.findViewById(R.id.ivClose);
-        if (s.isPlay==true || s.id.equals(playId)) {
+        if (s.isPlay == true || s.id.equals(playId)) {
             ivTop.setVisibility(View.VISIBLE);
+            ivClose.setVisibility(View.GONE);
             textViewTitle.setTextColor(Color.parseColor("#fd8548"));
         } else {
             ivTop.setVisibility(View.GONE);
+            ivClose.setVisibility(View.VISIBLE);
             textViewTitle.setTextColor(Color.parseColor("#16181a"));
         }
         holder.itemView.setOnClickListener(new View.OnClickListener() {

@@ -1,6 +1,7 @@
 package com.wotingfm.common.net;
 
 
+import com.wotingfm.common.bean.AlbumInfo;
 import com.wotingfm.common.bean.AnchorInfo;
 import com.wotingfm.common.bean.HomeBanners;
 import com.wotingfm.common.bean.Player;
@@ -81,8 +82,20 @@ public interface RetrofitService {
     Observable<Object> unfollowUsers(@Path("id") String id);
 
     //取消订阅专辑
-    @DELETE(" api/listenings/albums/{id}/subscriptions")
+    @DELETE("api/listenings/albums/{id}/subscriptions")
     Observable<Object> unSubscriptions(@Path("id") String id);
+
+    //专辑详情  获得专辑信息
+    @GET("api/listenings/albums/{id}")
+    Observable<AlbumInfo> albumsInfo(@Path("id") String id);
+
+    //相似推荐
+    @GET("api/listenings/albums/{id}/similars")
+    Observable<Subscrible> albumsSimilars(@Path("id") String id);
+
+    //获取专辑所有节目
+    @GET("api/listenings/albums/{id}/singles")
+    Observable<Player> singlesList(@Path("id") String id, @Query("page") int page);
 
     @POST(Api.URL_LOGIN)
 // 登录

@@ -76,10 +76,12 @@ public class PlayerDialog extends Dialog implements View.OnClickListener {
 
                 @Override
                 public void close(SinglesBase singlesBean) {
-                    singLesBeans.remove(singlesBean);
-                    if(popPlay!=null)
-                        popPlay.close(singlesBean);
-                    playerListAdapter.notifyDataSetChanged();
+                    if(singlesBean.isPlay==false) {
+                        singLesBeans.remove(singlesBean);
+                        if (popPlay != null)
+                            popPlay.close(singlesBean);
+                        playerListAdapter.notifyDataSetChanged();
+                    }
                 }
             }, pid);
             playerListAdapter.notifyDataSetChanged();
