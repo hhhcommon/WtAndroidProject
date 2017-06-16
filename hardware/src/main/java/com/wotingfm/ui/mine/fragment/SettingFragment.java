@@ -81,7 +81,7 @@ public class SettingFragment extends Fragment implements View.OnClickListener {
 
                 break;
             case R.id.view_account_security:// 账号安全
-
+                MineActivity.open(new AccountSecurityFragment());
                 break;
             case R.id.view_feedback:// 意见反馈
                 MineActivity.open(new FeedbackFragment());

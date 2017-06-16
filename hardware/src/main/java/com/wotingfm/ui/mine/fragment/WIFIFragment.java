@@ -52,6 +52,9 @@ public class WIFIFragment extends Fragment implements View.OnClickListener {
     private View rootView;
     private WIFIFragment ct;
 
+    private View viewConnSuccess;
+    private TextView textWifiName;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         if (rootView == null) {
@@ -82,6 +85,9 @@ public class WIFIFragment extends Fragment implements View.OnClickListener {
         wifiListView.addHeaderView(headView);
         wifiListView.setSelector(new ColorDrawable(Color.TRANSPARENT));
 
+        viewConnSuccess = headView.findViewById(R.id.view_conn_success);// 显示连接的网络
+        textWifiName = (TextView) headView.findViewById(R.id.text_wifi_name);// 连接的网络SSID
+
         textUserWiFi = (TextView) headView.findViewById(R.id.user_wifi_list);   // 提示文字  可用 WiFi
 
         headView.findViewById(R.id.wifi_set).setOnClickListener(this);          // WiFi设置
@@ -101,6 +107,23 @@ public class WIFIFragment extends Fragment implements View.OnClickListener {
         if (scanResultList == null) {// 判断附近是否有可用 WiFi
             scanResultList = new ArrayList<>();
         }
+
+        if (mWifiInfo != null && scanResultList.size() >= 0) {
+            String ssid = mWifiInfo.getSSID();
+            L.e("ssid -- > > " + ssid);
+            if (ssid.startsWith("\"")) {
+                ssid = ssid.substring(1, ssid.length() - 1);
+            }
+            for (int i=0, size=scanResultList.size(); i<size; i++) {
+                if (ssid.equals(scanResultList.get(i).SSID)) {// 判断当前连接的网络
+                    viewConnSuccess.setVisibility(View.VISIBLE);
+                    textWifiName.setText(ssid);
+                    scanResultList.remove(i);
+                    break;
+                }
+            }
+        }
+
         wifiListView.setAdapter(adapter = new WiFiListAdapter(context, scanResultList));
         setItemListener();
     }
@@ -236,7 +259,25 @@ public class WIFIFragment extends Fragment implements View.OnClickListener {
                     @Override
                     public void run() {
                         mWifiInfo = wifiManager.getConnectionInfo();// 已连接 WiFi 信息
-                        adapter.setList(scanResultList = wifiManager.getScanResults());
+                        scanResultList = wifiManager.getScanResults();
+
+                        if (mWifiInfo != null && scanResultList.size() >= 0) {
+                            String ssid = mWifiInfo.getSSID();
+                            L.e("ssid -- > > " + ssid);
+                            if (ssid.startsWith("\"")) {
+                                ssid = ssid.substring(1, ssid.length() - 1);
+                            }
+                            for (int i=0, size=scanResultList.size(); i<size; i++) {
+                                if (ssid.equals(scanResultList.get(i).SSID)) {// 判断当前连接的网络
+                                    viewConnSuccess.setVisibility(View.VISIBLE);
+                                    textWifiName.setText(ssid);
+                                    scanResultList.remove(i);
+                                    break;
+                                }
+                            }
+                        }
+
+                        adapter.setList(scanResultList);
                         L.i("scanResultList.size() --- > > " + scanResultList.size());
                         L.i("TAG", mWifiInfo.toString());
                     }
@@ -250,6 +291,7 @@ public class WIFIFragment extends Fragment implements View.OnClickListener {
                         textUserWiFi.setVisibility(View.GONE);
                         scanResultList.clear();
                         adapter.notifyDataSetChanged();
+                        viewConnSuccess.setVisibility(View.GONE);
                         break;
                     case WifiManager.WIFI_STATE_ENABLED:// WiFi 打开
                         imageWiFiSet.setImageResource(R.mipmap.on_switch);
