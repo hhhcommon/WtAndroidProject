@@ -76,6 +76,11 @@
             android:name=".ui.play.activity.download.DownloadProgramActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
+        <!-- 专辑详情 -->
+        <activity
+            android:name=".ui.play.activity.albums.AlbumsInfoActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" />
 
 
         <!-- 扫一扫 -->

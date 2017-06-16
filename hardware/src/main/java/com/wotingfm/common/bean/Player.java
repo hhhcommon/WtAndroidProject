@@ -20,6 +20,7 @@ public class Player implements Serializable {
 
     public static class DataBean implements Serializable {
         public List<SinglesBean> singles;
+        public int total_count;
 
         @DatabaseTable(tableName = DBUtils.TB_HISTORICAL_PLAY)
         public static class SinglesBean extends SinglesBase implements Serializable {

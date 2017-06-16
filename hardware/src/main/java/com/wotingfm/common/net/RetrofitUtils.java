@@ -3,12 +3,14 @@ package com.wotingfm.common.net;
 
 import android.text.TextUtils;
 
+import com.wotingfm.common.bean.AlbumInfo;
 import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.bean.AnchorInfo;
 import com.wotingfm.common.bean.HomeBanners;
 import com.wotingfm.common.bean.Player;
 import com.wotingfm.common.bean.Reports;
 import com.wotingfm.common.bean.Subscrible;
+import com.wotingfm.ui.play.activity.albums.fragment.AlbumsInfoFragment;
 import com.wotingfm.common.constant.StringConstant;
 
 import java.io.IOException;
@@ -50,6 +52,8 @@ public class RetrofitUtils {
     }
 
     private void createService() {
+        builder = new OkHttpClient.Builder();
+        builder.connectTimeout(DEFAULT_TIMEOUT, TimeUnit.SECONDS);
         Retrofit retrofit = new Retrofit.Builder()
                 //设置OKHttpClient为网络客户端
                 .client(genericClient())
@@ -130,6 +134,19 @@ public class RetrofitUtils {
      *
      * @return
      */
+    public Observable<Player> getProgramList(String albums, int page) {
+        return retrofitService.singlesList(albums, page)
+                .map(new Func1<Player, Player>() {
+                    @Override
+                    public Player call(Player player) {
+                        if (player.ret != 0) {
+                            throw new IllegalStateException(player.msg);
+                        }
+                        return player;
+                    }
+                });
+    }
+
     public Observable<List<Player.DataBean.SinglesBean>> getPlayerList(String albums) {
         return retrofitService.getPlayerList(albums)
                 .map(new Func1<Player, List<Player.DataBean.SinglesBean>>() {
@@ -146,6 +163,19 @@ public class RetrofitUtils {
     //订阅列表，我的
     public Observable<List<Subscrible.DataBean.AlbumsBean>> getSubscriptionsList(String pid) {
         return retrofitService.getSubscriptionsList(pid)
+                .map(new Func1<Subscrible, List<Subscrible.DataBean.AlbumsBean>>() {
+                    @Override
+                    public List<Subscrible.DataBean.AlbumsBean> call(Subscrible player) {
+                        if (player.ret != 0) {
+                            throw new IllegalStateException(player.msg);
+                        }
+                        return player.data.albums;
+                    }
+                });
+    }
+
+    public Observable<List<Subscrible.DataBean.AlbumsBean>> getSimilarsList(String pid) {
+        return retrofitService.albumsSimilars(pid)
                 .map(new Func1<Subscrible, List<Subscrible.DataBean.AlbumsBean>>() {
                     @Override
                     public List<Subscrible.DataBean.AlbumsBean> call(Subscrible player) {
@@ -267,6 +297,19 @@ public class RetrofitUtils {
                 });
     }
 
+    public Observable<AlbumInfo> getAlbumInfo(String uid) {
+        return retrofitService.albumsInfo(uid)
+                .map(new Func1<AlbumInfo, AlbumInfo>() {
+
+                    @Override
+                    public AlbumInfo call(AlbumInfo anchorInfo) {
+                        if (anchorInfo != null && anchorInfo.ret != 0 && anchorInfo.data != null && anchorInfo.data.album != null) {
+                            throw new IllegalStateException(anchorInfo.msg);
+                        }
+                        return anchorInfo;
+                    }
+                });
+    }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
 
