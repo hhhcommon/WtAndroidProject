@@ -222,4 +222,11 @@ public class RegisterPresenter {
         }
     }
 
+    public void cancel(){
+        if (mCountDownTimer != null) {
+            mCountDownTimer.cancel();
+            mCountDownTimer = null;
+        }
+    }
+
 }

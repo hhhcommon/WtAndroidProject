@@ -37,7 +37,7 @@ import static com.wotingfm.common.net.RetrofitService.BASE_URL;
 
 public class RetrofitUtils {
 
-    private static final int DEFAULT_TIMEOUT = 20;
+    private static final int DEFAULT_TIMEOUT = 2000;
     private RetrofitService retrofitService;
     public static RetrofitUtils INSTANCE;
     public static String TEST_USERID = "00163e00693b";

@@ -193,4 +193,10 @@ public class RegisterFragment extends Fragment implements View.OnClickListener {
             tv_yzm.setTextColor(this.getResources().getColor(R.color.app_basic));
         }
     }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        registerPresenter.cancel();
+    }
 }
