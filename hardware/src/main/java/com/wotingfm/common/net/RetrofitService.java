@@ -97,9 +97,6 @@ public interface RetrofitService {
     @GET("api/listenings/albums/{id}/singles")
     Observable<Player> singlesList(@Path("id") String id, @Query("page") int page);
 
-    @POST(Api.URL_LOGIN)
-// 登录
-    Observable<Login> login(@Query("phone") String phone, @Query("password") String password);
     // 登录
     @POST(Api.URL_LOGIN)
     Observable<Object> login(@Query("phone") String phone, @Query("password") String password);
