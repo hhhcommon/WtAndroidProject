@@ -62,13 +62,13 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:gravity">center</item>
         <item name="android:textColor">@color/black_head_word</item>
-        <item name="android:textSize">22sp</item>
+        <item name="android:textSize">17sp</item>
     </style>
 
     <!--个人中心标识文字-->
     <style name="MineIdentifyingTextStyle">
         <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">47dp</item>
+        <item name="android:layout_height">36dp</item>
         <item name="android:gravity">center_vertical</item>
         <item name="android:textColor">@color/black_head_word</item>
         <item name="android:textSize">18sp</item>
@@ -78,32 +78,32 @@
     <!-- 个人中心 Relative -->
     <style name="MineRelativeStyle">
         <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">58dp</item>
+        <item name="android:layout_height">44dp</item>
         <item name="android:background">@drawable/wt_view_click_background</item>
         <item name="android:clickable">true</item>
     </style>
 
     <!-- 个人中心 LeftImage -->
     <style name="MineLeftImageStyle">
-        <item name="android:layout_width">32dp</item>
-        <item name="android:layout_height">32dp</item>
-        <item name="android:layout_marginLeft">16dp</item>
+        <item name="android:layout_width">24dp</item>
+        <item name="android:layout_height">24dp</item>
+        <item name="android:layout_marginLeft">12dp</item>
         <item name="android:layout_centerVertical">true</item>
     </style>
 
     <!-- 个人中心 TextView -->
     <style name="MineTextStyle" parent="WrapContent">
-        <item name="android:layout_marginLeft">14dp</item>
+        <item name="android:layout_marginLeft">10dp</item>
         <item name="android:layout_centerVertical">true</item>
         <item name="android:textColor">@color/black_head_word</item>
-        <item name="android:textSize">20sp</item>
+        <item name="android:textSize">16sp</item>
     </style>
 
     <!-- 个人中心 RightImage -->
     <style name="MineRightImageStyle">
-        <item name="android:layout_width">32dp</item>
-        <item name="android:layout_height">32dp</item>
-        <item name="android:layout_marginRight">10dp</item>
+        <item name="android:layout_width">24dp</item>
+        <item name="android:layout_height">24dp</item>
+        <item name="android:layout_marginRight">8dp</item>
         <item name="android:layout_centerVertical">true</item>
         <item name="android:layout_alignParentRight">true</item>
         <item name="android:src">@mipmap/chat_icon_next</item>
@@ -125,6 +125,16 @@
         <item name="@android:windowEnterAnimation">@anim/wt_slide_in_from_bottom</item>
         <item name="@android:windowExitAnimation">@anim/wt_slide_out_from_bottom</item>
     </style>
+
+    <style name="Theme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/gray</item>
+        <item name="colorPrimaryDark">@color/black</item>
+        <item name="colorAccent">@color/red</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
 
     <style name="Base.Widget.TabLayout" parent="Widget.Design.TabLayout">
         <item name="tabTextAppearance">@style/TextAppearance.TabLayout.Tab</item>

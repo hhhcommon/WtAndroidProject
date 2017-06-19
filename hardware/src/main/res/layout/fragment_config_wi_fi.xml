@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background_color"
+    android:background="@color/white"
     android:orientation="vertical">
 
     <include
@@ -35,6 +35,7 @@
         android:enabled="false"
         android:textSize="16sp"
         android:gravity="center"
+        android:background="@drawable/wt_view_click_background"
         android:textColor="@color/app_basic"
         android:text="@string/connect"/>
 
@@ -43,6 +44,7 @@
         android:layout_width="match_parent"
         android:layout_height="44dp"
         android:text="@string/cancel"
+        android:background="@drawable/wt_view_click_background"
         android:textSize="16sp"
         android:gravity="center"
         android:textColor="@color/black_head_word"/>
