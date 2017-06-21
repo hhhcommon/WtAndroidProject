@@ -255,7 +255,7 @@ public class AnchorPersonalCenterActivity extends NoTitleBarBaseActivity impleme
                 .subscribe(new Action1<Object>() {
                     @Override
                     public void call(Object Object) {
-                        T.getInstance().equals("关注成功");
+                        T.getInstance().showToast("关注成功");
                         sw.data.user.had_followd = true;
                         sw.data.user.idols_count = sw.data.user.idols_count + 1;
                         setHeadViewData(sw);
@@ -264,7 +264,7 @@ public class AnchorPersonalCenterActivity extends NoTitleBarBaseActivity impleme
                 }, new Action1<Throwable>() {
                     @Override
                     public void call(Throwable throwable) {
-                        T.getInstance().equals("关注成功");
+                        T.getInstance().showToast("关注失败");
                         dissmisDialog();
                     }
                 });
@@ -278,7 +278,7 @@ public class AnchorPersonalCenterActivity extends NoTitleBarBaseActivity impleme
                 .subscribe(new Action1<Object>() {
                     @Override
                     public void call(Object s) {
-                        T.getInstance().equals("取消关注成功");
+                        T.getInstance().showToast("取消关注成功");
                         sw.data.user.had_followd = false;
                         sw.data.user.idols_count = sw.data.user.idols_count - 1;
                         setHeadViewData(sw);
@@ -287,7 +287,7 @@ public class AnchorPersonalCenterActivity extends NoTitleBarBaseActivity impleme
                 }, new Action1<Throwable>() {
                     @Override
                     public void call(Throwable throwable) {
-                        T.getInstance().equals("关注关注失败");
+                        T.getInstance().showToast("取消关注失败");
                         dissmisDialog();
                     }
                 });

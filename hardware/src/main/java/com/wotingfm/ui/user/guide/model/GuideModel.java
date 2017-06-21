@@ -42,7 +42,7 @@ public class GuideModel extends UserInfo  {
      * @param listener 监听
      */
     public void loadNews(String url, String tag, JSONObject js, final OnLoadInterface listener) {
-        RetrofitUtils.getInstance().getHomeBanners()
+      /*  RetrofitUtils.getInstance().getHomeBanners()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Action1<List<HomeBanners.Banner>>() {
@@ -53,7 +53,7 @@ public class GuideModel extends UserInfo  {
                     @Override
                     public void call(Throwable throwable) {
                     }
-                });
+                });*/
     }
 
 }

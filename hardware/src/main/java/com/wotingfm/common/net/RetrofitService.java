@@ -3,9 +3,12 @@ package com.wotingfm.common.net;
 
 import com.wotingfm.common.bean.AlbumInfo;
 import com.wotingfm.common.bean.AnchorInfo;
+import com.wotingfm.common.bean.BaseResult;
+import com.wotingfm.common.bean.Classification;
 import com.wotingfm.common.bean.HomeBanners;
 import com.wotingfm.common.bean.Player;
 import com.wotingfm.common.bean.Reports;
+import com.wotingfm.common.bean.Selected;
 import com.wotingfm.common.bean.Subscrible;
 import com.wotingfm.ui.intercom.main.contacts.model.Contact;
 import com.wotingfm.ui.user.login.model.Login;
@@ -50,8 +53,33 @@ public interface RetrofitService {
     @GET("api/reports/reasons")
     Observable<Reports> getPlayerReports(@Query("type") String type);
 
-    @GET("api/listenings/player")
-    Observable<HomeBanners> getHomeBanners();
+    //banner SELECTION:精选; LIVE:直播; RADIO:电台
+    @GET("api/listenings/banners")
+    Observable<HomeBanners> getHomeBanners(@Query("type") String type);
+
+    //分类首页
+    @GET("api/listenings/channels")
+    Observable<Classification> getClassifications();
+
+    //精选首页列表
+    @GET("api/listenings/selections")
+    Observable<Selected> getSelecteds();
+
+    //订阅专辑
+    @POST("api/listenings/albums/{id}/subscriptions")
+    Observable<BaseResult> subscriptionsAlbums();
+
+    //取消订阅
+    @DELETE("api/listenings/albums/{id}/subscriptions")
+    Observable<BaseResult> deleteSubscriptionsAlbums();
+
+    //关注
+    @POST("/api/fans")
+    Observable<BaseResult> submitFans(@Query("idol_id") String idol_id, @Query("user_id") String user_id);
+
+    //取消关注
+    @DELETE("/api/fans")
+    Observable<BaseResult> submitNoFans(@Query("idol_id") String idol_id, @Query("user_id") String user_id);
 
     //喜欢（收藏）节目
     @POST("api/listenings/singles/{id}/likes")

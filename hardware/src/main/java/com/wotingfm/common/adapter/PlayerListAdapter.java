@@ -40,7 +40,7 @@ public class PlayerListAdapter extends CommonAdapter<SinglesBase> {
             ivClose.setVisibility(View.GONE);
             textViewTitle.setTextColor(Color.parseColor("#fd8548"));
         } else {
-            ivTop.setVisibility(View.GONE);
+            ivTop.setVisibility(View.INVISIBLE);
             ivClose.setVisibility(View.VISIBLE);
             textViewTitle.setTextColor(Color.parseColor("#16181a"));
         }

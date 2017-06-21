@@ -1,8 +1,10 @@
 package com.wotingfm.ui.play.activity.albums.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,9 +21,13 @@ import com.wotingfm.R;
 import com.wotingfm.common.adapter.albumsAdapter.AlbumsInfoProgramAdapter;
 import com.wotingfm.common.bean.Player;
 import com.wotingfm.common.net.RetrofitUtils;
+import com.wotingfm.common.utils.DownloadUtils;
+import com.wotingfm.common.utils.T;
 import com.wotingfm.ui.base.basefragment.BaseFragment;
+import com.wotingfm.ui.play.activity.download.DownloadSelectActivity;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import butterknife.BindView;
@@ -31,14 +37,16 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 
+import static android.app.Activity.RESULT_OK;
+
 /**
  * Created by amine on 2017/6/14.
  * *专辑详情。节目fragment
  */
 
-public class ProgramInfoFragment extends BaseFragment implements OnLoadMoreListener, OnRefreshListener {
+public class ProgramInfoFragment extends BaseFragment {
     @BindView(R.id.mRecyclerView)
-    ARecyclerView mRecyclerView;
+    RecyclerView mRecyclerView;
     @BindView(R.id.loadLayout)
     LoadFrameLayout loadLayout;
     @BindView(R.id.tvTotal)
@@ -49,7 +57,6 @@ public class ProgramInfoFragment extends BaseFragment implements OnLoadMoreListe
     ImageView ivDownload;
     @BindView(R.id.relativeLable)
     RelativeLayout relativeLable;
-    private LoadMoreFooterView loadMoreFooterView;
 
     @Override
     protected int getLayoutResource() {
@@ -74,22 +81,65 @@ public class ProgramInfoFragment extends BaseFragment implements OnLoadMoreListe
             @Override
             public void onClick(View v) {
                 loadLayout.showLoadingView();
+                refresh();
             }
         });
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
+        mRecyclerView.setNestedScrollingEnabled(false);
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        loadMoreFooterView = (LoadMoreFooterView) mRecyclerView.getLoadMoreFooterView();
         mRecyclerView.setLayoutManager(layoutManager);
         albumsInfoProgramAdapter = new AlbumsInfoProgramAdapter(getActivity(), singlesBeanList);
-        mRecyclerView.setIAdapter(albumsInfoProgramAdapter);
+        mRecyclerView.setAdapter(albumsInfoProgramAdapter);
+        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+            }
+
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                //拿到最后一条的position
+                LinearLayoutManager manager = (LinearLayoutManager) recyclerView.getLayoutManager();
+                int endCompletelyPosition = manager.findLastCompletelyVisibleItemPosition();
+                if (endCompletelyPosition == albumsInfoProgramAdapter.getItemCount() - 1) {
+                    //执行加载更多的方法，无论是用接口还是别的方式都行
+                    loadMore();
+                }
+            }
+        });
         refresh();
+        ivSequence.setOnClickListener(this);
+        relativeLable.setOnClickListener(this);
+        ivDownload.setOnClickListener(this);
     }
 
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.relativeLable:
+                Intent intent = getActivity().getIntent();
+                intent.putExtra("albumsId", albumsID);
+                getActivity().setResult(RESULT_OK, intent);
+                getActivity().finish();
+                break;
+            case R.id.ivSequence:
+                Collections.reverse(singlesBeanList);
+                albumsInfoProgramAdapter.notifyDataSetChanged();
+                T.getInstance().showToast("排序成功");
+                break;
+            case R.id.ivDownload:
+                DownloadSelectActivity.start(getActivity(), albumsID);
+
+                break;
+        }
+    }
 
     private int mPage;
     private String albumsID;
 
     private void refresh() {
+        mPage = 1;
         RetrofitUtils.getInstance().getProgramList(albumsID, mPage)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -97,7 +147,6 @@ public class ProgramInfoFragment extends BaseFragment implements OnLoadMoreListe
                     @Override
                     public void call(Player albumsBeen) {
                         relativeLable.setVisibility(View.VISIBLE);
-                        mRecyclerView.setRefreshing(false);
                         tvTotal.setText("(全部播放共" + albumsBeen.data.total_count + "集)");
                         if (albumsBeen != null && albumsBeen.data != null && albumsBeen.data.singles != null && !albumsBeen.data.singles.isEmpty()) {
                             mPage++;
@@ -126,14 +175,12 @@ public class ProgramInfoFragment extends BaseFragment implements OnLoadMoreListe
                 .subscribe(new Action1<Player>() {
                     @Override
                     public void call(Player albumsBeen) {
-                        mRecyclerView.setRefreshing(false);
                         if (albumsBeen != null && albumsBeen.data != null && albumsBeen.data.singles != null && !albumsBeen.data.singles.isEmpty()) {
                             mPage++;
                             singlesBeanList.addAll(albumsBeen.data.singles);
                             albumsInfoProgramAdapter.notifyDataSetChanged();
-                            loadMoreFooterView.setStatus(LoadMoreFooterView.Status.GONE);
                         } else {
-                            loadMoreFooterView.setStatus(LoadMoreFooterView.Status.THE_END);
+                            T.getInstance().showToast("没有更多数据");
                         }
                     }
                 }, new Action1<Throwable>() {
@@ -145,18 +192,6 @@ public class ProgramInfoFragment extends BaseFragment implements OnLoadMoreListe
                 });
     }
 
-    @Override
-    public void onLoadMore(View loadMoreView) {
-        if (loadMoreFooterView.canLoadMore() && albumsInfoProgramAdapter.getItemCount() > 0) {
-            loadMoreFooterView.setStatus(LoadMoreFooterView.Status.LOADING);
-            loadMore();
-        }
-    }
-
-    @Override
-    public void onRefresh() {
-        refresh();
-    }
 
     private List<Player.DataBean.SinglesBean> singlesBeanList = new ArrayList<>();
     private AlbumsInfoProgramAdapter albumsInfoProgramAdapter;

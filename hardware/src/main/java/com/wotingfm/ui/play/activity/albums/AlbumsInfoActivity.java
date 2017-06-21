@@ -3,16 +3,13 @@ package com.wotingfm.ui.play.activity.albums;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.view.ViewPager;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
-import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -23,10 +20,12 @@ import com.wotingfm.R;
 import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.bean.AlbumInfo;
 import com.wotingfm.common.bean.AnchorInfo;
+import com.wotingfm.common.bean.BaseResult;
 import com.wotingfm.common.net.RetrofitUtils;
+import com.wotingfm.common.utils.L;
+import com.wotingfm.common.utils.T;
 import com.wotingfm.common.view.ObservableScrollView;
 import com.wotingfm.ui.base.baseactivity.NoTitleBarBaseActivity;
-import com.wotingfm.ui.play.activity.AnchorPersonalCenterActivity;
 import com.wotingfm.ui.play.activity.albums.fragment.AlbumsInfoFragment;
 import com.wotingfm.ui.play.activity.albums.fragment.ProgramInfoFragment;
 import com.wotingfm.ui.play.activity.albums.fragment.SimilarInfoFragment;
@@ -41,40 +40,42 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 
-import static com.wotingfm.R.id.loadLayout;
-
 /**
  * Created by amine on 2017/6/15.
  * 专辑详情
  */
 
-public class AlbumsInfoActivity extends NoTitleBarBaseActivity implements View.OnClickListener, ObservableScrollView.ScrollViewListener {
+public class AlbumsInfoActivity extends NoTitleBarBaseActivity implements View.OnClickListener {
+
+    @BindView(R.id.ivBack)
+    ImageView ivBack;
+    @BindView(R.id.tvTitle)
+    TextView tvTitle;
+/*    @BindView(R.id.mRecyclerView)
+    RecyclerView mRecyclerView;*/
+
+    @BindView(R.id.mRelativeLayout)
+    RelativeLayout mRelativeLayout;
+    @BindView(R.id.mObservableScrollView)
+    ObservableScrollView mObservableScrollView;
     @BindView(R.id.ivPhotoBg)
     ImageView ivPhotoBg;
     @BindView(R.id.ivPhoto)
     ImageView ivPhoto;
     @BindView(R.id.tvFollow)
     TextView tvFollow;
-    @BindView(R.id.tabs)
-    TabLayout tabLayout;
-    @BindView(R.id.viewPager)
-    ViewPager viewPager;
-    @BindView(R.id.ivBack)
-    ImageView ivBack;
-    @BindView(R.id.tvTitle)
-    TextView tvTitle;
-    @BindView(R.id.mRelativeLayout)
-    RelativeLayout mRelativeLayout;
-    @BindView(R.id.mScrollView)
-    ObservableScrollView mScrollView;
-
+    @BindView(R.id.tvAlbumsInfo)
+    TextView tvAlbumsInfo;
+    @BindView(R.id.tvProgramInfo)
+    TextView tvProgramInfo;
+    @BindView(R.id.tvSimilarInfo)
+    TextView tvSimilarInfo;
     private int height = 640;// 滑动开始变色的高,真实项目中此高度是由广告轮播或其他首页view高度决定
-    private int overallXScroll = 0;
 
     public static void start(Activity activity, String albumsId) {
         Intent intent = new Intent(activity, AlbumsInfoActivity.class);
         intent.putExtra("albumsId", albumsId);
-        activity.startActivityForResult(intent, 8080);
+        activity.startActivityForResult(intent, 8088);
     }
 
     @Override
@@ -82,7 +83,7 @@ public class AlbumsInfoActivity extends NoTitleBarBaseActivity implements View.O
         return R.layout.activity_albums_info;
     }
 
-    private void setResultData(AlbumInfo s) {
+    private void setResultData(final AlbumInfo s) {
         tvTitle.setText(s.data.album.title);
         Glide.with(context)
                 .load(s.data.album.owner.avatar)
@@ -96,8 +97,96 @@ public class AlbumsInfoActivity extends NoTitleBarBaseActivity implements View.O
                 .error(R.mipmap.oval_defut_photo)
                 .placeholder(R.mipmap.oval_defut_photo)
                 .into(ivPhoto);
-        tvFollow.setText("订阅(" + s.data.album.subscriptions_count + ")");
-        ivBack.setOnClickListener(this);
+        if (s.data.album.had_subscibed == true) {
+            tvFollow.setText("已订阅(" + s.data.album.subscriptions_count + ")");
+            tvFollow.setTextColor(Color.parseColor("#50ffffff"));
+            Drawable rightDrawable = getResources().getDrawable(R.mipmap.icon_subscription_s);
+            rightDrawable.setBounds(0, 0, rightDrawable.getMinimumWidth(), rightDrawable.getMinimumHeight());
+            tvFollow.setCompoundDrawables(rightDrawable, null, null, null);
+        } else {
+            tvFollow.setText("订阅(" + s.data.album.subscriptions_count + ")");
+            tvFollow.setTextColor(Color.parseColor("#ffffff"));
+            Drawable rightDrawable = getResources().getDrawable(R.mipmap.icon_subscription_n);
+            rightDrawable.setBounds(0, 0, rightDrawable.getMinimumWidth(), rightDrawable.getMinimumHeight());
+            tvFollow.setCompoundDrawables(rightDrawable, null, null, null);
+        }
+        tvFollow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (s.data.album.had_subscibed == true) {
+                    deleteSubscriptionsAlbums();
+                } else {
+                    subscriptionsAlbums();
+                }
+            }
+        });
+
+    }
+
+    private AlbumInfo albumInfoBase;
+
+    private void subscriptionsAlbums() {
+        showLodingDialog();
+        RetrofitUtils.getInstance().subscriptionsAlbums()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Action1<BaseResult>() {
+                    @Override
+                    public void call(BaseResult baseResult) {
+                        if (baseResult != null && baseResult.ret == 0) {
+                            if (albumInfoBase != null && albumInfoBase.data != null && albumInfoBase.data.album != null) {
+                                albumInfoBase.data.album.subscriptions_count = albumInfoBase.data.album.subscriptions_count + 1;
+                                albumInfoBase.data.album.had_subscibed = true;
+                                setResultData(albumInfoBase);
+                            }
+                            T.getInstance().showToast("订阅成功");
+                        } else {
+                            if (baseResult != null)
+                                T.getInstance().showToast(baseResult.msg);
+                            else
+                                T.getInstance().showToast("订阅失败");
+                        }
+                        dissmisDialog();
+                    }
+                }, new Action1<Throwable>() {
+                    @Override
+                    public void call(Throwable throwable) {
+                        T.getInstance().showToast("订阅失败");
+                        dissmisDialog();
+                    }
+                });
+    }
+
+    private void deleteSubscriptionsAlbums() {
+        showLodingDialog();
+        RetrofitUtils.getInstance().deleteSubscriptionsAlbums()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Action1<BaseResult>() {
+                    @Override
+                    public void call(BaseResult baseResult) {
+                        if (baseResult != null && baseResult.ret == 0) {
+                            if (albumInfoBase != null && albumInfoBase.data != null && albumInfoBase.data.album != null) {
+                                albumInfoBase.data.album.subscriptions_count = albumInfoBase.data.album.subscriptions_count - 1;
+                                albumInfoBase.data.album.had_subscibed = false;
+                                setResultData(albumInfoBase);
+                            }
+                            T.getInstance().showToast("取消订阅成功");
+                        } else {
+                            if (baseResult != null)
+                                T.getInstance().showToast(baseResult.msg);
+                            else
+                                T.getInstance().showToast("取消订阅失败");
+                        }
+                        dissmisDialog();
+                    }
+                }, new Action1<Throwable>() {
+                    @Override
+                    public void call(Throwable throwable) {
+                        T.getInstance().showToast("取消订阅失败");
+                        dissmisDialog();
+                    }
+                });
     }
 
     @Override
@@ -106,68 +195,93 @@ public class AlbumsInfoActivity extends NoTitleBarBaseActivity implements View.O
             case R.id.ivBack:
                 finish();
                 break;
-        }
-    }
-
-    @Override
-    public void onScrollChanged(ObservableScrollView scrollView, int x, int dy, int oldx, int oldy) {
-        overallXScroll = overallXScroll + dy;// 累加y值 解决滑动一半y值为0
-        if (overallXScroll <= 0) {   //设置标题的背景颜色
-            mRelativeLayout.setBackgroundColor(Color.argb((int) 0, 255, 255, 255));
-            tvTitle.setTextColor(Color.argb((int) 0, 22, 24, 26));
-        } else if (overallXScroll > 0 && overallXScroll <= height) { //滑动距离小于banner图的高度时，设置背景和字体颜色颜色透明度渐变
-            float scale = (float) overallXScroll / height;
-            float alpha = (255 * scale);
-            mRelativeLayout.setBackgroundColor(Color.argb((int) alpha, 255, 255, 255));
-            tvTitle.setTextColor(Color.argb((int) alpha, 22, 24, 26));
-        } else {
-            mRelativeLayout.setBackgroundColor(Color.argb((int) 255, 255, 255, 255));
-            tvTitle.setTextColor(Color.argb((int) 255, 22, 24, 26));
+            case R.id.tvAlbumsInfo:
+                setTextColor(tvAlbumsInfo, 0);
+                break;
+            case R.id.tvProgramInfo:
+                setTextColor(tvProgramInfo, 1);
+                break;
+            case R.id.tvSimilarInfo:
+                setTextColor(tvSimilarInfo, 2);
+                break;
         }
     }
 
 
-    public class MyAdapter extends FragmentPagerAdapter {
-
-        private List<String> title;
-        private List<Fragment> views;
-
-        public MyAdapter(FragmentManager fm, List<String> title, List<Fragment> views) {
-            super(fm);
-            this.title = title;
-            this.views = views;
-        }
-
-        @Override
-        public Fragment getItem(int position) {
-            return views.get(position);
-        }
-
-        @Override
-        public int getCount() {
-            return views.size();
-        }
-
-
-        //配置标题的方法
-        @Override
-        public CharSequence getPageTitle(int position) {
-            return title.get(position);
-        }
-    }
-
-    private List<Fragment> mFragment = new ArrayList<>();
-
-    private MyAdapter mAdapter;
     @BindView(R.id.loadLayout)
     LoadFrameLayout loadLayout;
 
     @Override
     public void initView() {
-        height = DementionUtil.dip2px(this, 220);
+        height = DementionUtil.dip2px(this, 210);
         String albumsId = getIntent().getStringExtra("albumsId");
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        ivBack.setOnClickListener(this);
+        tvAlbumsInfo.setOnClickListener(this);
+        tvProgramInfo.setOnClickListener(this);
+        tvSimilarInfo.setOnClickListener(this);
+        mObservableScrollView.setScrollViewListener(new ObservableScrollView.ScrollViewListener() {
+            @Override
+            public void onScrollChanged(ObservableScrollView scrollView, int x, int dy, int oldx, int oldy) {
+                if (dy <= 0) {   //设置标题的背景颜色
+                    mRelativeLayout.setBackgroundColor(Color.argb((int) 0, 255, 255, 255));
+                    tvTitle.setTextColor(Color.argb((int) 0, 22, 24, 26));
+                } else if (dy > 0 && dy <= height) { //滑动距离小于banner图的高度时，设置背景和字体颜色颜色透明度渐变
+                    float scale = (float) dy / height;
+                    float alpha = (255 * scale);
+                    mRelativeLayout.setBackgroundColor(Color.argb((int) alpha, 255, 255, 255));
+                    tvTitle.setTextColor(Color.argb((int) alpha, 22, 24, 26));
+                } else {
+                    mRelativeLayout.setBackgroundColor(Color.argb((int) 255, 255, 255, 255));
+                    tvTitle.setTextColor(Color.argb((int) 255, 22, 24, 26));
+                }
+            }
+        });
         getAlbumInfo(albumsId);
-        mScrollView.setScrollViewListener(this);
+    }
+
+    private AlbumsInfoFragment albumsFragment;
+    private ProgramInfoFragment programFragment;
+    private SimilarInfoFragment similarInfoFragment;
+
+    private void initFragment(AlbumInfo s) {
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        albumsFragment = AlbumsInfoFragment.newInstance(s);
+        programFragment = ProgramInfoFragment.newInstance(s.data.album.id);
+        similarInfoFragment = SimilarInfoFragment.newInstance(s.data.album.id);
+        transaction.add(R.id.fl_body, albumsFragment, "albumsFragment");
+        transaction.add(R.id.fl_body, programFragment, "programFragment");
+        transaction.add(R.id.fl_body, similarInfoFragment, "similarInfoFragment");
+        transaction.commit();
+        SwitchTo(0);
+    }
+
+    private void SwitchTo(int position) {
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        switch (position) {
+            case 0:
+                transaction.hide(programFragment);
+                transaction.hide(similarInfoFragment);
+                transaction.show(albumsFragment);
+                transaction.commitAllowingStateLoss();
+                break;
+
+            case 1:
+                transaction.hide(albumsFragment);
+                transaction.hide(similarInfoFragment);
+                transaction.show(programFragment);
+                transaction.commitAllowingStateLoss();
+                break;
+            case 2:
+                transaction.hide(albumsFragment);
+                transaction.hide(programFragment);
+                transaction.show(similarInfoFragment);
+                transaction.commitAllowingStateLoss();
+                break;
+            default:
+                break;
+        }
     }
 
     private void getAlbumInfo(String albumsId) {
@@ -178,19 +292,19 @@ public class AlbumsInfoActivity extends NoTitleBarBaseActivity implements View.O
                 .subscribe(new Action1<AlbumInfo>() {
                     @Override
                     public void call(AlbumInfo s) {
-                        loadLayout.showContentView();
                         List<String> type = new ArrayList<>();
                         type.add("详情");
                         type.add("节目");
                         type.add("相似");
-                        mFragment.add(AlbumsInfoFragment.newInstance(s));
-                        String albumsID = s.data.album.id;
+                        initFragment(s);
+                        // mFragment.add(newInstance(s));
+    /*                    String albumsID = s.data.album.id;
                         mFragment.add(ProgramInfoFragment.newInstance(albumsID));
                         mFragment.add(SimilarInfoFragment.newInstance(albumsID));
-                        mAdapter = new MyAdapter(getSupportFragmentManager(), type, mFragment);
-                        viewPager.setAdapter(mAdapter);
-                        tabLayout.setupWithViewPager(viewPager);
+                        mAdapter = new MyAdapter(getSupportFragmentManager(), type, mFragment);*/
+                        albumInfoBase = s;
                         setResultData(s);
+                        loadLayout.showContentView();
                     }
 
 
@@ -200,5 +314,17 @@ public class AlbumsInfoActivity extends NoTitleBarBaseActivity implements View.O
                         loadLayout.showErrorView();
                     }
                 });
+    }
+
+    /**
+     * @param textViewBase 需要变颜色文本
+     * @param code         切换的下标
+     */
+    private void setTextColor(TextView textViewBase, int code) {
+        tvAlbumsInfo.setTextColor(Color.parseColor("#16181a"));
+        tvProgramInfo.setTextColor(Color.parseColor("#16181a"));
+        tvSimilarInfo.setTextColor(Color.parseColor("#16181a"));
+        textViewBase.setTextColor(Color.parseColor("#fd8548"));
+        SwitchTo(code);
     }
 }
