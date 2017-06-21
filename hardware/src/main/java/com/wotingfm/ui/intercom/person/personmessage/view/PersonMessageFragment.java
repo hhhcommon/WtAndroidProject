@@ -15,6 +15,7 @@ import android.widget.TextView;
 import com.wotingfm.R;
 import com.wotingfm.ui.intercom.main.view.InterPhoneActivity;
 import com.wotingfm.ui.intercom.person.personmessage.presenter.PersonMessagePresenter;
+import com.wotingfm.ui.intercom.person.personnote.view.EditPersonNoteFragment;
 
 /**
  * 用户详情，区分好友与非好友
@@ -28,7 +29,7 @@ public class PersonMessageFragment extends Fragment implements View.OnClickListe
     private LinearLayout lin_note;
     private PersonMessagePresenter presenter;
     private LinearLayout lin_chose;
-    private boolean type;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -56,6 +57,7 @@ public class PersonMessageFragment extends Fragment implements View.OnClickListe
         tv_send = (TextView) rootView.findViewById(R.id.tv_send);             // 添加好友展示信息
         img_call = (ImageView) rootView.findViewById(R.id.img_call);          // 呼叫展示图片
         lin_note = (LinearLayout) rootView.findViewById(R.id.lin_note);       // 备注
+        lin_note.setOnClickListener(this);
         tv_name = (TextView) rootView.findViewById(R.id.tv_name);             // 姓名
         tv_introduce = (TextView) rootView.findViewById(R.id.tv_introduce);   // 介绍
         tv_number = (TextView) rootView.findViewById(R.id.tv_number);         // 听号
@@ -79,8 +81,8 @@ public class PersonMessageFragment extends Fragment implements View.OnClickListe
             case R.id.img_more:
                 presenter.headViewShow();
                 break;
-            case R.id.lin_note:
-                // 设置备注
+            case R.id.lin_note: // 设置备注
+                InterPhoneActivity.open(new EditPersonNoteFragment());
                 break;
             case R.id.tv_quxiao:
                 presenter.headViewShow();
@@ -122,7 +124,6 @@ public class PersonMessageFragment extends Fragment implements View.OnClickListe
      * @param b true 好友/false 非好友
      */
     public void setView(boolean b) {
-        this.type=b;
         if (b) {
             // 是好友
             tv_send.setVisibility(View.GONE);

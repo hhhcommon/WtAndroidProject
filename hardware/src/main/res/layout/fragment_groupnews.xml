@@ -47,7 +47,7 @@
 
 
                 <TextView
-                    android:id="@+id/tv_news"
+                    android:id="@+id/tv_nameNumber"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/tv_groupName"
@@ -60,11 +60,12 @@
                     android:textSize="12sp" />
 
                 <TextView
+                    android:id="@+id/tv_groupNumber"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignBottom="@+id/tv_news"
+                    android:layout_alignBottom="@+id/tv_nameNumber"
                     android:layout_marginLeft="10dp"
-                    android:layout_toRightOf="@+id/tv_news"
+                    android:layout_toRightOf="@+id/tv_nameNumber"
                     android:text="1234567"
                     android:textColor="@color/white"
                     android:textSize="12sp" />
@@ -115,6 +116,7 @@
                         android:textSize="14sp" />
 
                     <TextView
+                        android:id="@+id/tv_address"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="13dp"
@@ -156,9 +158,11 @@
                         android:layout_alignParentRight="true"
                         android:layout_marginRight="12dp"
                         android:layout_marginTop="12dp"
+                        android:visibility="gone"
                         android:src="@mipmap/chat_icon_next" />
 
                     <TextView
+                        android:id="@+id/tv_groupIntroduce"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/tv_groupIntroduce_name"
@@ -180,7 +184,7 @@
                     android:gravity="top">
 
                     <TextView
-                        android:id="@+id/tv_groupNumber"
+                        android:id="@+id/tv_groupNumberName"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="12dp"
@@ -194,7 +198,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="12dp"
-                        android:layout_toRightOf="@+id/tv_groupNumber"
+                        android:layout_toRightOf="@+id/tv_groupNumberName"
                         android:text="(88)"
                         android:textColor="@color/black_head_word"
                         android:textSize="14sp" />
@@ -208,14 +212,15 @@
                         android:src="@mipmap/chat_icon_next" />
 
                     <GridView
+                        android:id="@+id/gridView"
                         android:layout_width="match_parent"
                         android:layout_height="52dp"
-                        android:layout_below="@+id/tv_groupNumber"
+                        android:layout_below="@+id/tv_groupNumberName"
                         android:layout_marginBottom="15dp"
                         android:layout_marginLeft="12dp"
+                        android:numColumns="5"
                         android:layout_marginRight="12dp"
-                        android:layout_marginTop="15dp"
-                        android:background="@color/app_basic"></GridView>
+                        android:layout_marginTop="15dp"></GridView>
 
                 </RelativeLayout>
 

@@ -6,27 +6,6 @@
     android:orientation="vertical">
 
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="44dp"
-        android:background="@color/app_basic">
-
-        <ImageView
-            android:id="@+id/head_left_btn"
-            android:layout_width="44dp"
-            android:layout_height="44dp"
-            android:layout_marginLeft="2dp"
-            android:src="@mipmap/nav_icon_back_white" />
-
-        <ImageView
-            android:layout_width="44dp"
-            android:layout_height="44dp"
-            android:layout_alignParentRight="true"
-            android:layout_marginRight="2dp"
-            android:src="@mipmap/nav_icon_more_white" />
-
-    </RelativeLayout>
-
     <ScrollView
         android:id="@+id/scrollView"
         android:layout_width="wrap_content"
@@ -35,50 +14,79 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:background="@mipmap/p"
             android:orientation="vertical">
 
-            <RelativeLayout
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/app_basic"
+                android:layout_height="220dp"
                 android:orientation="vertical"
-                android:visibility="gone">
+                android:visibility="visible">
 
-                <TextView
-                    android:id="@+id/tv_groupName"
-                    android:layout_width="wrap_content"
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="44dp">
+
+                    <ImageView
+                        android:id="@+id/head_left_btn"
+                        android:layout_width="44dp"
+                        android:layout_height="44dp"
+                        android:layout_marginLeft="2dp"
+                        android:src="@mipmap/nav_icon_back_white" />
+
+                    <ImageView
+                        android:id="@+id/img_other"
+                        android:layout_width="44dp"
+                        android:layout_height="44dp"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginRight="2dp"
+                        android:src="@mipmap/nav_icon_more_white" />
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="12dp"
-                    android:layout_marginTop="98dp"
-                    android:gravity="center"
-                    android:text="爱车巨龙"
-                    android:textColor="@color/white"
-                    android:textSize="20sp" />
+                    android:orientation="vertical"
+                    android:visibility="visible">
+
+                    <TextView
+                        android:id="@+id/tv_groupName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="12dp"
+                        android:layout_marginTop="98dp"
+                        android:gravity="center"
+                        android:text="爱车巨龙"
+                        android:textColor="@color/white"
+                        android:textSize="20sp" />
 
 
-                <TextView
-                    android:id="@+id/tv_news"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/tv_groupName"
-                    android:layout_marginBottom="15dp"
-                    android:layout_marginLeft="12dp"
-                    android:layout_marginTop="15dp"
-                    android:gravity="center"
-                    android:text="群号"
-                    android:textColor="@color/white"
-                    android:textSize="12sp" />
+                    <TextView
+                        android:id="@+id/tv_news"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/tv_groupName"
+                        android:layout_marginBottom="15dp"
+                        android:layout_marginLeft="12dp"
+                        android:layout_marginTop="15dp"
+                        android:gravity="center"
+                        android:text="群号"
+                        android:textColor="@color/white"
+                        android:textSize="12sp" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignBottom="@+id/tv_news"
-                    android:layout_marginLeft="10dp"
-                    android:layout_toRightOf="@+id/tv_news"
-                    android:text="1234567"
-                    android:textColor="@color/white"
-                    android:textSize="12sp" />
-            </RelativeLayout>
+                    <TextView
+                        android:id="@+id/tv_groupNumber"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignBottom="@+id/tv_news"
+                        android:layout_marginLeft="10dp"
+                        android:layout_toRightOf="@+id/tv_news"
+                        android:text="1234567"
+                        android:textColor="@color/white"
+                        android:textSize="12sp" />
+                </RelativeLayout>
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -103,6 +111,7 @@
                         android:textSize="14sp" />
 
                     <TextView
+                        android:id="@+id/tv_address"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="13dp"
@@ -196,10 +205,12 @@
                         android:layout_height="24dp"
                         android:layout_alignParentRight="true"
                         android:layout_marginRight="12dp"
+                        android:visibility="gone"
                         android:layout_marginTop="12dp"
                         android:src="@mipmap/chat_icon_next" />
 
                     <TextView
+                        android:id="@+id/tv_groupIntroduce"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/tv_groupIntroduce_name"
@@ -221,7 +232,7 @@
                     android:gravity="top">
 
                     <TextView
-                        android:id="@+id/tv_groupNumber"
+                        android:id="@+id/tv_groupNumberName"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="12dp"
@@ -235,7 +246,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="12dp"
-                        android:layout_toRightOf="@+id/tv_groupNumber"
+                        android:layout_toRightOf="@+id/tv_groupNumberName"
                         android:text="(88)"
                         android:textColor="@color/black_head_word"
                         android:textSize="14sp" />
@@ -249,14 +260,15 @@
                         android:src="@mipmap/chat_icon_next" />
 
                     <GridView
+                        android:id="@+id/gridView"
                         android:layout_width="match_parent"
-                        android:layout_height="50dp"
-                        android:layout_below="@+id/tv_groupNumber"
+                        android:layout_height="52dp"
+                        android:layout_below="@+id/tv_groupNumberName"
                         android:layout_marginBottom="15dp"
                         android:layout_marginLeft="12dp"
                         android:layout_marginRight="12dp"
                         android:layout_marginTop="15dp"
-                        android:background="@color/app_basic"></GridView>
+                        android:numColumns="5"></GridView>
 
                 </RelativeLayout>
 
@@ -278,6 +290,7 @@
                         android:textSize="14sp" />
 
                     <RelativeLayout
+                        android:id="@+id/re_channel1"
                         android:layout_width="match_parent"
                         android:layout_height="44dp"
                         android:background="@color/white">
@@ -308,6 +321,7 @@
                         android:background="@color/line_color" />
 
                     <RelativeLayout
+                        android:id="@+id/re_channel2"
                         android:layout_width="match_parent"
                         android:layout_height="44dp"
                         android:background="@color/white">
@@ -340,7 +354,8 @@
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="12dp"
                     android:layout_marginRight="12dp"
-                    android:layout_marginTop="30dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginBottom="40dp"
                     android:background="@drawable/background_circle_orange"
                     android:gravity="center"
                     android:orientation="vertical">
