@@ -157,6 +157,7 @@ public class CreateGroupMainPresenter {
                 break;
         }
     }
+
     ///////////////////////////////////////////////////////////////////////////////////////////////
     // 检查数据的正确性  检查通过则进行登录
     private boolean checkData(String name, String password, int type) {

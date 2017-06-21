@@ -47,14 +47,14 @@
                 android:layout_height="24dp"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
-                android:layout_marginRight="12dp"
+                android:layout_marginRight="8dp"
                 android:src="@mipmap/chat_icon_next" />
 
         </RelativeLayout>
 
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="0.5dp"
+            android:layout_height="1dp"
             android:background="@color/line_color" />
 
         <RelativeLayout
@@ -76,14 +76,14 @@
                 android:layout_height="24dp"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
-                android:layout_marginRight="12dp"
+                android:layout_marginRight="8dp"
                 android:src="@mipmap/chat_icon_next" />
 
         </RelativeLayout>
 
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="0.5dp"
+            android:layout_height="1dp"
             android:background="@color/line_color" />
 
         <RelativeLayout
@@ -105,7 +105,7 @@
                 android:layout_height="24dp"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
-                android:layout_marginRight="12dp"
+                android:layout_marginRight="8dp"
                 android:src="@mipmap/chat_icon_next" />
 
         </RelativeLayout>
@@ -130,14 +130,14 @@
                 android:layout_height="24dp"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
-                android:layout_marginRight="12dp"
+                android:layout_marginRight="8dp"
                 android:src="@mipmap/chat_icon_next" />
 
         </RelativeLayout>
 
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="0.5dp"
+            android:layout_height="1dp"
             android:background="@color/line_color" />
 
         <RelativeLayout
@@ -159,7 +159,7 @@
                 android:layout_height="24dp"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
-                android:layout_marginRight="12dp"
+                android:layout_marginRight="8dp"
                 android:src="@mipmap/chat_icon_next" />
 
         </RelativeLayout>

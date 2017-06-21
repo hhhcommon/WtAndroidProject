@@ -117,7 +117,13 @@ public interface RetrofitService {
     @POST(Api.URL_GET_FRIENDS)
     Observable<Contact> getFriends(@Query("token") String token);
 
+    // 加群方式
+    @POST(Api.URL_APPLY_GROUP_TYPE)
+    Observable<Object> applyGroupType(@Query("password") String password,@Query("token") int type);
 
+    // 入组申请
+    @POST(Api.URL_GROUP_APPLY)
+    Observable<Object> groupApply(@Query("s") String s);
 }
 
 

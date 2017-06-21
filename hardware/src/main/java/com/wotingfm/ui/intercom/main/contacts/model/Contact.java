@@ -19,11 +19,20 @@ public class Contact implements Serializable {
     public List<user> friends;
 
     public static class user implements Serializable {
+        private int type=1;
         private String avatar;
         private String sortLetters;     // 显示数据拼音的首字母
         private String id;
         private String name;
         private String NickName;
+
+        public int getType() {
+            return type;
+        }
+
+        public void setType(int type) {
+            this.type = type;
+        }
 
         public String getAvatar() {
             return avatar;

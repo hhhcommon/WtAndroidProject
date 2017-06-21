@@ -35,6 +35,7 @@ public class GroupApplyFragment extends Fragment implements View.OnClickListener
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         if (rootView == null) {
             rootView = inflater.inflate(R.layout.fragment_apply, container, false);
+            rootView.setOnClickListener(this);
             inItView();
             presenter = new GroupApplyPresenter(this);
         }
