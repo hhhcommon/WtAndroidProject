@@ -23,7 +23,7 @@ import com.wotingfm.ui.intercom.add.find.FindFragment;
 import com.wotingfm.ui.intercom.group.creat.view.CreateGroupMainFragment;
 import com.wotingfm.ui.intercom.main.chat.view.ChatFragment;
 import com.wotingfm.ui.intercom.main.contacts.fragment.ContactsFragment;
-import com.wotingfm.ui.intercom.main.simulation.SimulationInterPhoneFrag;
+import com.wotingfm.ui.intercom.main.simulation.SimulationInterPhoneFragment;
 import com.wotingfm.ui.main.view.MainActivity;
 import com.wotingfm.ui.intercom.scanning.activity.CaptureActivity;
 import com.wotingfm.ui.user.logo.LogoActivity;
@@ -172,7 +172,7 @@ public class InterPhoneFragment extends Fragment implements View.OnClickListener
                 addDialog.dismiss();
                 break;
             case R.id.tv_intercom:
-                InterPhoneActivity.open(new SimulationInterPhoneFrag());
+                InterPhoneActivity.open(new SimulationInterPhoneFragment());
                 addDialog.dismiss();
                 break;
             case R.id.img_person:

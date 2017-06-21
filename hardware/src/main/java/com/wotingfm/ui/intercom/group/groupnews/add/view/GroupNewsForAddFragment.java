@@ -16,7 +16,7 @@ import com.wotingfm.ui.intercom.group.groupmanage.GroupManageFragment;
 import com.wotingfm.ui.intercom.group.groupnews.add.adapter.GroupNewsPersonForAddAdapter;
 import com.wotingfm.ui.intercom.group.groupnews.add.presenter.GroupNewsForAddPresenter;
 import com.wotingfm.ui.intercom.main.contacts.model.Contact;
-import com.wotingfm.ui.intercom.main.simulation.SimulationInterPhoneFrag;
+import com.wotingfm.ui.intercom.main.simulation.SimulationInterPhoneFragment;
 import com.wotingfm.ui.intercom.main.view.InterPhoneActivity;
 
 import java.util.List;
@@ -95,14 +95,14 @@ public class GroupNewsForAddFragment extends Fragment implements View.OnClickLis
                 ToastUtils.show_always(this.getActivity(), "开始对讲");
                 break;
             case R.id.re_channel1:
-                SimulationInterPhoneFrag fragment = new SimulationInterPhoneFrag();
+                SimulationInterPhoneFragment fragment = new SimulationInterPhoneFragment();
                 Bundle bundle = new Bundle();
                 bundle.putString("channel", "00000");
                 fragment.setArguments(bundle);
                 InterPhoneActivity.open(fragment);
                 break;
             case R.id.re_channel2:
-                SimulationInterPhoneFrag fragment1 = new SimulationInterPhoneFrag();
+                SimulationInterPhoneFragment fragment1 = new SimulationInterPhoneFragment();
                 Bundle bundle1 = new Bundle();
                 bundle1.putString("channel", "00000");
                 fragment1.setArguments(bundle1);
