@@ -416,6 +416,13 @@ public class RetrofitUtils {
                 });
     }
 
+    /**
+     * 忘记密码
+     * @param userName
+     * @param password
+     * @param yzm
+     * @return
+     */
     public Observable<Object> resetPasswords(String userName, String password, String yzm) {
         return retrofitService.resetPasswords(userName, password, yzm)
                 .map(new Func1<Object, Object>() {
@@ -426,8 +433,45 @@ public class RetrofitUtils {
                 });
     }
 
+    /**
+     * 登录
+     * @param userName
+     * @param password
+     * @return
+     */
     public Observable<Object> login(String userName, String password) {
         return retrofitService.login(userName, password)
+                .map(new Func1<Object, Object>() {
+                    @Override
+                    public Object call(Object O) {
+                        return O;
+                    }
+                });
+    }
+
+    /**
+     * 加群方式
+     * @param password
+     * @param type
+     * @return
+     */
+    public Observable<Object> applyGroupType(String password, int type) {
+        return retrofitService.applyGroupType(password, type)
+                .map(new Func1<Object, Object>() {
+                    @Override
+                    public Object call(Object O) {
+                        return O;
+                    }
+                });
+    }
+
+    /**
+     * 入组申请
+     * @param s
+     * @return
+     */
+    public Observable<Object> groupApply(String s) {
+        return retrofitService.groupApply(s)
                 .map(new Func1<Object, Object>() {
                     @Override
                     public Object call(Object O) {

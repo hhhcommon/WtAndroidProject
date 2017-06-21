@@ -23,11 +23,11 @@
         <TextView
             android:id="@+id/tv_send"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="12dp"
-            android:gravity="end"
+            android:gravity="center"
             android:lineSpacingExtra="0sp"
             android:text="确定"
             android:textColor="@color/black_head_word"
