@@ -1,10 +1,9 @@
 package com.wotingfm.ui.intercom.person.personmessage.presenter;
 
-import android.app.Activity;
 import android.os.Bundle;
 
 import com.wotingfm.common.utils.ToastUtils;
-import com.wotingfm.ui.intercom.person.personmessage.PersonMessageFragment;
+import com.wotingfm.ui.intercom.person.personmessage.view.PersonMessageFragment;
 import com.wotingfm.ui.intercom.person.personmessage.model.PersonMessageModel;
 
 /**

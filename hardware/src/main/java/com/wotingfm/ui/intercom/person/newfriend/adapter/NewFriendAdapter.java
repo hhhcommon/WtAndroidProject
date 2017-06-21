@@ -66,6 +66,14 @@ public class NewFriendAdapter extends RecyclerView.Adapter<NewFriendAdapter.Simp
                 mIDeleteBtnClickListener.onDeleteBtnClick(view, n);
             }
         });
+
+        holder.re_adapter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int n = holder.getLayoutPosition();
+                mIDeleteBtnClickListener.onAdapterClick(view, n);
+            }
+        });
     }
 
     @Override
@@ -75,9 +83,8 @@ public class NewFriendAdapter extends RecyclerView.Adapter<NewFriendAdapter.Simp
 
     class SimpleHolder extends RecyclerView.ViewHolder {
         public ImageView img_url;
-        public TextView tv_Delete;
-        public TextView tv_name, tv_news, tv_ok;
-        public RelativeLayout layout_content;
+        public TextView tv_name, tv_news, tv_ok,tv_Delete;
+        public RelativeLayout layout_content,re_adapter;
 
         public SimpleHolder(View itemView) {
             super(itemView);
@@ -86,6 +93,7 @@ public class NewFriendAdapter extends RecyclerView.Adapter<NewFriendAdapter.Simp
             tv_name = (TextView) itemView.findViewById(R.id.tv_name);
             tv_news = (TextView) itemView.findViewById(R.id.tv_news);
             tv_ok = (TextView) itemView.findViewById(R.id.tv_ok);
+            re_adapter = (RelativeLayout) itemView.findViewById(R.id.re_adapter);
             layout_content = (RelativeLayout) itemView.findViewById(R.id.layout_content);
             ((SlidingButtonView) itemView).setSlidingButtonListener(NewFriendAdapter.this);
         }
@@ -135,7 +143,7 @@ public class NewFriendAdapter extends RecyclerView.Adapter<NewFriendAdapter.Simp
 
     public interface IonSlidingViewClickListener {
         void onItemClick(View view, int position);
-
+        void onAdapterClick(View view, int position);
         void onDeleteBtnClick(View view, int position);
     }
 

@@ -2,18 +2,13 @@ package com.wotingfm.ui.intercom.main.view;
 
 import android.content.res.Configuration;
 import android.content.res.Resources;
-import android.graphics.Color;
-import android.os.Build;
 import android.os.Bundle;
-import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
-import android.view.WindowManager;
 import android.widget.Toast;
 import com.woting.commonplat.utils.SequenceUUID;
 import com.wotingfm.R;
-import com.wotingfm.common.utils.StatusBarUtil;
 
 /**
  * 对讲模块主页
@@ -23,6 +18,7 @@ import com.wotingfm.common.utils.StatusBarUtil;
 
 public class InterPhoneActivity extends AppCompatActivity {
     public static InterPhoneActivity context;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,6 +40,10 @@ public class InterPhoneActivity extends AppCompatActivity {
     // 打开新的 Fragment
     public static void open(Fragment frg) {
         context.getSupportFragmentManager().beginTransaction()
+                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+//                .setCustomAnimations(
+//                        R.animator.fragment_slide_right_in, R.animator.fragment_slide_left_out,
+//                        R.animator.fragment_slide_left_in, R.animator.fragment_slide_right_out)
                 .add(R.id.fragment_content, frg)
                 .addToBackStack(SequenceUUID.getUUID())
                 .commitAllowingStateLoss();
@@ -70,8 +70,6 @@ public class InterPhoneActivity extends AppCompatActivity {
             close();
         }
     }
-
-
 
 
 }

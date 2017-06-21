@@ -1,13 +1,11 @@
 package com.wotingfm.ui.intercom.main.view;
 
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
-import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,7 +23,7 @@ import com.wotingfm.ui.intercom.add.find.FindFragment;
 import com.wotingfm.ui.intercom.group.creat.view.CreateGroupMainFragment;
 import com.wotingfm.ui.intercom.main.chat.view.ChatFragment;
 import com.wotingfm.ui.intercom.main.contacts.fragment.ContactsFragment;
-import com.wotingfm.ui.intercom.main.simulation.SimulationInterphoneFragment;
+import com.wotingfm.ui.intercom.main.simulation.SimulationInterPhoneFragment;
 import com.wotingfm.ui.main.view.MainActivity;
 import com.wotingfm.ui.intercom.scanning.activity.CaptureActivity;
 import com.wotingfm.ui.user.logo.LogoActivity;
@@ -174,7 +172,7 @@ public class InterPhoneFragment extends Fragment implements View.OnClickListener
                 addDialog.dismiss();
                 break;
             case R.id.tv_intercom:
-                InterPhoneActivity.open(new SimulationInterphoneFragment());
+                InterPhoneActivity.open(new SimulationInterPhoneFragment());
                 addDialog.dismiss();
                 break;
             case R.id.img_person:

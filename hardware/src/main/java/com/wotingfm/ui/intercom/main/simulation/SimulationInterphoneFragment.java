@@ -21,7 +21,7 @@ import java.util.List;
  * 邮箱：645700751@qq.com
  * 模拟对讲
  */
-public class SimulationInterphoneFragment extends Fragment implements View.OnClickListener {
+public class SimulationInterPhoneFragment extends Fragment implements View.OnClickListener {
 
     private TextView tv_text, tv_number, tv_set;
     private List<String> list;

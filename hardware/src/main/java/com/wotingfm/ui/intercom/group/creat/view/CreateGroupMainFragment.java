@@ -1,11 +1,8 @@
 package com.wotingfm.ui.intercom.group.creat.view;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,12 +12,9 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
 import com.wotingfm.R;
 import com.wotingfm.ui.intercom.group.creat.presenter.CreateGroupMainPresenter;
 import com.wotingfm.ui.intercom.main.view.InterPhoneActivity;
-
-import java.io.File;
 
 /**
  * 创建群主页
@@ -33,13 +27,11 @@ public class CreateGroupMainFragment extends Fragment implements View.OnClickLis
     private EditText et_phoneNumber, et_password;
     private TextView tv_send;
     private CreateGroupMainPresenter presenter;
-    private FragmentActivity context;
     private LinearLayout lin_chose;// 图片来源选择
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        context = getActivity();
     }
 
     @Override
@@ -114,11 +106,11 @@ public class CreateGroupMainFragment extends Fragment implements View.OnClickLis
     // 图片上传界面的展示
     public void imageShow(boolean type) {
         if (type) {
-            Animation mAnimation = AnimationUtils.loadAnimation(context, R.anim.wt_slide_in_from_bottom);
+            Animation mAnimation = AnimationUtils.loadAnimation(this.getActivity(), R.anim.wt_slide_in_from_bottom);
             lin_chose.setAnimation(mAnimation);
             lin_chose.setVisibility(View.VISIBLE);
         } else {
-            Animation mAnimation = AnimationUtils.loadAnimation(context, R.anim.wt_slide_out_from_bottom);
+            Animation mAnimation = AnimationUtils.loadAnimation(this.getActivity(), R.anim.wt_slide_out_from_bottom);
             lin_chose.setAnimation(mAnimation);
             lin_chose.setVisibility(View.GONE);
         }

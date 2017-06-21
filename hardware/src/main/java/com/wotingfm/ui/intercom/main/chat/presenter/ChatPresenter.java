@@ -1,9 +1,13 @@
 package com.wotingfm.ui.intercom.main.chat.presenter;
 
+import com.wotingfm.common.utils.GetTestData;
 import com.wotingfm.ui.intercom.main.chat.model.ChatModel;
 import com.wotingfm.ui.intercom.main.chat.view.ChatFragment;
+import com.wotingfm.ui.intercom.main.contacts.model.Contact;
 import com.wotingfm.ui.intercom.person.newfriend.model.NewFriendModel;
 import com.wotingfm.ui.intercom.person.newfriend.view.NewFriendFragment;
+
+import java.util.List;
 
 /**
  * 作者：xinLong on 2017/6/5 13:55
@@ -13,6 +17,7 @@ public class ChatPresenter {
 
     private final ChatFragment activity;
     private final ChatModel model;
+    private List<Contact.user> list;
 
 
     public ChatPresenter(ChatFragment activity) {
@@ -21,7 +26,9 @@ public class ChatPresenter {
     }
 
     public void getData() {
-        activity.updateUI();
+       list= model.getData();
+
+        activity.updateUI(list);
     }
 
 }

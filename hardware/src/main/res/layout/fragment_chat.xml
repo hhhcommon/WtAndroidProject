@@ -6,12 +6,13 @@
     android:orientation="vertical">
 
     <RelativeLayout
+        android:id="@+id/re_group"
         android:layout_width="match_parent"
         android:layout_height="320dp"
         android:background="@color/background_color">
 
         <ImageView
-            android:id="@+id/img_url"
+            android:id="@+id/img_url_group"
             android:layout_width="52dp"
             android:layout_height="52dp"
             android:layout_marginLeft="12dp"
@@ -19,6 +20,7 @@
             android:src="@mipmap/test" />
 
         <TextView
+            android:id="@+id/tv_groupName_group"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="76dp"
@@ -29,6 +31,7 @@
             android:textSize="16sp" />
 
         <TextView
+            android:id="@+id/tv_news_group"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="76dp"
@@ -39,6 +42,7 @@
             android:textSize="14.7sp" />
 
         <ImageView
+            android:id="@+id/img_close_group"
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:layout_alignParentRight="true"
@@ -54,12 +58,14 @@
             android:gravity="center">
 
             <ImageView
+                android:id="@+id/img_person_group"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
                 android:src="@mipmap/test" />
         </LinearLayout>
 
         <TextView
+            android:id="@+id/tv_person_group"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"

@@ -17,6 +17,7 @@ import com.wotingfm.common.utils.GetTestData;
 import com.wotingfm.ui.intercom.main.view.InterPhoneActivity;
 import com.wotingfm.ui.intercom.person.newfriend.adapter.NewFriendAdapter;
 import com.wotingfm.ui.intercom.person.newfriend.presenter.NewFriendPresenter;
+import com.wotingfm.ui.intercom.person.personmessage.view.PersonMessageFragment;
 
 /**
  * 新的朋友
@@ -82,6 +83,15 @@ public class NewFriendFragment extends Fragment implements NewFriendAdapter.IonS
 
     @Override
     public void onItemClick(View view, int position) {
+    }
+
+    @Override
+    public void onAdapterClick(View view, int position) {
+        PersonMessageFragment fragment = new PersonMessageFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString("type", "true");
+        fragment.setArguments(bundle);
+        InterPhoneActivity.open(fragment);
     }
 
     @Override
