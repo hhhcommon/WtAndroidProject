@@ -19,7 +19,7 @@
             android:orientation="vertical">
 
 
-            <LinearLayout
+            <RelativeLayout
                 android:id="@+id/linear"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -35,15 +35,15 @@
                 <TextView
                     android:id="@+id/tvTitle"
                     android:layout_width="wrap_content"
+                    android:layout_toRightOf="@+id/ivTop"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
                     android:ellipsize="end"
-                    android:lineSpacingExtra="0sp"
                     android:singleLine="true"
                     android:text="过年回家你妈和你说什么了？"
                     android:textColor="#16181a"
                     android:textSize="16sp" />
-            </LinearLayout>
+            </RelativeLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
