@@ -102,6 +102,7 @@ public class AlbumsInfoFragment extends BaseFragment {
         } else {
             tvFollow.setText("关注");
         }
+
         if (albumInfo.data.album.channels != null && !albumInfo.data.album.channels.isEmpty()) {
             labelTagContent.setVisibility(View.VISIBLE);
             flowLayout.removeAllViews();
