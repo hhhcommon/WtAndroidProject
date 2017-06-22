@@ -60,6 +60,11 @@
             android:name=".ui.play.look.activity.LookListActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
+        <!-- 发现的首页  更多 -->
+        <activity
+            android:name=".ui.play.look.activity.SelectedMoreActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" />
         <!-- 界面举报 -->
         <activity
             android:name=".ui.play.activity.ReportsPlayerActivity"

@@ -18,7 +18,6 @@ public class AlbumInfo implements Serializable {
 
 
         public AlbumBean album;
-        public List<Channels> channels;
 
 
         public static class AlbumBean implements Serializable {
@@ -31,13 +30,16 @@ public class AlbumInfo implements Serializable {
             public int subscriptions_count;
             public String title;
             public int total_single_count;
+            public List<Channels> channels;
+
+            public static class Channels implements Serializable {
+                public String id;
+                public String title;
+                public String logo;
+
+            }
 
         }
-        public static class Channels implements Serializable {
-            public String id;
-            public String title;
-            public String logo;
 
-        }
     }
 }

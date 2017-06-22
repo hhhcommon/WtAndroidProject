@@ -18,6 +18,7 @@ import com.wotingfm.common.bean.Selected;
 import com.wotingfm.common.net.RetrofitUtils;
 import com.wotingfm.common.view.BannerView;
 import com.wotingfm.ui.base.basefragment.BaseFragment;
+import com.wotingfm.ui.play.look.activity.SelectedMoreActivity;
 import com.zhy.adapter.recyclerview.wrapper.HeaderAndFooterWrapper;
 
 import java.util.ArrayList;
@@ -71,7 +72,7 @@ public class SelectedFragment extends BaseFragment implements SwipeRefreshLayout
 
             @Override
             public void clickMore(Selected.DataBeanX dataBeanX) {
-
+                SelectedMoreActivity.start(getActivity(),dataBeanX.type,dataBeanX.title);
             }
         });
         mHeaderAndFooterWrapper = new HeaderAndFooterWrapper(selectedAdapter);
@@ -84,7 +85,6 @@ public class SelectedFragment extends BaseFragment implements SwipeRefreshLayout
             @Override
             public void onClick(View v) {
                 loadLayout.showLoadingView();
-                refresh();
                 getBanners();
                 getSelecteds();
             }
@@ -93,8 +93,6 @@ public class SelectedFragment extends BaseFragment implements SwipeRefreshLayout
         getSelecteds();
     }
 
-    private void refresh() {
-    }
 
     @Override
     public void onResume() {
@@ -159,6 +157,7 @@ public class SelectedFragment extends BaseFragment implements SwipeRefreshLayout
                 .subscribe(new Action1<List<Selected.DataBeanX>>() {
                     @Override
                     public void call(List<Selected.DataBeanX> dataBeanXes) {
+                        mSwipeLayout.setRefreshing(false);
                         loadLayout.showContentView();
                         datas.clear();
                         datas.addAll(dataBeanXes);

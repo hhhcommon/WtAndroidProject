@@ -9,6 +9,7 @@ import com.wotingfm.common.bean.HomeBanners;
 import com.wotingfm.common.bean.Player;
 import com.wotingfm.common.bean.Reports;
 import com.wotingfm.common.bean.Selected;
+import com.wotingfm.common.bean.SelectedMore;
 import com.wotingfm.common.bean.Subscrible;
 import com.wotingfm.ui.intercom.main.contacts.model.Contact;
 import com.wotingfm.ui.user.login.model.Login;
@@ -64,6 +65,9 @@ public interface RetrofitService {
     //精选首页列表
     @GET("api/listenings/selections")
     Observable<Selected> getSelecteds();
+
+    @GET("api/listenings/selections/search-more")
+    Observable<SelectedMore> getSelectedsMore(@Query("page") int page, @Query("type") String type);
 
     //订阅专辑
     @POST("api/listenings/albums/{id}/subscriptions")
@@ -147,7 +151,7 @@ public interface RetrofitService {
 
     // 加群方式
     @POST(Api.URL_APPLY_GROUP_TYPE)
-    Observable<Object> applyGroupType(@Query("password") String password,@Query("token") int type);
+    Observable<Object> applyGroupType(@Query("password") String password, @Query("token") int type);
 
     // 入组申请
     @POST(Api.URL_GROUP_APPLY)

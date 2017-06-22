@@ -102,17 +102,17 @@ public class AlbumsInfoFragment extends BaseFragment {
         } else {
             tvFollow.setText("关注");
         }
-        if (albumInfo.data.channels != null && !albumInfo.data.channels.isEmpty()) {
-            labelContent.setVisibility(View.VISIBLE);
-            labelContent.removeAllViews();
-            for (int i = 0, size = albumInfo.data.channels.size(); i < size; i++) {
+        if (albumInfo.data.album.channels != null && !albumInfo.data.album.channels.isEmpty()) {
+            labelTagContent.setVisibility(View.VISIBLE);
+            flowLayout.removeAllViews();
+            for (int i = 0, size = albumInfo.data.album.channels.size(); i < size; i++) {
                 View view = LayoutInflater.from(getActivity()).inflate(R.layout.item_channels, null);
                 TextView textView = (TextView) view.findViewById(R.id.tvTag);
-                textView.setText(albumInfo.data.channels.get(i).title);
-                labelContent.addView(view);
+                textView.setText(albumInfo.data.album.channels.get(i).title);
+                flowLayout.addView(view);
             }
         } else {
-            labelContent.setVisibility(View.GONE);
+            labelTagContent.setVisibility(View.GONE);
         }
         tvFollow.setOnClickListener(new View.OnClickListener() {
             @Override

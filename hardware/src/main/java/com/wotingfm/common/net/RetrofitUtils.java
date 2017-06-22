@@ -12,6 +12,7 @@ import com.wotingfm.common.bean.HomeBanners;
 import com.wotingfm.common.bean.Player;
 import com.wotingfm.common.bean.Reports;
 import com.wotingfm.common.bean.Selected;
+import com.wotingfm.common.bean.SelectedMore;
 import com.wotingfm.common.bean.Subscrible;
 import com.wotingfm.ui.play.activity.albums.fragment.AlbumsInfoFragment;
 import com.wotingfm.common.constant.StringConstant;
@@ -172,6 +173,19 @@ public class RetrofitUtils {
                             throw new IllegalStateException(classification.msg);
                         }
                         return classification.data;
+                    }
+                });
+    }
+
+    public Observable<List<SelectedMore.DataBean.AlbumsBean>> getSelectedsMore(int page, String type) {
+        return retrofitService.getSelectedsMore(page, type)
+                .map(new Func1<SelectedMore, List<SelectedMore.DataBean.AlbumsBean>>() {
+                    @Override
+                    public List<SelectedMore.DataBean.AlbumsBean> call(SelectedMore classification) {
+                        if (classification.ret != 0) {
+                            throw new IllegalStateException(classification.msg);
+                        }
+                        return classification.data.albums;
                     }
                 });
     }
@@ -418,6 +432,7 @@ public class RetrofitUtils {
 
     /**
      * 忘记密码
+     *
      * @param userName
      * @param password
      * @param yzm
@@ -435,6 +450,7 @@ public class RetrofitUtils {
 
     /**
      * 登录
+     *
      * @param userName
      * @param password
      * @return
@@ -451,6 +467,7 @@ public class RetrofitUtils {
 
     /**
      * 加群方式
+     *
      * @param password
      * @param type
      * @return
@@ -467,6 +484,7 @@ public class RetrofitUtils {
 
     /**
      * 入组申请
+     *
      * @param s
      * @return
      */

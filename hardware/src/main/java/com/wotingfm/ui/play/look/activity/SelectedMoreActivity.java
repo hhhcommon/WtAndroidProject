@@ -1,8 +1,9 @@
-package com.wotingfm.ui.play.activity.albums;
+package com.wotingfm.ui.play.look.activity;
 
-import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
 
@@ -13,17 +14,18 @@ import com.woting.commonplat.amine.OnRefreshListener;
 import com.woting.commonplat.widget.LoadFrameLayout;
 import com.wotingfm.R;
 import com.wotingfm.common.adapter.albumsAdapter.AlbumsAdapter;
+import com.wotingfm.common.adapter.findHome.ItemSelected1Adapter;
+import com.wotingfm.common.bean.Selected;
+import com.wotingfm.common.bean.SelectedMore;
 import com.wotingfm.common.bean.Subscrible;
 import com.wotingfm.common.net.RetrofitUtils;
 import com.wotingfm.ui.base.baseactivity.BaseToolBarActivity;
-import com.wotingfm.ui.play.activity.AnchorPersonalCenterActivity;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.schedulers.Schedulers;
@@ -31,53 +33,48 @@ import rx.schedulers.Schedulers;
 import static android.R.attr.type;
 
 /**
- * 个人专辑列表
- * Created by amine on 2017/6/13.
+ * Created by amine on 2017/6/22.
+ * 精选，每日  列表，
  */
 
-public class AlbumsListActivity extends BaseToolBarActivity implements OnLoadMoreListener, OnRefreshListener {
+public class SelectedMoreActivity extends BaseToolBarActivity implements OnLoadMoreListener, OnRefreshListener {
+
     @BindView(R.id.mRecyclerView)
     ARecyclerView mRecyclerView;
     @BindView(R.id.loadLayout)
     LoadFrameLayout loadLayout;
 
-    private AlbumsAdapter mAdapter;
-
-    public static void start(Activity activity, String uid, String title) {
-        Intent intent = new Intent(activity, AlbumsListActivity.class);
-        intent.putExtra("uid", uid);
+    public static void start(Context activity, String type, String title) {
+        Intent intent = new Intent(activity, SelectedMoreActivity.class);
+        intent.putExtra("type", type);
         intent.putExtra("title", title);
-        activity.startActivityForResult(intent, 7070);
+        activity.startActivity(intent);
     }
 
     @Override
     public int getLayoutId() {
-        return R.layout.activity_albums_list;
+        return R.layout.activity_selected;
     }
 
+    private String type, title;
     private LoadMoreFooterView loadMoreFooterView;
-    private List<Subscrible.DataBean.AlbumsBean> albumsBeanList = new ArrayList<>();
 
     @Override
     public void initView() {
         Intent intent = getIntent();
-        String title = intent.getStringExtra("title");
-        user_id = intent.getStringExtra("uid");
+        title = intent.getStringExtra("title");
+        type = intent.getStringExtra("type");
         setTitle(title);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        GridLayoutManager layoutManager = new GridLayoutManager(this, 3);
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         loadMoreFooterView = (LoadMoreFooterView) mRecyclerView.getLoadMoreFooterView();
         mRecyclerView.setOnLoadMoreListener(this);
         mRecyclerView.setOnRefreshListener(this);
         mRecyclerView.setLayoutManager(layoutManager);
-        mAdapter = new AlbumsAdapter(this, albumsBeanList);
-        mAdapter.setPlayerClick(new AlbumsAdapter.PlayerClick() {
+        mAdapter = new ItemSelected1Adapter(this, datas, new ItemSelected1Adapter.SelectedClick() {
             @Override
-            public void clickAlbums(Subscrible.DataBean.AlbumsBean singlesBean) {
-                Intent intent = getIntent();
-                intent.putExtra("albumsId", singlesBean.id);
-                setResult(RESULT_OK, intent);
-                finish();
+            public void click(SelectedMore.DataBean.AlbumsBean dataBean) {
+
             }
         });
         mRecyclerView.setIAdapter(mAdapter);
@@ -92,22 +89,23 @@ public class AlbumsListActivity extends BaseToolBarActivity implements OnLoadMor
         refresh();
     }
 
+    private ItemSelected1Adapter mAdapter;
+    private List<SelectedMore.DataBean.AlbumsBean> datas = new ArrayList<>();
     private int mPage;
-    private String user_id;
 
     private void refresh() {
-        mPage=1;
-        RetrofitUtils.getInstance().getAlbumsList(user_id, mPage)
+        mPage = 1;
+        RetrofitUtils.getInstance().getSelectedsMore(mPage, type)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Action1<List<Subscrible.DataBean.AlbumsBean>>() {
+                .subscribe(new Action1<List<SelectedMore.DataBean.AlbumsBean>>() {
                     @Override
-                    public void call(List<Subscrible.DataBean.AlbumsBean> albumsBeen) {
+                    public void call(List<SelectedMore.DataBean.AlbumsBean> albumsBeen) {
                         mRecyclerView.setRefreshing(false);
                         if (albumsBeen != null && !albumsBeen.isEmpty()) {
                             mPage++;
-                            albumsBeanList.clear();
-                            albumsBeanList.addAll(albumsBeen);
+                            datas.clear();
+                            datas.addAll(albumsBeen);
                             loadLayout.showContentView();
                             mAdapter.notifyDataSetChanged();
                         } else {
@@ -125,16 +123,16 @@ public class AlbumsListActivity extends BaseToolBarActivity implements OnLoadMor
     }
 
     private void loadMore() {
-        RetrofitUtils.getInstance().getAlbumsList(user_id, mPage)
+        RetrofitUtils.getInstance().getSelectedsMore(mPage, type)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Action1<List<Subscrible.DataBean.AlbumsBean>>() {
+                .subscribe(new Action1<List<SelectedMore.DataBean.AlbumsBean>>() {
                     @Override
-                    public void call(List<Subscrible.DataBean.AlbumsBean> albumsBeen) {
+                    public void call(List<SelectedMore.DataBean.AlbumsBean> albumsBeen) {
                         mRecyclerView.setRefreshing(false);
                         if (albumsBeen != null && !albumsBeen.isEmpty()) {
                             mPage++;
-                            albumsBeanList.addAll(albumsBeen);
+                            datas.addAll(albumsBeen);
                             mAdapter.notifyDataSetChanged();
                             loadMoreFooterView.setStatus(LoadMoreFooterView.Status.GONE);
                         } else {
@@ -162,5 +160,4 @@ public class AlbumsListActivity extends BaseToolBarActivity implements OnLoadMor
     public void onRefresh() {
         refresh();
     }
-
 }

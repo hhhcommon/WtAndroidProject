@@ -2,4 +2,5 @@
 <resources>
     <dimen name="padding_middle">18dp</dimen>
     <dimen name="padding_middle_10">10dp</dimen>
+    <dimen name="padding_middle_12">12dp</dimen>
 </resources>
