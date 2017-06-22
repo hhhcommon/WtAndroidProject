@@ -127,7 +127,7 @@ public class MenuDialog extends Dialog implements View.OnClickListener {
                         if (singlesBeens != null && !singlesBeens.isEmpty()) {
                             for (SinglesDownload s : singlesBeens) {
                                 if (s.id.equals(pdsBase.id)) {
-                                    com.wotingfm.common.utils.T.getInstance().equals("已下载");
+                                    com.wotingfm.common.utils.T.getInstance().showToast("已下载");
                                     return;
                                 }
                             }
@@ -140,7 +140,7 @@ public class MenuDialog extends Dialog implements View.OnClickListener {
                                 super.onStart();
                                 L.i("mingku", "downloadStart");
                                 if (pdsBase != null && downloadHelper != null) {
-                                    com.wotingfm.common.utils.T.getInstance().equals("开始下载");
+                                    com.wotingfm.common.utils.T.getInstance().showToast("开始下载");
                                     ContentValues contentValues = new ContentValues();
                                     contentValues.put("id", pdsBase.id);
                                     contentValues.put("single_title", pdsBase.single_title);

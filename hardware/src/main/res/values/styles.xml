@@ -6,7 +6,8 @@
         <item name="colorPrimaryDark">@color/white</item>
         <item name="colorAccent">@color/app_basic</item>
     </style>
-    <style name="NoActionBar" parent="Theme.AppCompat.Light.NoActionBar" > </style>
+
+    <style name="NoActionBar" parent="Theme.AppCompat.Light.NoActionBar"></style>
 
 
     <!--1.colorPrimary 应用的主要色调，actionBar默认使用该颜色，Toolbar导航栏的底色-->
@@ -140,7 +141,7 @@
         <item name="tabTextAppearance">@style/TextAppearance.TabLayout.Tab</item>
         <item name="tabMode">scrollable</item>
         <item name="tabGravity">fill</item>
-        <item name="tabIndicatorColor">#ffffff</item>
+        <item name="tabIndicatorColor">#fd8548</item>
         <item name="tabSelectedTextColor">#fd8548</item>
         <item name="tabIndicatorHeight">2dp</item>
         <item name="tabPaddingStart">14sp</item>

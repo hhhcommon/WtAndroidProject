@@ -78,7 +78,7 @@ public class PlayerHistoryActivity extends BaseToolBarActivity {
 
                     @Override
                     public void delete(Player.DataBean.SinglesBean singlesBean) {
-                        T.getInstance().equals("删除成功");
+                        T.getInstance().showToast("删除成功");
                         list.remove(singlesBean);
                         historyHelper.deleteTable(singlesBean.id);
                         playerHistoryListAdapter.notifyDataSetChanged();

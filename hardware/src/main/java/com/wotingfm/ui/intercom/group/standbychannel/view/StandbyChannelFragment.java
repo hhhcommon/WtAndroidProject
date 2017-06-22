@@ -127,7 +127,7 @@ public class StandbyChannelFragment extends Fragment implements View.OnClickList
 
         Window window = CDialog.getWindow();
         window.setGravity(Gravity.BOTTOM);
-        window.setWindowAnimations(R.style.inOutStyle);
+        //window.setWindowAnimations(R.style.inOutStyle);
         window.setBackgroundDrawableResource(R.color.transparent_background);
     }
 

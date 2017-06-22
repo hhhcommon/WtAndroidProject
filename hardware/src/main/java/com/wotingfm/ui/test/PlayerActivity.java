@@ -31,6 +31,7 @@ import com.wotingfm.common.view.MenuDialog;
 import com.wotingfm.common.view.PlayerDialog;
 import com.wotingfm.ui.base.baseactivity.NoTitleBarBaseActivity;
 import com.wotingfm.ui.main.view.MainActivity;
+import com.wotingfm.ui.play.look.activity.LookListActivity;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -209,9 +210,9 @@ public class PlayerActivity extends NoTitleBarBaseActivity implements View.OnCli
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.ivPlayerCenter:
-                GlobalStateConfig.mineFromType=1;
-                GlobalStateConfig.activityA="C";
-                GlobalStateConfig.activityB="B";
+                GlobalStateConfig.mineFromType = 1;
+                GlobalStateConfig.activityA = "C";
+                GlobalStateConfig.activityB = "B";
                 MainActivity.changeThree();
                 Intent push = new Intent(BroadcastConstants.MINE_ACTIVITY_CHANGE);
                 Bundle bundle = new Bundle();
@@ -220,7 +221,7 @@ public class PlayerActivity extends NoTitleBarBaseActivity implements View.OnCli
                 sendBroadcast(push);
                 break;
             case R.id.ivPlayerFind:
-
+                LookListActivity.start(this);
                 break;
             case R.id.ivBefore:
                 if (singLesBeans.size() > postionPlayer && postionPlayer > 0) {
@@ -381,6 +382,14 @@ public class PlayerActivity extends NoTitleBarBaseActivity implements View.OnCli
         }
         //选择专辑
         else if (requestCode == 8080 && resultCode == RESULT_OK && data != null) {
+            String albumsId = data.getStringExtra("albumsId");
+            if (bdPlayer != null)
+                bdPlayer.stopPlayback();
+            loadLayout.showLoadingView();
+            getPlayerList(albumsId);
+        }
+        //专辑详情一系列，resultCode =RESULT_OK 代表是选择详情所有节目
+        else if (requestCode == 8088 && resultCode == RESULT_OK && data != null) {
             String albumsId = data.getStringExtra("albumsId");
             if (bdPlayer != null)
                 bdPlayer.stopPlayback();

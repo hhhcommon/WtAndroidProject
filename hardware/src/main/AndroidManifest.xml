@@ -10,8 +10,8 @@
         android:hardwareAccelerated="true"
         android:icon="@mipmap/app_logo"
         android:label="@string/app_name"
-        android:theme="@style/AppBlackTheme"
-        android:supportsRtl="false">
+        android:supportsRtl="false"
+        android:theme="@style/AppBlackTheme">
 
         <!-- 启动页 -->
         <activity
@@ -35,15 +35,14 @@
         <activity
             android:name=".ui.main.view.MainActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/NoActionBar">
-        </activity>
+            android:theme="@style/NoActionBar"></activity>
 
 
         <!-- 登录主页 -->
         <activity
             android:name="com.wotingfm.ui.user.logo.LogoActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme"/>
+            android:theme="@style/AppTheme" />
 
 
         <!-- 播放历史 -->
@@ -54,6 +53,16 @@
         <!-- 我的订阅 -->
         <activity
             android:name=".ui.play.activity.MeSubscribeListActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" />
+        <!-- 发现的首页 -->
+        <activity
+            android:name=".ui.play.look.activity.LookListActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" />
+        <!-- 发现的首页  更多 -->
+        <activity
+            android:name=".ui.play.look.activity.SelectedMoreActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
         <!-- 界面举报 -->
@@ -79,6 +88,11 @@
         <!-- 专辑详情 -->
         <activity
             android:name=".ui.play.activity.albums.AlbumsInfoActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" />
+        <!--下载选择 -->
+        <activity
+            android:name=".ui.play.activity.download.DownloadSelectActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
 

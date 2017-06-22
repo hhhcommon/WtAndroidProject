@@ -19,6 +19,6 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginLeft="8dp"
-        android:textColor="@color/white"
+        android:textColor="#16181a"
         android:textSize="10sp" />
 </merge>

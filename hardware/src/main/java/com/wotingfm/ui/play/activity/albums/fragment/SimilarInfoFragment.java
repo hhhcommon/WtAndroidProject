@@ -80,6 +80,15 @@ public class SimilarInfoFragment extends BaseFragment {
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         mRecyclerView.setLayoutManager(layoutManager);
         albumsAdapter = new AlbumsAdapter(getActivity(), albumsBeens);
+        albumsAdapter.setPlayerClick(new AlbumsAdapter.PlayerClick() {
+            @Override
+            public void clickAlbums(Subscrible.DataBean.AlbumsBean singlesBean) {
+                Intent intent = getActivity().getIntent();
+                intent.putExtra("albumsId", albumsID);
+                getActivity().setResult(RESULT_OK, intent);
+                getActivity().finish();
+            }
+        });
         mRecyclerView.setAdapter(albumsAdapter);
         refresh();
     }
@@ -92,6 +101,7 @@ public class SimilarInfoFragment extends BaseFragment {
                     @Override
                     public void call(List<Subscrible.DataBean.AlbumsBean> albumsBeen) {
                         if (albumsBeen != null && !albumsBeen.isEmpty()) {
+                            albumsBeens.clear();
                             albumsBeens.addAll(albumsBeen);
                             loadLayout.showContentView();
                             albumsAdapter.notifyDataSetChanged();
