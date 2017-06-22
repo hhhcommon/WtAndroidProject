@@ -20,5 +20,9 @@ public class Api {
     public static final String URL_GROUP_APPLY = "";
     // 偏好设置
     public static final String URL_PREFERENCE = "";
+    // 注销登录
+    public static final String URL_CANCEL = "";
+    // 获取用户数据
+    public static final String URL_GET_USERINFO = "";
 
 }

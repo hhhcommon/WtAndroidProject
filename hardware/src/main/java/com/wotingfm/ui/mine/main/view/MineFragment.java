@@ -1,4 +1,4 @@
-package com.wotingfm.ui.mine.fragment;
+package com.wotingfm.ui.mine.main.view;
 
 import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
@@ -9,12 +9,21 @@ import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.wotingfm.R;
 import com.wotingfm.common.config.GlobalStateConfig;
 import com.wotingfm.common.constant.BroadcastConstants;
+import com.wotingfm.common.utils.GlideUtils;
 import com.wotingfm.ui.main.view.MainActivity;
-import com.wotingfm.ui.mine.MineActivity;
+import com.wotingfm.ui.mine.fragment.BluetoothFragment;
+import com.wotingfm.ui.mine.fragment.FMSetFragment;
+import com.wotingfm.ui.mine.set.view.SettingFragment;
+import com.wotingfm.ui.mine.fragment.WIFIFragment;
+import com.wotingfm.ui.mine.main.MineActivity;
+import com.wotingfm.ui.mine.main.presenter.MinePresenter;
+import com.wotingfm.ui.user.logo.LogoActivity;
 
 /**
  * 个人中心主界面
@@ -25,6 +34,9 @@ public class MineFragment extends Fragment implements View.OnClickListener {
 
     private View rootView;
     private FragmentActivity context;
+    private MinePresenter presenter;
+    private ImageView image_head;
+    private TextView text_user_name, text_user_number;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -38,16 +50,20 @@ public class MineFragment extends Fragment implements View.OnClickListener {
         if (rootView == null) {
             rootView = inflater.inflate(R.layout.fragment_mine, container, false);
             rootView.setOnClickListener(this);
-
             initView();
             initEvent();
+            presenter = new MinePresenter(this);
+            presenter.getData();
         }
         return rootView;
     }
 
     // 初始化视图
     private void initView() {
-
+        image_head = (ImageView) rootView.findViewById(R.id.image_head);// 头像
+        image_head.setOnClickListener(this);
+        text_user_name = (TextView) rootView.findViewById(R.id.text_user_name);// 昵称
+        text_user_number = (TextView) rootView.findViewById(R.id.text_user_number);// id号
     }
 
     // 初始化点击事件
@@ -60,6 +76,32 @@ public class MineFragment extends Fragment implements View.OnClickListener {
         rootView.findViewById(R.id.flow_set).setOnClickListener(this);// 流量管理
         rootView.findViewById(R.id.image_info).setOnClickListener(this);// 消息中心
         rootView.findViewById(R.id.image_qr_code).setOnClickListener(this);// 二维码
+    }
+
+    /**
+     * 设置界面数据(登录)
+     *
+     * @param url
+     * @param name
+     * @param num
+     */
+    public void setViewForLogin(String url, String name, String num) {
+        if (url != null && !url.trim().equals("")) {
+            GlideUtils.loadImageViewSize(this.getActivity(), url, 70, 70, image_head, true);
+        } else {
+            image_head.setImageResource(R.mipmap.icon_avatar_d);
+        }
+        text_user_name.setText(name);
+        text_user_number.setText("我听号：" + num);
+    }
+
+    /**
+     * 设置界面数据(未登录)
+     */
+    public void setView() {
+        image_head.setImageResource(R.mipmap.icon_avatar_d);
+        text_user_name.setText("点击登录");
+        text_user_number.setText("登录后可享受更多服务");
     }
 
     @Override
@@ -115,6 +157,11 @@ public class MineFragment extends Fragment implements View.OnClickListener {
             case R.id.image_qr_code:// 二维码
 
                 break;
+            case R.id.image_head:// 登录
+                startActivity(new Intent(this.getActivity(), LogoActivity.class));
+                break;
+
+
         }
     }
 }

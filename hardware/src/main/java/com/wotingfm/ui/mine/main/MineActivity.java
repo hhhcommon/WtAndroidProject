@@ -1,4 +1,4 @@
-package com.wotingfm.ui.mine;
+package com.wotingfm.ui.mine.main;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -7,7 +7,7 @@ import com.woting.commonplat.utils.SequenceUUID;
 import com.wotingfm.R;
 import com.wotingfm.common.utils.L;
 import com.wotingfm.ui.base.baseactivity.BaseFragmentActivity;
-import com.wotingfm.ui.mine.fragment.MineFragment;
+import com.wotingfm.ui.mine.main.view.MineFragment;
 
 /**
  * 作者：xinLong on 2017/6/2 12:15

@@ -16,6 +16,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.wotingfm.R;
+import com.wotingfm.common.view.RippleImageView;
 import com.wotingfm.ui.intercom.group.groupnews.add.view.GroupNewsForAddFragment;
 import com.wotingfm.ui.intercom.main.chat.adapter.ChatAdapter;
 import com.wotingfm.ui.intercom.main.chat.presenter.ChatPresenter;
@@ -76,6 +77,10 @@ public class ChatFragment extends Fragment implements ChatAdapter.IonSlidingView
         // 列表
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.recycler_view);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(context));
+        RippleImageView rippleImageView = (RippleImageView) rootView.findViewById(R.id.rippleImageView);
+        //开始动画
+        rippleImageView.startWaveAnimation();
+//        rippleImageView.stopWaveAnimation();
     }
 
     @Override

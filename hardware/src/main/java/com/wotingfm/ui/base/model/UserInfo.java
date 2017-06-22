@@ -51,7 +51,7 @@ public class UserInfo  {
         et.putString(StringConstant.IS_LOGIN, "true");
 
         try {
-            String userId = userInfo.getString("UserId");// 用户 ID
+            String userId = userInfo.getString("id");// 用户 ID
             et.putString(StringConstant.USER_ID, userId);
         } catch (Exception e) {
             e.printStackTrace();
@@ -76,7 +76,7 @@ public class UserInfo  {
         }
 
         try {
-            String UserNum = userInfo.getString("UserNum");
+            String UserNum = userInfo.getString("userNum");
             et.putString(StringConstant.USER_NUM, UserNum);
         } catch (Exception e) {
             e.printStackTrace();
@@ -100,7 +100,7 @@ public class UserInfo  {
         }
 
         try {
-            String nickName = userInfo.getString("NickName");
+            String nickName = userInfo.getString("nickName");
             if (nickName != null && !nickName.equals("")) {
                 if (nickName.equals("&null")) {
                     et.putString(StringConstant.NICK_NAME, "");
@@ -116,7 +116,7 @@ public class UserInfo  {
         }
 
         try {
-            String starSign = userInfo.getString("StarSign");// 星座
+            String starSign = userInfo.getString("starSign");// 星座
             et.putString(StringConstant.STAR_SIGN, starSign);
         } catch (Exception e) {
             e.printStackTrace();
@@ -124,7 +124,7 @@ public class UserInfo  {
         }
 
         try {
-            String birthday = userInfo.getString("Birthday");// 生日
+            String birthday = userInfo.getString("birthday");// 生日
             et.putString(StringConstant.BIRTHDAY, birthday);
         } catch (Exception e) {
             e.printStackTrace();
@@ -173,7 +173,7 @@ public class UserInfo  {
         }
 
         try {
-            String userSign = userInfo.getString("UserSign");// 签名
+            String userSign = userInfo.getString("userSign");// 签名
             if (userSign != null && !userSign.equals("")) {
                 if (userSign.equals("&null")) {
                     et.putString(StringConstant.USER_SIGN, "");

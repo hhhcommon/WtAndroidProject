@@ -11,7 +11,10 @@
         layout="@layout/common_head"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
-
+<TextView
+    android:layout_width="match_parent"
+    android:background="@color/line_color"
+    android:layout_height="1dp" />
     <RelativeLayout
         android:id="@+id/view_personal_info"
         style="@style/MineRelativeStyle">
@@ -23,7 +26,10 @@
         <ImageView style="@style/MineRightImageStyle" />
 
     </RelativeLayout>
-
+    <TextView
+        android:layout_width="match_parent"
+        android:background="@color/line_color"
+        android:layout_height="1dp" />
     <RelativeLayout
         android:id="@+id/view_my_concern"
         style="@style/MineRelativeStyle">
@@ -35,7 +41,10 @@
         <ImageView style="@style/MineRightImageStyle" />
 
     </RelativeLayout>
-
+    <TextView
+        android:layout_width="match_parent"
+        android:background="@color/line_color"
+        android:layout_height="1dp" />
     <RelativeLayout
         android:id="@+id/view_preference_setting"
         style="@style/MineRelativeStyle">
@@ -47,7 +56,10 @@
         <ImageView style="@style/MineRightImageStyle" />
 
     </RelativeLayout>
-
+    <TextView
+        android:layout_width="match_parent"
+        android:background="@color/line_color"
+        android:layout_height="1dp" />
     <RelativeLayout
         android:id="@+id/view_message_settings"
         style="@style/MineRelativeStyle">
@@ -59,7 +71,10 @@
         <ImageView style="@style/MineRightImageStyle" />
 
     </RelativeLayout>
-
+    <TextView
+        android:layout_width="match_parent"
+        android:background="@color/line_color"
+        android:layout_height="1dp" />
     <RelativeLayout
         android:id="@+id/view_clear_cache"
         style="@style/MineRelativeStyle">
@@ -86,7 +101,7 @@
     <RelativeLayout
         android:id="@+id/view_account_security"
         style="@style/MineRelativeStyle"
-        android:layout_marginTop="10dp">
+        android:layout_marginTop="8dp">
 
         <TextView
             style="@style/MineTextStyle"
@@ -99,7 +114,7 @@
     <RelativeLayout
         android:id="@+id/view_feedback"
         style="@style/MineRelativeStyle"
-        android:layout_marginTop="10dp">
+        android:layout_marginTop="8dp">
 
         <TextView
             style="@style/MineTextStyle"
@@ -108,11 +123,14 @@
         <ImageView style="@style/MineRightImageStyle" />
 
     </RelativeLayout>
-
+    <TextView
+        android:layout_width="match_parent"
+        android:background="@color/line_color"
+        android:layout_height="1dp" />
     <RelativeLayout
         android:id="@+id/view_about"
         style="@style/MineRelativeStyle"
-        android:layout_marginBottom="40dp">
+        android:layout_marginBottom="13dp">
 
         <TextView
             style="@style/MineTextStyle"
@@ -122,4 +140,12 @@
 
     </RelativeLayout>
 
+    <TextView
+        android:id="@+id/tv_close"
+        android:layout_width="match_parent"
+        android:gravity="center"
+        android:background="@color/white"
+        android:text="退出登录"
+        android:textColor="@color/app_basic"
+        android:layout_height="44dp" />
 </LinearLayout>

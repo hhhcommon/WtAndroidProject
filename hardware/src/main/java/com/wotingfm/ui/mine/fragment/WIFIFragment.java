@@ -27,7 +27,7 @@ import com.wotingfm.R;
 import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.common.utils.L;
-import com.wotingfm.ui.mine.MineActivity;
+import com.wotingfm.ui.mine.main.MineActivity;
 import com.wotingfm.ui.mine.adapter.WiFiListAdapter;
 
 import java.util.ArrayList;

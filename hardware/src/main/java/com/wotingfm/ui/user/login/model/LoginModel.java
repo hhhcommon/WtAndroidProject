@@ -2,6 +2,7 @@ package com.wotingfm.ui.user.login.model;
 
 import android.util.Log;
 
+import com.google.gson.Gson;
 import com.wotingfm.common.net.RetrofitUtils;
 import com.wotingfm.ui.base.model.UserInfo;
 
@@ -33,7 +34,7 @@ public class LoginModel extends UserInfo {
                     @Override
                     public void call(Object o) {
                         try {
-                            Log.e("登录返回数据",o.toString());
+                               Log.e("登录返回数据",new Gson().toJson(o));
                             //填充UI
                             listener.onSuccess(o);
                         } catch (Exception e) {

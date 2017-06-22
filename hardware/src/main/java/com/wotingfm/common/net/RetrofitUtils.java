@@ -424,4 +424,35 @@ public class RetrofitUtils {
                     }
                 });
     }
+
+    /**
+     * 注销登录
+     * @param s 提交的数据
+     * @return Object
+     */
+    public Observable<Object> cancel(String s) {
+        return retrofitService.cancel(s)
+                .map(new Func1<Object, Object>() {
+                    @Override
+                    public Object call(Object O) {
+                        return O;
+                    }
+                });
+    }
+
+    /**
+     * 获取用户数据
+     * @param s 提交的数据
+     * @return Object
+     */
+    public Observable<Object> getUserInfo(String s) {
+        return retrofitService.getUserInfo(s)
+                .map(new Func1<Object, Object>() {
+                    @Override
+                    public Object call(Object O) {
+                        return O;
+                    }
+                });
+    }
+
 }

@@ -1,5 +1,6 @@
-package com.wotingfm.ui.mine.fragment;
+package com.wotingfm.ui.mine.set.view;
 
+import android.app.Dialog;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -9,7 +10,15 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.wotingfm.R;
-import com.wotingfm.ui.mine.MineActivity;
+import com.wotingfm.common.utils.DialogUtils;
+import com.wotingfm.ui.mine.fragment.AccountSecurityFragment;
+import com.wotingfm.ui.mine.fragment.FeedbackFragment;
+import com.wotingfm.ui.mine.fragment.MessageSettingFragment;
+import com.wotingfm.ui.mine.fragment.PersonalInfoFragment;
+import com.wotingfm.ui.mine.main.MineActivity;
+import com.wotingfm.ui.mine.set.presenter.SettingPresenter;
+import com.wotingfm.ui.user.logo.LogoActivity;
+import com.wotingfm.ui.user.preference.view.PreferenceFragment;
 
 /**
  * 设置
@@ -17,6 +26,9 @@ import com.wotingfm.ui.mine.MineActivity;
  */
 public class SettingFragment extends Fragment implements View.OnClickListener {
     private View rootView;
+    private SettingPresenter presenter;
+    private Dialog dialog;
+    private TextView tv_close;
 
     @Nullable
     @Override
@@ -24,15 +36,18 @@ public class SettingFragment extends Fragment implements View.OnClickListener {
         if (rootView == null) {
             rootView = inflater.inflate(R.layout.fragment_setting, container, false);
             rootView.setOnClickListener(this);
-
             initView();
             initEvent();
+            presenter = new SettingPresenter(this);
+            presenter.getData();
         }
         return rootView;
     }
 
     // 初始化视图
     private void initView() {
+        tv_close = (TextView) rootView.findViewById(R.id.tv_close);// 注销登录
+        tv_close.setOnClickListener(this);
         TextView textTitle = (TextView) rootView.findViewById(R.id.tv_center);// 标题
         textTitle.setText(getString(R.string.setting));
     }
@@ -72,7 +87,11 @@ public class SettingFragment extends Fragment implements View.OnClickListener {
 
                 break;
             case R.id.view_preference_setting:// 偏好设置
-
+                PreferenceFragment fragment = new PreferenceFragment();
+                Bundle bundle = new Bundle();
+                bundle.putString("fromType", "person");
+                fragment.setArguments(bundle);
+                MineActivity.open(fragment);
                 break;
             case R.id.view_message_settings:// 消息设置
                 MineActivity.open(new MessageSettingFragment());
@@ -89,6 +108,37 @@ public class SettingFragment extends Fragment implements View.OnClickListener {
             case R.id.view_about:// 关于
 
                 break;
+            case R.id.tv_close:// 注销登录
+                presenter.cancel();
+                break;
+
         }
+    }
+
+    /**
+     * 退出登录按钮是否显示
+     *
+     * @param b true 显示，false 不显示
+     */
+    public void setCloseView(boolean b) {
+        if (b) {
+            tv_close.setVisibility(View.VISIBLE);
+        } else {
+            tv_close.setVisibility(View.GONE);
+        }
+    }
+
+    /**
+     * 展示弹出框
+     */
+    public void dialogShow() {
+        dialog = DialogUtils.Dialog(this.getActivity());
+    }
+
+    /**
+     * 取消弹出框
+     */
+    public void dialogCancel() {
+        if (dialog != null) dialog.dismiss();
     }
 }

@@ -1,12 +1,8 @@
 package com.wotingfm.ui.intercom.main.chat.presenter;
 
-import com.wotingfm.common.utils.GetTestData;
 import com.wotingfm.ui.intercom.main.chat.model.ChatModel;
 import com.wotingfm.ui.intercom.main.chat.view.ChatFragment;
 import com.wotingfm.ui.intercom.main.contacts.model.Contact;
-import com.wotingfm.ui.intercom.person.newfriend.model.NewFriendModel;
-import com.wotingfm.ui.intercom.person.newfriend.view.NewFriendFragment;
-
 import java.util.List;
 
 /**
