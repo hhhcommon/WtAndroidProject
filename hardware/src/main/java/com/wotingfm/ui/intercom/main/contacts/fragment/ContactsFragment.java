@@ -66,8 +66,8 @@ public class ContactsFragment extends Fragment implements View.OnClickListener {
 
     // 初始化视图
     private void initViews() {
-        tip_view = (TipView) headView.findViewById(R.id.tip_view);// 提示界面
-        re_view = (RelativeLayout) headView.findViewById(R.id.re_view);// 有数据的界面
+        tip_view = (TipView) rootView.findViewById(R.id.tip_view);// 提示界面
+        re_view = (RelativeLayout) rootView.findViewById(R.id.re_view);// 有数据的界面
 
         listView = (ListView) rootView.findViewById(R.id.listView);
         sideBar = (SideBar) rootView.findViewById(R.id.sidrbar);
