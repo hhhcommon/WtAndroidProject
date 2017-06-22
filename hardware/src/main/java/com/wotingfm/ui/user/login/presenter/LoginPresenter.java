@@ -16,6 +16,7 @@ import org.json.JSONTokener;
 import java.util.List;
 
 /**
+ * 登录界面处理器
  * 作者：xinLong on 2017/6/5 13:55
  * 邮箱：645700751@qq.com
  */
@@ -81,17 +82,18 @@ public class LoginPresenter {
     ////////////////////////////////////////////////////////////////////////////////////////////////
     // 发送网络请求
     private void send(String userName, String password) {
+        activity.dialogShow();
         model.loadNews(userName, password, new LoginModel.OnLoadInterface() {
             @Override
             public void onSuccess(Object o) {
-//                loginView.removeDialog();
+                activity.dialogCancel();
                 dealLoginSuccess(o);
             }
 
             @Override
             public void onFailure(String msg) {
-//                loginView.removeDialog();
-//                ToastUtils.showVolleyError(loginView);
+                activity.dialogCancel();
+                ToastUtils.show_always(activity.getActivity(), "登录失败，请稍后再试");
             }
         });
     }
@@ -109,21 +111,29 @@ public class LoginPresenter {
                 JSONObject arg1 = (JSONObject) jsonParser.nextValue();
                 String token = arg1.getString("token");
 
+                // 保存后台获取到的token
+                if(token!=null&&!token.trim().equals("")){
+                    model.saveToken(token);
+                    ToastUtils.show_always(activity.getActivity(), token);
+                }
+
                 JSONObject ui = (JSONObject) new JSONTokener(arg1.getString("user")).nextValue();
+                // 保存用户数据
                 if (ui != null) {
-                    // 保存用户数据
                     model.saveUserInfo(ui);
                 }
-                ToastUtils.show_always(activity.getActivity(), token);
                 ToastUtils.show_always(activity.getActivity(), "登录成功");
                 LogoActivity.closeActivity();
             } else {
                 String msg = js.getString("msg");
-                ToastUtils.show_always(activity.getActivity(), msg);
+                if(msg!=null&&!msg.trim().equals("")){
+                    ToastUtils.show_always(activity.getActivity(), msg);
+                }
                 ToastUtils.show_always(activity.getActivity(), "登录失败，请稍后再试");
             }
         } catch (Exception e) {
             e.printStackTrace();
+            ToastUtils.show_always(activity.getActivity(), "登录失败，请稍后再试");
         }
     }
 

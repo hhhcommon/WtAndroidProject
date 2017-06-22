@@ -1,39 +1,34 @@
-package com.wotingfm.ui.user.login.model;
+package com.wotingfm.ui.user.preference.model;
 
 import android.util.Log;
-
 import com.wotingfm.common.net.RetrofitUtils;
 import com.wotingfm.ui.base.model.UserInfo;
-
-import rx.Observable;
-import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 
 /**
- * 登录界面数据中心
+ * 偏好设置的数据处理
  * 作者：xinLong on 2017/5/16 14:28
  * 邮箱：645700751@qq.com
  */
-public class LoginModel extends UserInfo {
+public class PreferenceModel extends UserInfo {
 
     /**
-     * 登录
+     * 提交偏好设置
      *
-     * @param userName
-     * @param password
+     * @param s        偏好数据
      * @param listener 监听
      */
-    public void loadNews(String userName, String password, final OnLoadInterface listener) {
-        RetrofitUtils.getInstance().login(userName, password)
+    public void loadNews(String s, final OnLoadInterface listener) {
+        RetrofitUtils.getInstance().preference(s)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Action1<Object>() {
                     @Override
                     public void call(Object o) {
                         try {
-                            Log.e("登录返回数据",o.toString());
+                            Log.e("偏好设置返回数据", o.toString());
                             //填充UI
                             listener.onSuccess(o);
                         } catch (Exception e) {
@@ -52,6 +47,7 @@ public class LoginModel extends UserInfo {
 
     public interface OnLoadInterface {
         void onSuccess(Object o);
+
         void onFailure(String msg);
     }
 

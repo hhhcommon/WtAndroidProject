@@ -1,5 +1,6 @@
 package com.wotingfm.ui.user.register.view;
 
+import android.app.Dialog;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
@@ -13,10 +14,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.wotingfm.R;
+import com.wotingfm.common.utils.DialogUtils;
 import com.wotingfm.ui.user.logo.LogoActivity;
 import com.wotingfm.ui.user.register.presenter.RegisterPresenter;
 
 /**
+ * 注册界面
  * 作者：xinLong on 2017/6/4 19:45
  * 邮箱：645700751@qq.com
  */
@@ -26,6 +29,7 @@ public class RegisterFragment extends Fragment implements View.OnClickListener {
     private EditText et_phoneNumber, et_passWord,et_yzm;
     private RegisterPresenter registerPresenter;
     private View rootView;
+    private Dialog dialog;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -185,6 +189,7 @@ public class RegisterFragment extends Fragment implements View.OnClickListener {
      * @param timeString 文字展示内容
      */
     public void setYzmStyle(boolean type, String timeString) {
+
         if (type) {
             tv_yzm.setText(timeString);
             tv_yzm.setTextColor(this.getResources().getColor(R.color.gray_edit_hint_word));
@@ -192,6 +197,20 @@ public class RegisterFragment extends Fragment implements View.OnClickListener {
             tv_yzm.setText(timeString);
             tv_yzm.setTextColor(this.getResources().getColor(R.color.app_basic));
         }
+    }
+
+    /**
+     * 展示弹出框
+     */
+    public void dialogShow() {
+        dialog = DialogUtils.Dialog(this.getActivity());
+    }
+
+    /**
+     * 取消弹出框
+     */
+    public void dialogCancel() {
+        if (dialog != null) dialog.dismiss();
     }
 
     @Override

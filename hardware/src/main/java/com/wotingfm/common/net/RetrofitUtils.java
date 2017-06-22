@@ -409,4 +409,19 @@ public class RetrofitUtils {
                     }
                 });
     }
+
+    /**
+     * 提交偏好设置
+     * @param s 提交的数据
+     * @return Object
+     */
+    public Observable<Object> preference(String s) {
+        return retrofitService.preference(s)
+                .map(new Func1<Object, Object>() {
+                    @Override
+                    public Object call(Object O) {
+                        return O;
+                    }
+                });
+    }
 }

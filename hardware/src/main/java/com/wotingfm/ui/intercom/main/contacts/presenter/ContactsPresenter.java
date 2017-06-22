@@ -1,5 +1,7 @@
 package com.wotingfm.ui.intercom.main.contacts.presenter;
 
+import com.woting.commonplat.config.GlobalNetWorkConfig;
+import com.wotingfm.common.utils.CommonUtils;
 import com.wotingfm.common.utils.GetTestData;
 import com.wotingfm.ui.intercom.main.contacts.fragment.ContactsFragment;
 import com.wotingfm.ui.intercom.main.contacts.model.Contact;
@@ -29,6 +31,21 @@ public class ContactsPresenter {
         characterParser = CharacterParser.getInstance();
         pinyinComparator = new PinyinComparator();
     }
+
+    /**
+     * 获取数据，数据适配
+     */
+    public void getData() {
+
+                if(CommonUtils.isLogin()){
+                    if (GlobalNetWorkConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
+
+                    }
+                }else{
+
+                }
+    }
+
 
     /**
      * 发送网络请求,获取好友

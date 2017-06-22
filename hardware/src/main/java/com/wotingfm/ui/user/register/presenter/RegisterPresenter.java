@@ -1,21 +1,22 @@
 package com.wotingfm.ui.user.register.presenter;
 
+import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.util.Log;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.wotingfm.common.utils.ToastUtils;
-import com.wotingfm.ui.user.login.model.Login;
-import com.wotingfm.ui.user.login.model.LoginModel;
+import com.wotingfm.ui.user.logo.LogoActivity;
+import com.wotingfm.ui.user.preference.view.PreferenceFragment;
 import com.wotingfm.ui.user.register.model.RegisterModel;
 import com.wotingfm.ui.user.register.view.RegisterFragment;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
 /**
+ * 注册处理器
  * 作者：xinLong on 2017/6/5 13:55
  * 邮箱：645700751@qq.com
  */
@@ -67,9 +68,6 @@ public class RegisterPresenter {
         }
         return true;
     }
-
-
-    ///////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
      * register
@@ -138,21 +136,19 @@ public class RegisterPresenter {
         activity.setRegisterBackground(bt);
     }
 
-
-    ///////////////////////////////////////////////////////////////////////////////////////////////
     // 发送注册账号请求
     private void send(String userName, String password, String yzm) {
+        activity.dialogShow();
         model.loadNews(userName, password, yzm, new RegisterModel.OnLoadInterface() {
             @Override
             public void onSuccess(Object o) {
-                //  loginView.removeDialog();
+                activity.dialogCancel();
                 dealRegisterSuccess(o);
             }
 
             @Override
             public void onFailure(String msg) {
-                //  loginView.removeDialog();
-                //  ToastUtils.showVolleyError(loginView);
+                activity.dialogCancel();
                 ToastUtils.show_always(activity.getActivity(), "注册失败，请稍后再试");
 
             }
@@ -165,10 +161,27 @@ public class RegisterPresenter {
             String s = new Gson().toJson(o);
             JSONObject js = new JSONObject(s);
             int ret = js.getInt("ret");
-            Log.e("ret",String.valueOf(ret));
-            if (ret==0) {
+            Log.e("ret", String.valueOf(ret));
+            if (ret == 0) {
+                String msg = js.getString("data");
+                JSONTokener jsonParser = new JSONTokener(msg);
+                JSONObject arg1 = (JSONObject) jsonParser.nextValue();
+                String token = arg1.getString("token");
+
+                // 保存后台获取到的token
+                if (token != null && !token.trim().equals("")) {
+                    model.saveToken(token);
+                    ToastUtils.show_always(activity.getActivity(), token);
+                }
+
+                JSONObject ui = (JSONObject) new JSONTokener(arg1.getString("user")).nextValue();
+                // 保存用户数据
+                if (ui != null) {
+                    model.saveUserInfo(ui);
+                }
                 ToastUtils.show_always(activity.getActivity(), "注册成功");
-            }else{
+                jump();// 跳转到偏好设置界面
+            } else {
                 String msg = js.getString("msg");
                 ToastUtils.show_always(activity.getActivity(), msg);
                 ToastUtils.show_always(activity.getActivity(), "注册失败，请稍后再试");
@@ -179,24 +192,32 @@ public class RegisterPresenter {
         }
     }
 
+    // 跳转到偏好设置界面
+    private void jump() {
+        PreferenceFragment fragment = new PreferenceFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString("fromType", "login");
+        fragment.setArguments(bundle);
+        LogoActivity.open(fragment);
+    }
+
     // 获取验证码的网络请求
     private void getYzmData(String userName) {
+        activity.dialogShow();
         model.loadNewsForYzm(userName, new RegisterModel.OnLoadInterface() {
             @Override
             public void onSuccess(Object result) {
-                //  loginView.removeDialog();
+                activity.dialogCancel();
                 dealGetYzmSuccess(result);
             }
 
             @Override
             public void onFailure(String msg) {
-                //  loginView.removeDialog();
-                //  ToastUtils.showVolleyError(loginView);
+                activity.dialogCancel();
                 ToastUtils.show_always(activity.getActivity(), "获取验证码失败，请稍后再试1");
             }
         });
     }
-
 
     // 处理户获取验证码返回数据
     private void dealGetYzmSuccess(Object o) {
@@ -204,8 +225,8 @@ public class RegisterPresenter {
             String s = new Gson().toJson(o);
             JSONObject js = new JSONObject(s);
             int ret = js.getInt("ret");
-            Log.e("ret",String.valueOf(ret));
-            if (ret==0) {
+            Log.e("ret", String.valueOf(ret));
+            if (ret == 0) {
                 String msg = js.getString("data");
                 JSONTokener jsonParser = new JSONTokener(msg);
                 JSONObject arg1 = (JSONObject) jsonParser.nextValue();
@@ -219,10 +240,11 @@ public class RegisterPresenter {
             }
         } catch (Exception e) {
             e.printStackTrace();
+            ToastUtils.show_always(activity.getActivity(), "获取验证码失败，请稍后再试");
         }
     }
 
-    public void cancel(){
+    public void cancel() {
         if (mCountDownTimer != null) {
             mCountDownTimer.cancel();
             mCountDownTimer = null;

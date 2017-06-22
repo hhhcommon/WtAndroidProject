@@ -124,6 +124,11 @@ public interface RetrofitService {
     // 入组申请
     @POST(Api.URL_GROUP_APPLY)
     Observable<Object> groupApply(@Query("s") String s);
+
+    // 入组申请
+    @POST(Api.URL_PREFERENCE)
+    Observable<Object> preference(@Query("s") String s);
+
 }
 
 
