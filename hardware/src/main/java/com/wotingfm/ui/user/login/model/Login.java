@@ -3,6 +3,7 @@ package com.wotingfm.ui.user.login.model;
 import com.google.gson.annotations.SerializedName;
 
 /**
+ * 测试代码
  * 作者：xinLong on 2017/6/8 11:32
  * 邮箱：645700751@qq.com
  */

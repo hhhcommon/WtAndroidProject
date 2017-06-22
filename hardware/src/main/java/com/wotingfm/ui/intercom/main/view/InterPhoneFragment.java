@@ -18,6 +18,7 @@ import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.config.GlobalStateConfig;
 import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.common.constant.StringConstant;
+import com.wotingfm.common.utils.CommonUtils;
 import com.wotingfm.ui.base.baseadapter.MyFragmentPagerAdapter;
 import com.wotingfm.ui.intercom.add.find.FindFragment;
 import com.wotingfm.ui.intercom.group.creat.view.CreateGroupMainFragment;
@@ -132,7 +133,7 @@ public class InterPhoneFragment extends Fragment implements View.OnClickListener
                 }
                 break;
             case R.id.tv_addFriend:// 跳转到添加好友
-                if (isLogin()) {
+                if (CommonUtils.isLogin()) {
                     FindFragment fragment = new FindFragment();
                     Bundle bundle = new Bundle();
                     bundle.putString("type", "friend");
@@ -144,7 +145,7 @@ public class InterPhoneFragment extends Fragment implements View.OnClickListener
                 addDialog.dismiss();
                 break;
             case R.id.tv_addGroup:        // 跳转到加入群组
-                if (isLogin()) {
+                if (CommonUtils.isLogin()) {
                     FindFragment fragment = new FindFragment();
                     Bundle bundle = new Bundle();
                     bundle.putString("type", "group");
@@ -156,7 +157,7 @@ public class InterPhoneFragment extends Fragment implements View.OnClickListener
                 addDialog.dismiss();
                 break;
             case R.id.tv_createGroup:// 跳转到创建讨论组
-                if (isLogin()) {
+                if (CommonUtils.isLogin()) {
                     InterPhoneActivity.open(new CreateGroupMainFragment());
                 } else {
                     startActivity(new Intent(context, LogoActivity.class));
@@ -164,7 +165,7 @@ public class InterPhoneFragment extends Fragment implements View.OnClickListener
                 addDialog.dismiss();
                 break;
             case R.id.tv_scanning:
-                if (isLogin()) {
+                if (CommonUtils.isLogin()) {
                     startActivity(new Intent(context, CaptureActivity.class));
                 } else {
                     startActivity(new Intent(context, LogoActivity.class));
@@ -220,14 +221,7 @@ public class InterPhoneFragment extends Fragment implements View.OnClickListener
         }
     }
 
-    private boolean isLogin() {
-        String login = BSApplication.SharedPreferences.getString(StringConstant.IS_LOGIN, "false");// 是否登录
-        if (!login.trim().equals("") && login.equals("true")) {
-            return true;
-        } else {
-            return false;
-        }
-    }
+
 
     // 设置头部样式
     private void update(int arg0) {

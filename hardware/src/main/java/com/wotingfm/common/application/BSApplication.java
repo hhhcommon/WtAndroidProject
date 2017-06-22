@@ -2,12 +2,8 @@ package com.wotingfm.common.application;
 
 import android.app.Application;
 import android.content.Context;
-import android.content.Intent;
-
 import com.woting.commonplat.manager.NetWorkManager;
 import com.woting.commonplat.manager.PhoneMsgManager;
-import com.wotingfm.common.helper.CollocationHelper;
-
 import cn.finalteam.okhttpfinal.OkHttpFinal;
 import cn.finalteam.okhttpfinal.OkHttpFinalConfiguration;
 
@@ -28,9 +24,7 @@ public class BSApplication extends Application {
         OkHttpFinal.getInstance().init(builder.build());
         SharedPreferences = this.getSharedPreferences("wotingfm", Context.MODE_PRIVATE);
         NetWorkManager.checkNetworkStatus(this);  // 获取网络状态
-        CollocationHelper.setCollocation();       // 设置配置文件
         PhoneMsgManager.getPhoneInfo(this);
-
     }
 
     @Override

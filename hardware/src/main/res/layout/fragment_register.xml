@@ -22,11 +22,11 @@
     <RelativeLayout
         android:id="@+id/lin_phoneNumber"
         android:layout_width="match_parent"
-        android:layout_height="39dp"
+        android:layout_height="40dp"
         android:layout_below="@+id/lin_line"
         android:layout_marginLeft="12dp"
         android:layout_marginRight="12dp"
-        android:layout_marginTop="18dp"
+        android:layout_marginTop="20dp"
         android:background="@drawable/background_login_edit_gray_white"
         android:orientation="horizontal">
 
@@ -60,7 +60,7 @@
         android:layout_below="@+id/lin_phoneNumber"
         android:layout_marginLeft="12dp"
         android:layout_marginRight="12dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="12dp"
         android:background="@drawable/background_login_edit_gray_white"
         android:orientation="horizontal">
 
@@ -99,7 +99,7 @@
         android:layout_below="@+id/lin_phoneYZM"
         android:layout_marginLeft="12dp"
         android:layout_marginRight="12dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="12dp"
         android:background="@drawable/background_login_edit_gray_white"
         android:gravity="center"
         android:orientation="horizontal">

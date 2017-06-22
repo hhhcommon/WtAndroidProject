@@ -35,7 +35,7 @@
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="90dp"
+        android:layout_marginTop="114dp"
         android:background="@drawable/background_login_logo"
         android:gravity="center"
         android:text="LOGO"
@@ -50,7 +50,7 @@
         android:layout_below="@+id/tv_logo"
         android:layout_marginLeft="30dp"
         android:layout_marginRight="30dp"
-        android:layout_marginTop="80dp"
+        android:layout_marginTop="210dp"
         android:background="@drawable/shape_register"
         android:gravity="center"
         android:text="新用户注册"
@@ -63,7 +63,7 @@
         android:layout_below="@+id/tv_register"
         android:layout_marginLeft="30dp"
         android:layout_marginRight="30dp"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="10dp"
         android:background="@drawable/shape_register"
         android:padding="2dp">
 

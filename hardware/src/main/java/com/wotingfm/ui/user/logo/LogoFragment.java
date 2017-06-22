@@ -13,6 +13,7 @@ import com.wotingfm.ui.user.login.view.LoginFragment;
 import com.wotingfm.ui.user.register.view.RegisterFragment;
 
 /**
+ * 用户主页
  * 作者：xinLong on 2017/6/4 19:48
  * 邮箱：645700751@qq.com
  */

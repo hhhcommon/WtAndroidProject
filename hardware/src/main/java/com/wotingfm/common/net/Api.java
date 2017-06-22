@@ -15,8 +15,10 @@ public class Api {
     // 好友列表
     public static final String URL_GET_FRIENDS = "api/users/:id/friends";
     // 加群方式(X)
-    public static final String URL_APPLY_GROUP_TYPE = "api/users/:id/friends";
+    public static final String URL_APPLY_GROUP_TYPE = "";
     // 入组申请(X)
-    public static final String URL_GROUP_APPLY = "api/users/:id/friends";
+    public static final String URL_GROUP_APPLY = "";
+    // 偏好设置
+    public static final String URL_PREFERENCE = "";
 
 }

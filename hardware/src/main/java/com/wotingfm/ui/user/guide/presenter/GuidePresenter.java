@@ -8,8 +8,6 @@ import com.wotingfm.ui.base.basepresenter.BasePresenter;
 import com.wotingfm.ui.main.view.MainActivity;
 import com.wotingfm.ui.user.guide.model.GuideModel;
 import com.wotingfm.ui.user.guide.view.GuideActivity;
-import com.wotingfm.ui.user.preference.PreferenceFragment;
-
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
@@ -33,21 +31,21 @@ public class GuidePresenter extends BasePresenter {
     }
 
     // 获取每次打开应用后的数据
-    private void send() {
-        JSONObject js = model.assemblyData(activity);
-        model.loadNews(GlobalUrlConfig.splashUrl, activity.getTag(), js, new OnLoadInterface() {
-            @Override
-            public void onSuccess(JSONObject result) {
-                dealLoginSuccess(result);
-                close();    // 界面跳转
-            }
-
-            @Override
-            public void onFailure(String msg) {
-                close();    // 界面跳转
-            }
-        });
-    }
+//    private void send() {
+//        JSONObject js = model.assemblyData(activity);
+//        model.loadNews(GlobalUrlConfig.splashUrl, activity.getTag(), js, new OnLoadInterface() {
+//            @Override
+//            public void onSuccess(JSONObject result) {
+//                dealLoginSuccess(result);
+//                close();    // 界面跳转
+//            }
+//
+//            @Override
+//            public void onFailure(String msg) {
+//                close();    // 界面跳转
+//            }
+//        });
+//    }
 
     private void dealLoginSuccess(JSONObject result) {
         try {

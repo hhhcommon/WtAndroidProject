@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background_color"
+    android:background="@color/white"
     android:clipToPadding="true"
     android:fitsSystemWindows="true">
 
@@ -31,6 +31,12 @@
     </RelativeLayout>
 
     <TextView
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@+id/view_head"
+        android:background="@color/line_color" />
+
+    <TextView
         android:id="@+id/tv_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -45,8 +51,8 @@
 
     <TextView
         android:id="@+id/tv_RAWY"
-        android:layout_width="94dp"
-        android:layout_height="39dp"
+        android:layout_width="92dp"
+        android:layout_height="40dp"
         android:layout_below="@+id/tv_name"
         android:layout_marginLeft="15dp"
         android:layout_marginTop="43dp"
@@ -59,8 +65,8 @@
 
     <TextView
         android:id="@+id/tv_FYKSJ"
-        android:layout_width="109dp"
-        android:layout_height="39dp"
+        android:layout_width="105dp"
+        android:layout_height="40dp"
         android:layout_below="@+id/tv_RAWY"
         android:layout_marginLeft="15dp"
         android:layout_marginTop="16dp"
@@ -73,8 +79,8 @@
 
     <TextView
         android:id="@+id/tv_ZZS"
-        android:layout_width="79dp"
-        android:layout_height="39dp"
+        android:layout_width="77dp"
+        android:layout_height="40dp"
         android:layout_below="@+id/tv_FYKSJ"
         android:layout_marginLeft="15dp"
         android:layout_marginTop="16dp"
@@ -87,8 +93,8 @@
 
     <TextView
         android:id="@+id/tv_XSSH"
-        android:layout_width="79dp"
-        android:layout_height="39dp"
+        android:layout_width="92dp"
+        android:layout_height="40dp"
         android:layout_alignBottom="@+id/tv_RAWY"
         android:layout_marginLeft="12dp"
         android:layout_toRightOf="@+id/tv_RAWY"
@@ -101,8 +107,8 @@
 
     <TextView
         android:id="@+id/tv_XJ"
-        android:layout_width="64dp"
-        android:layout_height="39dp"
+        android:layout_width="62dp"
+        android:layout_height="40dp"
         android:layout_alignBottom="@+id/tv_XSSH"
         android:layout_marginLeft="12dp"
         android:layout_toRightOf="@+id/tv_XSSH"
@@ -115,8 +121,8 @@
 
     <TextView
         android:id="@+id/tv_TGSTXS"
-        android:layout_width="124dp"
-        android:layout_height="39dp"
+        android:layout_width="122dp"
+        android:layout_height="40dp"
         android:layout_alignBottom="@+id/tv_FYKSJ"
         android:layout_marginLeft="12dp"
         android:layout_toRightOf="@+id/tv_FYKSJ"
@@ -129,8 +135,8 @@
 
     <TextView
         android:id="@+id/tv_YQQ"
-        android:layout_width="79dp"
-        android:layout_height="39dp"
+        android:layout_width="77dp"
+        android:layout_height="40dp"
         android:layout_alignBottom="@+id/tv_ZZS"
         android:layout_marginLeft="12dp"
         android:layout_toRightOf="@+id/tv_ZZS"
@@ -146,12 +152,12 @@
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="18dp"
+        android:layout_marginBottom="20dp"
         android:layout_marginLeft="12dp"
         android:layout_marginRight="12dp"
         android:background="@drawable/background_preference_enter"
         android:gravity="center"
         android:text="进入我听"
-        android:textColor="@color/color_preference_word"
+        android:textColor="#fd8548"
         android:textSize="15sp" />
 </RelativeLayout>

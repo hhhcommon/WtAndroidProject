@@ -12,16 +12,12 @@ import android.widget.TextView;
 
 import com.wotingfm.R;
 import com.wotingfm.common.utils.ToastUtils;
-import com.wotingfm.ui.intercom.group.groupapply.view.GroupApplyFragment;
 import com.wotingfm.ui.intercom.group.groupmanage.GroupManageFragment;
 import com.wotingfm.ui.intercom.group.groupnews.add.adapter.GroupNewsPersonForAddAdapter;
 import com.wotingfm.ui.intercom.group.groupnews.add.presenter.GroupNewsForAddPresenter;
-import com.wotingfm.ui.intercom.group.groupnews.noadd.adapter.GroupNewsPersonForNoAddAdapter;
-import com.wotingfm.ui.intercom.group.groupnews.noadd.presenter.GroupNewsForNoAddPresenter;
 import com.wotingfm.ui.intercom.main.contacts.model.Contact;
 import com.wotingfm.ui.intercom.main.simulation.SimulationInterPhoneFragment;
 import com.wotingfm.ui.intercom.main.view.InterPhoneActivity;
-import com.wotingfm.ui.intercom.person.personmessage.view.PersonMessageFragment;
 
 import java.util.List;
 
@@ -96,7 +92,7 @@ public class GroupNewsForAddFragment extends Fragment implements View.OnClickLis
                 InterPhoneActivity.open(new GroupManageFragment());
                 break;
             case R.id.lin_send:
-                ToastUtils.show_always(this.getActivity(),"开始对讲");
+                ToastUtils.show_always(this.getActivity(), "开始对讲");
                 break;
             case R.id.re_channel1:
                 SimulationInterPhoneFragment fragment = new SimulationInterPhoneFragment();

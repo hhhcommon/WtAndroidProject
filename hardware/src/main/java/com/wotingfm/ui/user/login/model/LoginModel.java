@@ -12,13 +12,14 @@ import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 
 /**
+ * 登录界面数据中心
  * 作者：xinLong on 2017/5/16 14:28
  * 邮箱：645700751@qq.com
  */
 public class LoginModel extends UserInfo {
 
     /**
-     * 进行数据交互
+     * 登录
      *
      * @param userName
      * @param password
@@ -48,7 +49,6 @@ public class LoginModel extends UserInfo {
                     }
                 });
     }
-
 
     public interface OnLoadInterface {
         void onSuccess(Object o);
