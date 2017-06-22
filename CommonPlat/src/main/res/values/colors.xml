@@ -15,7 +15,7 @@
     <color name="color_preference_word">#959698</color>
 
     <!-- 输入框默认提示字体 -->
-    <color name="gray_edit_hint_word">#959698</color>
+    <color name="gray_edit_hint_word">#cccccd</color>
 
     <!-- App基本色调 -->
     <color name="app_basic">#fd8548</color>

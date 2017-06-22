@@ -12,6 +12,7 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.woting.commonplat.widget.TipView;
 import com.wotingfm.R;
 import com.wotingfm.ui.intercom.add.search.local.view.SearchContactsForLocalFragment;
 import com.wotingfm.ui.intercom.group.groupchat.view.GroupChatFragment;
@@ -38,12 +39,12 @@ public class ContactsFragment extends Fragment implements View.OnClickListener {
     private ListView listView;
     private View headView;
     private TextView tv_search, tv_newGroupNum, tv_newFriendNum;
-    private RelativeLayout re_newFriend, re_newGroup;
+    private RelativeLayout re_newFriend, re_newGroup, re_view;
     private ContactsPresenter presenter;
-    private List<Contact.user> srcList_p;
     private ContactsAdapter adapter;
     private SideBar sideBar;
     private TextView tvDialog;
+    private TipView tip_view;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -58,13 +59,16 @@ public class ContactsFragment extends Fragment implements View.OnClickListener {
             initViews();// 设置界面
             setEditListener();
             presenter = new ContactsPresenter(this);
-            presenter.getFriends();// 获取数据
+            presenter.getData();// 获取数据
         }
         return rootView;
     }
 
     // 初始化视图
     private void initViews() {
+        tip_view = (TipView) headView.findViewById(R.id.tip_view);// 提示界面
+        re_view = (RelativeLayout) headView.findViewById(R.id.re_view);// 有数据的界面
+
         listView = (ListView) rootView.findViewById(R.id.listView);
         sideBar = (SideBar) rootView.findViewById(R.id.sidrbar);
         tvDialog = (TextView) rootView.findViewById(R.id.dialog);
@@ -134,11 +138,10 @@ public class ContactsFragment extends Fragment implements View.OnClickListener {
 
     // 有参方法 设置界面
     public void setData(List<Contact.user> list) {
-        this.srcList_p = list;
         if (adapter != null) {
-            adapter.ChangeDate(srcList_p);
+            adapter.ChangeDate(list);
         } else {
-            adapter = new ContactsAdapter(context, srcList_p);
+            adapter = new ContactsAdapter(context, list);
             listView.setAdapter(adapter);
         }
         setTouchListener();
@@ -149,6 +152,44 @@ public class ContactsFragment extends Fragment implements View.OnClickListener {
     public void setData() {
         NoAdapter adapters = new NoAdapter(context);
         listView.setAdapter(adapters);
+    }
+
+    /**
+     * 是否登录，是否有数据
+     *
+     * @param type 登录后数据类型
+     *             0 正常有数据
+     *             NO_DATA,没有数据 1
+     *             NO_NET,没有网络 2
+     *             NO_LOGIN,没有登录 3
+     *             IS_ERROR,加载错误 4
+     */
+    public void isLoginView(int type) {
+        if (type == 0) {
+            // 已经登录，并且有数据
+            re_view.setVisibility(View.VISIBLE);
+            tip_view.setVisibility(View.GONE);
+        } else if (type == 1) {
+            // 已经登录，没有数据
+            re_view.setVisibility(View.GONE);
+            tip_view.setVisibility(View.VISIBLE);
+            tip_view.setTipView(TipView.TipStatus.NO_DATA, "您还没有聊天对象哟\n快去找好友们聊天吧");
+        } else if (type == 2) {
+            // 没有网络
+            re_view.setVisibility(View.GONE);
+            tip_view.setVisibility(View.VISIBLE);
+            tip_view.setTipView(TipView.TipStatus.NO_NET);
+        } else if (type == 3) {
+            // 没有登录
+            re_view.setVisibility(View.GONE);
+            tip_view.setVisibility(View.VISIBLE);
+            tip_view.setTipView(TipView.TipStatus.NO_LOGIN);
+        } else if (type == 4) {
+            // 已经登录，数据加载失败
+            re_view.setVisibility(View.GONE);
+            tip_view.setVisibility(View.VISIBLE);
+            tip_view.setTipView(TipView.TipStatus.IS_ERROR);
+        }
     }
 
     @Override

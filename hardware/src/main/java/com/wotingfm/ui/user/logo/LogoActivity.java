@@ -5,6 +5,7 @@ import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentTransaction;
 import android.widget.Toast;
 
 import com.woting.commonplat.utils.SequenceUUID;
@@ -12,7 +13,7 @@ import com.wotingfm.R;
 import com.wotingfm.ui.intercom.main.view.InterPhoneFragment;
 
 /**
- * 对讲模块主页
+ * 个人模块主页
  * 作者：xinLong on 2017/6/4 23:20
  * 邮箱：645700751@qq.com
  */
@@ -40,6 +41,7 @@ public class LogoActivity extends FragmentActivity  {
     // 打开新的 Fragment
     public static void open(Fragment frg) {
         context.getSupportFragmentManager().beginTransaction()
+                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                 .add(R.id.fragment_content, frg)
                 .addToBackStack(SequenceUUID.getUUID())
                 .commitAllowingStateLoss();

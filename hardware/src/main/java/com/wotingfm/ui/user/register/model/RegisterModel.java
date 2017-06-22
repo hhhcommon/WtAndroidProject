@@ -22,13 +22,14 @@ import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 
 /**
+ * 注册数据处理中心
  * 作者：xinLong on 2017/5/16 14:28
  * 邮箱：645700751@qq.com
  */
 public class RegisterModel extends UserInfo {
 
     /**
-     * 进行数据交互
+     * 提交注册数据
      *
      * @param userName
      * @param password
@@ -61,7 +62,7 @@ public class RegisterModel extends UserInfo {
     }
 
     /**
-     * 进行数据交互
+     * 获取验证码
      *
      * @param userName
      * @param listener 监听

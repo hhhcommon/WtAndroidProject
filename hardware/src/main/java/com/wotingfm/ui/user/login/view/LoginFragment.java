@@ -1,5 +1,6 @@
 package com.wotingfm.ui.user.login.view;
 
+import android.app.Dialog;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
@@ -13,11 +14,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.wotingfm.R;
+import com.wotingfm.common.utils.DialogUtils;
 import com.wotingfm.ui.user.login.presenter.LoginPresenter;
 import com.wotingfm.ui.user.logo.LogoActivity;
 import com.wotingfm.ui.user.retrievepassword.view.RetrievePassWordFragment;
 
 /**
+ * 登录界面
  * 作者：xinLong on 2017/6/4 19:45
  * 邮箱：645700751@qq.com
  */
@@ -27,6 +30,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
     private EditText et_phoneNumber, et_passWord;
     private LoginPresenter loginPresenter;
     private View rootView;
+    private Dialog dialog;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -161,5 +165,19 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
         } else {
             tv_login.setBackgroundResource(R.drawable.background_login_tvlogin_off);
         }
+    }
+
+    /**
+     * 展示弹出框
+     */
+    public void dialogShow() {
+        dialog = DialogUtils.Dialog(this.getActivity());
+    }
+
+    /**
+     * 取消弹出框
+     */
+    public void dialogCancel() {
+        if (dialog != null) dialog.dismiss();
     }
 }

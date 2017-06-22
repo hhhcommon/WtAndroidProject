@@ -10,13 +10,14 @@
     <color name="transparent_10_black">#E5000000</color>
     <color name="transparent_10_white">#E5ffffff</color>
     <color name="transparent_90_white">#19ffffff</color>
+    <color name="translucent_42_black">#2a000000</color>
     <!-- 黑色  标头字体 -->
     <color name="black_head_word">#16181a</color>
     <!-- 偏好设置字体 -->
     <color name="color_preference_word">#959698</color>
 
     <!-- 输入框默认提示字体 -->
-    <color name="gray_edit_hint_word">#959698</color>
+    <color name="gray_edit_hint_word">#cccccd</color>
 
     <!-- App基本色调 -->
     <color name="app_basic">#fd8548</color>

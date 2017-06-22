@@ -71,8 +71,8 @@
         <item name="android:layout_height">36dp</item>
         <item name="android:gravity">center_vertical</item>
         <item name="android:textColor">@color/black_head_word</item>
-        <item name="android:textSize">18sp</item>
-        <item name="android:paddingLeft">16dp</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:paddingLeft">12dp</item>
     </style>
 
     <!-- 个人中心 Relative -->
@@ -155,4 +155,23 @@
     <style name="Widget.TabLayout" parent="Base.Widget.TabLayout" />
 
     <style name="TextAppearance.TabLayout.Tab" parent="Base.TextAppearance.TabLayout.Tab" />
+
+    <!--等待提示-->
+    <style name="dialog_circle">
+        <item name="android:indeterminateDrawable">@drawable/dialog_background</item>
+        <item name="android:background">@mipmap/dialog_circle_white</item>
+        <item name="android:minWidth">35dp</item>
+        <item name="android:minHeight">35dp</item>
+        <item name="android:maxWidth">35dp</item>
+        <item name="android:maxHeight">35dp</item>
+    </style>
+
+    <style name="MyDialog" parent="@android:style/Theme.Dialog">
+        <item name="android:windowFrame">@null</item><!--边框-->
+        <item name="android:windowIsFloating">true</item><!--是否浮现在activity之上-->
+        <item name="android:windowIsTranslucent">false</item><!--半透明-->
+        <item name="android:windowNoTitle">true</item><!--无标题-->
+        <item name="android:windowBackground">@color/transparent_background</item><!--背景透明-->
+        <item name="android:backgroundDimEnabled">false</item><!--模糊-->
+    </style>
 </resources>
