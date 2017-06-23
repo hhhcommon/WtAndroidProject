@@ -246,6 +246,7 @@ public class MenuDialog extends Dialog implements View.OnClickListener {
                 if (pdsBase != null) {
                     boolean isLogin2 = CommonUtils.isLogin();
                     if (isLogin2 == false) {
+                        dismiss();
                         LogoActivity.start(activity);
                         return;
                     }
