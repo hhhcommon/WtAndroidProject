@@ -7,8 +7,10 @@ import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import com.wotingfm.R;
 import com.wotingfm.ui.intercom.group.groupchat.model.GroupChat;
+import com.wotingfm.ui.intercom.main.contacts.model.Contact;
 
 import java.util.List;
 
@@ -120,13 +122,13 @@ public class GroupChatAdapter extends BaseExpandableListAdapter {
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-        GroupChat.news lists = group.get(groupPosition).getPerson().get(childPosition);
+        Contact.group lists = group.get(groupPosition).getPerson().get(childPosition);
 
 
-        if (lists.getName() == null || lists.getName().equals("")) {
+        if (lists.getTitle() == null || lists.getTitle().equals("")) {
             holder.tv_name.setText("名称");//名
         } else {
-            holder.tv_name.setText(lists.getName());//名
+            holder.tv_name.setText(lists.getTitle());//名
         }
         return convertView;
 
