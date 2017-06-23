@@ -48,8 +48,6 @@ public class RetrofitUtils {
     private static final int DEFAULT_TIMEOUT = 3000;
     private RetrofitService retrofitService;
     public static RetrofitUtils INSTANCE;
-    public static String TEST_USERID = "00163e00693b";
-    private String token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIwMDE2M2UwMDY5M2IiLCJpc3MiOiJodHRwOlwvXC93b3Rpbmcuc3VpdGluZ3dlaS5jb21cL2FwaVwvYWNjb3VudHNcL2xvZ2luIiwiaWF0IjoxNDk2NzE5OTI0LCJleHAiOjE1MDE5MDM5MjQsIm5iZiI6MTQ5NjcxOTkyNCwianRpIjoiZWQ1YmZmMWI4NzM4ZDVmYmQwZjk4ZTU4NjEwZjdkOTMifQ.jobc9DSVQTZUQp57NEOowz-cf1zZG2s05RTekOUd9Yw";
     private OkHttpClient.Builder builder;
 
     private RetrofitUtils() {
@@ -74,7 +72,7 @@ public class RetrofitUtils {
     }
 
     private OkHttpClient genericClient() {
-        final String _token = BSApplication.SharedPreferences.getString(StringConstant.TOKEN, token);
+        final String _token = BSApplication.SharedPreferences.getString(StringConstant.TOKEN, null);
         if (!TextUtils.isEmpty(_token)) {
             return new OkHttpClient.Builder()
                     .addInterceptor(new Interceptor() {
