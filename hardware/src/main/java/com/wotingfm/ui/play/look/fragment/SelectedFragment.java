@@ -19,6 +19,7 @@ import com.wotingfm.common.net.RetrofitUtils;
 import com.wotingfm.common.view.BannerView;
 import com.wotingfm.ui.base.basefragment.BaseFragment;
 import com.wotingfm.ui.play.look.activity.SelectedMoreActivity;
+import com.wotingfm.ui.test.PlayerActivity;
 import com.zhy.adapter.recyclerview.wrapper.HeaderAndFooterWrapper;
 
 import java.util.ArrayList;
@@ -67,12 +68,13 @@ public class SelectedFragment extends BaseFragment implements SwipeRefreshLayout
         SelectedAdapter selectedAdapter = new SelectedAdapter(getActivity(), datas, new SelectedAdapter.SelectedClickBase() {
             @Override
             public void click(Selected.DataBeanX.DataBean dataBean) {
-
+                PlayerActivity.start(getActivity(), dataBean.id, null);
+                getActivity().finish();
             }
 
             @Override
             public void clickMore(Selected.DataBeanX dataBeanX) {
-                SelectedMoreActivity.start(getActivity(),dataBeanX.type,dataBeanX.title);
+                SelectedMoreActivity.start(getActivity(), dataBeanX.type, dataBeanX.title);
             }
         });
         mHeaderAndFooterWrapper = new HeaderAndFooterWrapper(selectedAdapter);

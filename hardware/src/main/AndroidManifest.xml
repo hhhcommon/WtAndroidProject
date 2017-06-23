@@ -80,6 +80,11 @@
             android:name=".ui.play.activity.albums.AlbumsListActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
+        <!-- 小分类列表 -->
+        <activity
+            android:name=".ui.play.look.activity.classification.ClassificationActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" />
         <!-- 专辑，节目，下载中 -->
         <activity
             android:name=".ui.play.activity.download.DownloadProgramActivity"

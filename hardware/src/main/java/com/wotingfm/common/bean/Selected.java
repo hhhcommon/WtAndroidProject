@@ -41,7 +41,7 @@ public class Selected implements Serializable {
              * title : Ms.
              */
 
-            public int id;
+            public String id;
             public String lastest_news;
             public String logo_url;
             public int play_count;

@@ -7,6 +7,7 @@ import com.wotingfm.common.bean.AlbumInfo;
 import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.bean.AnchorInfo;
 import com.wotingfm.common.bean.BaseResult;
+import com.wotingfm.common.bean.Channels;
 import com.wotingfm.common.bean.Classification;
 import com.wotingfm.common.bean.HomeBanners;
 import com.wotingfm.common.bean.Player;
@@ -18,6 +19,7 @@ import com.wotingfm.ui.play.activity.albums.fragment.AlbumsInfoFragment;
 import com.wotingfm.common.constant.StringConstant;
 
 import java.io.IOException;
+import java.nio.channels.Channel;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -43,7 +45,7 @@ import static com.wotingfm.common.net.RetrofitService.BASE_URL;
 
 public class RetrofitUtils {
 
-    private static final int DEFAULT_TIMEOUT = 2000;
+    private static final int DEFAULT_TIMEOUT = 3000;
     private RetrofitService retrofitService;
     public static RetrofitUtils INSTANCE;
     public static String TEST_USERID = "00163e00693b";
@@ -190,8 +192,21 @@ public class RetrofitUtils {
                 });
     }
 
-    public Observable<List<Player.DataBean.SinglesBean>> getPlayerList(String albums) {
-        return retrofitService.getPlayerList(albums)
+    public Observable<List<Channels.DataBean.ChannelsBean>> getChannels(String albums) {
+        return retrofitService.getChannels(albums)
+                .map(new Func1<Channels, List<Channels.DataBean.ChannelsBean>>() {
+                    @Override
+                    public List<Channels.DataBean.ChannelsBean> call(Channels player) {
+                        if (player.ret != 0) {
+                            throw new IllegalStateException(player.msg);
+                        }
+                        return player.data.channels;
+                    }
+                });
+    }
+
+    public Observable<List<Player.DataBean.SinglesBean>> getPlayerList(String albums, String q) {
+        return retrofitService.getPlayerList(albums, q)
                 .map(new Func1<Player, List<Player.DataBean.SinglesBean>>() {
                     @Override
                     public List<Player.DataBean.SinglesBean> call(Player player) {
@@ -206,6 +221,19 @@ public class RetrofitUtils {
     //订阅列表，我的
     public Observable<List<Subscrible.DataBean.AlbumsBean>> getSubscriptionsList(String pid) {
         return retrofitService.getSubscriptionsList(pid)
+                .map(new Func1<Subscrible, List<Subscrible.DataBean.AlbumsBean>>() {
+                    @Override
+                    public List<Subscrible.DataBean.AlbumsBean> call(Subscrible player) {
+                        if (player.ret != 0) {
+                            throw new IllegalStateException(player.msg);
+                        }
+                        return player.data.albums;
+                    }
+                });
+    }
+
+    public Observable<List<Subscrible.DataBean.AlbumsBean>> getChannelsAlbums(String pid, int page) {
+        return retrofitService.getChannelsAlbums(pid, page)
                 .map(new Func1<Subscrible, List<Subscrible.DataBean.AlbumsBean>>() {
                     @Override
                     public List<Subscrible.DataBean.AlbumsBean> call(Subscrible player) {
@@ -500,6 +528,7 @@ public class RetrofitUtils {
 
     /**
      * 提交偏好设置
+     *
      * @param s 提交的数据
      * @return Object
      */
