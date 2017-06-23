@@ -76,7 +76,7 @@ public abstract class BaseToolBarActivity extends BaseActivity implements View.O
 
     protected void initToolBar(WTToolbar toolbar) {
         if (toolbar != null) {
-            toolbar.setDividerColor(getResources().getColor(R.color.white));
+            toolbar.setDividerColor(getResources().getColor(R.color.line_color));
             toolbar.setShowDivider(true);
             setSupportActionBar(toolbar);
             ActionBar actionBar = getSupportActionBar();
@@ -146,6 +146,7 @@ public abstract class BaseToolBarActivity extends BaseActivity implements View.O
         super.onCreate(savedInstanceState);
         context = this;
         setContentView(getLayoutId());
+        AppManager.getAppManager().addActivity(this);
         ButterKnife.bind(this);
         this.initView();
     }

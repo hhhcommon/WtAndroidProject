@@ -42,8 +42,7 @@
         android:layout_height="44dp"
         android:layout_alignParentBottom="true"
         android:layout_gravity="bottom"
-        android:background="#16181a"
-        android:visibility="gone">
+        android:background="#16181a">
 
         <TextView
             android:id="@+id/ivPlayList"

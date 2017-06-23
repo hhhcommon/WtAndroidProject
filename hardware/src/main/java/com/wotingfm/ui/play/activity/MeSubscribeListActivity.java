@@ -68,7 +68,7 @@ public class MeSubscribeListActivity extends BaseToolBarActivity {
         playerHistoryListAdapter = new PlayerSubscribleListAdapter(this, albumsBeens, new PlayerSubscribleListAdapter.PlayerHistoryClick() {
             @Override
             public void click(Subscrible.DataBean.AlbumsBean singlesBean) {
-                T.getInstance().equals("点击订阅列表");
+                T.getInstance().showToast("点击订阅列表");
             }
 
             @Override
@@ -118,14 +118,14 @@ public class MeSubscribeListActivity extends BaseToolBarActivity {
                     public void call(Object s) {
                         dissmisDialog();
                         albumsBeens.remove(albumsBean);
-                        T.getInstance().equals("取消成功");
+                        T.getInstance().showToast("取消成功");
                         playerHistoryListAdapter.notifyDataSetChanged();
                     }
                 }, new Action1<Throwable>() {
                     @Override
                     public void call(Throwable throwable) {
                         dissmisDialog();
-                        T.getInstance().equals("取消订阅失败");
+                        T.getInstance().showToast("取消订阅失败");
                     }
                 });
     }

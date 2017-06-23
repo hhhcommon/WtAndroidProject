@@ -48,4 +48,6 @@ public class SinglesBase implements Serializable {
     //是否下载完成
     @DatabaseField
     public boolean isDownloadOver;
+    @DatabaseField
+    public boolean isSelect;
 }

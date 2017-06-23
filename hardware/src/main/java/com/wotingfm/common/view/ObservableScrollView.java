@@ -1,6 +1,7 @@
 package com.wotingfm.common.view;
 
 import android.content.Context;
+import android.support.v4.widget.NestedScrollView;
 import android.util.AttributeSet;
 import android.widget.ScrollView;
 
@@ -9,7 +10,7 @@ import android.widget.ScrollView;
  */
 
 
-public class ObservableScrollView extends ScrollView {
+public class ObservableScrollView extends NestedScrollView {
 
     private ScrollViewListener scrollViewListener = null;
 

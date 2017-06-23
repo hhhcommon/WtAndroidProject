@@ -96,6 +96,7 @@ public class AlbumsListActivity extends BaseToolBarActivity implements OnLoadMor
     private String user_id;
 
     private void refresh() {
+        mPage=1;
         RetrofitUtils.getInstance().getAlbumsList(user_id, mPage)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

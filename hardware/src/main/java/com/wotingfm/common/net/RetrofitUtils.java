@@ -6,14 +6,20 @@ import android.text.TextUtils;
 import com.wotingfm.common.bean.AlbumInfo;
 import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.bean.AnchorInfo;
+import com.wotingfm.common.bean.BaseResult;
+import com.wotingfm.common.bean.Channels;
+import com.wotingfm.common.bean.Classification;
 import com.wotingfm.common.bean.HomeBanners;
 import com.wotingfm.common.bean.Player;
 import com.wotingfm.common.bean.Reports;
+import com.wotingfm.common.bean.Selected;
+import com.wotingfm.common.bean.SelectedMore;
 import com.wotingfm.common.bean.Subscrible;
 import com.wotingfm.ui.play.activity.albums.fragment.AlbumsInfoFragment;
 import com.wotingfm.common.constant.StringConstant;
 
 import java.io.IOException;
+import java.nio.channels.Channel;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -39,7 +45,7 @@ import static com.wotingfm.common.net.RetrofitService.BASE_URL;
 
 public class RetrofitUtils {
 
-    private static final int DEFAULT_TIMEOUT = 2000;
+    private static final int DEFAULT_TIMEOUT = 3000;
     private RetrofitService retrofitService;
     public static RetrofitUtils INSTANCE;
     public static String TEST_USERID = "00163e00693b";
@@ -116,15 +122,15 @@ public class RetrofitUtils {
                 .subscribe(s);
     }
 
-    public Observable<List<HomeBanners.Banner>> getHomeBanners() {
-        return retrofitService.getHomeBanners()
-                .map(new Func1<HomeBanners, List<HomeBanners.Banner>>() {
+    public Observable<List<HomeBanners.DataBean.BannersBean>> getHomeBanners(String type) {
+        return retrofitService.getHomeBanners(type)
+                .map(new Func1<HomeBanners, List<HomeBanners.DataBean.BannersBean>>() {
                     @Override
-                    public List<HomeBanners.Banner> call(HomeBanners homeBanners) {
-                        if (homeBanners.status != 200) {
-                            throw new IllegalStateException(homeBanners.message);
+                    public List<HomeBanners.DataBean.BannersBean> call(HomeBanners homeBanners) {
+                        if (homeBanners.ret != 0) {
+                            throw new IllegalStateException(homeBanners.msg);
                         }
-                        return homeBanners.banners;
+                        return homeBanners.data.banners;
                     }
                 });
     }
@@ -147,8 +153,60 @@ public class RetrofitUtils {
                 });
     }
 
-    public Observable<List<Player.DataBean.SinglesBean>> getPlayerList(String albums) {
-        return retrofitService.getPlayerList(albums)
+    public Observable<List<Classification.DataBeanX>> getClassifications() {
+        return retrofitService.getClassifications()
+                .map(new Func1<Classification, List<Classification.DataBeanX>>() {
+                    @Override
+                    public List<Classification.DataBeanX> call(Classification classification) {
+                        if (classification.ret != 0) {
+                            throw new IllegalStateException(classification.msg);
+                        }
+                        return classification.data;
+                    }
+                });
+    }
+
+    public Observable<List<Selected.DataBeanX>> getSelecteds() {
+        return retrofitService.getSelecteds()
+                .map(new Func1<Selected, List<Selected.DataBeanX>>() {
+                    @Override
+                    public List<Selected.DataBeanX> call(Selected classification) {
+                        if (classification.ret != 0) {
+                            throw new IllegalStateException(classification.msg);
+                        }
+                        return classification.data;
+                    }
+                });
+    }
+
+    public Observable<List<SelectedMore.DataBean.AlbumsBean>> getSelectedsMore(int page, String type) {
+        return retrofitService.getSelectedsMore(page, type)
+                .map(new Func1<SelectedMore, List<SelectedMore.DataBean.AlbumsBean>>() {
+                    @Override
+                    public List<SelectedMore.DataBean.AlbumsBean> call(SelectedMore classification) {
+                        if (classification.ret != 0) {
+                            throw new IllegalStateException(classification.msg);
+                        }
+                        return classification.data.albums;
+                    }
+                });
+    }
+
+    public Observable<List<Channels.DataBean.ChannelsBean>> getChannels(String albums) {
+        return retrofitService.getChannels(albums)
+                .map(new Func1<Channels, List<Channels.DataBean.ChannelsBean>>() {
+                    @Override
+                    public List<Channels.DataBean.ChannelsBean> call(Channels player) {
+                        if (player.ret != 0) {
+                            throw new IllegalStateException(player.msg);
+                        }
+                        return player.data.channels;
+                    }
+                });
+    }
+
+    public Observable<List<Player.DataBean.SinglesBean>> getPlayerList(String albums, String q) {
+        return retrofitService.getPlayerList(albums, q)
                 .map(new Func1<Player, List<Player.DataBean.SinglesBean>>() {
                     @Override
                     public List<Player.DataBean.SinglesBean> call(Player player) {
@@ -163,6 +221,19 @@ public class RetrofitUtils {
     //订阅列表，我的
     public Observable<List<Subscrible.DataBean.AlbumsBean>> getSubscriptionsList(String pid) {
         return retrofitService.getSubscriptionsList(pid)
+                .map(new Func1<Subscrible, List<Subscrible.DataBean.AlbumsBean>>() {
+                    @Override
+                    public List<Subscrible.DataBean.AlbumsBean> call(Subscrible player) {
+                        if (player.ret != 0) {
+                            throw new IllegalStateException(player.msg);
+                        }
+                        return player.data.albums;
+                    }
+                });
+    }
+
+    public Observable<List<Subscrible.DataBean.AlbumsBean>> getChannelsAlbums(String pid, int page) {
+        return retrofitService.getChannelsAlbums(pid, page)
                 .map(new Func1<Subscrible, List<Subscrible.DataBean.AlbumsBean>>() {
                     @Override
                     public List<Subscrible.DataBean.AlbumsBean> call(Subscrible player) {
@@ -218,6 +289,46 @@ public class RetrofitUtils {
                 .map(new Func1<Object, Object>() {
                     @Override
                     public Object call(Object s) {
+                        return s;
+                    }
+                });
+    }
+
+    public Observable<BaseResult> subscriptionsAlbums() {
+        return retrofitService.subscriptionsAlbums()
+                .map(new Func1<BaseResult, BaseResult>() {
+                    @Override
+                    public BaseResult call(BaseResult s) {
+                        return s;
+                    }
+                });
+    }
+
+    public Observable<BaseResult> deleteSubscriptionsAlbums() {
+        return retrofitService.deleteSubscriptionsAlbums()
+                .map(new Func1<BaseResult, BaseResult>() {
+                    @Override
+                    public BaseResult call(BaseResult s) {
+                        return s;
+                    }
+                });
+    }
+
+    public Observable<BaseResult> submitFans(String idol_id, String user_id) {
+        return retrofitService.submitFans(idol_id, user_id)
+                .map(new Func1<BaseResult, BaseResult>() {
+                    @Override
+                    public BaseResult call(BaseResult s) {
+                        return s;
+                    }
+                });
+    }
+
+    public Observable<BaseResult> submitNoFans(String idol_id, String user_id) {
+        return retrofitService.submitNoFans(idol_id, user_id)
+                .map(new Func1<BaseResult, BaseResult>() {
+                    @Override
+                    public BaseResult call(BaseResult s) {
                         return s;
                     }
                 });

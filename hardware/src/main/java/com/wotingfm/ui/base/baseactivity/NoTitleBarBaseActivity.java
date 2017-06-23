@@ -62,6 +62,7 @@ public abstract class NoTitleBarBaseActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         context = this;
         setContentView(getLayoutId());
+        AppManager.getAppManager().addActivity(this);
         ButterKnife.bind(this);
         this.initView();
     }

@@ -143,7 +143,7 @@ public class ReportsPlayerActivity extends BaseToolBarActivity {
             report_reason = reasonsBase.title;
         String content = edContent.getText().toString().trim();
         if (TextUtils.isEmpty(report_reason) && TextUtils.isEmpty(content)) {
-            T.getInstance().equals("请选择举报原因");
+            T.getInstance().showToast("请选择举报原因");
             return;
         }
         showLodingDialog();
@@ -154,14 +154,14 @@ public class ReportsPlayerActivity extends BaseToolBarActivity {
                     @Override
                     public void call(Object s) {
                         dissmisDialog();
-                        T.getInstance().equals("举报成功");
+                        T.getInstance().showToast("举报成功");
                         finish();
                     }
                 }, new Action1<Throwable>() {
                     @Override
                     public void call(Throwable throwable) {
                         dissmisDialog();
-                        T.getInstance().equals("举报失败");
+                        T.getInstance().showToast("举报失败");
                     }
                 });
     }
@@ -173,7 +173,7 @@ public class ReportsPlayerActivity extends BaseToolBarActivity {
             report_reason = reasonsBase.title;
         String content = edContent.getText().toString().trim();
         if (TextUtils.isEmpty(report_reason) && TextUtils.isEmpty(content)) {
-            T.getInstance().equals("请选择举报原因");
+            T.getInstance().showToast("请选择举报原因");
             return;
         }
         showLodingDialog();
@@ -184,14 +184,14 @@ public class ReportsPlayerActivity extends BaseToolBarActivity {
                     @Override
                     public void call(Object s) {
                         dissmisDialog();
-                        T.getInstance().equals("举报成功");
+                        T.getInstance().showToast("举报成功");
                         finish();
                     }
                 }, new Action1<Throwable>() {
                     @Override
                     public void call(Throwable throwable) {
                         dissmisDialog();
-                        T.getInstance().equals("举报失败");
+                        T.getInstance().showToast("举报失败");
                     }
                 });
     }

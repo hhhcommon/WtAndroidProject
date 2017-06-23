@@ -3,9 +3,14 @@ package com.wotingfm.common.net;
 
 import com.wotingfm.common.bean.AlbumInfo;
 import com.wotingfm.common.bean.AnchorInfo;
+import com.wotingfm.common.bean.BaseResult;
+import com.wotingfm.common.bean.Channels;
+import com.wotingfm.common.bean.Classification;
 import com.wotingfm.common.bean.HomeBanners;
 import com.wotingfm.common.bean.Player;
 import com.wotingfm.common.bean.Reports;
+import com.wotingfm.common.bean.Selected;
+import com.wotingfm.common.bean.SelectedMore;
 import com.wotingfm.common.bean.Subscrible;
 import com.wotingfm.ui.intercom.main.contacts.model.Contact;
 import com.wotingfm.ui.user.login.model.Login;
@@ -16,6 +21,8 @@ import retrofit2.http.POST;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 import rx.Observable;
+
+import static com.google.zxing.qrcode.decoder.ErrorCorrectionLevel.Q;
 
 
 /**
@@ -36,7 +43,15 @@ public interface RetrofitService {
 
     //首页播放fm列表
     @GET("api/listenings/player")
-    Observable<Player> getPlayerList(@Query("album_id") String album_id);
+    Observable<Player> getPlayerList(@Query("album_id") String album_id, @Query("q") String q);
+
+    //分类子页面-获取子分类
+    @GET("api/listenings/channels/{id}/children-channels")
+    Observable<Channels> getChannels(@Path("id") String id);
+
+    //分类子页面-获取某一个频道的所有专辑
+    @GET("api/listenings/channels/{id}/albums")
+    Observable<Subscrible> getChannelsAlbums(@Path("id") String id, @Query("page") int page);
 
     //获取用户订阅的专辑
     @GET("api/users/{id}/subscriptions/albums")
@@ -50,8 +65,36 @@ public interface RetrofitService {
     @GET("api/reports/reasons")
     Observable<Reports> getPlayerReports(@Query("type") String type);
 
-    @GET("api/listenings/player")
-    Observable<HomeBanners> getHomeBanners();
+    //banner SELECTION:精选; LIVE:直播; RADIO:电台
+    @GET("api/listenings/banners")
+    Observable<HomeBanners> getHomeBanners(@Query("type") String type);
+
+    //分类首页
+    @GET("api/listenings/channels")
+    Observable<Classification> getClassifications();
+
+    //精选首页列表
+    @GET("api/listenings/selections")
+    Observable<Selected> getSelecteds();
+
+    @GET("api/listenings/selections/search-more")
+    Observable<SelectedMore> getSelectedsMore(@Query("page") int page, @Query("type") String type);
+
+    //订阅专辑
+    @POST("api/listenings/albums/{id}/subscriptions")
+    Observable<BaseResult> subscriptionsAlbums();
+
+    //取消订阅
+    @DELETE("api/listenings/albums/{id}/subscriptions")
+    Observable<BaseResult> deleteSubscriptionsAlbums();
+
+    //关注
+    @POST("/api/fans")
+    Observable<BaseResult> submitFans(@Query("idol_id") String idol_id, @Query("user_id") String user_id);
+
+    //取消关注
+    @DELETE("/api/fans")
+    Observable<BaseResult> submitNoFans(@Query("idol_id") String idol_id, @Query("user_id") String user_id);
 
     //喜欢（收藏）节目
     @POST("api/listenings/singles/{id}/likes")
@@ -131,7 +174,7 @@ public interface RetrofitService {
 
     // 加群方式
     @POST(Api.URL_APPLY_GROUP_TYPE)
-    Observable<Object> applyGroupType(@Query("password") String password,@Query("token") int type);
+    Observable<Object> applyGroupType(@Query("password") String password, @Query("token") int type);
 
     // 入组申请
     @POST(Api.URL_GROUP_APPLY)
