@@ -73,7 +73,7 @@ public class MineFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.head_left_btn:
+            case R.id.head_left_btn:// 返回
                 if (GlobalStateConfig.mineFromType == 1) {
                     GlobalStateConfig.mineFromType = 0;
                     GlobalStateConfig.activityA = "A";
