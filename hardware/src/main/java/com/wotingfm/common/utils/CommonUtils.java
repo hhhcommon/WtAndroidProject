@@ -21,7 +21,7 @@ public class CommonUtils {
      * @param context
      * @return
      */
-    public static String getUserId(Context context) {
+    public static String getUserId() {
         SharedPreferences sp = BSApplication.SharedPreferences;
         String UserId = sp.getString(StringConstant.USER_ID, "");
         if (UserId == null || UserId.equals("")) {
@@ -40,7 +40,7 @@ public class CommonUtils {
     public static String getUserIdNoImei(Context context) {
         SharedPreferences sp = BSApplication.SharedPreferences;
         String UserId = sp.getString(StringConstant.USER_ID, "");
-        if (UserId == null || UserId.equals("") ) {
+        if (UserId == null || UserId.equals("")) {
             return "";
         } else {
             return UserId;
@@ -58,7 +58,7 @@ public class CommonUtils {
         try {
             SharedPreferences sp = BSApplication.SharedPreferences;
             String UserId = sp.getString(StringConstant.USER_ID, "");
-            if (UserId == null || UserId.equals("") ) {
+            if (UserId == null || UserId.equals("")) {
                 return null;
             } else {
                 return UserId;

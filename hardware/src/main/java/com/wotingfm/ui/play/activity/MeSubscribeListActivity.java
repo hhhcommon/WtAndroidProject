@@ -17,6 +17,7 @@ import com.wotingfm.common.bean.Player;
 import com.wotingfm.common.bean.Subscrible;
 import com.wotingfm.common.database.HistoryHelper;
 import com.wotingfm.common.net.RetrofitUtils;
+import com.wotingfm.common.utils.CommonUtils;
 import com.wotingfm.common.utils.T;
 import com.wotingfm.ui.base.baseactivity.BaseToolBarActivity;
 
@@ -80,7 +81,7 @@ public class MeSubscribeListActivity extends BaseToolBarActivity {
         mRecyclerView.setAdapter(playerHistoryListAdapter);
         loadLayout.showLoadingView();
         //请求数据，测试userid
-        getPlayerList(RetrofitUtils.TEST_USERID);
+        getPlayerList(CommonUtils.getUserId());
     }
 
     private List<Subscrible.DataBean.AlbumsBean> albumsBeens = new ArrayList<>();
