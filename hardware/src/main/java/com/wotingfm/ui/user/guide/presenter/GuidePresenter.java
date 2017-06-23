@@ -98,7 +98,7 @@ public class GuidePresenter extends BasePresenter {
      */
     public void todo() {
         // 测试代码
-        if (GlobalStateConfig.test) {
+        if (true) {
             // 界面跳转
             close();
         } else {

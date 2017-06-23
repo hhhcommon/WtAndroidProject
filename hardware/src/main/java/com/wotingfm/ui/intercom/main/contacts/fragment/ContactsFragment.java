@@ -1,5 +1,6 @@
 package com.wotingfm.ui.intercom.main.contacts.fragment;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -14,6 +15,7 @@ import android.widget.TextView;
 
 import com.woting.commonplat.widget.TipView;
 import com.wotingfm.R;
+import com.wotingfm.common.utils.DialogUtils;
 import com.wotingfm.ui.intercom.add.search.local.view.SearchContactsForLocalFragment;
 import com.wotingfm.ui.intercom.group.groupchat.view.GroupChatFragment;
 import com.wotingfm.ui.intercom.main.contacts.adapter.ContactsAdapter;
@@ -33,7 +35,7 @@ import java.util.List;
  * @author 辛龙
  *         2016年5月12日
  */
-public class ContactsFragment extends Fragment implements View.OnClickListener {
+public class ContactsFragment extends Fragment implements View.OnClickListener,TipView.TipViewClick {
     private View rootView;
     private FragmentActivity context;
     private ListView listView;
@@ -45,6 +47,8 @@ public class ContactsFragment extends Fragment implements View.OnClickListener {
     private SideBar sideBar;
     private TextView tvDialog;
     private TipView tip_view;
+    private int type;
+    private Dialog dialog;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -56,6 +60,7 @@ public class ContactsFragment extends Fragment implements View.OnClickListener {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         if (rootView == null) {
             rootView = inflater.inflate(R.layout.fragment_contacts, container, false);
+            rootView.setOnClickListener(this);
             initViews();// 设置界面
             setEditListener();
             presenter = new ContactsPresenter(this);
@@ -89,6 +94,7 @@ public class ContactsFragment extends Fragment implements View.OnClickListener {
         tv_search.setOnClickListener(this);
         re_newFriend.setOnClickListener(this);
         re_newGroup.setOnClickListener(this);
+        tip_view.setTipClick(this);
     }
 
     // 设置右侧触摸监听
@@ -118,7 +124,11 @@ public class ContactsFragment extends Fragment implements View.OnClickListener {
                 InterPhoneActivity.open(fragment);
             }
         });
+    }
 
+    @Override
+    public void onTipViewClick() {
+        presenter.tipClick(type);
     }
 
     @Override
@@ -165,6 +175,7 @@ public class ContactsFragment extends Fragment implements View.OnClickListener {
      *             IS_ERROR,加载错误 4
      */
     public void isLoginView(int type) {
+        this.type=type;
         if (type == 0) {
             // 已经登录，并且有数据
             re_view.setVisibility(View.VISIBLE);
@@ -192,6 +203,20 @@ public class ContactsFragment extends Fragment implements View.OnClickListener {
         }
     }
 
+    /**
+     * 展示弹出框
+     */
+    public void dialogShow() {
+        dialog = DialogUtils.Dialog(this.getActivity());
+    }
+
+    /**
+     * 取消弹出框
+     */
+    public void dialogCancel() {
+        if (dialog != null) dialog.dismiss();
+    }
+
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -211,5 +236,6 @@ public class ContactsFragment extends Fragment implements View.OnClickListener {
     public void onDestroy() {
         super.onDestroy();
     }
+
 
 }

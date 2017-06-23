@@ -21,4 +21,10 @@ public class BroadcastConstants {
 
     // 登录广播
     public static final String LOGIN = "LOGIN";
+
+    // 好友更改广播
+    public static final String PERSON_CHANGE = "PERSON_CHANGE";
+
+    // 群组更改广播
+    public static final String GROUP_CHANGE = "GROUP_CHANGE";
 }

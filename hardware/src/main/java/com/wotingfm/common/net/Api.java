@@ -13,7 +13,13 @@ public class Api {
     // 忘记密码重置
     public static final String URL_RESET_PASSWORDS = "api/accounts/reset-passwords";
     // 好友列表
-    public static final String URL_GET_FRIENDS = "api/users/:id/friends";
+    public static final String URL_GET_FRIENDS = "api/users/{id}/friends";
+    // 群组列表
+    public static final String URL_GET_GROUPS = "api/users/{id}/chat-groups";
+    // 好友信息
+    public static final String URL_GET_PERSON_NEWS = "api/users/{id}/friend-info";
+    // 新的好友申请
+    public static final String URL_GET_NEW_FRIEND = "api/users/{id}/received-friend-applies";
     // 加群方式(X)
     public static final String URL_APPLY_GROUP_TYPE = "";
     // 入组申请(X)

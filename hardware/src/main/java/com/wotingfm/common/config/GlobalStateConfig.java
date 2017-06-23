@@ -1,5 +1,9 @@
 package com.wotingfm.common.config;
 
+import com.wotingfm.ui.intercom.main.contacts.model.Contact;
+
+import java.util.List;
+
 /**
  * GlobalConfig
  * author：辛龙 (xinLong)
@@ -57,5 +61,6 @@ public class GlobalStateConfig {
      * PersonClientDevice(个人客户端设备) 终端类型1=app,2=设备，3=pc
      */
     public static int PCDType;
-
+    public static List<Contact.group> list_group;          // 通讯录中的对讲组
+    public static List<Contact.user> list_person;          // 通讯录中的好友
 }

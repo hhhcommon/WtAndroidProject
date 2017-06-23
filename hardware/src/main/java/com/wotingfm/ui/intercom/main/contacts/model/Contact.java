@@ -1,9 +1,6 @@
 package com.wotingfm.ui.intercom.main.contacts.model;
 
-import com.google.gson.annotations.SerializedName;
-
 import java.io.Serializable;
-import java.util.List;
 
 /**
  * 作者：xinLong on 2017/6/8 11:32
@@ -11,15 +8,9 @@ import java.util.List;
  */
 public class Contact implements Serializable {
 
-    // 下面变量的定义要与接口中的字段名字保持一致
-    // 如上面的错误码字段，你就像定义为code，而服务器返回的是error_code，这个时候就应该这么写：
-    @SerializedName("error_code")
-    public int msg;
-    public int ret;
-    public List<user> friends;
-
+    // 好友的字段
     public static class user implements Serializable {
-        private int type=1;
+        private int type = 1;
         private String avatar;
         private String sortLetters;     // 显示数据拼音的首字母
         private String id;
@@ -75,27 +66,36 @@ public class Contact implements Serializable {
         }
     }
 
+    // 群组的字段
     public static class group implements Serializable {
-        private String avatar;
-        private String sortLetters;     // 显示数据拼音的首字母
-        private String id;
-        private String name;
-        private String NickName;
 
-        public String getAvatar() {
-            return avatar;
+        private String created_at;                 // string	@mock=2017-06-06 11:16:31
+        private String creator_id;                 // string	@mock=00163e00693b
+        private String id;                         // number	@mock=7
+        private String introduction;               // string	@mock=
+        private String location;                   // string	@mock=
+        private String logo_url;                   // string	@mock=s
+        private String member_access_mode;         // string	@mock=1
+        private String owner_id;                   // string	@mock=104a0a149b20
+        private String password;                   // string	@mock=1234
+        private String qr_code_url;                // string	@mock=
+        private String title;                      // string	@mock=测试群聊123
+        private String updated_at;//
+
+        public String getCreated_at() {
+            return created_at;
         }
 
-        public void setAvatar(String avatar) {
-            this.avatar = avatar;
+        public void setCreated_at(String created_at) {
+            this.created_at = created_at;
         }
 
-        public String getSortLetters() {
-            return sortLetters;
+        public String getCreator_id() {
+            return creator_id;
         }
 
-        public void setSortLetters(String sortLetters) {
-            this.sortLetters = sortLetters;
+        public void setCreator_id(String creator_id) {
+            this.creator_id = creator_id;
         }
 
         public String getId() {
@@ -106,20 +106,76 @@ public class Contact implements Serializable {
             this.id = id;
         }
 
-        public String getName() {
-            return name;
+        public String getIntroduction() {
+            return introduction;
         }
 
-        public void setName(String name) {
-            this.name = name;
+        public void setIntroduction(String introduction) {
+            this.introduction = introduction;
         }
 
-        public String getNickName() {
-            return NickName;
+        public String getLocation() {
+            return location;
         }
 
-        public void setNickName(String nickName) {
-            NickName = nickName;
+        public void setLocation(String location) {
+            this.location = location;
+        }
+
+        public String getLogo_url() {
+            return logo_url;
+        }
+
+        public void setLogo_url(String logo_url) {
+            this.logo_url = logo_url;
+        }
+
+        public String getMember_access_mode() {
+            return member_access_mode;
+        }
+
+        public void setMember_access_mode(String member_access_mode) {
+            this.member_access_mode = member_access_mode;
+        }
+
+        public String getOwner_id() {
+            return owner_id;
+        }
+
+        public void setOwner_id(String owner_id) {
+            this.owner_id = owner_id;
+        }
+
+        public String getPassword() {
+            return password;
+        }
+
+        public void setPassword(String password) {
+            this.password = password;
+        }
+
+        public String getQr_code_url() {
+            return qr_code_url;
+        }
+
+        public void setQr_code_url(String qr_code_url) {
+            this.qr_code_url = qr_code_url;
+        }
+
+        public String getTitle() {
+            return title;
+        }
+
+        public void setTitle(String title) {
+            this.title = title;
+        }
+
+        public String getUpdated_at() {
+            return updated_at;
+        }
+
+        public void setUpdated_at(String updated_at) {
+            this.updated_at = updated_at;
         }
     }
 }

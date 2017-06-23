@@ -68,7 +68,7 @@ public class RetrofitUtils {
     }
 
     private OkHttpClient genericClient() {
-      final String _token= BSApplication.SharedPreferences.getString(StringConstant.TOKEN,token);
+        final String _token = BSApplication.SharedPreferences.getString(StringConstant.TOKEN, token);
         if (!TextUtils.isEmpty(_token)) {
             return new OkHttpClient.Builder()
                     .addInterceptor(new Interceptor() {
@@ -331,9 +331,10 @@ public class RetrofitUtils {
 
     /**
      * 注册
+     *
      * @param userName 用户名
      * @param password 手机号
-     * @param yzm 验证码
+     * @param yzm      验证码
      * @return Object
      */
     public Observable<Object> register(String userName, String password, String yzm) {
@@ -348,6 +349,7 @@ public class RetrofitUtils {
 
     /**
      * 忘记密码
+     *
      * @param userName
      * @param password
      * @param yzm
@@ -365,6 +367,7 @@ public class RetrofitUtils {
 
     /**
      * 登录
+     *
      * @param userName
      * @param password
      * @return
@@ -381,6 +384,7 @@ public class RetrofitUtils {
 
     /**
      * 加群方式
+     *
      * @param password
      * @param type
      * @return
@@ -397,6 +401,7 @@ public class RetrofitUtils {
 
     /**
      * 入组申请
+     *
      * @param s
      * @return
      */
@@ -412,6 +417,7 @@ public class RetrofitUtils {
 
     /**
      * 提交偏好设置
+     *
      * @param s 提交的数据
      * @return Object
      */
@@ -427,6 +433,7 @@ public class RetrofitUtils {
 
     /**
      * 注销登录
+     *
      * @param s 提交的数据
      * @return Object
      */
@@ -442,6 +449,7 @@ public class RetrofitUtils {
 
     /**
      * 获取用户数据
+     *
      * @param s 提交的数据
      * @return Object
      */
@@ -454,5 +462,74 @@ public class RetrofitUtils {
                     }
                 });
     }
+
+    /**
+     * 获取好友列表
+     *
+     * @param id    当前用户id
+     * @param token
+     * @return Object
+     */
+    public Observable<Object> getFriends(String id, String token) {
+        return retrofitService.getFriends(id, token)
+                .map(new Func1<Object, Object>() {
+                    @Override
+                    public Object call(Object O) {
+                        return O;
+                    }
+                });
+    }
+
+    /**
+     * 获取组列表
+     *
+     * @param id    当前用户id
+     * @param token
+     * @return Object
+     */
+    public Observable<Object> getGroups(String id, String token) {
+        return retrofitService.getGroups(id, token)
+                .map(new Func1<Object, Object>() {
+                    @Override
+                    public Object call(Object O) {
+                        return O;
+                    }
+                });
+    }
+
+    /**
+     * 获取好友信息
+     *
+     * @param id    当前用户id
+     * @param token
+     * @return Object
+     */
+    public Observable<Object> getPersonNews(String id, String token) {
+        return retrofitService.getPersonNews(id, token)
+                .map(new Func1<Object, Object>() {
+                    @Override
+                    public Object call(Object O) {
+                        return O;
+                    }
+                });
+    }
+
+    /**
+     * 获新的好友申请请求
+     *
+     * @param id    当前用户id
+     * @param token
+     * @return Object
+     */
+    public Observable<Object> newFriend(String id, String token) {
+        return retrofitService.newFriend(id, token)
+                .map(new Func1<Object, Object>() {
+                    @Override
+                    public Object call(Object O) {
+                        return O;
+                    }
+                });
+    }
+
 
 }

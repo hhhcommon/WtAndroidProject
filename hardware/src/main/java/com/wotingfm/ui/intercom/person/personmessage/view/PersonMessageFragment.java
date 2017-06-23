@@ -1,5 +1,6 @@
 package com.wotingfm.ui.intercom.person.personmessage.view;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -13,6 +14,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.wotingfm.R;
+import com.wotingfm.common.utils.DialogUtils;
 import com.wotingfm.ui.intercom.main.view.InterPhoneActivity;
 import com.wotingfm.ui.intercom.person.personmessage.presenter.PersonMessagePresenter;
 import com.wotingfm.ui.intercom.person.personnote.view.EditPersonNoteFragment;
@@ -29,6 +31,7 @@ public class PersonMessageFragment extends Fragment implements View.OnClickListe
     private LinearLayout lin_note;
     private PersonMessagePresenter presenter;
     private LinearLayout lin_chose;
+    private Dialog dialog;
 
 
     @Override
@@ -160,6 +163,20 @@ public class PersonMessageFragment extends Fragment implements View.OnClickListe
      */
     public void close() {
         InterPhoneActivity.close();
+    }
+
+    /**
+     * 展示弹出框
+     */
+    public void dialogShow() {
+        dialog = DialogUtils.Dialog(this.getActivity());
+    }
+
+    /**
+     * 取消弹出框
+     */
+    public void dialogCancel() {
+        if (dialog != null) dialog.dismiss();
     }
 
     @Override

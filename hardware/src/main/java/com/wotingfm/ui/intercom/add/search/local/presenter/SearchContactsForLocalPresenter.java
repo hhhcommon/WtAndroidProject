@@ -1,10 +1,16 @@
 package com.wotingfm.ui.intercom.add.search.local.presenter;
 
+import android.os.Bundle;
+
 import com.wotingfm.ui.intercom.add.search.local.model.SearchContactsForLocalModel;
 import com.wotingfm.ui.intercom.add.search.local.view.SearchContactsForLocalFragment;
+import com.wotingfm.ui.intercom.add.search.net.view.SearchContactsForNetFragment;
+import com.wotingfm.ui.intercom.group.groupnews.add.view.GroupNewsForAddFragment;
 import com.wotingfm.ui.intercom.main.contacts.model.Contact;
 import com.wotingfm.ui.intercom.main.contacts.view.CharacterParser;
 import com.wotingfm.ui.intercom.main.contacts.view.PinyinComparator;
+import com.wotingfm.ui.intercom.main.view.InterPhoneActivity;
+import com.wotingfm.ui.intercom.person.personmessage.view.PersonMessageFragment;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -80,7 +86,7 @@ public class SearchContactsForLocalPresenter {
             List<Contact.group> groupList=new ArrayList<>() ;
             // 此时有群组数据
             for (int i = 0; i < srcList_G.size(); i++) {
-                if (srcList_G.get(i).getName().contains(s)) {
+                if (srcList_G.get(i).getTitle().contains(s)) {
                     groupList.add(srcList_G.get(i));
                 }
             }
@@ -148,5 +154,29 @@ public class SearchContactsForLocalPresenter {
         // 根据 a - z 进行排序
         Collections.sort(filterDateList, pinyinComparator);
         return filterDateList;
+    }
+
+    /**
+     * 跳转到好友详情
+     * @param id
+     */
+   public void  jumpForPerson(int id){
+       PersonMessageFragment fragment = new PersonMessageFragment();
+       Bundle bundle = new Bundle();
+       bundle.putString("id",String.valueOf(id));
+       bundle.putString("type","true");
+       fragment.setArguments(bundle);
+       InterPhoneActivity.open(fragment);
+    }
+    /**
+     * 跳转到好友详情
+    * @param id
+    */
+    public void  jumpForGroup(int id){
+        GroupNewsForAddFragment fragment = new GroupNewsForAddFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString("id",String.valueOf(id));
+        fragment.setArguments(bundle);
+        InterPhoneActivity.open(fragment);
     }
 }

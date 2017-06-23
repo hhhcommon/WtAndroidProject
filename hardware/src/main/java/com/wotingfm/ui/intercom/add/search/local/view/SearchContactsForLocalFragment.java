@@ -19,6 +19,7 @@ import com.woting.commonplat.widget.HeightListView;
 import com.wotingfm.R;
 import com.wotingfm.ui.intercom.add.search.local.adapter.GroupsAdapter;
 import com.wotingfm.ui.intercom.add.search.local.presenter.SearchContactsForLocalPresenter;
+import com.wotingfm.ui.intercom.add.search.net.view.SearchContactsForNetFragment;
 import com.wotingfm.ui.intercom.group.groupnews.add.view.GroupNewsForAddFragment;
 import com.wotingfm.ui.intercom.main.contacts.adapter.ContactsAdapter;
 import com.wotingfm.ui.intercom.main.contacts.adapter.NoAdapter;
@@ -34,7 +35,7 @@ import java.util.List;
  * 作者：xinLong on 2017/6/5 01:30
  * 邮箱：645700751@qq.com
  */
-public class SearchContactsForLocalFragment extends Fragment implements View.OnClickListener{
+public class SearchContactsForLocalFragment extends Fragment implements View.OnClickListener {
     private View rootView;
     private FragmentActivity context;
     private ListView listViewG, listViewP;
@@ -169,32 +170,6 @@ public class SearchContactsForLocalFragment extends Fragment implements View.OnC
         setGroupListViewListener(group);
     }
 
-//    // 原始数据界面
-//    public void setViewForOnce(List<Contact.user> person, List<Contact.group> group) {
-//        if (person != null && person.size() != 0) {
-//            if (pAdapter == null) {
-//                pAdapter = new ContactsAdapter(context, person);
-//                listViewP.setAdapter(pAdapter);
-//            } else {
-//                pAdapter.ChangeDate(person);
-//            }
-//            new HeightListView(context).setListViewHeightBasedOnChildren(listViewP);
-//            setListViewListener(person);
-//            listViewP.setVisibility(View.VISIBLE);
-//        } else {
-//            listViewP.setVisibility(View.GONE);
-//        }
-//        if (group == null || group.size() == 0) {
-//            NoAdapter adapters = new NoAdapter(context);
-//            listViewG.setAdapter(adapters);
-//        } else {
-//            gAdapter = new GroupsAdapter(context, group);
-//            listViewG.setAdapter(gAdapter);
-//            setGroupListViewListener(group);
-//
-//        }
-//    }
-
     // listView 的监听
     private void setListViewListener(List<Contact.user> person) {
         pAdapter.setOnListener(new ContactsAdapter.OnListener() {
@@ -208,7 +183,8 @@ public class SearchContactsForLocalFragment extends Fragment implements View.OnC
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 // 跳转到好友信息界面
-                InterPhoneActivity.open(new PersonMessageFragment());
+                presenter.jumpForPerson(position);
+
             }
         });
 
@@ -226,7 +202,8 @@ public class SearchContactsForLocalFragment extends Fragment implements View.OnC
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 // 跳转到群组详情页面
-                InterPhoneActivity.open(new GroupNewsForAddFragment());
+                presenter.jumpForGroup(position);
+
             }
         });
     }
@@ -251,7 +228,7 @@ public class SearchContactsForLocalFragment extends Fragment implements View.OnC
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.tv_clear:
                 InterPhoneActivity.close();
                 break;
