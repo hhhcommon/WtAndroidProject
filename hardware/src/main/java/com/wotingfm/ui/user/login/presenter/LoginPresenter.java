@@ -1,10 +1,13 @@
 package com.wotingfm.ui.user.login.presenter;
 
+import android.content.Intent;
 import android.util.Log;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.woting.commonplat.config.GlobalNetWorkConfig;
+import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.common.utils.ToastUtils;
 import com.wotingfm.ui.user.login.model.LoginModel;
 import com.wotingfm.ui.user.login.view.LoginFragment;
@@ -41,7 +44,11 @@ public class LoginPresenter {
      */
     public void login(String userName, String password) {
         if (checkData(userName, password)) {
-            send(userName, password);
+            if (GlobalNetWorkConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
+                send(userName, password);
+            } else {
+                ToastUtils.show_always(activity.getActivity(), "网络连接失败，请稍后再试！");
+            }
         }
     }
 
@@ -87,7 +94,7 @@ public class LoginPresenter {
             @Override
             public void onSuccess(Object o) {
                 activity.dialogCancel();
-                dealLoginSuccess(o);
+                dealSuccess(o);
             }
 
             @Override
@@ -99,7 +106,7 @@ public class LoginPresenter {
     }
 
     // 处理返回数据
-    private void dealLoginSuccess(Object o) {
+    private void dealSuccess(Object o) {
         try {
             String s = new Gson().toJson(o);
             JSONObject js = new JSONObject(s);
@@ -112,7 +119,7 @@ public class LoginPresenter {
                 String token = arg1.getString("token");
 
                 // 保存后台获取到的token
-                if(token!=null&&!token.trim().equals("")){
+                if (token != null && !token.trim().equals("")) {
                     model.saveToken(token);
                     ToastUtils.show_always(activity.getActivity(), token);
                 }
@@ -123,10 +130,12 @@ public class LoginPresenter {
                     model.saveUserInfo(ui);
                 }
                 ToastUtils.show_always(activity.getActivity(), "登录成功");
+                // 发送登录广播通知所有界面
+                activity.getActivity().sendBroadcast(new Intent(BroadcastConstants.LOGIN));
                 LogoActivity.closeActivity();
             } else {
                 String msg = js.getString("msg");
-                if(msg!=null&&!msg.trim().equals("")){
+                if (msg != null && !msg.trim().equals("")) {
                     ToastUtils.show_always(activity.getActivity(), msg);
                 }
                 ToastUtils.show_always(activity.getActivity(), "登录失败，请稍后再试");

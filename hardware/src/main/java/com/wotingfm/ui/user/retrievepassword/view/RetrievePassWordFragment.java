@@ -1,5 +1,6 @@
 package com.wotingfm.ui.user.retrievepassword.view;
 
+import android.app.Dialog;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
@@ -13,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.wotingfm.R;
+import com.wotingfm.common.utils.DialogUtils;
 import com.wotingfm.ui.user.logo.LogoActivity;
 import com.wotingfm.ui.user.retrievepassword.presenter.RetrievePasswordPresenter;
 
@@ -26,6 +28,7 @@ public class RetrievePassWordFragment extends Fragment implements View.OnClickLi
     private EditText et_phoneNumber, et_newPassWord,et_yzm;
     private RetrievePasswordPresenter presenter;
     private View rootView;
+    private Dialog dialog;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -193,5 +196,25 @@ public class RetrievePassWordFragment extends Fragment implements View.OnClickLi
             tv_yzm.setText(timeString);
             tv_yzm.setTextColor(this.getResources().getColor(R.color.app_basic));
         }
+    }
+
+    /**
+     * 展示弹出框
+     */
+    public void dialogShow() {
+        dialog = DialogUtils.Dialog(this.getActivity());
+    }
+
+    /**
+     * 取消弹出框
+     */
+    public void dialogCancel() {
+        if (dialog != null) dialog.dismiss();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        presenter.cancel();
     }
 }

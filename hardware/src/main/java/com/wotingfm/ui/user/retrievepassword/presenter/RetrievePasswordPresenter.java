@@ -3,15 +3,14 @@ package com.wotingfm.ui.user.retrievepassword.presenter;
 import android.os.CountDownTimer;
 import android.util.Log;
 import android.widget.Toast;
-
+import com.google.gson.Gson;
+import com.woting.commonplat.config.GlobalNetWorkConfig;
 import com.wotingfm.common.utils.ToastUtils;
-import com.wotingfm.ui.user.login.model.Login;
-import com.wotingfm.ui.user.register.model.RegisterModel;
+import com.wotingfm.ui.user.logo.LogoActivity;
 import com.wotingfm.ui.user.retrievepassword.model.RetrievePasswordModel;
 import com.wotingfm.ui.user.retrievepassword.view.RetrievePassWordFragment;
-
-import org.json.JSONException;
 import org.json.JSONObject;
+import org.json.JSONTokener;
 
 /**
  * 作者：xinLong on 2017/6/5 13:55
@@ -66,51 +65,6 @@ public class RetrievePasswordPresenter {
         return true;
     }
 
-    // 获取网络数据
-   private void getYzmData(String userName){
-       model.loadNewsForYzm(userName, new RetrievePasswordModel.OnLoadInterface() {
-           @Override
-           public void onSuccess(Object o) {
-//                loginView.removeDialog();
-               dealGetYzmSuccess(o);
-           }
-
-           @Override
-           public void onFailure(String msg) {
-//                loginView.removeDialog();
-//                ToastUtils.showVolleyError(loginView);
-           }
-       });
-   }
-
-    ///////////////////////////////////////////////////////////////////////////////////////////////
-    /**
-     * confirm
-     *
-     * @param userName 用户名
-     * @param password 密码
-     * @return true:可以登录 / false：不能登录
-     */
-    public void confirm(String userName, String password, String yzm) {
-        if (checkData(userName, password, yzm)) {
-            send(userName, password, yzm);
-        }
-    }
-
-    /**
-     * 获取验证码
-     */
-    public void getYzm(String userName) {
-        if(userName!=null&&!userName.equals("")){
-            if (mCountDownTimer == null) {
-                timerDown();
-                getYzmData(userName);
-            }
-        }else{
-            ToastUtils.show_always(activity.getActivity(),"手机号不能为空");
-        }
-    }
-
     /**
      * 密码明文显示
      * 默认为密码
@@ -150,44 +104,128 @@ public class RetrievePasswordPresenter {
         activity.setConfirmBackground(bt);
     }
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-    // 发送网络请求
+    /**
+     * confirm
+     *
+     * @param userName 用户名
+     * @param password 密码
+     * @return true:可以登录 / false：不能登录
+     */
+    public void confirm(String userName, String password, String yzm) {
+        if (checkData(userName, password, yzm)) {
+            if (GlobalNetWorkConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
+                send(userName, password, yzm);
+            } else {
+                ToastUtils.show_always(activity.getActivity(), "网络连接失败，请稍后再试！");
+            }
+
+        }
+    }
+
+    /**
+     * 获取验证码
+     */
+    public void getYzm(String userName) {
+        if(userName!=null&&!userName.equals("")){
+            if (GlobalNetWorkConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
+                if (mCountDownTimer == null) {
+                    timerDown();
+                    getYzmData(userName);
+                }
+            } else {
+                ToastUtils.show_always(activity.getActivity(), "网络连接失败，请稍后再试！");
+            }
+        }else{
+            ToastUtils.show_always(activity.getActivity(),"手机号不能为空");
+        }
+    }
+
+    // 发送忘记密码请求
     private void send(String userName, String password, String yzm) {
         model.loadNews(userName, password, yzm, new RetrievePasswordModel.OnLoadInterface() {
             @Override
             public void onSuccess(Object result) {
-//                loginView.removeDialog();
-                dealLoginSuccess(result);
+                activity.dialogCancel();
+                dealSuccess(result);
             }
 
             @Override
             public void onFailure(String msg) {
-//                loginView.removeDialog();
-//                ToastUtils.showVolleyError(loginView);
+                activity.dialogCancel();
+                ToastUtils.show_always(activity.getActivity(), "修改密码失败，请稍后再试");
             }
         });
     }
 
-
-    // 处理返回数据
-    private void dealLoginSuccess(Object o) {
+    // 处理忘记密码返回数据
+    private void dealSuccess(Object o) {
         try {
-            JSONObject js=new JSONObject(o.toString());
-            String ret= js.getString("ret");
-            Log.e("ret",ret.toString());
-        } catch (JSONException e) {
+            String s = new Gson().toJson(o);
+            JSONObject js = new JSONObject(s);
+            int ret = js.getInt("ret");
+            Log.e("ret", String.valueOf(ret));
+            if (ret == 0) {
+                LogoActivity.close();
+                ToastUtils.show_always(activity.getActivity(), "修改密码成功");
+            } else {
+                String msg = js.getString("msg");
+                ToastUtils.show_always(activity.getActivity(), msg);
+                ToastUtils.show_always(activity.getActivity(), "修改密码失败，请稍后再试");
+            }
+        } catch (Exception e) {
             e.printStackTrace();
+            ToastUtils.show_always(activity.getActivity(), "修改密码失败，请稍后再试");
         }
     }
 
-    // 处理返回数据
+
+    // 获取验证码的网络请求
+    private void getYzmData(String userName) {
+        activity.dialogShow();
+        model.loadNewsForYzm(userName, new RetrievePasswordModel.OnLoadInterface() {
+            @Override
+            public void onSuccess(Object result) {
+                activity.dialogCancel();
+                dealGetYzmSuccess(result);
+            }
+
+            @Override
+            public void onFailure(String msg) {
+                activity.dialogCancel();
+                ToastUtils.show_always(activity.getActivity(), "获取验证码失败，请稍后再试1");
+            }
+        });
+    }
+
+    // 处理户获取验证码返回数据
     private void dealGetYzmSuccess(Object o) {
         try {
-            JSONObject js=new JSONObject(o.toString());
-            String ret= js.getString("ret");
-            Log.e("ret",ret.toString());
-        } catch (JSONException e) {
+            String s = new Gson().toJson(o);
+            JSONObject js = new JSONObject(s);
+            int ret = js.getInt("ret");
+            Log.e("ret", String.valueOf(ret));
+            if (ret == 0) {
+                String msg = js.getString("data");
+                JSONTokener jsonParser = new JSONTokener(msg);
+                JSONObject arg1 = (JSONObject) jsonParser.nextValue();
+                int code = arg1.getInt("code");
+                ToastUtils.show_always(activity.getActivity(), String.valueOf(code));
+                ToastUtils.show_always(activity.getActivity(), "获取验证码成功");
+            } else {
+                String msg = js.getString("msg");
+                ToastUtils.show_always(activity.getActivity(), msg);
+                ToastUtils.show_always(activity.getActivity(), "获取验证码失败，请稍后再试");
+            }
+        } catch (Exception e) {
             e.printStackTrace();
+            ToastUtils.show_always(activity.getActivity(), "获取验证码失败，请稍后再试");
+        }
+    }
+
+    public void cancel() {
+        if (mCountDownTimer != null) {
+            mCountDownTimer.cancel();
+            mCountDownTimer = null;
         }
     }
 }

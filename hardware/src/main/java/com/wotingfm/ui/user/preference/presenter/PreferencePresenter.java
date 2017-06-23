@@ -1,5 +1,9 @@
 package com.wotingfm.ui.user.preference.presenter;
 
+import com.woting.commonplat.config.GlobalNetWorkConfig;
+import com.wotingfm.common.config.GlobalStateConfig;
+import com.wotingfm.common.utils.CommonUtils;
+import com.wotingfm.common.utils.ToastUtils;
 import com.wotingfm.ui.user.preference.model.PreferenceModel;
 import com.wotingfm.ui.user.preference.view.PreferenceFragment;
 
@@ -37,12 +41,13 @@ public class PreferencePresenter {
 
     /**
      * 判断此时页面展示状况
+     *
      * @param type
      */
     public void setBackground(int type) {
         if (type == 1) {
             if (type1) {
-              activity.setViewForRAWY(true);
+                activity.setViewForRAWY(true);
                 type1 = false;
             } else {
                 activity.setViewForRAWY(false);
@@ -102,21 +107,31 @@ public class PreferencePresenter {
     // 先判断有没有选中状态的数据
     // 发送数据，待实现
     public void postData() {
-        activity.dialogShow();
-        String s="";
-        model.loadNews(s, new PreferenceModel.OnLoadInterface() {
-            @Override
-            public void onSuccess(Object result) {
-                activity.dialogCancel();
-                activity.close();
-            }
+        // 测试代码
+        if(GlobalStateConfig.test){
+            activity.close();
+        }else{
+            // 实际代码
+            if (GlobalNetWorkConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
+                activity.dialogShow();
+                String s = "";
+                model.loadNews(s, new PreferenceModel.OnLoadInterface() {
+                    @Override
+                    public void onSuccess(Object result) {
+                        activity.dialogCancel();
+                        activity.close();
+                    }
 
-            @Override
-            public void onFailure(String msg) {
-                activity.dialogCancel();
-                activity.close();
+                    @Override
+                    public void onFailure(String msg) {
+                        activity.dialogCancel();
+                        activity.close();
+                    }
+                });
+            } else {
+                ToastUtils.show_always(activity.getActivity(), "网络连接失败，请稍后再试！");
             }
-        });
+        }
     }
 
 }

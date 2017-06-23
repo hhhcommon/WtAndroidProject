@@ -71,10 +71,10 @@ public class GroupsAdapter extends BaseAdapter{
         }
         Contact.group lists = list.get(position);
 
-        if (lists.getName() == null || lists.getName().equals("")) {
+        if (lists.getTitle() == null || lists.getTitle().equals("")) {
             holder.tv_name.setText("名称");//名
         } else {
-            holder.tv_name.setText(lists.getName());//名
+            holder.tv_name.setText(lists.getTitle());//名
         }
 
 //        if (lists.avatar == null || lists.avatar.equals("") || lists.avatar.equals("null") || lists.avatar.trim().equals("")) {

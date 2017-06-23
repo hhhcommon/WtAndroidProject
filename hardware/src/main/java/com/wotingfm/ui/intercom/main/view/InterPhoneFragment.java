@@ -45,6 +45,7 @@ public class InterPhoneFragment extends Fragment implements View.OnClickListener
     private View rootView;
     private FragmentActivity context;
     private ImageView img_person;
+    private InterPhonePresenter presenter;
 
     @Override
     public void onCreate( Bundle savedInstanceState) {
@@ -59,6 +60,8 @@ public class InterPhoneFragment extends Fragment implements View.OnClickListener
             InitTextView();  // 初始化视图
             InitViewPager(); // 初始化 ViewPager
             dialog();        // 初始化功能弹出框
+            presenter=new InterPhonePresenter(this);
+            presenter.getData();
         }
         return rootView;
     }

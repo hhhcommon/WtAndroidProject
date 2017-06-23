@@ -1,7 +1,6 @@
 package com.wotingfm.ui.user.preference.view;
 
 import android.app.Dialog;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -12,8 +11,7 @@ import android.widget.TextView;
 
 import com.wotingfm.R;
 import com.wotingfm.common.utils.DialogUtils;
-import com.wotingfm.ui.main.view.MainActivity;
-import com.wotingfm.ui.mine.MineActivity;
+import com.wotingfm.ui.mine.main.MineActivity;
 import com.wotingfm.ui.user.logo.LogoActivity;
 import com.wotingfm.ui.user.preference.presenter.PreferencePresenter;
 

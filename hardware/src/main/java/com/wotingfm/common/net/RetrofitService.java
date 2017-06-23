@@ -154,11 +154,23 @@ public interface RetrofitService {
 
     // 忘记密码重置
     @POST(Api.URL_RESET_PASSWORDS)
-    Observable<Login> resetPasswords(@Query("phone") String phone, @Query("password") String password, @Query("code") String code);
+    Observable<Object> resetPasswords(@Query("phone") String phone, @Query("password") String password, @Query("code") String code);
 
     // 好友列表
-    @POST(Api.URL_GET_FRIENDS)
-    Observable<Contact> getFriends(@Query("token") String token);
+    @GET(Api.URL_GET_FRIENDS)
+    Observable<Object> getFriends(@Path("id") String id, @Query("token") String token);
+
+    // 群组列表
+    @GET(Api.URL_GET_GROUPS)
+    Observable<Object> getGroups(@Path("id") String id, @Query("token") String token);
+
+    // 获取好友信息
+    @GET(Api.URL_GET_PERSON_NEWS)
+    Observable<Object> getPersonNews(@Path("id") String id, @Query("token") String token);
+
+    // 新的好友申请请求
+    @GET(Api.URL_GET_NEW_FRIEND)
+    Observable<Object> newFriend(@Path("id") String id, @Query("token") String token);
 
     // 加群方式
     @POST(Api.URL_APPLY_GROUP_TYPE)
@@ -168,9 +180,17 @@ public interface RetrofitService {
     @POST(Api.URL_GROUP_APPLY)
     Observable<Object> groupApply(@Query("s") String s);
 
-    // 入组申请
+    // 偏好设置
     @POST(Api.URL_PREFERENCE)
     Observable<Object> preference(@Query("s") String s);
+
+    // 注销登录
+    @POST(Api.URL_CANCEL)
+    Observable<Object> cancel(@Query("s") String s);
+
+    // 获取用户数据
+    @POST(Api.URL_GET_USERINFO)
+    Observable<Object> getUserInfo(@Query("s") String s);
 
 }
 

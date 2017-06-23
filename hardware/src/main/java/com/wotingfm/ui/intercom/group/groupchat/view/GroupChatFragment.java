@@ -12,7 +12,9 @@ import android.view.ViewGroup;
 import android.widget.ExpandableListView;
 import android.widget.TextView;
 
+import com.woting.commonplat.widget.TipView;
 import com.wotingfm.R;
+import com.wotingfm.common.utils.DialogUtils;
 import com.wotingfm.ui.intercom.group.groupchat.adapter.GroupChatAdapter;
 import com.wotingfm.ui.intercom.group.groupchat.model.GroupChat;
 import com.wotingfm.ui.intercom.group.groupchat.presenter.GroupChatPresenter;
@@ -26,12 +28,14 @@ import java.util.List;
  * 作者：xinLong on 2017/6/5 01:30
  * 邮箱：645700751@qq.com
  */
-public class GroupChatFragment extends Fragment implements View.OnClickListener {
+public class GroupChatFragment extends Fragment implements View.OnClickListener,TipView.TipViewClick {
     private View rootView;
     private ExpandableListView spListView;
     private GroupChatPresenter presenter;
     private FragmentActivity context;
     private GroupChatAdapter adapter;
+    private TipView tip_view;
+    private int type;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -43,6 +47,7 @@ public class GroupChatFragment extends Fragment implements View.OnClickListener 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         if (rootView == null) {
             rootView = inflater.inflate(R.layout.fragment_mychat, container, false);
+            rootView.setOnClickListener(this);
             inItView();
             presenter = new GroupChatPresenter(this);
             presenter.getData();
@@ -52,6 +57,7 @@ public class GroupChatFragment extends Fragment implements View.OnClickListener 
 
     // 设置界面
     private void inItView() {
+        tip_view = (TipView) rootView.findViewById(R.id.tip_view);// 提示界面
         rootView.findViewById(R.id.head_left_btn).setOnClickListener(this);
         TextView tv_center = (TextView) rootView.findViewById(R.id.tv_center);
         tv_center.setText("群聊");
@@ -80,6 +86,11 @@ public class GroupChatFragment extends Fragment implements View.OnClickListener 
     }
 
     @Override
+    public void onTipViewClick() {
+        presenter.tipClick(type);
+    }
+
+    @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.head_left_btn:
@@ -94,6 +105,45 @@ public class GroupChatFragment extends Fragment implements View.OnClickListener 
 
         for (int i = 0; i < list.size(); i++) {
             spListView.expandGroup(i);
+        }
+    }
+
+    /**
+     * 是否登录，是否有数据
+     *
+     * @param type 登录后数据类型
+     *             0 正常有数据
+     *             NO_DATA,没有数据 1
+     *             NO_NET,没有网络 2
+     *             NO_LOGIN,没有登录 3
+     *             IS_ERROR,加载错误 4
+     */
+    public void isLoginView(int type) {
+        this.type=type;
+        if (type == 0) {
+            // 已经登录，并且有数据
+            spListView.setVisibility(View.VISIBLE);
+            tip_view.setVisibility(View.GONE);
+        } else if (type == 1) {
+            // 已经登录，没有数据
+            spListView.setVisibility(View.GONE);
+            tip_view.setVisibility(View.VISIBLE);
+            tip_view.setTipView(TipView.TipStatus.NO_DATA, "您还没有聊天对象哟\n快去找好友们聊天吧");
+        } else if (type == 2) {
+            // 没有网络
+            spListView.setVisibility(View.GONE);
+            tip_view.setVisibility(View.VISIBLE);
+            tip_view.setTipView(TipView.TipStatus.NO_NET);
+        } else if (type == 3) {
+            // 没有登录
+            spListView.setVisibility(View.GONE);
+            tip_view.setVisibility(View.VISIBLE);
+            tip_view.setTipView(TipView.TipStatus.NO_LOGIN);
+        } else if (type == 4) {
+            // 已经登录，数据加载失败
+            spListView.setVisibility(View.GONE);
+            tip_view.setVisibility(View.VISIBLE);
+            tip_view.setTipView(TipView.TipStatus.IS_ERROR);
         }
     }
 

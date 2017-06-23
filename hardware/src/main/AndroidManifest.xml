@@ -135,7 +135,7 @@
 
         <!--  -->
         <activity
-            android:name=".ui.mine.MineActivity"
+            android:name=".ui.mine.main.MineActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
 

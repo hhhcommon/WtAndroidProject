@@ -13,7 +13,10 @@
         android:text="联系人"
         android:textColor="#959698"
         android:textSize="16sp" />
-
+<TextView
+    android:layout_width="match_parent"
+    android:background="@color/line_color"
+    android:layout_height="1dp" />
     <ListView
         android:id="@+id/head_listView"
         android:layout_width="match_parent"

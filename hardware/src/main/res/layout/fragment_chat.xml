@@ -50,19 +50,24 @@
             android:layout_marginTop="24dp"
             android:src="@mipmap/icon_live_close_red" />
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="108dp"
             android:layout_height="108dp"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="106dp"
-            android:gravity="center">
+            android:layout_marginTop="106dp">
+
+            <com.wotingfm.common.view.RippleImageView
+                android:id="@+id/rippleImageView"
+                android:layout_width="108dp"
+                android:layout_height="108dp"></com.wotingfm.common.view.RippleImageView>
 
             <ImageView
                 android:id="@+id/img_person_group"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
+                android:layout_centerInParent="true"
                 android:src="@mipmap/test" />
-        </LinearLayout>
+        </RelativeLayout>
 
         <TextView
             android:id="@+id/tv_person_group"
@@ -97,7 +102,16 @@
                 android:textColor="#16181a"
                 android:textSize="12sp" />
         </LinearLayout>
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="20dp"
+            android:scaleType="fitXY"
+            android:layout_marginTop="284dp"
+            android:src="@mipmap/testa" />
     </RelativeLayout>
+
+
 
     <TextView
         android:layout_width="match_parent"

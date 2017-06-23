@@ -93,7 +93,7 @@ public class SearchContactsForNetPresenter {
             List<Contact.group> groupList=new ArrayList<>() ;
             // 此时有群组数据
             for (int i = 0; i < srcList_G.size(); i++) {
-                if (srcList_G.get(i).getName().contains(s)) {
+                if (srcList_G.get(i).getTitle().contains(s)) {
                     groupList.add(srcList_G.get(i));
                 }
             }

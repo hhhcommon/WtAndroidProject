@@ -26,9 +26,10 @@ import com.wotingfm.R;
 import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.common.utils.L;
 import com.wotingfm.common.utils.ToastUtils;
-import com.wotingfm.ui.mine.MineActivity;
+import com.wotingfm.ui.mine.main.MineActivity;
 import com.wotingfm.ui.mine.adapter.PairBluetoothAdapter;
 import com.wotingfm.ui.mine.adapter.UserBluetoothAdapter;
+import com.wotingfm.ui.mine.main.view.MineFragment;
 import com.wotingfm.ui.mine.model.BluetoothInfo;
 
 import java.lang.reflect.Method;

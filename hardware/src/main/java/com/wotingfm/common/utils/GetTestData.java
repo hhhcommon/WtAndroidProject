@@ -61,8 +61,7 @@ public class GetTestData {
     // 生成一条组数据
     private static Contact.group getGroup(String name, String id) {
         Contact.group group = new Contact.group();
-        group.setName(name);
-        group.setNickName(name);
+        group.setTitle(name);
         group.setId(id);
         return group;
     }

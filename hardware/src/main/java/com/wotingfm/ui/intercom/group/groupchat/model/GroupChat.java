@@ -1,5 +1,8 @@
 package com.wotingfm.ui.intercom.group.groupchat.model;
 
+import com.wotingfm.ui.intercom.main.contacts.model.Contact;
+import com.wotingfm.ui.intercom.person.newfriend.model.NewFriend;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 
@@ -11,56 +14,15 @@ public class GroupChat {
     private String Name;
     private String GroupNumber;
 
-    private ArrayList<news>  person;
+    private ArrayList<Contact.group>  person;
 
-    public static class news implements Serializable {
-        private String avatar;
-        private String sortLetters;     // 显示数据拼音的首字母
-        private String id;
-        private String name;
-        private String NickName;
-
-        public String getAvatar() {
-            return avatar;
-        }
-
-        public void setAvatar(String avatar) {
-            this.avatar = avatar;
-        }
-
-        public String getSortLetters() {
-            return sortLetters;
-        }
-
-        public void setSortLetters(String sortLetters) {
-            this.sortLetters = sortLetters;
-        }
-
-        public String getId() {
-            return id;
-        }
-
-        public void setId(String id) {
-            this.id = id;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public void setName(String name) {
-            this.name = name;
-        }
-
-        public String getNickName() {
-            return NickName;
-        }
-
-        public void setNickName(String nickName) {
-            NickName = nickName;
-        }
+    public ArrayList<Contact.group> getPerson() {
+        return person;
     }
 
+    public void setPerson(ArrayList<Contact.group> person) {
+        this.person = person;
+    }
 
     public String getName() {
         return Name;
@@ -78,11 +40,4 @@ public class GroupChat {
         GroupNumber = groupNumber;
     }
 
-    public ArrayList<news> getPerson() {
-        return person;
-    }
-
-    public void setPerson(ArrayList<news> person) {
-        this.person = person;
-    }
 }

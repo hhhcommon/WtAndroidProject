@@ -10,11 +10,10 @@ import android.widget.TabHost;
 
 import com.wotingfm.R;
 import com.wotingfm.common.utils.StatusBarUtil;
-import com.wotingfm.common.utils.T;
 import com.wotingfm.ui.intercom.main.view.InterPhoneActivity;
 import com.wotingfm.ui.main.presenter.MainPresenter;
 import com.wotingfm.ui.test.PlayerActivity;
-import com.wotingfm.ui.mine.MineActivity;
+import com.wotingfm.ui.mine.main.MineActivity;
 
 
 public class MainActivity extends TabActivity {

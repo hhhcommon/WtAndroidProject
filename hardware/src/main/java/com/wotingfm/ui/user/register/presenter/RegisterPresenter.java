@@ -1,11 +1,14 @@
 package com.wotingfm.ui.user.register.presenter;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.util.Log;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.woting.commonplat.config.GlobalNetWorkConfig;
+import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.common.utils.ToastUtils;
 import com.wotingfm.ui.user.logo.LogoActivity;
 import com.wotingfm.ui.user.preference.view.PreferenceFragment;
@@ -78,7 +81,11 @@ public class RegisterPresenter {
      */
     public void register(String userName, String password, String yzm) {
         if (checkData(userName, password, yzm)) {
-            send(userName, password, yzm);
+            if (GlobalNetWorkConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
+                send(userName, password, yzm);
+            } else {
+                ToastUtils.show_always(activity.getActivity(), "网络连接失败，请稍后再试！");
+            }
         }
     }
 
@@ -87,14 +94,17 @@ public class RegisterPresenter {
      */
     public void getYzm(String userName) {
         if (userName != null && !userName.equals("")) {
-            if (mCountDownTimer == null) {
-                timerDown();
-                getYzmData(userName);
+            if (GlobalNetWorkConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
+                if (mCountDownTimer == null) {
+                    timerDown();
+                    getYzmData(userName);
+                }
+            } else {
+                ToastUtils.show_always(activity.getActivity(), "网络连接失败，请稍后再试！");
             }
         } else {
             ToastUtils.show_always(activity.getActivity(), "手机号不能为空");
         }
-
     }
 
     /**
@@ -180,6 +190,8 @@ public class RegisterPresenter {
                     model.saveUserInfo(ui);
                 }
                 ToastUtils.show_always(activity.getActivity(), "注册成功");
+                // 发送登录广播通知所有界面
+                activity.getActivity().sendBroadcast(new Intent(BroadcastConstants.LOGIN));
                 jump();// 跳转到偏好设置界面
             } else {
                 String msg = js.getString("msg");

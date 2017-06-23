@@ -45,7 +45,7 @@ public class SplashActivity extends Activity {
 
     // 跳转到引导页
     private void todo(){
-        startActivity(new Intent(this, MainActivity.class));
+        startActivity(new Intent(this, GuideActivity.class));
         finish();
     }
 

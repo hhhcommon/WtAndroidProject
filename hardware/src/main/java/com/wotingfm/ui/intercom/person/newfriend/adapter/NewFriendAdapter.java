@@ -14,22 +14,24 @@ import android.widget.TextView;
 import com.wotingfm.R;
 import com.wotingfm.common.view.slidingbutton.SlidingButtonView;
 import com.wotingfm.ui.intercom.main.contacts.model.Contact;
+import com.wotingfm.ui.intercom.person.newfriend.model.NewFriend;
 
 import java.util.List;
 
 /**
+ * 新的好友申请的适配器
  * 作者：xinLong on 2017/6/12 13:42
  * 邮箱：645700751@qq.com
  */
 
 public class NewFriendAdapter extends RecyclerView.Adapter<NewFriendAdapter.SimpleHolder> implements SlidingButtonView.IonSlidingButtonListener {
-    private final List<Contact.user> mData;
+    private final List<NewFriend> mData;
     private Context mContext;
 
     private IonSlidingViewClickListener mIDeleteBtnClickListener;
     private SlidingButtonView mMenu;
 
-    public NewFriendAdapter(Context context, List<Contact.user> friendList) {
+    public NewFriendAdapter(Context context, List<NewFriend> friendList) {
         mContext = context;
         mData = friendList;
     }

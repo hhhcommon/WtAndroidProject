@@ -1,5 +1,6 @@
 package com.wotingfm.ui.intercom.add.search.local.model;
 
+import com.wotingfm.common.config.GlobalStateConfig;
 import com.wotingfm.common.utils.GetTestData;
 import com.wotingfm.ui.intercom.main.contacts.model.Contact;
 import java.util.ArrayList;
@@ -15,7 +16,7 @@ public class SearchContactsForLocalModel {
      * 获取好友
      */
     public  List<Contact.user> getDataForPerson() {
-        List<Contact.user> srcList_p= GetTestData.getFriendList();
+        List<Contact.user> srcList_p= GlobalStateConfig.list_person;
         return srcList_p;
     }
 
@@ -23,7 +24,7 @@ public class SearchContactsForLocalModel {
      * 获取群组
      */
     public List<Contact.group> getDataForGroup() {
-        List<Contact.group>  srcList_G=GetTestData.getGroupList() ;
+        List<Contact.group>  srcList_G=GlobalStateConfig.list_group ;
         return srcList_G;
     }
 

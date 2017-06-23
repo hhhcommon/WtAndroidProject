@@ -541,4 +541,106 @@ public class RetrofitUtils {
                     }
                 });
     }
+
+    /**
+     * 注销登录
+     *
+     * @param s 提交的数据
+     * @return Object
+     */
+    public Observable<Object> cancel(String s) {
+        return retrofitService.cancel(s)
+                .map(new Func1<Object, Object>() {
+                    @Override
+                    public Object call(Object O) {
+                        return O;
+                    }
+                });
+    }
+
+    /**
+     * 获取用户数据
+     *
+     * @param s 提交的数据
+     * @return Object
+     */
+    public Observable<Object> getUserInfo(String s) {
+        return retrofitService.getUserInfo(s)
+                .map(new Func1<Object, Object>() {
+                    @Override
+                    public Object call(Object O) {
+                        return O;
+                    }
+                });
+    }
+
+    /**
+     * 获取好友列表
+     *
+     * @param id    当前用户id
+     * @param token
+     * @return Object
+     */
+    public Observable<Object> getFriends(String id, String token) {
+        return retrofitService.getFriends(id, token)
+                .map(new Func1<Object, Object>() {
+                    @Override
+                    public Object call(Object O) {
+                        return O;
+                    }
+                });
+    }
+
+    /**
+     * 获取组列表
+     *
+     * @param id    当前用户id
+     * @param token
+     * @return Object
+     */
+    public Observable<Object> getGroups(String id, String token) {
+        return retrofitService.getGroups(id, token)
+                .map(new Func1<Object, Object>() {
+                    @Override
+                    public Object call(Object O) {
+                        return O;
+                    }
+                });
+    }
+
+    /**
+     * 获取好友信息
+     *
+     * @param id    当前用户id
+     * @param token
+     * @return Object
+     */
+    public Observable<Object> getPersonNews(String id, String token) {
+        return retrofitService.getPersonNews(id, token)
+                .map(new Func1<Object, Object>() {
+                    @Override
+                    public Object call(Object O) {
+                        return O;
+                    }
+                });
+    }
+
+    /**
+     * 获新的好友申请请求
+     *
+     * @param id    当前用户id
+     * @param token
+     * @return Object
+     */
+    public Observable<Object> newFriend(String id, String token) {
+        return retrofitService.newFriend(id, token)
+                .map(new Func1<Object, Object>() {
+                    @Override
+                    public Object call(Object O) {
+                        return O;
+                    }
+                });
+    }
+
+
 }

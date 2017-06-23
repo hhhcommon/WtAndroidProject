@@ -1,9 +1,12 @@
 package com.wotingfm.ui.intercom.group.groupchat.model;
 
+import com.wotingfm.common.config.GlobalStateConfig;
 import com.wotingfm.common.net.RetrofitUtils;
 import com.wotingfm.ui.base.model.UserInfo;
+import com.wotingfm.ui.intercom.main.contacts.model.Contact;
 import com.wotingfm.ui.user.login.model.Login;
 
+import java.security.acl.Group;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,7 +20,7 @@ import rx.schedulers.Schedulers;
  */
 public class GroupChatModel extends UserInfo {
 
-    public List<GroupChat> getData() {
+    public List<GroupChat> getTestData(){
         List<GroupChat> list=new ArrayList<>();
         GroupChat GC= new GroupChat();
         GC.setGroupNumber("12");
@@ -32,8 +35,8 @@ public class GroupChatModel extends UserInfo {
         return list;
     }
 
-    private  ArrayList<GroupChat.news>  getGroupList() {
-        ArrayList<GroupChat.news> srcList_G = new ArrayList<>();
+    private  ArrayList<Contact.group>  getGroupList() {
+        ArrayList<Contact.group> srcList_G = new ArrayList<>();
         srcList_G.add(getGroup("兔子群-1","1"));
         srcList_G.add(getGroup("野鸡大学群-2","2"));
         srcList_G.add(getGroup("三国群-3","3"));
@@ -51,10 +54,9 @@ public class GroupChatModel extends UserInfo {
     }
 
     // 生成一条组数据
-    private  GroupChat.news getGroup(String name, String id) {
-        GroupChat.news group = new GroupChat.news();
-        group.setName(name);
-        group.setNickName(name);
+    private  Contact.group getGroup(String name, String id) {
+        Contact.group group = new Contact.group();
+        group.setTitle(name);
         group.setId(id);
         return group;
     }
