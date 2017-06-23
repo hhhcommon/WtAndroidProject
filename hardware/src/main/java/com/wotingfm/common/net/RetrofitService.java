@@ -4,6 +4,7 @@ package com.wotingfm.common.net;
 import com.wotingfm.common.bean.AlbumInfo;
 import com.wotingfm.common.bean.AnchorInfo;
 import com.wotingfm.common.bean.BaseResult;
+import com.wotingfm.common.bean.Channels;
 import com.wotingfm.common.bean.Classification;
 import com.wotingfm.common.bean.HomeBanners;
 import com.wotingfm.common.bean.Player;
@@ -20,6 +21,8 @@ import retrofit2.http.POST;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 import rx.Observable;
+
+import static com.google.zxing.qrcode.decoder.ErrorCorrectionLevel.Q;
 
 
 /**
@@ -40,7 +43,15 @@ public interface RetrofitService {
 
     //首页播放fm列表
     @GET("api/listenings/player")
-    Observable<Player> getPlayerList(@Query("album_id") String album_id);
+    Observable<Player> getPlayerList(@Query("album_id") String album_id, @Query("q") String q);
+
+    //分类子页面-获取子分类
+    @GET("api/listenings/channels/{id}/children-channels")
+    Observable<Channels> getChannels(@Path("id") String id);
+
+    //分类子页面-获取某一个频道的所有专辑
+    @GET("api/listenings/channels/{id}/albums")
+    Observable<Subscrible> getChannelsAlbums(@Path("id") String id, @Query("page") int page);
 
     //获取用户订阅的专辑
     @GET("api/users/{id}/subscriptions/albums")

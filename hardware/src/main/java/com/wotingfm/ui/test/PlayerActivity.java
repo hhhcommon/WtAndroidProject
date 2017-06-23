@@ -1,11 +1,14 @@
 package com.wotingfm.ui.test;
 
+import android.app.Activity;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PagerSnapHelper;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -29,11 +32,15 @@ import com.wotingfm.common.utils.L;
 import com.wotingfm.common.utils.TimeUtils;
 import com.wotingfm.common.view.MenuDialog;
 import com.wotingfm.common.view.PlayerDialog;
+import com.wotingfm.ui.base.baseactivity.AppManager;
 import com.wotingfm.ui.base.baseactivity.NoTitleBarBaseActivity;
 import com.wotingfm.ui.main.view.MainActivity;
+import com.wotingfm.ui.play.activity.albums.AlbumsInfoActivity;
 import com.wotingfm.ui.play.look.activity.LookListActivity;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -68,11 +75,25 @@ public class PlayerActivity extends NoTitleBarBaseActivity implements View.OnCli
     @BindView(R.id.mRecyclerView)
     RecyclerView mRecyclerView;
 
+    public static void start(Context activity, String albumsId, String serchQ) {
+        EventBus.getDefault().postSticky("stop");
+        AppManager.getAppManager().finishAllActivity();
+        Intent intent = new Intent(activity, PlayerActivity.class);
+        intent.putExtra("albumsId", albumsId);
+        intent.putExtra("serchQ", serchQ);
+        activity.startActivity(intent);
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        EventBus.getDefault().register(this);
+    }
+
     @Override
     public int getLayoutId() {
         return R.layout.activity_player;
     }
-
 
     @Override
     public void initView() {
@@ -91,11 +112,16 @@ public class PlayerActivity extends NoTitleBarBaseActivity implements View.OnCli
         snapHelper.attachToRecyclerView(mRecyclerView);
         mPlayerAdapter = new PlayerAdapter(getApplicationContext(), singLesBeans);
         mRecyclerView.setAdapter(mPlayerAdapter);
-        bdPlayer = new BDPlayer(getApplicationContext());
+        if (bdPlayer == null)
+            bdPlayer = new BDPlayer(getApplicationContext());
+        bdPlayer.stopPlayback();
         setListener();
         historyHelper = new HistoryHelper(this);
+        Intent intent = getIntent();
+        serchQ = intent.getStringExtra("serchQ");
+        albumsId = intent.getStringExtra("albumsId");
         loadLayout.showLoadingView();
-        getPlayerList("");
+        getPlayerList(albumsId);
 
     }
 
@@ -132,7 +158,6 @@ public class PlayerActivity extends NoTitleBarBaseActivity implements View.OnCli
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 LinearLayoutManager manager = (LinearLayoutManager) recyclerView.getLayoutManager();
                 int postion = manager.findLastCompletelyVisibleItemPosition();
-                L.i("mingku", "postion=" + postion);
                 if (newState == RecyclerView.SCROLL_STATE_IDLE && postion != postionPlayer && postion >= 0) {
                     seekbarVideo.setProgress(0);
                     postionPlayer = postion;
@@ -307,9 +332,11 @@ public class PlayerActivity extends NoTitleBarBaseActivity implements View.OnCli
     private PlayerDialog playerDialog;
     //菜单dialohg
     private MenuDialog menuDialog;
+    //搜索条件或者专辑
+    private String serchQ, albumsId;
 
     private void getPlayerList(String albums) {
-        RetrofitUtils.getInstance().getPlayerList(albums)
+        RetrofitUtils.getInstance().getPlayerList(albums, serchQ)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Action1<List<Player.DataBean.SinglesBean>>() {
@@ -322,7 +349,7 @@ public class PlayerActivity extends NoTitleBarBaseActivity implements View.OnCli
                             mPlayerAdapter.notifyDataSetChanged();
                             postionPlayer = 0;
                             SinglesBase sb = singls.get(0);
-                            bdPlayer.stopPlayback();
+                            bdPlayer.pause();
                             bdPlayer.setVideoPath(sb.single_file_url);
                             bdPlayer.start();
                             relatiBottom.setVisibility(View.VISIBLE);
@@ -421,7 +448,24 @@ public class PlayerActivity extends NoTitleBarBaseActivity implements View.OnCli
         super.onBackPressed();
         if (bdPlayer != null) {
             bdPlayer.stopPlayback();
-            bdPlayer.release();
         }
     }
+
+    //接受到下载完成的通知
+    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
+    public void onMessageEventMainThread(String event) {
+        L.i("mingku", "event=" + event);
+        if (!TextUtils.isEmpty(event) && "stop".equals(event)) {
+            if (bdPlayer != null) {
+                bdPlayer.stopPlayback();
+            }
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
+
 }
