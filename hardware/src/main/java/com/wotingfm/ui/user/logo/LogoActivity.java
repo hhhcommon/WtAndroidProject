@@ -1,5 +1,7 @@
 package com.wotingfm.ui.user.logo;
 
+import android.content.Context;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Bundle;
@@ -10,7 +12,11 @@ import android.widget.Toast;
 
 import com.woting.commonplat.utils.SequenceUUID;
 import com.wotingfm.R;
+import com.wotingfm.ui.base.baseactivity.AppManager;
 import com.wotingfm.ui.intercom.main.view.InterPhoneFragment;
+import com.wotingfm.ui.test.PlayerActivity;
+
+import org.greenrobot.eventbus.EventBus;
 
 /**
  * 个人模块主页
@@ -18,8 +24,14 @@ import com.wotingfm.ui.intercom.main.view.InterPhoneFragment;
  * 邮箱：645700751@qq.com
  */
 
-public class LogoActivity extends FragmentActivity  {
+public class LogoActivity extends FragmentActivity {
     private static LogoActivity context;
+
+    public static void start(Context activity) {
+        Intent intent = new Intent(activity, LogoActivity.class);
+        activity.startActivity(intent);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

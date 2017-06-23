@@ -36,7 +36,6 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 
-import static com.wotingfm.common.utils.CommonUtils.isLogin;
 
 /**
  * Created by amine on 2017/6/14.
@@ -87,7 +86,8 @@ public class AlbumsInfoFragment extends BaseFragment {
         if (albumInfo != null) {
             setResultData(albumInfo);
         }
-        userId = CommonUtils.getUserId(getActivity());
+        userId = CommonUtils.getUserId();
+
     }
 
     private void setResultData(final AlbumInfo albumInfo) {
@@ -126,8 +126,8 @@ public class AlbumsInfoFragment extends BaseFragment {
             @Override
             public void onClick(View v) {
                 boolean isLogin = CommonUtils.isLogin();
-                if(isLogin==false){
-                    LogoActivity.open(new LoginFragment());
+                if (isLogin == false) {
+                    LogoActivity.start(getActivity());
                     return;
                 }
                 if (had_followed == true) {
