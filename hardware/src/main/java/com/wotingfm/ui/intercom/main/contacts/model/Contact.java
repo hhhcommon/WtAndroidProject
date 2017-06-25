@@ -16,6 +16,51 @@ public class Contact implements Serializable {
         private String id;
         private String name;
         private String NickName;
+        private String gender;
+        private String signature;
+        private boolean is_admin;
+        private String introduction;               //
+        private String location;                   //
+
+        public String getLocation() {
+            return location;
+        }
+
+        public void setLocation(String location) {
+            this.location = location;
+        }
+
+        public boolean is_admin() {
+            return is_admin;
+        }
+
+        public void setIs_admin(boolean is_admin) {
+            this.is_admin = is_admin;
+        }
+
+        public String getIntroduction() {
+            return introduction;
+        }
+
+        public void setIntroduction(String introduction) {
+            this.introduction = introduction;
+        }
+
+        public String getGender() {
+            return gender;
+        }
+
+        public void setGender(String gender) {
+            this.gender = gender;
+        }
+
+        public String getSignature() {
+            return signature;
+        }
+
+        public void setSignature(String signature) {
+            this.signature = signature;
+        }
 
         public int getType() {
             return type;

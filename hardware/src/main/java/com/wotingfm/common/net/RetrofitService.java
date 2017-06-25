@@ -172,13 +172,54 @@ public interface RetrofitService {
     @GET(Api.URL_GET_NEW_FRIEND)
     Observable<Object> newFriend(@Path("id") String id, @Query("token") String token);
 
+    // 群组详情
+    @GET(Api.URL_GET_GROUP_NEWS)
+    Observable<Object> getGroupNews(@Path("id") String id);
+
+    // 群组成员
+    @GET(Api.URL_GET_GROUP_PERSON)
+    Observable<Object> getGroupPerson(@Path("id") String id);
+
+    // 推荐的成员
+    @GET(Api.URL_GET_PERSON_RECOMMEND)
+    Observable<Object> getRecommendPerson(@Path("id") String id, @Query("token") String type);
+
+    // 推荐的群组
+    @GET(Api.URL_GET_GROUP__RECOMMEND)
+    Observable<Object> getRecommendGroup(@Path("id") String id, @Query("token") String type);
+
+    // 搜索的群组
+    @GET(Api.URL_GET_GROUP__SEARCH)
+    Observable<Object> getSearchGroup(@Path("id") String id, @Query("q") String s, @Query("type") String type);
+
+    // 搜索的好友
+    @GET(Api.URL_GET_PERSON__SEARCH)
+    Observable<Object> getSearchPerson(@Path("id") String id, @Query("q") String s,@Query("type") String type);
+
     // 加群方式
     @POST(Api.URL_APPLY_GROUP_TYPE)
     Observable<Object> applyGroupType(@Query("password") String password, @Query("token") int type);
 
+    // 删除好友申请
+    @DELETE(Api.URL_NEW_FRIEND_DEL)
+    Observable<Object> newFriendDel(@Path("id") String id, @Query("token") String token);
+
+    // 同意好友申请
+    @POST(Api.URL_NEW_FRIEND_APPLY)
+    Observable<Object> newFriendApply(@Path("id") String id, @Query("token") String token);
+
+    // 拒绝好友申请
+    @POST(Api.URL_NEW_FRIEND_REFUSE)
+    Observable<Object> newFriendRefuse(@Path("id") String id, @Query("token") String token);
+
     // 入组申请
     @POST(Api.URL_GROUP_APPLY)
     Observable<Object> groupApply(@Query("s") String s);
+
+    // 添加好友
+    @POST(Api.URL_PERSON_APPLY)
+    Observable<Object> personApply(@Query("friend_id") String id, @Query("apply_message") String s);
+
 
     // 偏好设置
     @POST(Api.URL_PREFERENCE)
@@ -189,7 +230,7 @@ public interface RetrofitService {
     Observable<Object> cancel(@Query("s") String s);
 
     // 获取用户数据
-    @POST(Api.URL_GET_USERINFO)
+    @POST(Api.URL_GET_USER_INFO)
     Observable<Object> getUserInfo(@Query("s") String s);
 
 }

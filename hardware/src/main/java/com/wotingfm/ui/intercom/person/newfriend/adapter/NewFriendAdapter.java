@@ -45,8 +45,18 @@ public class NewFriendAdapter extends RecyclerView.Adapter<NewFriendAdapter.Simp
     // 数据绑定
     @Override
     public void onBindViewHolder(final SimpleHolder holder, int position) {
-        holder.layout_content.getLayoutParams().width = getScreenWidth(mContext);
-        holder.tv_name.setText(mData.get(position).getName());
+        if(mData.get(position).getApply_type().equals("1")){
+            holder.layout_content.getLayoutParams().width = getScreenWidth(mContext);
+            holder.tv_name.setText(mData.get(position).getName());
+            holder.tv_oks.setVisibility(View.GONE);
+            holder.tv_ok.setVisibility(View.VISIBLE);
+        }else{
+            holder.layout_content.getLayoutParams().width = getScreenWidth(mContext);
+            holder.tv_name.setText(mData.get(position).getName());
+            holder.tv_oks.setVisibility(View.VISIBLE);
+            holder.tv_ok.setVisibility(View.GONE);
+        }
+
         holder.tv_ok.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -85,7 +95,7 @@ public class NewFriendAdapter extends RecyclerView.Adapter<NewFriendAdapter.Simp
 
     class SimpleHolder extends RecyclerView.ViewHolder {
         public ImageView img_url;
-        public TextView tv_name, tv_news, tv_ok,tv_Delete;
+        public TextView tv_name, tv_news, tv_ok,tv_Delete,tv_oks;
         public RelativeLayout layout_content,re_adapter;
 
         public SimpleHolder(View itemView) {
@@ -94,16 +104,12 @@ public class NewFriendAdapter extends RecyclerView.Adapter<NewFriendAdapter.Simp
             img_url = (ImageView) itemView.findViewById(R.id.img_url);
             tv_name = (TextView) itemView.findViewById(R.id.tv_name);
             tv_news = (TextView) itemView.findViewById(R.id.tv_news);
+            tv_oks = (TextView) itemView.findViewById(R.id.tv_oks);
             tv_ok = (TextView) itemView.findViewById(R.id.tv_ok);
             re_adapter = (RelativeLayout) itemView.findViewById(R.id.re_adapter);
             layout_content = (RelativeLayout) itemView.findViewById(R.id.layout_content);
             ((SlidingButtonView) itemView).setSlidingButtonListener(NewFriendAdapter.this);
         }
-    }
-
-    public void removeData(int position) {
-        mData.remove(position);
-        notifyDataSetChanged();
     }
 
     @Override

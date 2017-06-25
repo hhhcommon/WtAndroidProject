@@ -60,10 +60,9 @@ public class NewFriendModel extends UserInfo {
      * 新的好友申请==删除
      * @param listener 监听
      */
-    public void loadNewsForDel( final OnLoadInterface listener) {
-        String id= BSApplication.SharedPreferences.getString(StringConstant.USER_ID,"000");
+    public void loadNewsForDel( String id,final OnLoadInterface listener) {
         String token= BSApplication.SharedPreferences.getString(StringConstant.TOKEN,"000");
-        RetrofitUtils.getInstance().newFriend(id, token)
+        RetrofitUtils.getInstance().newFriendDel(id, token)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Action1<Object>() {
@@ -91,10 +90,9 @@ public class NewFriendModel extends UserInfo {
      * 新的好友申请==同意
      * @param listener 监听
      */
-    public void loadNewsForApply( final OnLoadInterface listener) {
-        String id= BSApplication.SharedPreferences.getString(StringConstant.USER_ID,"000");
+    public void loadNewsForApply( String id,final OnLoadInterface listener) {
         String token= BSApplication.SharedPreferences.getString(StringConstant.TOKEN,"000");
-        RetrofitUtils.getInstance().newFriend(id, token)
+        RetrofitUtils.getInstance().newFriendApply(id, token)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Action1<Object>() {
@@ -122,10 +120,9 @@ public class NewFriendModel extends UserInfo {
      * 新的好友申请==拒绝
      * @param listener 监听
      */
-    public void loadNewsForRefuse( final OnLoadInterface listener) {
-        String id= BSApplication.SharedPreferences.getString(StringConstant.USER_ID,"000");
+    public void loadNewsForRefuse(String id, final OnLoadInterface listener) {
         String token= BSApplication.SharedPreferences.getString(StringConstant.TOKEN,"000");
-        RetrofitUtils.getInstance().newFriend(id, token)
+        RetrofitUtils.getInstance().newFriendRefuse(id, token)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Action1<Object>() {

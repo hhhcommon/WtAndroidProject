@@ -17,6 +17,15 @@ public class NewFriend {
     private String date;            // string	@mock=2017-06-05 18:18:04.000000
     private String timezone;        // string	@mock=Asia/Shanghai
     private String timezone_type;   //
+    private String apply_type="1";  // 好友申请的类型 1未同意 2同意
+
+    public String getApply_type() {
+        return apply_type;
+    }
+
+    public void setApply_type(String apply_type) {
+        this.apply_type = apply_type;
+    }
 
     public String getApply_id() {
         return apply_id;

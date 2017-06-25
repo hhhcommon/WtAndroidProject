@@ -3,35 +3,44 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <LinearLayout
+    <ImageView
+        android:id="@+id/img_background"
+        android:layout_width="match_parent"
+        android:layout_height="220dp"
+        android:scaleType="fitXY"
+        android:src="@mipmap/p" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="44dp">
+
+        <ImageView
+            android:id="@+id/head_left_btn"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:layout_marginLeft="2dp"
+            android:src="@mipmap/nav_icon_back_white" />
+
+        <ImageView
+            android:id="@+id/img_more"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="2dp"
+            android:src="@mipmap/nav_icon_more_white" />
+    </RelativeLayout>
+
+    <com.woting.commonplat.widget.TipView
+        android:id="@+id/tip_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/line_color"
+        android:visibility="gone" />
+
+    <LinearLayout
+        android:id="@+id/lin_news"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical">
-<LinearLayout
-    android:layout_width="match_parent"
-    android:orientation="vertical"
-    android:background="@mipmap/p"
-    android:layout_height="wrap_content">
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="44dp">
-
-            <ImageView
-                android:id="@+id/head_left_btn"
-                android:layout_width="44dp"
-                android:layout_height="44dp"
-                android:layout_marginLeft="2dp"
-                android:src="@mipmap/nav_icon_back_white" />
-
-            <ImageView
-                android:id="@+id/img_more"
-                android:layout_width="44dp"
-                android:layout_height="44dp"
-                android:layout_alignParentRight="true"
-                android:layout_marginRight="2dp"
-                android:src="@mipmap/nav_icon_more_white" />
-        </RelativeLayout>
 
         <ImageView
             android:id="@+id/img_url"
@@ -55,166 +64,174 @@
             android:id="@+id/tv_introduce"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="22dp"
             android:layout_marginTop="10dp"
             android:gravity="center"
             android:text="我的爱好就是你，别问我为什么知道"
             android:textColor="@color/white"
-            android:layout_marginBottom="22dp"
             android:textSize="12sp" />
-</LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
 
-            android:background="@color/white">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="13dp"
-                android:layout_marginLeft="12dp"
-                android:layout_marginTop="13dp"
-                android:gravity="center"
-                android:textColor="@color/black_head_word"
-                android:text="听号"
-                android:textSize="14sp" />
-
-            <TextView
-                android:id="@+id/tv_number"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="13dp"
-                android:layout_marginLeft="12dp"
-                android:layout_marginTop="13dp"
-                android:gravity="center"
-                android:textColor="@color/black_head_word"
-                android:text="1234567"
-                android:textSize="14sp" />
-        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:background="@color/white">
+            android:background="@color/line_color"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+
+                android:background="@color/white">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="13dp"
+                    android:layout_marginLeft="12dp"
+                    android:layout_marginTop="13dp"
+                    android:gravity="center"
+                    android:text="听号"
+                    android:textColor="@color/black_head_word"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/tv_number"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="13dp"
+                    android:layout_marginLeft="12dp"
+                    android:layout_marginTop="13dp"
+                    android:gravity="center"
+                    android:text="1234567"
+                    android:textColor="@color/black_head_word"
+                    android:textSize="14sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:background="@color/white">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="13dp"
+                    android:layout_marginLeft="12dp"
+                    android:layout_marginTop="13dp"
+                    android:gravity="center"
+                    android:text="地区"
+                    android:textColor="@color/black_head_word"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/tv_address"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="13dp"
+                    android:layout_marginLeft="12dp"
+                    android:layout_marginTop="13dp"
+                    android:gravity="center"
+                    android:text="北京"
+                    android:textColor="@color/black_head_word"
+                    android:textSize="14sp" />
+            </LinearLayout>
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:background="@color/line_color" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="13dp"
+                android:background="@color/white">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="13dp"
+                    android:layout_marginLeft="12dp"
+                    android:layout_marginTop="13dp"
+                    android:gravity="center"
+                    android:text="签名"
+                    android:textColor="@color/black_head_word"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/tv_sign"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="13dp"
+                    android:layout_marginLeft="12dp"
+                    android:layout_marginTop="13dp"
+                    android:lineSpacingExtra="7sp"
+                    android:text="我的爱好就是你，别问我为什么知道，因为我也不知道"
+                    android:textColor="@color/black_head_word"
+                    android:textSize="14sp" />
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:background="@color/line_color" />
+
+            <LinearLayout
+                android:id="@+id/lin_note"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="13dp"
+                    android:layout_marginLeft="12dp"
+                    android:layout_marginTop="13dp"
+                    android:layout_weight="1"
+                    android:gravity="center|left"
+                    android:text="设置备注信息"
+                    android:textColor="@color/black_head_word"
+                    android:textSize="14sp" />
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_marginRight="7dp"
+                    android:src="@mipmap/chat_icon_next" />
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:background="@color/line_color" />
+
+            <LinearLayout
+                android:id="@+id/lin_send"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
                 android:layout_marginLeft="12dp"
-                android:layout_marginTop="13dp"
-                android:gravity="center"
-                android:text="地区"
-                android:textColor="@color/black_head_word"
-                android:textSize="14sp" />
+                android:layout_marginRight="12dp"
+                android:layout_marginTop="30dp"
+                android:background="@drawable/background_circle_orange"
+                android:gravity="center">
 
-            <TextView
-                android:id="@+id/tv_address"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="13dp"
-                android:layout_marginLeft="12dp"
-                android:layout_marginTop="13dp"
-                android:gravity="center"
-                android:textColor="@color/black_head_word"
-                android:text="北京"
-                android:textSize="14sp" />
-        </LinearLayout>
+                <TextView
+                    android:id="@+id/tv_send"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="开始对讲"
+                    android:textColor="@color/white"
+                    android:textSize="15sp" />
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="0.5dp"
-            android:background="@color/line_color" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/white">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="13dp"
-                android:layout_marginLeft="12dp"
-                android:layout_marginTop="13dp"
-                android:gravity="center"
-                android:text="签名"
-                android:textColor="@color/black_head_word"
-                android:textSize="14sp" />
-
-            <TextView
-                android:id="@+id/tv_sign"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="13dp"
-                android:layout_marginLeft="12dp"
-                android:layout_marginTop="13dp"
-                android:lineSpacingExtra="7sp"
-                android:textColor="@color/black_head_word"
-                android:text="我的爱好就是你，别问我为什么知道，因为我也不知道"
-                android:textSize="14sp" />
-        </LinearLayout>
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="0.5dp"
-            android:background="@color/line_color" />
-
-        <LinearLayout
-            android:id="@+id/lin_note"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/white"
-            android:gravity="center_vertical">
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="13dp"
-                android:layout_marginLeft="12dp"
-                android:layout_marginTop="13dp"
-                android:layout_weight="1"
-                android:gravity="center|left"
-                android:textColor="@color/black_head_word"
-                android:text="设置备注信息"
-                android:textSize="14sp" />
-
-            <ImageView
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:layout_marginRight="7dp"
-                android:src="@mipmap/chat_icon_next" />
-        </LinearLayout>
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="0.5dp"
-            android:background="@color/line_color" />
-
-        <LinearLayout
-            android:id="@+id/lin_send"
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:layout_marginLeft="12dp"
-            android:layout_marginRight="12dp"
-            android:layout_marginTop="30dp"
-            android:background="@drawable/background_circle_orange"
-            android:gravity="center">
-
-            <TextView
-                android:id="@+id/tv_send"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="开始对讲"
-                android:textColor="@color/white"
-                android:textSize="15sp" />
-
-            <ImageView
-                android:id="@+id/img_call"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:src="@mipmap/chat_icon_call_white" />
+                <ImageView
+                    android:id="@+id/img_call"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@mipmap/chat_icon_call_white" />
+            </LinearLayout>
         </LinearLayout>
     </LinearLayout>
 

@@ -4,11 +4,14 @@
     android:layout_width="match_parent"
     android:background="@color/background_color"
     android:layout_height="match_parent">
-
+    <com.woting.commonplat.widget.TipView
+        android:id="@+id/tip_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone" />
     <android.support.design.widget.AppBarLayout
         android:id="@+id/app_bar"
         android:layout_width="match_parent"
-
         android:layout_height="200dp">
         <!--1.scroll 表示CollapsingToolbarLayout可以滚动（不设置的话头部的ImageView将不能折叠）-->
         <!--2.enterAlways 表示底部的滚动控件只要向下滚动，头部就显示出来-->
@@ -84,6 +87,7 @@
 
     <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
+        android:id="@+id/scrView"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 

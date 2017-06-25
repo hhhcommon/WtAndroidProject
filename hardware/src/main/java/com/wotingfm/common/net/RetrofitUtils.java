@@ -642,5 +642,177 @@ public class RetrofitUtils {
                 });
     }
 
+    /**
+     * 获取群组信息
+     *
+     * @param id    当前群id
+     * @return Object
+     */
+    public Observable<Object> getGroupNews(String id) {
+        return retrofitService.getGroupNews(id)
+                .map(new Func1<Object, Object>() {
+                    @Override
+                    public Object call(Object O) {
+                        return O;
+                    }
+                });
+    }
+
+    /**
+     * 获取群组成员
+     *
+     * @param id    当前群id
+     * @return Object
+     */
+    public Observable<Object> getGroupPerson(String id) {
+        return retrofitService.getGroupPerson(id)
+                .map(new Func1<Object, Object>() {
+                    @Override
+                    public Object call(Object O) {
+                        return O;
+                    }
+                });
+    }
+
+    /**
+     * 获取推荐的成员()
+     *
+     * @param id    当前群id
+     * @param type
+     * @return Object
+     */
+    public Observable<Object> getRecommendPerson(String id,String type) {
+        return retrofitService.getRecommendPerson(id,type)
+                .map(new Func1<Object, Object>() {
+                    @Override
+                    public Object call(Object O) {
+                        return O;
+                    }
+                });
+    }
+
+    /**
+     * 获取推荐的群组
+     *
+     * @param id    当前群id
+     * @param type
+     * @return Object
+     */
+    public Observable<Object> getRecommendGroup(String id,String type) {
+        return retrofitService.getRecommendGroup(id,type)
+                .map(new Func1<Object, Object>() {
+                    @Override
+                    public Object call(Object O) {
+                        return O;
+                    }
+                });
+    }
+
+    /**
+     * 获取搜索的群组
+     *
+     * @param id    当前用户id
+     * @param s     搜索的内容
+     * @param type
+     * @return Objects
+     */
+    public Observable<Object> getSearchGroup(String id,String s,String type) {
+        return retrofitService.getSearchGroup(id,s,type)
+                .map(new Func1<Object, Object>() {
+                    @Override
+                    public Object call(Object O) {
+                        return O;
+                    }
+                });
+    }
+
+    /**
+     * 获取搜索的好友
+     *
+     * @param id    当前用户id
+     * @param s     搜索的内容
+     * @param type
+     * @return Objects
+     */
+    public Observable<Object> getSearchPerson(String id,String s,String type) {
+        return retrofitService.getSearchPerson(id,s,type)
+                .map(new Func1<Object, Object>() {
+                    @Override
+                    public Object call(Object O) {
+                        return O;
+                    }
+                });
+    }
+
+
+    /**
+     * 删除好友申请
+     *
+     * @param id    操作用户id
+     * @param token
+     * @return Objects
+     */
+    public Observable<Object> newFriendDel(String id,String token) {
+        return retrofitService.newFriendDel(id,token)
+                .map(new Func1<Object, Object>() {
+                    @Override
+                    public Object call(Object O) {
+                        return O;
+                    }
+                });
+    }
+
+    /**
+     * 同意好友申请
+     *
+     * @param id    操作用户id
+     * @param token
+     * @return Objects
+     */
+    public Observable<Object> newFriendApply(String id,String token) {
+        return retrofitService.newFriendApply(id,token)
+                .map(new Func1<Object, Object>() {
+                    @Override
+                    public Object call(Object O) {
+                        return O;
+                    }
+                });
+    }
+
+    /**
+     * 拒绝好友申请
+     *
+     * @param id    操作用户id
+     * @param token
+     * @return Objects
+     */
+    public Observable<Object> newFriendRefuse(String id,String token) {
+        return retrofitService.newFriendRefuse(id,token)
+                .map(new Func1<Object, Object>() {
+                    @Override
+                    public Object call(Object O) {
+                        return O;
+                    }
+                });
+    }
+
+
+    /**
+     * 添加好友
+     *
+     * @param id    操作用户id
+     * @param s     申请消息
+     * @return Objects
+     */
+    public Observable<Object> personApply(String id,String s) {
+        return retrofitService.personApply(id,s)
+                .map(new Func1<Object, Object>() {
+                    @Override
+                    public Object call(Object O) {
+                        return O;
+                    }
+                });
+    }
+
 
 }

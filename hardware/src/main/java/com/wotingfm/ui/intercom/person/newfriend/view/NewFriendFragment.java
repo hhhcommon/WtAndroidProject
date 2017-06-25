@@ -99,17 +99,34 @@ public class NewFriendFragment extends Fragment implements NewFriendAdapter.IonS
         mAdapter.setOnSlidListener(this);
     }
 
+    /**
+     * 同意按钮的操作
+     * @param view
+     * @param position
+     */
     @Override
     public void onItemClick(View view, int position) {
+        presenter.apply(position);
     }
 
+    /**
+     * 删除按钮的操作
+     * @param view
+     * @param position
+     */
+    @Override
+    public void onDeleteBtnClick(View view, int position) {
+        presenter.del(position);
+    }
+
+    /**
+     * item的点击事件
+     * @param view
+     * @param position
+     */
     @Override
     public void onAdapterClick(View view, int position) {
-        PersonMessageFragment fragment = new PersonMessageFragment();
-        Bundle bundle = new Bundle();
-        bundle.putString("type", "true");
-        fragment.setArguments(bundle);
-        InterPhoneActivity.open(fragment);
+        presenter.onClick(position);
     }
 
     /**
@@ -132,7 +149,7 @@ public class NewFriendFragment extends Fragment implements NewFriendAdapter.IonS
             // 已经登录，没有数据
             mRecyclerView.setVisibility(View.GONE);
             tip_view.setVisibility(View.VISIBLE);
-            tip_view.setTipView(TipView.TipStatus.NO_DATA, "您还没有聊天对象哟\n快去找好友们聊天吧");
+            tip_view.setTipView(TipView.TipStatus.NO_DATA);
         } else if (type == 2) {
             // 没有网络
             mRecyclerView.setVisibility(View.GONE);
@@ -165,10 +182,8 @@ public class NewFriendFragment extends Fragment implements NewFriendAdapter.IonS
     public void dialogCancel() {
         if (dialog != null) dialog.dismiss();
     }
-    @Override
-    public void onDeleteBtnClick(View view, int position) {
-        mAdapter.removeData(position);
-    }
+
+
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {

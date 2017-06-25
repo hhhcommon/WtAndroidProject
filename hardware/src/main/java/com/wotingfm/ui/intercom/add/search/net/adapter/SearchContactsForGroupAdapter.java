@@ -6,8 +6,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.SectionIndexer;
 import android.widget.TextView;
 
 import com.wotingfm.R;
@@ -19,24 +17,19 @@ import java.util.List;
  * 作者：xinLong on 2017/6/8 14:36
  * 邮箱：645700751@qq.com
  */
-public class SearchContactsAdapter extends BaseAdapter implements  SectionIndexer {
-    private List<Contact.user> list;
+public class SearchContactsForGroupAdapter extends BaseAdapter  {
+    private List<Contact.group> list;
     private Context context;
-    private OnListener onListener;
 
-    public SearchContactsAdapter(Context context, List<Contact.user> list) {
+    public SearchContactsForGroupAdapter(Context context, List<Contact.group> list) {
         super();
         this.list = list;
         this.context = context;
     }
 
-    public void ChangeDate(List<Contact.user> list) {
+    public void ChangeDate(List<Contact.group> list) {
         this.list = list;
         this.notifyDataSetChanged();
-    }
-
-    public void setOnListener(OnListener onListener) {
-        this.onListener = onListener;
     }
 
     @Override
@@ -63,20 +56,18 @@ public class SearchContactsAdapter extends BaseAdapter implements  SectionIndexe
             holder.tv_name = (TextView) convertView.findViewById(R.id.tv_name);//名
             holder.img_touXiang = (ImageView) convertView.findViewById(R.id.image);
             holder.img_chat = (ImageView) convertView.findViewById(R.id.img_chat);
-
-            holder.indexLayout = (LinearLayout) convertView.findViewById(R.id.index);
-            holder.indexTv = (TextView) convertView.findViewById(R.id.indexTv);
+            holder.img_chat.setVisibility(View.GONE);
 
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-        Contact.user lists = list.get(position);
+        Contact.group lists = list.get(position);
 
-        if (lists.getName() == null || lists.getName().equals("")) {
+        if (lists.getTitle()== null || lists.getTitle().equals("")) {
             holder.tv_name.setText("名称");//名
         } else {
-            holder.tv_name.setText(lists.getName());//名
+            holder.tv_name.setText(lists.getTitle());//名
         }
 
 //        if (lists.avatar == null || lists.avatar.equals("") || lists.avatar.equals("null") || lists.avatar.trim().equals("")) {
@@ -93,51 +84,14 @@ public class SearchContactsAdapter extends BaseAdapter implements  SectionIndexe
 //            AssembleImageUrlUtils.loadImage(_url, url, holder.img_touXiang, IntegerConstant.TYPE_GROUP);
 //        }
 
-        holder.img_chat.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                onListener.add(position);
-            }
-        });
         return convertView;
-    }
-
-    public interface OnListener {
-        public void add(int position);
     }
 
     class ViewHolder {
         public TextView tv_name;
         public ImageView img_touXiang;
         public ImageView img_chat;
-
-        public LinearLayout indexLayout;
-        public TextView indexTv;
     }
 
-    /**
-     * 根据ListView的当前位置获取分类的首字母的Char ascii值
-     */
-    public int getSectionForPosition(int position) {
-        return list.get(position).getSortLetters().charAt(0);
-    }
 
-    /**
-     * 根据分类的首字母的Char ascii值获取其第一次出现该首字母的位置
-     */
-    public int getPositionForSection(int section) {
-        for (int i = 0; i < getCount(); i++) {
-            String sortStr = list.get(i).getSortLetters();
-            char firstChar = sortStr.toUpperCase().charAt(0);
-            if (firstChar == section) {
-                return i;
-            }
-        }
-
-        return -1;
-    }
-
-    @Override
-    public Object[] getSections() {
-        return null;
-    }
 }

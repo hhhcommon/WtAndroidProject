@@ -1,5 +1,6 @@
 package com.wotingfm.ui.intercom.add.search.net.view;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -17,11 +18,15 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.woting.commonplat.widget.HeightListView;
+import com.woting.commonplat.widget.TipView;
 import com.wotingfm.R;
+import com.wotingfm.common.utils.DialogUtils;
 import com.wotingfm.ui.intercom.add.search.local.adapter.GroupsAdapter;
-import com.wotingfm.ui.intercom.add.search.net.adapter.SearchContactsAdapter;
+import com.wotingfm.ui.intercom.add.search.net.adapter.SearchContactsForGroupAdapter;
+import com.wotingfm.ui.intercom.add.search.net.adapter.SearchContactsForUserAdapter;
 import com.wotingfm.ui.intercom.add.search.net.presenter.SearchContactsForNetPresenter;
 import com.wotingfm.ui.intercom.group.groupnews.add.view.GroupNewsForAddFragment;
+import com.wotingfm.ui.intercom.group.groupnews.noadd.view.GroupNewsForNoAddFragment;
 import com.wotingfm.ui.intercom.main.contacts.adapter.ContactsAdapter;
 import com.wotingfm.ui.intercom.main.contacts.adapter.NoAdapter;
 import com.wotingfm.ui.intercom.main.contacts.model.Contact;
@@ -35,20 +40,22 @@ import java.util.List;
  * 作者：xinLong on 2017/6/5 01:30
  * 邮箱：645700751@qq.com
  */
-public class SearchContactsForNetFragment extends Fragment implements View.OnClickListener{
+public class SearchContactsForNetFragment extends Fragment implements View.OnClickListener, TipView.TipViewClick {
     private View rootView;
     private FragmentActivity context;
-    private LinearLayout lin_pos,lin_search;
-    private ListView lv_pos,listViewG,listViewP;
-    private TextView tv_clear,tv_newsP,tv_newsG;
+    private LinearLayout lin_pos, lin_search;
+    private ListView lv_pos, listViewG, listViewP;
+    private TextView tv_clear, tv_newsP, tv_newsG;
     private EditText et_search;
     private ImageView img_search;
+    private Dialog dialog;
+    private TipView tip_view;
+    private int type;
     private SearchContactsForNetPresenter presenter;
-    private ContactsAdapter pAdapter;
-    private GroupsAdapter gAdapter;
-    private LinearLayout lin_background;
-    private TextView tv_ts;// 提示性界面，临时使用，需替换
-    private SearchContactsAdapter searchContactsAdapter;
+    private SearchContactsForGroupAdapter searchContactsForGroupAdapter;
+    private SearchContactsForUserAdapter searchContactsForUserAdapter;
+    private SearchContactsForGroupAdapter gAdapter;
+    private SearchContactsForUserAdapter pAdapter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -64,15 +71,15 @@ public class SearchContactsForNetFragment extends Fragment implements View.OnCli
             initViews();// 设置界面
             setEditListener();
             presenter = new SearchContactsForNetPresenter(this);
-            presenter.getFriends();
+            presenter.getRecommendedData();// 获取推荐数据
         }
         return rootView;
     }
 
     // 初始化视图
     private void initViews() {
-        lin_background = (LinearLayout) rootView.findViewById(R.id.lin_background);
-        tv_ts = (TextView) rootView.findViewById(R.id.tv_ts);
+        tip_view = (TipView) rootView.findViewById(R.id.tip_view);// 提示界面
+        tip_view.setTipClick(this);
 
         lin_pos = (LinearLayout) rootView.findViewById(R.id.lin_pos);
         lv_pos = (ListView) rootView.findViewById(R.id.lv_pos);
@@ -116,68 +123,49 @@ public class SearchContactsForNetFragment extends Fragment implements View.OnCli
         });
     }
 
-    // 第一次进入时候的界面展示
-    public void setViewOne() {
-        lin_background.setVisibility(View.VISIBLE);
-        tv_ts.setText("请输入您想要搜索的关键词");
-        lin_pos.setVisibility(View.GONE);
-        lin_search.setVisibility(View.GONE);
+    @Override
+    public void onTipViewClick() {
+        presenter.tipClick(type);
     }
 
-    // 此时没有数据
-    public void setView() {
-        lin_background.setVisibility(View.VISIBLE);
-        tv_ts.setText("暂没有数据");
-        lin_pos.setVisibility(View.GONE);
-        lin_search.setVisibility(View.GONE);
-    }
-
-    // 设置可能认识的人没有数据的界面
-    public void setViewForPosNoData() {
-        lin_background.setVisibility(View.VISIBLE);
-        tv_ts.setText("请输入您想要搜索的关键词");
-        lin_pos.setVisibility(View.GONE);
-        lin_search.setVisibility(View.GONE);
-    }
-
-    // 设置可能认识的人有数据的界面
-    public void setViewForPos(List<Contact.user> list) {
-        lin_background.setVisibility(View.GONE);
-        lin_pos.setVisibility(View.VISIBLE);
-        lin_search.setVisibility(View.GONE);
-        if (searchContactsAdapter == null) {
-            searchContactsAdapter = new SearchContactsAdapter(context, list);
-            lv_pos.setAdapter(searchContactsAdapter);
+    // 设置可能认识的人有数据的界面（个人）
+    public void setViewForPosPerson(List<Contact.user> list) {
+        if (searchContactsForUserAdapter == null) {
+            searchContactsForUserAdapter = new SearchContactsForUserAdapter(context, list);
+            lv_pos.setAdapter(searchContactsForUserAdapter);
         } else {
-            searchContactsAdapter.ChangeDate(list);
+            searchContactsForUserAdapter.ChangeDate(list);
         }
+        setPosPersonListViewListener(list);
     }
 
-    // 此时个人有数据
+    // 设置可能认识的人有数据的界面（群组）
+    public void setViewForPosGroup(List<Contact.group> list) {
+        if (searchContactsForGroupAdapter == null) {
+            searchContactsForGroupAdapter = new SearchContactsForGroupAdapter(context, list);
+            lv_pos.setAdapter(searchContactsForGroupAdapter);
+        } else {
+            searchContactsForGroupAdapter.ChangeDate(list);
+        }
+        setPosGroupListViewListener(list);
+    }
+
+    // 设置个人有数据
     public void setViewForPerson(List<Contact.user> person) {
-        lin_background.setVisibility(View.GONE);
-        lin_pos.setVisibility(View.GONE);
-        lin_search.setVisibility(View.VISIBLE);
         if (pAdapter == null) {
-            pAdapter = new ContactsAdapter(context, person);
+            pAdapter = new SearchContactsForUserAdapter(context, person);
             listViewP.setAdapter(pAdapter);
         } else {
             pAdapter.ChangeDate(person);
         }
-        new HeightListView(context).setListViewHeightBasedOnChildren(listViewP);
         setListViewListener(person);
-        NoAdapter adapters = new NoAdapter(context);
-        listViewG.setAdapter(adapters);
 
     }
 
-    // 此时群组有数据
+    // 设置群组有数据
     public void setViewForGroup(List<Contact.group> group) {
-        lin_background.setVisibility(View.GONE);
-        lin_pos.setVisibility(View.GONE);
-        lin_search.setVisibility(View.VISIBLE);
         if (gAdapter == null) {
-            gAdapter = new GroupsAdapter(context, group);
+            gAdapter = new SearchContactsForGroupAdapter(context, group);
             listViewG.setAdapter(gAdapter);
         } else {
             gAdapter.ChangeDate(group);
@@ -185,60 +173,134 @@ public class SearchContactsForNetFragment extends Fragment implements View.OnCli
         setGroupListViewListener(group);
     }
 
-    // 此时群组、个人都有数据
-    public void setViewForAll(List<Contact.user> person, List<Contact.group> group) {
-        lin_background.setVisibility(View.GONE);
-        lin_pos.setVisibility(View.GONE);
-        lin_search.setVisibility(View.VISIBLE);
-        if (pAdapter == null) {
-            pAdapter = new ContactsAdapter(context, person);
-            listViewP.setAdapter(pAdapter);
-        } else {
-            pAdapter.ChangeDate(person);
-        }
-        new HeightListView(context).setListViewHeightBasedOnChildren(listViewP);
-        setListViewListener(person);
-        gAdapter = new GroupsAdapter(context, group);
-        listViewG.setAdapter(gAdapter);
-        setGroupListViewListener(group);
-    }
-
-    // listView 的监听
-    private void setListViewListener(List<Contact.user> person) {
-        pAdapter.setOnListener(new ContactsAdapter.OnListener() {
+    // listView 的监听==推荐的好友
+    private void setPosPersonListViewListener(final List<Contact.user> person) {
+        lv_pos.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void add(int position) {
-//                call(id);
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                // 跳转到好友信息界面
+                PersonMessageFragment fragment = new PersonMessageFragment();
+                Bundle bundle = new Bundle();
+                bundle.putString("type", "true");
+                bundle.putString("id", person.get(position).getId());
+                fragment.setArguments(bundle);
+                InterPhoneActivity.open(fragment);
             }
         });
+    }
 
+    // 组 listView 监听==推荐的群组
+    private void setPosGroupListViewListener(final List<Contact.group> group) {
+        lv_pos.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                // 跳转到群组详情页面
+                GroupNewsForNoAddFragment fragment = new GroupNewsForNoAddFragment();
+                Bundle bundle = new Bundle();
+                bundle.putString("id", group.get(position).getId());
+                fragment.setArguments(bundle);
+                InterPhoneActivity.open(fragment);
+            }
+        });
+    }
+
+    // listView 的监听==搜索到的好友
+    private void setListViewListener(final List<Contact.user> person) {
         listViewP.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 // 跳转到好友信息界面
-                InterPhoneActivity.open(new PersonMessageFragment());
+                PersonMessageFragment fragment = new PersonMessageFragment();
+                Bundle bundle = new Bundle();
+                bundle.putString("type", "true");
+                bundle.putString("id", person.get(position).getId());
+                fragment.setArguments(bundle);
+                InterPhoneActivity.open(fragment);
             }
         });
 
     }
 
-    // 组 listView 监听
-    private void setGroupListViewListener(List<Contact.group> group) {
-        gAdapter.setOnListener(new GroupsAdapter.OnListener() {
-            @Override
-            public void add(int position) {
-            }
-        });
-
+    // 组 listView 监听==搜索到的群组
+    private void setGroupListViewListener(final List<Contact.group> group) {
         listViewG.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 // 跳转到群组详情页面
-                InterPhoneActivity.open(new GroupNewsForAddFragment());
+                GroupNewsForNoAddFragment fragment = new GroupNewsForNoAddFragment();
+                Bundle bundle = new Bundle();
+                bundle.putString("id", group.get(position).getId());
+                fragment.setArguments(bundle);
+                InterPhoneActivity.open(fragment);
             }
         });
     }
 
+
+
+    /**
+     * 是否登录，是否有数据
+     *
+     * @param type 登录后数据类型
+     *             -1 推荐有数据
+     *             0 搜索有数据
+     *             NO_DATA,没有数据 1
+     *             NO_NET,没有网络 2
+     *             NO_LOGIN,没有登录 3
+     *             IS_ERROR,加载错误 4
+     */
+    public void isLoginView(int type) {
+        this.type = type;
+        if (type == -1) {
+            // 已经登录，推荐有数据
+            lin_pos.setVisibility(View.VISIBLE);
+            lin_search.setVisibility(View.GONE);
+            tip_view.setVisibility(View.GONE);
+        }else if(type == 0){
+            // 已经登录，搜索有数据
+            lin_pos.setVisibility(View.GONE);
+            lin_search.setVisibility(View.VISIBLE);
+            tip_view.setVisibility(View.GONE);
+        } else if (type == 1) {
+            // 已经登录，没有数据
+            lin_pos.setVisibility(View.GONE);
+            lin_search.setVisibility(View.GONE);
+            tip_view.setVisibility(View.VISIBLE);
+            tip_view.setTipView(TipView.TipStatus.NO_DATA, "您还没有聊天对象哟\n快去找好友们聊天吧");
+        } else if (type == 2) {
+            // 没有网络
+            lin_pos.setVisibility(View.GONE);
+            lin_search.setVisibility(View.GONE);
+            tip_view.setVisibility(View.VISIBLE);
+            tip_view.setTipView(TipView.TipStatus.NO_NET);
+        } else if (type == 3) {
+            // 没有登录
+            lin_pos.setVisibility(View.GONE);
+            lin_search.setVisibility(View.GONE);
+            tip_view.setVisibility(View.VISIBLE);
+            tip_view.setTipView(TipView.TipStatus.NO_LOGIN);
+        } else if (type == 4) {
+            // 已经登录，数据加载失败
+            lin_pos.setVisibility(View.GONE);
+            lin_search.setVisibility(View.GONE);
+            tip_view.setVisibility(View.VISIBLE);
+            tip_view.setTipView(TipView.TipStatus.IS_ERROR);
+        }
+    }
+
+    /**
+     * 展示弹出框
+     */
+    public void dialogShow() {
+        dialog = DialogUtils.Dialog(this.getActivity());
+    }
+
+    /**
+     * 取消弹出框
+     */
+    public void dialogCancel() {
+        if (dialog != null) dialog.dismiss();
+    }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
@@ -262,7 +324,7 @@ public class SearchContactsForNetFragment extends Fragment implements View.OnCli
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.tv_clear:
                 InterPhoneActivity.close();
                 break;
