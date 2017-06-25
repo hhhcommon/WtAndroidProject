@@ -202,7 +202,7 @@ public class GroupNewsForNoAddPresenter {
         // 组装数据
         ArrayList<Contact.user> g_list = new ArrayList<>();
         for (int i = 0; i < list.size(); i++) {
-            if (list.get(i).getIs_admin()) {
+            if (list.get(i).is_admin()) {
                 g_list.add(g_list.get(i));
             }
         }
