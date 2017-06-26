@@ -18,7 +18,6 @@ public class CommonUtils {
     /**
      * 获取USERID，没有则返回imei
      *
-     * @param context
      * @return
      */
     public static String getUserId() {
