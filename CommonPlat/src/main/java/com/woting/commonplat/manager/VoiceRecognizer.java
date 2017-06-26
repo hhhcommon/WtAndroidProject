@@ -1,13 +1,17 @@
 package com.woting.commonplat.manager;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+
 import com.iflytek.cloud.SpeechConstant;
 import com.iflytek.cloud.SpeechError;
 import com.iflytek.cloud.SpeechRecognizer;
 import com.iflytek.cloud.RecognizerListener;
 import com.iflytek.cloud.RecognizerResult;
+import com.woting.commonplat.constant.BroadcastConstants;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -111,22 +115,12 @@ public class VoiceRecognizer {
             if (str != null && !str.equals("")) {
                 str = str.replaceAll("[`~!@#$%^&*()+=|{}':;',\\[\\].<>/?~！@#￥%……& amp;*（）——+|{}【】‘；：”“’。，、？|-]", "");
                 //根据发起来源决定调用
-//			if(fromWhere.equals(BroadcastConstants.SEARCHVOICE)){
-//            	   Intent intent =new Intent();
-//            	   intent.putExtra("VoiceContent",str);
-//            	   intent.setAction(BroadcastConstants.SEARCHVOICE);
-//            	   contexts.sendBroadcast(intent);
-//               }else if(fromWhere.equals(BroadcastConstants.PLAYERVOICE)){
-//            	   Intent intent =new Intent();
-//            	   intent.putExtra("VoiceContent",str);
-//            	   intent.setAction(BroadcastConstants.PLAYERVOICE);
-//            	   contexts.sendBroadcast(intent);
-//               }else if(fromWhere.equals(BroadcastConstants.FINDVOICE)){
-//            	   Intent intent =new Intent();
-//            	   intent.putExtra("VoiceContent",str);
-//            	   intent.setAction(BroadcastConstants.FINDVOICE);
-//            	   contexts.sendBroadcast(intent);
-//               }
+                if (fromWhere.equals(BroadcastConstants.SEARCHVOICE)) {
+                    Intent intent = new Intent();
+                    intent.putExtra("VoiceContent", str);
+                    intent.setAction(BroadcastConstants.SEARCHVOICE);
+                    contexts.sendBroadcast(intent);
+                }
             }
         }
     }
