@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="44dp">
+
+        <EditText
+            android:id="@+id/et_searchlike"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="5dp"
+            android:layout_toLeftOf="@id/tvCancel"
+            android:layout_toRightOf="@id/head_left_btn"
+            android:background="@drawable/ed_bg"
+            android:ellipsize="end"
+            android:gravity="center|left"
+            android:singleLine="true"
+            android:textColor="#16181a"
+            android:paddingLeft="12dp"
+            android:textColorHint="@color/gray"
+            android:textCursorDrawable="@drawable/ed_cursor"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/tvCancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:gravity="end"
+            android:lineSpacingExtra="5.3sp"
+            android:padding="12dp"
+            android:text="取消"
+            android:textColor="#16181a"
+            android:textSize="14sp" />
+    </RelativeLayout>
+
+    <android.support.design.widget.TabLayout
+        android:id="@+id/tabs"
+        style="@style/Widget.TabLayout"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/toolbar_height"
+        android:layout_centerInParent="true"
+        android:layout_gravity="center"
+        android:layout_toLeftOf="@+id/ivVoice"
+        android:layout_toRightOf="@+id/ivClose"
+        android:paddingLeft="12dp"
+        android:paddingRight="12dp"
+        app:tabGravity="fill"
+        app:tabMode="fixed" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="#efefef" />
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/viewPager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+</LinearLayout>

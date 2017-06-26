@@ -2,6 +2,8 @@ package com.wotingfm.common.application;
 
 import android.app.Application;
 import android.content.Context;
+
+import com.iflytek.cloud.SpeechUtility;
 import com.woting.commonplat.manager.NetWorkManager;
 import com.woting.commonplat.manager.PhoneMsgManager;
 import cn.finalteam.okhttpfinal.OkHttpFinal;
@@ -20,6 +22,7 @@ public class BSApplication extends Application {
     public void onCreate() {
         super.onCreate();
         mContext = this;
+        SpeechUtility.createUtility(this, "appid=56275014");// 初始化讯飞
         OkHttpFinalConfiguration.Builder builder = new OkHttpFinalConfiguration.Builder();
         OkHttpFinal.getInstance().init(builder.build());
         SharedPreferences = this.getSharedPreferences("wotingfm", Context.MODE_PRIVATE);

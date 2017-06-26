@@ -459,6 +459,14 @@ public class PlayerActivity extends NoTitleBarBaseActivity implements View.OnCli
             if (bdPlayer != null) {
                 bdPlayer.stopPlayback();
             }
+        } else if (!TextUtils.isEmpty(event) && "pause".equals(event)) {
+            if (bdPlayer != null) {
+                bdPlayer.pause();
+            }
+        } else if (!TextUtils.isEmpty(event) && "start".equals(event)) {
+            if (bdPlayer != null) {
+                bdPlayer.start();
+            }
         }
     }
 

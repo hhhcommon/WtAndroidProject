@@ -3,7 +3,6 @@
     package="com.wotingfm">
     <!-- supportsRtl 从左到右 -->
     <!-- android:screenOrientation="portrait" 强制竖屏 -->
-
     <application
         android:name="com.wotingfm.common.application.BSApplication"
         android:allowBackup="false"
@@ -143,5 +142,6 @@
 
     </application>
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+
 
 </manifest>
