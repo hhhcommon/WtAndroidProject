@@ -1,19 +1,24 @@
 package com.wotingfm.ui.play.activity.albums.fragment;
 
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.woting.commonplat.widget.GlideCircleTransform;
+import com.woting.commonplat.widget.LoadFrameLayout;
 import com.wotingfm.R;
 import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.bean.AlbumInfo;
 import com.wotingfm.common.bean.BaseResult;
+import com.wotingfm.common.constant.StringConstant;
+import com.wotingfm.common.net.RetrofitService;
 import com.wotingfm.common.net.RetrofitUtils;
 import com.wotingfm.common.utils.CommonUtils;
 import com.wotingfm.common.utils.T;
@@ -22,10 +27,15 @@ import com.wotingfm.ui.base.basefragment.BaseFragment;
 import com.wotingfm.ui.user.login.view.LoginFragment;
 import com.wotingfm.ui.user.logo.LogoActivity;
 
+import org.w3c.dom.Text;
+
 import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.schedulers.Schedulers;
+
 
 /**
  * Created by amine on 2017/6/14.
@@ -77,6 +87,7 @@ public class AlbumsInfoFragment extends BaseFragment {
             setResultData(albumInfo);
         }
         userId = CommonUtils.getUserId();
+
     }
 
     private void setResultData(final AlbumInfo albumInfo) {
@@ -115,8 +126,8 @@ public class AlbumsInfoFragment extends BaseFragment {
             @Override
             public void onClick(View v) {
                 boolean isLogin = CommonUtils.isLogin();
-                if(isLogin==false){
-                    LogoActivity.open(new LoginFragment());
+                if (isLogin == false) {
+                    LogoActivity.start(getActivity());
                     return;
                 }
                 if (had_followed == true) {

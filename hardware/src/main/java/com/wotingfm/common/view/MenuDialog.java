@@ -219,7 +219,7 @@ public class MenuDialog extends Dialog implements View.OnClickListener {
                 dismiss();
                 boolean isLogin = CommonUtils.isLogin();
                 if (isLogin == false) {
-                    LogoActivity.open(new LoginFragment());
+                    LogoActivity.start(activity);
                     return;
                 }
                 MeSubscribeListActivity.start(activity);
@@ -229,7 +229,7 @@ public class MenuDialog extends Dialog implements View.OnClickListener {
                     dismiss();
                     boolean isLogin1 = CommonUtils.isLogin();
                     if (isLogin1 == false) {
-                        LogoActivity.open(new LoginFragment());
+                        LogoActivity.start(activity);
                         return;
                     }
                     ReportsPlayerActivity.start(activity, pdsBase.id, "REPORT_SINGLE");
@@ -246,7 +246,8 @@ public class MenuDialog extends Dialog implements View.OnClickListener {
                 if (pdsBase != null) {
                     boolean isLogin2 = CommonUtils.isLogin();
                     if (isLogin2 == false) {
-                        LogoActivity.open(new LoginFragment());
+                        dismiss();
+                        LogoActivity.start(activity);
                         return;
                     }
                     if (pdsBase.had_liked == true) {

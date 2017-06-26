@@ -243,7 +243,7 @@ public class AnchorPersonalCenterActivity extends NoTitleBarBaseActivity impleme
             public void onClick(View v) {
                 boolean isLogin = CommonUtils.isLogin();
                 if(isLogin==false){
-                    LogoActivity.open(new LoginFragment());
+                    LogoActivity.start(AnchorPersonalCenterActivity.this);
                     return;
                 }
                 showLodingDialog();
