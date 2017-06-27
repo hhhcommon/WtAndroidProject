@@ -35,22 +35,6 @@ public class UserBean implements Serializable {
     public List<SinglesBean> singles;
 
 
-    public static class AlbumsBean implements Serializable {
-        /**
-         * id : 1
-         * logo_url : http://i.ebayimg.com/images/g/UQsAAOxy4t1SkeRh/s-l300.jpg
-         * play_count : 0
-         * status : 0
-         * title : 第一个专辑
-         */
-
-        public String id;
-        public String logo_url;
-        public String play_count;
-        public int status;
-        public String title;
-
-    }
 
     public static class SinglesBean implements Serializable {
         /**

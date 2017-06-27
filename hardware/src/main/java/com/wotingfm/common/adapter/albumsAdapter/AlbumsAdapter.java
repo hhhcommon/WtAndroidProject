@@ -9,6 +9,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.wotingfm.R;
 import com.wotingfm.common.application.BSApplication;
+import com.wotingfm.common.bean.AlbumsBean;
 import com.wotingfm.common.bean.AnchorInfo;
 import com.wotingfm.common.bean.Player;
 import com.wotingfm.common.bean.Subscrible;
@@ -23,15 +24,15 @@ import static com.loc.e.i;
  * Created by amine on 2017/6/7.
  */
 
-public class AlbumsAdapter extends CommonAdapter<Subscrible.DataBean.AlbumsBean> {
+public class AlbumsAdapter extends CommonAdapter<AlbumsBean> {
     private PlayerClick playerClick;
 
-    public AlbumsAdapter(Context context, List<Subscrible.DataBean.AlbumsBean> datas) {
+    public AlbumsAdapter(Context context, List<AlbumsBean> datas) {
         super(context, R.layout.item_albums, datas);
     }
 
     @Override
-    protected void convert(ViewHolder holder, final Subscrible.DataBean.AlbumsBean s, final int position) {
+    protected void convert(ViewHolder holder, final AlbumsBean s, final int position) {
         ImageView ivPhoto = (ImageView) holder.itemView.findViewById(R.id.ivPhoto);
         TextView tvTitle = (TextView) holder.itemView.findViewById(R.id.tvTitle);
         TextView tvContent = (TextView) holder.itemView.findViewById(R.id.tvContent);
@@ -57,7 +58,7 @@ public class AlbumsAdapter extends CommonAdapter<Subscrible.DataBean.AlbumsBean>
     }
 
     public interface PlayerClick {
-        void clickAlbums(Subscrible.DataBean.AlbumsBean singlesBean);
+        void clickAlbums(AlbumsBean singlesBean);
     }
 
 }

@@ -17,6 +17,7 @@ import com.wotingfm.common.adapter.albumsAdapter.AlbumsAdapter;
 import com.wotingfm.common.adapter.downloadAdapter.AlbumsDownloadAdapter;
 import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.bean.AlbumInfo;
+import com.wotingfm.common.bean.AlbumsBean;
 import com.wotingfm.common.bean.SinglesDownload;
 import com.wotingfm.common.bean.Subscrible;
 import com.wotingfm.common.database.DownloadHelper;
@@ -82,7 +83,7 @@ public class SimilarInfoFragment extends BaseFragment {
         albumsAdapter = new AlbumsAdapter(getActivity(), albumsBeens);
         albumsAdapter.setPlayerClick(new AlbumsAdapter.PlayerClick() {
             @Override
-            public void clickAlbums(Subscrible.DataBean.AlbumsBean singlesBean) {
+            public void clickAlbums(AlbumsBean singlesBean) {
                 Intent intent = getActivity().getIntent();
                 intent.putExtra("albumsId", albumsID);
                 getActivity().setResult(RESULT_OK, intent);
@@ -97,9 +98,9 @@ public class SimilarInfoFragment extends BaseFragment {
         RetrofitUtils.getInstance().getSimilarsList(albumsID)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Action1<List<Subscrible.DataBean.AlbumsBean>>() {
+                .subscribe(new Action1<List<AlbumsBean>>() {
                     @Override
-                    public void call(List<Subscrible.DataBean.AlbumsBean> albumsBeen) {
+                    public void call(List<AlbumsBean> albumsBeen) {
                         if (albumsBeen != null && !albumsBeen.isEmpty()) {
                             albumsBeens.clear();
                             albumsBeens.addAll(albumsBeen);
@@ -118,6 +119,6 @@ public class SimilarInfoFragment extends BaseFragment {
                 });
     }
 
-    private List<Subscrible.DataBean.AlbumsBean> albumsBeens = new ArrayList<>();
+    private List<AlbumsBean> albumsBeens = new ArrayList<>();
     private AlbumsAdapter albumsAdapter;
 }

@@ -7,10 +7,12 @@ import com.wotingfm.common.bean.BaseResult;
 import com.wotingfm.common.bean.Channels;
 import com.wotingfm.common.bean.Classification;
 import com.wotingfm.common.bean.HomeBanners;
+import com.wotingfm.common.bean.LiveBean;
 import com.wotingfm.common.bean.Player;
 import com.wotingfm.common.bean.Reports;
 import com.wotingfm.common.bean.Selected;
 import com.wotingfm.common.bean.SelectedMore;
+import com.wotingfm.common.bean.SerchList;
 import com.wotingfm.common.bean.Subscrible;
 import com.wotingfm.ui.intercom.main.contacts.model.Contact;
 import com.wotingfm.ui.user.login.model.Login;
@@ -52,6 +54,10 @@ public interface RetrofitService {
     //分类子页面-获取某一个频道的所有专辑
     @GET("api/listenings/channels/{id}/albums")
     Observable<Subscrible> getChannelsAlbums(@Path("id") String id, @Query("page") int page);
+
+    //直播模块首页列表
+    @GET("api/voice-lives/editor-recommandations")
+    Observable<LiveBean> getRecommandations(@Query("page") int page);
 
     //获取用户订阅的专辑
     @GET("api/users/{id}/subscriptions/albums")
@@ -103,6 +109,16 @@ public interface RetrofitService {
     //发布的专辑列表
     @GET("api/users/{id}/albums")
     Observable<Subscrible> albumsList(@Path("id") String id, @Query("page") int page);
+
+    //搜索(全部)
+    /*
+        users:主播 singles:节目 albums:专辑; radios:电台
+        q 	   搜索参数
+        type  搜索类型
+        page  分页
+     */
+    @GET("api/listenings/search")
+    Observable<SerchList> serchList(@Query("type") String type, @Query("q") String q, @Query("page") int page);
 
     //关注主播
     @POST("api/fans")

@@ -15,11 +15,14 @@ import com.woting.commonplat.widget.LoadFrameLayout;
 import com.wotingfm.R;
 import com.wotingfm.common.adapter.albumsAdapter.AlbumsAdapter;
 import com.wotingfm.common.adapter.findHome.ItemSelected1Adapter;
+import com.wotingfm.common.bean.AlbumsBean;
+import com.wotingfm.common.bean.Player;
 import com.wotingfm.common.bean.Selected;
 import com.wotingfm.common.bean.SelectedMore;
 import com.wotingfm.common.bean.Subscrible;
 import com.wotingfm.common.net.RetrofitUtils;
 import com.wotingfm.ui.base.baseactivity.BaseToolBarActivity;
+import com.wotingfm.ui.test.PlayerActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -73,8 +76,8 @@ public class SelectedMoreActivity extends BaseToolBarActivity implements OnLoadM
         mRecyclerView.setLayoutManager(layoutManager);
         mAdapter = new ItemSelected1Adapter(this, datas, new ItemSelected1Adapter.SelectedClick() {
             @Override
-            public void click(SelectedMore.DataBean.AlbumsBean dataBean) {
-
+            public void click(AlbumsBean dataBean) {
+                PlayerActivity.start(SelectedMoreActivity.this, dataBean.id, "");
             }
         });
         mRecyclerView.setIAdapter(mAdapter);
@@ -90,7 +93,7 @@ public class SelectedMoreActivity extends BaseToolBarActivity implements OnLoadM
     }
 
     private ItemSelected1Adapter mAdapter;
-    private List<SelectedMore.DataBean.AlbumsBean> datas = new ArrayList<>();
+    private List<AlbumsBean> datas = new ArrayList<>();
     private int mPage;
 
     private void refresh() {
@@ -98,9 +101,9 @@ public class SelectedMoreActivity extends BaseToolBarActivity implements OnLoadM
         RetrofitUtils.getInstance().getSelectedsMore(mPage, type)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Action1<List<SelectedMore.DataBean.AlbumsBean>>() {
+                .subscribe(new Action1<List<AlbumsBean>>() {
                     @Override
-                    public void call(List<SelectedMore.DataBean.AlbumsBean> albumsBeen) {
+                    public void call(List<AlbumsBean> albumsBeen) {
                         mRecyclerView.setRefreshing(false);
                         if (albumsBeen != null && !albumsBeen.isEmpty()) {
                             mPage++;
@@ -126,9 +129,9 @@ public class SelectedMoreActivity extends BaseToolBarActivity implements OnLoadM
         RetrofitUtils.getInstance().getSelectedsMore(mPage, type)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Action1<List<SelectedMore.DataBean.AlbumsBean>>() {
+                .subscribe(new Action1<List<AlbumsBean>>() {
                     @Override
-                    public void call(List<SelectedMore.DataBean.AlbumsBean> albumsBeen) {
+                    public void call(List<AlbumsBean> albumsBeen) {
                         mRecyclerView.setRefreshing(false);
                         if (albumsBeen != null && !albumsBeen.isEmpty()) {
                             mPage++;

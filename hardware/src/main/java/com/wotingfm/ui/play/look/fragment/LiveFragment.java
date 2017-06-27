@@ -1,6 +1,5 @@
 package com.wotingfm.ui.play.look.fragment;
 
-import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -12,16 +11,17 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.woting.commonplat.amine.ARecyclerView;
+import com.woting.commonplat.amine.LoadMoreFooterView;
+import com.woting.commonplat.amine.OnLoadMoreListener;
 import com.woting.commonplat.widget.LoadFrameLayout;
 import com.wotingfm.R;
 import com.wotingfm.common.adapter.findHome.LiveListAdapter;
-import com.wotingfm.common.adapter.findHome.RadioStationAdapter;
+import com.wotingfm.common.bean.AlbumsBean;
 import com.wotingfm.common.bean.HomeBanners;
 import com.wotingfm.common.bean.LiveBean;
-import com.wotingfm.common.bean.Radiostation;
 import com.wotingfm.common.net.RetrofitUtils;
+import com.wotingfm.common.utils.T;
 import com.wotingfm.common.view.BannerView;
-import com.wotingfm.common.view.GridSpacingItemDecoration;
 import com.wotingfm.ui.base.basefragment.BaseFragment;
 import com.zhy.adapter.recyclerview.wrapper.HeaderAndFooterWrapper;
 
@@ -29,16 +29,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.Unbinder;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.schedulers.Schedulers;
-
-import static com.wotingfm.R.id.tvCountry;
-import static com.wotingfm.R.id.tvLocal;
-import static com.wotingfm.R.id.tvProvince;
-import static com.wotingfm.ui.intercom.main.view.InterPhoneActivity.context;
 
 /**
  * Created by amine on 2017/6/14.
@@ -49,7 +42,7 @@ public class LiveFragment extends BaseFragment implements SwipeRefreshLayout.OnR
 
 
     @BindView(R.id.mRecyclerView)
-    ARecyclerView mRecyclerView;
+    RecyclerView mRecyclerView;
     @BindView(R.id.id_swipe_ly)
     SwipeRefreshLayout mSwipeLayout;
     @BindView(R.id.loadLayout)
@@ -67,16 +60,39 @@ public class LiveFragment extends BaseFragment implements SwipeRefreshLayout.OnR
 
     private View headview;
     private TextView tvTitle;
+    private LiveListAdapter selectedAdapter;
 
     @Override
     protected void initView() {
         GridLayoutManager layoutManager = new GridLayoutManager(getActivity(), 2, GridLayoutManager.VERTICAL, false);
         mRecyclerView.setLayoutManager(layoutManager);
+        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+            }
+
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                //拿到最后一条的position
+                LinearLayoutManager manager = (LinearLayoutManager) recyclerView.getLayoutManager();
+                int endCompletelyPosition = manager.findLastCompletelyVisibleItemPosition();
+                if (selectedAdapter.getItemCount() > 10 && endCompletelyPosition == selectedAdapter.getItemCount() - 1) {
+                    //执行加载更多的方法，无论是用接口还是别的方式都行
+                    loadMore();
+                }
+            }
+        });
         mSwipeLayout.setOnRefreshListener(this);
-        LiveListAdapter selectedAdapter = new LiveListAdapter(getActivity(), datas, new LiveListAdapter.LiveListClick() {
+        selectedAdapter = new LiveListAdapter(getActivity(), list, new LiveListAdapter.LiveListClick() {
             @Override
             public void click(LiveBean.DataBean dataBean) {
-
+                if ("living".equals(dataBean.type)) {
+                    T.getInstance().showToast("直播");
+                } else {
+                    T.getInstance().showToast("预告");
+                }
             }
         });
         headview = LayoutInflater.from(getActivity()).inflate(R.layout.headview_live, mRecyclerView, false);
@@ -92,15 +108,15 @@ public class LiveFragment extends BaseFragment implements SwipeRefreshLayout.OnR
             @Override
             public void onClick(View v) {
                 loadLayout.showLoadingView();
-                // refresh();
                 getBanners();
+                refresh();
             }
         });
         getBanners();
+        refresh();
     }
 
     private HeaderAndFooterWrapper mHeaderAndFooterWrapper;
-    private List<LiveBean.DataBean> datas = new ArrayList<>();
     private BannerView mBannerView;
 
     @Override
@@ -139,8 +155,6 @@ public class LiveFragment extends BaseFragment implements SwipeRefreshLayout.OnR
                 .subscribe(new Action1<List<HomeBanners.DataBean.BannersBean>>() {
                     @Override
                     public void call(List<HomeBanners.DataBean.BannersBean> banners) {
-                        loadLayout.showContentView();
-                        mSwipeLayout.setRefreshing(false);
                         if (banners != null && !banners.isEmpty()) {
                             mBannerView.setData(banners);
                             mBannerView.setVisibility(View.VISIBLE);
@@ -151,36 +165,6 @@ public class LiveFragment extends BaseFragment implements SwipeRefreshLayout.OnR
                         } else {
                             mBannerView.setVisibility(View.GONE);
                         }
-                        datas.clear();
-                        LiveBean.DataBean r = new LiveBean.DataBean();
-                        r.title1 = "北京新闻广播";
-                        r.title2 = "正在直播：新闻新天下";
-                        r.number = 1;
-                        r.type = 1;
-                        r.logo = "http://";
-                        datas.add(r);
-                        LiveBean.DataBean r1 = new LiveBean.DataBean();
-                        r1.title1 = "北京新闻广播";
-                        r1.title2 = "正在直播：新闻新天下";
-                        r1.number = 1;
-                        r1.type = 1;
-                        r1.logo = "http://";
-                        datas.add(r1);
-                        LiveBean.DataBean r2 = new LiveBean.DataBean();
-                        r2.title1 = "北京新闻广播2";
-                        r2.title2 = "正在直播：新闻新天下";
-                        r2.number = 2;
-                        r2.type = 2;
-                        r2.logo = "http://";
-                        datas.add(r2);
-                        LiveBean.DataBean r22 = new LiveBean.DataBean();
-                        r22.title1 = "北京新闻广播2";
-                        r22.title2 = "正在直播：新闻新天下";
-                        r22.number = 2;
-                        r22.type = 2;
-                        r22.logo = "http://";
-                        datas.add(r22);
-                        mHeaderAndFooterWrapper.notifyDataSetChanged();
                     }
                 }, new Action1<Throwable>() {
                     @Override
@@ -190,8 +174,70 @@ public class LiveFragment extends BaseFragment implements SwipeRefreshLayout.OnR
                 });
     }
 
+
+    private int mPage;
+
+    private void refresh() {
+        mPage = 1;
+        RetrofitUtils.getInstance().getRecommandations(mPage)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Action1<List<LiveBean.DataBean>>() {
+                    @Override
+                    public void call(List<LiveBean.DataBean> albumsBeen) {
+                        mSwipeLayout.setRefreshing(false);
+                        if (albumsBeen != null && !albumsBeen.isEmpty()) {
+                            mPage++;
+                            list.clear();
+                            list.addAll(albumsBeen);
+                            tvTitle.setVisibility(View.VISIBLE);
+                            loadLayout.showContentView();
+                            mHeaderAndFooterWrapper.notifyDataSetChanged();
+                        } else {
+                            loadLayout.showContentView();
+                            tvTitle.setVisibility(View.GONE);
+                        }
+                    }
+                }, new Action1<Throwable>() {
+                    @Override
+                    public void call(Throwable throwable) {
+                        loadLayout.showErrorView();
+                        throwable.printStackTrace();
+                    }
+                });
+
+    }
+
+    private void loadMore() {
+        RetrofitUtils.getInstance().getRecommandations(mPage)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Action1<List<LiveBean.DataBean>>() {
+                    @Override
+                    public void call(List<LiveBean.DataBean> albumsBeen) {
+                        mSwipeLayout.setRefreshing(false);
+                        if (albumsBeen != null && !albumsBeen.isEmpty()) {
+                            mPage++;
+                            list.addAll(albumsBeen);
+                            mHeaderAndFooterWrapper.notifyDataSetChanged();
+                        } else {
+                            T.getInstance().showToast("没有更多数据");
+                        }
+                    }
+                }, new Action1<Throwable>() {
+                    @Override
+                    public void call(Throwable throwable) {
+                        loadLayout.showErrorView();
+                        throwable.printStackTrace();
+                    }
+                });
+    }
+
+    private List<LiveBean.DataBean> list = new ArrayList<>();
+
+
     @Override
     public void onRefresh() {
-        getBanners();
+        refresh();
     }
 }

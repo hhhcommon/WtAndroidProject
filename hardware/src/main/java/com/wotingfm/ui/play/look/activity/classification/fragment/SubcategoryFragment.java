@@ -17,6 +17,7 @@ import com.wotingfm.common.adapter.albumsAdapter.AlbumsAdapter;
 import com.wotingfm.common.adapter.downloadAdapter.DownloadSelectAdapter;
 import com.wotingfm.common.adapter.findHome.ClassificationAdapter;
 import com.wotingfm.common.bean.AlbumInfo;
+import com.wotingfm.common.bean.AlbumsBean;
 import com.wotingfm.common.bean.Channels;
 import com.wotingfm.common.bean.Classification;
 import com.wotingfm.common.bean.Player;
@@ -25,6 +26,7 @@ import com.wotingfm.common.net.RetrofitUtils;
 import com.wotingfm.common.utils.T;
 import com.wotingfm.ui.base.basefragment.BaseFragment;
 import com.wotingfm.ui.play.activity.albums.fragment.AlbumsInfoFragment;
+import com.wotingfm.ui.test.PlayerActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -68,7 +70,7 @@ public class SubcategoryFragment extends BaseFragment implements OnLoadMoreListe
 
 
     private LoadMoreFooterView loadMoreFooterView;
-    private List<Subscrible.DataBean.AlbumsBean> albumsBeanList = new ArrayList<>();
+    private List<AlbumsBean> albumsBeanList = new ArrayList<>();
     private AlbumsAdapter mAdapter;
     private Channels.DataBean.ChannelsBean albumInfo;
 
@@ -88,7 +90,8 @@ public class SubcategoryFragment extends BaseFragment implements OnLoadMoreListe
         mAdapter = new AlbumsAdapter(getActivity(), albumsBeanList);
         mAdapter.setPlayerClick(new AlbumsAdapter.PlayerClick() {
             @Override
-            public void clickAlbums(Subscrible.DataBean.AlbumsBean singlesBean) {
+            public void clickAlbums(AlbumsBean singlesBean) {
+                PlayerActivity.start(getActivity(), singlesBean.id, "");
             }
         });
         mRecyclerView.setIAdapter(mAdapter);
@@ -109,9 +112,9 @@ public class SubcategoryFragment extends BaseFragment implements OnLoadMoreListe
         RetrofitUtils.getInstance().getChannelsAlbums(albumInfo.id, mPage)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Action1<List<Subscrible.DataBean.AlbumsBean>>() {
+                .subscribe(new Action1<List<AlbumsBean>>() {
                     @Override
-                    public void call(List<Subscrible.DataBean.AlbumsBean> albumsBeen) {
+                    public void call(List<AlbumsBean> albumsBeen) {
                         mRecyclerView.setRefreshing(false);
                         if (albumsBeen != null && !albumsBeen.isEmpty()) {
                             mPage++;
@@ -137,9 +140,9 @@ public class SubcategoryFragment extends BaseFragment implements OnLoadMoreListe
         RetrofitUtils.getInstance().getChannelsAlbums(albumInfo.id, mPage)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Action1<List<Subscrible.DataBean.AlbumsBean>>() {
+                .subscribe(new Action1<List<AlbumsBean>>() {
                     @Override
-                    public void call(List<Subscrible.DataBean.AlbumsBean> albumsBeen) {
+                    public void call(List<AlbumsBean> albumsBeen) {
                         mRecyclerView.setRefreshing(false);
                         if (albumsBeen != null && !albumsBeen.isEmpty()) {
                             mPage++;

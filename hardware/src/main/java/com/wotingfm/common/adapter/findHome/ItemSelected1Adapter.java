@@ -11,6 +11,7 @@ import com.bumptech.glide.Glide;
 import com.woting.commonplat.utils.DementionUtil;
 import com.wotingfm.R;
 import com.wotingfm.common.application.BSApplication;
+import com.wotingfm.common.bean.AlbumsBean;
 import com.wotingfm.common.bean.Selected;
 import com.wotingfm.common.bean.SelectedMore;
 import com.zhy.adapter.recyclerview.CommonAdapter;
@@ -22,12 +23,12 @@ import java.util.List;
  * Created by amine on 2017/6/22.
  */
 
-public class ItemSelected1Adapter extends CommonAdapter<SelectedMore.DataBean.AlbumsBean> {
+public class ItemSelected1Adapter extends CommonAdapter<AlbumsBean> {
     private SelectedClick tagClick;
     private int with = 0;
     private LinearLayout.LayoutParams layoutParams1, layoutParams2;
 
-    public ItemSelected1Adapter(Context context, List<SelectedMore.DataBean.AlbumsBean> datas, SelectedClick tagClick) {
+    public ItemSelected1Adapter(Context context, List<AlbumsBean> datas, SelectedClick tagClick) {
         super(context, R.layout.item_item1_selected_home, datas);
         this.tagClick = tagClick;
         with = (DementionUtil.getScreenWidthInPx(context) - DementionUtil.dip2px(context, 54)) / 3;
@@ -36,7 +37,7 @@ public class ItemSelected1Adapter extends CommonAdapter<SelectedMore.DataBean.Al
     }
 
     @Override
-    protected void convert(ViewHolder holder, final SelectedMore.DataBean.AlbumsBean dataBean, int position) {
+    protected void convert(ViewHolder holder, final AlbumsBean dataBean, int position) {
         TextView textView = (TextView) holder.itemView.findViewById(R.id.tvContent);
         ImageView ivClass = (ImageView) holder.itemView.findViewById(R.id.ivClass);
         Glide.with(BSApplication.getInstance()).load(dataBean.logo_url)// Glide
@@ -57,7 +58,7 @@ public class ItemSelected1Adapter extends CommonAdapter<SelectedMore.DataBean.Al
     }
 
     public interface SelectedClick {
-        void click(SelectedMore.DataBean.AlbumsBean dataBean);
+        void click(AlbumsBean dataBean);
     }
 
 }

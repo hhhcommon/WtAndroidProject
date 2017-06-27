@@ -74,6 +74,11 @@
             android:name=".ui.play.activity.AnchorPersonalCenterActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
+        <!-- 搜索 -->
+        <activity
+            android:name=".ui.play.look.activity.serch.SerchActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" />
         <!-- 个人专辑列表 -->
         <activity
             android:name=".ui.play.activity.albums.AlbumsListActivity"

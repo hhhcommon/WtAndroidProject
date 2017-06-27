@@ -9,6 +9,7 @@ import com.bumptech.glide.Glide;
 import com.mcxtzhang.swipemenulib.SwipeMenuLayout;
 import com.wotingfm.R;
 import com.wotingfm.common.application.BSApplication;
+import com.wotingfm.common.bean.AlbumsBean;
 import com.wotingfm.common.bean.Player;
 import com.wotingfm.common.bean.Subscrible;
 import com.wotingfm.common.utils.TimeUtils;
@@ -22,16 +23,16 @@ import java.util.List;
  * 我的订阅
  */
 
-public class PlayerSubscribleListAdapter extends CommonAdapter<Subscrible.DataBean.AlbumsBean> {
+public class PlayerSubscribleListAdapter extends CommonAdapter<AlbumsBean> {
     private PlayerHistoryClick playerHistoryClick;
 
-    public PlayerSubscribleListAdapter(Context context, List<Subscrible.DataBean.AlbumsBean> datas, PlayerHistoryClick playerHistoryClick) {
+    public PlayerSubscribleListAdapter(Context context, List<AlbumsBean> datas, PlayerHistoryClick playerHistoryClick) {
         super(context, R.layout.item_player_subscrible, datas);
         this.playerHistoryClick = playerHistoryClick;
     }
 
     @Override
-    protected void convert(ViewHolder holder, final Subscrible.DataBean.AlbumsBean s, final int position) {
+    protected void convert(ViewHolder holder, final AlbumsBean s, final int position) {
         holder.setText(R.id.tvContent, s.lastest_news);
         TextView textViewTitle = (TextView) holder.itemView.findViewById(R.id.tvTitle);
         final SwipeMenuLayout swipeable_container = (SwipeMenuLayout) holder.itemView.findViewById(R.id.swipeable_container);
@@ -62,9 +63,9 @@ public class PlayerSubscribleListAdapter extends CommonAdapter<Subscrible.DataBe
 
 
     public interface PlayerHistoryClick {
-        void click(Subscrible.DataBean.AlbumsBean singlesBean);
+        void click(AlbumsBean singlesBean);
 
-        void delete(Subscrible.DataBean.AlbumsBean singlesBean);
+        void delete(AlbumsBean singlesBean);
     }
 
 }
