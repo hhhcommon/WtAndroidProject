@@ -187,6 +187,7 @@ public class LookListActivity extends NoTitleBarBaseActivity implements View.OnC
                 }
                 hideSoftKeyboard();
                 SerchActivity.start(this, content);
+                etSearchlike.setText("");
                 break;
             case R.id.ivBack:
             case R.id.ivClose:

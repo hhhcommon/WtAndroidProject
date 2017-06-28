@@ -7,8 +7,10 @@ import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.text.Editable;
 import android.text.Selection;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -102,21 +104,28 @@ public class SerchActivity extends NoTitleBarBaseActivity {
                 finish();
             }
         });
+        etSearchlike.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                serch(s + "");
+            }
+        });
         etSearchlike.setOnEditorActionListener(new TextView.OnEditorActionListener() {
                                                    @Override
                                                    public boolean onEditorAction(TextView v, int arg1, KeyEvent event) {
                                                        if (arg1 == EditorInfo.IME_ACTION_SEARCH) {
                                                            String content = etSearchlike.getText().toString().trim();
-                                                           if (!TextUtils.isEmpty(content)) {
-                                                               if (albumsListFragment != null)
-                                                                   albumsListFragment.refresh();
-                                                               if (programListFragment != null)
-                                                                   programListFragment.refresh();
-                                                               if (anchorListFragment != null)
-                                                                   anchorListFragment.refresh();
-                                                               if (radioStationListFragment != null)
-                                                                   radioStationListFragment.refresh();
-                                                           }
+                                                           serch(content);
                                                        }
                                                        return false;
                                                    }
@@ -125,4 +134,16 @@ public class SerchActivity extends NoTitleBarBaseActivity {
         );
     }
 
+    private void serch(String content) {
+        if (!TextUtils.isEmpty(content)) {
+            if (albumsListFragment != null)
+                albumsListFragment.refresh();
+            if (programListFragment != null)
+                programListFragment.refresh();
+            if (anchorListFragment != null)
+                anchorListFragment.refresh();
+            if (radioStationListFragment != null)
+                radioStationListFragment.refresh();
+        }
+    }
 }

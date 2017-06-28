@@ -11,10 +11,13 @@ import com.woting.commonplat.amine.OnRefreshListener;
 import com.woting.commonplat.widget.LoadFrameLayout;
 import com.wotingfm.R;
 import com.wotingfm.common.adapter.albumsAdapter.AlbumsAdapter;
+import com.wotingfm.common.adapter.serch.UsersSerchAdapter;
 import com.wotingfm.common.bean.AlbumsBean;
 import com.wotingfm.common.bean.SerchList;
+import com.wotingfm.common.bean.UserBean;
 import com.wotingfm.common.net.RetrofitUtils;
 import com.wotingfm.ui.base.basefragment.BaseFragment;
+import com.wotingfm.ui.play.activity.AnchorPersonalCenterActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -68,10 +71,10 @@ public class AnchorListFragment extends BaseFragment implements OnLoadMoreListen
                 loadLayout.showLoadingView();
             }
         });
-        mAdapter = new AlbumsAdapter(getActivity(), albumsBeanList);
-        mAdapter.setPlayerClick(new AlbumsAdapter.PlayerClick() {
+        mAdapter = new UsersSerchAdapter(getActivity(), albumsBeanList, new UsersSerchAdapter.OnClick() {
             @Override
-            public void clickAlbums(AlbumsBean singlesBean) {
+            public void click(UserBean s) {
+                AnchorPersonalCenterActivity.start(getActivity(),s.id);
             }
         });
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
@@ -82,8 +85,8 @@ public class AnchorListFragment extends BaseFragment implements OnLoadMoreListen
     }
 
     private int mPage;
-    private AlbumsAdapter mAdapter;
-    private List<AlbumsBean> albumsBeanList = new ArrayList<>();
+    private UsersSerchAdapter mAdapter;
+        private List<UserBean> albumsBeanList = new ArrayList<>();
 
     public void refresh() {
         mPage = 1;
@@ -94,10 +97,10 @@ public class AnchorListFragment extends BaseFragment implements OnLoadMoreListen
                     @Override
                     public void call(SerchList serchList) {
                         mRecyclerView.setRefreshing(false);
-                        if (serchList != null && serchList.ret == 0 && serchList.data != null && serchList.data.albums != null && !serchList.data.albums.isEmpty()) {
+                        if (serchList != null && serchList.ret == 0 && serchList.data != null && serchList.data.users != null && !serchList.data.users.isEmpty()) {
                             mPage++;
                             albumsBeanList.clear();
-                            albumsBeanList.addAll(serchList.data.albums);
+                            albumsBeanList.addAll(serchList.data.users);
                             loadLayout.showContentView();
                             mAdapter.notifyDataSetChanged();
                         } else {
@@ -122,9 +125,9 @@ public class AnchorListFragment extends BaseFragment implements OnLoadMoreListen
                     @Override
                     public void call(SerchList serchList) {
                         mRecyclerView.setRefreshing(false);
-                        if (serchList != null && serchList.ret == 0 && serchList.data != null && serchList.data.albums != null && !serchList.data.albums.isEmpty()) {
+                        if (serchList != null && serchList.ret == 0 && serchList.data != null && serchList.data.users != null && !serchList.data.users.isEmpty()) {
                             mPage++;
-                            albumsBeanList.addAll(serchList.data.albums);
+                            albumsBeanList.addAll(serchList.data.users);
                             mAdapter.notifyDataSetChanged();
                             loadMoreFooterView.setStatus(LoadMoreFooterView.Status.GONE);
                         } else {

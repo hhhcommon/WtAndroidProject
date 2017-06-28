@@ -188,20 +188,20 @@ public class AnchorPersonalCenterActivity extends NoTitleBarBaseActivity impleme
                                 setHeadViewData(s);
                                 dataBeanXes.addAll(s.data.user.data);
                                 mHeaderAndFooterWrapper.notifyDataSetChanged();
-                            } else {
-                                loadLayout.showErrorView();
+                                } else {
+                                    loadLayout.showErrorView();
+                                }
                             }
                         }
-                    }
 
 
-                }, new Action1<Throwable>() {
-                    @Override
-                    public void call(Throwable throwable) {
-                        loadLayout.showErrorView();
-                    }
-                });
-    }
+                    }, new Action1<Throwable>() {
+                        @Override
+                        public void call(Throwable throwable) {
+                            loadLayout.showErrorView();
+                        }
+                    });
+        }
 
     //headview
     private ImageView ivPhotoBg, ivPhoto;
