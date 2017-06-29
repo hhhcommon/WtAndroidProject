@@ -94,13 +94,16 @@ public class PersonMessagePresenter {
                 String msg = js.getString("data");
                 JSONTokener jsonParser = new JSONTokener(msg);
                 JSONObject arg1 = (JSONObject) jsonParser.nextValue();
-                // 此处字段待对接
-                String friends = arg1.getString("friends");
+                String friends = arg1.getString("user");
                 // 用户信息
                 Contact.user user = new Gson().fromJson(friends, new TypeToken<Contact.user>() {
                 }.getType());
-                assemblyData(user);
-
+                if(user!=null){
+                    assemblyData(user);
+                    activity.isLoginView(0);
+                }else{
+                    activity.isLoginView(4);
+                }
             } else {
                 String msg = js.getString("msg");
                 if (msg != null && !msg.trim().equals("")) {
@@ -110,8 +113,8 @@ public class PersonMessagePresenter {
             }
         } catch (Exception e) {
             e.printStackTrace();
+            activity.isLoginView(4);
         }
-        activity.isLoginView(4);
     }
 
     private void assemblyData(Contact.user user) {

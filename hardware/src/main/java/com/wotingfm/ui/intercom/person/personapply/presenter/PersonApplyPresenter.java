@@ -21,7 +21,6 @@ public class PersonApplyPresenter {
     private final PersonApplyModel model;
     private final String id;
 
-
     public PersonApplyPresenter(PersonApplyFragment activity) {
         this.activity = activity;
         this.model = new PersonApplyModel();

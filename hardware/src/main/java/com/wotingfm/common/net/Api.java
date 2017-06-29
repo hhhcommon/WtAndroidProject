@@ -42,10 +42,10 @@ public class Api {
     public static final String URL_DEL_GROUP_NUM = "api/chat-groups/{id}/members";
     // 添加群成员
     public static final String URL_ADD_GROUP_NUM = "api/chat-groups/{id}/members";
-    // 搜索的好友(X)
-    public static final String URL_GET_PERSON__SEARCH = "api/contacts/search";
-    // 搜索的群组(X)
-    public static final String URL_GET_GROUP__SEARCH = "api/contacts/search";
+    // 搜索的好友
+    public static final String URL_GET_PERSON__SEARCH = "api/listenings/search";
+    // 搜索的群组
+    public static final String URL_GET_GROUP__SEARCH = "api/listenings/search";
     // 推荐的成员(X)
     public static final String URL_GET_PERSON_RECOMMEND = "";
     // 推荐的群组(X)

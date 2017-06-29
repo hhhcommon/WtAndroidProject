@@ -7,11 +7,13 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.woting.commonplat.config.GlobalNetWorkConfig;
 import com.wotingfm.common.config.GlobalStateConfig;
+import com.wotingfm.ui.intercom.group.groupapply.view.GroupApplyFragment;
 import com.wotingfm.ui.intercom.group.groupmumbershow.view.GroupNumberShowFragment;
 import com.wotingfm.ui.intercom.group.groupnews.noadd.model.GroupNewsForNoAddModel;
 import com.wotingfm.ui.intercom.group.groupnews.noadd.view.GroupNewsForNoAddFragment;
 import com.wotingfm.ui.intercom.main.contacts.model.Contact;
 import com.wotingfm.ui.intercom.main.view.InterPhoneActivity;
+import com.wotingfm.ui.intercom.person.personapply.view.PersonApplyFragment;
 
 import org.json.JSONObject;
 import org.json.JSONTokener;
@@ -70,17 +72,14 @@ public class GroupNewsForNoAddPresenter {
      * 获取群详情
      */
     public void getNews() {
-        activity.dialogShow();
         model.loadNews(id, new GroupNewsForNoAddModel.OnLoadInterface() {
             @Override
             public void onSuccess(Object o) {
-                activity.dialogCancel();
                 dealSuccess(o);
             }
 
             @Override
             public void onFailure(String msg) {
-                activity.dialogCancel();
             }
         });
     }
@@ -226,16 +225,28 @@ public class GroupNewsForNoAddPresenter {
         }
     }
 
+     /**
+     * 跳转到成员列表界面
+     */
+    public void  jump(){
+        GroupNumberShowFragment fragment = new GroupNumberShowFragment();
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("list", g_list);
+        fragment.setArguments(bundle);
+        InterPhoneActivity.open(fragment);
+    }
     /**
      * 跳转到成员列表界面
      */
-   public void  jump(){
-       GroupNumberShowFragment fragment = new GroupNumberShowFragment();
-       Bundle bundle = new Bundle();
-       bundle.putSerializable("list", g_list);
-       fragment.setArguments(bundle);
-       InterPhoneActivity.open(fragment);
+    public void apply(){
+        GroupApplyFragment fragment = new GroupApplyFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString("id", id);
+        fragment.setArguments(bundle);
+        InterPhoneActivity.open(fragment);
     }
+
+
 
     /**
      * 异常按钮点击

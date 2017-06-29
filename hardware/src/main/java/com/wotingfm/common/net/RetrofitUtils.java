@@ -715,7 +715,7 @@ public class RetrofitUtils {
      * @return Objects
      */
     public Observable<Object> getSearchGroup(String s) {
-        return retrofitService.getSearchGroup(s)
+        return retrofitService.getSearchGroup("chat-groups",s)
                 .map(new Func1<Object, Object>() {
                     @Override
                     public Object call(Object O) {
@@ -731,7 +731,7 @@ public class RetrofitUtils {
      * @return Objects
      */
     public Observable<Object> getSearchPerson(String s) {
-        return retrofitService.getSearchPerson(s)
+        return retrofitService.getSearchPerson("users",s)
                 .map(new Func1<Object, Object>() {
                     @Override
                     public Object call(Object O) {

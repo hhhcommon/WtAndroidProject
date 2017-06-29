@@ -44,8 +44,8 @@ public class SearchContactsForNetFragment extends Fragment implements View.OnCli
     private View rootView;
     private FragmentActivity context;
     private LinearLayout lin_pos, lin_search;
-    private ListView lv_pos, listViewG, listViewP;
-    private TextView tv_clear, tv_newsP, tv_newsG;
+    private ListView lv_pos, listView;
+    private TextView tv_clear;
     private EditText et_search;
     private ImageView img_search;
     private Dialog dialog;
@@ -80,24 +80,14 @@ public class SearchContactsForNetFragment extends Fragment implements View.OnCli
     private void initViews() {
         tip_view = (TipView) rootView.findViewById(R.id.tip_view);// 提示界面
         tip_view.setTipClick(this);
-
         lin_pos = (LinearLayout) rootView.findViewById(R.id.lin_pos);
         lv_pos = (ListView) rootView.findViewById(R.id.lv_pos);
-
         lin_search = (LinearLayout) rootView.findViewById(R.id.lin_search);
-        listViewG = (ListView) rootView.findViewById(R.id.lv_search);
-
+        listView = (ListView) rootView.findViewById(R.id.lv_search);
         tv_clear = (TextView) rootView.findViewById(R.id.tv_clear);
         tv_clear.setOnClickListener(this);
         et_search = (EditText) rootView.findViewById(R.id.et_search);
         img_search = (ImageView) rootView.findViewById(R.id.img_search);
-
-        View headView = LayoutInflater.from(context).inflate(R.layout.headview_search_local, null);// 头部 view
-        tv_newsP = (TextView) headView.findViewById(R.id.tv_newsP);
-        tv_newsG = (TextView) headView.findViewById(R.id.tv_newsG);
-        listViewP = (ListView) headView.findViewById(R.id.head_listView);
-
-        listViewG.addHeaderView(headView);// 添加头部 view
     }
 
     // 根据输入框输入值的改变来过滤搜索
@@ -107,7 +97,7 @@ public class SearchContactsForNetFragment extends Fragment implements View.OnCli
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 String search_name = s.toString();
                 if (search_name.trim().equals("")) {
-                    presenter.search("");
+                    presenter.getRecommendedData();
                 } else {// 关键词不为空
                     presenter.search(search_name);
                 }
@@ -154,7 +144,7 @@ public class SearchContactsForNetFragment extends Fragment implements View.OnCli
     public void setViewForPerson(List<Contact.user> person) {
         if (pAdapter == null) {
             pAdapter = new SearchContactsForUserAdapter(context, person);
-            listViewP.setAdapter(pAdapter);
+            listView.setAdapter(pAdapter);
         } else {
             pAdapter.ChangeDate(person);
         }
@@ -166,7 +156,7 @@ public class SearchContactsForNetFragment extends Fragment implements View.OnCli
     public void setViewForGroup(List<Contact.group> group) {
         if (gAdapter == null) {
             gAdapter = new SearchContactsForGroupAdapter(context, group);
-            listViewG.setAdapter(gAdapter);
+            listView.setAdapter(gAdapter);
         } else {
             gAdapter.ChangeDate(group);
         }
@@ -181,7 +171,7 @@ public class SearchContactsForNetFragment extends Fragment implements View.OnCli
                 // 跳转到好友信息界面
                 PersonMessageFragment fragment = new PersonMessageFragment();
                 Bundle bundle = new Bundle();
-                bundle.putString("type", "true");
+                bundle.putString("type", "false");
                 bundle.putString("id", person.get(position).getId());
                 fragment.setArguments(bundle);
                 InterPhoneActivity.open(fragment);
@@ -206,13 +196,13 @@ public class SearchContactsForNetFragment extends Fragment implements View.OnCli
 
     // listView 的监听==搜索到的好友
     private void setListViewListener(final List<Contact.user> person) {
-        listViewP.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 // 跳转到好友信息界面
                 PersonMessageFragment fragment = new PersonMessageFragment();
                 Bundle bundle = new Bundle();
-                bundle.putString("type", "true");
+                bundle.putString("type", "false");
                 bundle.putString("id", person.get(position).getId());
                 fragment.setArguments(bundle);
                 InterPhoneActivity.open(fragment);
@@ -223,7 +213,7 @@ public class SearchContactsForNetFragment extends Fragment implements View.OnCli
 
     // 组 listView 监听==搜索到的群组
     private void setGroupListViewListener(final List<Contact.group> group) {
-        listViewG.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 // 跳转到群组详情页面
@@ -235,7 +225,6 @@ public class SearchContactsForNetFragment extends Fragment implements View.OnCli
             }
         });
     }
-
 
 
     /**
@@ -256,7 +245,7 @@ public class SearchContactsForNetFragment extends Fragment implements View.OnCli
             lin_pos.setVisibility(View.VISIBLE);
             lin_search.setVisibility(View.GONE);
             tip_view.setVisibility(View.GONE);
-        }else if(type == 0){
+        } else if (type == 0) {
             // 已经登录，搜索有数据
             lin_pos.setVisibility(View.GONE);
             lin_search.setVisibility(View.VISIBLE);
@@ -266,7 +255,7 @@ public class SearchContactsForNetFragment extends Fragment implements View.OnCli
             lin_pos.setVisibility(View.GONE);
             lin_search.setVisibility(View.GONE);
             tip_view.setVisibility(View.VISIBLE);
-            tip_view.setTipView(TipView.TipStatus.NO_DATA, "您还没有聊天对象哟\n快去找好友们聊天吧");
+            tip_view.setTipView(TipView.TipStatus.NO_DATA, "搜索词不要太逆天呦");
         } else if (type == 2) {
             // 没有网络
             lin_pos.setVisibility(View.GONE);

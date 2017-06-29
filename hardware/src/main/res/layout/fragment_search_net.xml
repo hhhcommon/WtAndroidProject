@@ -91,6 +91,8 @@
         <ListView
             android:id="@+id/lv_search"
             android:layout_width="match_parent"
+            android:scrollbars="none"
+            android:divider="@color/white"
             android:layout_height="match_parent"></ListView>
     </LinearLayout>
 </LinearLayout>

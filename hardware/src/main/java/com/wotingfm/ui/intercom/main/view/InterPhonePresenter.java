@@ -142,7 +142,8 @@ public class InterPhonePresenter {
             Receiver = new MessageReceiver();
             IntentFilter filter = new IntentFilter();
             filter.addAction(BroadcastConstants.LOGIN);// 登录成功GROUP_CHANGE
-            filter.addAction(BroadcastConstants.GROUP_CHANGE);// 更新群列表
+            filter.addAction(BroadcastConstants.GROUP_GET);// 更新群列表
+            filter.addAction(BroadcastConstants.PERSON_GET);// 更新好友
             filter.addAction(BroadcastConstants.VIEW_INTER_PHONE);// 更改对讲页面viewPage的展示界面
             activity.getActivity().registerReceiver(Receiver, filter);
         }
@@ -158,8 +159,11 @@ public class InterPhonePresenter {
             }else if (action.equals(BroadcastConstants.VIEW_INTER_PHONE)) {
                 // 更改为对讲主页
                 activity.change(0);
-            }else if (action.equals(BroadcastConstants.GROUP_CHANGE)) {
-                // 重新获取通讯录数据
+            }else if (action.equals(BroadcastConstants.GROUP_GET)) {
+                // 重新获取群组
+                getGroup();
+            }else if (action.equals(BroadcastConstants.PERSON_GET)) {
+                // 重新获取好友
                 getGroup();
             }
         }

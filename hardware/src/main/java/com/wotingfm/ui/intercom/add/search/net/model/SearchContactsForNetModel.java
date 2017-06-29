@@ -4,6 +4,7 @@ import android.util.Log;
 
 import com.google.gson.Gson;
 import com.wotingfm.common.application.BSApplication;
+import com.wotingfm.common.config.GlobalStateConfig;
 import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.common.net.RetrofitUtils;
 import com.wotingfm.common.utils.GetTestData;
@@ -25,8 +26,8 @@ public class SearchContactsForNetModel {
     /**
      * 获取好友
      */
-    public  List<Contact.user> getDataForPerson() {
-        List<Contact.user> srcList_p= GetTestData.getFriendList();
+    public List<Contact.user> getDataForPerson() {
+        List<Contact.user> srcList_p = GetTestData.getFriendList();
         return srcList_p;
     }
 
@@ -34,24 +35,73 @@ public class SearchContactsForNetModel {
      * 获取群组
      */
     public List<Contact.group> getDataForGroup() {
-        List<Contact.group>  srcList_G=GetTestData.getGroupList() ;
+        List<Contact.group> srcList_G = GetTestData.getGroupList();
         return srcList_G;
     }
 
+    /**
+     * 去掉重复数据
+     *
+     * @return
+     */
+    public List<Contact.group> assemblyDataForGroup(List<Contact.group> list) {
+        List<Contact.group> srcList_G = GlobalStateConfig.list_group;
+        if (srcList_G != null && srcList_G.size() > 0) {
+            for (int i = 0; i < srcList_G.size(); i++) {
+                String id = srcList_G.get(i).getId().trim();
+                if (id != null && !id.equals("")) {
+                    for (int j = 0; j < list.size(); j++) {
+                        String _id = list.get(j).getId().trim();
+                        if (_id != null && !_id.equals("") && _id.equals(id)) {
+                            list.remove(j);
+                            j--;
+                        }
+                    }
+                }
+            }
+            return list;
+        } else {
+            return list;
+        }
+    }
+
+    /**
+     * 去掉重复数据
+     */
+    public List<Contact.user> assemblyDataForPerson(List<Contact.user> list) {
+        List<Contact.user> srcList_p = GlobalStateConfig.list_person;
+        if (srcList_p != null && srcList_p.size() > 0) {
+            for (int i = 0; i < srcList_p.size(); i++) {
+                String id = srcList_p.get(i).getId().trim();
+                if (id != null && !id.equals("")) {
+                    for (int j = 0; j < list.size(); j++) {
+                        String _id = list.get(j).getId().trim();
+                        if (_id != null && !_id.equals("") && _id.equals(id)) {
+                            list.remove(j);
+                            j--;
+                        }
+                    }
+                }
+            }
+            return list;
+        } else {
+            return list;
+        }
+    }
 
     /**
      * 获取推荐好友
      */
-    public void loadNewsForRecommendPerson(String type,final OnLoadInterface listener) {
-        String id= BSApplication.SharedPreferences.getString(StringConstant.USER_ID,"");
-        RetrofitUtils.getInstance().getRecommendPerson(id,type)
+    public void loadNewsForRecommendPerson(String type, final OnLoadInterface listener) {
+        String id = BSApplication.SharedPreferences.getString(StringConstant.USER_ID, "");
+        RetrofitUtils.getInstance().getRecommendPerson(id, type)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Action1<Object>() {
                     @Override
                     public void call(Object o) {
                         try {
-                            Log.e("好友列表返回数据",new Gson().toJson(o));
+                            Log.e("好友列表返回数据", new Gson().toJson(o));
                             //填充UI
                             listener.onSuccess(o);
                         } catch (Exception e) {
@@ -71,16 +121,16 @@ public class SearchContactsForNetModel {
     /**
      * 获取推荐群组
      */
-    public void loadNewsForRecommendGroup(String type,final OnLoadInterface listener) {
-        String id= BSApplication.SharedPreferences.getString(StringConstant.USER_ID,"");
-        RetrofitUtils.getInstance().getRecommendGroup(id,type)
+    public void loadNewsForRecommendGroup(String type, final OnLoadInterface listener) {
+        String id = BSApplication.SharedPreferences.getString(StringConstant.USER_ID, "");
+        RetrofitUtils.getInstance().getRecommendGroup(id, type)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Action1<Object>() {
                     @Override
                     public void call(Object o) {
                         try {
-                            Log.e("好友列表返回数据",new Gson().toJson(o));
+                            Log.e("好友列表返回数据", new Gson().toJson(o));
                             //填充UI
                             listener.onSuccess(o);
                         } catch (Exception e) {
@@ -100,7 +150,7 @@ public class SearchContactsForNetModel {
     /**
      * 获取搜索好友
      */
-    public void loadNewsForSearchPerson(String s,final OnLoadInterface listener) {
+    public void loadNewsForSearchPerson(String s, final OnLoadInterface listener) {
         RetrofitUtils.getInstance().getSearchPerson(s)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -108,7 +158,7 @@ public class SearchContactsForNetModel {
                     @Override
                     public void call(Object o) {
                         try {
-                            Log.e("搜索好友列表返回数据",new Gson().toJson(o));
+                            Log.e("搜索好友列表返回数据", new Gson().toJson(o));
                             //填充UI
                             listener.onSuccess(o);
                         } catch (Exception e) {
@@ -128,7 +178,7 @@ public class SearchContactsForNetModel {
     /**
      * 获取搜索群组
      */
-    public void loadNewsForSearchGroup(String s,final OnLoadInterface listener) {
+    public void loadNewsForSearchGroup(String s, final OnLoadInterface listener) {
         RetrofitUtils.getInstance().getSearchGroup(s)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -136,7 +186,7 @@ public class SearchContactsForNetModel {
                     @Override
                     public void call(Object o) {
                         try {
-                            Log.e("搜索群组列表返回数据",new Gson().toJson(o));
+                            Log.e("搜索群组列表返回数据", new Gson().toJson(o));
                             //填充UI
                             listener.onSuccess(o);
                         } catch (Exception e) {
@@ -155,6 +205,7 @@ public class SearchContactsForNetModel {
 
     public interface OnLoadInterface {
         void onSuccess(Object o);
+
         void onFailure(String msg);
     }
 }

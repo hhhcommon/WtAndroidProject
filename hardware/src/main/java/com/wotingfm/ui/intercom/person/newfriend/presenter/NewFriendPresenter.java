@@ -232,6 +232,7 @@ public class NewFriendPresenter {
             if (ret == 0) {
                 list.get(position).setApply_type("2");
                 activity.updateUI(list);
+                activity.getActivity().sendBroadcast(new Intent(BroadcastConstants.PERSON_GET));
             } else {
                 String msg = js.getString("msg");
                 if (msg != null && !msg.trim().equals("")) {

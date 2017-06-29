@@ -135,7 +135,7 @@ public class SearchContactsForNetPresenter {
                     activity.setViewForPosPerson(list);
                     activity.isLoginView(-1);
                 } else {
-                    activity.isLoginView(4);
+                    activity.isLoginView(1);
                 }
             }else{
                 activity.isLoginView(4);
@@ -165,7 +165,7 @@ public class SearchContactsForNetPresenter {
                     activity.setViewForPosGroup(list);
                     activity.isLoginView(-1);
                 } else {
-                    activity.isLoginView(4);
+                    activity.isLoginView(1);
                 }
             }else{
                 activity.isLoginView(4);
@@ -274,15 +274,20 @@ public class SearchContactsForNetPresenter {
                 String msg = js.getString("data");
                 JSONTokener jsonParser = new JSONTokener(msg);
                 JSONObject arg1 = (JSONObject) jsonParser.nextValue();
-                String friends = arg1.getString("friends");
+                String friends = arg1.getString("users");
                 // 好友列表
                 List<Contact.user> list = new Gson().fromJson(friends, new TypeToken<List<Contact.user>>() {
                 }.getType());
                 if (list != null && list.size() > 0) {
-                    searchForPersonData(str,list);
-                    activity.isLoginView(0);
+                    List<Contact.user> _list=model.assemblyDataForPerson(list);
+                    if (_list != null && _list.size() > 0) {
+                        activity.setViewForPerson(_list);
+                        activity.isLoginView(0);
+                    } else {
+                        activity.isLoginView(1);
+                    }
                 } else {
-                    activity.isLoginView(4);
+                    activity.isLoginView(1);
                 }
             }else{
                 activity.isLoginView(4);
@@ -309,10 +314,15 @@ public class SearchContactsForNetPresenter {
                 List<Contact.group> list = new Gson().fromJson(groups, new TypeToken<List<Contact.group>>() {
                 }.getType());
                 if (list != null && list.size() > 0) {
-                    searchForGroupData(str,list);
-                    activity.isLoginView(0);
+                    List<Contact.group> _list= model.assemblyDataForGroup(list);
+                    if (_list != null && _list.size() > 0) {
+                        activity.setViewForGroup(_list);
+                        activity.isLoginView(0);
+                    } else {
+                        activity.isLoginView(1);
+                    }
                 } else {
-                    activity.isLoginView(4);
+                    activity.isLoginView(1);
                 }
             }else{
                 activity.isLoginView(4);

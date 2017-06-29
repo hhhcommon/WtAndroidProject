@@ -28,6 +28,12 @@ public class BroadcastConstants {
     // 群组更改广播
     public static final String GROUP_CHANGE = "GROUP_CHANGE";
 
+    // 重新获取好友
+    public static final String PERSON_GET = "PERSON_GET";
+
+    // 重新获取群组
+    public static final String GROUP_GET = "GROUP_GET";
+
     // 群组界面关闭
     public static final String VIEW_GROUP_CLOSE = "VIEW_GROUP_CLOSE";
 

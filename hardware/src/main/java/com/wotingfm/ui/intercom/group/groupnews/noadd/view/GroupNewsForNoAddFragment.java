@@ -22,6 +22,7 @@ import com.wotingfm.ui.intercom.group.groupnews.noadd.adapter.GroupNewsPersonFor
 import com.wotingfm.ui.intercom.group.groupnews.noadd.presenter.GroupNewsForNoAddPresenter;
 import com.wotingfm.ui.intercom.main.contacts.model.Contact;
 import com.wotingfm.ui.intercom.main.view.InterPhoneActivity;
+import com.wotingfm.ui.intercom.person.personapply.view.PersonApplyFragment;
 
 import java.util.List;
 
@@ -99,7 +100,7 @@ public class GroupNewsForNoAddFragment extends Fragment implements View.OnClickL
             case R.id.head_left_btn:
                 break;
             case R.id.tv_send:
-                InterPhoneActivity.open(new GroupApplyFragment());
+                presenter.apply();
                 break;
             case R.id.re_groupNumber:
                 presenter.jump();// 跳转到成员列表界面

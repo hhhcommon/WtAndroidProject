@@ -62,6 +62,7 @@ public class ChatFragment extends Fragment implements ChatAdapter.IonSlidingView
             rootView = inflater.inflate(R.layout.fragment_chat, container, false);
             rootView.setOnClickListener(this);
             inItView();
+            isLoginView(-1);
             presenter = new ChatPresenter(this);
             presenter.getData();
         }
@@ -214,7 +215,11 @@ public class ChatFragment extends Fragment implements ChatAdapter.IonSlidingView
      */
     public void isLoginView(int type) {
         this.type = type;
-        if (type == 0) {
+        if (type == -1) {
+            // 默认界面
+            lin_back.setVisibility(View.GONE);
+            tip_view.setVisibility(View.GONE);
+        } else if (type == 0) {
             // 已经登录，并且有数据
             lin_back.setVisibility(View.VISIBLE);
             tip_view.setVisibility(View.GONE);

@@ -3,7 +3,11 @@
     android:layout_width="match_parent"
     android:background="@color/line_color"
     android:layout_height="match_parent">
-
+    <com.woting.commonplat.widget.TipView
+        android:id="@+id/tip_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone" />
     <ImageView
         android:id="@+id/img_background"
         android:layout_width="match_parent"
@@ -13,6 +17,7 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
+        android:background="@color/transparent_90_black"
         android:layout_height="44dp">
 
         <ImageView
@@ -31,11 +36,7 @@
             android:src="@mipmap/nav_icon_more_white" />
     </RelativeLayout>
 
-    <com.woting.commonplat.widget.TipView
-        android:id="@+id/tip_view"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="gone" />
+
 
     <LinearLayout
         android:id="@+id/lin_news"
@@ -223,7 +224,7 @@
                     android:id="@+id/tv_send"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="开始对讲"
+                    android:text="添加好友"
                     android:textColor="@color/white"
                     android:textSize="15sp" />
 

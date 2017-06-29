@@ -9,6 +9,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
+
 import com.woting.commonplat.utils.SequenceUUID;
 import com.wotingfm.R;
 
@@ -54,9 +55,25 @@ public class InterPhoneActivity extends AppCompatActivity {
     // 关闭已经打开的 Fragment
     public static void close() {
         context.getSupportFragmentManager().popBackStackImmediate();// 立即删除回退栈中的数据
-        InputMethodManager imm = (InputMethodManager)context.getSystemService(Context.INPUT_METHOD_SERVICE); //得到InputMethodManager的实例
+        hintKbTwo();
+    }
+
+
+    //此方法只是关闭软键盘
+    public static void hintKbTwo() {
+        InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+        if (imm.isActive() && context.getCurrentFocus() != null) {
+            if (context.getCurrentFocus().getWindowToken() != null) {
+                imm.hideSoftInputFromWindow(context.getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+            }
+        }
+    }
+
+    //此方法，如果显示则隐藏，如果隐藏则显示
+    public static void hintKbOne() {
+        InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE); //得到InputMethodManager的实例
         if (imm.isActive()) {//如果开启
-            imm.toggleSoftInput(InputMethodManager.SHOW_IMPLICIT,InputMethodManager.HIDE_NOT_ALWAYS);//关闭软键盘，开启方法相同，这个方法是切换开启与关闭状态的
+            imm.toggleSoftInput(InputMethodManager.SHOW_IMPLICIT, InputMethodManager.HIDE_NOT_ALWAYS);//关闭软键盘，开启方法相同，这个方法是切换开启与关闭状态的
         }
     }
 

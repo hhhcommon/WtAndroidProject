@@ -50,6 +50,7 @@ public class PersonMessageFragment extends Fragment implements View.OnClickListe
             rootView = inflater.inflate(R.layout.fragment_person_news, container, false);
             rootView.setOnClickListener(this);
             initViews();// 设置界面
+            isLoginView(-1);
             presenter = new PersonMessagePresenter(this);
             presenter.getData();
         }
@@ -200,7 +201,12 @@ public class PersonMessageFragment extends Fragment implements View.OnClickListe
      */
     public void isLoginView(int type) {
         this.type=type;
-        if (type == 0) {
+        if (type == -1) {
+            // 默认界面
+            lin_news .setVisibility(View.GONE);
+            img_background.setVisibility(View.GONE);
+            tip_view.setVisibility(View.GONE);
+        }else if (type == 0) {
             // 已经登录，并且有数据
             lin_news .setVisibility(View.VISIBLE);
             img_background.setVisibility(View.VISIBLE);

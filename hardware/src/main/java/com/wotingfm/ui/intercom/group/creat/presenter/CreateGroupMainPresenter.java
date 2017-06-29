@@ -55,7 +55,7 @@ public class CreateGroupMainPresenter {
     private final int PHOTO_REQUEST_CUT = 7;    // 标识 跳转到图片裁剪界面
     private String outputFilePath;
     private boolean headViewShow = false;// 图片选择界面是否展示
-    private String url; // 阿里云返回的图片路径
+    private String url="test"; // 阿里云返回的图片路径
 
     public CreateGroupMainPresenter(CreateGroupMainFragment activity) {
         this.activity = activity;
@@ -240,7 +240,7 @@ public class CreateGroupMainPresenter {
             Log.e("创建群==ret", String.valueOf(ret));
             if (ret == 0) {
                 // 创建成功后返回的数据
-                activity.getActivity().sendBroadcast(new Intent(BroadcastConstants.GROUP_CHANGE));
+                activity.getActivity().sendBroadcast(new Intent(BroadcastConstants.GROUP_GET));
                 String gid="000";
                 InterPhoneActivity.close();
                 StandbyChannelFragment fragment = new StandbyChannelFragment();
