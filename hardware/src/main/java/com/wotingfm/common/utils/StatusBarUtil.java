@@ -1,14 +1,19 @@
 package com.wotingfm.common.utils;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
+import android.content.Context;
 import android.graphics.Color;
 import android.os.Build;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 
 import com.readystatesoftware.systembartint.SystemBarTintManager;
+import com.wotingfm.R;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -123,10 +128,8 @@ public class StatusBarUtil {
         if (window != null) {
             try {
                 WindowManager.LayoutParams lp = window.getAttributes();
-                Field darkFlag = WindowManager.LayoutParams.class
-                        .getDeclaredField("MEIZU_FLAG_DARK_STATUS_BAR_ICON");
-                Field meizuFlags = WindowManager.LayoutParams.class
-                        .getDeclaredField("meizuFlags");
+                Field darkFlag = WindowManager.LayoutParams.class.getDeclaredField("MEIZU_FLAG_DARK_STATUS_BAR_ICON");
+                Field meizuFlags = WindowManager.LayoutParams.class.getDeclaredField("meizuFlags");
                 darkFlag.setAccessible(true);
                 meizuFlags.setAccessible(true);
                 int bit = darkFlag.getInt(null);
@@ -191,7 +194,6 @@ public class StatusBarUtil {
         } else if (type == 3) {
             activity.getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
         }
-
     }
 
     /**
@@ -205,7 +207,111 @@ public class StatusBarUtil {
         } else if (type == 3) {
             activity.getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE);
         }
-
     }
 
+
+    private static final int BUILD_VERSION_KITKAT = 19;
+    private static final int BUILD_VERSION_LOLLIPOP = 21;
+    public static final int FLAG_TRANSLUCENT_STATUS = 0x04000000;
+    private Activity mActivity;
+    private View statusBarView;
+    private int statusBarHeight;
+
+    public StatusBarUtil(Activity activity) {
+        this.mActivity = activity;
+        statusBarHeight = getStatusBarHeight(activity);
+    }
+
+    public void setStatusBarView(View statusBarView) {
+        this.statusBarView = statusBarView;
+        setTransparent();
+    }
+
+    public void setStatusBarView() {
+        setTransparent();
+    }
+
+    public int getStatusBarHeight() {
+        return statusBarHeight;
+    }
+
+    /**
+     * 设置状态栏全透明
+     */
+    private void setTransparent() {
+        if (Build.VERSION.SDK_INT < BUILD_VERSION_KITKAT) {
+            return;
+        }
+        if (statusBarHeight <= 0) {
+            return;
+        }
+        transparentStatusBar();
+        showStatusBarView();
+    }
+
+    @TargetApi(19)
+    private void showStatusBarView() {
+        int color = mActivity.getResources().getColor(R.color.background_color);
+        if (statusBarView == null) {
+            statusBarView = new View(mActivity);
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, getStatusBarHeight(mActivity));
+            statusBarView.setLayoutParams(params);
+            statusBarView.setBackgroundColor(color);
+            ViewGroup decorView = (ViewGroup) mActivity.getWindow().getDecorView();
+            FrameLayout content = (FrameLayout) decorView.findViewById(android.R.id.content);
+            FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) content.getChildAt(0).getLayoutParams();
+            layoutParams.setMargins(0, statusBarHeight, 0, 0);
+            decorView.addView(statusBarView);
+        } else {
+            ViewGroup.LayoutParams layoutParams = statusBarView.getLayoutParams();
+            layoutParams.height = getStatusBarHeight(mActivity);
+            statusBarView.setLayoutParams(layoutParams);
+            statusBarView.setBackgroundColor(color);
+        }
+    }
+
+    // 参考上面注释掉的代码 因为需要用隐藏API 调用方式进行改成反射
+    private void transparentStatusBar() {
+        Window window = mActivity.getWindow();
+        if (Build.VERSION.SDK_INT >= BUILD_VERSION_LOLLIPOP) {
+            // 不 add 此条 flag 会导致在 EMUI3.1(华为) 上失效，add 这个 flag 会导致在其它机型上面添加一个半透明黑条
+            window.addFlags(FLAG_TRANSLUCENT_STATUS);
+            // 因为需要用隐藏 API，没有重新编译 5.x 版本的 android.jar，使用的还是 18 的 api，这里用的反射
+            try {
+                Class[] argsClass = new Class[]{int.class};
+                Method setStatusBarColorMethod = Window.class.getMethod("setStatusBarColor", argsClass);
+                setStatusBarColorMethod.invoke(window, Color.TRANSPARENT);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else {
+            window.addFlags(FLAG_TRANSLUCENT_STATUS);
+        }
+    }
+
+    /**
+     * 获取状态栏高度
+     * @param context context
+     * @return 状态栏高度
+     */
+    private static int getStatusBarHeight(Context context) {
+        if (Build.VERSION.SDK_INT < BUILD_VERSION_KITKAT) {
+            return 0;
+        }
+        // 获得状态栏高度
+        int resourceId = context.getResources().getIdentifier("status_bar_height", "dimen", "android");
+        return context.getResources().getDimensionPixelSize(resourceId);
+    }
+
+    public void setStatusbarVisibility(int visibility) {
+        if (statusBarView != null) {
+            this.statusBarView.setVisibility(visibility);
+        }
+    }
+
+    public void setColor(int color) {
+        if (statusBarView != null) {
+            this.statusBarView.setBackgroundColor(color);
+        }
+    }
 }

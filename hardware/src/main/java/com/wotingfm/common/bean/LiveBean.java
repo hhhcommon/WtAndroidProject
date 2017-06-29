@@ -4,16 +4,11 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
- * Created by amine on 2017/6/21.
+ * Created by amine on 2017/6/27.
  */
 
 public class LiveBean implements Serializable {
 
-    /**
-     * data : [{"data":[{"id":"cn32","logo":"http://www.wotingfm.com/dataCenter/contentimg/80abcbe42ada4574be5e28323f73cef1.100_100.png","title":"游戏动漫"}],"title":"常用分类"},{"data":[{"id":"cn34","logo":"http://www.wotingfm.com/dataCenter/contentimg/ee5b96e963324fd1bd8a243b98be2446.100_100.png","title":"综艺娱乐"}],"title":"其它分类"}]
-     * msg : success
-     * ret : 0
-     */
 
     public String msg;
     public int ret;
@@ -21,18 +16,37 @@ public class LiveBean implements Serializable {
 
 
     public static class DataBean implements Serializable {
-        /**
-         * id : cn32
-         * logo : http://www.wotingfm.com/dataCenter/contentimg/80abcbe42ada4574be5e28323f73cef1.100_100.png
-         * title : 游戏动漫
-         */
 
-        public String id;
-        public String logo;
-        public String title1;
-        public String title2;
-        public String title3;
-        public int number;
-        public int type;
+        public ChannelBean channel;
+        public OwnerBean owner;
+        public int audience_count;
+        public String begin_at;
+        public String cover;
+        public int id;
+        public String live_number;
+        public String title;
+        public String type;
+
+        public static class ChannelBean {
+        }
+
+        public static class OwnerBean {
+            /**
+             * avatar : ##userimg##user_42c0.jpg
+             * fans_count : 0
+             * had_real_name_cert : true
+             * id : 8053ae905e71
+             * idols_count : 0
+             * name : 查理
+             */
+
+            public String avatar;
+            public int fans_count;
+            public boolean had_real_name_cert;
+            public String id;
+            public int idols_count;
+            public String name;
+
+        }
     }
 }

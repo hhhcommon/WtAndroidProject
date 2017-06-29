@@ -13,10 +13,12 @@ import com.wotingfm.R;
 import com.wotingfm.common.adapter.PlayerHistoryListAdapter;
 import com.wotingfm.common.adapter.PlayerSubscribleListAdapter;
 import com.wotingfm.common.application.BSApplication;
+import com.wotingfm.common.bean.AlbumsBean;
 import com.wotingfm.common.bean.Player;
 import com.wotingfm.common.bean.Subscrible;
 import com.wotingfm.common.database.HistoryHelper;
 import com.wotingfm.common.net.RetrofitUtils;
+import com.wotingfm.common.utils.CommonUtils;
 import com.wotingfm.common.utils.T;
 import com.wotingfm.ui.base.baseactivity.BaseToolBarActivity;
 
@@ -67,12 +69,12 @@ public class MeSubscribeListActivity extends BaseToolBarActivity {
         mRecyclerView.setLayoutManager(layoutManager);
         playerHistoryListAdapter = new PlayerSubscribleListAdapter(this, albumsBeens, new PlayerSubscribleListAdapter.PlayerHistoryClick() {
             @Override
-            public void click(Subscrible.DataBean.AlbumsBean singlesBean) {
+            public void click(AlbumsBean singlesBean) {
                 T.getInstance().showToast("点击订阅列表");
             }
 
             @Override
-            public void delete(Subscrible.DataBean.AlbumsBean singlesBean) {
+            public void delete(AlbumsBean singlesBean) {
                 showLodingDialog();
                 unfollowPlayer(singlesBean);
             }
@@ -80,18 +82,18 @@ public class MeSubscribeListActivity extends BaseToolBarActivity {
         mRecyclerView.setAdapter(playerHistoryListAdapter);
         loadLayout.showLoadingView();
         //请求数据，测试userid
-        getPlayerList(RetrofitUtils.TEST_USERID);
+        getPlayerList(CommonUtils.getUserId());
     }
 
-    private List<Subscrible.DataBean.AlbumsBean> albumsBeens = new ArrayList<>();
+    private List<AlbumsBean> albumsBeens = new ArrayList<>();
 
     private void getPlayerList(String uid) {
         RetrofitUtils.getInstance().getSubscriptionsList(uid)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Action1<List<Subscrible.DataBean.AlbumsBean>>() {
+                .subscribe(new Action1<List<AlbumsBean>>() {
                     @Override
-                    public void call(List<Subscrible.DataBean.AlbumsBean> albumsBeen) {
+                    public void call(List<AlbumsBean> albumsBeen) {
                         if (albumsBeen != null && !albumsBeen.isEmpty()) {
                             albumsBeens.addAll(albumsBeen);
                             loadLayout.showContentView();
@@ -109,7 +111,7 @@ public class MeSubscribeListActivity extends BaseToolBarActivity {
                 });
     }
 
-    private void unfollowPlayer(final Subscrible.DataBean.AlbumsBean albumsBean) {
+    private void unfollowPlayer(final AlbumsBean albumsBean) {
         RetrofitUtils.getInstance().unSubscriptions(albumsBean.id)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

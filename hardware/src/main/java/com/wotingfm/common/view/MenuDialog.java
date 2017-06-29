@@ -25,6 +25,7 @@ import com.wotingfm.common.bean.SinglesDownload;
 import com.wotingfm.common.config.DbConfig;
 import com.wotingfm.common.database.DownloadHelper;
 import com.wotingfm.common.net.RetrofitUtils;
+import com.wotingfm.common.utils.CommonUtils;
 import com.wotingfm.common.utils.L;
 import com.wotingfm.common.utils.SDCardUtils;
 import com.wotingfm.common.utils.T;
@@ -34,6 +35,8 @@ import com.wotingfm.ui.play.activity.PlayerHistoryActivity;
 import com.wotingfm.ui.play.activity.ReportsPlayerActivity;
 import com.wotingfm.ui.play.activity.albums.AlbumsInfoActivity;
 import com.wotingfm.ui.play.activity.download.DownloadProgramActivity;
+import com.wotingfm.ui.user.login.view.LoginFragment;
+import com.wotingfm.ui.user.logo.LogoActivity;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -214,11 +217,21 @@ public class MenuDialog extends Dialog implements View.OnClickListener {
                 break;
             case R.id.tvSubscription:
                 dismiss();
+                boolean isLogin = CommonUtils.isLogin();
+                if (isLogin == false) {
+                    LogoActivity.start(activity);
+                    return;
+                }
                 MeSubscribeListActivity.start(activity);
                 break;
             case R.id.tvReport:
                 if (pdsBase != null) {
                     dismiss();
+                    boolean isLogin1 = CommonUtils.isLogin();
+                    if (isLogin1 == false) {
+                        LogoActivity.start(activity);
+                        return;
+                    }
                     ReportsPlayerActivity.start(activity, pdsBase.id, "REPORT_SINGLE");
                 }
                 break;
@@ -231,6 +244,12 @@ public class MenuDialog extends Dialog implements View.OnClickListener {
                 break;
             case R.id.tvLike:
                 if (pdsBase != null) {
+                    boolean isLogin2 = CommonUtils.isLogin();
+                    if (isLogin2 == false) {
+                        dismiss();
+                        LogoActivity.start(activity);
+                        return;
+                    }
                     if (pdsBase.had_liked == true) {
                         unfollowPlayer();
                     } else {

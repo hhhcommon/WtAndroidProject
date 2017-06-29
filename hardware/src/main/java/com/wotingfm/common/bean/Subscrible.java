@@ -23,14 +23,5 @@ public class Subscrible implements Serializable {
     public static class DataBean implements Serializable {
         public List<AlbumsBean> albums;
 
-        public static class AlbumsBean implements Serializable {
-
-            public String id;
-            public String lastest_news;
-            public String logo_url;
-            public String play_count;
-            public String title;
-
-        }
     }
 }

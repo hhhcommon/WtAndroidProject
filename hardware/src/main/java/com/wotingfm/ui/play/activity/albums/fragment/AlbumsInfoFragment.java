@@ -17,11 +17,15 @@ import com.wotingfm.R;
 import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.bean.AlbumInfo;
 import com.wotingfm.common.bean.BaseResult;
+import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.common.net.RetrofitService;
 import com.wotingfm.common.net.RetrofitUtils;
+import com.wotingfm.common.utils.CommonUtils;
 import com.wotingfm.common.utils.T;
 import com.wotingfm.common.view.FlowLayout;
 import com.wotingfm.ui.base.basefragment.BaseFragment;
+import com.wotingfm.ui.user.login.view.LoginFragment;
+import com.wotingfm.ui.user.logo.LogoActivity;
 
 import org.w3c.dom.Text;
 
@@ -31,6 +35,7 @@ import butterknife.Unbinder;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.schedulers.Schedulers;
+
 
 /**
  * Created by amine on 2017/6/14.
@@ -71,6 +76,7 @@ public class AlbumsInfoFragment extends BaseFragment {
 
     private AlbumInfo albumInfo;
 
+    private String userId;
 
     @Override
     protected void initView() {
@@ -80,6 +86,8 @@ public class AlbumsInfoFragment extends BaseFragment {
         if (albumInfo != null) {
             setResultData(albumInfo);
         }
+        userId = CommonUtils.getUserId();
+
     }
 
     private void setResultData(final AlbumInfo albumInfo) {
@@ -117,6 +125,11 @@ public class AlbumsInfoFragment extends BaseFragment {
         tvFollow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                boolean isLogin = CommonUtils.isLogin();
+                if (isLogin == false) {
+                    LogoActivity.start(getActivity());
+                    return;
+                }
                 if (had_followed == true) {
                     submitNoFans(albumInfo.data.album.owner.id);
                 } else {
@@ -128,7 +141,7 @@ public class AlbumsInfoFragment extends BaseFragment {
 
     private void submitFans(String idol_id) {
         showLodingDialog();
-        RetrofitUtils.getInstance().submitFans(idol_id, RetrofitUtils.TEST_USERID)
+        RetrofitUtils.getInstance().submitFans(idol_id, userId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Action1<BaseResult>() {
@@ -159,7 +172,7 @@ public class AlbumsInfoFragment extends BaseFragment {
 
     private void submitNoFans(String idol_id) {
         showLodingDialog();
-        RetrofitUtils.getInstance().submitNoFans(idol_id, RetrofitUtils.TEST_USERID)
+        RetrofitUtils.getInstance().submitNoFans(idol_id, userId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Action1<BaseResult>() {

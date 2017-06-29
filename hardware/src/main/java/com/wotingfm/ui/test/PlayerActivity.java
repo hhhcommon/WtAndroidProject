@@ -82,6 +82,15 @@ public class PlayerActivity extends NoTitleBarBaseActivity implements View.OnCli
         activity.startActivity(intent);
     }
 
+    public static void start(Context activity, SinglesBase singlesBase, String serchQ) {
+        EventBus.getDefault().postSticky("stop");
+        AppManager.getAppManager().finishAllActivity();
+        Intent intent = new Intent(activity, PlayerActivity.class);
+        intent.putExtra("singlesBase", singlesBase);
+        intent.putExtra("serchQ", serchQ);
+        activity.startActivity(intent);
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -119,7 +128,21 @@ public class PlayerActivity extends NoTitleBarBaseActivity implements View.OnCli
         serchQ = intent.getStringExtra("serchQ");
         albumsId = intent.getStringExtra("albumsId");
         loadLayout.showLoadingView();
-        getPlayerList(albumsId);
+        SinglesBase singlesBase = (SinglesBase) intent.getSerializableExtra("singlesBase");
+        if (singlesBase != null) {
+            loadLayout.showContentView();
+            singLesBeans.clear();
+            singLesBeans.add(singlesBase);
+            postionPlayer = 0;
+            bdPlayer.pause();
+            bdPlayer.setVideoPath(singlesBase.single_file_url);
+            bdPlayer.start();
+            relatiBottom.setVisibility(View.VISIBLE);
+            setBeforeOrNext(singlesBase);
+            mPlayerAdapter.notifyDataSetChanged();
+        } else {
+            getPlayerList(albumsId);
+        }
 
     }
 
@@ -456,6 +479,14 @@ public class PlayerActivity extends NoTitleBarBaseActivity implements View.OnCli
         if (!TextUtils.isEmpty(event) && "stop".equals(event)) {
             if (bdPlayer != null) {
                 bdPlayer.stopPlayback();
+            }
+        } else if (!TextUtils.isEmpty(event) && "pause".equals(event)) {
+            if (bdPlayer != null) {
+                bdPlayer.pause();
+            }
+        } else if (!TextUtils.isEmpty(event) && "start".equals(event)) {
+            if (bdPlayer != null) {
+                bdPlayer.start();
             }
         }
     }

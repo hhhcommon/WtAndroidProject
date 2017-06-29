@@ -102,7 +102,7 @@ public class ProgramInfoFragment extends BaseFragment {
                 //拿到最后一条的position
                 LinearLayoutManager manager = (LinearLayoutManager) recyclerView.getLayoutManager();
                 int endCompletelyPosition = manager.findLastCompletelyVisibleItemPosition();
-                if (endCompletelyPosition == albumsInfoProgramAdapter.getItemCount() - 1) {
+                if (albumsInfoProgramAdapter.getItemCount() > 10 && endCompletelyPosition == albumsInfoProgramAdapter.getItemCount() - 1) {
                     //执行加载更多的方法，无论是用接口还是别的方式都行
                     loadMore();
                 }

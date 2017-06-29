@@ -21,11 +21,14 @@ import com.wotingfm.common.adapter.userAdapter.AnchorPersonalCenterInfoAdapter;
 import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.bean.AnchorInfo;
 import com.wotingfm.common.net.RetrofitUtils;
+import com.wotingfm.common.utils.CommonUtils;
 import com.wotingfm.common.utils.L;
 import com.wotingfm.common.utils.T;
 import com.wotingfm.common.view.ReportsDialog;
 import com.wotingfm.ui.base.baseactivity.NoTitleBarBaseActivity;
 import com.wotingfm.ui.play.activity.albums.AlbumsListActivity;
+import com.wotingfm.ui.user.login.view.LoginFragment;
+import com.wotingfm.ui.user.logo.LogoActivity;
 import com.zhy.adapter.recyclerview.wrapper.HeaderAndFooterWrapper;
 
 import java.util.ArrayList;
@@ -77,6 +80,7 @@ public class AnchorPersonalCenterActivity extends NoTitleBarBaseActivity impleme
 
     @Override
     public void initView() {
+        userId = CommonUtils.getUserId();
         ivMore.setOnClickListener(this);
         ivBack.setOnClickListener(this);
         height = DementionUtil.dip2px(this, 200);
@@ -184,20 +188,20 @@ public class AnchorPersonalCenterActivity extends NoTitleBarBaseActivity impleme
                                 setHeadViewData(s);
                                 dataBeanXes.addAll(s.data.user.data);
                                 mHeaderAndFooterWrapper.notifyDataSetChanged();
-                            } else {
-                                loadLayout.showErrorView();
+                                } else {
+                                    loadLayout.showErrorView();
+                                }
                             }
                         }
-                    }
 
 
-                }, new Action1<Throwable>() {
-                    @Override
-                    public void call(Throwable throwable) {
-                        loadLayout.showErrorView();
-                    }
-                });
-    }
+                    }, new Action1<Throwable>() {
+                        @Override
+                        public void call(Throwable throwable) {
+                            loadLayout.showErrorView();
+                        }
+                    });
+        }
 
     //headview
     private ImageView ivPhotoBg, ivPhoto;
@@ -237,15 +241,22 @@ public class AnchorPersonalCenterActivity extends NoTitleBarBaseActivity impleme
         tvFollow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                boolean isLogin = CommonUtils.isLogin();
+                if(isLogin==false){
+                    LogoActivity.start(AnchorPersonalCenterActivity.this);
+                    return;
+                }
                 showLodingDialog();
                 if (s.data.user.had_followd == true) {
-                    unFollowAnchor(RetrofitUtils.TEST_USERID, s);
+                    unFollowAnchor(userId, s);
                 } else {
-                    followAnchor(RetrofitUtils.TEST_USERID, s);
+                    followAnchor(userId, s);
                 }
             }
         });
     }
+
+    private String userId;
 
     private void followAnchor(String uid, final AnchorInfo sw) {
         L.i("mingku", "uid=" + uid + ":" + sw.data.user.id);

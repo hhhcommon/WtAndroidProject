@@ -28,7 +28,6 @@ public class MainPresenter extends BasePresenter {
     public MainPresenter(MainActivity mainActivity) {
         this.mainActivity = mainActivity;
         this.mainModel = new MainModel();
-        SpeechUtility.createUtility(mainActivity, "appid=58116950");// 初始化讯飞
         createService();
         registerReceiver();
     }

@@ -5,15 +5,18 @@ import android.text.TextUtils;
 
 import com.wotingfm.common.bean.AlbumInfo;
 import com.wotingfm.common.application.BSApplication;
+import com.wotingfm.common.bean.AlbumsBean;
 import com.wotingfm.common.bean.AnchorInfo;
 import com.wotingfm.common.bean.BaseResult;
 import com.wotingfm.common.bean.Channels;
 import com.wotingfm.common.bean.Classification;
 import com.wotingfm.common.bean.HomeBanners;
+import com.wotingfm.common.bean.LiveBean;
 import com.wotingfm.common.bean.Player;
 import com.wotingfm.common.bean.Reports;
 import com.wotingfm.common.bean.Selected;
 import com.wotingfm.common.bean.SelectedMore;
+import com.wotingfm.common.bean.SerchList;
 import com.wotingfm.common.bean.Subscrible;
 import com.wotingfm.ui.play.activity.albums.fragment.AlbumsInfoFragment;
 import com.wotingfm.common.constant.StringConstant;
@@ -48,8 +51,6 @@ public class RetrofitUtils {
     private static final int DEFAULT_TIMEOUT = 3000;
     private RetrofitService retrofitService;
     public static RetrofitUtils INSTANCE;
-    public static String TEST_USERID = "00163e00693b";
-    private String token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIwMDE2M2UwMDY5M2IiLCJpc3MiOiJodHRwOlwvXC93b3Rpbmcuc3VpdGluZ3dlaS5jb21cL2FwaVwvYWNjb3VudHNcL2xvZ2luIiwiaWF0IjoxNDk2NzE5OTI0LCJleHAiOjE1MDE5MDM5MjQsIm5iZiI6MTQ5NjcxOTkyNCwianRpIjoiZWQ1YmZmMWI4NzM4ZDVmYmQwZjk4ZTU4NjEwZjdkOTMifQ.jobc9DSVQTZUQp57NEOowz-cf1zZG2s05RTekOUd9Yw";
     private OkHttpClient.Builder builder;
 
     private RetrofitUtils() {
@@ -74,7 +75,7 @@ public class RetrofitUtils {
     }
 
     private OkHttpClient genericClient() {
-        final String _token = BSApplication.SharedPreferences.getString(StringConstant.TOKEN, token);
+        final String _token = BSApplication.SharedPreferences.getString(StringConstant.TOKEN, null);
         if (!TextUtils.isEmpty(_token)) {
             return new OkHttpClient.Builder()
                     .addInterceptor(new Interceptor() {
@@ -179,11 +180,11 @@ public class RetrofitUtils {
                 });
     }
 
-    public Observable<List<SelectedMore.DataBean.AlbumsBean>> getSelectedsMore(int page, String type) {
+    public Observable<List<AlbumsBean>> getSelectedsMore(int page, String type) {
         return retrofitService.getSelectedsMore(page, type)
-                .map(new Func1<SelectedMore, List<SelectedMore.DataBean.AlbumsBean>>() {
+                .map(new Func1<SelectedMore, List<AlbumsBean>>() {
                     @Override
-                    public List<SelectedMore.DataBean.AlbumsBean> call(SelectedMore classification) {
+                    public List<AlbumsBean> call(SelectedMore classification) {
                         if (classification.ret != 0) {
                             throw new IllegalStateException(classification.msg);
                         }
@@ -219,11 +220,11 @@ public class RetrofitUtils {
     }
 
     //订阅列表，我的
-    public Observable<List<Subscrible.DataBean.AlbumsBean>> getSubscriptionsList(String pid) {
+    public Observable<List<AlbumsBean>> getSubscriptionsList(String pid) {
         return retrofitService.getSubscriptionsList(pid)
-                .map(new Func1<Subscrible, List<Subscrible.DataBean.AlbumsBean>>() {
+                .map(new Func1<Subscrible, List<AlbumsBean>>() {
                     @Override
-                    public List<Subscrible.DataBean.AlbumsBean> call(Subscrible player) {
+                    public List<AlbumsBean> call(Subscrible player) {
                         if (player.ret != 0) {
                             throw new IllegalStateException(player.msg);
                         }
@@ -232,11 +233,24 @@ public class RetrofitUtils {
                 });
     }
 
-    public Observable<List<Subscrible.DataBean.AlbumsBean>> getChannelsAlbums(String pid, int page) {
+    public Observable<List<LiveBean.DataBean>> getRecommandations(int page) {
+        return retrofitService.getRecommandations(page)
+                .map(new Func1<LiveBean, List<LiveBean.DataBean>>() {
+                    @Override
+                    public List<LiveBean.DataBean> call(LiveBean player) {
+                        if (player.ret != 0) {
+                            throw new IllegalStateException(player.msg);
+                        }
+                        return player.data;
+                    }
+                });
+    }
+
+    public Observable<List<AlbumsBean>> getChannelsAlbums(String pid, int page) {
         return retrofitService.getChannelsAlbums(pid, page)
-                .map(new Func1<Subscrible, List<Subscrible.DataBean.AlbumsBean>>() {
+                .map(new Func1<Subscrible, List<AlbumsBean>>() {
                     @Override
-                    public List<Subscrible.DataBean.AlbumsBean> call(Subscrible player) {
+                    public List<AlbumsBean> call(Subscrible player) {
                         if (player.ret != 0) {
                             throw new IllegalStateException(player.msg);
                         }
@@ -245,11 +259,11 @@ public class RetrofitUtils {
                 });
     }
 
-    public Observable<List<Subscrible.DataBean.AlbumsBean>> getSimilarsList(String pid) {
+    public Observable<List<AlbumsBean>> getSimilarsList(String pid) {
         return retrofitService.albumsSimilars(pid)
-                .map(new Func1<Subscrible, List<Subscrible.DataBean.AlbumsBean>>() {
+                .map(new Func1<Subscrible, List<AlbumsBean>>() {
                     @Override
-                    public List<Subscrible.DataBean.AlbumsBean> call(Subscrible player) {
+                    public List<AlbumsBean> call(Subscrible player) {
                         if (player.ret != 0) {
                             throw new IllegalStateException(player.msg);
                         }
@@ -258,15 +272,28 @@ public class RetrofitUtils {
                 });
     }
 
-    public Observable<List<Subscrible.DataBean.AlbumsBean>> getAlbumsList(String pid, int page) {
+    public Observable<List<AlbumsBean>> getAlbumsList(String pid, int page) {
         return retrofitService.albumsList(pid, page)
-                .map(new Func1<Subscrible, List<Subscrible.DataBean.AlbumsBean>>() {
+                .map(new Func1<Subscrible, List<AlbumsBean>>() {
                     @Override
-                    public List<Subscrible.DataBean.AlbumsBean> call(Subscrible player) {
+                    public List<AlbumsBean> call(Subscrible player) {
                         if (player.ret != 0) {
                             throw new IllegalStateException(player.msg);
                         }
                         return player.data.albums;
+                    }
+                });
+    }
+
+    public Observable<SerchList> serchList(String type, String q, int page) {
+        return retrofitService.serchList(type, q, page)
+                .map(new Func1<SerchList, SerchList>() {
+                    @Override
+                    public SerchList call(SerchList serchList) {
+                        if (serchList.ret != 0) {
+                            throw new IllegalStateException(serchList.msg);
+                        }
+                        return serchList;
                     }
                 });
     }
