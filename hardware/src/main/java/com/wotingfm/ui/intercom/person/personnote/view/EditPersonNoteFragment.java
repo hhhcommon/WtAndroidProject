@@ -1,5 +1,6 @@
 package com.wotingfm.ui.intercom.person.personnote.view;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -12,11 +13,12 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.wotingfm.R;
+import com.wotingfm.common.utils.DialogUtils;
 import com.wotingfm.ui.intercom.main.view.InterPhoneActivity;
 import com.wotingfm.ui.intercom.person.personnote.presenter.EditPersonNotePresenter;
 
 /**
- * 编辑群介绍
+ * 设置备注
  * 作者：xinLong on 2017/6/5 01:30
  * 邮箱：645700751@qq.com
  */
@@ -24,6 +26,7 @@ public class EditPersonNoteFragment extends Fragment implements View.OnClickList
     private View rootView;
     private EditPersonNotePresenter presenter;
     private EditText et_news;
+    private Dialog dialog;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -59,6 +62,20 @@ public class EditPersonNoteFragment extends Fragment implements View.OnClickList
                 presenter.send(s);
                 break;
         }
+    }
+
+    /**
+     * 展示弹出框
+     */
+    public void dialogShow() {
+        dialog = DialogUtils.Dialog(this.getActivity());
+    }
+
+    /**
+     * 取消弹出框
+     */
+    public void dialogCancel() {
+        if (dialog != null) dialog.dismiss();
     }
 
     @Override

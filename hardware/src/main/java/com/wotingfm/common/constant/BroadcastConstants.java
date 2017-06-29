@@ -27,4 +27,17 @@ public class BroadcastConstants {
 
     // 群组更改广播
     public static final String GROUP_CHANGE = "GROUP_CHANGE";
+
+    // 群组界面关闭
+    public static final String VIEW_GROUP_CLOSE = "VIEW_GROUP_CLOSE";
+
+    // 好友界面关闭
+    public static final String VIEW_PERSON_CLOSE = "VIEW_PERSON_CLOSE";
+
+    // 此时对讲界面（更改对讲页面viewPage的展示界面）
+    public static final String VIEW_INTER_PHONE = "VIEW_INTER_PHONE";
+
+    // 有新的对讲连接成功时，对讲页面更改，数据更改
+    public static final String VIEW_INTER_PHONE_CHAT_OK = "VIEW_INTER_PHONE_CHAT_OK";
+
 }

@@ -22,8 +22,8 @@ public class InterPhoneModel {
      * 获取好友
      */
     public void loadNewsForUser(final OnLoadInterface listener) {
-        String id= BSApplication.SharedPreferences.getString(StringConstant.USER_ID,"000");
-        String token= BSApplication.SharedPreferences.getString(StringConstant.TOKEN,"000");
+        String id= BSApplication.SharedPreferences.getString(StringConstant.USER_ID,"");
+        String token= BSApplication.SharedPreferences.getString(StringConstant.TOKEN,"");
         RetrofitUtils.getInstance().getFriends(id,token)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -52,8 +52,8 @@ public class InterPhoneModel {
      * 获取群组
      */
     public void loadNewsForGroup(final OnLoadInterface listener) {
-        String id= BSApplication.SharedPreferences.getString(StringConstant.USER_ID,"000");
-        String token= BSApplication.SharedPreferences.getString(StringConstant.TOKEN,"000");
+        String id= BSApplication.SharedPreferences.getString(StringConstant.USER_ID,"");
+        String token= BSApplication.SharedPreferences.getString(StringConstant.TOKEN,"");
         RetrofitUtils.getInstance().getGroups(id,token)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -61,7 +61,7 @@ public class InterPhoneModel {
                     @Override
                     public void call(Object o) {
                         try {
-                            Log.e("好友列表返回数据",new Gson().toJson(o));
+                            Log.e("群组列表返回数据",new Gson().toJson(o));
                             //填充UI
                             listener.onSuccess(o);
                         } catch (Exception e) {

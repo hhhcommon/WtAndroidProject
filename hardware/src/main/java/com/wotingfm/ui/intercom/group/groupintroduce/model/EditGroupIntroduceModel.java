@@ -16,19 +16,19 @@ import rx.schedulers.Schedulers;
 public class EditGroupIntroduceModel extends UserInfo {
 
     /**
-     * 进行数据交互
+     * 修改群介绍
      * @param s
      * @param listener 监听
      */
-    public void loadNews( String s, final OnLoadInterface listener) {
-        RetrofitUtils.getInstance().groupApply(s)
+    public void loadNews( String id,String s, final OnLoadInterface listener) {
+        RetrofitUtils.getInstance().editGroupIntroduce(id,s)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Action1<Object>() {
                     @Override
                     public void call(Object o) {
                         try {
-                            Log.e("入组申请返回数据",o.toString());
+                            Log.e("修改群介绍返回数据",o.toString());
                             //填充UI
                             listener.onSuccess(o);
                         } catch (Exception e) {

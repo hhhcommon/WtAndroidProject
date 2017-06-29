@@ -7,13 +7,11 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.woting.commonplat.config.GlobalNetWorkConfig;
 import com.wotingfm.common.config.GlobalStateConfig;
-import com.wotingfm.common.utils.ToastUtils;
-import com.wotingfm.ui.intercom.add.search.net.model.SearchContactsForNetModel;
+import com.wotingfm.ui.intercom.group.groupmumbershow.view.GroupNumberShowFragment;
 import com.wotingfm.ui.intercom.group.groupnews.noadd.model.GroupNewsForNoAddModel;
 import com.wotingfm.ui.intercom.group.groupnews.noadd.view.GroupNewsForNoAddFragment;
 import com.wotingfm.ui.intercom.main.contacts.model.Contact;
-import com.wotingfm.ui.intercom.person.newfriend.model.NewFriendModel;
-import com.wotingfm.ui.intercom.person.newfriend.view.NewFriendFragment;
+import com.wotingfm.ui.intercom.main.view.InterPhoneActivity;
 
 import org.json.JSONObject;
 import org.json.JSONTokener;
@@ -30,7 +28,7 @@ public class GroupNewsForNoAddPresenter {
     private final GroupNewsForNoAddFragment activity;
     private final GroupNewsForNoAddModel model;
     private final String id;
-
+    private ArrayList<Contact.user> g_list;// 全部管理员
 
     public GroupNewsForNoAddPresenter(GroupNewsForNoAddFragment activity) {
         this.activity = activity;
@@ -55,7 +53,7 @@ public class GroupNewsForNoAddPresenter {
                 if (list != null && list.size() > 0) {
                     activity.setGridViewData(list);
                 } else {
-                    activity.setGridView();
+                    activity.setViewForNoGroupPerson();
                 }
                 activity.isLoginView(0);
             } else {
@@ -69,7 +67,7 @@ public class GroupNewsForNoAddPresenter {
     }
 
     /**
-     * 获取推荐的群组
+     * 获取群详情
      */
     public void getNews() {
         activity.dialogShow();
@@ -109,6 +107,9 @@ public class GroupNewsForNoAddPresenter {
                     // 设置数据出错界面
                     activity.isLoginView(4);
                 }
+            }else{
+                // 设置数据出错界面
+                activity.isLoginView(4);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -189,6 +190,9 @@ public class GroupNewsForNoAddPresenter {
                     // 设置数据出错界面
                     activity.setViewForNoGroupPerson();
                 }
+            }else{
+                // 设置数据出错界面
+                activity.setViewForNoGroupPerson();
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -200,7 +204,7 @@ public class GroupNewsForNoAddPresenter {
     // 组建群成员界面
     private void assemblyDataForGroup(List<Contact.user> list) {
         // 组装数据
-        ArrayList<Contact.user> g_list = new ArrayList<>();
+         g_list = new ArrayList<>();
         for (int i = 0; i < list.size(); i++) {
             if (list.get(i).is_admin()) {
                 g_list.add(g_list.get(i));
@@ -208,10 +212,29 @@ public class GroupNewsForNoAddPresenter {
         }
         // 数据适配
         if (g_list != null && g_list.size() > 0) {
-            activity.setGridViewData(g_list);
+            if (g_list.size() > 5) {
+                ArrayList<Contact.user> _list = new ArrayList<>();
+                for (int i = 0; i < 5; i++) {
+                    _list.add(g_list.get(i));
+                }
+                activity.setGridViewData(_list);
+            } else {
+                activity.setGridViewData(g_list);
+            }
         } else {
-            activity.setGridView();
+            activity.setViewForNoGroupPerson();
         }
+    }
+
+    /**
+     * 跳转到成员列表界面
+     */
+   public void  jump(){
+       GroupNumberShowFragment fragment = new GroupNumberShowFragment();
+       Bundle bundle = new Bundle();
+       bundle.putSerializable("list", g_list);
+       fragment.setArguments(bundle);
+       InterPhoneActivity.open(fragment);
     }
 
     /**
@@ -223,6 +246,5 @@ public class GroupNewsForNoAddPresenter {
         if(type==4){
             getData();
         }
-
     }
 }

@@ -516,8 +516,8 @@ public class RetrofitUtils {
      * @param s
      * @return
      */
-    public Observable<Object> groupApply(String s) {
-        return retrofitService.groupApply(s)
+    public Observable<Object> groupApply(String id,String s) {
+        return retrofitService.groupApply(id,s)
                 .map(new Func1<Object, Object>() {
                     @Override
                     public Object call(Object O) {
@@ -645,7 +645,7 @@ public class RetrofitUtils {
     /**
      * 获取群组信息
      *
-     * @param id    当前群id
+     * @param id 当前群id
      * @return Object
      */
     public Observable<Object> getGroupNews(String id) {
@@ -661,7 +661,7 @@ public class RetrofitUtils {
     /**
      * 获取群组成员
      *
-     * @param id    当前群id
+     * @param id 当前群id
      * @return Object
      */
     public Observable<Object> getGroupPerson(String id) {
@@ -677,12 +677,12 @@ public class RetrofitUtils {
     /**
      * 获取推荐的成员()
      *
-     * @param id    当前群id
+     * @param id   当前群id
      * @param type
      * @return Object
      */
-    public Observable<Object> getRecommendPerson(String id,String type) {
-        return retrofitService.getRecommendPerson(id,type)
+    public Observable<Object> getRecommendPerson(String id, String type) {
+        return retrofitService.getRecommendPerson(id, type)
                 .map(new Func1<Object, Object>() {
                     @Override
                     public Object call(Object O) {
@@ -694,12 +694,12 @@ public class RetrofitUtils {
     /**
      * 获取推荐的群组
      *
-     * @param id    当前群id
+     * @param id   当前群id
      * @param type
      * @return Object
      */
-    public Observable<Object> getRecommendGroup(String id,String type) {
-        return retrofitService.getRecommendGroup(id,type)
+    public Observable<Object> getRecommendGroup(String id, String type) {
+        return retrofitService.getRecommendGroup(id, type)
                 .map(new Func1<Object, Object>() {
                     @Override
                     public Object call(Object O) {
@@ -711,13 +711,11 @@ public class RetrofitUtils {
     /**
      * 获取搜索的群组
      *
-     * @param id    当前用户id
-     * @param s     搜索的内容
-     * @param type
+     * @param s 搜索的内容
      * @return Objects
      */
-    public Observable<Object> getSearchGroup(String id,String s,String type) {
-        return retrofitService.getSearchGroup(id,s,type)
+    public Observable<Object> getSearchGroup(String s) {
+        return retrofitService.getSearchGroup(s)
                 .map(new Func1<Object, Object>() {
                     @Override
                     public Object call(Object O) {
@@ -729,13 +727,11 @@ public class RetrofitUtils {
     /**
      * 获取搜索的好友
      *
-     * @param id    当前用户id
-     * @param s     搜索的内容
-     * @param type
+     * @param s 搜索的内容
      * @return Objects
      */
-    public Observable<Object> getSearchPerson(String id,String s,String type) {
-        return retrofitService.getSearchPerson(id,s,type)
+    public Observable<Object> getSearchPerson(String s) {
+        return retrofitService.getSearchPerson(s)
                 .map(new Func1<Object, Object>() {
                     @Override
                     public Object call(Object O) {
@@ -752,8 +748,8 @@ public class RetrofitUtils {
      * @param token
      * @return Objects
      */
-    public Observable<Object> newFriendDel(String id,String token) {
-        return retrofitService.newFriendDel(id,token)
+    public Observable<Object> newFriendDel(String id, String token) {
+        return retrofitService.newFriendDel(id, token)
                 .map(new Func1<Object, Object>() {
                     @Override
                     public Object call(Object O) {
@@ -769,8 +765,8 @@ public class RetrofitUtils {
      * @param token
      * @return Objects
      */
-    public Observable<Object> newFriendApply(String id,String token) {
-        return retrofitService.newFriendApply(id,token)
+    public Observable<Object> newFriendApply(String id, String token) {
+        return retrofitService.newFriendApply(id, token)
                 .map(new Func1<Object, Object>() {
                     @Override
                     public Object call(Object O) {
@@ -786,8 +782,8 @@ public class RetrofitUtils {
      * @param token
      * @return Objects
      */
-    public Observable<Object> newFriendRefuse(String id,String token) {
-        return retrofitService.newFriendRefuse(id,token)
+    public Observable<Object> newFriendRefuse(String id, String token) {
+        return retrofitService.newFriendRefuse(id, token)
                 .map(new Func1<Object, Object>() {
                     @Override
                     public Object call(Object O) {
@@ -795,17 +791,16 @@ public class RetrofitUtils {
                     }
                 });
     }
-
 
     /**
      * 添加好友
      *
-     * @param id    操作用户id
-     * @param s     申请消息
+     * @param id 操作用户id
+     * @param s  申请消息
      * @return Objects
      */
-    public Observable<Object> personApply(String id,String s) {
-        return retrofitService.personApply(id,s)
+    public Observable<Object> personApply(String id, String s) {
+        return retrofitService.personApply(id, s)
                 .map(new Func1<Object, Object>() {
                     @Override
                     public Object call(Object O) {
@@ -814,5 +809,137 @@ public class RetrofitUtils {
                 });
     }
 
+    /**
+     * 创建群组
+     *
+     * @param Name
+     * @param password
+     * @param type
+     * @return Objects
+     */
+    public Observable<Object> CreateGroup(String Name, String password, int type, String url) {
+        return retrofitService.CreateGroup(Name, password, type, url)
+                .map(new Func1<Object, Object>() {
+                    @Override
+                    public Object call(Object O) {
+                        return O;
+                    }
+                });
+    }
 
+    /**
+     * 设置群组备用频道
+     *
+     * @param channel1
+     * @param channel2
+     * @param id
+     * @return Objects
+     */
+    public Observable<Object> setChannel(String channel1, String channel2, String id) {
+        return retrofitService.setChannel(channel1, channel2, id)
+                .map(new Func1<Object, Object>() {
+                    @Override
+                    public Object call(Object O) {
+                        return O;
+                    }
+                });
+    }
+
+    /**
+     * 设置管理员
+     *
+     * @param s
+     * @return Objects
+     */
+    public Observable<Object> setManager(String id,String s) {
+        return retrofitService.setManager(id,s)
+                .map(new Func1<Object, Object>() {
+                    @Override
+                    public Object call(Object O) {
+                        return O;
+                    }
+                });
+    }
+
+    /**
+     * 修改群名称
+     *
+     * @param s
+     * @return Objects
+     */
+    public Observable<Object> editGroupName(String id,String s) {
+        return retrofitService.editGroupName(id,s)
+                .map(new Func1<Object, Object>() {
+                    @Override
+                    public Object call(Object O) {
+                        return O;
+                    }
+                });
+    }
+
+    /**
+     * 修改群介绍
+     *
+     * @param s
+     * @return Objects
+     */
+    public Observable<Object> editGroupIntroduce(String id,String s) {
+        return retrofitService.editGroupIntroduce(id,s)
+                .map(new Func1<Object, Object>() {
+                    @Override
+                    public Object call(Object O) {
+                        return O;
+                    }
+                });
+    }
+
+    /**
+     * 删除群成员
+     *
+     * @param gid
+     * @param id
+     * @return Objects
+     */
+    public Observable<Object> groupNumDel(String gid,String id) {
+        return retrofitService.groupNumDel(gid,id)
+                .map(new Func1<Object, Object>() {
+                    @Override
+                    public Object call(Object O) {
+                        return O;
+                    }
+                });
+    }
+
+    /**
+     * 添加群成员
+     *
+     * @param gid
+     * @param id
+     * @return Objects
+     */
+    public Observable<Object> groupNumAdd(String gid,String id) {
+        return retrofitService.groupNumAdd(gid,id)
+                .map(new Func1<Object, Object>() {
+                    @Override
+                    public Object call(Object O) {
+                        return O;
+                    }
+                });
+    }
+
+    /**
+     * 修改好友备注
+     *
+     * @param s
+     * @return Objects
+     */
+    public Observable<Object> editPersonNote(String id,String s) {
+        return retrofitService.editPersonNote(id,s)
+                .map(new Func1<Object, Object>() {
+                    @Override
+                    public Object call(Object O) {
+                        return O;
+                    }
+                });
+    }
 }

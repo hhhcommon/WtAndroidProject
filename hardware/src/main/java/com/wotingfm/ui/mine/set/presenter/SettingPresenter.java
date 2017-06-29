@@ -39,7 +39,7 @@ public class SettingPresenter {
      * 发送注销请求
      */
     public void cancel() {
-        if(GlobalStateConfig.test){
+        if(true){
             // 测试代码
             dealCancelSuccess();
         }else{

@@ -168,7 +168,6 @@ public class NewFriendFragment extends Fragment implements NewFriendAdapter.IonS
         }
     }
 
-
     /**
      * 展示弹出框
      */
@@ -182,8 +181,6 @@ public class NewFriendFragment extends Fragment implements NewFriendAdapter.IonS
     public void dialogCancel() {
         if (dialog != null) dialog.dismiss();
     }
-
-
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {

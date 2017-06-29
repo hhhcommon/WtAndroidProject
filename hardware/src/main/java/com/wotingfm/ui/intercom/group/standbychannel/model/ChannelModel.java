@@ -1,13 +1,12 @@
 package com.wotingfm.ui.intercom.group.standbychannel.model;
 
+import android.util.Log;
+
+import com.google.gson.Gson;
 import com.wotingfm.common.net.RetrofitUtils;
 import com.wotingfm.common.utils.FrequencyUtil;
 import com.wotingfm.ui.base.model.UserInfo;
-import com.wotingfm.ui.user.login.model.Login;
-
 import java.util.List;
-
-import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.schedulers.Schedulers;
@@ -24,33 +23,35 @@ public class ChannelModel extends UserInfo {
     }
 
     /**
-     * 进行数据交互
+     * 设置组备用频道
      *
-     * @param userName
-     * @param password
+     * @param channel1
+     * @param channel2
+     * @param id 组id
      * @param listener 监听
      */
-    public void loadNews(String userName, String password, final OnLoadInterface listener) {
-//        RetrofitUtils.getInstance().register(userName, password,yzm)
-//                .subscribeOn(Schedulers.io())
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .subscribe(new Action1<Object>() {
-//                    @Override
-//                    public void call(Object o) {
-//                        //填充UI
-//                        listener.onSuccess(o);
-//                    }
-//                }, new Action1<Throwable>() {
-//                    @Override
-//                    public void call(Throwable throwable) {
-//                        throwable.printStackTrace();
-//                        listener.onFailure("");
-//                    }
-//                });
+    public void loadNews(String channel1, String channel2,String id, final OnLoadInterface listener) {
+        RetrofitUtils.getInstance().setChannel(channel1, channel2,id)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Action1<Object>() {
+                    @Override
+                    public void call(Object o) {
+                        Log.e("设置备用频道返回数据",new Gson().toJson(o));
+                        //填充UI
+                        listener.onSuccess(o);
+                    }
+                }, new Action1<Throwable>() {
+                    @Override
+                    public void call(Throwable throwable) {
+                        throwable.printStackTrace();
+                        listener.onFailure("");
+                    }
+                });
     }
 
     public interface OnLoadInterface {
-        void onSuccess(Login login);
+        void onSuccess(Object o);
 
         void onFailure(String msg);
     }

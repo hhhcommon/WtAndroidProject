@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.wotingfm.R;
 import com.wotingfm.common.view.slidingbutton.SlidingButtonView;
+import com.wotingfm.ui.intercom.main.chat.model.TalkHistory;
 import com.wotingfm.ui.intercom.main.contacts.model.Contact;
 
 import java.util.List;
@@ -24,16 +25,22 @@ import java.util.List;
  */
 
 public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.SimpleHolder> implements SlidingButtonView.IonSlidingButtonListener {
-    private final List<Contact.user> mDatas;
+    private List<TalkHistory> t;
     private Context mContext;
 
     private IonSlidingViewClickListener mIDeleteBtnClickListener;
     private SlidingButtonView mMenu;
 
-    public ChatAdapter(Context context, List<Contact.user> friendList) {
+    public ChatAdapter(Context context, List<TalkHistory> friendList) {
         mContext = context;
-        mDatas = friendList;
+        t = friendList;
     }
+
+    public void ChangeData( List<TalkHistory> friendList) {
+        t = friendList;
+        notifyDataSetChanged();
+    }
+
 
     @Override
     public SimpleHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -45,7 +52,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.SimpleHolder> 
     @Override
     public void onBindViewHolder(final SimpleHolder holder, int position) {
         holder.layout_content.getLayoutParams().width = getScreenWidth(mContext);
-        holder.tv_name.setText(mDatas.get(position).getName());
+        holder.tv_name.setText(t.get(position).getName());
         holder.img_voice.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -71,7 +78,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.SimpleHolder> 
 
     @Override
     public int getItemCount() {
-        return mDatas.size();
+        return t.size();
     }
 
     class SimpleHolder extends RecyclerView.ViewHolder {
@@ -90,11 +97,6 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.SimpleHolder> 
             layout_content = (RelativeLayout) itemView.findViewById(R.id.layout_content);
             ((SlidingButtonView) itemView).setSlidingButtonListener(ChatAdapter.this);
         }
-    }
-
-    public void removeData(int position) {
-        mDatas.remove(position);
-        notifyDataSetChanged();
     }
 
     @Override

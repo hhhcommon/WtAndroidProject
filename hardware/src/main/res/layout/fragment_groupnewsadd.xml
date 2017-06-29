@@ -356,7 +356,7 @@
                     android:layout_marginRight="12dp"
                     android:layout_marginTop="20dp"
                     android:layout_marginBottom="40dp"
-                    android:background="@drawable/background_circle_orange"
+                    android:background="@drawable/background_circle_app"
                     android:gravity="center"
                     android:orientation="vertical">
 

@@ -17,11 +17,9 @@ public class CommonUtils {
 
     /**
      * 获取USERID，没有则返回imei
-     *
-     * @param context
      * @return
      */
-    public static String getUserId(Context context) {
+    public static String getUserId() {
         SharedPreferences sp = BSApplication.SharedPreferences;
         String UserId = sp.getString(StringConstant.USER_ID, "");
         if (UserId == null || UserId.equals("")) {
@@ -34,10 +32,9 @@ public class CommonUtils {
     /**
      * 获取USERID，没有则返回imei
      *
-     * @param context
      * @return
      */
-    public static String getUserIdNoImei(Context context) {
+    public static String getUserIdNoImei() {
         SharedPreferences sp = BSApplication.SharedPreferences;
         String UserId = sp.getString(StringConstant.USER_ID, "");
         if (UserId == null || UserId.equals("") ) {

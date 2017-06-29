@@ -97,7 +97,7 @@
         android:layout_marginTop="50dp"
         android:text="完成"
         android:gravity="center"
-        android:background="@drawable/background_circle_orange"
+        android:background="@drawable/background_circle_app"
         android:textColor="@color/white"
         android:textSize="14sp" />
 </LinearLayout>

@@ -128,9 +128,9 @@ public class SearchContactsForLocalPresenter {
     // 为 ListView 填充数据
     private List<Contact.user>  filledData(List<Contact.user> person) {
         for (int i = 0; i < person.size(); i++) {
-            person.get(i).setName(person.get(i).getNickName());
+            person.get(i).setName(person.get(i).getName());
             // 汉字转换成拼音
-            String pinyin = characterParser.getSelling(person.get(i).getNickName());
+            String pinyin = characterParser.getSelling(person.get(i).getName());
             String sortString = pinyin.substring(0, 1).toUpperCase();
             // 正则表达式，判断首字母是否是英文字母
             if (sortString.matches("[A-Z]")) {
@@ -168,6 +168,7 @@ public class SearchContactsForLocalPresenter {
        fragment.setArguments(bundle);
        InterPhoneActivity.open(fragment);
     }
+
     /**
      * 跳转到好友详情
     * @param id

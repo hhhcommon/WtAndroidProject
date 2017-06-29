@@ -1,18 +1,15 @@
 package com.wotingfm.ui.intercom.group.groupname.view;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.TextView;
-
 import com.wotingfm.R;
-import com.wotingfm.ui.base.baseinterface.OnLoadInterface;
+import com.wotingfm.common.utils.DialogUtils;
 import com.wotingfm.ui.intercom.group.groupname.presenter.EditGroupNamePresenter;
 import com.wotingfm.ui.intercom.main.view.InterPhoneActivity;
 
@@ -25,6 +22,7 @@ public class EditGroupNameFragment extends Fragment implements View.OnClickListe
     private View rootView;
     private EditGroupNamePresenter presenter;
     private EditText et_news;
+    private Dialog dialog;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -41,7 +39,6 @@ public class EditGroupNameFragment extends Fragment implements View.OnClickListe
         }
         return rootView;
     }
-
 
     private void inItView() {
         rootView.findViewById(R.id.head_left_btn).setOnClickListener(this);
@@ -60,6 +57,20 @@ public class EditGroupNameFragment extends Fragment implements View.OnClickListe
                 presenter.send(s);
                 break;
         }
+    }
+
+    /**
+     * 展示弹出框
+     */
+    public void dialogShow() {
+        dialog = DialogUtils.Dialog(this.getActivity());
+    }
+
+    /**
+     * 取消弹出框
+     */
+    public void dialogCancel() {
+        if (dialog != null) dialog.dismiss();
     }
 
     @Override

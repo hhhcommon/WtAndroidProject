@@ -5,125 +5,216 @@
     android:background="@color/white"
     android:orientation="vertical">
 
-    <RelativeLayout
-        android:id="@+id/re_group"
-        android:layout_width="match_parent"
-        android:layout_height="320dp"
-        android:background="@color/background_color">
-
-        <ImageView
-            android:id="@+id/img_url_group"
-            android:layout_width="52dp"
-            android:layout_height="52dp"
-            android:layout_marginLeft="12dp"
-            android:layout_marginTop="12dp"
-            android:src="@mipmap/test" />
-
-        <TextView
-            android:id="@+id/tv_groupName_group"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="76dp"
-            android:layout_marginTop="20dp"
-            android:lineSpacingExtra="0sp"
-            android:text="周末悦乐群"
-            android:textColor="#16181a"
-            android:textSize="16sp" />
-
-        <TextView
-            android:id="@+id/tv_news_group"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="76dp"
-            android:layout_marginTop="45dp"
-            android:lineSpacingExtra="0sp"
-            android:text="12人正在通话"
-            android:textColor="#fd8548"
-            android:textSize="14.7sp" />
-
-        <ImageView
-            android:id="@+id/img_close_group"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_alignParentRight="true"
-            android:layout_marginRight="16dp"
-            android:layout_marginTop="24dp"
-            android:src="@mipmap/icon_live_close_red" />
-
-        <RelativeLayout
-            android:layout_width="108dp"
-            android:layout_height="108dp"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="106dp">
-
-            <com.wotingfm.common.view.RippleImageView
-                android:id="@+id/rippleImageView"
-                android:layout_width="108dp"
-                android:layout_height="108dp"></com.wotingfm.common.view.RippleImageView>
-
-            <ImageView
-                android:id="@+id/img_person_group"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:layout_centerInParent="true"
-                android:src="@mipmap/test" />
-        </RelativeLayout>
-
-        <TextView
-            android:id="@+id/tv_person_group"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="224dp"
-            android:gravity="center_horizontal"
-            android:lineSpacingExtra="0sp"
-            android:text="Lisir.李光然"
-            android:textColor="#16181a"
-            android:textSize="17.3sp" />
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="248dp"
-            android:gravity="center"
-            android:orientation="horizontal">
-
-            <ImageView
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:src="@mipmap/chat_icon_saying" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:lineSpacingExtra="0sp"
-                android:text="正在说话"
-                android:textColor="#16181a"
-                android:textSize="12sp" />
-        </LinearLayout>
-
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="20dp"
-            android:scaleType="fitXY"
-            android:layout_marginTop="284dp"
-            android:src="@mipmap/testa" />
-    </RelativeLayout>
-
-
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/line_color" />
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recycler_view"
+    <com.woting.commonplat.widget.TipView
+        android:id="@+id/tip_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/line_color"
-        android:overScrollMode="never"
-        android:scrollbars="none"></android.support.v7.widget.RecyclerView>
+        android:visibility="gone" />
+
+    <LinearLayout
+        android:id="@+id/lin_back"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:id="@+id/re_group"
+            android:layout_width="match_parent"
+            android:layout_height="320dp"
+            android:background="@color/background_color"
+            android:visibility="gone">
+
+            <ImageView
+                android:id="@+id/img_url_group"
+                android:layout_width="52dp"
+                android:layout_height="52dp"
+                android:layout_marginLeft="12dp"
+                android:layout_marginTop="12dp"
+                android:src="@mipmap/test" />
+
+            <TextView
+                android:id="@+id/tv_groupName_group"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="76dp"
+                android:layout_marginTop="20dp"
+                android:lineSpacingExtra="0sp"
+                android:text="周末悦乐群"
+                android:textColor="#16181a"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/tv_news_group"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="76dp"
+                android:layout_marginTop="45dp"
+                android:lineSpacingExtra="0sp"
+                android:text="12人正在通话"
+                android:textColor="#fd8548"
+                android:textSize="14.7sp" />
+
+            <ImageView
+                android:id="@+id/img_close_group"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="16dp"
+                android:layout_marginTop="24dp"
+                android:src="@mipmap/icon_live_close_red" />
+
+            <RelativeLayout
+                android:layout_width="108dp"
+                android:layout_height="108dp"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="106dp">
+
+                <com.wotingfm.common.view.RippleImageView
+                    android:id="@+id/rippleImageView"
+                    android:layout_width="108dp"
+                    android:layout_height="108dp"></com.wotingfm.common.view.RippleImageView>
+
+                <ImageView
+                    android:id="@+id/img_person_group"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_centerInParent="true"
+                    android:src="@mipmap/test" />
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/tv_person_group"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="224dp"
+                android:gravity="center_horizontal"
+                android:lineSpacingExtra="0sp"
+                android:text="Lisir.李光然"
+                android:textColor="#16181a"
+                android:textSize="17.3sp" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="248dp"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@mipmap/chat_icon_saying" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:lineSpacingExtra="0sp"
+                    android:text="正在说话"
+                    android:textColor="#16181a"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+                android:layout_marginTop="284dp"
+                android:scaleType="fitXY"
+                android:src="@mipmap/testa" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/re_person"
+            android:layout_width="match_parent"
+            android:layout_height="320dp"
+            android:background="@color/background_color"
+            android:visibility="gone">
+
+            <ImageView
+                android:id="@+id/img_close_person"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="16dp"
+                android:layout_marginTop="24dp"
+                android:src="@mipmap/icon_live_close_red" />
+
+            <RelativeLayout
+                android:layout_width="108dp"
+                android:layout_height="108dp"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="76dp">
+
+                <com.wotingfm.common.view.RippleImageView
+                    android:id="@+id/rippleImageView_person"
+                    android:layout_width="108dp"
+                    android:layout_height="108dp"></com.wotingfm.common.view.RippleImageView>
+
+                <ImageView
+                    android:id="@+id/img_person_person"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_centerInParent="true"
+                    android:src="@mipmap/test" />
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/tv_person_person"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="194dp"
+                android:gravity="center_horizontal"
+                android:lineSpacingExtra="0sp"
+                android:text="Lisir.李光然"
+                android:textColor="#16181a"
+                android:textSize="17.3sp" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="218dp"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@mipmap/chat_icon_saying" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:lineSpacingExtra="0sp"
+                    android:text="正在说话"
+                    android:textColor="#16181a"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+                android:layout_marginTop="284dp"
+                android:scaleType="fitXY"
+                android:src="@mipmap/testa" />
+        </RelativeLayout>
+
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/line_color" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/line_color"
+            android:overScrollMode="never"
+            android:scrollbars="none"></android.support.v7.widget.RecyclerView>
+
+    </LinearLayout>
 
 </LinearLayout>

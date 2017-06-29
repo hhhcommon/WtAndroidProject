@@ -3,6 +3,7 @@ package com.wotingfm.ui.intercom.group.editgroupmessage.presenter;
 import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.widget.Toast;
@@ -10,8 +11,15 @@ import android.widget.Toast;
 import com.woting.commonplat.manager.FileManager;
 import com.woting.commonplat.utils.BitmapUtils;
 import com.wotingfm.common.application.BSApplication;
+import com.wotingfm.common.config.GlobalStateConfig;
 import com.wotingfm.ui.intercom.group.editgroupmessage.model.EditGroupMessageModel;
 import com.wotingfm.ui.intercom.group.editgroupmessage.view.EditGroupMessageFragment;
+import com.wotingfm.ui.intercom.group.groupintroduce.view.EditGroupIntroduceFragment;
+import com.wotingfm.ui.intercom.group.groupmumbershow.view.GroupNumberShowFragment;
+import com.wotingfm.ui.intercom.group.groupname.view.EditGroupNameFragment;
+import com.wotingfm.ui.intercom.group.groupnews.noadd.view.GroupNewsForNoAddFragment;
+import com.wotingfm.ui.intercom.main.contacts.model.Contact;
+import com.wotingfm.ui.intercom.main.view.InterPhoneActivity;
 import com.wotingfm.ui.photocut.PhotoCutActivity;
 
 import java.io.File;
@@ -27,23 +35,54 @@ public class EditGroupMessagePresenter {
     private final int TO_GALLERY = 1;           // 标识 打开系统图库
     private final int TO_CAMERA = 2;            // 标识 打开系统照相机
     private final int PHOTO_REQUEST_CUT = 7;    // 标识 跳转到图片裁剪界面
+    private final Contact.group group;
     private String outputFilePath;
     private boolean headViewShow = false;// 图片选择界面是否展示
 
     public EditGroupMessagePresenter(EditGroupMessageFragment activity) {
         this.activity = activity;
         this.model = new EditGroupMessageModel();
+        Bundle bundle = activity.getArguments();
+        group = (Contact.group) bundle.getSerializable("group");
     }
 
     public void getData() {
-        String imgUrl="";
-        String groupName="测试——测试群";
-        String groupAddress="测试——北京";
-        String groupIntroduce="测试--群介绍信息";
-        activity.setViewForImage(imgUrl);
-        activity.setViewForGroupName(groupName);
-        activity.setViewGroupAddresse(groupAddress);
-        activity.setViewForGroupIntroduce(groupIntroduce);
+        if (GlobalStateConfig.test) {
+            String imgUrl = "";
+            String groupName = "测试——测试群";
+            String groupAddress = "测试——北京";
+            String groupIntroduce = "测试--群介绍信息";
+            activity.setViewForImage(imgUrl);
+            activity.setViewForGroupName(groupName);
+            activity.setViewGroupAddress(groupAddress);
+            activity.setViewForGroupIntroduce(groupIntroduce);
+        } else {
+            String imgUrl = group.getLogo_url();
+            if (imgUrl != null && !imgUrl.equals("")) {
+                activity.setViewForImage(imgUrl);
+            } else {
+                activity.setViewForImage("");
+            }
+            String groupName = group.getTitle();
+            if (groupName != null && !groupName.equals("")) {
+                activity.setViewForGroupName(groupName);
+            } else {
+                activity.setViewForGroupName("");
+            }
+            String groupAddress = group.getLocation();
+            if (groupAddress != null && !groupAddress.equals("")) {
+                activity.setViewGroupAddress(groupAddress);
+            } else {
+                activity.setViewGroupAddress("");
+            }
+            String groupIntroduce = group.getIntroduction();
+            if (groupIntroduce != null && !groupIntroduce.equals("")) {
+                activity.setViewForGroupIntroduce(groupIntroduce);
+            } else {
+                activity.setViewForGroupIntroduce("");
+            }
+        }
+
     }
 
     /**
@@ -86,6 +125,7 @@ public class EditGroupMessagePresenter {
 
     /**
      * 返回值得监听
+     *
      * @param requestCode
      * @param resultCode
      * @param data
@@ -156,13 +196,29 @@ public class EditGroupMessagePresenter {
     private void upImageUrl(String path) {
     }
 
+    /**
+     * 跳转到群名称界面
+     */
     public void setGroupName() {
+        EditGroupNameFragment fragment = new EditGroupNameFragment();
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("list", group);
+        fragment.setArguments(bundle);
+        InterPhoneActivity.open(fragment);
     }
 
     public void setGroupAddress() {
     }
 
+    /**
+     * 跳转到群介绍界面
+     */
     public void setGroupIntroduce() {
+        EditGroupIntroduceFragment fragment = new EditGroupIntroduceFragment();
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("list", group);
+        fragment.setArguments(bundle);
+        InterPhoneActivity.open(fragment);
     }
 
 

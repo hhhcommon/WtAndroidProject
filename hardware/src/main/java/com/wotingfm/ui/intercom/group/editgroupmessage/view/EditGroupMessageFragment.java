@@ -126,6 +126,8 @@ public class EditGroupMessageFragment extends Fragment implements View.OnClickLi
     public void setViewForImage(String url) {
         if (url != null && !url.trim().equals("")) {
             GlideUtils.loadImageViewSize(this.getActivity(), url, 60, 60, image_headView, true);
+        }else{
+
         }
     }
 
@@ -147,7 +149,7 @@ public class EditGroupMessageFragment extends Fragment implements View.OnClickLi
      *
      * @param s
      */
-    public void setViewGroupAddresse(String s) {
+    public void setViewGroupAddress(String s) {
         if (s != null && !s.trim().equals("")) {
             tv_groupAddress.setText(s);
         } else {

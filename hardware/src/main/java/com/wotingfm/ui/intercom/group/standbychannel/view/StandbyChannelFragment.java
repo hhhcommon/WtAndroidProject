@@ -17,6 +17,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.wotingfm.R;
+import com.wotingfm.common.utils.DialogUtils;
 import com.wotingfm.common.utils.FrequencyUtil;
 import com.wotingfm.common.view.pickview.LoopView;
 import com.wotingfm.common.view.pickview.OnItemSelectedListener;
@@ -37,6 +38,7 @@ public class StandbyChannelFragment extends Fragment implements View.OnClickList
     public int channelIndex=1;
     private ChannelPresenter presenter;
     private TextView tv_channel1,tv_channel2;
+    private Dialog dialog;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -156,6 +158,20 @@ public class StandbyChannelFragment extends Fragment implements View.OnClickList
         }else{
             tv_channel2.setText(s);
         }
+    }
+
+    /**
+     * 展示弹出框
+     */
+    public void dialogShow() {
+        dialog = DialogUtils.Dialog(this.getActivity());
+    }
+
+    /**
+     * 取消弹出框
+     */
+    public void dialogCancel() {
+        if (dialog != null) dialog.dismiss();
     }
 
     @Override

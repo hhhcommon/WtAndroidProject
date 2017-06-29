@@ -1,5 +1,6 @@
 package com.wotingfm.ui.intercom.group.groupapply.view;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -12,6 +13,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.wotingfm.R;
+import com.wotingfm.common.utils.DialogUtils;
 import com.wotingfm.ui.intercom.group.groupapply.presenter.GroupApplyPresenter;
 import com.wotingfm.ui.intercom.main.view.InterPhoneActivity;
 
@@ -25,6 +27,7 @@ public class GroupApplyFragment extends Fragment implements View.OnClickListener
     private EditText et_news;
     private TextView tv_number;
     private GroupApplyPresenter presenter;
+    private Dialog dialog;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -86,6 +89,21 @@ public class GroupApplyFragment extends Fragment implements View.OnClickListener
     public void setTextViewChange(String s) {
         tv_number.setText(s);
     }
+
+    /**
+     * 展示弹出框
+     */
+    public void dialogShow() {
+        dialog = DialogUtils.Dialog(this.getActivity());
+    }
+
+    /**
+     * 取消弹出框
+     */
+    public void dialogCancel() {
+        if (dialog != null) dialog.dismiss();
+    }
+
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {

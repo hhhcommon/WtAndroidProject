@@ -43,7 +43,7 @@ public class SearchContactsForNetModel {
      * 获取推荐好友
      */
     public void loadNewsForRecommendPerson(String type,final OnLoadInterface listener) {
-        String id= BSApplication.SharedPreferences.getString(StringConstant.USER_ID,"000");
+        String id= BSApplication.SharedPreferences.getString(StringConstant.USER_ID,"");
         RetrofitUtils.getInstance().getRecommendPerson(id,type)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -72,7 +72,7 @@ public class SearchContactsForNetModel {
      * 获取推荐群组
      */
     public void loadNewsForRecommendGroup(String type,final OnLoadInterface listener) {
-        String id= BSApplication.SharedPreferences.getString(StringConstant.USER_ID,"000");
+        String id= BSApplication.SharedPreferences.getString(StringConstant.USER_ID,"");
         RetrofitUtils.getInstance().getRecommendGroup(id,type)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -101,9 +101,7 @@ public class SearchContactsForNetModel {
      * 获取搜索好友
      */
     public void loadNewsForSearchPerson(String s,final OnLoadInterface listener) {
-        String id= BSApplication.SharedPreferences.getString(StringConstant.USER_ID,"000");
-        String type="";
-        RetrofitUtils.getInstance().getSearchPerson(id,s,type)
+        RetrofitUtils.getInstance().getSearchPerson(s)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Action1<Object>() {
@@ -131,9 +129,7 @@ public class SearchContactsForNetModel {
      * 获取搜索群组
      */
     public void loadNewsForSearchGroup(String s,final OnLoadInterface listener) {
-        String id= BSApplication.SharedPreferences.getString(StringConstant.USER_ID,"000");
-        String type="";
-        RetrofitUtils.getInstance().getSearchGroup(id,s,type)
+        RetrofitUtils.getInstance().getSearchGroup(s)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Action1<Object>() {

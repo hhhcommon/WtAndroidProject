@@ -111,7 +111,7 @@ public class ContactsAdapter extends BaseAdapter implements  SectionIndexer {
     }
 
     public interface OnListener {
-        public void add(int position);
+         void add(int position);
     }
 
     class ViewHolder {

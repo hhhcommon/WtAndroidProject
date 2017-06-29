@@ -131,7 +131,7 @@
             android:layout_marginLeft="40dp"
             android:layout_marginRight="40dp"
             android:layout_marginTop="50dp"
-            android:background="@drawable/background_circle_orange"
+            android:background="@drawable/background_circle_app"
             android:gravity="center"
             android:text="提交"
             android:textColor="@color/white"

@@ -12,7 +12,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.GridView;
 import android.widget.RelativeLayout;
-import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.woting.commonplat.widget.TipView;
@@ -102,6 +101,10 @@ public class GroupNewsForNoAddFragment extends Fragment implements View.OnClickL
             case R.id.tv_send:
                 InterPhoneActivity.open(new GroupApplyFragment());
                 break;
+            case R.id.re_groupNumber:
+                presenter.jump();// 跳转到成员列表界面
+                break;
+
         }
     }
 
@@ -126,6 +129,7 @@ public class GroupNewsForNoAddFragment extends Fragment implements View.OnClickL
      * @param list
      */
     public void setGridViewData(List<Contact.user> list) {
+        re_groupNumber.setVisibility(View.VISIBLE);
         if (adapter == null) {
             adapter = new GroupNewsPersonForNoAddAdapter(this.getActivity(), list);
             gridView.setAdapter(adapter);
@@ -137,10 +141,10 @@ public class GroupNewsForNoAddFragment extends Fragment implements View.OnClickL
 
     /**
      * 隐藏成员展示
+     * 设置没有群成员的界面，也就意味着数据有错
      */
-    public void setGridView() {
-        gridView.setVisibility(View.GONE);
-        tv_number.setText("（0）");// 成员数
+    public void setViewForNoGroupPerson(){
+        re_groupNumber.setVisibility(View.GONE);
     }
 
     /**
@@ -185,11 +189,6 @@ public class GroupNewsForNoAddFragment extends Fragment implements View.OnClickL
             tip_view.setVisibility(View.VISIBLE);
             tip_view.setTipView(TipView.TipStatus.IS_ERROR);
         }
-    }
-
-    // 设置没有群成员的界面，也就意味着数据有错
-    public void setViewForNoGroupPerson(){
-        re_groupNumber.setVisibility(View.GONE);
     }
 
     /**

@@ -1,12 +1,17 @@
 package com.wotingfm.ui.intercom.group.groupchat.presenter;
 
+import android.os.Bundle;
+
 import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.config.GlobalStateConfig;
 import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.ui.intercom.group.groupchat.model.GroupChat;
 import com.wotingfm.ui.intercom.group.groupchat.model.GroupChatModel;
 import com.wotingfm.ui.intercom.group.groupchat.view.GroupChatFragment;
+import com.wotingfm.ui.intercom.group.groupnews.noadd.view.GroupNewsForNoAddFragment;
 import com.wotingfm.ui.intercom.main.contacts.model.Contact;
+import com.wotingfm.ui.intercom.main.view.InterPhoneActivity;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,7 +24,7 @@ public class GroupChatPresenter {
 
     private final GroupChatFragment activity;
     private final GroupChatModel model;
-
+    private List<GroupChat> list;
     public GroupChatPresenter(GroupChatFragment activity) {
         this.activity = activity;
         this.model = new GroupChatModel();
@@ -64,12 +69,12 @@ public class GroupChatPresenter {
     public void getData() {
         if (GlobalStateConfig.test) {
             // 测试代码
-            List<GroupChat> list = model.getTestData();
+            list = model.getTestData();
             activity.setView(list);
             activity.isLoginView(0);
         } else {
             if (GlobalStateConfig.list_group != null && GlobalStateConfig.list_group.size() > 0) {
-                List<GroupChat> list = assemblyData(GlobalStateConfig.list_group);
+                list = assemblyData(GlobalStateConfig.list_group);
                 if (list != null && list.size() > 0) {
                     activity.setView(list);
                     activity.isLoginView(0);
@@ -80,6 +85,20 @@ public class GroupChatPresenter {
                 activity.isLoginView(1);
             }
         }
+    }
+
+    /**
+     * 界面跳转
+     *
+     * @param g
+     * @param p
+     */
+    public void jump(int g, int p) {
+        GroupNewsForNoAddFragment fragment = new GroupNewsForNoAddFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString("id", list.get(g).getPerson().get(p).getId());
+        fragment.setArguments(bundle);
+        InterPhoneActivity.open(fragment);
     }
 
     /**

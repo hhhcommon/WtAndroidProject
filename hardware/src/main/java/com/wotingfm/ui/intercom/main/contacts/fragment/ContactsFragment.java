@@ -109,6 +109,12 @@ public class ContactsFragment extends Fragment implements View.OnClickListener,T
                 }
             }
         });
+        adapter.setOnListener(new ContactsAdapter.OnListener() {
+            @Override
+            public void add(int position) {
+                presenter.call(position);
+            }
+        });
     }
 
     // 设置右侧触摸监听
@@ -146,7 +152,10 @@ public class ContactsFragment extends Fragment implements View.OnClickListener,T
         }
     }
 
-    // 有参方法 设置界面
+    /**
+     * 有参方法 设置界面
+     * @param list
+     */
     public void setData(List<Contact.user> list) {
         if (adapter != null) {
             adapter.ChangeDate(list);
@@ -158,7 +167,9 @@ public class ContactsFragment extends Fragment implements View.OnClickListener,T
         setClickListener();
     }
 
-    // 无参方法 设置界面
+    /**
+     * 无参方法 设置界面
+     */
     public void setData() {
         NoAdapter adapters = new NoAdapter(context);
         listView.setAdapter(adapters);
@@ -235,6 +246,7 @@ public class ContactsFragment extends Fragment implements View.OnClickListener,T
     @Override
     public void onDestroy() {
         super.onDestroy();
+        presenter.destroy();
     }
 
 

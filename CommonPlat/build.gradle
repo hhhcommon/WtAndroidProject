@@ -34,6 +34,6 @@ dependencies {
     compile 'com.zhy:base-rvadapter:3.0.3'
     compile 'org.greenrobot:eventbus:3.0.0'
     compile 'com.android.support:design:25+'
-
-
+    compile files('libs/org.apache.http.legacy.jar')
+    compile files('libs/httpmime-4.1.1.jar')
 }

@@ -12,6 +12,7 @@ import com.wotingfm.ui.intercom.main.contacts.model.Contact;
 import java.util.List;
 
 /**
+ * 设置管理员适配器
  * 作者：xinLong on 2017/6/8 14:36
  * 邮箱：645700751@qq.com
  */

@@ -52,8 +52,6 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 
-import static com.wotingfm.common.database.SQLite.helper;
-
 /**
  * 作者：xinLong on 2017/6/2 12:15
  * 邮箱：645700751@qq.com

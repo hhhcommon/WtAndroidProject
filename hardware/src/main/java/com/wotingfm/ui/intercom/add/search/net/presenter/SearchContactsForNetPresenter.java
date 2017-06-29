@@ -47,7 +47,7 @@ public class SearchContactsForNetPresenter {
      */
     public void getRecommendedData() {
         if (GlobalNetWorkConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
-            if (GlobalStateConfig.test) {
+            if (true) {
                 // 测试数据
                 if (fromType.trim().equals("group")) {
                     List<Contact.group> srcList_G = model.getDataForGroup();

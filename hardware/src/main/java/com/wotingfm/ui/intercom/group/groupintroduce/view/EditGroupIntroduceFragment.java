@@ -1,5 +1,6 @@
 package com.wotingfm.ui.intercom.group.groupintroduce.view;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -12,6 +13,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.wotingfm.R;
+import com.wotingfm.common.utils.DialogUtils;
 import com.wotingfm.ui.intercom.group.groupintroduce.presenter.EditGroupIntroducePresenter;
 import com.wotingfm.ui.intercom.main.view.InterPhoneActivity;
 
@@ -25,6 +27,7 @@ public class EditGroupIntroduceFragment extends Fragment implements View.OnClick
     private EditGroupIntroducePresenter presenter;
     private TextView tv_number;
     private EditText et_news;
+    private Dialog dialog;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -86,6 +89,20 @@ public class EditGroupIntroduceFragment extends Fragment implements View.OnClick
      */
     public void setTextViewChange(String s) {
         tv_number.setText(s);
+    }
+
+    /**
+     * 展示弹出框
+     */
+    public void dialogShow() {
+        dialog = DialogUtils.Dialog(this.getActivity());
+    }
+
+    /**
+     * 取消弹出框
+     */
+    public void dialogCancel() {
+        if (dialog != null) dialog.dismiss();
     }
 
     @Override

@@ -10,12 +10,11 @@ public class Contact implements Serializable {
 
     // 好友的字段
     public static class user implements Serializable {
-        private int type = 1;
+        private int type = 3;
         private String avatar;
         private String sortLetters;     // 显示数据拼音的首字母
         private String id;
         private String name;
-        private String NickName;
         private String gender;
         private String signature;
         private boolean is_admin;
@@ -102,13 +101,6 @@ public class Contact implements Serializable {
             this.name = name;
         }
 
-        public String getNickName() {
-            return NickName;
-        }
-
-        public void setNickName(String nickName) {
-            NickName = nickName;
-        }
     }
 
     // 群组的字段

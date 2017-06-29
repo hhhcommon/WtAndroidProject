@@ -1,8 +1,10 @@
-package com.woting.commonplat.database;
+package com.wotingfm.common.database;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+
+import com.wotingfm.common.config.GlobalStateConfig;
 
 /**
  * 创建数据库表
@@ -12,10 +14,11 @@ import android.database.sqlite.SQLiteOpenHelper;
  */
 public class SQLiteHelper extends SQLiteOpenHelper {
 
-    public SQLiteHelper(Context paramContext, String dbVersionName, int dbVersionCode) {
-        super(paramContext, dbVersionName, null, dbVersionCode);
+    public SQLiteHelper(Context paramContext) {
+        super(paramContext, "wt.db", null,  GlobalStateConfig.dbVersionCode);
     }
 
+    // 该函数是在第一次创建数据库的时候执行,实际上是在第一次得到SQLiteDatabse对象的时候，才会调用这个方法
     public void onCreate(SQLiteDatabase db) {
         //bjuserid用户id    type对讲类型group，person   id对讲id  addtime对讲开始时间
         db.execSQL("CREATE TABLE IF NOT EXISTS talkHistory(_id Integer primary key autoincrement, "

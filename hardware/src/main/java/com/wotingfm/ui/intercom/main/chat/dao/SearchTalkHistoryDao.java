@@ -4,8 +4,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.woting.commonplat.database.SQLiteHelper;
-import com.wotingfm.common.database.SQLite;
+import com.wotingfm.common.database.SQLiteHelper;
 import com.wotingfm.common.utils.CommonUtils;
 import com.wotingfm.ui.intercom.main.chat.model.DBTalkHistory;
 
@@ -23,7 +22,7 @@ public class SearchTalkHistoryDao {
 
 	//构造方法
 	public SearchTalkHistoryDao(Context context) {
-		helper = SQLite.getInstance(context);
+		helper =new SQLiteHelper(context);
 		this.context=context;
 	}
 
@@ -47,7 +46,7 @@ public class SearchTalkHistoryDao {
 	public List<DBTalkHistory> queryHistory() {
 		List<DBTalkHistory> myList = new ArrayList<DBTalkHistory>();
 		SQLiteDatabase db = helper.getReadableDatabase();
-		String userId = CommonUtils.getUserId(context);
+		String userId = CommonUtils.getUserId();
 		Cursor cursor = null;
 		try {
 			cursor = db.rawQuery("Select * from talkHistory  where bjUserId=? order by addTime desc", new String[]{userId});
@@ -80,7 +79,7 @@ public class SearchTalkHistoryDao {
 	 */
 	public void deleteHistory(String id) {
 		SQLiteDatabase db = helper.getReadableDatabase();
-		String userId = CommonUtils.getUserId(context);
+		String userId = CommonUtils.getUserId();
 		String uid = id;
 		db.execSQL("Delete from talkHistory where id=? and bjUserId=?",
 				new String[] { uid ,userId});

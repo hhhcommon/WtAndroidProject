@@ -30,8 +30,8 @@ public class NewFriendModel extends UserInfo {
      * @param listener 监听
      */
     public void loadNews( final OnLoadInterface listener) {
-        String id= BSApplication.SharedPreferences.getString(StringConstant.USER_ID,"000");
-        String token= BSApplication.SharedPreferences.getString(StringConstant.TOKEN,"000");
+        String id= BSApplication.SharedPreferences.getString(StringConstant.USER_ID,"");
+        String token= BSApplication.SharedPreferences.getString(StringConstant.TOKEN,"");
         RetrofitUtils.getInstance().newFriend(id, token)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -61,7 +61,7 @@ public class NewFriendModel extends UserInfo {
      * @param listener 监听
      */
     public void loadNewsForDel( String id,final OnLoadInterface listener) {
-        String token= BSApplication.SharedPreferences.getString(StringConstant.TOKEN,"000");
+        String token= BSApplication.SharedPreferences.getString(StringConstant.TOKEN,"");
         RetrofitUtils.getInstance().newFriendDel(id, token)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -91,7 +91,7 @@ public class NewFriendModel extends UserInfo {
      * @param listener 监听
      */
     public void loadNewsForApply( String id,final OnLoadInterface listener) {
-        String token= BSApplication.SharedPreferences.getString(StringConstant.TOKEN,"000");
+        String token= BSApplication.SharedPreferences.getString(StringConstant.TOKEN,"");
         RetrofitUtils.getInstance().newFriendApply(id, token)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -121,7 +121,7 @@ public class NewFriendModel extends UserInfo {
      * @param listener 监听
      */
     public void loadNewsForRefuse(String id, final OnLoadInterface listener) {
-        String token= BSApplication.SharedPreferences.getString(StringConstant.TOKEN,"000");
+        String token= BSApplication.SharedPreferences.getString(StringConstant.TOKEN,"");
         RetrofitUtils.getInstance().newFriendRefuse(id, token)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

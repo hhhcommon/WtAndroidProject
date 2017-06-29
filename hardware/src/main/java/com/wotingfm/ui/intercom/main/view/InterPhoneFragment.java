@@ -38,9 +38,9 @@ import java.util.ArrayList;
  */
 
 public class InterPhoneFragment extends Fragment implements View.OnClickListener {
-    private static TextView tv_chat, tv_linkman, line_chat, line_linkman;
+    private TextView tv_chat, tv_linkman, line_chat, line_linkman;
     private PopupWindow addDialog;
-    private static ViewPager mPager;
+    private ViewPager mPager;
     private ImageView img_more;
     private View rootView;
     private FragmentActivity context;
@@ -48,7 +48,7 @@ public class InterPhoneFragment extends Fragment implements View.OnClickListener
     private InterPhonePresenter presenter;
 
     @Override
-    public void onCreate( Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         context = getActivity();
     }
@@ -60,7 +60,7 @@ public class InterPhoneFragment extends Fragment implements View.OnClickListener
             InitTextView();  // 初始化视图
             InitViewPager(); // 初始化 ViewPager
             dialog();        // 初始化功能弹出框
-            presenter=new InterPhonePresenter(this);
+            presenter = new InterPhonePresenter(this);
             presenter.getData();
         }
         return rootView;
@@ -74,7 +74,7 @@ public class InterPhoneFragment extends Fragment implements View.OnClickListener
         img_person = (ImageView) rootView.findViewById(R.id.img_person);
         img_person.setOnClickListener(this);
         tv_chat = (TextView) rootView.findViewById(R.id.tv_chat);
-        line_chat = (TextView)rootView. findViewById(R.id.line_chat);
+        line_chat = (TextView) rootView.findViewById(R.id.line_chat);
         tv_linkman = (TextView) rootView.findViewById(R.id.tv_linkman);
         line_linkman = (TextView) rootView.findViewById(R.id.line_linkman);
 
@@ -180,9 +180,9 @@ public class InterPhoneFragment extends Fragment implements View.OnClickListener
                 addDialog.dismiss();
                 break;
             case R.id.img_person:
-                GlobalStateConfig.mineFromType=2;
-                GlobalStateConfig.activityA="A";
-                GlobalStateConfig.activityB="C";
+                GlobalStateConfig.mineFromType = 2;
+                GlobalStateConfig.activityA = "A";
+                GlobalStateConfig.activityB = "C";
                 MainActivity.changeThree();
                 Intent push = new Intent(BroadcastConstants.MINE_ACTIVITY_CHANGE);
                 Bundle bundle = new Bundle();
@@ -225,20 +225,19 @@ public class InterPhoneFragment extends Fragment implements View.OnClickListener
     }
 
 
-
     // 设置头部样式
     private void update(int arg0) {
         mPager.setCurrentItem(arg0);
         if (arg0 == 0) {
-            tv_chat.setTextColor(this.getResources().getColor(R.color.app_basic));
-            tv_linkman.setTextColor(this.getResources().getColor(R.color.black_head_word));
+            tv_chat.setTextColor(context.getResources().getColor(R.color.app_basic));
+            tv_linkman.setTextColor(context.getResources().getColor(R.color.black_head_word));
 //            line_chat.setBackgroundResource(R.color.app_basic);
 //            line_linkman.setBackgroundResource(R.color.gray_edit_hint_word);
             line_chat.setVisibility(View.VISIBLE);
             line_linkman.setVisibility(View.INVISIBLE);
         } else if (arg0 == 1) {
-            tv_chat.setTextColor(this.getResources().getColor(R.color.black_head_word));
-            tv_linkman.setTextColor(this.getResources().getColor(R.color.app_basic));
+            tv_chat.setTextColor(context.getResources().getColor(R.color.black_head_word));
+            tv_linkman.setTextColor(context.getResources().getColor(R.color.app_basic));
 //            line_chat.setBackgroundResource(R.color.gray_edit_hint_word);
 //            line_linkman.setBackgroundResource(R.color.app_basic);
             line_chat.setVisibility(View.INVISIBLE);
@@ -246,5 +245,13 @@ public class InterPhoneFragment extends Fragment implements View.OnClickListener
         }
     }
 
+    public void change(int type) {
+        update(type);
+    }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        presenter.destroy();
+    }
 }

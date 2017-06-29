@@ -4,15 +4,15 @@ import java.io.Serializable;
 
 public class DBTalkHistory implements Serializable {
 	private String BJUserId;	//本机userid
-	private String TyPe;		//类别 User，Group
+	private String TyPe;		//类别 person，group
 	private String ID;			//
 	private String AddTime;		//添加时间
-	public DBTalkHistory(String bjuserid, String type, String id, String addtime) {
+	public DBTalkHistory(String bjUserId, String type, String id, String addTime) {
 		super();
-		BJUserId = bjuserid;
+		BJUserId = bjUserId;
 		TyPe = type;
 		ID = id;
-		AddTime = addtime;
+		AddTime = addTime;
 	}
 	public String getBJUserId() {
 		return BJUserId;

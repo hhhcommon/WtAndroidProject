@@ -66,7 +66,7 @@ public class GroupNewsForNoAddModel extends UserInfo {
                     @Override
                     public void call(Object o) {
                         try {
-                            Log.e("获取群组信息返回数据",new Gson().toJson(o));
+                            Log.e("获取群组成员返回数据",new Gson().toJson(o));
                             //填充UI
                             listener.onSuccess(o);
                         } catch (Exception e) {

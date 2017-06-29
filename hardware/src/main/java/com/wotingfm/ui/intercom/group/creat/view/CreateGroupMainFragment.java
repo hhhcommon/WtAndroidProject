@@ -1,5 +1,6 @@
 package com.wotingfm.ui.intercom.group.creat.view;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -13,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import com.wotingfm.R;
+import com.wotingfm.common.utils.DialogUtils;
 import com.wotingfm.ui.intercom.group.creat.presenter.CreateGroupMainPresenter;
 import com.wotingfm.ui.intercom.main.view.InterPhoneActivity;
 
@@ -28,6 +30,7 @@ public class CreateGroupMainFragment extends Fragment implements View.OnClickLis
     private TextView tv_send;
     private CreateGroupMainPresenter presenter;
     private LinearLayout lin_chose;// 图片来源选择
+    private Dialog dialog;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -84,10 +87,9 @@ public class CreateGroupMainFragment extends Fragment implements View.OnClickLis
                 presenter.setSen();
                 break;
             case R.id.tv_send:
-                int type = 1;
                 String name = et_phoneNumber.getText().toString().trim();
                 String password = et_password.getText().toString().trim();
-                presenter.send(type, name, password);
+                presenter.send(name, password);
                 break;
             case R.id.tv_paizhao:
                 presenter.camera();
@@ -126,29 +128,43 @@ public class CreateGroupMainFragment extends Fragment implements View.OnClickLis
     }
 
     /**
-     * 设置公开群样式
-     */
-    public void setViewG() {
-        img_password.setImageResource(R.mipmap.create_group_icon_selected_n);
-        img_shen.setImageResource(R.mipmap.create_group_icon_selected_n);
-    }
-
-    /**
      * 设置密码群样式
      */
-    public void setViewM() {
-        img_password.setImageResource(R.mipmap.create_group_icon_selected_s);
-        img_shen.setImageResource(R.mipmap.create_group_icon_selected_n);
+    public void setViewM(boolean b) {
+        if(b){
+            img_password.setImageResource(R.mipmap.create_group_icon_selected_s);
+        }else{
+            img_password.setImageResource(R.mipmap.create_group_icon_selected_n);
+        }
+
+
     }
 
     /**
      * 设置审核群样式
      */
-    public void setViewS() {
-        img_password.setImageResource(R.mipmap.create_group_icon_selected_n);
-        img_shen.setImageResource(R.mipmap.create_group_icon_selected_s);
+    public void setViewS(boolean b) {
+        if(b){
+            img_shen.setImageResource(R.mipmap.create_group_icon_selected_s);
+        }else{
+            img_shen.setImageResource(R.mipmap.create_group_icon_selected_n);
+        }
     }
 
+    /**
+     * 展示弹出框
+     */
+    public void dialogShow() {
+        dialog = DialogUtils.Dialog(this.getActivity());
+    }
+
+    /**
+     * 取消弹出框
+     */
+    public void dialogCancel() {
+        if (dialog != null) dialog.dismiss();
+    }
+    
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);

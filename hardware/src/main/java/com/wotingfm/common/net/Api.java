@@ -12,6 +12,8 @@ public class Api {
     public static final String URL_REGISTER_YZM = "api/accounts/verify-codes";
     // 忘记密码重置
     public static final String URL_RESET_PASSWORDS = "api/accounts/reset-passwords";
+    // 创建群组
+    public static final String URL_CREATE_GROUP = "api/chat-groups";
     // 好友列表
     public static final String URL_GET_FRIENDS = "api/users/{id}/friends";
     // 群组列表
@@ -29,7 +31,17 @@ public class Api {
     // 同意好友申请
     public static final String URL_NEW_FRIEND_APPLY = "api/friends/applies/{id}/approves";
     // 拒绝好友申请
-    public static final String URL_NEW_FRIEND_REFUSE = "friends/applies/{id}/denies";
+    public static final String URL_NEW_FRIEND_REFUSE = "api/friends/applies/{id}/denies";
+    // 设置管理员
+    public static final String URL_GROUP_SET_MANAGER = "api/chat-groups/{id}/admins";
+    // 好友申请
+    public static final String URL_PERSON_APPLY = "api/friends/applies";
+    // 修改群信息
+    public static final String URL_EDIT_GROUP = "api/chat-groups/{id}";
+    // 删除群成员
+    public static final String URL_DEL_GROUP_NUM = "api/chat-groups/{id}/members";
+    // 添加群成员
+    public static final String URL_ADD_GROUP_NUM = "api/chat-groups/{id}/members";
     // 搜索的好友(X)
     public static final String URL_GET_PERSON__SEARCH = "api/contacts/search";
     // 搜索的群组(X)
@@ -42,13 +54,15 @@ public class Api {
     public static final String URL_APPLY_GROUP_TYPE = "";
     // 入组申请(X)
     public static final String URL_GROUP_APPLY = "";
-    // 好友申请
-    public static final String URL_PERSON_APPLY = "api/friends/applies";
     // 偏好设置(X)
     public static final String URL_PREFERENCE = "";
     // 注销登录(X)
     public static final String URL_CANCEL = "";
     // 获取用户数据(X)
     public static final String URL_GET_USER_INFO = "";
+    // 设置群组备用频道(X)
+    public static final String URL_SET_CHANNEL = "";
+    // 修改好友备注(X)
+    public static final String URL_CHANGE_PERSON_NOTE = "";
 
 }

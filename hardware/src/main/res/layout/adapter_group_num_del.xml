@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.wotingfm.common.view.slidingbutton.SlidingButtonView xmlns:android="http://schemas.android.com/apk/res/android"
+
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="1dp"
+    android:background="@color/white">
+
+    <RelativeLayout
+        android:id="@+id/re_adapter"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/tv_delete"
+            android:layout_width="52dp"
+            android:layout_height="60dp"
+            android:layout_toRightOf="@+id/layout_content"
+            android:background="@color/red"
+            android:gravity="center"
+            android:text="删 除"
+            android:textColor="@color/white"
+            android:textSize="15sp"
+            android:visibility="visible" />
+
+        <RelativeLayout
+            android:id="@+id/layout_content"
+            android:layout_width="match_parent"
+            android:layout_height="60dp">
+
+            <ImageView
+                android:id="@+id/img_url"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_centerVertical="true"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="12dp"
+                android:src="@mipmap/test" />
+
+
+            <TextView
+                android:id="@+id/tv_name"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_marginLeft="12dp"
+                android:textSize="16sp"
+                android:textColor="#16181a"
+                android:gravity="left|center"
+                android:text="成员名称"
+                android:layout_toRightOf="@id/img_url" />
+        </RelativeLayout>
+
+
+    </RelativeLayout>
+    >
+</com.wotingfm.common.view.slidingbutton.SlidingButtonView>
