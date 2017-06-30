@@ -14,7 +14,7 @@ public class GlobalStateConfig {
     /**
      * 是否是测试代码
      */
-    public static final boolean test = false;
+    public static final boolean test = true;
     /**
      * 用于档位切换的参数
      * A：播放模块
