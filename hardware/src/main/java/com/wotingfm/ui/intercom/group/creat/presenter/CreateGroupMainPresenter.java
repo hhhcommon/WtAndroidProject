@@ -19,7 +19,6 @@ import com.woting.commonplat.utils.BitmapUtils;
 import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.config.GlobalStateConfig;
 import com.wotingfm.common.constant.BroadcastConstants;
-import com.wotingfm.common.net.MyHttp;
 import com.wotingfm.common.utils.ToastUtils;
 import com.wotingfm.ui.intercom.group.creat.model.CreateGroupMainModel;
 import com.wotingfm.ui.intercom.group.creat.view.CreateGroupMainFragment;
@@ -289,7 +288,7 @@ public class CreateGroupMainPresenter {
                 try {
                     String ExtName = path.substring(path.lastIndexOf("."));
                     String TestURI = "wt/common/upload4App.do?FType=GroupP&ExtName=";
-                    String Response = MyHttp.postFile(new File(path), TestURI + ExtName + "&PCDType=");
+                  //  String Response = MyHttp.postFile(new File(path), TestURI + ExtName + "&PCDType=");
                     url = "";
                     msg.what = 1;
                 } catch (Exception e) {

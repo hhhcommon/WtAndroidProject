@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.netease.nim.chatroom.demo.entertainment.activity.LiveActivity;
 import com.woting.commonplat.amine.ARecyclerView;
 import com.woting.commonplat.amine.LoadMoreFooterView;
 import com.woting.commonplat.amine.OnLoadMoreListener;
@@ -89,7 +90,7 @@ public class LiveFragment extends BaseFragment implements SwipeRefreshLayout.OnR
             @Override
             public void click(LiveBean.DataBean dataBean) {
                 if ("living".equals(dataBean.type)) {
-                    T.getInstance().showToast("直播");
+                    LiveActivity.start(getActivity(), false, true);
                 } else {
                     T.getInstance().showToast("预告");
                 }

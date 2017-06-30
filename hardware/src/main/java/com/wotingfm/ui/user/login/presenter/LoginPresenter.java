@@ -1,12 +1,26 @@
 package com.wotingfm.ui.user.login.presenter;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.netease.nim.chatroom.demo.DemoCache;
+import com.netease.nim.chatroom.demo.im.config.AuthPreferences;
+import com.netease.nim.chatroom.demo.im.config.UserPreferences;
+import com.netease.nim.chatroom.demo.im.ui.dialog.DialogMaker;
+import com.netease.nim.chatroom.demo.inject.FlavorDependent;
+import com.netease.nimlib.sdk.AbortableFuture;
+import com.netease.nimlib.sdk.NIMClient;
+import com.netease.nimlib.sdk.RequestCallback;
+import com.netease.nimlib.sdk.auth.AuthService;
+import com.netease.nimlib.sdk.auth.LoginInfo;
 import com.woting.commonplat.config.GlobalNetWorkConfig;
+import com.wotingfm.R;
+import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.common.utils.ToastUtils;
 import com.wotingfm.ui.user.login.model.LoginModel;
@@ -29,6 +43,7 @@ public class LoginPresenter {
     private final LoginModel model;
     private boolean eyeShow = false;
 
+    private AbortableFuture<LoginInfo> loginRequest;
 
     public LoginPresenter(LoginFragment activity) {
         this.activity = activity;
@@ -128,11 +143,8 @@ public class LoginPresenter {
                 // 保存用户数据
                 if (ui != null) {
                     model.saveUserInfo(ui);
+                    loginYx(ui.optString("acc_id"), ui.optString("net_ease_token"));
                 }
-                ToastUtils.show_always(activity.getActivity(), "登录成功");
-                // 发送登录广播通知所有界面
-                activity.getActivity().sendBroadcast(new Intent(BroadcastConstants.LOGIN));
-                LogoActivity.closeActivity();
             } else {
                 String msg = js.getString("msg");
                 if (msg != null && !msg.trim().equals("")) {
@@ -144,6 +156,46 @@ public class LoginPresenter {
             e.printStackTrace();
             ToastUtils.show_always(activity.getActivity(), "登录失败，请稍后再试");
         }
+    }
+
+
+    private void loginYx(final String account, final String token) {
+        // 登录
+        loginRequest = NIMClient.getService(AuthService.class).login(new LoginInfo(account, token));
+        loginRequest.setCallback(new RequestCallback<LoginInfo>() {
+            @Override
+            public void onSuccess(LoginInfo param) {
+
+                onLoginDone();
+                DemoCache.setAccount(account);
+                saveLoginInfo(account, token);
+
+                // 初始化消息提醒
+                NIMClient.toggleNotification(UserPreferences.getNotificationToggle());
+
+                // 初始化免打扰
+                NIMClient.updateStatusBarNotificationConfig(UserPreferences.getStatusConfig());
+                ToastUtils.show_always(activity.getActivity(), "登录成功");
+                // 发送登录广播通知所有界面
+                activity.getActivity().sendBroadcast(new Intent(BroadcastConstants.LOGIN));
+                LogoActivity.closeActivity();
+            }
+
+            @Override
+            public void onFailed(int code) {
+                onLoginDone();
+                if (code == 302 || code == 404) {
+                    Toast.makeText(BSApplication.getInstance(), R.string.login_failed, Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(BSApplication.getInstance(), "登录失败: " + code, Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onException(Throwable exception) {
+                onLoginDone();
+            }
+        });
     }
 
     /*
@@ -164,4 +216,16 @@ public class LoginPresenter {
         }
         return true;
     }
+
+
+    private void onLoginDone() {
+        loginRequest = null;
+        DialogMaker.dismissProgressDialog();
+    }
+
+    private void saveLoginInfo(final String account, final String token) {
+        AuthPreferences.saveUserAccount(account);
+        AuthPreferences.saveUserToken(token);
+    }
+
 }

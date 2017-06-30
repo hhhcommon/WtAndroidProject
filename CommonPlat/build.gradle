@@ -2,8 +2,8 @@ apply plugin: 'com.android.library'
 
 android {
     compileSdkVersion 25
-    buildToolsVersion = '25.0.3'
-
+    buildToolsVersion = '25.0.1'
+    useLibrary 'org.apache.http.legacy'
     defaultConfig {
         minSdkVersion 14
         targetSdkVersion 21
@@ -14,6 +14,11 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    allprojects {
+        repositories {
+            jcenter() // 或者 mavenCentral()
         }
     }
 }
@@ -34,6 +39,6 @@ dependencies {
     compile 'com.zhy:base-rvadapter:3.0.3'
     compile 'org.greenrobot:eventbus:3.0.0'
     compile 'com.android.support:design:25+'
-    compile files('libs/org.apache.http.legacy.jar')
-    compile files('libs/httpmime-4.1.1.jar')
+
+
 }
