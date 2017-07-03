@@ -8,6 +8,7 @@ import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.bean.AlbumsBean;
 import com.wotingfm.common.bean.AnchorInfo;
 import com.wotingfm.common.bean.BaseResult;
+import com.wotingfm.common.bean.CLive;
 import com.wotingfm.common.bean.Channels;
 import com.wotingfm.common.bean.Classification;
 import com.wotingfm.common.bean.HomeBanners;
@@ -18,11 +19,9 @@ import com.wotingfm.common.bean.Selected;
 import com.wotingfm.common.bean.SelectedMore;
 import com.wotingfm.common.bean.SerchList;
 import com.wotingfm.common.bean.Subscrible;
-import com.wotingfm.ui.play.activity.albums.fragment.AlbumsInfoFragment;
 import com.wotingfm.common.constant.StringConstant;
 
 import java.io.IOException;
-import java.nio.channels.Channel;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -202,6 +201,19 @@ public class RetrofitUtils {
                             throw new IllegalStateException(player.msg);
                         }
                         return player.data.channels;
+                    }
+                });
+    }
+
+    public Observable<CLive.DataBean.VoiceLiveBean> carteLive(String userId) {
+        return retrofitService.carteLive(userId)
+                .map(new Func1<CLive, CLive.DataBean.VoiceLiveBean>() {
+                    @Override
+                    public CLive.DataBean.VoiceLiveBean call(CLive player) {
+                        if (player.ret != 0) {
+                            throw new IllegalStateException(player.msg);
+                        }
+                        return player.data.voiceLive;
                     }
                 });
     }
@@ -543,8 +555,8 @@ public class RetrofitUtils {
      * @param s
      * @return
      */
-    public Observable<Object> groupApply(String id,String s) {
-        return retrofitService.groupApply(id,s)
+    public Observable<Object> groupApply(String id, String s) {
+        return retrofitService.groupApply(id, s)
                 .map(new Func1<Object, Object>() {
                     @Override
                     public Object call(Object O) {
@@ -742,7 +754,7 @@ public class RetrofitUtils {
      * @return Objects
      */
     public Observable<Object> getSearchGroup(String s) {
-        return retrofitService.getSearchGroup("chat-groups",s)
+        return retrofitService.getSearchGroup("chat-groups", s)
                 .map(new Func1<Object, Object>() {
                     @Override
                     public Object call(Object O) {
@@ -758,7 +770,7 @@ public class RetrofitUtils {
      * @return Objects
      */
     public Observable<Object> getSearchPerson(String s) {
-        return retrofitService.getSearchPerson("users",s)
+        return retrofitService.getSearchPerson("users", s)
                 .map(new Func1<Object, Object>() {
                     @Override
                     public Object call(Object O) {
@@ -878,8 +890,8 @@ public class RetrofitUtils {
      * @param s
      * @return Objects
      */
-    public Observable<Object> setManager(String id,String s) {
-        return retrofitService.setManager(id,s)
+    public Observable<Object> setManager(String id, String s) {
+        return retrofitService.setManager(id, s)
                 .map(new Func1<Object, Object>() {
                     @Override
                     public Object call(Object O) {
@@ -894,8 +906,8 @@ public class RetrofitUtils {
      * @param s
      * @return Objects
      */
-    public Observable<Object> editGroupName(String id,String s) {
-        return retrofitService.editGroupName(id,s)
+    public Observable<Object> editGroupName(String id, String s) {
+        return retrofitService.editGroupName(id, s)
                 .map(new Func1<Object, Object>() {
                     @Override
                     public Object call(Object O) {
@@ -910,8 +922,8 @@ public class RetrofitUtils {
      * @param s
      * @return Objects
      */
-    public Observable<Object> editGroupIntroduce(String id,String s) {
-        return retrofitService.editGroupIntroduce(id,s)
+    public Observable<Object> editGroupIntroduce(String id, String s) {
+        return retrofitService.editGroupIntroduce(id, s)
                 .map(new Func1<Object, Object>() {
                     @Override
                     public Object call(Object O) {
@@ -927,8 +939,8 @@ public class RetrofitUtils {
      * @param id
      * @return Objects
      */
-    public Observable<Object> groupNumDel(String gid,String id) {
-        return retrofitService.groupNumDel(gid,id)
+    public Observable<Object> groupNumDel(String gid, String id) {
+        return retrofitService.groupNumDel(gid, id)
                 .map(new Func1<Object, Object>() {
                     @Override
                     public Object call(Object O) {
@@ -944,8 +956,8 @@ public class RetrofitUtils {
      * @param id
      * @return Objects
      */
-    public Observable<Object> groupNumAdd(String gid,String id) {
-        return retrofitService.groupNumAdd(gid,id)
+    public Observable<Object> groupNumAdd(String gid, String id) {
+        return retrofitService.groupNumAdd(gid, id)
                 .map(new Func1<Object, Object>() {
                     @Override
                     public Object call(Object O) {
@@ -960,8 +972,8 @@ public class RetrofitUtils {
      * @param s
      * @return Objects
      */
-    public Observable<Object> editPersonNote(String id,String s) {
-        return retrofitService.editPersonNote(id,s)
+    public Observable<Object> editPersonNote(String id, String s) {
+        return retrofitService.editPersonNote(id, s)
                 .map(new Func1<Object, Object>() {
                     @Override
                     public Object call(Object O) {

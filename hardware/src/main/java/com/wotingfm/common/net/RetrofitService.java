@@ -4,6 +4,7 @@ package com.wotingfm.common.net;
 import com.wotingfm.common.bean.AlbumInfo;
 import com.wotingfm.common.bean.AnchorInfo;
 import com.wotingfm.common.bean.BaseResult;
+import com.wotingfm.common.bean.CLive;
 import com.wotingfm.common.bean.Channels;
 import com.wotingfm.common.bean.Classification;
 import com.wotingfm.common.bean.HomeBanners;
@@ -90,6 +91,10 @@ public interface RetrofitService {
     //订阅专辑
     @POST("api/listenings/albums/{id}/subscriptions")
     Observable<BaseResult> subscriptionsAlbums();
+
+    //创建直播
+    @POST("api/voice-lives")
+    Observable<CLive> carteLive(@Query("user_id") String user_id);
 
     //取消订阅
     @DELETE("api/listenings/albums/{id}/subscriptions")
@@ -218,11 +223,11 @@ public interface RetrofitService {
 
     // 搜索的群组
     @GET(Api.URL_GET_GROUP__SEARCH)
-    Observable<Object> getSearchGroup(@Query("type") String type,@Query("q") String s);
+    Observable<Object> getSearchGroup(@Query("type") String type, @Query("q") String s);
 
     // 搜索的好友
     @GET(Api.URL_GET_PERSON__SEARCH)
-    Observable<Object> getSearchPerson(@Query("type") String type,@Query("q") String s);
+    Observable<Object> getSearchPerson(@Query("type") String type, @Query("q") String s);
 
     // 加群方式
     @POST(Api.URL_APPLY_GROUP_TYPE)
