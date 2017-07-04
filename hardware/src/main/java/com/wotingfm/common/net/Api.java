@@ -46,6 +46,10 @@ public class Api {
     public static final String URL_GET_PERSON__SEARCH = "api/listenings/search";
     // 搜索的群组
     public static final String URL_GET_GROUP__SEARCH = "api/listenings/search";
+    // 好友订阅的专辑
+    public static final String URL_PERSON_SUB = "api/users/{id}/subscriptions/albums";
+    // 退出群组
+    public static final String URL_GROUP_DELETE = " api/users/{pid}/chat-groups/{gid}";
     // 推荐的成员(X)
     public static final String URL_GET_PERSON_RECOMMEND = "";
     // 推荐的群组(X)
@@ -58,7 +62,7 @@ public class Api {
     public static final String URL_PREFERENCE = "";
     // 注销登录(X)
     public static final String URL_CANCEL = "";
-    // 获取用户数据(X)
+    // 获取用户自身数据引导页(X)
     public static final String URL_GET_USER_INFO = "";
     // 设置群组备用频道(X)
     public static final String URL_SET_CHANNEL = "";

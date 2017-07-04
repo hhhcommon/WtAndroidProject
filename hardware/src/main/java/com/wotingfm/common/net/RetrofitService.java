@@ -218,11 +218,13 @@ public interface RetrofitService {
 
     // 搜索的群组
     @GET(Api.URL_GET_GROUP__SEARCH)
-    Observable<Object> getSearchGroup(@Query("type") String type,@Query("q") String s);
+    Observable<Object> getSearchGroup(@Query("type") String type,
+                                      @Query("q") String s);
 
     // 搜索的好友
     @GET(Api.URL_GET_PERSON__SEARCH)
-    Observable<Object> getSearchPerson(@Query("type") String type,@Query("q") String s);
+    Observable<Object> getSearchPerson(@Query("type") String type,
+                                       @Query("q") String s);
 
     // 加群方式
     @POST(Api.URL_APPLY_GROUP_TYPE)
@@ -246,7 +248,8 @@ public interface RetrofitService {
 
     // 设置管理员
     @POST(Api.URL_GROUP_SET_MANAGER)
-    Observable<Object> setManager(@Path("id") String id, @Query("new_admin_ids") String s);
+    Observable<Object> setManager(@Path("id") String id,
+                                  @Query("new_admin_ids") String s);
 
     // 添加好友
     @POST(Api.URL_PERSON_APPLY)
@@ -296,7 +299,6 @@ public interface RetrofitService {
     Observable<Object> editPersonNote(@Path("id") String id,
                                       @Query("note") String s);
 
-
     // 删除群成员
     @DELETE(Api.URL_DEL_GROUP_NUM)
     Observable<Object> groupNumDel(@Path("id") String gid,
@@ -306,7 +308,6 @@ public interface RetrofitService {
     @POST(Api.URL_ADD_GROUP_NUM)
     Observable<Object> groupNumAdd(@Path("id") String gid,
                                    @Query("member_user_id") String id);
-
 
     // 偏好设置
     @POST(Api.URL_PREFERENCE)
@@ -322,7 +323,18 @@ public interface RetrofitService {
 
     // 入组申请
     @POST(Api.URL_GROUP_APPLY)
-    Observable<Object> groupApply(@Path("id") String gid, @Query("s") String s);
+    Observable<Object> groupApply(@Path("id") String gid,
+                                  @Query("s") String s);
+
+    // 好友订阅专辑
+    @POST(Api.URL_PERSON_SUB)
+    Observable<Object> getPersonSub(@Path("id") String gid);
+
+    // 退出群组
+    @DELETE(Api.URL_GROUP_DELETE)
+    Observable<Object> exitGroup(@Path("gid") String gid,
+                                 @Path("pid") String pid);
+
 
 }
 

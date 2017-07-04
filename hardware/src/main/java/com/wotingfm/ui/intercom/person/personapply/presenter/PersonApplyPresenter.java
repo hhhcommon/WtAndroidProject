@@ -2,12 +2,14 @@ package com.wotingfm.ui.intercom.person.personapply.presenter;
 
 import android.os.Bundle;
 import android.util.Log;
+
 import com.google.gson.Gson;
 import com.woting.commonplat.config.GlobalNetWorkConfig;
 import com.wotingfm.common.utils.ToastUtils;
 import com.wotingfm.ui.intercom.main.view.InterPhoneActivity;
 import com.wotingfm.ui.intercom.person.personapply.model.PersonApplyModel;
 import com.wotingfm.ui.intercom.person.personapply.view.PersonApplyFragment;
+
 import org.json.JSONObject;
 
 /**
@@ -19,13 +21,16 @@ public class PersonApplyPresenter {
 
     private final PersonApplyFragment activity;
     private final PersonApplyModel model;
-    private final String id;
+    private String id;
 
     public PersonApplyPresenter(PersonApplyFragment activity) {
         this.activity = activity;
         this.model = new PersonApplyModel();
-        Bundle bundle = activity.getArguments();
-        id = bundle.getString("id");
+        try {
+            id = activity.getArguments().getString("id");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -35,22 +40,26 @@ public class PersonApplyPresenter {
      */
     public void send(String s) {
         if (GlobalNetWorkConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
-            if (s != null && !s.trim().equals("")) {
-                activity.dialogShow();
-                model.loadNews(id,s, new PersonApplyModel.OnLoadInterface() {
-                    @Override
-                    public void onSuccess(Object o) {
-                        activity.dialogCancel();
-                        dealSuccess(o);
-                    }
+            if (id != null && !id.trim().equals("")) {
+                if (s != null && !s.trim().equals("")) {
+                    activity.dialogShow();
+                    model.loadNews(id, s, new PersonApplyModel.OnLoadInterface() {
+                        @Override
+                        public void onSuccess(Object o) {
+                            activity.dialogCancel();
+                            dealSuccess(o);
+                        }
 
-                    @Override
-                    public void onFailure(String msg) {
-                        activity.dialogCancel();
-                    }
-                });
+                        @Override
+                        public void onFailure(String msg) {
+                            activity.dialogCancel();
+                        }
+                    });
+                } else {
+                    ToastUtils.show_always(activity.getActivity(), "提交数据不能为空");
+                }
             } else {
-                ToastUtils.show_always(activity.getActivity(), "提交数据不能为空");
+                ToastUtils.show_always(activity.getActivity(), "数据出错了，请您稍后再试！");
             }
         } else {
             ToastUtils.show_always(activity.getActivity(), "网络连接失败，请稍后再试！");

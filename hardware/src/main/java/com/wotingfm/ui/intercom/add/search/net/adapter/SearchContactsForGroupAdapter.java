@@ -1,6 +1,7 @@
 package com.wotingfm.ui.intercom.add.search.net.adapter;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,7 +9,9 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.woting.commonplat.utils.BitmapUtils;
 import com.wotingfm.R;
+import com.wotingfm.common.utils.GlideUtils;
 import com.wotingfm.ui.intercom.main.contacts.model.Contact;
 
 import java.util.List;
@@ -54,10 +57,9 @@ public class SearchContactsForGroupAdapter extends BaseAdapter  {
             holder = new ViewHolder();
             convertView = LayoutInflater.from(context).inflate(R.layout.adapter_groups, null);
             holder.tv_name = (TextView) convertView.findViewById(R.id.tv_name);//名
-            holder.img_touXiang = (ImageView) convertView.findViewById(R.id.image);
+            holder.img_touXiang = (ImageView) convertView.findViewById(R.id.img_view);
             holder.img_chat = (ImageView) convertView.findViewById(R.id.img_chat);
             holder.img_chat.setVisibility(View.GONE);
-
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
@@ -70,19 +72,12 @@ public class SearchContactsForGroupAdapter extends BaseAdapter  {
             holder.tv_name.setText(lists.getTitle());//名
         }
 
-//        if (lists.avatar == null || lists.avatar.equals("") || lists.avatar.equals("null") || lists.avatar.trim().equals("")) {
-//            Bitmap bmp = BitmapUtils.readBitMap(context, R.mipmap.wt_image_tx_qz);
-//            holder.img_touXiang.setImageBitmap(bmp);
-//        } else {
-//            String url;
-//            if (lists.avatar.startsWith("http:")) {
-//                url = lists.avatar;
-//            } else {
-//                url = GlobalConfig.imageurl + lists.avatar;
-//            }
-//            // 加载图片
-//            AssembleImageUrlUtils.loadImage(_url, url, holder.img_touXiang, IntegerConstant.TYPE_GROUP);
-//        }
+        if (lists.getLogo_url() != null &&!lists.getLogo_url() .equals("") ) {
+            GlideUtils.loadImageViewSize(context, lists.getLogo_url(), 60, 60, holder.img_touXiang, true);
+        } else {
+            Bitmap bmp = BitmapUtils.readBitMap(context, R.mipmap.icon_avatar_d);
+            holder.img_touXiang.setImageBitmap(bmp);
+        }
 
         return convertView;
     }

@@ -8,8 +8,10 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.woting.commonplat.config.GlobalNetWorkConfig;
+import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.config.GlobalStateConfig;
 import com.wotingfm.common.constant.BroadcastConstants;
+import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.common.utils.CommonUtils;
 import com.wotingfm.common.utils.ToastUtils;
 import com.wotingfm.ui.intercom.group.groupnews.add.view.GroupNewsForAddFragment;
@@ -20,6 +22,7 @@ import com.wotingfm.ui.intercom.main.chat.model.TalkHistory;
 import com.wotingfm.ui.intercom.main.chat.view.ChatFragment;
 import com.wotingfm.ui.intercom.main.contacts.model.Contact;
 import com.wotingfm.ui.intercom.main.view.InterPhoneActivity;
+import com.wotingfm.ui.intercom.person.personmessage.view.PersonMessageFragment;
 import com.wotingfm.ui.user.logo.LogoActivity;
 
 import java.util.ArrayList;
@@ -51,14 +54,12 @@ public class ChatPresenter {
         if (GlobalNetWorkConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
             if (CommonUtils.isLogin()) {
                 list = model.getData();
-
                 if (list != null && list.size() > 0) {
                     activity.isLoginView(0);
                     activity.updateUI(list);
                 } else {
                     activity.isLoginView(1);
                 }
-
             } else {
                 activity.isLoginView(3);
             }
@@ -74,6 +75,7 @@ public class ChatPresenter {
      */
     public void call(int position) {
         if (list != null && list.size() > 0) {
+            // 按钮点击数据
             TalkHistory _data = list.get(position);
             String type = _data.getTyPe().trim();
             if (type != null && !type.equals("") && type.equals("person")) {
@@ -168,14 +170,65 @@ public class ChatPresenter {
     }
 
     /**
-     * 更改此时对讲状态为null
+     * item按钮的操作
+     *
+     * @param position
      */
-    public void setNull() {
-        if (list == null) list = new ArrayList<>();
-        list.add(0, data);
-        activity.updateUI(list);
-        data = null;
+    public void itemClick(int position) {
+        if (list != null && list.size() > 0) {
+            TalkHistory _data = list.get(position);
+            String type = _data.getTyPe().trim();
+            if (type != null && !type.equals("") && type.equals("person")) {
+                String id = list.get(position).getID();
+                if (id != null && !id.trim().equals("")) {
+                    if (model.judgeFriends(id)) {
+                        PersonMessageFragment fragment = new PersonMessageFragment();
+                        Bundle bundle = new Bundle();
+                        bundle.putString("type", "true");
+                        bundle.putString("id", id);
+                        fragment.setArguments(bundle);
+                        InterPhoneActivity.open(fragment);
+                    } else {
+                        PersonMessageFragment fragment = new PersonMessageFragment();
+                        Bundle bundle = new Bundle();
+                        bundle.putString("type", "false");
+                        bundle.putString("id", id);
+                        fragment.setArguments(bundle);
+                        InterPhoneActivity.open(fragment);
+                    }
+                } else {
+                    // 数据有问题
+                    ToastUtils.show_always(activity.getActivity(), "数据出错了，请您稍后再试！");
+                }
+            } else if (type != null && !type.equals("") && type.equals("group")) {
+                String id = list.get(position).getID();
+                if (id != null && !id.trim().equals("")) {
+                    if (model.judgeGroupCreate(id)) {
+                        GroupNewsForAddFragment fragment = new GroupNewsForAddFragment();
+                        Bundle bundle = new Bundle();
+                        bundle.putString("id", id);
+                        bundle.putString("type", "true");
+                        fragment.setArguments(bundle);
+                        InterPhoneActivity.open(fragment);
+                    } else {
+                        GroupNewsForAddFragment fragment = new GroupNewsForAddFragment();
+                        Bundle bundle = new Bundle();
+                        bundle.putString("id", id);
+                        bundle.putString("type", "false");
+                        fragment.setArguments(bundle);
+                        InterPhoneActivity.open(fragment);
+                    }
+                } else {
+                    // 数据有问题
+                    ToastUtils.show_always(activity.getActivity(), "数据出错了，请您稍后再试！");
+                }
+            } else {
+                // 数据有问题
+                ToastUtils.show_always(activity.getActivity(), "数据出错了，请您稍后再试！");
+            }
+        }
     }
+
 
     /**
      * 删除数据
@@ -186,7 +239,7 @@ public class ChatPresenter {
         if (list != null && list.size() > 0) {
             // 从数据库中删除该条数据
             String id = list.get(position).getID();
-            if (id != null && id.trim().equals("")) {
+            if (id != null && !id.trim().equals("")) {
                 model.del(id);
             }
             // 界面更改
@@ -206,14 +259,35 @@ public class ChatPresenter {
     }
 
     /**
-     * 界面跳转
+     * 界面跳转(此时群肯定是自己所在的群)
+     * 判断该群是不是自己创建的
      */
-    public void jump(){
-        GroupNewsForAddFragment fragment = new GroupNewsForAddFragment();
-        Bundle bundle = new Bundle();
-        bundle.putString("id", data.getID());
-        fragment.setArguments(bundle);
-        InterPhoneActivity.open(fragment);
+    public void jump() {
+        if (model.judgeGroupCreate(data.getID())) {
+            GroupNewsForAddFragment fragment = new GroupNewsForAddFragment();
+            Bundle bundle = new Bundle();
+            bundle.putString("id", data.getID());
+            bundle.putString("type", "true");
+            fragment.setArguments(bundle);
+            InterPhoneActivity.open(fragment);
+        } else {
+            GroupNewsForAddFragment fragment = new GroupNewsForAddFragment();
+            Bundle bundle = new Bundle();
+            bundle.putString("id", data.getID());
+            bundle.putString("type", "false");
+            fragment.setArguments(bundle);
+            InterPhoneActivity.open(fragment);
+        }
+    }
+
+    /**
+     * 更改此时对讲状态为null
+     */
+    public void setNull() {
+        if (list == null) list = new ArrayList<>();
+        if (data != null) list.add(0, data);
+        activity.updateUI(list);
+        data = null;
     }
 
     /**
@@ -225,7 +299,7 @@ public class ChatPresenter {
         if (type == 3) {
             // 没有登录,打开登录界面
             activity.getActivity().startActivity(new Intent(activity.getActivity(), LogoActivity.class));
-        }else if(type==1){
+        } else if (type == 1) {
             getData();
         }
     }
@@ -307,7 +381,8 @@ public class ChatPresenter {
                     Contact.user u = model.getUser(id);// 根据库表的第一条数据的id得到对应的通讯录里边的好友数据
                     TalkHistory _d = model.assemblyDataForPerson(u, f);// 根据两条对应数据组装展示数据
                     activity.setPersonViewShow(_d);
-                    list = model.delForList(list, id);// 删除列表中重复数据
+                    if (list != null && list.size() > 0)
+                        list = model.delForList(list, id);// 删除列表中重复数据
                     if (list != null && list.size() > 0) activity.updateUI(list);
                     data = _d;// 替换此时对讲对象
                 } else {

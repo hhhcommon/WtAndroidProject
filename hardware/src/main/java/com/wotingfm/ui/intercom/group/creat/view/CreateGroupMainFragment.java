@@ -136,8 +136,6 @@ public class CreateGroupMainFragment extends Fragment implements View.OnClickLis
         }else{
             img_password.setImageResource(R.mipmap.create_group_icon_selected_n);
         }
-
-
     }
 
     /**
@@ -163,27 +161,6 @@ public class CreateGroupMainFragment extends Fragment implements View.OnClickLis
      */
     public void dialogCancel() {
         if (dialog != null) dialog.dismiss();
-    }
-    
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        presenter.onActivityResult(requestCode, resultCode, data);
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
     }
 
 }

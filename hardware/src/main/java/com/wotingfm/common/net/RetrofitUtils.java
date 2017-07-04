@@ -969,4 +969,38 @@ public class RetrofitUtils {
                     }
                 });
     }
+
+    /**
+     * 获取好友订阅专辑
+     *
+     * @param id
+     * @return Objects
+     */
+    public Observable<Object> getPersonSub(String id) {
+        return retrofitService.getPersonSub(id)
+                .map(new Func1<Object, Object>() {
+                    @Override
+                    public Object call(Object O) {
+                        return O;
+                    }
+                });
+    }
+
+    /**
+     * 退出群组
+     *
+     * @param gId
+     * @param pId
+     * @return Objects
+     */
+    public Observable<Object> exitGroup(String gId,String pId) {
+        return retrofitService.exitGroup( gId, pId)
+                .map(new Func1<Object, Object>() {
+                    @Override
+                    public Object call(Object O) {
+                        return O;
+                    }
+                });
+    }
+
 }

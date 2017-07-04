@@ -1,6 +1,7 @@
 package com.wotingfm.ui.intercom.group.groupmumberadd.adapter;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,7 +9,9 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.woting.commonplat.utils.BitmapUtils;
 import com.wotingfm.R;
+import com.wotingfm.common.utils.GlideUtils;
 import com.wotingfm.ui.intercom.main.contacts.model.Contact;
 
 import java.util.List;
@@ -19,7 +22,6 @@ import java.util.List;
 public class GroupNumberAddAdapter extends BaseAdapter {
     private List<Contact.user> list;
     private Context context;
-    private Contact.user lists;
     private OnListener onListener;
 
     public GroupNumberAddAdapter(Context context, List<Contact.user> list) {
@@ -34,6 +36,7 @@ public class GroupNumberAddAdapter extends BaseAdapter {
 
     public void ChangeDate(List<Contact.user> list) {
         this.list = list;
+        notifyDataSetChanged();
     }
 
     @Override
@@ -64,7 +67,8 @@ public class GroupNumberAddAdapter extends BaseAdapter {
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-        lists = list.get(position);
+        Contact.user lists = list.get(position);
+
         String name = lists.getName();
         if (name != null && !name.trim().equals("")) {
             holder.tv_name.setText(name);
@@ -72,6 +76,12 @@ public class GroupNumberAddAdapter extends BaseAdapter {
             holder.tv_name.setText("未知");
         }
 
+        if (lists.getAvatar() != null && !lists.getAvatar().equals("")) {
+            GlideUtils.loadImageViewSize(context, lists.getAvatar(), 60, 60, holder.img_view, true);
+        } else {
+            Bitmap bmp = BitmapUtils.readBitMap(context, R.mipmap.icon_avatar_d);
+            holder.img_view.setImageBitmap(bmp);
+        }
         holder.tv_type.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

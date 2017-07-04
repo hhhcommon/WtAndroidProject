@@ -167,7 +167,7 @@ public class FloatingWindowService extends Service {
                         int dy = (int) event.getRawY() - lastY;
                         params.x = paramX + dx;
                         params.y = paramY + dy;
-                        Log.e("悬浮窗", params.y + "=======" + params.x);
+//                        Log.e("悬浮窗", params.y + "=======" + params.x);
                         // 更新悬浮窗位置
                         wm.updateViewLayout(floatView, params);
                         break;

@@ -25,6 +25,7 @@ public class GroupNewsPersonForNoAddAdapter extends BaseAdapter {
 
     public void changeData(List<Contact.user> list) {
         this.list = list;
+        notifyDataSetChanged();
     }
 
     @Override

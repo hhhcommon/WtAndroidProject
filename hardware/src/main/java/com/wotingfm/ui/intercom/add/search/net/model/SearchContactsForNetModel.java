@@ -8,6 +8,7 @@ import com.wotingfm.common.config.GlobalStateConfig;
 import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.common.net.RetrofitUtils;
 import com.wotingfm.common.utils.GetTestData;
+import com.wotingfm.ui.base.model.CommonModel;
 import com.wotingfm.ui.intercom.main.contacts.model.Contact;
 
 import java.util.ArrayList;
@@ -21,7 +22,7 @@ import rx.schedulers.Schedulers;
  * 作者：xinLong on 2017/5/16 14:28
  * 邮箱：645700751@qq.com
  */
-public class SearchContactsForNetModel {
+public class SearchContactsForNetModel extends CommonModel {
 
     /**
      * 获取好友
@@ -87,6 +88,38 @@ public class SearchContactsForNetModel {
         } else {
             return list;
         }
+    }
+
+    /**
+     * 设置搜索数据（群组）
+     * @param s
+     * @param srcList_g
+     * @return
+     */
+    public  List<Contact.group> searchForGroupData(String s, List<Contact.group> srcList_g) {
+        List<Contact.group>  list=new ArrayList<>();
+        for(int i=0;i<srcList_g.size();i++){
+            if(srcList_g.get(i).getTitle().contains(s)){
+                list.add(srcList_g.get(i));
+            }
+        }
+        return list;
+    }
+
+    /**
+     * 设置搜索数据（个人）
+     * @param s
+     * @param srcList_p
+     * @return
+     */
+    public  List<Contact.user> searchForPersonData(String s, List<Contact.user> srcList_p) {
+        List<Contact.user>  list=new ArrayList<>();
+        for(int i=0;i<srcList_p.size();i++){
+            if(srcList_p.get(i).getName().contains(s)){
+                list.add(srcList_p.get(i));
+            }
+        }
+        return list;
     }
 
     /**

@@ -1,6 +1,7 @@
 package com.wotingfm.ui.intercom.person.newfriend.adapter;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
@@ -11,7 +12,10 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import com.woting.commonplat.utils.BitmapUtils;
 import com.wotingfm.R;
+import com.wotingfm.common.utils.GlideUtils;
 import com.wotingfm.common.view.slidingbutton.SlidingButtonView;
 import com.wotingfm.ui.intercom.main.contacts.model.Contact;
 import com.wotingfm.ui.intercom.person.newfriend.model.NewFriend;
@@ -45,17 +49,27 @@ public class NewFriendAdapter extends RecyclerView.Adapter<NewFriendAdapter.Simp
     // 数据绑定
     @Override
     public void onBindViewHolder(final SimpleHolder holder, int position) {
-        if(mData.get(position).getApply_type().equals("1")){
+        NewFriend m = mData.get(position);
+
+        if(m.getApply_type().equals("1")){
             holder.layout_content.getLayoutParams().width = getScreenWidth(mContext);
-            holder.tv_name.setText(mData.get(position).getName());
+            holder.tv_name.setText(m.getName());
             holder.tv_oks.setVisibility(View.GONE);
             holder.tv_ok.setVisibility(View.VISIBLE);
         }else{
             holder.layout_content.getLayoutParams().width = getScreenWidth(mContext);
-            holder.tv_name.setText(mData.get(position).getName());
+            holder.tv_name.setText(m.getName());
             holder.tv_oks.setVisibility(View.VISIBLE);
             holder.tv_ok.setVisibility(View.GONE);
         }
+
+        if (m.getAvatar() != null && !m.getAvatar().equals("")) {
+            GlideUtils.loadImageViewSize(mContext, m.getAvatar(), 60, 60, holder.img_url, true);
+        } else {
+            Bitmap bmp = BitmapUtils.readBitMap(mContext, R.mipmap.icon_avatar_d);
+            holder.img_url.setImageBitmap(bmp);
+        }
+
 
         holder.tv_ok.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -73,8 +87,10 @@ public class NewFriendAdapter extends RecyclerView.Adapter<NewFriendAdapter.Simp
         holder.tv_Delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (menuIsOpen()) {
+                    closeMenu();//关闭菜单
+                }
                 int n = holder.getLayoutPosition();
-
                 mIDeleteBtnClickListener.onDeleteBtnClick(view, n);
             }
         });

@@ -55,7 +55,7 @@ public class CreateGroupMainPresenter {
     private final int PHOTO_REQUEST_CUT = 7;    // 标识 跳转到图片裁剪界面
     private String outputFilePath;
     private boolean headViewShow = false;// 图片选择界面是否展示
-    private String url="test"; // 阿里云返回的图片路径
+    private String url = "test"; // 阿里云返回的图片路径
 
     public CreateGroupMainPresenter(CreateGroupMainFragment activity) {
         this.activity = activity;
@@ -82,11 +82,10 @@ public class CreateGroupMainPresenter {
      * @param password
      */
     public void send(String name, String password) {
-        // 临时测试数据
         if (GlobalNetWorkConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
             if (GlobalStateConfig.test) {
                 // 测试数据
-                InterPhoneActivity.open(new StandbyChannelFragment());
+                jumpChannel("000");
             } else {
                 // 实际数据
                 if (checkData(name, password)) {
@@ -97,7 +96,6 @@ public class CreateGroupMainPresenter {
         } else {
             ToastUtils.show_always(activity.getActivity(), "网络连接失败，请稍后再试！");
         }
-
     }
 
     /**
@@ -213,8 +211,8 @@ public class CreateGroupMainPresenter {
         if (b2) {
             type = 1;
         }
-        if(b1&&b2){
-            type=3;
+        if (b1 && b2) {
+            type = 3;
         }
         model.loadNews(name, password, type, url, new CreateGroupMainModel.OnLoadInterface() {
             @Override
@@ -241,14 +239,8 @@ public class CreateGroupMainPresenter {
             if (ret == 0) {
                 // 创建成功后返回的数据
                 activity.getActivity().sendBroadcast(new Intent(BroadcastConstants.GROUP_GET));
-                String gid="000";
-                InterPhoneActivity.close();
-                StandbyChannelFragment fragment = new StandbyChannelFragment();
-                Bundle bundle = new Bundle();
-                bundle.putString("fromType", "create");
-                bundle.putString("groupId", gid);
-                fragment.setArguments(bundle);
-                InterPhoneActivity.open(fragment);
+                String gid = "000";
+                jumpChannel(gid);
             } else {
                 ToastUtils.show_always(activity.getActivity(), "创建失败，请稍后再试！");
             }
@@ -302,4 +294,14 @@ public class CreateGroupMainPresenter {
         }.start();
     }
 
+    // 跳转到设置频道界面
+    private void jumpChannel(String id) {
+        InterPhoneActivity.close();
+        StandbyChannelFragment fragment = new StandbyChannelFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString("fromType", "create");
+        bundle.putString("groupId", id);
+        fragment.setArguments(bundle);
+        InterPhoneActivity.open(fragment);
+    }
 }

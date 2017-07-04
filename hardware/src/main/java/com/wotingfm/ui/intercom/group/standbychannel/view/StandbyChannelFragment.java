@@ -72,7 +72,7 @@ public class StandbyChannelFragment extends Fragment implements View.OnClickList
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.head_left_btn:
-                InterPhoneActivity.close();
+                presenter.jump();
                 break;
             case R.id.lin_channel1:
                 presenter.setChannel(1);
@@ -89,7 +89,6 @@ public class StandbyChannelFragment extends Fragment implements View.OnClickList
             case R.id.tv_ok:
                 presenter.ok(channelIndex);
                 break;
-
         }
     }
 
@@ -172,26 +171,6 @@ public class StandbyChannelFragment extends Fragment implements View.OnClickList
      */
     public void dialogCancel() {
         if (dialog != null) dialog.dismiss();
-    }
-
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
     }
 
 

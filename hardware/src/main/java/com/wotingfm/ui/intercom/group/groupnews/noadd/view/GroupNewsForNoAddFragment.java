@@ -2,21 +2,27 @@ package com.wotingfm.ui.intercom.group.groupnews.noadd.view;
 
 import android.app.Dialog;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.GridView;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.woting.commonplat.widget.TipView;
 import com.wotingfm.R;
 import com.wotingfm.common.utils.DialogUtils;
+import com.wotingfm.common.view.myscrollview.ObservableScrollView;
+import com.wotingfm.ui.base.baseinterface.ScrollViewListener;
 import com.wotingfm.ui.intercom.group.groupapply.view.GroupApplyFragment;
 import com.wotingfm.ui.intercom.group.groupnews.noadd.adapter.GroupNewsPersonForNoAddAdapter;
 import com.wotingfm.ui.intercom.group.groupnews.noadd.presenter.GroupNewsForNoAddPresenter;
@@ -31,9 +37,9 @@ import java.util.List;
  * 作者：xinLong on 2017/6/5 01:30
  * 邮箱：645700751@qq.com
  */
-public class GroupNewsForNoAddFragment extends Fragment implements View.OnClickListener, TipView.TipViewClick {
+public class GroupNewsForNoAddFragment extends Fragment implements View.OnClickListener, TipView.TipViewClick, ScrollViewListener {
     private View rootView;
-    private TextView tv_groupName, tv_groupNumber, tv_address, tv_groupIntroduce, tv_number, tv_send;
+    private TextView tv_groupName, tv_groupNumber, tv_address, tv_groupIntroduce, tv_number, tv_send, tvTitle;
     private RelativeLayout re_groupIntroduce, re_groupNumber;
     private GridView gridView;
     private GroupNewsForNoAddPresenter presenter;
@@ -41,8 +47,10 @@ public class GroupNewsForNoAddFragment extends Fragment implements View.OnClickL
     private Dialog dialog;
     private TipView tip_view;
     private int type;
-    private NestedScrollView scrView;
-    private AppBarLayout app_bar;
+    private ObservableScrollView scrollView;
+    private int height = 480;// 滑动开始变色的高
+    private RelativeLayout mRelativeLayout;
+    private ImageView head_left_btn, img_other;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -52,15 +60,8 @@ public class GroupNewsForNoAddFragment extends Fragment implements View.OnClickL
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         if (rootView == null) {
-            rootView = inflater.inflate(R.layout.fragment_groupnews, container, false);
+            rootView = inflater.inflate(R.layout.fragment_groupnewsnoadd, container, false);
             rootView.setOnClickListener(this);
-
-            Toolbar toolbar = (Toolbar) rootView.findViewById(R.id.toolbar);
-            toolbar.inflateMenu(R.menu.menu_groupnews);
-            toolbar.setTitle("xinlong");
-            toolbar.setTitleTextColor(this.getResources().getColor(R.color.app_basic));
-            InterPhoneActivity.context.setSupportActionBar(toolbar);
-
             inItView();
             presenter = new GroupNewsForNoAddPresenter(this);
             presenter.getData();
@@ -72,9 +73,15 @@ public class GroupNewsForNoAddFragment extends Fragment implements View.OnClickL
         tip_view = (TipView) rootView.findViewById(R.id.tip_view);// 提示界面
         tip_view.setTipClick(this);
 
-        app_bar = (AppBarLayout) rootView.findViewById(R.id.app_bar);//
-        scrView = (NestedScrollView) rootView.findViewById(R.id.scrView);//
+        mRelativeLayout = (RelativeLayout) rootView.findViewById(R.id.mRelativeLayout);// 标题栏
+        head_left_btn = (ImageView) rootView.findViewById(R.id.head_left_btn);// 返回按钮
+        head_left_btn.setOnClickListener(this);
+        tvTitle = (TextView) rootView.findViewById(R.id.tvTitle);//
+        img_other = (ImageView) rootView.findViewById(R.id.img_other);// 其它按钮
+        img_other.setOnClickListener(this);
 
+        scrollView = (ObservableScrollView) rootView.findViewById(R.id.scrollView);//
+        scrollView.setScrollViewListener(this);
         tv_groupName = (TextView) rootView.findViewById(R.id.tv_groupName);// 群名称
         tv_groupNumber = (TextView) rootView.findViewById(R.id.tv_groupNumber);// 群号
         tv_address = (TextView) rootView.findViewById(R.id.tv_address);// 地址
@@ -98,6 +105,7 @@ public class GroupNewsForNoAddFragment extends Fragment implements View.OnClickL
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.head_left_btn:
+                InterPhoneActivity.close();
                 break;
             case R.id.tv_send:
                 presenter.apply();
@@ -105,7 +113,8 @@ public class GroupNewsForNoAddFragment extends Fragment implements View.OnClickL
             case R.id.re_groupNumber:
                 presenter.jump();// 跳转到成员列表界面
                 break;
-
+            case R.id.img_other:
+                break;
         }
     }
 
@@ -140,11 +149,39 @@ public class GroupNewsForNoAddFragment extends Fragment implements View.OnClickL
         tv_number.setText("（" + String.valueOf(list.size()) + "）");// 成员数
     }
 
+    @Override
+    public void onScrollChanged(ObservableScrollView scrollView, int x, int y, int oldX, int oldY) {
+        Log.e("滑动大小","x"+x);
+        Log.e("滑动大小","y"+y);
+        Log.e("滑动大小","oldX"+oldX);
+        Log.e("滑动大小","oldY"+oldY);
+        Log.e("滑动大小","height"+height);
+        if (y <= 0) {   //设置标题的背景颜色
+            mRelativeLayout.setBackgroundColor(Color.argb((int) 0, 255, 255, 255));
+            tvTitle.setVisibility(View.GONE);
+            head_left_btn.setImageResource(R.mipmap.nav_icon_back_white);
+            img_other.setImageResource(R.mipmap.nav_icon_more_white);
+        } else if (y > 0 && y <= height) {
+            float scale = (float) y / height;
+            float alpha = (255 * scale);
+            mRelativeLayout.setBackgroundColor(Color.argb((int) alpha, 255, 255, 255));
+            tvTitle.setVisibility(View.GONE);
+            head_left_btn.setImageResource(R.mipmap.nav_icon_back_white);
+            img_other.setImageResource(R.mipmap.nav_icon_more_white);
+        } else if(y>height) {
+            mRelativeLayout.setBackgroundColor(Color.argb((int) 255, 255, 255, 255));
+            tvTitle.setVisibility(View.VISIBLE);
+            head_left_btn.setImageResource(R.mipmap.nav_icon_back_black);
+            img_other.setImageResource(R.mipmap.nav_icon_more_black);
+        }
+    }
+
+
     /**
      * 隐藏成员展示
      * 设置没有群成员的界面，也就意味着数据有错
      */
-    public void setViewForNoGroupPerson(){
+    public void setViewForNoGroupPerson() {
         re_groupNumber.setVisibility(View.GONE);
     }
 
@@ -162,31 +199,26 @@ public class GroupNewsForNoAddFragment extends Fragment implements View.OnClickL
         this.type = type;
         if (type == 0) {
             // 已经登录，并且有数据
-            scrView.setVisibility(View.VISIBLE);
-            app_bar.setVisibility(View.VISIBLE);
+            scrollView.setVisibility(View.VISIBLE);
             tip_view.setVisibility(View.GONE);
         } else if (type == 1) {
             // 已经登录，没有数据
-            scrView.setVisibility(View.GONE);
-            app_bar.setVisibility(View.GONE);
+            scrollView.setVisibility(View.GONE);
             tip_view.setVisibility(View.VISIBLE);
             tip_view.setTipView(TipView.TipStatus.NO_DATA, "您还没有聊天对象哟\n快去找好友们聊天吧");
         } else if (type == 2) {
             // 没有网络
-            scrView.setVisibility(View.GONE);
-            app_bar.setVisibility(View.GONE);
+            scrollView.setVisibility(View.GONE);
             tip_view.setVisibility(View.VISIBLE);
             tip_view.setTipView(TipView.TipStatus.NO_NET);
         } else if (type == 3) {
             // 没有登录
-            scrView.setVisibility(View.GONE);
-            app_bar.setVisibility(View.GONE);
+            scrollView.setVisibility(View.GONE);
             tip_view.setVisibility(View.VISIBLE);
             tip_view.setTipView(TipView.TipStatus.NO_LOGIN);
         } else if (type == 4) {
             // 已经登录，数据加载失败
-            scrView.setVisibility(View.GONE);
-            app_bar.setVisibility(View.GONE);
+            scrollView.setVisibility(View.GONE);
             tip_view.setVisibility(View.VISIBLE);
             tip_view.setTipView(TipView.TipStatus.IS_ERROR);
         }

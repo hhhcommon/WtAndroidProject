@@ -1,5 +1,6 @@
 package com.wotingfm.common.utils;
 
+import com.wotingfm.common.bean.AlbumsBean;
 import com.wotingfm.ui.intercom.main.contacts.model.Contact;
 
 import java.util.ArrayList;
@@ -11,6 +12,10 @@ import java.util.List;
  */
 public class GetTestData {
 
+    /**
+     * 测试组信息
+     * @return
+     */
     public static List<Contact.group>  getGroupList() {
         List<Contact.group> srcList_G = new ArrayList<>();
         srcList_G.add(getGroup("兔子群-1","1"));
@@ -29,6 +34,10 @@ public class GetTestData {
         return  srcList_G;
     }
 
+    /**
+     * 测试用户信息
+     * @return
+     */
     public static List<Contact.user>  getFriendList() {
         List<Contact.user> srcList_p = new ArrayList<>();
         srcList_p.add(getUser("小苹果","1"));
@@ -49,6 +58,31 @@ public class GetTestData {
         return srcList_p;
     }
 
+    /**
+     * 测试专辑信息
+     * @return
+     */
+    public static List<AlbumsBean>  getAlbumsList() {
+        List<AlbumsBean> a = new ArrayList<>();
+        a.add(getAlbums("小苹果","1"));
+        a.add(getAlbums("大美丽","2"));
+        a.add(getAlbums("放羊佬","3"));
+        a.add(getAlbums("阿富汗","4"));
+        a.add(getAlbums("奔驰","5"));
+        a.add(getAlbums("冲天一怒为红颜","6"));
+        a.add(getAlbums("东风拖拉机","7"));
+        a.add(getAlbums("易中天","8"));
+        a.add(getAlbums("京东大哥","9"));
+        a.add(getAlbums("海尔兄弟","10"));
+        a.add(getAlbums("卡夫卡","11"));
+        a.add(getAlbums("刘德华","12"));
+        a.add(getAlbums("面条爱上包子","13"));
+        a.add(getAlbums("我的天呀","14"));
+
+        return a;
+    }
+
+
     // 生成一条用户数据
     private static Contact.user getUser(String name, String id) {
         Contact.user user = new Contact.user();
@@ -64,4 +98,13 @@ public class GetTestData {
         group.setId(id);
         return group;
     }
+
+    // 生成一条专辑数据
+    private static AlbumsBean getAlbums(String name, String id) {
+        AlbumsBean a = new AlbumsBean();
+        a.title=name;
+        a.id=id;
+        return a;
+    }
+
 }

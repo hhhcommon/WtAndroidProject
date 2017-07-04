@@ -46,6 +46,7 @@ public class GroupNumberAddFragment extends Fragment implements View.OnClickList
             rootView.setOnClickListener(this);
             inItView();
             presenter = new GroupNumberAddPresenter(this);
+            presenter.getData();
         }
         return rootView;
     }
@@ -112,23 +113,4 @@ public class GroupNumberAddFragment extends Fragment implements View.OnClickList
         if (dialog != null) dialog.dismiss();
     }
 
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-    }
 }

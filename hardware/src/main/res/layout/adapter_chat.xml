@@ -46,12 +46,12 @@
 
             <ImageView
                 android:id="@+id/img_voice"
-                android:layout_width="24dp"
+                android:layout_width="48dp"
+                android:layout_height="60dp"
                 android:layout_alignParentRight="true"
-                android:layout_marginRight="12dp"
                 android:layout_centerVertical="true"
-                android:src="@mipmap/chat_icon_call"
-                android:layout_height="24dp" />
+                android:padding="12dp"
+                android:src="@mipmap/chat_icon_call" />
         </RelativeLayout>
 
 

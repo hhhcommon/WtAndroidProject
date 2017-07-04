@@ -1,6 +1,7 @@
 package com.wotingfm.ui.intercom.main.chat.adapter;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
@@ -12,7 +13,9 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.woting.commonplat.utils.BitmapUtils;
 import com.wotingfm.R;
+import com.wotingfm.common.utils.GlideUtils;
 import com.wotingfm.common.view.slidingbutton.SlidingButtonView;
 import com.wotingfm.ui.intercom.main.chat.model.TalkHistory;
 import com.wotingfm.ui.intercom.main.contacts.model.Contact;
@@ -28,7 +31,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.SimpleHolder> 
     private List<TalkHistory> t;
     private Context mContext;
 
-    private IonSlidingViewClickListener mIDeleteBtnClickListener;
+    private IonSlidingViewClickListener clickListener;
     private SlidingButtonView mMenu;
 
     public ChatAdapter(Context context, List<TalkHistory> friendList) {
@@ -41,6 +44,10 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.SimpleHolder> 
         notifyDataSetChanged();
     }
 
+    @Override
+    public int getItemCount() {
+        return t.size();
+    }
 
     @Override
     public SimpleHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -52,7 +59,19 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.SimpleHolder> 
     @Override
     public void onBindViewHolder(final SimpleHolder holder, int position) {
         holder.layout_content.getLayoutParams().width = getScreenWidth(mContext);
-        holder.tv_name.setText(t.get(position).getName());
+        String name="";
+        try {
+            name=t.get(position).getName();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        holder.tv_name.setText(name);
+        if (t.get(position).getURL()!= null && !t.get(position).getURL().equals("")) {
+            GlideUtils.loadImageViewSize(mContext, t.get(position).getURL(), 60, 60, holder.img_url, true);
+        } else {
+            Bitmap bmp = BitmapUtils.readBitMap(mContext, R.mipmap.icon_avatar_d);
+            holder.img_url.setImageBitmap(bmp);
+        }
         holder.img_voice.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -61,7 +80,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.SimpleHolder> 
                     closeMenu();//关闭菜单
                 } else {
                     int n = holder.getLayoutPosition();
-                    mIDeleteBtnClickListener.onItemClick(view, n);
+                    clickListener.onItemClick(view, n);
                 }
             }
         });
@@ -69,16 +88,21 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.SimpleHolder> 
         holder.tv_Delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (menuIsOpen()) {
+                    closeMenu();//关闭菜单
+                }
                 int n = holder.getLayoutPosition();
-
-                mIDeleteBtnClickListener.onDeleteBtnClick(view, n);
+                clickListener.onDeleteBtnClick(view, n);
             }
         });
-    }
+        holder.layout_content.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int n = holder.getLayoutPosition();
+                clickListener.onClick(view, n);
+            }
+        });
 
-    @Override
-    public int getItemCount() {
-        return t.size();
     }
 
     class SimpleHolder extends RecyclerView.ViewHolder {
@@ -119,7 +143,6 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.SimpleHolder> 
     public void closeMenu() {
         mMenu.closeMenu();
         mMenu = null;
-
     }
 
     /**
@@ -133,12 +156,12 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.SimpleHolder> 
     }
 
     public void setOnSlidListener(IonSlidingViewClickListener listener) {
-        mIDeleteBtnClickListener = listener;
+        clickListener = listener;
     }
 
     public interface IonSlidingViewClickListener {
         void onItemClick(View view, int position);
-
+        void onClick(View view, int position);
         void onDeleteBtnClick(View view, int position);
     }
 

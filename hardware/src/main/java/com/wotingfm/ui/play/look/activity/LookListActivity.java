@@ -130,9 +130,9 @@ public class LookListActivity extends NoTitleBarBaseActivity implements View.OnC
         viewPager.setOffscreenPageLimit(3);
         tabLayout.setupWithViewPager(viewPager);
 
-        mVoiceRecognizer = VoiceRecognizer.getInstance(context, BroadcastConstants.SEARCHVOICE);// 初始化语音搜索
+        mVoiceRecognizer = VoiceRecognizer.getInstance(context, BroadcastConstants.SEARCH_VOICE);// 初始化语音搜索
         IntentFilter mFilter = new IntentFilter();
-        mFilter.addAction(BroadcastConstants.SEARCHVOICE);
+        mFilter.addAction(BroadcastConstants.SEARCH_VOICE);
         context.registerReceiver(mBroadcastReceiver, mFilter);
         etSearchlike.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -153,7 +153,7 @@ public class LookListActivity extends NoTitleBarBaseActivity implements View.OnC
     private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, final Intent intent) {
-            if (intent.getAction().equals(BroadcastConstants.SEARCHVOICE)) {
+            if (intent.getAction().equals(BroadcastConstants.SEARCH_VOICE)) {
                 final String str = intent.getStringExtra("VoiceContent");
                 tvContent.setText("正在为您查找: " + str);
                 new Handler().postDelayed(new Runnable() {

@@ -1,5 +1,6 @@
 package com.wotingfm.ui.intercom.group.groupnews.add.presenter;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -7,15 +8,22 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.woting.commonplat.config.GlobalNetWorkConfig;
 import com.wotingfm.common.config.GlobalStateConfig;
+import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.common.utils.ToastUtils;
+import com.wotingfm.ui.intercom.group.groupmanage.GroupManageFragment;
+import com.wotingfm.ui.intercom.group.groupmumberadd.view.GroupNumberAddFragment;
+import com.wotingfm.ui.intercom.group.groupmumberdel.view.GroupNumberDelFragment;
+import com.wotingfm.ui.intercom.group.groupmumbershow.view.GroupNumberShowFragment;
 import com.wotingfm.ui.intercom.group.groupnews.add.model.GroupNewsForAddModel;
 import com.wotingfm.ui.intercom.group.groupnews.add.view.GroupNewsForAddFragment;
-import com.wotingfm.ui.intercom.group.groupnews.noadd.model.GroupNewsForNoAddModel;
 import com.wotingfm.ui.intercom.main.contacts.model.Contact;
+import com.wotingfm.ui.intercom.main.view.InterPhoneActivity;
+import com.wotingfm.ui.intercom.person.personmessage.view.PersonMessageFragment;
 
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,14 +35,19 @@ public class GroupNewsForAddPresenter {
 
     private final GroupNewsForAddFragment activity;
     private final GroupNewsForAddModel model;
-    private final String id;
-
+    private String gid;
+    private Contact.group g_news;
+    private List<Contact.user> list;
+    private boolean headViewShow = false;// 选择界面是否展示
 
     public GroupNewsForAddPresenter(GroupNewsForAddFragment activity) {
         this.activity = activity;
         this.model = new GroupNewsForAddModel();
-        Bundle bundle = activity.getArguments();
-        id = bundle.getString("id");
+        try {
+            gid = activity.getArguments().getString("id");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -44,6 +57,7 @@ public class GroupNewsForAddPresenter {
         if (GlobalNetWorkConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
             if (GlobalStateConfig.test) {
                 // 测试数据
+                activity.setViewForMy(true);
                 String name = "朝阳钓鱼";
                 String number = "518518";
                 String address = "北京朝阳";
@@ -51,29 +65,25 @@ public class GroupNewsForAddPresenter {
                 String channel1 = "CH100-100000";
                 String channel2 = "CH100-100000";
                 activity.setViewData(name, number, address, introduce, channel1, channel2);
-
-                List<Contact.user> list = model.getPersonList();
+                list = model.getPersonList();// 获取群成员数据
                 if (list != null && list.size() > 0) {
-                    if (list.size() > 3) {
-                        List<Contact.user> _list = new ArrayList<>();
-                        for (int i = 0; i < 3; i++) {
-                            _list.add(list.get(i));
-                        }
-                        _list.add(model.getUser("小苹果", "1", 2));
-                        _list.add(model.getUser("小苹果", "1", 3));
+                    ArrayList<Contact.user> _list = model.assemblyDataForGroup(list, true);// 组装群成员展示数据
+                    if (_list != null && _list.size() > 0) {
                         activity.setGridViewData(_list);
                     } else {
-                        list.add(model.getUser("小苹果", "1", 2));
-                        list.add(model.getUser("小苹果", "1", 3));
-                        activity.setGridViewData(list);
+                        activity.setViewForNoGroupPerson();
                     }
                 } else {
                     activity.setViewForNoGroupPerson();
                 }
             } else {
                 // 实际数据
-                getNews();
-                getGroupPerson();
+                if (gid != null && !gid.equals("")) {
+                    getNews();
+                    getGroupPerson();
+                } else {
+                    ToastUtils.show_always(activity.getActivity(), "数据出错了，请稍后再试！");
+                }
             }
         } else {
             ToastUtils.show_always(activity.getActivity(), "网络连接失败，请稍后再试！");
@@ -84,7 +94,7 @@ public class GroupNewsForAddPresenter {
      * 获取群详情
      */
     public void getNews() {
-        model.getGroupNews(id, new GroupNewsForAddModel.OnLoadInterface() {
+        model.getGroupNews(gid, new GroupNewsForAddModel.OnLoadInterface() {
             @Override
             public void onSuccess(Object o) {
                 dealSuccess(o);
@@ -110,11 +120,12 @@ public class GroupNewsForAddPresenter {
                 JSONObject arg1 = (JSONObject) jsonParser.nextValue();
                 String group = arg1.getString("chat_group");
                 // 群详情
-                Contact.group g_news = new Gson().fromJson(group, new TypeToken<Contact.group>() {
+                g_news = new Gson().fromJson(group, new TypeToken<Contact.group>() {
                 }.getType());
                 if (g_news != null) {
                     // 处理数据
                     assemblyData(g_news);
+                    activity.isLoginView(0);
                 } else {
                     // 设置数据出错界面
                     activity.isLoginView(4);
@@ -158,6 +169,21 @@ public class GroupNewsForAddPresenter {
         }
         String channel1 = "CH100-100000";
         String channel2 = "CH100-100000";
+        String cid = "";
+        try {
+            cid = g_news.getCreator_id();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        if (cid != null && !cid.equals("")) {
+            if (model.judgeMine(cid)) {
+                activity.setViewForMy(true);
+            } else {
+                activity.setViewForMy(false);
+            }
+        } else {
+            activity.setViewForMy(false);
+        }
         activity.setViewData(name, number, address, introduce, channel1, channel2);
     }
 
@@ -167,7 +193,7 @@ public class GroupNewsForAddPresenter {
      */
     public void getGroupPerson() {
         activity.dialogShow();
-        model.getGroupPerson(id, new GroupNewsForAddModel.OnLoadInterface() {
+        model.getGroupPerson(gid, new GroupNewsForAddModel.OnLoadInterface() {
             @Override
             public void onSuccess(Object o) {
                 activity.dialogCancel();
@@ -194,11 +220,17 @@ public class GroupNewsForAddPresenter {
                 JSONObject arg1 = (JSONObject) jsonParser.nextValue();
                 String group = arg1.getString("chat_group");
                 // 群成员
-                List<Contact.user> list = new Gson().fromJson(group, new TypeToken<List<Contact.user>>() {
+                list = new Gson().fromJson(group, new TypeToken<List<Contact.user>>() {
                 }.getType());
                 if (list != null) {
                     // 处理数据
-                    assemblyDataForGroup(list);
+                    boolean b = model.isAdmin(list);// 判断当前用户是否是管理员
+                    ArrayList<Contact.user> _list = model.assemblyDataForGroup(list, b);
+                    if (_list != null && _list.size() > 0) {
+                        activity.setGridViewData(_list);
+                    } else {
+                        activity.setViewForNoGroupPerson();
+                    }
                 } else {
                     // 设置数据出错界面
                     activity.setViewForNoGroupPerson();
@@ -214,28 +246,124 @@ public class GroupNewsForAddPresenter {
         }
     }
 
-    // 组建群成员界面
-    private void assemblyDataForGroup(List<Contact.user> list) {
-        // 组装数据
-        ArrayList<Contact.user> g_list = new ArrayList<>();
-        for (int i = 0; i < list.size(); i++) {
-            if (list.get(i).is_admin()) {
-                g_list.add(g_list.get(i));
+
+    /**
+     * 跳转到群管理界面
+     */
+    public void jumpManager() {
+        if (GlobalStateConfig.test) {
+            String name = "朝阳钓鱼";
+            String number = "518518";
+            String address = "北京朝阳";
+            String introduce = "这是一个钓鱼交流群";
+            String channel1 = "CH100-100000";
+            String channel2 = "CH100-100000";
+            Contact.group group = new Contact.group();
+            group.setTitle(name);
+            group.setId(number);
+            group.setLocation(address);
+            group.setIntroduction(introduce);
+
+            GroupManageFragment fragment = new GroupManageFragment();
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("group", group);
+            bundle.putSerializable("list", (Serializable) list);
+            fragment.setArguments(bundle);
+            InterPhoneActivity.open(fragment);
+        } else {
+            if (g_news != null) {
+                GroupManageFragment fragment = new GroupManageFragment();
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("group", g_news);
+                bundle.putSerializable("list", (Serializable) list);
+                fragment.setArguments(bundle);
+                InterPhoneActivity.open(fragment);
+            } else {
+                ToastUtils.show_always(activity.getActivity(), "数据出错了，请您稍后再试！");
             }
         }
-        // 数据适配
-        if (g_list != null && g_list.size() > 0) {
-            if (g_list.size() > 5) {
-                ArrayList<Contact.user> _list = new ArrayList<>();
-                for (int i = 0; i < 5; i++) {
-                    _list.add(g_list.get(i));
-                }
-                activity.setGridViewData(_list);
-            } else {
-                activity.setGridViewData(g_list);
-            }
+    }
+
+    /**
+     * 跳转到群成员展示页
+     */
+    public void jumpGroupNumberShow() {
+        String cid = "1";
+        try {
+            cid = g_news.getCreator_id();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        if (list != null && list.size() > 0) {
+            GroupNumberShowFragment fragment = new GroupNumberShowFragment();
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("list", (Serializable) list);
+            bundle.putString("id", cid);// 群创建者id
+            fragment.setArguments(bundle);
+            InterPhoneActivity.open(fragment);
         } else {
-            activity.setViewForNoGroupPerson();
+            ToastUtils.show_always(activity.getActivity(), "数据出错了，请您稍后再试！");
+        }
+    }
+
+    /**
+     * 判断界面展示
+     */
+    public void headViewShow() {
+        if (headViewShow) {
+            activity.imageShow(false);
+            headViewShow = false;
+        } else {
+            activity.imageShow(true);
+            headViewShow = true;
+        }
+    }
+
+    /**
+     * 退出该群
+     */
+    public void exit() {
+        if (GlobalStateConfig.test) {
+            activity.exitResult();// 设置返回监听
+            InterPhoneActivity.close();
+        } else {
+            if (GlobalNetWorkConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
+                activity.dialogShow();
+                model.exitGroup(gid, new GroupNewsForAddModel.OnLoadInterface() {
+                    @Override
+                    public void onSuccess(Object o) {
+                        activity.dialogCancel();
+                        dealExitGroupSuccess(o);
+                    }
+
+                    @Override
+                    public void onFailure(String msg) {
+                        activity.dialogCancel();
+                    }
+                });
+            } else {
+                ToastUtils.show_always(activity.getActivity(), "网络连接失败，请稍后再试！");
+            }
+        }
+    }
+
+    // 处理退出组返回的数据
+    private void dealExitGroupSuccess(Object o) {
+        try {
+            String s = new Gson().toJson(o);
+            JSONObject js = new JSONObject(s);
+            int ret = js.getInt("ret");
+            Log.e("退出群==ret", String.valueOf(ret));
+            if (ret == 0) {
+                activity.exitResult();// 设置返回监听
+                activity.getActivity().sendBroadcast(new Intent(BroadcastConstants.GROUP_GET));// 更新群数据
+                InterPhoneActivity.close();
+            } else {
+                ToastUtils.show_always(activity.getActivity(), "数据出错了，请您稍后再试！");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            ToastUtils.show_always(activity.getActivity(), "数据出错了，请您稍后再试！");
         }
     }
 
@@ -249,4 +377,62 @@ public class GroupNewsForAddPresenter {
             getData();
         }
     }
+
+    /**
+     * Grid的点击事件
+     *
+     * @param list
+     * @param position
+     */
+    public void setGridItemClick(List<Contact.user> list, int position) {
+        if (list != null && list.size() > 0) {
+            int type = list.get(position).getType();
+            if (type == 1) {// 跳转到群成员界面，判断是否是自己好友
+                String id = list.get(position).getId().trim();
+                if (id != null && !id.equals("")) {
+                    if (model.judgeFriends(id)) {
+                        PersonMessageFragment fragment = new PersonMessageFragment();
+                        Bundle bundle = new Bundle();
+                        bundle.putString("type", "true");
+                        bundle.putString("id", id);
+                        fragment.setArguments(bundle);
+                        InterPhoneActivity.open(fragment);
+                    } else {
+                        PersonMessageFragment fragment = new PersonMessageFragment();
+                        Bundle bundle = new Bundle();
+                        bundle.putString("type", "false");
+                        bundle.putString("id", id);
+                        fragment.setArguments(bundle);
+                        InterPhoneActivity.open(fragment);
+                    }
+                } else {
+                    ToastUtils.show_always(activity.getActivity(), "数据出错了，请稍后再试！");
+                }
+            } else if (type == 2) {// 添加群成员
+                GroupNumberAddFragment fragment = new GroupNumberAddFragment();
+                Bundle bundle = new Bundle();
+                bundle.putString("gid", gid);
+                fragment.setArguments(bundle);
+                InterPhoneActivity.open(fragment);
+            } else if (type == 3) {// 删除群成员
+                String cid = "1";
+                try {
+                    cid = g_news.getCreator_id();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                GroupNumberDelFragment fragment = new GroupNumberDelFragment();
+                Bundle bundle = new Bundle();
+                bundle.putString("gid", gid);// 群id
+                bundle.putString("id", cid);// 群创建者id
+                bundle.putSerializable("list", (Serializable) list);// 成员列表
+                fragment.setArguments(bundle);
+                InterPhoneActivity.open(fragment);
+            }
+        } else {
+            ToastUtils.show_always(activity.getActivity(), "数据出错了，请稍后再试！");
+        }
+    }
+
+
 }

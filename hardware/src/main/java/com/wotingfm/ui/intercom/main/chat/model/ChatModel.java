@@ -2,9 +2,12 @@ package com.wotingfm.ui.intercom.main.chat.model;
 
 import android.util.Log;
 
+import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.config.GlobalStateConfig;
+import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.common.utils.CommonUtils;
 import com.wotingfm.common.utils.GetTestData;
+import com.wotingfm.ui.base.model.CommonModel;
 import com.wotingfm.ui.intercom.main.chat.dao.SearchTalkHistoryDao;
 import com.wotingfm.ui.intercom.main.chat.view.ChatFragment;
 import com.wotingfm.ui.intercom.main.contacts.model.Contact;
@@ -16,7 +19,7 @@ import java.util.List;
  * 作者：xinLong on 2017/5/16 14:28
  * 邮箱：645700751@qq.com
  */
-public class ChatModel {
+public class ChatModel extends CommonModel {
     private final ChatFragment activity;
     private SearchTalkHistoryDao dbDao;
 
@@ -140,6 +143,10 @@ public class ChatModel {
         return h;
     }
 
+    /**
+     * 获取展示数据
+     * @return
+     */
     public List<TalkHistory> getData() {
         if (GlobalStateConfig.test) {
             // 测试数据
@@ -230,7 +237,12 @@ public class ChatModel {
         }
     }
 
-    // 组装好友数据
+    /**
+     * 组装好友数据
+     * @param s
+     * @param h
+     * @return
+     */
     public TalkHistory assemblyDataForPerson(Contact.user s, DBTalkHistory h) {
         if (s != null) {
             if (h == null) {
@@ -364,5 +376,41 @@ public class ChatModel {
         } else {
             return null;
         }
+    }
+
+    /**
+     * 判断是否是自己创建的群
+     *
+     * @param id
+     * @return
+     */
+    public boolean judgeGroupCreate(String id) {
+        boolean b = false;
+        Contact.group group = null;
+        List<Contact.group> list = GlobalStateConfig.list_group;
+        String pid = BSApplication.SharedPreferences.getString(StringConstant.USER_ID, "");
+        if (id != null && !id.equals("")) {
+            if (list != null && list.size() > 0) {
+                for (int i = 0; i < list.size(); i++) {
+                    String gid = list.get(i).getId();
+                    if (gid != null && !gid.equals("")) {
+                        if (gid.equals(id)) {
+                            group = list.get(i);
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+
+        if (group != null) {
+            String cid = group.getCreator_id();
+            if (cid != null && !cid.equals("")) {
+                if (cid.equals(pid)) {
+                    b = true;
+                }
+            }
+        }
+        return b;
     }
 }

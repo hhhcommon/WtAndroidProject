@@ -35,17 +35,10 @@ public class NewFriendFragment extends Fragment implements NewFriendAdapter.IonS
     private View rootView;
     private RecyclerView mRecyclerView;
     private NewFriendAdapter mAdapter;
-    private FragmentActivity context;
     private NewFriendPresenter presenter;
     private TipView tip_view;
     private int type;
     private Dialog dialog;
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        context = getActivity();
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -54,11 +47,9 @@ public class NewFriendFragment extends Fragment implements NewFriendAdapter.IonS
             rootView.setOnClickListener(this);
             inItView();
             presenter = new NewFriendPresenter(this);
-            presenter.getData();
         }
         return rootView;
     }
-
 
     // 初始化界面
     private void inItView() {
@@ -69,7 +60,7 @@ public class NewFriendFragment extends Fragment implements NewFriendAdapter.IonS
         tv_center.setText("新的朋友");
 
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.recycler_view);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(context));
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(this.getActivity()));
     }
 
     @Override
@@ -89,13 +80,12 @@ public class NewFriendFragment extends Fragment implements NewFriendAdapter.IonS
     // 适配数据
     public void updateUI(List<NewFriend> list) {
         if (mAdapter == null) {
-            mAdapter = new NewFriendAdapter(context, list);
+            mAdapter = new NewFriendAdapter(this.getActivity(), list);
             mRecyclerView.setAdapter(mAdapter);
             mRecyclerView.setItemAnimator(new DefaultItemAnimator());
         } else {
             mAdapter.notifyDataSetChanged();
         }
-
         mAdapter.setOnSlidListener(this);
     }
 
@@ -181,26 +171,5 @@ public class NewFriendFragment extends Fragment implements NewFriendAdapter.IonS
     public void dialogCancel() {
         if (dialog != null) dialog.dismiss();
     }
-
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-    }
-
 
 }

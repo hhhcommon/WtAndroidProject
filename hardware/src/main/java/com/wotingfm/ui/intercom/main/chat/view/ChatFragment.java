@@ -1,5 +1,6 @@
 package com.wotingfm.ui.intercom.main.chat.view;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -39,7 +40,6 @@ public class ChatFragment extends Fragment implements ChatAdapter.IonSlidingView
 
     private View rootView;
     private ChatPresenter presenter;
-    private FragmentActivity context;
     private RecyclerView mRecyclerView;
     private ChatAdapter mAdapter;
     private ImageView img_url_group, img_person_group;
@@ -48,13 +48,8 @@ public class ChatFragment extends Fragment implements ChatAdapter.IonSlidingView
     private RippleImageView rippleImageView_person, rippleImageView_group;
     private LinearLayout lin_back;
     private TipView tip_view;
+    private Dialog confirmDialog;
     private int type;
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        context = getActivity();
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -62,6 +57,7 @@ public class ChatFragment extends Fragment implements ChatAdapter.IonSlidingView
             rootView = inflater.inflate(R.layout.fragment_chat, container, false);
             rootView.setOnClickListener(this);
             inItView();
+            Dialog();
             isLoginView(-1);
             presenter = new ChatPresenter(this);
             presenter.getData();
@@ -94,7 +90,7 @@ public class ChatFragment extends Fragment implements ChatAdapter.IonSlidingView
 
         // 列表
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.recycler_view);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(context));
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(this.getActivity()));
     }
 
     @Override
@@ -124,11 +120,11 @@ public class ChatFragment extends Fragment implements ChatAdapter.IonSlidingView
      */
     public void updateUI(List<TalkHistory> list) {
         if (mAdapter == null) {
-            mAdapter = new ChatAdapter(context, list);
+            mAdapter = new ChatAdapter(this.getActivity(), list);
             mRecyclerView.setAdapter(mAdapter);
             mRecyclerView.setItemAnimator(new DefaultItemAnimator());
         } else {
-            mAdapter.ChangeData(list);
+            mAdapter.notifyDataSetChanged();
         }
         mAdapter.setOnSlidListener(this);
     }
@@ -252,31 +248,61 @@ public class ChatFragment extends Fragment implements ChatAdapter.IonSlidingView
     }
 
     @Override
+    public void onClick(View view, int position) {
+        presenter.itemClick(position);
+    }
+
+    /**
+     * 删除数据
+     * @param view
+     * @param position
+     */
+    @Override
     public void onDeleteBtnClick(View view, int position) {
         presenter.del(position);
     }
 
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
+    private void Dialog() {
+        final View dialog1 = LayoutInflater.from(this.getActivity()).inflate(R.layout.dialog_talk_person_del, null);
+        TextView tv_cancel = (TextView) dialog1.findViewById(R.id.tv_cancle);
+        TextView tv_confirm = (TextView) dialog1.findViewById(R.id.tv_confirm);
+        confirmDialog = new Dialog(this.getActivity(), R.style.MyDialog);
+        confirmDialog.setContentView(dialog1);
+        confirmDialog.setCanceledOnTouchOutside(true);
+        confirmDialog.getWindow().setBackgroundDrawableResource(R.color.transparent_background);
+        tv_cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                confirmDialog.dismiss();
+            }
+        });
+
+        tv_confirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                confirmDialog.dismiss();
+            }
+        });
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
+    /**
+     * 展示弹出框
+     */
+    public void dialogShow() {
+        confirmDialog.show();
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
+    /**
+     * 取消弹出框
+     */
+    public void dialogCancel() {
+        confirmDialog.dismiss();
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
         presenter.destroy();
-
     }
-
 
 }

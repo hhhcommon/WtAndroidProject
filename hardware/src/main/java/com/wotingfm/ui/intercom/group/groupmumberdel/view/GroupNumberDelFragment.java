@@ -30,7 +30,7 @@ import java.util.List;
  * 作者：xinLong on 2017/6/5 01:30
  * 邮箱：645700751@qq.com
  */
-public class GroupNumberDelFragment extends Fragment implements GroupNumberDelAdapter.IonSlidingViewClickListener,  View.OnClickListener{
+public class GroupNumberDelFragment extends Fragment implements GroupNumberDelAdapter.IonSlidingViewClickListener, View.OnClickListener {
     private View rootView;
     private RecyclerView mRecyclerView;
     private GroupNumberDelPresenter presenter;
@@ -88,6 +88,7 @@ public class GroupNumberDelFragment extends Fragment implements GroupNumberDelAd
 
     /**
      * 删除按钮的操作
+     *
      * @param view
      * @param position
      */
@@ -98,6 +99,7 @@ public class GroupNumberDelFragment extends Fragment implements GroupNumberDelAd
 
     /**
      * item的点击事件
+     *
      * @param view
      * @param position
      */
@@ -120,23 +122,4 @@ public class GroupNumberDelFragment extends Fragment implements GroupNumberDelAd
         if (dialog != null) dialog.dismiss();
     }
 
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-    }
 }

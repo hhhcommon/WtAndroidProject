@@ -39,6 +39,28 @@ public class NewFriendPresenter {
     public NewFriendPresenter(NewFriendFragment activity) {
         this.activity = activity;
         this.model = new NewFriendModel();
+        getData();// 获取数据
+    }
+
+    // 获取数据
+    private void getData() {
+        if (GlobalNetWorkConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
+            if (GlobalStateConfig.test) {
+                // 测试数据
+                list = model.getFriendList();
+                if (list != null && list.size() > 0) {
+                    activity.updateUI(list);
+                    activity.isLoginView(0);
+                } else {
+                    activity.isLoginView(1);
+                }
+            } else {
+                // 获取网络数据
+                send();
+            }
+        } else {
+            activity.isLoginView(3);
+        }
     }
 
     // 新的好友申请请求
@@ -93,29 +115,6 @@ public class NewFriendPresenter {
     }
 
     /**
-     * 获取数据
-     */
-    public void getData() {
-        if (GlobalNetWorkConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
-            if (GlobalStateConfig.test) {
-                // 测试数据
-                list = model.getFriendList();
-                if (list != null && list.size() > 0) {
-                    activity.updateUI(list);
-                    activity.isLoginView(0);
-                } else {
-                    activity.isLoginView(1);
-                }
-            } else {
-                // 获取网络数据
-                send();
-            }
-        } else {
-            activity.isLoginView(3);
-        }
-    }
-
-    /**
      * 提示事件的点击事件
      *
      * @param type
@@ -136,12 +135,27 @@ public class NewFriendPresenter {
      * @param position
      */
     public void onClick(int position) {
-        PersonMessageFragment fragment = new PersonMessageFragment();
-        Bundle bundle = new Bundle();
-        bundle.putString("type", "false");
-        bundle.putString("id", list.get(position).getId());
-        fragment.setArguments(bundle);
-        InterPhoneActivity.open(fragment);
+        String id = list.get(position).getId();
+        if (id != null && !id.equals("")) {
+            String type = list.get(position).getApply_type();
+            if (type != null && !type.equals("") && type.equals("1")) {
+                PersonMessageFragment fragment = new PersonMessageFragment();
+                Bundle bundle = new Bundle();
+                bundle.putString("type", "false");
+                bundle.putString("id", id);
+                fragment.setArguments(bundle);
+                InterPhoneActivity.open(fragment);
+            } else {
+                PersonMessageFragment fragment = new PersonMessageFragment();
+                Bundle bundle = new Bundle();
+                bundle.putString("type", "true");
+                bundle.putString("id", id);
+                fragment.setArguments(bundle);
+                InterPhoneActivity.open(fragment);
+            }
+        } else {
+            ToastUtils.show_always(activity.getActivity(), "数据出错了，请稍后再试！");
+        }
     }
 
     /**
@@ -207,12 +221,12 @@ public class NewFriendPresenter {
     // 新的好友申请==同意
     private void sendApply(final int position) {
         activity.dialogShow();
-        String s=list.get(position).getApply_id();
-        model.loadNewsForApply(s,new NewFriendModel.OnLoadInterface() {
+        String s = list.get(position).getApply_id();
+        model.loadNewsForApply(s, new NewFriendModel.OnLoadInterface() {
             @Override
             public void onSuccess(Object o) {
                 activity.dialogCancel();
-                dealApplySuccess(o,position);
+                dealApplySuccess(o, position);
             }
 
             @Override
@@ -223,7 +237,7 @@ public class NewFriendPresenter {
     }
 
     // 处理新的好友申请==同意=返回数据
-    private void dealApplySuccess(Object o,int position) {
+    private void dealApplySuccess(Object o, int position) {
         try {
             String s = new Gson().toJson(o);
             JSONObject js = new JSONObject(s);
@@ -237,7 +251,7 @@ public class NewFriendPresenter {
                 String msg = js.getString("msg");
                 if (msg != null && !msg.trim().equals("")) {
                     ToastUtils.show_always(activity.getActivity(), msg);
-                }else{
+                } else {
                     ToastUtils.show_always(activity.getActivity(), "出错了，请您稍后再试！");
                 }
             }
@@ -250,12 +264,12 @@ public class NewFriendPresenter {
     // 新的好友申请==删除
     private void sendDel(final int position) {
         activity.dialogShow();
-        String s=list.get(position).getApply_id();
-        model.loadNewsForDel(s,new NewFriendModel.OnLoadInterface() {
+        String s = list.get(position).getApply_id();
+        model.loadNewsForDel(s, new NewFriendModel.OnLoadInterface() {
             @Override
             public void onSuccess(Object o) {
                 activity.dialogCancel();
-                dealDelSuccess(o,position);
+                dealDelSuccess(o, position);
             }
 
             @Override
@@ -266,7 +280,7 @@ public class NewFriendPresenter {
     }
 
     // 处理新的好友申请==删除=返回数据
-    private void dealDelSuccess(Object o,int position) {
+    private void dealDelSuccess(Object o, int position) {
         try {
             String s = new Gson().toJson(o);
             JSONObject js = new JSONObject(s);
@@ -279,7 +293,7 @@ public class NewFriendPresenter {
                 String msg = js.getString("msg");
                 if (msg != null && !msg.trim().equals("")) {
                     ToastUtils.show_always(activity.getActivity(), msg);
-                }else{
+                } else {
                     ToastUtils.show_always(activity.getActivity(), "出错了，请您稍后再试！");
                 }
             }
@@ -292,12 +306,12 @@ public class NewFriendPresenter {
     // 新的好友申请==拒绝
     private void sendRefuse(final int position) {
         activity.dialogShow();
-        String s=list.get(position).getApply_id();
-        model.loadNewsForRefuse(s,new NewFriendModel.OnLoadInterface() {
+        String s = list.get(position).getApply_id();
+        model.loadNewsForRefuse(s, new NewFriendModel.OnLoadInterface() {
             @Override
             public void onSuccess(Object o) {
                 activity.dialogCancel();
-                dealRefuseSuccess(o,position);
+                dealRefuseSuccess(o, position);
             }
 
             @Override
@@ -308,7 +322,7 @@ public class NewFriendPresenter {
     }
 
     // 处理新的好友申请==拒绝=返回数据
-    private void dealRefuseSuccess(Object o,int position) {
+    private void dealRefuseSuccess(Object o, int position) {
         try {
             String s = new Gson().toJson(o);
             JSONObject js = new JSONObject(s);
@@ -321,7 +335,7 @@ public class NewFriendPresenter {
                 String msg = js.getString("msg");
                 if (msg != null && !msg.trim().equals("")) {
                     ToastUtils.show_always(activity.getActivity(), msg);
-                }else{
+                } else {
                     ToastUtils.show_always(activity.getActivity(), "出错了，请您稍后再试！");
                 }
             }
@@ -330,6 +344,5 @@ public class NewFriendPresenter {
             ToastUtils.show_always(activity.getActivity(), "出错了，请您稍后再试！");
         }
     }
-
 
 }

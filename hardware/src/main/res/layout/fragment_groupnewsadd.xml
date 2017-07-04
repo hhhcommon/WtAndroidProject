@@ -1,93 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background_color"
     android:orientation="vertical">
 
+    <com.woting.commonplat.widget.TipView
+        android:id="@+id/tip_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone" />
 
-    <ScrollView
+    <com.wotingfm.common.view.myscrollview.ObservableScrollView
         android:id="@+id/scrollView"
         android:layout_width="wrap_content"
+        android:scrollbars="none"
         android:layout_height="wrap_content">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@mipmap/p"
             android:orientation="vertical">
-
-            <LinearLayout
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="220dp"
-                android:orientation="vertical"
+                android:layout_height="200dp"
+                android:background="@mipmap/p"
                 android:visibility="visible">
 
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="44dp">
-
-                    <ImageView
-                        android:id="@+id/head_left_btn"
-                        android:layout_width="44dp"
-                        android:layout_height="44dp"
-                        android:layout_marginLeft="2dp"
-                        android:src="@mipmap/nav_icon_back_white" />
-
-                    <ImageView
-                        android:id="@+id/img_other"
-                        android:layout_width="44dp"
-                        android:layout_height="44dp"
-                        android:layout_alignParentRight="true"
-                        android:layout_marginRight="2dp"
-                        android:src="@mipmap/nav_icon_more_white" />
-
-                </RelativeLayout>
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
+                <TextView
+                    android:id="@+id/tv_groupName"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:visibility="visible">
-
-                    <TextView
-                        android:id="@+id/tv_groupName"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="12dp"
-                        android:layout_marginTop="98dp"
-                        android:gravity="center"
-                        android:text="爱车巨龙"
-                        android:textColor="@color/white"
-                        android:textSize="20sp" />
+                    android:layout_marginLeft="12dp"
+                    android:layout_marginTop="136dp"
+                    android:gravity="center"
+                    android:text="爱车巨龙"
+                    android:textColor="@color/white"
+                    android:textSize="20sp" />
 
 
-                    <TextView
-                        android:id="@+id/tv_news"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@+id/tv_groupName"
-                        android:layout_marginBottom="15dp"
-                        android:layout_marginLeft="12dp"
-                        android:layout_marginTop="15dp"
-                        android:gravity="center"
-                        android:text="群号"
-                        android:textColor="@color/white"
-                        android:textSize="12sp" />
+                <TextView
+                    android:id="@+id/tv_news"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="12dp"
+                    android:gravity="center"
+                    android:layout_marginTop="172dp"
+                    android:text="群号"
+                    android:textColor="@color/white"
+                    android:textSize="12sp" />
 
-                    <TextView
-                        android:id="@+id/tv_groupNumber"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignBottom="@+id/tv_news"
-                        android:layout_marginLeft="10dp"
-                        android:layout_toRightOf="@+id/tv_news"
-                        android:text="1234567"
-                        android:textColor="@color/white"
-                        android:textSize="12sp" />
-                </RelativeLayout>
-            </LinearLayout>
-
+                <TextView
+                    android:id="@+id/tv_groupNumber"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBottom="@+id/tv_news"
+                    android:layout_marginLeft="10dp"
+                    android:layout_toRightOf="@+id/tv_news"
+                    android:text="1234567"
+                    android:textColor="@color/white"
+                    android:textSize="12sp" />
+            </RelativeLayout>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -161,6 +134,7 @@
                     android:id="@+id/re_groupManager"
                     android:layout_width="match_parent"
                     android:layout_height="44dp"
+                    android:visibility="gone"
                     android:background="@color/white">
 
                     <TextView
@@ -205,9 +179,9 @@
                         android:layout_height="24dp"
                         android:layout_alignParentRight="true"
                         android:layout_marginRight="12dp"
-                        android:visibility="gone"
                         android:layout_marginTop="12dp"
-                        android:src="@mipmap/chat_icon_next" />
+                        android:src="@mipmap/chat_icon_next"
+                        android:visibility="gone" />
 
                     <TextView
                         android:id="@+id/tv_groupIntroduce"
@@ -267,6 +241,7 @@
                         android:layout_marginBottom="15dp"
                         android:layout_marginLeft="12dp"
                         android:layout_marginRight="12dp"
+                        android:scrollbars="none"
                         android:layout_marginTop="15dp"
                         android:numColumns="5"></GridView>
 
@@ -352,10 +327,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
                     android:layout_centerVertical="true"
+                    android:layout_marginBottom="140dp"
                     android:layout_marginLeft="12dp"
                     android:layout_marginRight="12dp"
                     android:layout_marginTop="20dp"
-                    android:layout_marginBottom="40dp"
                     android:background="@drawable/background_circle_app"
                     android:gravity="center"
                     android:orientation="vertical">
@@ -368,5 +343,75 @@
 
             </LinearLayout>
         </LinearLayout>
-    </ScrollView>
-</LinearLayout>
+    </com.wotingfm.common.view.myscrollview.ObservableScrollView>
+
+    <RelativeLayout
+        android:id="@+id/mRelativeLayout"
+        android:layout_width="match_parent"
+        android:layout_height="44dp">
+
+        <ImageView
+            android:id="@+id/head_left_btn"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:layout_marginLeft="2dp"
+            android:src="@mipmap/nav_icon_back_white" />
+
+        <TextView
+            android:id="@+id/tvTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            android:text="群资料"
+            android:textColor="@color/black"
+            android:textSize="17.3sp"
+            android:visibility="gone" />
+
+        <ImageView
+            android:id="@+id/img_other"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="2dp"
+            android:src="@mipmap/nav_icon_more_white" />
+
+    </RelativeLayout>
+    <LinearLayout
+        android:id="@+id/lin_chose"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/transparent_40_black"
+        android:gravity="bottom"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/tv_exit"
+            android:layout_width="match_parent"
+            android:layout_height="44dp"
+            android:background="@color/white"
+            android:gravity="center"
+            android:lineSpacingExtra="0sp"
+            android:text="退出该群"
+            android:textColor="#f25e5e"
+            android:textSize="16sp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="8dip"
+            android:background="@color/line_color" />
+
+        <TextView
+            android:id="@+id/tv_quxiao"
+            android:layout_width="match_parent"
+            android:layout_height="44dp"
+            android:background="@color/white"
+            android:gravity="center"
+            android:lineSpacingExtra="0sp"
+            android:text="取消"
+            android:textColor="#16181a"
+            android:textSize="16sp" />
+
+    </LinearLayout>
+</RelativeLayout>

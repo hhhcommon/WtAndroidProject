@@ -1,5 +1,6 @@
 package com.wotingfm.ui.intercom.add.search.local.view;
 
+import android.app.Dialog;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -14,19 +15,14 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
-
 import com.woting.commonplat.widget.HeightListView;
 import com.wotingfm.R;
 import com.wotingfm.ui.intercom.add.search.local.adapter.GroupsAdapter;
 import com.wotingfm.ui.intercom.add.search.local.presenter.SearchContactsForLocalPresenter;
-import com.wotingfm.ui.intercom.add.search.net.view.SearchContactsForNetFragment;
-import com.wotingfm.ui.intercom.group.groupnews.add.view.GroupNewsForAddFragment;
 import com.wotingfm.ui.intercom.main.contacts.adapter.ContactsAdapter;
 import com.wotingfm.ui.intercom.main.contacts.adapter.NoAdapter;
 import com.wotingfm.ui.intercom.main.contacts.model.Contact;
 import com.wotingfm.ui.intercom.main.view.InterPhoneActivity;
-import com.wotingfm.ui.intercom.person.personmessage.view.PersonMessageFragment;
-
 import java.util.List;
 
 
@@ -40,7 +36,7 @@ public class SearchContactsForLocalFragment extends Fragment implements View.OnC
     private FragmentActivity context;
     private ListView listViewG, listViewP;
     private View headView;
-    private TextView tv_clear, tv_newsP, tv_newsG;
+    private TextView tv_clear, tv_newsP, tv_newsG,tv_group_bg;
     private EditText et_search;
     private ImageView img_search;
     private SearchContactsForLocalPresenter presenter;
@@ -48,6 +44,8 @@ public class SearchContactsForLocalFragment extends Fragment implements View.OnC
     private ContactsAdapter pAdapter;
     private LinearLayout lin_background;
     private TextView tv_ts;// 提示性界面，临时使用，需替换
+    private Dialog confirmDialog;
+    private String id;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -81,6 +79,7 @@ public class SearchContactsForLocalFragment extends Fragment implements View.OnC
 
         headView = LayoutInflater.from(context).inflate(R.layout.headview_search_local, null);// 头部 view
         tv_newsP = (TextView) headView.findViewById(R.id.tv_newsP);
+        tv_group_bg = (TextView) headView.findViewById(R.id.tv_group_bg);
         tv_newsG = (TextView) headView.findViewById(R.id.tv_newsG);
         listViewP = (ListView) headView.findViewById(R.id.head_listView);
 
@@ -126,7 +125,11 @@ public class SearchContactsForLocalFragment extends Fragment implements View.OnC
 
     // 此时个人有数据
     public void setViewForPerson(List<Contact.user> person) {
+        tv_newsP.setVisibility(View.VISIBLE);
+        tv_newsG.setVisibility(View.GONE);
         lin_background.setVisibility(View.GONE);
+        tv_group_bg.setVisibility(View.GONE);
+        listViewP.setVisibility(View.VISIBLE);
         listViewG.setVisibility(View.VISIBLE);
         if (pAdapter == null) {
             pAdapter = new ContactsAdapter(context, person);
@@ -142,7 +145,11 @@ public class SearchContactsForLocalFragment extends Fragment implements View.OnC
 
     // 此时群组有数据
     public void setViewForGroup(List<Contact.group> group) {
+        tv_newsP.setVisibility(View.GONE);
+        tv_newsG.setVisibility(View.VISIBLE);
         lin_background.setVisibility(View.GONE);
+        tv_group_bg.setVisibility(View.GONE);
+        listViewP.setVisibility(View.GONE);
         listViewG.setVisibility(View.VISIBLE);
         if (gAdapter == null) {
             gAdapter = new GroupsAdapter(context, group);
@@ -155,7 +162,11 @@ public class SearchContactsForLocalFragment extends Fragment implements View.OnC
 
     // 此时群组、个人都有数据
     public void setViewForAll(List<Contact.user> person, List<Contact.group> group) {
+        tv_newsP.setVisibility(View.VISIBLE);
+        tv_newsG.setVisibility(View.VISIBLE);
         lin_background.setVisibility(View.GONE);
+        tv_group_bg.setVisibility(View.VISIBLE);
+        listViewP.setVisibility(View.VISIBLE);
         listViewG.setVisibility(View.VISIBLE);
         if (pAdapter == null) {
             pAdapter = new ContactsAdapter(context, person);
@@ -171,11 +182,11 @@ public class SearchContactsForLocalFragment extends Fragment implements View.OnC
     }
 
     // listView 的监听
-    private void setListViewListener(List<Contact.user> person) {
+    private void setListViewListener(final List<Contact.user> person) {
         pAdapter.setOnListener(new ContactsAdapter.OnListener() {
             @Override
             public void add(int position) {
-//                call(id);
+                presenter.call(position);
             }
         });
 
@@ -183,47 +194,27 @@ public class SearchContactsForLocalFragment extends Fragment implements View.OnC
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 // 跳转到好友信息界面
-                presenter.jumpForPerson(position);
-
+                presenter.jumpForPerson(person,position);
             }
         });
-
     }
 
     // 组 listView 监听
-    private void setGroupListViewListener(List<Contact.group> group) {
+    private void setGroupListViewListener(final List<Contact.group> group) {
         gAdapter.setOnListener(new GroupsAdapter.OnListener() {
             @Override
             public void add(int position) {
+                presenter.interPhone(position);
             }
         });
 
         listViewG.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                // 跳转到群组详情页面
-                presenter.jumpForGroup(position);
-
+                // 跳转到群组详情页面,需要-1
+                presenter.jumpForGroup(group,position-1);
             }
         });
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        if (rootView != null) {
-            ((ViewGroup) rootView.getParent()).removeView(rootView);
-        }
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
     }
 
     @Override
@@ -234,4 +225,53 @@ public class SearchContactsForLocalFragment extends Fragment implements View.OnC
                 break;
         }
     }
+
+    // 呼叫弹出框
+    private void Dialog() {
+        final View dialog1 = LayoutInflater.from(this.getActivity()).inflate(R.layout.dialog_talk_person_del, null);
+        TextView tv_cancel = (TextView) dialog1.findViewById(R.id.tv_cancle);
+        TextView tv_confirm = (TextView) dialog1.findViewById(R.id.tv_confirm);
+        confirmDialog = new Dialog(this.getActivity(), R.style.MyDialog);
+        confirmDialog.setContentView(dialog1);
+        confirmDialog.setCanceledOnTouchOutside(true);
+        confirmDialog.getWindow().setBackgroundDrawableResource(R.color.transparent_background);
+        tv_cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                confirmDialog.dismiss();
+            }
+        });
+
+        tv_confirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                presenter.callOk(id);
+                confirmDialog.dismiss();
+            }
+        });
+    }
+
+    /**
+     * 展示弹出框
+     */
+    public void dialogShow(String id) {
+        this.id=id;
+        confirmDialog.show();
+    }
+
+    /**
+     * 取消弹出框
+     */
+    public void dialogCancel() {
+        confirmDialog.dismiss();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        if (rootView != null) {
+            ((ViewGroup) rootView.getParent()).removeView(rootView);
+        }
+    }
+
 }

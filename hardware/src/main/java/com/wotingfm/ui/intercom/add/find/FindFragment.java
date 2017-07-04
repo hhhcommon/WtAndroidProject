@@ -15,19 +15,17 @@ import com.wotingfm.ui.intercom.main.view.InterPhoneActivity;
 import com.wotingfm.ui.intercom.scanning.activity.CaptureActivity;
 
 /**
- * 查找群组与好友
+ * 查找群组与好友（已完成）
  * 作者：xinLong on 2017/6/5 01:30
  * 邮箱：645700751@qq.com
  */
 public class FindFragment extends Fragment implements View.OnClickListener {
     private View rootView;
-    private FragmentActivity context;
-    private String fromType="group";// 界面跳转来源 添加群组=group，添加好友=friend
+    private String fromType = "group";// 界面跳转来源 添加群组=group，添加好友=friend
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        context = getActivity();
         Bundle bundle = getArguments();
         fromType = bundle.getString("type");
     }
@@ -60,7 +58,7 @@ public class FindFragment extends Fragment implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.head_left_btn:
-                close();
+                InterPhoneActivity.close();
                 break;
             case R.id.re_sao:
                 startActivity(new Intent(getActivity(), CaptureActivity.class));
@@ -80,37 +78,8 @@ public class FindFragment extends Fragment implements View.OnClickListener {
                     fragment.setArguments(bundle);
                     InterPhoneActivity.open(fragment);
                 }
-
                 break;
         }
     }
-
-    /**
-     * 关闭当前界面
-     */
-    public void close() {
-        InterPhoneActivity.close();
-    }
-
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-    }
-
 
 }

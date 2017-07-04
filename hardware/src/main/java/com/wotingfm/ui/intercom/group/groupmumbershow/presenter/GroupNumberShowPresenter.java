@@ -37,7 +37,6 @@ public class GroupNumberShowPresenter {
     public GroupNumberShowPresenter(GroupNumberShowFragment activity) {
         this.activity = activity;
         this.model = new GroupNumberShowModel();
-
     }
 
     /**
@@ -48,14 +47,6 @@ public class GroupNumberShowPresenter {
             if (GlobalStateConfig.test) {
                 // 测试数据
                 list = model.getData();
-                try {
-                    list.get(0).setType(1);
-                    list.get(1).setType(2);
-                    list.get(2).setType(2);
-                    list.get(3).setType(2);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
             } else {
                 // 实际数据
                 list = getNews();
@@ -72,70 +63,25 @@ public class GroupNumberShowPresenter {
      * 获取组装数据
      */
     public List<Contact.user> getNews() {
-        Bundle bundle = activity.getArguments();
-        String id = bundle.getString("id");// 群创建者id
-        List<Contact.user> list = (List<Contact.user>) bundle.getSerializable("list");// 成员列表
-        List<Contact.user> _list = new ArrayList<>();
-        // 有群主
-        if (id != null && !id.trim().equals("")) {
-            // 添加群主
-            for (int i = 0; i < list.size(); i++) {
-                boolean b = list.get(i).is_admin();
-                if (b) {
-                    String _id = list.get(i).getId();
-                    if (_id != null && !_id.trim().equals("")) {
-                        if (id.equals(_id)) {
-                            list.get(i).setType(1);
-                            _list.add(list.get(i));
-                        }
-                    }
-                }
-            }
-
-            // 添加管理员
-            for (int i = 0; i < list.size(); i++) {
-                boolean b = list.get(i).is_admin();
-                if (b) {
-                    String _id = list.get(i).getId();
-                    if (_id != null && !_id.trim().equals("")) {
-                        if (!id.equals(_id)) {
-                            list.get(i).setType(2);
-                            _list.add(list.get(i));
-                        }
-                    }
-                }
-            }
-
-            // 添加成员
-            for (int i = 0; i < list.size(); i++) {
-                boolean b = list.get(i).is_admin();
-                if (!b) {
-
-                    list.get(i).setType(3);
-                    _list.add(list.get(i));
-                }
-            }
-        } else {
-            // 添加管理员
-            for (int i = 0; i < list.size(); i++) {
-                boolean b = list.get(i).is_admin();
-                if (b) {
-                    list.get(i).setType(2);
-                    _list.add(list.get(i));
-                }
-            }
-            // 添加成员
-            for (int i = 0; i < list.size(); i++) {
-                boolean b = list.get(i).is_admin();
-                if (!b) {
-
-                    list.get(i).setType(3);
-                    _list.add(list.get(i));
-                }
-            }
+        String id = null;// 群创建者id
+        try {
+            id = activity.getArguments().getString("id");
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
-        return _list;
+        List<Contact.user> list = null;// 成员列表
+        try {
+            list = (List<Contact.user>) activity.getArguments().getSerializable("list");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        if (list != null && list.size() > 0) {
+            List<Contact.user> _list = model.assemblyData(list, id);
+            return _list;
+        } else {
+            return null;
+        }
     }
 
     /**
@@ -145,34 +91,20 @@ public class GroupNumberShowPresenter {
      */
     public void showPersonNews(int position) {
         // 判断当前用户是否是自己好友
-        boolean b = false;
-        String gId = "";
-        if (list != null && list.size() > 0) {
-            Contact.user u = list.get(position);
-            if (u != null) {
-                String id = u.getId();
-                gId = id;
-                if (id != null && !id.trim().equals("")) {
-                    List<Contact.user> _list = GlobalStateConfig.list_person;
-                    if (_list != null && _list.size() > 0) {
-                        for (int i = 0; i < _list.size(); i++) {
-                            String _id = _list.get(i).getId();
-                            if (_id.equals(id)) {
-                                b = true;
-                                break;
-                            }
-                        }
-                    }
-                }
-            }
+        boolean b = model.isFriend(list, position);
+        String Id = null;
+        try {
+            Id = list.get(position).getId();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        if (gId != null && !gId.equals("")) {
+        if (Id != null && !Id.equals("")) {
             if (b) {
                 // 是自己好友
                 PersonMessageFragment fragment = new PersonMessageFragment();
                 Bundle bundle = new Bundle();
                 bundle.putString("type", "true");
-                bundle.putString("id", gId);
+                bundle.putString("id", Id);
                 fragment.setArguments(bundle);
                 InterPhoneActivity.open(fragment);
             } else {
@@ -180,7 +112,7 @@ public class GroupNumberShowPresenter {
                 PersonMessageFragment fragment = new PersonMessageFragment();
                 Bundle bundle = new Bundle();
                 bundle.putString("type", "false");
-                bundle.putString("id", gId);
+                bundle.putString("id", Id);
                 fragment.setArguments(bundle);
                 InterPhoneActivity.open(fragment);
             }

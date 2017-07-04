@@ -34,13 +34,12 @@ public class InterPhonePresenter {
     public InterPhonePresenter(InterPhoneFragment activity) {
         this.activity = activity;
         this.model = new InterPhoneModel();
-        setReceiver();
+        getData();    // 获取数据，数据适配
+        setReceiver();// 设置广播接收器
     }
 
-    /**
-     * 获取数据，数据适配
-     */
-    public void getData() {
+    // 获取数据，数据适配
+    private void getData() {
         if (CommonUtils.isLogin()) {
             if (GlobalNetWorkConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
                 if (GlobalStateConfig.test) {
@@ -48,8 +47,8 @@ public class InterPhonePresenter {
                     GlobalStateConfig.list_person = GetTestData.getFriendList();
                     GlobalStateConfig.list_group = GetTestData.getGroupList();
                 } else {
-                    getUser();
-                    getGroup();
+                    getUser();//  获取好友数据
+                    getGroup();// 获取群组数据
                 }
             }
         }
@@ -102,7 +101,6 @@ public class InterPhonePresenter {
                     GlobalStateConfig.list_person = list;
                     // 发送好友数据更改广播通知所有界面
                     activity.getActivity().sendBroadcast(new Intent(BroadcastConstants.PERSON_CHANGE));
-                    Log.e("1111","广播发送");
                 }
             }
         } catch (Exception e) {
@@ -141,9 +139,9 @@ public class InterPhonePresenter {
         if (Receiver == null) {
             Receiver = new MessageReceiver();
             IntentFilter filter = new IntentFilter();
-            filter.addAction(BroadcastConstants.LOGIN);// 登录成功GROUP_CHANGE
-            filter.addAction(BroadcastConstants.GROUP_GET);// 更新群列表
-            filter.addAction(BroadcastConstants.PERSON_GET);// 更新好友
+            filter.addAction(BroadcastConstants.LOGIN);           // 登录成功GROUP_CHANGE
+            filter.addAction(BroadcastConstants.GROUP_GET);       // 更新群列表
+            filter.addAction(BroadcastConstants.PERSON_GET);      // 更新好友
             filter.addAction(BroadcastConstants.VIEW_INTER_PHONE);// 更改对讲页面viewPage的展示界面
             activity.getActivity().registerReceiver(Receiver, filter);
         }
@@ -154,22 +152,20 @@ public class InterPhonePresenter {
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
             if (action.equals(BroadcastConstants.LOGIN)) {
-                // 接收到账户更改后重新获取数据
-                getData();
-            }else if (action.equals(BroadcastConstants.VIEW_INTER_PHONE)) {
-                // 更改为对讲主页
-                activity.change(0);
-            }else if (action.equals(BroadcastConstants.GROUP_GET)) {
-                // 重新获取群组
-                getGroup();
-            }else if (action.equals(BroadcastConstants.PERSON_GET)) {
-                // 重新获取好友
-                getGroup();
+                getData();// 接收到账户更改后重新获取数据
+            } else if (action.equals(BroadcastConstants.VIEW_INTER_PHONE)) {
+                activity.change(0);// 更改为对讲主页
+            } else if (action.equals(BroadcastConstants.GROUP_GET)) {
+                getGroup();// 重新获取群组
+            } else if (action.equals(BroadcastConstants.PERSON_GET)) {
+                getGroup();// 重新获取好友
             }
         }
     }
 
-    // 界面销毁,注销广播
+    /**
+     * 界面销毁,注销广播
+     */
     public void destroy() {
         if (Receiver != null) {
             activity.getActivity().unregisterReceiver(Receiver);

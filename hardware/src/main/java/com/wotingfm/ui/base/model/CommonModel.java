@@ -1,14 +1,10 @@
 package com.wotingfm.ui.base.model;
 
-import android.content.Context;
-
-import com.woting.commonplat.config.GlobalAddressConfig;
-import com.woting.commonplat.manager.PhoneMsgManager;
 import com.wotingfm.common.config.GlobalStateConfig;
-import com.wotingfm.common.utils.CommonUtils;
+import com.wotingfm.common.utils.GetTestData;
+import com.wotingfm.ui.intercom.main.contacts.model.Contact;
 
-import org.json.JSONException;
-import org.json.JSONObject;
+import java.util.List;
 
 /**
  * 作者：xinLong on 2017/5/31 15:13
@@ -17,24 +13,50 @@ import org.json.JSONObject;
 public class CommonModel {
 
     /**
-     * 获取网络请求公共请求属性
+     * 判断该用户是否是自己好友
+     *
+     * @param id
+     * @return
      */
-    public static JSONObject getJsonObject(Context context) {
-        JSONObject jsonObject = new JSONObject();
-        try {
-            jsonObject.put("MobileClass", PhoneMsgManager.model + "::" + PhoneMsgManager.productor);
-            jsonObject.put("ScreenSize", PhoneMsgManager.ScreenWidth + "x" + PhoneMsgManager.ScreenHeight);
-            jsonObject.put("IMEI", PhoneMsgManager.imei);
-            jsonObject.put("GPS-longitude", GlobalAddressConfig.longitude);
-            jsonObject.put("GPS-latitude ", GlobalAddressConfig.latitude);
-            jsonObject.put("PCDType", GlobalStateConfig.PCDType);
-            String userId = CommonUtils.getSocketUserId();
-            if (userId != null && !userId.trim().equals("")) {
-                jsonObject.put("UserId", userId);
+    public boolean judgeFriends(String id) {
+        boolean b = false;
+        List<Contact.user> list = GlobalStateConfig.list_person;
+        if (list != null && list.size() > 0) {
+            for (int i = 0; i < list.size(); i++) {
+                String _id = list.get(i).getId();
+                if (_id != null && !_id.equals("")) {
+                    if (id.equals(_id)) {
+                        b = true;
+                        break;
+                    }
+                }
             }
-        } catch (JSONException e) {
-            e.printStackTrace();
         }
-        return jsonObject;
+        return b;
     }
+
+    /**
+     * 判断该群组是不是自己所在的群组
+     *
+     * @param id
+     * @return
+     */
+    public boolean judgeGroups(String id) {
+        boolean b = false;
+        List<Contact.group> list = GlobalStateConfig.list_group;
+        if (list != null && list.size() > 0) {
+            for (int i = 0; i < list.size(); i++) {
+                String _id = list.get(i).getId();
+                if (_id != null && !_id.equals("")) {
+                    if (id.equals(_id)) {
+                        b = true;
+                        break;
+                    }
+                }
+            }
+        }
+        return b;
+    }
+
+
 }

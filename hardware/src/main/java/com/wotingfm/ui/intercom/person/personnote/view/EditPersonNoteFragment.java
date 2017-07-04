@@ -22,11 +22,12 @@ import com.wotingfm.ui.intercom.person.personnote.presenter.EditPersonNotePresen
  * 作者：xinLong on 2017/6/5 01:30
  * 邮箱：645700751@qq.com
  */
-public class EditPersonNoteFragment extends Fragment implements View.OnClickListener{
+public class EditPersonNoteFragment extends Fragment implements View.OnClickListener {
     private View rootView;
     private EditPersonNotePresenter presenter;
     private EditText et_news;
     private Dialog dialog;
+    private ResultListener Listener;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -44,7 +45,7 @@ public class EditPersonNoteFragment extends Fragment implements View.OnClickList
         return rootView;
     }
 
-
+    // 设置界面
     private void inItView() {
         rootView.findViewById(R.id.head_left_btn).setOnClickListener(this);
         rootView.findViewById(R.id.tv_send).setOnClickListener(this);
@@ -65,6 +66,16 @@ public class EditPersonNoteFragment extends Fragment implements View.OnClickList
     }
 
     /**
+     * 返回值设置
+     *
+     * @param type
+     * @param name
+     */
+    public void setResult(boolean type, String name) {
+        Listener.resultListener(type, name);
+    }
+
+    /**
      * 展示弹出框
      */
     public void dialogShow() {
@@ -78,24 +89,17 @@ public class EditPersonNoteFragment extends Fragment implements View.OnClickList
         if (dialog != null) dialog.dismiss();
     }
 
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
+    /**
+     * 回调结果值
+     *
+     * @param l
+     */
+    public void setResultListener(ResultListener l) {
+        Listener = l;
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
+    public interface ResultListener {
+        void resultListener(boolean type, String name);
     }
 
 }

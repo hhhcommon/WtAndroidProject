@@ -39,6 +39,7 @@ public class GroupNumberShowFragment extends Fragment implements View.OnClickLis
             rootView.setOnClickListener(this);
             inItView();
             presenter = new GroupNumberShowPresenter(this);
+            presenter.getData();
         }
         return rootView;
     }

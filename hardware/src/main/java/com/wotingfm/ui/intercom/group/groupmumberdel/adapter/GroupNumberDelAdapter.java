@@ -1,6 +1,7 @@
 package com.wotingfm.ui.intercom.group.groupmumberdel.adapter;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
@@ -12,7 +13,9 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.woting.commonplat.utils.BitmapUtils;
 import com.wotingfm.R;
+import com.wotingfm.common.utils.GlideUtils;
 import com.wotingfm.common.view.slidingbutton.SlidingButtonView;
 import com.wotingfm.ui.intercom.main.contacts.model.Contact;
 import com.wotingfm.ui.intercom.person.newfriend.model.NewFriend;
@@ -48,7 +51,20 @@ public class GroupNumberDelAdapter extends RecyclerView.Adapter<GroupNumberDelAd
     public void onBindViewHolder(final SimpleHolder holder, int position) {
 
         holder.layout_content.getLayoutParams().width = getScreenWidth(mContext);
-        holder.tv_name.setText(mData.get(position).getName());
+        Contact.user lists = mData.get(position);
+        String name = lists.getName();
+        if (name != null && !name.trim().equals("")) {
+            holder.tv_name.setText(name);
+        } else {
+            holder.tv_name.setText("未知");
+        }
+
+        if (lists.getAvatar() != null && !lists.getAvatar().equals("")) {
+            GlideUtils.loadImageViewSize(mContext, lists.getAvatar(), 60, 60, holder.img_url, true);
+        } else {
+            Bitmap bmp = BitmapUtils.readBitMap(mContext, R.mipmap.icon_avatar_d);
+            holder.img_url.setImageBitmap(bmp);
+        }
 
         holder.tv_Delete.setOnClickListener(new View.OnClickListener() {
             @Override

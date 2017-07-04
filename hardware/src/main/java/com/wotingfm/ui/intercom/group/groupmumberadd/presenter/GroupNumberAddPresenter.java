@@ -39,30 +39,15 @@ public class GroupNumberAddPresenter {
      * 获取数据设置界面数据
      */
     public void getData() {
-        if (GlobalNetWorkConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
-            if (GlobalStateConfig.test) {
-                // 测试数据
-                list = model.getData();
-            } else {
-                // 实际数据
-                list = getNews();
-            }
-            if (list != null && list.size() > 0) {
-                activity.setView(list);
-            }
-        } else {
-            ToastUtils.show_always(activity.getActivity(), "网络连接失败，请稍后再试！");
+        list = GlobalStateConfig.list_person;
+        try {
+            gid = activity.getArguments().getString("gid");// 群id
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-    }
-
-    /**
-     * 获取数据
-     */
-    public List<Contact.user> getNews() {
-        List<Contact.user> list = GlobalStateConfig.list_person;
-        Bundle bundle = activity.getArguments();
-        gid = bundle.getString("gid");// 群id
-        return list;
+        if (list != null && list.size() > 0) {
+            activity.setView(list);
+        }
     }
 
     /**
@@ -86,6 +71,7 @@ public class GroupNumberAddPresenter {
             }
         }
     }
+
 
     /**
      * 添加群成员

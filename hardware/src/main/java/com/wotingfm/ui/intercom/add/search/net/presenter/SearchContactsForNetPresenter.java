@@ -10,7 +10,11 @@ import com.wotingfm.common.config.GlobalStateConfig;
 import com.wotingfm.common.utils.ToastUtils;
 import com.wotingfm.ui.intercom.add.search.net.model.SearchContactsForNetModel;
 import com.wotingfm.ui.intercom.add.search.net.view.SearchContactsForNetFragment;
+import com.wotingfm.ui.intercom.group.groupnews.add.view.GroupNewsForAddFragment;
+import com.wotingfm.ui.intercom.group.groupnews.noadd.view.GroupNewsForNoAddFragment;
 import com.wotingfm.ui.intercom.main.contacts.model.Contact;
+import com.wotingfm.ui.intercom.main.view.InterPhoneActivity;
+import com.wotingfm.ui.intercom.person.personmessage.view.PersonMessageFragment;
 
 import org.json.JSONObject;
 import org.json.JSONTokener;
@@ -38,8 +42,11 @@ public class SearchContactsForNetPresenter {
 
     // 获取界面来源
     private void getData() {
-        Bundle bundle = activity.getArguments();
-        fromType = bundle.getString("type");
+        try {
+            fromType = activity.getArguments().getString("type");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -47,7 +54,7 @@ public class SearchContactsForNetPresenter {
      */
     public void getRecommendedData() {
         if (GlobalNetWorkConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
-            if (true) {
+            if (GlobalStateConfig.test) {
                 // 测试数据
                 if (fromType.trim().equals("group")) {
                     List<Contact.group> srcList_G = model.getDataForGroup();
@@ -70,7 +77,6 @@ public class SearchContactsForNetPresenter {
         } else {
             activity.isLoginView(2);
         }
-
     }
 
     /**
@@ -137,7 +143,7 @@ public class SearchContactsForNetPresenter {
                 } else {
                     activity.isLoginView(1);
                 }
-            }else{
+            } else {
                 activity.isLoginView(4);
             }
         } catch (Exception e) {
@@ -167,7 +173,7 @@ public class SearchContactsForNetPresenter {
                 } else {
                     activity.isLoginView(1);
                 }
-            }else{
+            } else {
                 activity.isLoginView(4);
             }
         } catch (Exception e) {
@@ -187,24 +193,36 @@ public class SearchContactsForNetPresenter {
                 // 测试数据
                 if (fromType.trim().equals("group")) {
                     List<Contact.group> srcList_G = model.getDataForGroup();
-                    if(srcList_G!=null&&srcList_G.size()>0){
+                    if (srcList_G != null && srcList_G.size() > 0) {
                         if (s != null && !s.trim().equals("")) {
-                            searchForGroupData(s,srcList_G);
+                            List<Contact.group> list = model.searchForGroupData(s, srcList_G);
+                            if (list != null && list.size() > 0) {
+                                activity.setViewForGroup(list);
+                                activity.isLoginView(0);
+                            } else {
+                                activity.isLoginView(1);
+                            }
                         } else {
                             activity.isLoginView(1);
                         }
-                    }else{
+                    } else {
                         activity.isLoginView(1);
                     }
                 } else {
                     List<Contact.user> srcList_p = model.getDataForPerson();
-                    if(srcList_p!=null&&srcList_p.size()>0){
+                    if (srcList_p != null && srcList_p.size() > 0) {
                         if (s != null && !s.trim().equals("")) {
-                            searchForPersonData(s,srcList_p);
+                            List<Contact.user> list = model.searchForPersonData(s, srcList_p);
+                            if (list != null && list.size() > 0) {
+                                activity.setViewForPerson(list);
+                                activity.isLoginView(0);
+                            } else {
+                                activity.isLoginView(1);
+                            }
                         } else {
                             activity.isLoginView(1);
                         }
-                    }else{
+                    } else {
                         activity.isLoginView(1);
                     }
                 }
@@ -224,6 +242,50 @@ public class SearchContactsForNetPresenter {
     }
 
     /**
+     * 跳转到好友信息界面
+     * @param id
+     */
+    public void jumpPerson(String id){
+        if(model.judgeFriends(id)){
+            PersonMessageFragment fragment = new PersonMessageFragment();
+            Bundle bundle = new Bundle();
+            bundle.putString("type", "true");
+            bundle.putString("id",id );
+            fragment.setArguments(bundle);
+            InterPhoneActivity.open(fragment);
+        }else{
+            PersonMessageFragment fragment = new PersonMessageFragment();
+            Bundle bundle = new Bundle();
+            bundle.putString("type", "false");
+            bundle.putString("id", id);
+            fragment.setArguments(bundle);
+            InterPhoneActivity.open(fragment);
+        }
+    }
+
+    /**
+     * 跳转到群组界面
+     * @param id
+     */
+    public void jumpGroup(String id){
+        if(model.judgeGroups(id)){
+            GroupNewsForAddFragment fragment = new GroupNewsForAddFragment();
+            Bundle bundle = new Bundle();
+            bundle.putString("id",id);
+            bundle.putString("type", "true");
+            fragment.setArguments(bundle);
+            InterPhoneActivity.open(fragment);
+        }else{
+            GroupNewsForNoAddFragment fragment = new GroupNewsForNoAddFragment();
+            Bundle bundle = new Bundle();
+            bundle.putString("id", id);
+            fragment.setArguments(bundle);
+            InterPhoneActivity.open(fragment);
+        }
+    }
+
+
+    /**
      * 获取搜索的好友
      */
     public void getSearchDataForPerson(final String s) {
@@ -232,7 +294,7 @@ public class SearchContactsForNetPresenter {
             @Override
             public void onSuccess(Object o) {
                 activity.dialogCancel();
-                dealSearchUserSuccess(o,s);
+                dealSearchUserSuccess(o, s);
             }
 
             @Override
@@ -252,7 +314,7 @@ public class SearchContactsForNetPresenter {
             @Override
             public void onSuccess(Object o) {
                 activity.dialogCancel();
-                dealSearchGroupSuccess(o,s);
+                dealSearchGroupSuccess(o, s);
             }
 
             @Override
@@ -264,7 +326,7 @@ public class SearchContactsForNetPresenter {
     }
 
     // 处理搜索返回好友的数据
-    private void dealSearchUserSuccess(Object o,String str) {
+    private void dealSearchUserSuccess(Object o, String str) {
         try {
             String s = new Gson().toJson(o);
             JSONObject js = new JSONObject(s);
@@ -279,7 +341,7 @@ public class SearchContactsForNetPresenter {
                 List<Contact.user> list = new Gson().fromJson(friends, new TypeToken<List<Contact.user>>() {
                 }.getType());
                 if (list != null && list.size() > 0) {
-                    List<Contact.user> _list=model.assemblyDataForPerson(list);
+                    List<Contact.user> _list = model.assemblyDataForPerson(list);
                     if (_list != null && _list.size() > 0) {
                         activity.setViewForPerson(_list);
                         activity.isLoginView(0);
@@ -289,7 +351,7 @@ public class SearchContactsForNetPresenter {
                 } else {
                     activity.isLoginView(1);
                 }
-            }else{
+            } else {
                 activity.isLoginView(4);
             }
         } catch (Exception e) {
@@ -299,7 +361,7 @@ public class SearchContactsForNetPresenter {
     }
 
     // 处理搜索返回组的数据
-    private void dealSearchGroupSuccess(Object o,String str) {
+    private void dealSearchGroupSuccess(Object o, String str) {
         try {
             String s = new Gson().toJson(o);
             JSONObject js = new JSONObject(s);
@@ -314,7 +376,7 @@ public class SearchContactsForNetPresenter {
                 List<Contact.group> list = new Gson().fromJson(groups, new TypeToken<List<Contact.group>>() {
                 }.getType());
                 if (list != null && list.size() > 0) {
-                    List<Contact.group> _list= model.assemblyDataForGroup(list);
+                    List<Contact.group> _list = model.assemblyDataForGroup(list);
                     if (_list != null && _list.size() > 0) {
                         activity.setViewForGroup(_list);
                         activity.isLoginView(0);
@@ -324,7 +386,7 @@ public class SearchContactsForNetPresenter {
                 } else {
                     activity.isLoginView(1);
                 }
-            }else{
+            } else {
                 activity.isLoginView(4);
             }
         } catch (Exception e) {
@@ -333,27 +395,6 @@ public class SearchContactsForNetPresenter {
         }
     }
 
-    // 设置搜索数据（群组）
-    private void searchForGroupData(String s, List<Contact.group> srcList_g) {
-        List<Contact.group>  list=new ArrayList<>();
-        for(int i=0;i<srcList_g.size();i++){
-            if(srcList_g.get(i).getTitle().contains(s)){
-                list.add(srcList_g.get(i));
-            }
-        }
-        activity.setViewForGroup(list);
-    }
-
-    // 设置搜索数据（个人）
-    private void searchForPersonData(String s, List<Contact.user> srcList_p) {
-        List<Contact.user>  list=new ArrayList<>();
-        for(int i=0;i<srcList_p.size();i++){
-            if(srcList_p.get(i).getName().contains(s)){
-                list.add(srcList_p.get(i));
-            }
-        }
-        activity.setViewForPerson(list);
-    }
 
     /**
      * 异常按钮的点击事件
@@ -361,6 +402,6 @@ public class SearchContactsForNetPresenter {
      * @param type
      */
     public void tipClick(int type) {
-
+        // 此处不需要处理
     }
 }

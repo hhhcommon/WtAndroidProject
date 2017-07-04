@@ -26,6 +26,8 @@ public class GlideUtils {
      * 生命周期集成   根据Activity/Fragment生命周期自动管理请求
      * 高效处理Bitmap  使用Bitmap Pool使Bitmap复用，主动调用recycle回收需要回收的Bitmap，减小系统回收压力
      * 这里默认支持Context，Glide支持Context,Activity,Fragment，FragmentActivity
+     * 其中radius的取值范围是1-25，radius越大，模糊度越高。
+     * Glide.with(this).load(R.drawable.defalut_photo).bitmapTransform(new BlurTransformation(this, 15)).into(img_bg);
      */
 
     /**
@@ -75,7 +77,6 @@ public class GlideUtils {
         }else{
             Glide.with(mContext).load(path).placeholder(loadingImage).error(errorImageView).into(mImageView);
         }
-
     }
 
     /**

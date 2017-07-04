@@ -4,12 +4,16 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.Bundle;
 import android.util.Log;
 
+import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.config.GlobalStateConfig;
 import com.wotingfm.common.constant.BroadcastConstants;
+import com.wotingfm.common.constant.IntegerConstant;
 import com.wotingfm.common.utils.CommonUtils;
 import com.wotingfm.common.utils.ToastUtils;
+import com.wotingfm.ui.intercom.alert.call.view.CallAlertActivity;
 import com.wotingfm.ui.intercom.main.chat.model.ChatModel;
 import com.wotingfm.ui.intercom.main.chat.model.DBTalkHistory;
 import com.wotingfm.ui.intercom.main.chat.model.TalkHistory;
@@ -19,13 +23,16 @@ import com.wotingfm.ui.intercom.main.contacts.model.Contact;
 import com.wotingfm.ui.intercom.main.contacts.model.ContactsModel;
 import com.wotingfm.ui.intercom.main.contacts.view.CharacterParser;
 import com.wotingfm.ui.intercom.main.contacts.view.PinyinComparator;
+import com.wotingfm.ui.intercom.main.view.InterPhoneActivity;
 import com.wotingfm.ui.intercom.main.view.InterPhoneFragment;
+import com.wotingfm.ui.intercom.person.personmessage.view.PersonMessageFragment;
 import com.wotingfm.ui.user.logo.LogoActivity;
 
 import java.util.Collections;
 import java.util.List;
 
 /**
+ * 通讯录业务处理中心
  * 作者：xinLong on 2017/6/5 13:55
  * 邮箱：645700751@qq.com
  */
@@ -33,26 +40,21 @@ public class ContactsPresenter {
 
     private final ContactsFragment activity;
     private final ContactsModel model;
-    private final CharacterParser characterParser;
-    private final PinyinComparator pinyinComparator;
     private MessageReceiver Receiver;
     private List<Contact.user> list;
 
     public ContactsPresenter(ContactsFragment activity) {
         this.activity = activity;
         this.model = new ContactsModel(activity);
-
-        characterParser = CharacterParser.getInstance();
-        pinyinComparator = new PinyinComparator();
-        setReceiver();
+        getData();    // 获取数据
+        setReceiver();// 设置广播接收器
     }
 
-    /**
-     * 获取数据，数据适配
-     */
-    public void getData() {
+    // 获取数据，数据适配
+    private void getData() {
         if (CommonUtils.isLogin()) {
-            getFriends();
+            getFriends();// 获取数据
+            getRedData();// 设置小红点
         } else {
             activity.isLoginView(3);
         }
@@ -65,11 +67,9 @@ public class ContactsPresenter {
      */
     public void tipClick(int type) {
         if (type == 3) {
-            // 跳转到登录界面
-            activity.getActivity().startActivity(new Intent(activity.getActivity(), LogoActivity.class));
+            activity.getActivity().startActivity(new Intent(activity.getActivity(), LogoActivity.class)); // 跳转到登录界面
         } else if (type == 4) {
-            // 重新获取数据
-            getData();
+            getData();// 重新获取数据
         }
     }
 
@@ -79,14 +79,16 @@ public class ContactsPresenter {
     public void getFriends() {
         list = GlobalStateConfig.list_person;
         if (list != null && list.size() > 0) {
-            assemblyData(list);
-            activity.isLoginView(0);
-            Log.e("1111","list大小=="+list.size());
+            List<Contact.user> srcList = model.assemblyData(list);
+            if (srcList != null && srcList.size() > 0) {
+                activity.setData(srcList);
+            } else {
+                activity.setData();
+            }
         } else {
             activity.setData();
-            activity.isLoginView(0);
-            Log.e("1111","list为空");
         }
+        activity.isLoginView(0);
     }
 
     /**
@@ -98,105 +100,107 @@ public class ContactsPresenter {
         if (ChatPresenter.data != null) {
             // 此时有对讲状态
             String _t = ChatPresenter.data.getTyPe().trim();
-            if (_t != null && !_t.equals("") && _t.equals("person")) {
-                // 此时的对讲状态是单对单
-                /**
-                 * 此处需要弹出框提示以及呼叫流程
-                 * 以下代码是呼叫成功后的代码调用
-                 */
-                // 关闭对讲页面好友数据
-                activity.getActivity().sendBroadcast(new Intent(BroadcastConstants.VIEW_PERSON_CLOSE));
-                Contact.user u = list.get(position);
-                if (u != null) {
-                    DBTalkHistory l = model.assemblyData(u);
-                    String id =l.getID().trim();
-                    if(id!=null&&!id.equals("")){
-                        model.del(id);
-                    }
-                    model.add(l);
-                    activity.getActivity().sendBroadcast(new Intent(BroadcastConstants.VIEW_INTER_PHONE));// 跳转到对讲主页
-                    activity.getActivity().sendBroadcast(new Intent(BroadcastConstants.VIEW_INTER_PHONE_CHAT_OK));// 对讲主页界面，数据更新
-                } else {
-                    ToastUtils.show_always(activity.getActivity(), "数据出错了，请稍后再试！");
-                }
-            } else if (_t != null && !_t.equals("") && _t.equals("group")) {
-                // 此时的对讲状态是群组
+            if (_t != null && !_t.equals("") && _t.equals("person")) {// 此时的对讲状态是单对单
+                // 弹出选择界面
+                activity.dialogShow(position);
+            } else if (_t != null && !_t.equals("") && _t.equals("group")) {// 此时的对讲状态是群组
+                // 退出组
+                talkOverGroup();
                 // 关闭对讲页面群组数据
                 activity.getActivity().sendBroadcast(new Intent(BroadcastConstants.VIEW_GROUP_CLOSE));
-                /**
-                 * 此处需要退出组对讲，然后进行呼叫流程
-                 * 以下代码是呼叫成功后的代码调用
-                 */
-                Contact.user u = list.get(position);
-                if (u != null) {
-                    DBTalkHistory l = model.assemblyData(u);
-                    String id =l.getID().trim();
-                    if(id!=null&&!id.equals("")){
-                        model.del(id);
-                    }
-                    model.add(l);
-                    activity.getActivity().sendBroadcast(new Intent(BroadcastConstants.VIEW_INTER_PHONE));// 跳转到对讲主页
-                    activity.getActivity().sendBroadcast(new Intent(BroadcastConstants.VIEW_INTER_PHONE_CHAT_OK));// 对讲主页界面，数据更新
-                } else {
-                    ToastUtils.show_always(activity.getActivity(), "数据出错了，请稍后再试！");
-                }
-
+                // 进行呼叫
+                callPerson(position);
             }
         } else {
             // 此时没有对讲状态
-            /**
-             * 此处需要呼叫流程
-             * 以下代码是呼叫成功后的代码调用
-             */
-            //  添加到数据库
-            Contact.user u = list.get(position);
-            if (u != null) {
-                DBTalkHistory l = model.assemblyData(u);
-                String id =l.getID().trim();
-                if(id!=null&&!id.equals("")){
-                    model.del(id);
-                }
-                model.add(l);
-                activity.getActivity().sendBroadcast(new Intent(BroadcastConstants.VIEW_INTER_PHONE));// 跳转到对讲主页
-                activity.getActivity().sendBroadcast(new Intent(BroadcastConstants.VIEW_INTER_PHONE_CHAT_OK));// 对讲主页界面，数据更新
-            } else {
-                ToastUtils.show_always(activity.getActivity(), "数据出错了，请稍后再试！");
-            }
+            // 进行呼叫
+            callPerson(position);
         }
     }
 
-    // 组装数据
-    private void assemblyData(List<Contact.user> userList) {
-        try {
-            if (userList != null && userList.size() > 0) {
-                // 根据 a - z 进行排序源数据
-                List<Contact.user> srcList = filledData(userList);
-                Collections.sort(srcList, pinyinComparator);
-                activity.setData(srcList);
-            } else {
-                activity.setData();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            activity.isLoginView(4);
+    /**
+     * 同意挂断当前对讲后的操作
+     *
+     * @param position
+     */
+    public void callOk(int position) {
+        // 挂断当前会话
+        talkOver();
+        // 关闭对讲页面好友数据
+        activity.getActivity().sendBroadcast(new Intent(BroadcastConstants.VIEW_PERSON_CLOSE));
+        // 进行呼叫
+        callPerson(position);
+    }
+
+    /**
+     * 呼叫/入组成功后操作
+     */
+    public void pushCallOk() {
+        activity.getActivity().sendBroadcast(new Intent(BroadcastConstants.VIEW_INTER_PHONE));// 跳转到对讲主页
+        activity.getActivity().sendBroadcast(new Intent(BroadcastConstants.VIEW_INTER_PHONE_CHAT_OK));// 对讲主页界面，数据更新
+    }
+
+    // 挂断当前个人对讲
+    private void talkOver() {
+        if (ChatPresenter.data != null && ChatPresenter.data.getID() != null) {
+            ChatPresenter.data.getID();// 挂断电话
         }
     }
 
-    // 为 ListView 填充数据
-    private List<Contact.user> filledData(List<Contact.user> person) {
-        for (int i = 0; i < person.size(); i++) {
-            person.get(i).setName(person.get(i).getName());
-            // 汉字转换成拼音
-            String pinyin = characterParser.getSelling(person.get(i).getName());
-            String sortString = pinyin.substring(0, 1).toUpperCase();
-            // 正则表达式，判断首字母是否是英文字母
-            if (sortString.matches("[A-Z]")) {
-                person.get(i).setSortLetters(sortString.toUpperCase());
-            } else {
-                person.get(i).setSortLetters("#");
+    // 进行呼叫
+    private void callPerson(int position) {
+        Contact.user u = list.get(position);
+        if (u != null) {
+            DBTalkHistory l = model.assemblyData(u);
+            String id = l.getID().trim();
+            if (id != null && !id.equals("")) {
+                model.del(id);
+                Intent intent = new Intent(activity.getActivity(), CallAlertActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putString("id", id);
+                intent.putExtras(bundle);
+                activity.startActivity(intent);
             }
+        } else {
+            ToastUtils.show_always(activity.getActivity(), "数据出错了，请稍后再试！");
         }
-        return person;
+    }
+
+    // 退出组对讲
+    private void talkOverGroup() {
+        if (ChatPresenter.data != null && ChatPresenter.data.getID() != null) {
+            ChatPresenter.data.getID();// 退出组
+        }
+    }
+
+    /**
+     * 设置小红点样式
+     */
+    private void getRedData() {
+        int point_person = BSApplication.SharedPreferences.getInt(IntegerConstant.RED_POINT_PERSON, 0);
+        activity.setRedView("person", point_person);
+        int point_group = BSApplication.SharedPreferences.getInt(IntegerConstant.RED_POINT_GROUP, 0);
+        activity.setRedView("group", point_group);
+    }
+
+    /**
+     * 跳转到好友详情界面
+     *
+     * @param position
+     */
+    public void jump(int position) {
+        String id = list.get(position).getId();
+        if (id != null && !id.equals("")) {
+            PersonMessageFragment fragment = new PersonMessageFragment();
+            Bundle bundle = new Bundle();
+            bundle.putString("type", "true");// true是好友界面，false非好友界面
+            bundle.putString("id", id);// 好友的id
+            fragment.setArguments(bundle);
+            InterPhoneActivity.open(fragment);
+        } else {
+            ToastUtils.show_always(activity.getActivity(), "数据出错了，请稍后再试");
+        }
+
     }
 
     // 设置广播接收器
@@ -204,9 +208,12 @@ public class ContactsPresenter {
         if (Receiver == null) {
             Receiver = new MessageReceiver();
             IntentFilter filter = new IntentFilter();
-            filter.addAction(BroadcastConstants.CANCEL);
-            filter.addAction(BroadcastConstants.LOGIN);
-            filter.addAction(BroadcastConstants.PERSON_CHANGE);
+            filter.addAction(BroadcastConstants.CANCEL);       // 注销的监听
+            filter.addAction(BroadcastConstants.LOGIN);        // 登录的监听
+            filter.addAction(BroadcastConstants.PERSON_CHANGE);// 好友更改广播
+            filter.addAction(BroadcastConstants.PUSH_CALL_SEND);// 单对单呼叫成功
+            // 小红点更改的广播
+            filter.addAction(BroadcastConstants.VIEW_INTER_PHONE_POINT_CHANGE);
             activity.getActivity().registerReceiver(Receiver, filter);
         }
     }
@@ -215,19 +222,25 @@ public class ContactsPresenter {
         @Override
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
-            if (action.equals(BroadcastConstants.CANCEL)) {
+            if (action.equals(BroadcastConstants.CANCEL)) {              // 注销的监听
                 // 设置未登录界面
                 activity.isLoginView(3);
-            } else if (action.equals(BroadcastConstants.LOGIN)) {
+            } else if (action.equals(BroadcastConstants.LOGIN)) {        // 登录的监听
                 getData();
-            } else if (action.equals(BroadcastConstants.PERSON_CHANGE)) {
-                Log.e("1111","广播接收");
+            } else if (action.equals(BroadcastConstants.PERSON_CHANGE)) {// 好友更改广播
                 getData();
+            } else if (action.equals(BroadcastConstants.VIEW_INTER_PHONE_POINT_CHANGE)) {
+                // 小红点更改的广播
+                getRedData();
+            } else if (action.equals(BroadcastConstants.PUSH_CALL_SEND)) {// 单对单呼叫成功
+                pushCallOk();
             }
         }
     }
 
-    // 界面销毁,注销广播
+    /**
+     * 界面销毁,注销广播
+     */
     public void destroy() {
         if (Receiver != null) {
             activity.getActivity().unregisterReceiver(Receiver);

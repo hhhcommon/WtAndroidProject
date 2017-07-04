@@ -9,7 +9,7 @@ package com.wotingfm.common.constant;
 public class BroadcastConstants {
     // 是否打开了个人中心界面
     public static final String MINE_ACTIVITY_CHANGE = "MINE_ACTIVITY_CHANGE";
-    public static final String SEARCHVOICE = "SEARCHVOICE";
+    public static final String SEARCH_VOICE = "SEARCH_VOICE";
     // 全局按钮监听
     public static final String ACTIVITY_CHANGE = "ACTIVITY_CHANGE";
 
@@ -45,5 +45,14 @@ public class BroadcastConstants {
 
     // 有新的对讲连接成功时，对讲页面更改，数据更改
     public static final String VIEW_INTER_PHONE_CHAT_OK = "VIEW_INTER_PHONE_CHAT_OK";
+
+    // 通讯录小红点的样式更改
+    public static final String VIEW_INTER_PHONE_POINT_CHANGE = "VIEW_INTER_PHONE_POINT_CHANGE";
+
+    // 发送单对单呼叫成功
+    public static final String PUSH_CALL_SEND = "PUSH_CALL_SEND";
+
+    // 接收单对单呼叫成功
+    public static final String PUSH_CALL_REC = "PUSH_CALL_REC";
 
 }

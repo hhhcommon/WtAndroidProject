@@ -38,7 +38,7 @@ public class VideoDialog extends Dialog {
 
         setCanceledOnTouchOutside(true);
 
-        mVoiceRecognizer = VoiceRecognizer.getInstance(context, BroadcastConstants.SEARCHVOICE);// 初始化语音搜索
+        mVoiceRecognizer = VoiceRecognizer.getInstance(context, BroadcastConstants.SEARCH_VOICE);// 初始化语音搜索
         fragmentVideo = (FrameLayout) findViewById(R.id.fragmentVideo);
         tvTitle = (TextView) findViewById(R.id.tvTitle);
         tvContent = (TextView) findViewById(R.id.tvContent);

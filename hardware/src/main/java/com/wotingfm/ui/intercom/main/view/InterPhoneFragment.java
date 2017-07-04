@@ -41,17 +41,9 @@ public class InterPhoneFragment extends Fragment implements View.OnClickListener
     private TextView tv_chat, tv_linkman, line_chat, line_linkman;
     private PopupWindow addDialog;
     private ViewPager mPager;
-    private ImageView img_more;
+    private ImageView img_more,img_person;
     private View rootView;
-    private FragmentActivity context;
-    private ImageView img_person;
     private InterPhonePresenter presenter;
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        context = getActivity();
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -61,22 +53,21 @@ public class InterPhoneFragment extends Fragment implements View.OnClickListener
             InitViewPager(); // 初始化 ViewPager
             dialog();        // 初始化功能弹出框
             presenter = new InterPhonePresenter(this);
-            presenter.getData();
         }
         return rootView;
     }
 
     // 初始化视图
     private void InitTextView() {
-        img_more = (ImageView) rootView.findViewById(R.id.img_more);
+        img_more = (ImageView) rootView.findViewById(R.id.img_more);       // 三个点
         img_more.setOnClickListener(this);
-
-        img_person = (ImageView) rootView.findViewById(R.id.img_person);
+        img_person = (ImageView) rootView.findViewById(R.id.img_person);   // 个人中心
         img_person.setOnClickListener(this);
-        tv_chat = (TextView) rootView.findViewById(R.id.tv_chat);
-        line_chat = (TextView) rootView.findViewById(R.id.line_chat);
-        tv_linkman = (TextView) rootView.findViewById(R.id.tv_linkman);
-        line_linkman = (TextView) rootView.findViewById(R.id.line_linkman);
+
+        tv_chat = (TextView) rootView.findViewById(R.id.tv_chat);          // 展示条
+        line_chat = (TextView) rootView.findViewById(R.id.line_chat);      // 展示条
+        tv_linkman = (TextView) rootView.findViewById(R.id.tv_linkman);    // 展示条
+        line_linkman = (TextView) rootView.findViewById(R.id.line_linkman);// 展示条
 
         tv_chat.setOnClickListener(new txListener(0));
         tv_linkman.setOnClickListener(new txListener(1));
@@ -88,7 +79,7 @@ public class InterPhoneFragment extends Fragment implements View.OnClickListener
         mPager = (ViewPager) rootView.findViewById(R.id.viewpager);
         mPager.setOffscreenPageLimit(1);
         ArrayList<Fragment> fragmentList = new ArrayList<>();
-        Fragment ctFragment = new ChatFragment();// 电台首页
+        Fragment ctFragment = new ChatFragment();   // 对讲页
         Fragment cFragment = new ContactsFragment();// 通讯录
         fragmentList.add(ctFragment);
         fragmentList.add(cFragment);
@@ -99,7 +90,7 @@ public class InterPhoneFragment extends Fragment implements View.OnClickListener
 
     // "更多" 对话框
     private void dialog() {
-        View dialog = LayoutInflater.from(context).inflate(R.layout.dialog_intercom, null);
+        View dialog = LayoutInflater.from(this.getActivity()).inflate(R.layout.dialog_intercom, null);
         TextView tv_addFriend = (TextView) dialog.findViewById(R.id.tv_addFriend);        // 添加好友
         TextView tv_addGroup = (TextView) dialog.findViewById(R.id.tv_addGroup);          // 加入群组
         TextView tv_createGroup = (TextView) dialog.findViewById(R.id.tv_createGroup);    // 创建群组
@@ -143,7 +134,7 @@ public class InterPhoneFragment extends Fragment implements View.OnClickListener
                     fragment.setArguments(bundle);
                     InterPhoneActivity.open(fragment);
                 } else {
-                    startActivity(new Intent(context, LogoActivity.class));
+                    startActivity(new Intent(this.getActivity(), LogoActivity.class));
                 }
                 addDialog.dismiss();
                 break;
@@ -155,7 +146,7 @@ public class InterPhoneFragment extends Fragment implements View.OnClickListener
                     fragment.setArguments(bundle);
                     InterPhoneActivity.open(fragment);
                 } else {
-                    startActivity(new Intent(context, LogoActivity.class));
+                    startActivity(new Intent(this.getActivity(), LogoActivity.class));
                 }
                 addDialog.dismiss();
                 break;
@@ -163,15 +154,15 @@ public class InterPhoneFragment extends Fragment implements View.OnClickListener
                 if (CommonUtils.isLogin()) {
                     InterPhoneActivity.open(new CreateGroupMainFragment());
                 } else {
-                    startActivity(new Intent(context, LogoActivity.class));
+                    startActivity(new Intent(this.getActivity(), LogoActivity.class));
                 }
                 addDialog.dismiss();
                 break;
             case R.id.tv_scanning:
                 if (CommonUtils.isLogin()) {
-                    startActivity(new Intent(context, CaptureActivity.class));
+                    startActivity(new Intent(this.getActivity(), CaptureActivity.class));
                 } else {
-                    startActivity(new Intent(context, LogoActivity.class));
+                    startActivity(new Intent(this.getActivity(), LogoActivity.class));
                 }
                 addDialog.dismiss();
                 break;
@@ -188,7 +179,7 @@ public class InterPhoneFragment extends Fragment implements View.OnClickListener
                 Bundle bundle = new Bundle();
                 bundle.putInt("viewType", 3);
                 push.putExtras(bundle);
-                context.sendBroadcast(push);
+                this.getActivity().sendBroadcast(push);
                 break;
         }
 
@@ -224,27 +215,26 @@ public class InterPhoneFragment extends Fragment implements View.OnClickListener
         }
     }
 
-
     // 设置头部样式
     private void update(int arg0) {
         mPager.setCurrentItem(arg0);
         if (arg0 == 0) {
-            tv_chat.setTextColor(context.getResources().getColor(R.color.app_basic));
-            tv_linkman.setTextColor(context.getResources().getColor(R.color.black_head_word));
-//            line_chat.setBackgroundResource(R.color.app_basic);
-//            line_linkman.setBackgroundResource(R.color.gray_edit_hint_word);
+            tv_chat.setTextColor(this.getActivity().getResources().getColor(R.color.app_basic));
+            tv_linkman.setTextColor(this.getActivity().getResources().getColor(R.color.black_head_word));
             line_chat.setVisibility(View.VISIBLE);
             line_linkman.setVisibility(View.INVISIBLE);
         } else if (arg0 == 1) {
-            tv_chat.setTextColor(context.getResources().getColor(R.color.black_head_word));
-            tv_linkman.setTextColor(context.getResources().getColor(R.color.app_basic));
-//            line_chat.setBackgroundResource(R.color.gray_edit_hint_word);
-//            line_linkman.setBackgroundResource(R.color.app_basic);
+            tv_chat.setTextColor(this.getActivity().getResources().getColor(R.color.black_head_word));
+            tv_linkman.setTextColor(this.getActivity().getResources().getColor(R.color.app_basic));
             line_chat.setVisibility(View.INVISIBLE);
             line_linkman.setVisibility(View.VISIBLE);
         }
     }
 
+    /**
+     * 更改样式
+     * @param type
+     */
     public void change(int type) {
         update(type);
     }

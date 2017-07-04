@@ -143,6 +143,18 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
 
+        <!--  -->
+        <activity
+            android:name="com.wotingfm.ui.intercom.alert.receive.view.ReceiveAlertActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" />
+
+        <!--  -->
+        <activity
+            android:name="com.wotingfm.ui.intercom.alert.call.view.CallAlertActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" />
+
         <service android:name=".common.service.FloatingWindowService" />
 
     </application>

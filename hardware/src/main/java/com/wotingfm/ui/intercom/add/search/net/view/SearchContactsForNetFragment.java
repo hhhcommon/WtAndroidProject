@@ -16,23 +16,15 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
-
-import com.woting.commonplat.widget.HeightListView;
 import com.woting.commonplat.widget.TipView;
 import com.wotingfm.R;
 import com.wotingfm.common.utils.DialogUtils;
-import com.wotingfm.ui.intercom.add.search.local.adapter.GroupsAdapter;
+import com.wotingfm.common.utils.ToastUtils;
 import com.wotingfm.ui.intercom.add.search.net.adapter.SearchContactsForGroupAdapter;
 import com.wotingfm.ui.intercom.add.search.net.adapter.SearchContactsForUserAdapter;
 import com.wotingfm.ui.intercom.add.search.net.presenter.SearchContactsForNetPresenter;
-import com.wotingfm.ui.intercom.group.groupnews.add.view.GroupNewsForAddFragment;
-import com.wotingfm.ui.intercom.group.groupnews.noadd.view.GroupNewsForNoAddFragment;
-import com.wotingfm.ui.intercom.main.contacts.adapter.ContactsAdapter;
-import com.wotingfm.ui.intercom.main.contacts.adapter.NoAdapter;
 import com.wotingfm.ui.intercom.main.contacts.model.Contact;
 import com.wotingfm.ui.intercom.main.view.InterPhoneActivity;
-import com.wotingfm.ui.intercom.person.personmessage.view.PersonMessageFragment;
-
 import java.util.List;
 
 /**
@@ -118,7 +110,19 @@ public class SearchContactsForNetFragment extends Fragment implements View.OnCli
         presenter.tipClick(type);
     }
 
-    // 设置可能认识的人有数据的界面（个人）
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.tv_clear:
+                InterPhoneActivity.close();
+                break;
+        }
+    }
+
+    /**
+     * 设置可能认识的人有数据的界面（个人）
+     * @param list
+     */
     public void setViewForPosPerson(List<Contact.user> list) {
         if (searchContactsForUserAdapter == null) {
             searchContactsForUserAdapter = new SearchContactsForUserAdapter(context, list);
@@ -129,7 +133,10 @@ public class SearchContactsForNetFragment extends Fragment implements View.OnCli
         setPosPersonListViewListener(list);
     }
 
-    // 设置可能认识的人有数据的界面（群组）
+    /**
+     * 设置可能认识的人有数据的界面（群组）
+     * @param list
+     */
     public void setViewForPosGroup(List<Contact.group> list) {
         if (searchContactsForGroupAdapter == null) {
             searchContactsForGroupAdapter = new SearchContactsForGroupAdapter(context, list);
@@ -140,7 +147,10 @@ public class SearchContactsForNetFragment extends Fragment implements View.OnCli
         setPosGroupListViewListener(list);
     }
 
-    // 设置个人有数据
+    /**
+     * 设置个人有数据
+     * @param person
+     */
     public void setViewForPerson(List<Contact.user> person) {
         if (pAdapter == null) {
             pAdapter = new SearchContactsForUserAdapter(context, person);
@@ -152,7 +162,10 @@ public class SearchContactsForNetFragment extends Fragment implements View.OnCli
 
     }
 
-    // 设置群组有数据
+    /**
+     * 设置群组有数据
+     * @param group
+     */
     public void setViewForGroup(List<Contact.group> group) {
         if (gAdapter == null) {
             gAdapter = new SearchContactsForGroupAdapter(context, group);
@@ -169,12 +182,12 @@ public class SearchContactsForNetFragment extends Fragment implements View.OnCli
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 // 跳转到好友信息界面
-                PersonMessageFragment fragment = new PersonMessageFragment();
-                Bundle bundle = new Bundle();
-                bundle.putString("type", "false");
-                bundle.putString("id", person.get(position).getId());
-                fragment.setArguments(bundle);
-                InterPhoneActivity.open(fragment);
+                String _id = person.get(position).getId();
+                if (_id != null && !_id.equals("")) {
+                    presenter.jumpPerson(_id);
+                } else {
+                    ToastUtils.show_always(context, "数据出错了，请稍后再试！");
+                }
             }
         });
     }
@@ -185,11 +198,12 @@ public class SearchContactsForNetFragment extends Fragment implements View.OnCli
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 // 跳转到群组详情页面
-                GroupNewsForNoAddFragment fragment = new GroupNewsForNoAddFragment();
-                Bundle bundle = new Bundle();
-                bundle.putString("id", group.get(position).getId());
-                fragment.setArguments(bundle);
-                InterPhoneActivity.open(fragment);
+                String _id = group.get(position).getId();
+                if (_id != null && !_id.equals("")) {
+                    presenter.jumpGroup(_id);
+                } else {
+                    ToastUtils.show_always(context, "数据出错了，请稍后再试！");
+                }
             }
         });
     }
@@ -200,12 +214,12 @@ public class SearchContactsForNetFragment extends Fragment implements View.OnCli
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 // 跳转到好友信息界面
-                PersonMessageFragment fragment = new PersonMessageFragment();
-                Bundle bundle = new Bundle();
-                bundle.putString("type", "false");
-                bundle.putString("id", person.get(position).getId());
-                fragment.setArguments(bundle);
-                InterPhoneActivity.open(fragment);
+                String _id = person.get(position).getId();
+                if (_id != null && !_id.equals("")) {
+                    presenter.jumpPerson(_id);
+                } else {
+                    ToastUtils.show_always(context, "数据出错了，请稍后再试！");
+                }
             }
         });
 
@@ -217,11 +231,13 @@ public class SearchContactsForNetFragment extends Fragment implements View.OnCli
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 // 跳转到群组详情页面
-                GroupNewsForNoAddFragment fragment = new GroupNewsForNoAddFragment();
-                Bundle bundle = new Bundle();
-                bundle.putString("id", group.get(position).getId());
-                fragment.setArguments(bundle);
-                InterPhoneActivity.open(fragment);
+                String _id = group.get(position).getId();
+                if (_id != null && !_id.equals("")) {
+                    presenter.jumpGroup(_id);
+                } else {
+                    ToastUtils.show_always(context, "数据出错了，请稍后再试！");
+                }
+
             }
         });
     }
@@ -291,32 +307,5 @@ public class SearchContactsForNetFragment extends Fragment implements View.OnCli
         if (dialog != null) dialog.dismiss();
     }
 
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-    }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-    }
-
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.tv_clear:
-                InterPhoneActivity.close();
-                break;
-        }
-    }
 }

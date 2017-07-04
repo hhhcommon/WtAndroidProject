@@ -1,5 +1,6 @@
 package com.wotingfm.ui.intercom.group.groupchat.view;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -28,20 +29,15 @@ import java.util.List;
  * 作者：xinLong on 2017/6/5 01:30
  * 邮箱：645700751@qq.com
  */
-public class GroupChatFragment extends Fragment implements View.OnClickListener,TipView.TipViewClick {
+public class GroupChatFragment extends Fragment implements View.OnClickListener, TipView.TipViewClick {
     private View rootView;
     private ExpandableListView spListView;
     private GroupChatPresenter presenter;
-    private FragmentActivity context;
     private GroupChatAdapter adapter;
     private TipView tip_view;
     private int type;
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        context=getActivity();
-    }
+    private Dialog confirmDialog;
+    private String id;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -49,8 +45,8 @@ public class GroupChatFragment extends Fragment implements View.OnClickListener,
             rootView = inflater.inflate(R.layout.fragment_mychat, container, false);
             rootView.setOnClickListener(this);
             inItView();
+            Dialog();
             presenter = new GroupChatPresenter(this);
-            presenter.getData();
         }
         return rootView;
     }
@@ -66,6 +62,12 @@ public class GroupChatFragment extends Fragment implements View.OnClickListener,
 
             @Override
             public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
+                if (parent.isGroupExpanded(groupPosition)) {
+                    parent.collapseGroup(groupPosition);
+                } else {
+                    //第二个参数false表示展开时是否触发默认滚动动画
+                    parent.expandGroup(groupPosition, false);
+                }
                 return true;
             }
         });
@@ -79,7 +81,7 @@ public class GroupChatFragment extends Fragment implements View.OnClickListener,
         spListView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
             @Override
             public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
-                presenter.jump(groupPosition,childPosition);
+                presenter.jump(groupPosition, childPosition);
                 return false;
             }
         });
@@ -99,13 +101,33 @@ public class GroupChatFragment extends Fragment implements View.OnClickListener,
         }
     }
 
-    public void setView(List<GroupChat> list){
-        adapter = new GroupChatAdapter(context, list);
-        spListView.setAdapter(adapter);
-
+    /**
+     * 适配数据
+     * @param list
+     */
+    public void setView(List<GroupChat> list) {
+        if (adapter == null) {
+            adapter = new GroupChatAdapter(this.getActivity(), list);
+            spListView.setAdapter(adapter);
+        } else {
+            adapter.changeData(list);
+        }
         for (int i = 0; i < list.size(); i++) {
             spListView.expandGroup(i);
         }
+        onItemClick();
+    }
+
+    /**
+     * 点击适配器
+     */
+    public void onItemClick() {
+        adapter.setClickListener(new GroupChatAdapter.clickListener() {
+            @Override
+            public void onItemClick(int groupPosition, int childPosition) {
+                presenter.interPhone(groupPosition, childPosition);
+            }
+        });
     }
 
     /**
@@ -119,7 +141,7 @@ public class GroupChatFragment extends Fragment implements View.OnClickListener,
      *             IS_ERROR,加载错误 4
      */
     public void isLoginView(int type) {
-        this.type=type;
+        this.type = type;
         if (type == 0) {
             // 已经登录，并且有数据
             spListView.setVisibility(View.VISIBLE);
@@ -128,7 +150,7 @@ public class GroupChatFragment extends Fragment implements View.OnClickListener,
             // 已经登录，没有数据
             spListView.setVisibility(View.GONE);
             tip_view.setVisibility(View.VISIBLE);
-            tip_view.setTipView(TipView.TipStatus.NO_DATA, "您还没有聊天对象哟\n快去找好友们聊天吧");
+            tip_view.setTipView(TipView.TipStatus.NO_DATA, "您还没有加入的群组哟\n快去创建吧");
         } else if (type == 2) {
             // 没有网络
             spListView.setVisibility(View.GONE);
@@ -147,25 +169,44 @@ public class GroupChatFragment extends Fragment implements View.OnClickListener,
         }
     }
 
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
+    // 呼叫弹出框
+    private void Dialog() {
+        final View dialog1 = LayoutInflater.from(this.getActivity()).inflate(R.layout.dialog_talk_person_del, null);
+        TextView tv_cancel = (TextView) dialog1.findViewById(R.id.tv_cancle);
+        TextView tv_confirm = (TextView) dialog1.findViewById(R.id.tv_confirm);
+        confirmDialog = new Dialog(this.getActivity(), R.style.MyDialog);
+        confirmDialog.setContentView(dialog1);
+        confirmDialog.setCanceledOnTouchOutside(true);
+        confirmDialog.getWindow().setBackgroundDrawableResource(R.color.transparent_background);
+        tv_cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                confirmDialog.dismiss();
+            }
+        });
+
+        tv_confirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                presenter.callOk(id);
+                confirmDialog.dismiss();
+            }
+        });
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
+    /**
+     * 展示弹出框
+     */
+    public void dialogShow(String id) {
+        this.id = id;
+        confirmDialog.show();
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
+    /**
+     * 取消弹出框
+     */
+    public void dialogCancel() {
+        confirmDialog.dismiss();
     }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-    }
-
 
 }

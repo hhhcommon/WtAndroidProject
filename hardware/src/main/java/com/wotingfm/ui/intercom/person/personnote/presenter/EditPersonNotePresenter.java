@@ -1,11 +1,16 @@
 package com.wotingfm.ui.intercom.person.personnote.presenter;
 
-import android.os.Bundle;
+import android.util.Log;
 
+import com.google.gson.Gson;
 import com.woting.commonplat.config.GlobalNetWorkConfig;
+import com.wotingfm.common.config.GlobalStateConfig;
 import com.wotingfm.common.utils.ToastUtils;
+import com.wotingfm.ui.intercom.main.view.InterPhoneActivity;
 import com.wotingfm.ui.intercom.person.personnote.model.EditPersonNoteModel;
 import com.wotingfm.ui.intercom.person.personnote.view.EditPersonNoteFragment;
+
+import org.json.JSONObject;
 
 /**
  * 作者：xinLong on 2017/6/5 13:55
@@ -15,44 +20,72 @@ public class EditPersonNotePresenter {
 
     private final EditPersonNoteFragment activity;
     private final EditPersonNoteModel model;
-    private final String id;
-
+    private String id;
 
     public EditPersonNotePresenter(EditPersonNoteFragment activity) {
         this.activity = activity;
         this.model = new EditPersonNoteModel();
-       Bundle bundle= activity.getArguments();
-        id= bundle.getString("id");
+        try {
+            id = activity.getArguments().getString("id");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     /**
      * 发送申请
+     *
      * @param s
      */
-    public void send(String s) {
-        if(s!=null&&!s.trim().equals("")){
-            if (GlobalNetWorkConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
-                activity.dialogShow();
-            model.loadNews(id,s, new EditPersonNoteModel.OnLoadInterface() {
-                @Override
-                public void onSuccess(Object o) {
-                    activity.dialogCancel();                    dealSuccess(o);
-                }
-
-                @Override
-                public void onFailure(String msg) {
-                    activity.dialogCancel();
-                }
-            });
-            }else{
-                ToastUtils.show_always(activity.getActivity(), "网络连接失败，请稍后再试！");
+    public void send(final String s) {
+        if (GlobalStateConfig.test) {
+            if (s != null && !s.trim().equals("")) {
+                activity.setResult(true, s);
+                InterPhoneActivity.close();
+            } else {
+                ToastUtils.show_always(activity.getActivity(), "提交数据不能为空");
             }
-        }else{
-            ToastUtils.show_always(activity.getActivity(),"提交数据不能为空");
+        } else {
+            if (s != null && !s.trim().equals("")) {
+                if (GlobalNetWorkConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
+                    activity.dialogShow();
+                    model.loadNews(id, s, new EditPersonNoteModel.OnLoadInterface() {
+                        @Override
+                        public void onSuccess(Object o) {
+                            activity.dialogCancel();
+                            dealSuccess(o, s);
+                        }
+
+                        @Override
+                        public void onFailure(String msg) {
+                            activity.dialogCancel();
+                        }
+                    });
+                } else {
+                    ToastUtils.show_always(activity.getActivity(), "网络连接失败，请稍后再试！");
+                }
+            } else {
+                ToastUtils.show_always(activity.getActivity(), "提交数据不能为空");
+            }
         }
     }
 
-    private void dealSuccess(Object o) {
+    private void dealSuccess(Object o, String name) {
+        try {
+            String s = new Gson().toJson(o);
+            JSONObject js = new JSONObject(s);
+            int ret = js.getInt("ret");
+            Log.e("ret", String.valueOf(ret));
+            if (ret == 0) {
+                activity.setResult(true, name);
+                InterPhoneActivity.close();
+            } else {
+                ToastUtils.show_always(activity.getActivity(), "修改失败，请稍后再试！");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            ToastUtils.show_always(activity.getActivity(), "修改失败，请稍后再试！");
+        }
     }
 
 

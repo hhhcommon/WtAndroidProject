@@ -1,41 +1,31 @@
-<android.support.design.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:background="@color/background_color"
-    android:layout_height="match_parent">
+    android:orientation="vertical">
+
     <com.woting.commonplat.widget.TipView
         android:id="@+id/tip_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:visibility="gone" />
-    <android.support.design.widget.AppBarLayout
-        android:id="@+id/app_bar"
-        android:layout_width="match_parent"
-        android:layout_height="200dp">
-        <!--1.scroll 表示CollapsingToolbarLayout可以滚动（不设置的话头部的ImageView将不能折叠）-->
-        <!--2.enterAlways 表示底部的滚动控件只要向下滚动，头部就显示出来-->
-        <!--3.enterAlwaysCollapsed 表示当底部滚动控件滚动见顶时，头部显示出来-->
-        <!--4.exitUntilCollapsed 表示头部折叠到最小高度时（Toolbar的高度），就不再折叠-->
-        <!--5.snap 表示在滑动过程中如果停止滑动，则头部会就近折叠（要么恢复原状，要么折叠成一个Toolbar）-->
-        <android.support.design.widget.CollapsingToolbarLayout
-            android:id="@+id/toolbar_layout"
+
+    <com.wotingfm.common.view.myscrollview.ObservableScrollView
+        android:id="@+id/scrollView"
+        android:layout_width="wrap_content"
+        android:scrollbars="none"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="200dp"
-            app:contentScrim="@color/white"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed|enterAlwaysCollapsed">
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="200dp">
-
-                <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:scaleType="centerCrop"
-                    android:src="@mipmap/p"
-                    app:layout_collapseMode="parallax"
-                    app:layout_collapseParallaxMultiplier="0.7" />
+                android:layout_height="200dp"
+                android:background="@mipmap/p">
 
                 <TextView
                     android:id="@+id/tv_groupName"
@@ -53,10 +43,8 @@
                     android:id="@+id/tv_nameNumber"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/tv_groupName"
-                    android:layout_marginBottom="16dp"
                     android:layout_marginLeft="12dp"
-                    android:layout_marginTop="6dp"
+                    android:layout_marginTop="172dp"
                     android:gravity="center"
                     android:text="群号"
                     android:textColor="@color/white"
@@ -73,29 +61,6 @@
                     android:textColor="@color/white"
                     android:textSize="12sp" />
             </RelativeLayout>
-
-
-            <android.support.v7.widget.Toolbar
-                android:id="@+id/toolbar"
-                android:layout_width="match_parent"
-                app:contentInsetStart="0dp"
-                app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-                android:layout_height="44dp"/>
-
-        </android.support.design.widget.CollapsingToolbarLayout>
-    </android.support.design.widget.AppBarLayout>
-
-    <android.support.v4.widget.NestedScrollView
-        android:layout_width="match_parent"
-        android:id="@+id/scrView"
-        android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
-
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -162,8 +127,8 @@
                         android:layout_alignParentRight="true"
                         android:layout_marginRight="12dp"
                         android:layout_marginTop="12dp"
-                        android:visibility="gone"
-                        android:src="@mipmap/chat_icon_next" />
+                        android:src="@mipmap/chat_icon_next"
+                        android:visibility="gone" />
 
                     <TextView
                         android:id="@+id/tv_groupIntroduce"
@@ -222,9 +187,10 @@
                         android:layout_below="@+id/tv_groupNumberName"
                         android:layout_marginBottom="15dp"
                         android:layout_marginLeft="12dp"
-                        android:numColumns="5"
                         android:layout_marginRight="12dp"
-                        android:layout_marginTop="15dp"></GridView>
+                        android:scrollbars="none"
+                        android:layout_marginTop="15dp"
+                        android:numColumns="5"></GridView>
 
                 </RelativeLayout>
 
@@ -243,8 +209,39 @@
                     android:textSize="14.7sp" />
             </LinearLayout>
         </LinearLayout>
-    </android.support.v4.widget.NestedScrollView>
+    </com.wotingfm.common.view.myscrollview.ObservableScrollView>
 
+    <RelativeLayout
+        android:id="@+id/mRelativeLayout"
+        android:layout_width="match_parent"
+        android:layout_height="44dp">
 
-</android.support.design.widget.CoordinatorLayout>
+        <ImageView
+            android:id="@+id/head_left_btn"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:layout_marginLeft="2dp"
+            android:src="@mipmap/nav_icon_back_white" />
 
+        <TextView
+            android:id="@+id/tvTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            android:text="群资料"
+            android:textColor="@color/black"
+            android:textSize="17.3sp"
+            android:visibility="gone" />
+
+        <ImageView
+            android:id="@+id/img_other"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="2dp"
+            android:visibility="gone"
+            android:src="@mipmap/nav_icon_more_white" />
+
+    </RelativeLayout>
+</RelativeLayout>
