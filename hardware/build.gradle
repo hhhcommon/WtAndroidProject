@@ -55,5 +55,4 @@ dependencies {
     compile 'com.readystatesoftware.systembartint:systembartint:1.0.3'
     // 顶栏样式
     compile project(':CommonPlat')
-    compile project(':uikit')
 }

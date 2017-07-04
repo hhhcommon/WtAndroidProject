@@ -265,4 +265,11 @@ public class LookListActivity extends NoTitleBarBaseActivity implements View.OnC
 
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (mBroadcastReceiver != null)
+            unregisterReceiver(mBroadcastReceiver
+            );
+    }
 }

@@ -3,6 +3,8 @@ package com.wotingfm.common.config.preference;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.netease.nim.live.DemoCache;
+
 
 /**
  * Created by hzxuwen on 2015/4/13.
@@ -10,6 +12,7 @@ import android.content.SharedPreferences;
 public class Preferences {
     private static final String KEY_USER_ACCOUNT = "account";
     private static final String KEY_USER_TOKEN = "token";
+    private static final String KEY_USER_SID = "sid";
 
     public static void saveUserAccount(String account) {
         saveString(KEY_USER_ACCOUNT, account);
@@ -25,6 +28,14 @@ public class Preferences {
 
     public static String getUserToken() {
         return getString(KEY_USER_TOKEN);
+    }
+
+    public static void saveUserSid(String sid) {
+        saveString(KEY_USER_SID, sid);
+    }
+
+    public static String getUserSid() {
+        return getString(KEY_USER_SID);
     }
 
     private static void saveString(String key, String value) {

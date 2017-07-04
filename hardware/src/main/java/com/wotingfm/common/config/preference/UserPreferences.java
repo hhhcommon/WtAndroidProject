@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.alibaba.fastjson.JSONObject;
+import com.netease.nim.live.DemoCache;
 import com.netease.nimlib.sdk.StatusBarNotificationConfig;
 
 /**

@@ -155,6 +155,15 @@
             android:name=".ui.play.activity.albums.AlbumsInfoActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
+        <!-- 直播页面  主播 -->
+        <activity
+            android:name=".ui.play.live.LiveRoomActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name="com.netease.nim.live.activity.InputActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" />
         <!--下载选择 -->
         <activity
             android:name=".ui.play.activity.download.DownloadSelectActivity"

@@ -1,13 +1,10 @@
 package com.wotingfm.ui.user.login.presenter;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.util.Log;
-import android.view.View;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.netease.nim.uikit.common.ui.dialog.DialogMaker;
 import com.netease.nimlib.sdk.AbortableFuture;
 import com.netease.nimlib.sdk.NIMClient;
@@ -15,9 +12,8 @@ import com.netease.nimlib.sdk.RequestCallback;
 import com.netease.nimlib.sdk.auth.AuthService;
 import com.netease.nimlib.sdk.auth.LoginInfo;
 import com.woting.commonplat.config.GlobalNetWorkConfig;
-import com.wotingfm.R;
 import com.wotingfm.common.application.BSApplication;
-import com.wotingfm.common.config.preference.DemoCache;
+import com.netease.nim.live.DemoCache;
 import com.wotingfm.common.config.preference.Preferences;
 import com.wotingfm.common.config.preference.UserPreferences;
 import com.wotingfm.common.constant.BroadcastConstants;
@@ -28,8 +24,6 @@ import com.wotingfm.ui.user.logo.LogoActivity;
 
 import org.json.JSONObject;
 import org.json.JSONTokener;
-
-import java.util.List;
 
 /**
  * 登录界面处理器
