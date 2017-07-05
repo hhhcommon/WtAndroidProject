@@ -7,8 +7,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.netease.nim.live.widget.CircleImageView;
 import com.netease.nim.uikit.R;
-import com.netease.nim.uikit.common.ui.imageview.CircleImageView;
 import com.netease.nimlib.sdk.chatroom.model.ChatRoomMember;
 
 import java.util.ArrayList;

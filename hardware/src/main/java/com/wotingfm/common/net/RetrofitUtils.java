@@ -47,7 +47,7 @@ import static com.wotingfm.common.net.RetrofitService.BASE_URL;
 
 public class RetrofitUtils {
 
-    private static final int DEFAULT_TIMEOUT = 3000;
+    private static final int DEFAULT_TIMEOUT = 20000;
     private RetrofitService retrofitService;
     public static RetrofitUtils INSTANCE;
     private OkHttpClient.Builder builder;
@@ -328,6 +328,16 @@ public class RetrofitUtils {
                 .map(new Func1<Object, Object>() {
                     @Override
                     public Object call(Object s) {
+                        return s;
+                    }
+                });
+    }
+
+    public Observable<BaseResult> endLive(String voiceLiveId, String user_id) {
+        return retrofitService.endLive(voiceLiveId, user_id, "end")
+                .map(new Func1<BaseResult, BaseResult>() {
+                    @Override
+                    public BaseResult call(BaseResult s) {
                         return s;
                     }
                 });

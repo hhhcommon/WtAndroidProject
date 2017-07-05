@@ -1,6 +1,7 @@
 package com.netease.nim.live.viewholder;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -23,12 +24,12 @@ public class ChatRoomViewHolderHelper {
         if (message.getMsgType() != MsgTypeEnum.notification) {
             // 聊天室中显示姓名
             if (message.getChatRoomMessageExtension() != null) {
-                text.setText(message.getChatRoomMessageExtension().getSenderNick());
+                text.setText(message.getChatRoomMessageExtension().getSenderNick()+":");
             } else {
-                text.setText(NimUserInfoCache.getInstance().getUserName(message.getFromAccount()));
+                text.setText(NimUserInfoCache.getInstance().getUserName(message.getFromAccount())+":");
             }
 
-            text.setTextColor(context.getResources().getColor(R.color.black));
+            text.setTextColor(Color.parseColor("#7fffffff"));
             text.setVisibility(View.VISIBLE);
             setNameIconView(message, imageView);
         }

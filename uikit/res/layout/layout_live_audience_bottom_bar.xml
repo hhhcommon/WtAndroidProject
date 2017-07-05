@@ -2,13 +2,33 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:paddingBottom="12dp"
     android:orientation="vertical">
+
+
+    <TextView
+        android:id="@+id/audience_message"
+        android:layout_width="match_parent"
+        android:layout_height="36dp"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/chat_live_bg"
+        android:ellipsize="end"
+        android:gravity="center|left"
+        android:hint="点击输入评论内容"
+        android:imeOptions="actionSearch"
+        android:paddingLeft="12dp"
+        android:layout_margin="12dp"
+        android:layout_marginBottom="12dp"
+        android:textColor="#40ffffff"
+        android:textSize="14sp"
+         />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:visibility="gone">
 
         <com.netease.nim.live.widget.PeriscopeLayout
             android:id="@+id/periscope"
@@ -20,35 +40,36 @@
             android:id="@+id/audience_like"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginRight="6dp"
-            android:layout_marginBottom="10dp"
             android:layout_gravity="end"
-            android:src="@drawable/btn_like_n"/>
+            android:layout_marginBottom="10dp"
+            android:layout_marginRight="6dp"
+            android:src="@drawable/btn_like_n"
+            android:visibility="gone" />
 
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
-            android:background="@color/color_grey_999999"/>
+            android:background="@color/color_grey_999999" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingTop="10dp"
-            android:paddingBottom="10dp"
             android:layout_alignParentBottom="true"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:paddingBottom="10dp"
+            android:paddingTop="10dp">
 
             <ImageView
-                android:id="@+id/audience_message"
                 style="@style/control_button"
                 android:layout_marginLeft="6dp"
-                android:src="@drawable/btn_message_n"/>
+                android:src="@drawable/btn_message_n" />
+
             <View
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="4"/>
+                android:layout_weight="4" />
 
             <ImageView
                 android:id="@+id/audience_gift"
@@ -110,24 +131,23 @@
     <include
         android:id="@+id/share_layout"
         layout="@layout/share_layout"
-        android:visibility="gone"
-        />
+        android:visibility="gone" />
 
     <include
         android:id="@+id/gift_animation_view"
         layout="@layout/gift_layout"
         android:layout_width="220dp"
         android:layout_height="50dp"
-        android:layout_marginBottom="200dp"
-        android:layout_centerVertical="true"/>
+        android:layout_centerVertical="true"
+        android:layout_marginBottom="200dp" />
 
     <include
         android:id="@+id/gift_animation_view_up"
         layout="@layout/gift_layout"
         android:layout_width="220dp"
         android:layout_height="50dp"
-        android:layout_marginBottom="200dp"
-        android:layout_centerVertical="true"/>
+        android:layout_centerVertical="true"
+        android:layout_marginBottom="200dp" />
 
 
 </RelativeLayout>

@@ -17,7 +17,6 @@ public class LiveBean implements Serializable {
 
     public static class DataBean implements Serializable {
 
-        public ChannelBean channel;
         public OwnerBean owner;
         public int audience_count;
         public String begin_at;
@@ -26,11 +25,22 @@ public class LiveBean implements Serializable {
         public String live_number;
         public String title;
         public String type;
+        public RtmpPushPullUrlJsonBean rtmp_push_pull_url_json;
 
-        public static class ChannelBean {
+        public static class RtmpPushPullUrlJsonBean implements Serializable {
+
+            public String cid;
+            public long ctime;
+            public String hlsPullUrl;
+            public String httpPullUrl;
+            public String name;
+            public String pushUrl;
+            public String rtmpPullUrl;
+
+
         }
 
-        public static class OwnerBean {
+        public static class OwnerBean implements Serializable {
             /**
              * avatar : ##userimg##user_42c0.jpg
              * fans_count : 0

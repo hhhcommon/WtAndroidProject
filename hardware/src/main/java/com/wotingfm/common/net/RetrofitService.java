@@ -61,6 +61,10 @@ public interface RetrofitService {
     @GET("api/voice-lives/editor-recommandations")
     Observable<LiveBean> getRecommandations(@Query("page") int page);
 
+    //直播模块首页列表
+    @GET("/api/voice-lives/{voiceLiveId}/status")
+    Observable<BaseResult> endLive(@Path("voiceLiveId") String voiceLiveId, @Query("user_id") String user_id, @Query("action") String action);
+
     //获取用户订阅的专辑
     @GET("api/users/{id}/subscriptions/albums")
     Observable<Subscrible> getSubscriptionsList(@Path("id") String id);

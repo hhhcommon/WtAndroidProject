@@ -162,8 +162,8 @@
             android:theme="@style/AppTheme" />
         <activity
             android:name="com.netease.nim.live.activity.InputActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/InputActivityTheme"
+            android:windowSoftInputMode="stateUnspecified|adjustResize"  />
         <!--下载选择 -->
         <activity
             android:name=".ui.play.activity.download.DownloadSelectActivity"

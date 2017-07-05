@@ -99,7 +99,8 @@ public class LiveFragment extends BaseFragment implements SwipeRefreshLayout.OnR
                         LogoActivity.start(getActivity());
                         return;
                     }
-                    DialogMaker.showProgressDialog(getActivity(), null, "请稍等...", true, new DialogInterface.OnCancelListener() {
+                    LiveRoomActivity.startAudience(getActivity(), dataBean.live_number, dataBean.rtmp_push_pull_url_json.rtmpPullUrl, true,dataBean);
+                   /* DialogMaker.showProgressDialog(getActivity(), null, "请稍等...", true, new DialogInterface.OnCancelListener() {
                         @Override
                         public void onCancel(DialogInterface dialog) {
                         }
@@ -111,10 +112,24 @@ public class LiveFragment extends BaseFragment implements SwipeRefreshLayout.OnR
                             if (status == true)
                                 LiveRoomActivity.startLive(getActivity(), roomId+"", publishParam);
                         }
-                    });
+                    });*/
 
                 } else {
                     T.getInstance().showToast("预告");
+                    DialogMaker.showProgressDialog(getActivity(), null, "请稍等...", true, new DialogInterface.OnCancelListener() {
+                        @Override
+                        public void onCancel(DialogInterface dialog) {
+                        }
+                    }).setCanceledOnTouchOutside(false);
+                    LiveManger.getInstance().startLive(CommonUtils.getUserId(), new LiveManger.LiveCallBack() {
+                        @Override
+                        public void liveStatus(boolean status, PublishParam publishParam, int roomId) {
+                            DialogMaker.dismissProgressDialog();
+                            if (status == true)
+                                LiveRoomActivity.startLive(getActivity(), roomId + "", publishParam);
+                        }
+                    });
+
                 }
             }
         });

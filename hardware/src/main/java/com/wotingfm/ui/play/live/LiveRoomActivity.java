@@ -25,6 +25,12 @@ import com.netease.nim.live.liveStreaming.CapturePreviewController;
 import com.netease.nim.live.liveStreaming.PublishParam;
 import com.netease.nim.live.server.DemoServerHttpClient;
 import com.netease.nim.live.util.VcloudFileUtils;
+import com.wotingfm.common.bean.BaseResult;
+import com.wotingfm.common.bean.LiveBean;
+import com.wotingfm.common.net.RetrofitUtils;
+import com.wotingfm.common.utils.CommonUtils;
+import com.wotingfm.common.utils.L;
+import com.wotingfm.common.utils.T;
 import com.wotingfm.ui.play.live.fragment.AudienceFragment;
 import com.wotingfm.ui.play.live.fragment.CaptureFragment;
 import com.wotingfm.ui.play.live.fragment.ChatRoomMessageFragment;
@@ -50,6 +56,10 @@ import com.netease.nim.live.session.input.InputConfig;
 import org.greenrobot.eventbus.EventBus;
 
 import java.util.List;
+
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
+import rx.schedulers.Schedulers;
 
 /**
  * Created by zhukkun on 1/5/17.
@@ -109,13 +119,14 @@ public class LiveRoomActivity extends BaseActivity implements NimContract.Ui {
      * @param context 上下文
      * @param url     直播地址
      */
-    public static void startAudience(Context context, String roomId, String url, boolean isSoftDecode) {
+    public static void startAudience(Context context, String roomId, String url, boolean isSoftDecode, LiveBean.DataBean dataBean) {
         Intent intent = new Intent();
         intent.setClass(context, LiveRoomActivity.class);
         intent.putExtra(IS_AUDIENCE, true);
         intent.putExtra(NimController.EXTRA_ROOM_ID, roomId);
         intent.putExtra(AudienceFragment.IS_LIVE, true); //观众默认为直播, 另一个种模式为点播.
         intent.putExtra(AudienceFragment.IS_SOFT_DECODE, isSoftDecode);
+        intent.putExtra("dataBean", dataBean);
         intent.putExtra(AudienceFragment.EXTRA_URL, url);
         context.startActivity(intent);
     }
@@ -178,8 +189,8 @@ public class LiveRoomActivity extends BaseActivity implements NimContract.Ui {
             captureFragment = new CaptureFragment();
             transaction.replace(R.id.layout_main_content, captureFragment);
         }
-
-        liveRoomInfoFragment = LiveRoomInfoFragment.getInstance(isAudience);
+        LiveBean.DataBean dataBean = (LiveBean.DataBean) getIntent().getSerializableExtra("dataBean");
+        liveRoomInfoFragment = LiveRoomInfoFragment.getInstance(isAudience, dataBean);
         transaction.replace(R.id.layout_room_info, liveRoomInfoFragment);
         transaction.commit();
     }
@@ -376,7 +387,20 @@ public class LiveRoomActivity extends BaseActivity implements NimContract.Ui {
     public void normalFinishLive() {
         //主播发送离开房间请求
         if (!isAudience) {
-            DemoServerHttpClient.getInstance().anchorLeave(roomId, new DemoServerHttpClient.DemoServerHttpCallback<Void>() {
+            RetrofitUtils.getInstance().endLive(roomId, CommonUtils.getUserId())
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new Action1<BaseResult>() {
+                        @Override
+                        public void call(BaseResult baseResult) {
+                            L.i("mingku", "endLive" + baseResult);
+                        }
+                    }, new Action1<Throwable>() {
+                        @Override
+                        public void call(Throwable throwable) {
+                        }
+                    });
+           /* DemoServerHttpClient.getInstance().anchorLeave(roomId, new DemoServerHttpClient.DemoServerHttpCallback<Void>() {
                 @Override
                 public void onSuccess(Void aVoid) {
                     //正常离开时,服务端会发送解散消息通知,此时根据解散时发送的被踢消息离开房间.
@@ -385,7 +409,7 @@ public class LiveRoomActivity extends BaseActivity implements NimContract.Ui {
                 @Override
                 public void onFailed(int code, String errorMsg) {
                 }
-            });
+            });*/
         }
         EventBus.getDefault().postSticky("start");
         finish();
