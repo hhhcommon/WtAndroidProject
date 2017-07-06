@@ -90,6 +90,8 @@ public class PlayerActivity extends NoTitleBarBaseActivity implements View.OnCli
     RecyclerView mRecyclerView;
     @BindView(R.id.LoadingView)
     LinearLayout mLoadingView;
+    @BindView(R.id.largeLabelSeekbar)
+    LinearLayout largeLabelSeekbar;
 
     public static void start(Context activity, String albumsId, String serchQ) {
         EventBus.getDefault().postSticky("stop");
@@ -189,6 +191,7 @@ public class PlayerActivity extends NoTitleBarBaseActivity implements View.OnCli
         loadLayout.showLoadingView();
         SinglesBase singlesBase = (SinglesBase) intent.getSerializableExtra("singlesBase");
         channelsBean = (Radio.DataBean.ChannelsBean) intent.getSerializableExtra("channelsBean");
+        relatiBottom.setVisibility(View.VISIBLE);
         if (singlesBase != null) {
             loadLayout.showContentView();
             singLesBeans.clear();
@@ -196,11 +199,12 @@ public class PlayerActivity extends NoTitleBarBaseActivity implements View.OnCli
             postionPlayer = 0;
             bdPlayer.setVideoPath(singlesBase.single_file_url);
             bdPlayer.start();
-            relatiBottom.setVisibility(View.VISIBLE);
+            largeLabelSeekbar.setVisibility(View.VISIBLE);
             setBeforeOrNext(singlesBase);
             mPlayerAdapter.notifyDataSetChanged();
         } else {
             if (channelsBean != null) {
+                largeLabelSeekbar.setVisibility(View.GONE);
                 loadLayout.showContentView();
                 singLesBeans.clear();
                 SinglesBase s = new SinglesBase();
@@ -211,11 +215,12 @@ public class PlayerActivity extends NoTitleBarBaseActivity implements View.OnCli
                 s.album_title = channelsBean.desc;
                 singLesBeans.add(s);
                 postionPlayer = 0;
-                relatiBottom.setVisibility(View.VISIBLE);
+                largeLabelSeekbar.setVisibility(View.INVISIBLE);
                 prepare();
                 setBeforeOrNext(s);
                 mPlayerAdapter.notifyDataSetChanged();
             } else {
+                largeLabelSeekbar.setVisibility(View.VISIBLE);
                 getPlayerList(albumsId);
             }
         }
@@ -359,22 +364,30 @@ public class PlayerActivity extends NoTitleBarBaseActivity implements View.OnCli
                 break;
             case R.id.ivPause:
                 BDPlayer.PlayerState isPause = bdPlayer.getCurrentPlayerState();
-                if (bdPlayer.getCurrentPlayerState() == isPause.STATE_PLAYING) {
-                    bdPlayer.pause();
-                    if (mMediaPlayer != null) {
-                        mMediaPlayer.pause();
-                    }
-                    ivPause.setImageResource(R.mipmap.music_play_icon_play);
-                } else if (bdPlayer.getCurrentPlayerState() == isPause.STATE_PAUSED) {
-                    bdPlayer.start();
-                    if (mIsStopped) {
-                        prepare();
-                    } else {
+                if (channelsBean != null) {
+                    if (mMediaPlayer.isPlaying() == true) {
                         if (mMediaPlayer != null) {
-                            mMediaPlayer.start();
+                            mMediaPlayer.pause();
                         }
+                        ivPause.setImageResource(R.mipmap.music_play_icon_play);
+                    } else {
+                        if (mIsStopped) {
+                            prepare();
+                        } else {
+                            if (mMediaPlayer != null) {
+                                mMediaPlayer.start();
+                            }
+                        }
+                        ivPause.setImageResource(R.mipmap.music_play_icon_pause);
                     }
-                    ivPause.setImageResource(R.mipmap.music_play_icon_pause);
+                } else {
+                    if (bdPlayer.getCurrentPlayerState() == isPause.STATE_PLAYING) {
+                        bdPlayer.pause();
+                        ivPause.setImageResource(R.mipmap.music_play_icon_play);
+                    } else if (bdPlayer.getCurrentPlayerState() == isPause.STATE_PAUSED) {
+                        bdPlayer.start();
+                        ivPause.setImageResource(R.mipmap.music_play_icon_pause);
+                    }
                 }
                 break;
             case R.id.ivNext:
