@@ -46,7 +46,17 @@
         android:protectionLevel="signature" />
     <!-- 接收 SDK 消息广播权限， 第三方 APP 接入时，请将 com.netease.vcloud.live 替换为自己的包名 -->
     <uses-permission android:name="com.wotingfm.permission.RECEIVE_MSG" />
-
+    <!-- 定位包、导航包需要的额外权限（注：基础权限也需要） -->
+    <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS" />
+    <!-- <uses-permission android:name="android.permission.ACCESS_MOCK_LOCATION" /> -->
+    <!-- 用于进行网络定位 -->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <!-- 用于访问GPS定位 -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
+    <!-- Needed to use our own Contact editor -->
+    <uses-permission android:name="android.permission.WRITE_CONTACTS" />
+    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
 
     <!-- 声明程序使用camera和自动对焦功能 -->
     <uses-feature android:name="android.hardware.camera" />
@@ -125,6 +135,24 @@
             android:name=".ui.play.activity.ReportsPlayerActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
+        <!-- 本地台 -->
+        <activity
+            android:name=".ui.play.radio.LocalRadioActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" />
+        <!-- 国家台 -->
+        <activity
+            android:name=".ui.play.radio.CountryRadioActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".ui.play.radio.ProvincesAndCitiesActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".ui.play.radio.ProvincesAndCitiesListRadioActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" />
         <!-- 主播个人中心 -->
         <activity
             android:name=".ui.play.activity.AnchorPersonalCenterActivity"
@@ -163,7 +191,7 @@
         <activity
             android:name="com.netease.nim.live.activity.InputActivity"
             android:theme="@style/InputActivityTheme"
-            android:windowSoftInputMode="stateUnspecified|adjustResize"  />
+            android:windowSoftInputMode="stateUnspecified|adjustResize" />
         <!--下载选择 -->
         <activity
             android:name=".ui.play.activity.download.DownloadSelectActivity"
@@ -239,6 +267,10 @@
         <!-- 云信SDK相关 结束                                                              -->
 
 
+        <!-- 高德地图用户Key -->
+        <meta-data
+            android:name="com.amap.api.v2.apikey"
+            android:value="7dabc8027d924f36cd758732c895c261" />
         <service android:name=".common.service.FloatingWindowService" />
     </application>
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />

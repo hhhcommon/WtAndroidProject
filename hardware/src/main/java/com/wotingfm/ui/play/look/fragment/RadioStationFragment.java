@@ -20,6 +20,9 @@ import com.wotingfm.common.bean.Selected;
 import com.wotingfm.common.net.RetrofitUtils;
 import com.wotingfm.common.view.BannerView;
 import com.wotingfm.ui.base.basefragment.BaseFragment;
+import com.wotingfm.ui.play.radio.CountryRadioActivity;
+import com.wotingfm.ui.play.radio.LocalRadioActivity;
+import com.wotingfm.ui.play.radio.ProvincesAndCitiesActivity;
 import com.zhy.adapter.recyclerview.wrapper.HeaderAndFooterWrapper;
 
 import java.util.ArrayList;
@@ -195,6 +198,21 @@ public class RadioStationFragment extends BaseFragment implements SwipeRefreshLa
                         loadLayout.showErrorView();
                     }
                 });*/
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.tvLocal:
+                LocalRadioActivity.start(getActivity());
+                break;
+            case R.id.tvCountry:
+                CountryRadioActivity.start(getActivity());
+                break;
+            case R.id.tvProvince:
+                ProvincesAndCitiesActivity.start(getActivity());
+                break;
+        }
     }
 
     @Override

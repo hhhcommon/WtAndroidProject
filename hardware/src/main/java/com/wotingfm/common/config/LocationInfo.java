@@ -1,4 +1,4 @@
-package com.woting.commonplat.location;
+package com.wotingfm.common.config;
 
 import android.content.Context;
 import android.content.Intent;
@@ -10,6 +10,8 @@ import com.amap.api.location.AMapLocation;
 import com.woting.commonplat.config.GlobalAddressConfig;
 import com.woting.commonplat.constant.BroadcastConstants;
 import com.woting.commonplat.location.gaode.GDLocation;
+import com.wotingfm.common.application.BSApplication;
+import com.wotingfm.common.constant.StringConstant;
 
 
 /**
@@ -97,11 +99,16 @@ public class LocationInfo implements GDLocation.Location {
         if (GlobalAddressConfig.CityName == null || !GlobalAddressConfig.CityName.equals(city)) {
             GlobalAddressConfig.CityName = city;
         }
+        SharedPreferences.Editor et = BSApplication.SharedPreferences.edit();
+        et.putString(StringConstant.CITYNAME, city);
+        et.putString(StringConstant.CITYID, GlobalAddressConfig.AdCode);
+        et.putString(StringConstant.LATITUDE, String.valueOf(latitude));
+        et.putString(StringConstant.LONGITUDE, String.valueOf(longitude));
 
     }
 
     // 发送广播
-    private void sendBroadcast(){
+    private void sendBroadcast() {
         Intent intent = new Intent();
         intent.setAction(BroadcastConstants.CITY_CHANGE);
         context.sendBroadcast(intent);

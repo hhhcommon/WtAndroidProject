@@ -10,6 +10,8 @@ import com.wotingfm.common.bean.Classification;
 import com.wotingfm.common.bean.HomeBanners;
 import com.wotingfm.common.bean.LiveBean;
 import com.wotingfm.common.bean.Player;
+import com.wotingfm.common.bean.Provinces;
+import com.wotingfm.common.bean.Radio;
 import com.wotingfm.common.bean.Reports;
 import com.wotingfm.common.bean.Selected;
 import com.wotingfm.common.bean.SelectedMore;
@@ -161,6 +163,14 @@ public interface RetrofitService {
     //相似推荐
     @GET("api/listenings/albums/{id}/similars")
     Observable<Subscrible> albumsSimilars(@Path("id") String id);
+
+    //获取省／国家／地区电台
+    @GET("api/listenings/radios/channels/")
+    Observable<Radio> getChannelsRadio(@Query("channel_type") String channel_type, @Query("page") int page);
+
+    //获取省市列表
+    @GET("/api/listenings/radios/channels/provinces")
+    Observable<Provinces> getProvinces();
 
     //获取专辑所有节目
     @GET("api/listenings/albums/{id}/singles")

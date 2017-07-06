@@ -16,11 +16,13 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.baidu.cloud.media.player.IMediaPlayer;
+import com.netease.nim.uikit.common.util.C;
 import com.woting.commonplat.player.baidu.BDPlayer;
 import com.woting.commonplat.widget.LoadFrameLayout;
 import com.wotingfm.R;
 import com.wotingfm.common.adapter.PlayerAdapter;
 import com.wotingfm.common.bean.Player;
+import com.wotingfm.common.bean.Radio;
 import com.wotingfm.common.bean.SinglesBase;
 import com.wotingfm.common.bean.SinglesDownload;
 import com.wotingfm.common.config.DbConfig;
@@ -82,6 +84,15 @@ public class PlayerActivity extends NoTitleBarBaseActivity implements View.OnCli
         activity.startActivity(intent);
     }
 
+    public static void start(Context activity, Radio.DataBean.ChannelsBean channelsBean, String serchQ) {
+        EventBus.getDefault().postSticky("stop");
+        AppManager.getAppManager().finishAllActivity();
+        Intent intent = new Intent(activity, PlayerActivity.class);
+        intent.putExtra("channelsBean", channelsBean);
+        intent.putExtra("serchQ", serchQ);
+        activity.startActivity(intent);
+    }
+
     public static void start(Context activity, SinglesBase singlesBase, String serchQ) {
         EventBus.getDefault().postSticky("stop");
         AppManager.getAppManager().finishAllActivity();
@@ -101,6 +112,8 @@ public class PlayerActivity extends NoTitleBarBaseActivity implements View.OnCli
     public int getLayoutId() {
         return R.layout.activity_player;
     }
+
+    private Radio.DataBean.ChannelsBean channelsBean;
 
     @Override
     public void initView() {
@@ -129,19 +142,36 @@ public class PlayerActivity extends NoTitleBarBaseActivity implements View.OnCli
         albumsId = intent.getStringExtra("albumsId");
         loadLayout.showLoadingView();
         SinglesBase singlesBase = (SinglesBase) intent.getSerializableExtra("singlesBase");
+        channelsBean = (Radio.DataBean.ChannelsBean) intent.getSerializableExtra("channelsBean");
         if (singlesBase != null) {
             loadLayout.showContentView();
             singLesBeans.clear();
             singLesBeans.add(singlesBase);
             postionPlayer = 0;
-            bdPlayer.pause();
             bdPlayer.setVideoPath(singlesBase.single_file_url);
             bdPlayer.start();
             relatiBottom.setVisibility(View.VISIBLE);
             setBeforeOrNext(singlesBase);
             mPlayerAdapter.notifyDataSetChanged();
         } else {
-            getPlayerList(albumsId);
+            if (channelsBean != null) {
+                loadLayout.showContentView();
+                singLesBeans.clear();
+                SinglesBase s = new SinglesBase();
+                s.album_title = channelsBean.title;
+                s.single_logo_url = channelsBean.image_url;
+                s.single_file_url = channelsBean.radio_url;
+                s.album_title = channelsBean.desc;
+                singLesBeans.add(s);
+                postionPlayer = 0;
+                bdPlayer.setVideoPath(s.single_file_url);
+                bdPlayer.start();
+                relatiBottom.setVisibility(View.VISIBLE);
+                setBeforeOrNext(s);
+                mPlayerAdapter.notifyDataSetChanged();
+            } else {
+                getPlayerList(albumsId);
+            }
         }
 
     }
@@ -338,7 +368,7 @@ public class PlayerActivity extends NoTitleBarBaseActivity implements View.OnCli
                             singLesBeans.set(postionPlayer, psb);
                             mPlayerAdapter.notifyDataSetChanged();
                         }
-                    });
+                    }, channelsBean);
                 menuDialog.show();
                 break;
         }

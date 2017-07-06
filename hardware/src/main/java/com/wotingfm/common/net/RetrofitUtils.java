@@ -14,6 +14,8 @@ import com.wotingfm.common.bean.Classification;
 import com.wotingfm.common.bean.HomeBanners;
 import com.wotingfm.common.bean.LiveBean;
 import com.wotingfm.common.bean.Player;
+import com.wotingfm.common.bean.Provinces;
+import com.wotingfm.common.bean.Radio;
 import com.wotingfm.common.bean.Reports;
 import com.wotingfm.common.bean.Selected;
 import com.wotingfm.common.bean.SelectedMore;
@@ -241,6 +243,32 @@ public class RetrofitUtils {
                             throw new IllegalStateException(player.msg);
                         }
                         return player.data.albums;
+                    }
+                });
+    }
+
+    public Observable<List<Provinces.DataBean.ProvincesBean>> getProvinces() {
+        return retrofitService.getProvinces()
+                .map(new Func1<Provinces, List<Provinces.DataBean.ProvincesBean>>() {
+                    @Override
+                    public List<Provinces.DataBean.ProvincesBean> call(Provinces player) {
+                        if (player.ret != 0) {
+                            throw new IllegalStateException(player.msg);
+                        }
+                        return player.data.provinces;
+                    }
+                });
+    }
+
+    public Observable<List<Radio.DataBean.ChannelsBean>> getChannelsRadio(String type, int page) {
+        return retrofitService.getChannelsRadio(type, page)
+                .map(new Func1<Radio, List<Radio.DataBean.ChannelsBean>>() {
+                    @Override
+                    public List<Radio.DataBean.ChannelsBean> call(Radio player) {
+                        if (player.ret != 0) {
+                            throw new IllegalStateException(player.msg);
+                        }
+                        return player.data.channels;
                     }
                 });
     }
