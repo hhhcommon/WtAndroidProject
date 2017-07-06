@@ -1,7 +1,6 @@
 package com.wotingfm.ui.intercom.person.personapply.view;
 
 import android.app.Dialog;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
@@ -37,7 +36,7 @@ public class PersonApplyFragment extends Fragment implements View.OnClickListene
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         if (rootView == null) {
-            rootView = inflater.inflate(R.layout.fragment_apply, container, false);
+            rootView = inflater.inflate(R.layout.fragment_apply_news, container, false);
             rootView.setOnClickListener(this);
             inItView();
             presenter = new PersonApplyPresenter(this);

@@ -1,36 +1,33 @@
 package com.wotingfm.ui.intercom.group.groupapply.presenter;
 
-import android.os.Bundle;
 import android.util.Log;
 
 import com.google.gson.Gson;
 import com.woting.commonplat.config.GlobalNetWorkConfig;
 import com.wotingfm.common.utils.ToastUtils;
-import com.wotingfm.ui.intercom.group.editgroupmessage.model.EditGroupMessageModel;
-import com.wotingfm.ui.intercom.group.groupapply.model.GroupApplyModel;
-import com.wotingfm.ui.intercom.group.groupapply.view.GroupApplyFragment;
-import com.wotingfm.ui.intercom.group.groupintroduce.model.EditGroupIntroduceModel;
-import com.wotingfm.ui.intercom.main.contacts.model.Contact;
-import com.wotingfm.ui.intercom.main.view.InterPhoneActivity;
-
+import com.wotingfm.ui.intercom.group.groupapply.model.GroupApplyForPasswordModel;
+import com.wotingfm.ui.intercom.group.groupapply.view.GroupApplyForPasswordFragment;
 import org.json.JSONObject;
 
 /**
  * 作者：xinLong on 2017/6/5 13:55
  * 邮箱：645700751@qq.com
  */
-public class GroupApplyPresenter {
+public class GroupApplyForPasswordPresenter {
 
-    private final GroupApplyFragment activity;
-    private final GroupApplyModel model;
-    private final String gid;// 组id
+    private final GroupApplyForPasswordFragment activity;
+    private final GroupApplyForPasswordModel model;
+    private  String gid;// 组id
 
 
-    public GroupApplyPresenter(GroupApplyFragment activity) {
+    public GroupApplyForPasswordPresenter(GroupApplyForPasswordFragment activity) {
         this.activity = activity;
-        this.model = new GroupApplyModel();
-        Bundle bundle = activity.getArguments();
-        gid = bundle.getString("gid");
+        this.model = new GroupApplyForPasswordModel();
+        try {
+            gid = activity.getArguments().getString("gid");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -42,7 +39,7 @@ public class GroupApplyPresenter {
         if (s != null && !s.trim().equals("")) {
             if (GlobalNetWorkConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
                 activity.dialogShow();
-                model.loadNews(gid, s, new GroupApplyModel.OnLoadInterface() {
+                model.loadNews(gid,  s, new GroupApplyForPasswordModel.OnLoadInterface() {
                     @Override
                     public void onSuccess(Object o) {
                         activity.dialogCancel();
@@ -68,7 +65,7 @@ public class GroupApplyPresenter {
             String s = new Gson().toJson(o);
             JSONObject js = new JSONObject(s);
             int ret = js.getInt("ret");
-            Log.e("修改群介绍==ret", String.valueOf(ret));
+            Log.e("加入群：密码==ret", String.valueOf(ret));
             if (ret == 0) {
 
             } else {
@@ -79,13 +76,4 @@ public class GroupApplyPresenter {
         }
     }
 
-    /**
-     * 字数更改之后变化
-     *
-     * @param src
-     */
-    public void textChange(String src) {
-
-        activity.setTextViewChange("");
-    }
 }

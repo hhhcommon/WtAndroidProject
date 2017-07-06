@@ -23,6 +23,7 @@ public class EditGroupNameFragment extends Fragment implements View.OnClickListe
     private EditGroupNamePresenter presenter;
     private EditText et_news;
     private Dialog dialog;
+    private ResultListener Listener;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -60,6 +61,14 @@ public class EditGroupNameFragment extends Fragment implements View.OnClickListe
     }
 
     /**
+     * 设置返回值监听
+     * @param name
+     */
+    public void setResult(String name){
+        Listener.resultListener(true,name);
+    }
+
+    /**
      * 展示弹出框
      */
     public void dialogShow() {
@@ -73,23 +82,16 @@ public class EditGroupNameFragment extends Fragment implements View.OnClickListe
         if (dialog != null) dialog.dismiss();
     }
 
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
+    /**
+     * 回调结果值
+     *
+     * @param l
+     */
+    public void setResultListener(ResultListener l) {
+        Listener = l;
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
+    public interface ResultListener {
+        void resultListener(boolean type, String name);
     }
 }

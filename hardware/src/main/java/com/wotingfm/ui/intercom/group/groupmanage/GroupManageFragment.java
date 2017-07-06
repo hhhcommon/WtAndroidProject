@@ -1,6 +1,5 @@
 package com.wotingfm.ui.intercom.group.groupmanage;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -14,6 +13,7 @@ import com.wotingfm.ui.intercom.group.applygrouptype.view.ApplyGroupTypeFragment
 import com.wotingfm.ui.intercom.group.editgroupmessage.view.EditGroupMessageFragment;
 import com.wotingfm.ui.intercom.group.setmanager.view.SetManagerFragment;
 import com.wotingfm.ui.intercom.group.standbychannel.view.StandbyChannelFragment;
+import com.wotingfm.ui.intercom.group.transfergroup.view.TransferGroupFragment;
 import com.wotingfm.ui.intercom.main.contacts.model.Contact;
 import com.wotingfm.ui.intercom.main.view.InterPhoneActivity;
 
@@ -48,12 +48,12 @@ public class GroupManageFragment extends Fragment implements View.OnClickListene
 
     private void getData() {
         try {
-            group = (Contact.group)  this.getArguments().getSerializable("group");
+            group = (Contact.group) this.getArguments().getSerializable("group");
         } catch (Exception e) {
             e.printStackTrace();
         }
         try {
-            list = (List<Contact.user>)  this.getArguments().getSerializable("list");// 成员列表
+            list = (List<Contact.user>) this.getArguments().getSerializable("list");// 成员列表
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -91,7 +91,7 @@ public class GroupManageFragment extends Fragment implements View.OnClickListene
                     InterPhoneActivity.open(new SetManagerFragment());
                 } else {
                     // 实际数据
-                    if (group != null && list != null && list.size() > 0&&group.getCreator_id()!=null&&group.getId()!=null) {
+                    if (group != null && list != null && list.size() > 0 && group.getCreator_id() != null && group.getId() != null) {
                         SetManagerFragment fragment = new SetManagerFragment();
                         Bundle bundle = new Bundle();
                         bundle.putSerializable("list", (Serializable) list);
@@ -115,7 +115,7 @@ public class GroupManageFragment extends Fragment implements View.OnClickListene
                     fragment.setArguments(bundle);
                     InterPhoneActivity.open(fragment);
                 } else {
-                    if (group != null&&group.getId()!=null) {
+                    if (group != null && group.getId() != null) {
                         StandbyChannelFragment fragment = new StandbyChannelFragment();
                         Bundle bundle = new Bundle();
                         bundle.putString("fromType", "message");
@@ -130,33 +130,52 @@ public class GroupManageFragment extends Fragment implements View.OnClickListene
                 }
                 break;
             case R.id.re_applyGroupType:// 加群方式
-                InterPhoneActivity.open(new ApplyGroupTypeFragment());
+                if (GlobalStateConfig.test) {
+                    ApplyGroupTypeFragment fragment = new ApplyGroupTypeFragment();
+                    InterPhoneActivity.open(fragment);
+                    fragment.setResultListener(new ApplyGroupTypeFragment.ResultListener() {
+                        @Override
+                        public void resultListener(int type, String password) {
+
+                        }
+                    });
+                } else {
+                    if (group != null) {
+                        ApplyGroupTypeFragment fragment = new ApplyGroupTypeFragment();
+                        Bundle bundle = new Bundle();
+                        bundle.putSerializable("group", group);
+                        fragment.setArguments(bundle);
+                        InterPhoneActivity.open(fragment);
+                        fragment.setResultListener(new ApplyGroupTypeFragment.ResultListener() {
+                            @Override
+                            public void resultListener(int type, String password) {
+
+                            }
+                        });
+                    } else {
+                        ToastUtils.show_always(this.getActivity(), "数据出错了，请您稍后再试！");
+                    }
+                }
                 break;
             case R.id.re_changeGroup:// 转让群
-                ToastUtils.show_always(this.getActivity(), "转让群");
+                if (GlobalStateConfig.test) {
+                    InterPhoneActivity.open(new TransferGroupFragment());
+                } else {
+                    if (group != null && list != null && list.size() > 0 && group.getCreator_id() != null && group.getId() != null) {
+                        TransferGroupFragment fragment = new TransferGroupFragment();
+                        Bundle bundle = new Bundle();
+                        bundle.putSerializable("list", (Serializable) list);
+                        bundle.putString("id", group.getCreator_id());
+                        bundle.putString("gid", group.getId());
+                        fragment.setArguments(bundle);
+                        InterPhoneActivity.open(fragment);
+                    } else {
+
+                        ToastUtils.show_always(this.getActivity(), "数据出错了，请您稍后再试！");
+                    }
+                }
                 break;
         }
     }
-
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-    }
-
 
 }

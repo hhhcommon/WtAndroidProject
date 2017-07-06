@@ -1,4 +1,4 @@
-package com.wotingfm.ui.intercom.group.groupintroduce.view;
+package com.wotingfm.ui.intercom.group.groupapply.view;
 
 import android.app.Dialog;
 import android.content.Intent;
@@ -14,21 +14,19 @@ import android.widget.TextView;
 
 import com.wotingfm.R;
 import com.wotingfm.common.utils.DialogUtils;
-import com.wotingfm.ui.intercom.group.groupintroduce.presenter.EditGroupIntroducePresenter;
+import com.wotingfm.ui.intercom.group.groupapply.presenter.GroupApplyForPasswordPresenter;
 import com.wotingfm.ui.intercom.main.view.InterPhoneActivity;
 
 /**
- * 编辑群介绍
+ * 入组申请界面
  * 作者：xinLong on 2017/6/5 01:30
  * 邮箱：645700751@qq.com
  */
-public class EditGroupIntroduceFragment extends Fragment implements View.OnClickListener{
+public class GroupApplyForPasswordFragment extends Fragment implements View.OnClickListener {
     private View rootView;
-    private EditGroupIntroducePresenter presenter;
-    private TextView tv_number;
     private EditText et_news;
+    private GroupApplyForPasswordPresenter presenter;
     private Dialog dialog;
-    private ResultListener Listener;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -38,10 +36,10 @@ public class EditGroupIntroduceFragment extends Fragment implements View.OnClick
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         if (rootView == null) {
-            rootView = inflater.inflate(R.layout.fragment_editgroupintroduce, container, false);
+            rootView = inflater.inflate(R.layout.fragment_apply_password, container, false);
             rootView.setOnClickListener(this);
             inItView();
-            presenter = new EditGroupIntroducePresenter(this);
+            presenter = new GroupApplyForPasswordPresenter(this);
         }
         return rootView;
     }
@@ -49,24 +47,7 @@ public class EditGroupIntroduceFragment extends Fragment implements View.OnClick
     private void inItView() {
         rootView.findViewById(R.id.head_left_btn).setOnClickListener(this);
         rootView.findViewById(R.id.tv_send).setOnClickListener(this);
-        tv_number = (TextView) rootView.findViewById(R.id.tv_number);// 计数
-        et_news = (EditText) rootView.findViewById(R.id.et_news);// 信息
-        et_news.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                String src = et_news.getText().toString().trim();
-                presenter.textChange(src);
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
+        et_news = (EditText) rootView.findViewById(R.id.et_news);// 申请信息
     }
 
     @Override
@@ -83,23 +64,6 @@ public class EditGroupIntroduceFragment extends Fragment implements View.OnClick
     }
 
     /**
-     * 设置返回值监听
-     * @param name
-     */
-    public void setResult(String name){
-        Listener.resultListener(true,name);
-    }
-
-    /**
-     * 字数计数的数据展示
-     *
-     * @param s
-     */
-    public void setTextViewChange(String s) {
-        tv_number.setText(s);
-    }
-
-    /**
      * 展示弹出框
      */
     public void dialogShow() {
@@ -113,16 +77,4 @@ public class EditGroupIntroduceFragment extends Fragment implements View.OnClick
         if (dialog != null) dialog.dismiss();
     }
 
-    /**
-     * 回调结果值
-     *
-     * @param l
-     */
-    public void setResultListener(ResultListener l) {
-        Listener = l;
-    }
-
-    public interface ResultListener {
-        void resultListener(boolean type, String name);
-    }
 }

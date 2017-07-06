@@ -66,6 +66,10 @@ public class CommonUtils {
         }
     }
 
+    /**
+     * 判断是否登录
+     * @return
+     */
     public static boolean isLogin() {
         String login = BSApplication.SharedPreferences.getString(StringConstant.IS_LOGIN, "false");// 是否登录
         if (!login.trim().equals("") && login.equals("true")) {

@@ -1,21 +1,31 @@
 package com.wotingfm.ui.intercom.group.editgroupmessage.view;
 
-import android.content.Intent;
+import android.app.Dialog;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.DisplayMetrics;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.woting.commonplat.utils.BitmapUtils;
 import com.wotingfm.R;
+import com.wotingfm.common.utils.DialogUtils;
 import com.wotingfm.common.utils.GlideUtils;
+import com.wotingfm.common.view.pickview.LoopView;
+import com.wotingfm.common.view.pickview.OnItemSelectedListener;
 import com.wotingfm.ui.intercom.group.editgroupmessage.presenter.EditGroupMessagePresenter;
 import com.wotingfm.ui.intercom.main.view.InterPhoneActivity;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 编辑资料
@@ -27,12 +37,10 @@ public class EditGroupMessageFragment extends Fragment implements View.OnClickLi
     private EditGroupMessagePresenter presenter;
     private LinearLayout lin_chose;
     private ImageView image_headView;
-    private TextView tv_groupName, tv_groupIntroduce_name, tv_groupAddress;
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
+    private TextView tv_groupName, tv_groupIntroduce, tv_groupAddress;
+    private Dialog cityDialog;
+    private int provinceIndex, cityIndex;
+    private Dialog dialog;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -41,7 +49,6 @@ public class EditGroupMessageFragment extends Fragment implements View.OnClickLi
             rootView.setOnClickListener(this);
             inItView();
             presenter = new EditGroupMessagePresenter(this);
-            presenter.getData();
         }
         return rootView;
     }
@@ -60,7 +67,8 @@ public class EditGroupMessageFragment extends Fragment implements View.OnClickLi
         tv_groupAddress = (TextView) rootView.findViewById(R.id.tv_groupAddress); // 群地址
 
         rootView.findViewById(R.id.re_groupIntroduce).setOnClickListener(this);
-        tv_groupIntroduce_name = (TextView) rootView.findViewById(R.id.tv_groupIntroduce_name); // 群介绍
+        tv_groupIntroduce = (TextView) rootView.findViewById(R.id.tv_groupIntroduce); // 群介绍
+
 
         lin_chose = (LinearLayout) rootView.findViewById(R.id.lin_chose); // 图片选择
         lin_chose.setOnClickListener(this);
@@ -93,7 +101,9 @@ public class EditGroupMessageFragment extends Fragment implements View.OnClickLi
                 presenter.setGroupName();  // 设置群名称
                 break;
             case R.id.re_groupAddress:
-                presenter.setGroupAddress();  // 设置群地址
+                if (cityDialog != null) {
+                    cityDialog.show(); // 设置群地址
+                }
                 break;
             case R.id.re_groupIntroduce:
                 presenter.setGroupIntroduce();  // 设置群介绍
@@ -124,10 +134,11 @@ public class EditGroupMessageFragment extends Fragment implements View.OnClickLi
      * @param url
      */
     public void setViewForImage(String url) {
-        if (url != null && !url.trim().equals("")) {
+        if (url != null && !url.equals("")) {
             GlideUtils.loadImageViewSize(this.getActivity(), url, 60, 60, image_headView, true);
-        }else{
-
+        } else {
+            Bitmap bmp = BitmapUtils.readBitMap(this.getActivity(), R.mipmap.icon_avatar_d);
+            image_headView.setImageBitmap(bmp);
         }
     }
 
@@ -164,30 +175,85 @@ public class EditGroupMessageFragment extends Fragment implements View.OnClickLi
      */
     public void setViewForGroupIntroduce(String s) {
         if (s != null && !s.trim().equals("")) {
-            tv_groupIntroduce_name.setText(s);
+            tv_groupIntroduce.setText(s);
         } else {
-            tv_groupIntroduce_name.setText("");
+            tv_groupIntroduce.setText("");
         }
     }
 
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
+    // 城市选择框
+    public void cityPickerDialog(final Map<String, List<String>> positionMap, final List<String> provinceList) {
+        if (positionMap != null && positionMap.size() > 0 && provinceList != null && provinceList.size() > 0) {
+            final View dialog = LayoutInflater.from(this.getActivity()).inflate(R.layout.dialog_city, null);
+            final LoopView pickProvince = (LoopView) dialog.findViewById(R.id.pick_province);
+            final LoopView pickCity = (LoopView) dialog.findViewById(R.id.pick_city);
+
+            // 设置字体样式
+            pickProvince.setTextSize(15, 17);
+            pickProvince.setItems(provinceList);
+            pickProvince.setInitPosition(0);
+
+            pickCity.setTextSize(15, 17);
+            List<String> tempList = positionMap.get(provinceList.get(0));
+            pickCity.setItems(tempList);
+            pickCity.setInitPosition(0);
+
+
+            pickProvince.setListener(new OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(int index) {
+                    provinceIndex = index;
+                    List<String> tempList1 = positionMap.get(provinceList.get(provinceIndex));
+                    pickCity.setItems(tempList1);
+                    pickCity.setInitPosition(0);
+                }
+            });
+            pickCity.setListener(new OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(int index) {
+                    cityIndex = index;
+                }
+            });
+
+            cityDialog = new Dialog(this.getActivity(), R.style.MyDialog);
+            cityDialog.setContentView(dialog);
+            cityDialog.setCanceledOnTouchOutside(true);
+
+            DisplayMetrics dm = new DisplayMetrics();
+            this.getActivity().getWindowManager().getDefaultDisplay().getMetrics(dm);
+            int screenWidth = dm.widthPixels;
+            ViewGroup.LayoutParams params = dialog.getLayoutParams();
+            params.width = screenWidth;
+            dialog.setLayoutParams(params);
+
+            Window window = cityDialog.getWindow();
+            window.setGravity(Gravity.BOTTOM);
+            window.setWindowAnimations(R.style.inOutStyle);
+            window.setBackgroundDrawableResource(R.color.transparent_40_black);
+
+            dialog.findViewById(R.id.tv_confirm).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    String name = positionMap.get(provinceList.get(provinceIndex)).get(cityIndex);
+                    presenter.sendAddress(name);
+                    cityDialog.dismiss();
+                }
+            });
+        }
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
+    /**
+     * 展示弹出框
+     */
+    public void dialogShow() {
+        dialog = DialogUtils.Dialog(this.getActivity());
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
+    /**
+     * 取消弹出框
+     */
+    public void dialogCancel() {
+        if (dialog != null) dialog.dismiss();
     }
 
 }

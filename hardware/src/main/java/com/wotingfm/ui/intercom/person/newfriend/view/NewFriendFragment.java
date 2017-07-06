@@ -84,7 +84,7 @@ public class NewFriendFragment extends Fragment implements NewFriendAdapter.IonS
             mRecyclerView.setAdapter(mAdapter);
             mRecyclerView.setItemAnimator(new DefaultItemAnimator());
         } else {
-            mAdapter.notifyDataSetChanged();
+            mAdapter.changeData(list);
         }
         mAdapter.setOnSlidListener(this);
     }

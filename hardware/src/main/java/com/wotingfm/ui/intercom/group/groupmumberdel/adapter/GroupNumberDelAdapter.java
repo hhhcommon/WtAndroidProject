@@ -29,15 +29,20 @@ import java.util.List;
  */
 
 public class GroupNumberDelAdapter extends RecyclerView.Adapter<GroupNumberDelAdapter.SimpleHolder> implements SlidingButtonView.IonSlidingButtonListener {
-    private final List<Contact.user> mData;
+    private List<Contact.user> mData;
     private Context mContext;
 
     private IonSlidingViewClickListener mIDeleteBtnClickListener;
     private SlidingButtonView mMenu;
 
     public GroupNumberDelAdapter(Context context, List<Contact.user> friendList) {
-        mContext = context;
-        mData = friendList;
+        this.mContext = context;
+        this.mData = friendList;
+    }
+
+    public void changeData(List<Contact.user> friendList) {
+        this.mData = friendList;
+        notifyDataSetChanged();
     }
 
     @Override
@@ -69,6 +74,9 @@ public class GroupNumberDelAdapter extends RecyclerView.Adapter<GroupNumberDelAd
         holder.tv_Delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (menuIsOpen()) {
+                    closeMenu();//关闭菜单
+                }
                 int n = holder.getLayoutPosition();
 
                 mIDeleteBtnClickListener.onDeleteBtnClick(view, n);
@@ -78,6 +86,9 @@ public class GroupNumberDelAdapter extends RecyclerView.Adapter<GroupNumberDelAd
         holder.re_adapter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (menuIsOpen()) {
+                    closeMenu();//关闭菜单
+                }
                 int n = holder.getLayoutPosition();
                 mIDeleteBtnClickListener.onAdapterClick(view, n);
             }
@@ -147,18 +158,6 @@ public class GroupNumberDelAdapter extends RecyclerView.Adapter<GroupNumberDelAd
         void onAdapterClick(View view, int position);
 
         void onDeleteBtnClick(View view, int position);
-    }
-
-    /**
-     * dpתpx
-     *
-     * @param context
-     * @param dp
-     * @return
-     */
-    public static int dp2px(Context context, float dp) {
-        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
-                dp, context.getResources().getDisplayMetrics());
     }
 
     public static int getScreenWidth(Context context) {

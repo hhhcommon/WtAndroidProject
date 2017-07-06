@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.wotingfm.common.view.slidingbutton.SlidingButtonView xmlns:android="http://schemas.android.com/apk/res/android"
-
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="1dp"
@@ -13,7 +12,7 @@
 
         <TextView
             android:id="@+id/tv_delete"
-            android:layout_width="52dp"
+            android:layout_width="60dp"
             android:layout_height="60dp"
             android:layout_toRightOf="@+id/layout_content"
             android:background="@color/red"
@@ -37,20 +36,17 @@
                 android:layout_marginLeft="12dp"
                 android:src="@mipmap/test" />
 
-
-            <TextView
-                android:id="@+id/tv_name"
+            <include
+                android:id="@+id/view_head"
+                layout="@layout/include_group_person_del"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
                 android:layout_marginLeft="12dp"
-                android:textSize="16sp"
-                android:textColor="#16181a"
-                android:gravity="left|center"
-                android:text="成员名称"
                 android:layout_toRightOf="@id/img_url" />
+
+
         </RelativeLayout>
 
 
     </RelativeLayout>
-    >
 </com.wotingfm.common.view.slidingbutton.SlidingButtonView>

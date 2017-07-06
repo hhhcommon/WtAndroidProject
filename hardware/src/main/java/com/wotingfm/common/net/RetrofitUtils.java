@@ -540,11 +540,12 @@ public class RetrofitUtils {
     /**
      * 入组申请
      *
-     * @param s
+     * @param news
+     * @param password
      * @return
      */
-    public Observable<Object> groupApply(String id,String s) {
-        return retrofitService.groupApply(id,s)
+    public Observable<Object> groupApply(String id,String news,String password) {
+        return retrofitService.groupApply(id,news,password)
                 .map(new Func1<Object, Object>() {
                     @Override
                     public Object call(Object O) {
@@ -905,6 +906,22 @@ public class RetrofitUtils {
     }
 
     /**
+     * 修改群地址
+     *
+     * @param s
+     * @return Objects
+     */
+    public Observable<Object> editGroupAddress(String id,String s) {
+        return retrofitService.editGroupAddress(id,s)
+                .map(new Func1<Object, Object>() {
+                    @Override
+                    public Object call(Object O) {
+                        return O;
+                    }
+                });
+    }
+
+    /**
      * 修改群介绍
      *
      * @param s
@@ -995,6 +1012,23 @@ public class RetrofitUtils {
      */
     public Observable<Object> exitGroup(String gId,String pId) {
         return retrofitService.exitGroup( gId, pId)
+                .map(new Func1<Object, Object>() {
+                    @Override
+                    public Object call(Object O) {
+                        return O;
+                    }
+                });
+    }
+
+    /**
+     * 移交群主
+     *
+     * @param gId
+     * @param pId
+     * @return Objects
+     */
+    public Observable<Object> transferManager(String gId,String pId) {
+        return retrofitService.transferManager( gId, pId)
                 .map(new Func1<Object, Object>() {
                     @Override
                     public Object call(Object O) {

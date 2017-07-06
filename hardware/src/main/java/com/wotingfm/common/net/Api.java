@@ -49,7 +49,9 @@ public class Api {
     // 好友订阅的专辑
     public static final String URL_PERSON_SUB = "api/users/{id}/subscriptions/albums";
     // 退出群组
-    public static final String URL_GROUP_DELETE = " api/users/{pid}/chat-groups/{gid}";
+    public static final String URL_GROUP_DELETE = "api/users/{pid}/chat-groups/{gid}";
+    // 移交群主(X)
+    public static final String URL_GROUP_TRANSFER_MANAGER = "";
     // 推荐的成员(X)
     public static final String URL_GET_PERSON_RECOMMEND = "";
     // 推荐的群组(X)

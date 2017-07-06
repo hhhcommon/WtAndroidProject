@@ -13,7 +13,7 @@ import rx.schedulers.Schedulers;
  * 作者：xinLong on 2017/5/16 14:28
  * 邮箱：645700751@qq.com
  */
-public class GroupApplyModel extends UserInfo {
+public class GroupApplyForNewsModel extends UserInfo {
 
     /**
      * 进行数据交互
@@ -22,7 +22,7 @@ public class GroupApplyModel extends UserInfo {
      * @param listener 监听
      */
     public void loadNews(String id, String s, final OnLoadInterface listener) {
-        RetrofitUtils.getInstance().groupApply(id, s)
+        RetrofitUtils.getInstance().groupApply(id, s,"")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Action1<Object>() {

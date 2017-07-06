@@ -88,6 +88,7 @@ public class StandbyChannelFragment extends Fragment implements View.OnClickList
                 break;
             case R.id.tv_ok:
                 presenter.ok(channelIndex);
+                showDialog(false);
                 break;
         }
     }
@@ -128,8 +129,8 @@ public class StandbyChannelFragment extends Fragment implements View.OnClickList
 
         Window window = CDialog.getWindow();
         window.setGravity(Gravity.BOTTOM);
-        //window.setWindowAnimations(R.style.inOutStyle);
-        window.setBackgroundDrawableResource(R.color.transparent_background);
+        window.setWindowAnimations(R.style.inOutStyle);
+        window.setBackgroundDrawableResource(R.color.transparent_40_black);
     }
 
     /**

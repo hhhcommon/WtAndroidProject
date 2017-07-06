@@ -1,5 +1,6 @@
 package com.woting.commonplat.utils;
 
+import android.content.Context;
 import android.util.Log;
 
 import com.google.gson.Gson;
@@ -8,6 +9,9 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONStringer;
 import org.json.JSONTokener;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -62,5 +66,33 @@ public class JsonEncloseUtils {
 	public static  String btToString(Object msg){
 		return	new Gson().toJson(msg);
 	}
-	
+
+	/**
+	 * 读取assets文件数据
+	 * @param context
+	 * @param fileName assets文件名
+     * @return
+     */
+	public static String getJsonDataForFile(Context context,String fileName){
+		String src = "";
+		InputStreamReader inputStreamReader;
+		try {
+			inputStreamReader = new InputStreamReader(context.getAssets().open(fileName), "UTF-8");
+			BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+			String line;
+			StringBuilder stringBuilder = new StringBuilder();
+			while ((line = bufferedReader.readLine()) != null) {
+				stringBuilder.append(line);
+			}
+			inputStreamReader.close();
+			bufferedReader.close();
+			src = stringBuilder.toString();
+			Log.e("读取assets文件数据==", stringBuilder.toString());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return src;
+	}
+
+
 }

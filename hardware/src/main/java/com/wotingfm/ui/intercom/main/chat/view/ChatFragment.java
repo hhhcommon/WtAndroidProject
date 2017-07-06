@@ -124,7 +124,7 @@ public class ChatFragment extends Fragment implements ChatAdapter.IonSlidingView
             mRecyclerView.setAdapter(mAdapter);
             mRecyclerView.setItemAnimator(new DefaultItemAnimator());
         } else {
-            mAdapter.notifyDataSetChanged();
+            mAdapter.ChangeData(list);
         }
         mAdapter.setOnSlidListener(this);
     }

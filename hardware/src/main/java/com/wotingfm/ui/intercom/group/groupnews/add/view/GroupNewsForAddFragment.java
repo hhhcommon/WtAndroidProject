@@ -253,7 +253,7 @@ public class GroupNewsForAddFragment extends Fragment implements View.OnClickLis
      *
      * @param list
      */
-    public void setGridViewData(List<Contact.user> list) {
+    public void setGridViewData(List<Contact.user> list,int num) {
         re_groupNumber.setVisibility(View.VISIBLE);
         if (adapter == null) {
             adapter = new GroupNewsPersonForAddAdapter(this.getActivity(), list);
@@ -262,7 +262,7 @@ public class GroupNewsForAddFragment extends Fragment implements View.OnClickLis
             adapter.changeData(list);
         }
         setGridListener(list);
-        tv_number.setText("（" + String.valueOf(list.size()) + "人）");// 成员数
+        tv_number.setText("（" + String.valueOf(num) + "人）");// 成员数
     }
 
     private void setGridListener(final List<Contact.user> list) {

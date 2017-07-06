@@ -35,12 +35,12 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.SimpleHolder> 
     private SlidingButtonView mMenu;
 
     public ChatAdapter(Context context, List<TalkHistory> friendList) {
-        mContext = context;
-        t = friendList;
+        this.mContext = context;
+        this.t = friendList;
     }
 
     public void ChangeData( List<TalkHistory> friendList) {
-        t = friendList;
+        this.t = friendList;
         notifyDataSetChanged();
     }
 
@@ -163,18 +163,6 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.SimpleHolder> 
         void onItemClick(View view, int position);
         void onClick(View view, int position);
         void onDeleteBtnClick(View view, int position);
-    }
-
-    /**
-     * dpתpx
-     *
-     * @param context
-     * @param dp
-     * @return
-     */
-    public static int dp2px(Context context, float dp) {
-        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
-                dp, context.getResources().getDisplayMetrics());
     }
 
     public static int getScreenWidth(Context context) {

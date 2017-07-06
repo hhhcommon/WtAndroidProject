@@ -202,7 +202,7 @@ public class CreateGroupMainPresenter {
         return true;
     }
 
-    // 发送网络请求=创建群组// 0密码群，1审核群，3密码审核群
+    // 发送网络请求=创建群组// 0密码群，1审核群，2密码审核群
     private void sendCreate(String name, String password) {
         int type = 0;
         if (b1) {
@@ -212,7 +212,7 @@ public class CreateGroupMainPresenter {
             type = 1;
         }
         if (b1 && b2) {
-            type = 3;
+            type = 2;
         }
         model.loadNews(name, password, type, url, new CreateGroupMainModel.OnLoadInterface() {
             @Override

@@ -7,22 +7,25 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.widget.Toast;
-
+import com.google.gson.Gson;
+import com.woting.commonplat.config.GlobalNetWorkConfig;
 import com.woting.commonplat.manager.FileManager;
 import com.woting.commonplat.utils.BitmapUtils;
 import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.config.GlobalStateConfig;
+import com.wotingfm.common.utils.ToastUtils;
+import com.wotingfm.ui.intercom.group.editgroupmessage.model.AddressModel;
 import com.wotingfm.ui.intercom.group.editgroupmessage.model.EditGroupMessageModel;
 import com.wotingfm.ui.intercom.group.editgroupmessage.view.EditGroupMessageFragment;
 import com.wotingfm.ui.intercom.group.groupintroduce.view.EditGroupIntroduceFragment;
-import com.wotingfm.ui.intercom.group.groupmumbershow.view.GroupNumberShowFragment;
 import com.wotingfm.ui.intercom.group.groupname.view.EditGroupNameFragment;
-import com.wotingfm.ui.intercom.group.groupnews.noadd.view.GroupNewsForNoAddFragment;
 import com.wotingfm.ui.intercom.main.contacts.model.Contact;
 import com.wotingfm.ui.intercom.main.view.InterPhoneActivity;
 import com.wotingfm.ui.photocut.PhotoCutActivity;
-
+import org.json.JSONObject;
 import java.io.File;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 作者：xinLong on 2017/6/5 13:55
@@ -35,54 +38,70 @@ public class EditGroupMessagePresenter {
     private final int TO_GALLERY = 1;           // 标识 打开系统图库
     private final int TO_CAMERA = 2;            // 标识 打开系统照相机
     private final int PHOTO_REQUEST_CUT = 7;    // 标识 跳转到图片裁剪界面
-    private final Contact.group group;
+    private Contact.group group;
     private String outputFilePath;
     private boolean headViewShow = false;// 图片选择界面是否展示
 
     public EditGroupMessagePresenter(EditGroupMessageFragment activity) {
         this.activity = activity;
-        this.model = new EditGroupMessageModel();
-        Bundle bundle = activity.getArguments();
-        group = (Contact.group) bundle.getSerializable("group");
+        this.model = new EditGroupMessageModel(activity);
+        try {
+            group = (Contact.group) activity.getArguments().getSerializable("group");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        if (group != null) {
+            getData();
+            getAddress();
+        } else {
+            ToastUtils.show_always(activity.getActivity(), "数据出错了，请稍后再试！");
+            InterPhoneActivity.close();
+        }
     }
 
-    public void getData() {
-        if (GlobalStateConfig.test) {
-            String imgUrl = "";
-            String groupName = "测试——测试群";
-            String groupAddress = "测试——北京";
-            String groupIntroduce = "测试--群介绍信息";
-            activity.setViewForImage(imgUrl);
-            activity.setViewForGroupName(groupName);
-            activity.setViewGroupAddress(groupAddress);
-            activity.setViewForGroupIntroduce(groupIntroduce);
-        } else {
-            String imgUrl = group.getLogo_url();
-            if (imgUrl != null && !imgUrl.equals("")) {
-                activity.setViewForImage(imgUrl);
-            } else {
-                activity.setViewForImage("");
-            }
-            String groupName = group.getTitle();
-            if (groupName != null && !groupName.equals("")) {
-                activity.setViewForGroupName(groupName);
-            } else {
-                activity.setViewForGroupName("");
-            }
-            String groupAddress = group.getLocation();
-            if (groupAddress != null && !groupAddress.equals("")) {
-                activity.setViewGroupAddress(groupAddress);
-            } else {
-                activity.setViewGroupAddress("");
-            }
-            String groupIntroduce = group.getIntroduction();
-            if (groupIntroduce != null && !groupIntroduce.equals("")) {
-                activity.setViewForGroupIntroduce(groupIntroduce);
-            } else {
-                activity.setViewForGroupIntroduce("");
+    private void getAddress() {
+        Object[] list = model.getAddress();
+        if (list != null && list.length > 0) {
+            Map<String, List<AddressModel.SubCata>> tempMap = (Map<String, List<AddressModel.SubCata>>) list[0];
+            Map<String, List<String>> positionMap = (Map<String, List<String>>) list[1];
+            List<String> provinceList = (List<String>) list[2];
+
+            if(positionMap!=null&&positionMap.size()>0&&provinceList!=null&&provinceList.size()>0){
+                activity.cityPickerDialog(positionMap, provinceList);
+            }else{
+                ToastUtils.show_always(activity.getActivity(),"address失败");
             }
         }
 
+    }
+
+
+    // 适配界面数据
+    private void getData() {
+        String imgUrl = group.getLogo_url();
+        if (imgUrl != null && !imgUrl.equals("")) {
+            activity.setViewForImage(imgUrl);
+        } else {
+            activity.setViewForImage("");
+        }
+        String groupName = group.getTitle();
+        if (groupName != null && !groupName.equals("")) {
+            activity.setViewForGroupName(groupName);
+        } else {
+            activity.setViewForGroupName("");
+        }
+        String groupAddress = group.getLocation();
+        if (groupAddress != null && !groupAddress.equals("")) {
+            activity.setViewGroupAddress(groupAddress);
+        } else {
+            activity.setViewGroupAddress("");
+        }
+        String groupIntroduce = group.getIntroduction();
+        if (groupIntroduce != null && !groupIntroduce.equals("")) {
+            activity.setViewForGroupIntroduce(groupIntroduce);
+        } else {
+            activity.setViewForGroupIntroduce("");
+        }
     }
 
     /**
@@ -155,35 +174,6 @@ public class EditGroupMessagePresenter {
         }
     }
 
-    ///////////////////////////////////////////////////////////////////////////////////////////////
-    // 检查数据的正确性  检查通过则进行登录
-    private boolean checkData() {
-        Toast.makeText(activity.getActivity(), "测试", Toast.LENGTH_LONG).show();
-        return true;
-    }
-
-    // 发送网络请求
-    private void send(String password, int type) {
-        model.loadNews(password, type, new EditGroupMessageModel.OnLoadInterface() {
-            @Override
-            public void onSuccess(Object o) {
-//                loginView.removeDialog();
-                dealLoginSuccess(o);
-            }
-
-            @Override
-            public void onFailure(String msg) {
-//                loginView.removeDialog();
-//                ToastUtils.showVolleyError(loginView);
-            }
-        });
-    }
-
-    // 处理返回数据
-    private void dealLoginSuccess(Object o) {
-
-    }
-
     // 图片裁剪
     private void startPhotoZoom(Uri uri) {
         Intent intent = new Intent(activity.getActivity(), PhotoCutActivity.class);
@@ -200,26 +190,101 @@ public class EditGroupMessagePresenter {
      * 跳转到群名称界面
      */
     public void setGroupName() {
-        EditGroupNameFragment fragment = new EditGroupNameFragment();
-        Bundle bundle = new Bundle();
-        bundle.putSerializable("list", group);
-        fragment.setArguments(bundle);
-        InterPhoneActivity.open(fragment);
-    }
-
-    public void setGroupAddress() {
+        if (group != null) {
+            EditGroupNameFragment fragment = new EditGroupNameFragment();
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("group", group);
+            fragment.setArguments(bundle);
+            InterPhoneActivity.open(fragment);
+            fragment.setResultListener(new EditGroupNameFragment.ResultListener() {
+                @Override
+                public void resultListener(boolean type, String name) {
+                    if (type) {
+                        if (name != null && !name.equals("")) {
+                            activity.setViewForGroupName(name);
+                        }
+                    }
+                }
+            });
+        } else {
+            ToastUtils.show_always(activity.getActivity(), "数据出错了，请稍后再试！");
+        }
     }
 
     /**
      * 跳转到群介绍界面
      */
     public void setGroupIntroduce() {
-        EditGroupIntroduceFragment fragment = new EditGroupIntroduceFragment();
-        Bundle bundle = new Bundle();
-        bundle.putSerializable("list", group);
-        fragment.setArguments(bundle);
-        InterPhoneActivity.open(fragment);
+        if (group != null) {
+            EditGroupIntroduceFragment fragment = new EditGroupIntroduceFragment();
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("group", group);
+            fragment.setArguments(bundle);
+            InterPhoneActivity.open(fragment);
+            fragment.setResultListener(new EditGroupIntroduceFragment.ResultListener() {
+                @Override
+                public void resultListener(boolean type, String name) {
+                    if (type) {
+                        if (name != null && !name.equals("")) {
+                            activity.setViewForGroupIntroduce(name);
+                        }
+                    }
+                }
+            });
+        } else {
+            ToastUtils.show_always(activity.getActivity(), "数据出错了，请稍后再试！");
+        }
+
     }
 
+    /**
+     * 修改地理位置
+     * @param name
+     */
+    public void sendAddress(final String name) {
+        if(name!=null&&!name.equals("")){
+            if(GlobalStateConfig.test){
+                activity.setViewGroupAddress(name);
+            }else{
+                if (GlobalNetWorkConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
+                    activity.dialogShow();
+                    String id = group.getId();
+                    model.loadNews(id, name, new EditGroupMessageModel.OnLoadInterface() {
+                        @Override
+                        public void onSuccess(Object o) {
+                            activity.dialogCancel();
+                            dealSuccess(o, name);
+                        }
 
+                        @Override
+                        public void onFailure(String msg) {
+                            activity.dialogCancel();
+                            ToastUtils.show_always(activity.getActivity(), "修改失败，请稍后再试！");
+                        }
+                    });
+                } else {
+                    ToastUtils.show_always(activity.getActivity(), "网络连接失败，请稍后再试！");
+                }
+            }
+        }
+    }
+
+    private void dealSuccess(Object o, String name) {
+        try {
+            String s = new Gson().toJson(o);
+            JSONObject js = new JSONObject(s);
+            int ret = js.getInt("ret");
+            Log.e("修改群地址=ret", String.valueOf(ret));
+            if (ret == 0) {
+                activity.setViewGroupAddress(name);
+                ToastUtils.show_always(activity.getActivity(), "修改成功");
+            } else {
+                ToastUtils.show_always(activity.getActivity(), "修改失败，请稍后再试！");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            // 设置数据出错界面
+            ToastUtils.show_always(activity.getActivity(), "修改失败，请稍后再试！");
+        }
+    }
 }

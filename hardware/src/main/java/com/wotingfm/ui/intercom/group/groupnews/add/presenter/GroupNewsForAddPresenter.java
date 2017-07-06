@@ -69,7 +69,7 @@ public class GroupNewsForAddPresenter {
                 if (list != null && list.size() > 0) {
                     ArrayList<Contact.user> _list = model.assemblyDataForGroup(list, true);// 组装群成员展示数据
                     if (_list != null && _list.size() > 0) {
-                        activity.setGridViewData(_list);
+                        activity.setGridViewData(_list,list.size());
                     } else {
                         activity.setViewForNoGroupPerson();
                     }
@@ -227,7 +227,7 @@ public class GroupNewsForAddPresenter {
                     boolean b = model.isAdmin(list);// 判断当前用户是否是管理员
                     ArrayList<Contact.user> _list = model.assemblyDataForGroup(list, b);
                     if (_list != null && _list.size() > 0) {
-                        activity.setGridViewData(_list);
+                        activity.setGridViewData(_list,list.size());
                     } else {
                         activity.setViewForNoGroupPerson();
                     }

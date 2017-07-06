@@ -145,15 +145,15 @@
 
         <!--  -->
         <activity
-            android:name="com.wotingfm.ui.intercom.alert.receive.view.ReceiveAlertActivity"
+            android:name=".ui.intercom.alert.receive.view.ReceiveAlertActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/MyAppTheme" />
 
         <!--  -->
         <activity
-            android:name="com.wotingfm.ui.intercom.alert.call.view.CallAlertActivity"
+            android:name=".ui.intercom.alert.call.view.CallAlertActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/MyAppTheme" />
 
         <service android:name=".common.service.FloatingWindowService" />
 

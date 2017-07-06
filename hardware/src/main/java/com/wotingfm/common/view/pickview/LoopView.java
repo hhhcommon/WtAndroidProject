@@ -97,7 +97,7 @@ public class LoopView extends View {
 
         lineSpacingMultiplier = 2.0F;
         isLoop = true;
-        itemsVisible = 9;
+        itemsVisible = 7;
         textSize = 0;
         colorGray = 0xffafafaf;
         colorBlack = 0xff313131;
@@ -328,7 +328,12 @@ public class LoopView extends View {
                 if (l1 > items.size() - 1) {
                     l1 = l1 - items.size();
                 }
-                as[k1] = items.get(l1);
+                try {
+                    as[k1] = items.get(l1);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    as[k1] = "";
+                }
             } else if (l1 < 0) {
                 as[k1] = "";
             } else if (l1 > items.size() - 1) {

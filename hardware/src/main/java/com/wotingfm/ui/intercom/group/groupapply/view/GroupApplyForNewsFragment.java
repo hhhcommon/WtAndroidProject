@@ -14,7 +14,7 @@ import android.widget.TextView;
 
 import com.wotingfm.R;
 import com.wotingfm.common.utils.DialogUtils;
-import com.wotingfm.ui.intercom.group.groupapply.presenter.GroupApplyPresenter;
+import com.wotingfm.ui.intercom.group.groupapply.presenter.GroupApplyForNewsPresenter;
 import com.wotingfm.ui.intercom.main.view.InterPhoneActivity;
 
 /**
@@ -22,11 +22,11 @@ import com.wotingfm.ui.intercom.main.view.InterPhoneActivity;
  * 作者：xinLong on 2017/6/5 01:30
  * 邮箱：645700751@qq.com
  */
-public class GroupApplyFragment extends Fragment implements View.OnClickListener {
+public class GroupApplyForNewsFragment extends Fragment implements View.OnClickListener {
     private View rootView;
     private EditText et_news;
     private TextView tv_number;
-    private GroupApplyPresenter presenter;
+    private GroupApplyForNewsPresenter presenter;
     private Dialog dialog;
 
     @Override
@@ -37,10 +37,10 @@ public class GroupApplyFragment extends Fragment implements View.OnClickListener
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         if (rootView == null) {
-            rootView = inflater.inflate(R.layout.fragment_apply, container, false);
+            rootView = inflater.inflate(R.layout.fragment_apply_news, container, false);
             rootView.setOnClickListener(this);
             inItView();
-            presenter = new GroupApplyPresenter(this);
+            presenter = new GroupApplyForNewsPresenter(this);
         }
         return rootView;
     }

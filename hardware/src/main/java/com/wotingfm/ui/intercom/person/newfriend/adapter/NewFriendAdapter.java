@@ -29,15 +29,20 @@ import java.util.List;
  */
 
 public class NewFriendAdapter extends RecyclerView.Adapter<NewFriendAdapter.SimpleHolder> implements SlidingButtonView.IonSlidingButtonListener {
-    private final List<NewFriend> mData;
+    private List<NewFriend> mData;
     private Context mContext;
 
     private IonSlidingViewClickListener mIDeleteBtnClickListener;
     private SlidingButtonView mMenu;
 
     public NewFriendAdapter(Context context, List<NewFriend> friendList) {
-        mContext = context;
-        mData = friendList;
+        this.mContext = context;
+        this.mData = friendList;
+    }
+
+    public void changeData(List<NewFriend> friendList) {
+        this.mData = friendList;
+        notifyDataSetChanged();
     }
 
     @Override
@@ -51,12 +56,12 @@ public class NewFriendAdapter extends RecyclerView.Adapter<NewFriendAdapter.Simp
     public void onBindViewHolder(final SimpleHolder holder, int position) {
         NewFriend m = mData.get(position);
 
-        if(m.getApply_type().equals("1")){
+        if (m.getApply_type().equals("1")) {
             holder.layout_content.getLayoutParams().width = getScreenWidth(mContext);
             holder.tv_name.setText(m.getName());
             holder.tv_oks.setVisibility(View.GONE);
             holder.tv_ok.setVisibility(View.VISIBLE);
-        }else{
+        } else {
             holder.layout_content.getLayoutParams().width = getScreenWidth(mContext);
             holder.tv_name.setText(m.getName());
             holder.tv_oks.setVisibility(View.VISIBLE);
@@ -111,8 +116,8 @@ public class NewFriendAdapter extends RecyclerView.Adapter<NewFriendAdapter.Simp
 
     class SimpleHolder extends RecyclerView.ViewHolder {
         public ImageView img_url;
-        public TextView tv_name, tv_news, tv_ok,tv_Delete,tv_oks;
-        public RelativeLayout layout_content,re_adapter;
+        public TextView tv_name, tv_news, tv_ok, tv_Delete, tv_oks;
+        public RelativeLayout layout_content, re_adapter;
 
         public SimpleHolder(View itemView) {
             super(itemView);
@@ -167,7 +172,9 @@ public class NewFriendAdapter extends RecyclerView.Adapter<NewFriendAdapter.Simp
 
     public interface IonSlidingViewClickListener {
         void onItemClick(View view, int position);
+
         void onAdapterClick(View view, int position);
+
         void onDeleteBtnClick(View view, int position);
     }
 

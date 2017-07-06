@@ -9,6 +9,7 @@ import com.wotingfm.ui.base.model.UserInfo;
 import com.wotingfm.ui.intercom.main.contacts.model.Contact;
 import com.wotingfm.ui.user.login.model.Login;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import rx.android.schedulers.AndroidSchedulers;
@@ -28,9 +29,26 @@ public class GroupNewsForNoAddModel extends UserInfo {
     }
 
     /**
+     * 组建群成员界面
+     *
+     * @param list
+     * @return
+     */
+    public List<Contact.user> assemblyDataForGroup(List<Contact.user> list) {
+        // 组装数据
+        List<Contact.user> g_list = new ArrayList<>();
+        for (int i = 0; i < list.size(); i++) {
+            if (list.get(i).is_admin()) {
+                g_list.add(g_list.get(i));
+            }
+        }
+        return g_list;
+    }
+
+    /**
      * 获取群组信息
      */
-    public void loadNews(String id,final OnLoadInterface listener) {
+    public void loadNews(String id, final OnLoadInterface listener) {
         RetrofitUtils.getInstance().getGroupNews(id)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -38,7 +56,7 @@ public class GroupNewsForNoAddModel extends UserInfo {
                     @Override
                     public void call(Object o) {
                         try {
-                            Log.e("获取群组信息返回数据",new Gson().toJson(o));
+                            Log.e("获取群组信息返回数据", new Gson().toJson(o));
                             //填充UI
                             listener.onSuccess(o);
                         } catch (Exception e) {
@@ -58,7 +76,7 @@ public class GroupNewsForNoAddModel extends UserInfo {
     /**
      * 获取群成员
      */
-    public void loadNewsForGroupPerson(String id,final OnLoadInterface listener) {
+    public void loadNewsForGroupPerson(String id, final OnLoadInterface listener) {
         RetrofitUtils.getInstance().getGroupPerson(id)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -66,7 +84,7 @@ public class GroupNewsForNoAddModel extends UserInfo {
                     @Override
                     public void call(Object o) {
                         try {
-                            Log.e("获取群组成员返回数据",new Gson().toJson(o));
+                            Log.e("获取群组成员返回数据", new Gson().toJson(o));
                             //填充UI
                             listener.onSuccess(o);
                         } catch (Exception e) {
@@ -85,6 +103,7 @@ public class GroupNewsForNoAddModel extends UserInfo {
 
     public interface OnLoadInterface {
         void onSuccess(Object o);
+
         void onFailure(String msg);
     }
 }

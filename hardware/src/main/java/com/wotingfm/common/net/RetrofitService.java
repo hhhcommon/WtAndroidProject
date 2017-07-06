@@ -324,7 +324,8 @@ public interface RetrofitService {
     // 入组申请
     @POST(Api.URL_GROUP_APPLY)
     Observable<Object> groupApply(@Path("id") String gid,
-                                  @Query("s") String s);
+                                  @Query("news") String news,
+                                  @Query("password") String password);
 
     // 好友订阅专辑
     @POST(Api.URL_PERSON_SUB)
@@ -335,6 +336,10 @@ public interface RetrofitService {
     Observable<Object> exitGroup(@Path("gid") String gid,
                                  @Path("pid") String pid);
 
+    // 移交群主
+    @DELETE(Api.URL_GROUP_TRANSFER_MANAGER)
+    Observable<Object> transferManager(@Path("gid") String gid,
+                                 @Path("pid") String pid);
 
 }
 

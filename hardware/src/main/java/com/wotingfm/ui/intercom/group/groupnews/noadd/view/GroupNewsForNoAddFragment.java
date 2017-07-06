@@ -1,13 +1,9 @@
 package com.wotingfm.ui.intercom.group.groupnews.noadd.view;
 
 import android.app.Dialog;
-import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.design.widget.AppBarLayout;
 import android.support.v4.app.Fragment;
-import android.support.v4.widget.NestedScrollView;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,7 +11,6 @@ import android.view.ViewGroup;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
-import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.woting.commonplat.widget.TipView;
@@ -23,12 +18,10 @@ import com.wotingfm.R;
 import com.wotingfm.common.utils.DialogUtils;
 import com.wotingfm.common.view.myscrollview.ObservableScrollView;
 import com.wotingfm.ui.base.baseinterface.ScrollViewListener;
-import com.wotingfm.ui.intercom.group.groupapply.view.GroupApplyFragment;
 import com.wotingfm.ui.intercom.group.groupnews.noadd.adapter.GroupNewsPersonForNoAddAdapter;
 import com.wotingfm.ui.intercom.group.groupnews.noadd.presenter.GroupNewsForNoAddPresenter;
 import com.wotingfm.ui.intercom.main.contacts.model.Contact;
 import com.wotingfm.ui.intercom.main.view.InterPhoneActivity;
-import com.wotingfm.ui.intercom.person.personapply.view.PersonApplyFragment;
 
 import java.util.List;
 
@@ -237,26 +230,5 @@ public class GroupNewsForNoAddFragment extends Fragment implements View.OnClickL
     public void dialogCancel() {
         if (dialog != null) dialog.dismiss();
     }
-
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-    }
-
 
 }

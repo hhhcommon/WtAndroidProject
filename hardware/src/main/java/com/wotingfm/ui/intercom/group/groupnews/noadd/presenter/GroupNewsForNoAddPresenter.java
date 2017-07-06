@@ -7,18 +7,18 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.woting.commonplat.config.GlobalNetWorkConfig;
 import com.wotingfm.common.config.GlobalStateConfig;
-import com.wotingfm.ui.intercom.group.groupapply.view.GroupApplyFragment;
+import com.wotingfm.ui.intercom.group.groupapply.GroupApplyFragment;
+import com.wotingfm.ui.intercom.group.groupapply.view.GroupApplyForNewsFragment;
 import com.wotingfm.ui.intercom.group.groupmumbershow.view.GroupNumberShowFragment;
 import com.wotingfm.ui.intercom.group.groupnews.noadd.model.GroupNewsForNoAddModel;
 import com.wotingfm.ui.intercom.group.groupnews.noadd.view.GroupNewsForNoAddFragment;
 import com.wotingfm.ui.intercom.main.contacts.model.Contact;
 import com.wotingfm.ui.intercom.main.view.InterPhoneActivity;
-import com.wotingfm.ui.intercom.person.personapply.view.PersonApplyFragment;
 
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
-import java.util.ArrayList;
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -29,14 +29,18 @@ public class GroupNewsForNoAddPresenter {
 
     private final GroupNewsForNoAddFragment activity;
     private final GroupNewsForNoAddModel model;
-    private final String id;
-    private ArrayList<Contact.user> g_list;// 全部管理员
+    private  String id;
+    private List<Contact.user> _list;
+    private String access = "2";//  0密码群，1审核群，2密码审核群
 
     public GroupNewsForNoAddPresenter(GroupNewsForNoAddFragment activity) {
         this.activity = activity;
         this.model = new GroupNewsForNoAddModel();
-        Bundle bundle = activity.getArguments();
-        id = bundle.getString("id");
+        try {
+            id = activity.getArguments().getString("id");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -106,7 +110,7 @@ public class GroupNewsForNoAddPresenter {
                     // 设置数据出错界面
                     activity.isLoginView(4);
                 }
-            }else{
+            } else {
                 // 设置数据出错界面
                 activity.isLoginView(4);
             }
@@ -140,6 +144,13 @@ public class GroupNewsForNoAddPresenter {
         String introduce = "";
         try {
             introduce = g_news.getIntroduction();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
+        try {
+            access = g_news.getMember_access_mode();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -184,12 +195,18 @@ public class GroupNewsForNoAddPresenter {
                 }.getType());
                 if (list != null) {
                     // 处理数据
-                    assemblyDataForGroup(list);
+                    _list = model.assemblyDataForGroup(list);
+                    // 数据适配
+                    if (_list != null && _list.size() > 0) {
+                        activity.setGridViewData(_list);
+                    } else {
+                        activity.setViewForNoGroupPerson();
+                    }
                 } else {
                     // 设置数据出错界面
                     activity.setViewForNoGroupPerson();
                 }
-            }else{
+            } else {
                 // 设置数据出错界面
                 activity.setViewForNoGroupPerson();
             }
@@ -200,53 +217,32 @@ public class GroupNewsForNoAddPresenter {
         }
     }
 
-    // 组建群成员界面
-    private void assemblyDataForGroup(List<Contact.user> list) {
-        // 组装数据
-         g_list = new ArrayList<>();
-        for (int i = 0; i < list.size(); i++) {
-            if (list.get(i).is_admin()) {
-                g_list.add(g_list.get(i));
-            }
-        }
-        // 数据适配
-        if (g_list != null && g_list.size() > 0) {
-            if (g_list.size() > 5) {
-                ArrayList<Contact.user> _list = new ArrayList<>();
-                for (int i = 0; i < 5; i++) {
-                    _list.add(g_list.get(i));
-                }
-                activity.setGridViewData(_list);
-            } else {
-                activity.setGridViewData(g_list);
-            }
-        } else {
-            activity.setViewForNoGroupPerson();
-        }
-    }
-
-     /**
-     * 跳转到成员列表界面
-     */
-    public void  jump(){
-        GroupNumberShowFragment fragment = new GroupNumberShowFragment();
-        Bundle bundle = new Bundle();
-        bundle.putSerializable("list", g_list);
-        fragment.setArguments(bundle);
-        InterPhoneActivity.open(fragment);
-    }
     /**
      * 跳转到成员列表界面
      */
-    public void apply(){
-        GroupApplyFragment fragment = new GroupApplyFragment();
-        Bundle bundle = new Bundle();
-        bundle.putString("id", id);
-        fragment.setArguments(bundle);
-        InterPhoneActivity.open(fragment);
+    public void jump() {
+        if (_list != null && _list.size() > 0) {
+            GroupNumberShowFragment fragment = new GroupNumberShowFragment();
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("list", (Serializable) _list);
+            fragment.setArguments(bundle);
+            InterPhoneActivity.open(fragment);
+        }
     }
 
-
+    /**
+     * 跳转到申请界面
+     */
+    public void apply() {
+        if (id != null && !id.equals("")) {
+            GroupApplyFragment fragment = new GroupApplyFragment();
+            Bundle bundle = new Bundle();
+            bundle.putString("gid", id);
+            bundle.putString("type", access);
+            fragment.setArguments(bundle);
+            InterPhoneActivity.open(fragment);
+        }
+    }
 
     /**
      * 异常按钮点击
@@ -254,7 +250,7 @@ public class GroupNewsForNoAddPresenter {
      * @param type
      */
     public void tipClick(int type) {
-        if(type==4){
+        if (type == 4) {
             getData();
         }
     }

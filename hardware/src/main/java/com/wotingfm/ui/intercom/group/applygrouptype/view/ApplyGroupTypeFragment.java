@@ -1,26 +1,32 @@
 package com.wotingfm.ui.intercom.group.applygrouptype.view;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageView;
 
 import com.wotingfm.R;
+import com.wotingfm.common.utils.DialogUtils;
 import com.wotingfm.ui.intercom.group.applygrouptype.presenter.ApplyGroupTypePresenter;
 import com.wotingfm.ui.intercom.main.view.InterPhoneActivity;
 
 /**
- * 加群方式(待定)
+ * 加群方式
  * 作者：xinLong on 2017/6/5 01:30
  * 邮箱：645700751@qq.com
  */
 public class ApplyGroupTypeFragment extends Fragment implements View.OnClickListener {
     private View rootView;
     private ApplyGroupTypePresenter presenter;
-    private ImageView img_password,img_shen;
+    private ImageView img_password, img_shen;
+    private EditText et_password;
+    private ResultListener Listener;
+    private Dialog dialog;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -43,9 +49,10 @@ public class ApplyGroupTypeFragment extends Fragment implements View.OnClickList
     private void inItView() {
         rootView.findViewById(R.id.head_left_btn).setOnClickListener(this);
         rootView.findViewById(R.id.tv_ok).setOnClickListener(this);
-        img_password=(ImageView)rootView.findViewById(R.id.img_password);
+        img_password = (ImageView) rootView.findViewById(R.id.img_password);
         img_password.setOnClickListener(this);
-        img_shen=(ImageView)rootView.findViewById(R.id.img_shen);
+        et_password = (EditText) rootView.findViewById(R.id.et_password);
+        img_shen = (ImageView) rootView.findViewById(R.id.img_shen);
         img_shen.setOnClickListener(this);
     }
 
@@ -56,7 +63,8 @@ public class ApplyGroupTypeFragment extends Fragment implements View.OnClickList
                 InterPhoneActivity.close();
                 break;
             case R.id.tv_ok:// 确定
-                presenter.ok();
+                String m = et_password.getText().toString();
+                presenter.ok(m);
                 break;
             case R.id.img_password:// 密码群
                 presenter.password();
@@ -67,48 +75,77 @@ public class ApplyGroupTypeFragment extends Fragment implements View.OnClickList
         }
     }
 
+
+    /**
+     * 返回值设置
+     *
+     * @param type
+     * @param password
+     */
+    public void setResult(int type, String password) {
+        Listener.resultListener(type, password);
+    }
+
     /**
      * 设置密码群样式
+     *
      * @param b
      */
-    public void setPasswordView(boolean b){
-        if(b){
+    public void setPasswordView(boolean b) {
+        if (b) {
             img_password.setImageResource(R.mipmap.create_group_icon_selected_s);
-        }else{
+        } else {
             img_password.setImageResource(R.mipmap.create_group_icon_selected_n);
         }
     }
 
     /**
+     * 设置密码群密码
+     *
+     * @param s
+     */
+    public void setPasswordViewNews(String s) {
+        et_password.setText(s);
+    }
+
+    /**
      * 设置审核群样式
+     *
      * @param b
      */
-    public void setShenView(boolean b){
-        if(b){
+    public void setShenView(boolean b) {
+        if (b) {
             img_shen.setImageResource(R.mipmap.create_group_icon_selected_s);
-        }else{
+        } else {
             img_shen.setImageResource(R.mipmap.create_group_icon_selected_n);
         }
     }
 
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
+    /**
+     * 展示弹出框
+     */
+    public void dialogShow() {
+        dialog = DialogUtils.Dialog(this.getActivity());
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
+    /**
+     * 取消弹出框
+     */
+    public void dialogCancel() {
+        if (dialog != null) dialog.dismiss();
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
+    /**
+     * 回调结果值
+     *
+     * @param l
+     */
+    public void setResultListener(ResultListener l) {
+        Listener = l;
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
+    public interface ResultListener {
+        void resultListener(int type, String password);
     }
 
 }
