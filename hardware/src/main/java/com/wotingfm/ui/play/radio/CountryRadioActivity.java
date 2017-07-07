@@ -20,6 +20,7 @@ import com.woting.commonplat.widget.LoadFrameLayout;
 import com.wotingfm.R;
 import com.wotingfm.common.adapter.albumsAdapter.AlbumsAdapter;
 import com.wotingfm.common.adapter.radioAdapter.RadioAdapter;
+import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.bean.AlbumsBean;
 import com.wotingfm.common.bean.Radio;
 import com.wotingfm.common.config.LocationInfo;
@@ -57,7 +58,8 @@ public class CountryRadioActivity extends BaseToolBarActivity implements OnLoadM
 
     @Override
     public int getLayoutId() {
-        return R.layout.activity_country_radio;
+
+        BSApplication.E_CLASS = getClass().getName();return R.layout.activity_country_radio;
     }
 
     private LoadMoreFooterView loadMoreFooterView;

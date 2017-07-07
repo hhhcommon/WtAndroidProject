@@ -1,19 +1,33 @@
 package com.wotingfm.ui.main.view;
 
 import android.app.TabActivity;
+import android.content.ComponentName;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.WindowManager;
 import android.widget.TabHost;
+import android.widget.Toast;
 
 import com.wotingfm.R;
+import com.wotingfm.common.application.BSApplication;
+import com.wotingfm.common.bean.MessageEvent;
 import com.wotingfm.common.utils.StatusBarUtil;
+import com.wotingfm.ui.base.baseactivity.AppManager;
+import com.wotingfm.ui.base.baseactivity.BaseActivity;
+import com.wotingfm.ui.base.baseactivity.NoTitleBarBaseActivity;
 import com.wotingfm.ui.intercom.main.view.InterPhoneActivity;
 import com.wotingfm.ui.main.presenter.MainPresenter;
 import com.wotingfm.ui.test.PlayerActivity;
 import com.wotingfm.ui.mine.main.MineActivity;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
+import static android.content.Intent.FLAG_ACTIVITY_REORDER_TO_FRONT;
 
 
 public class MainActivity extends TabActivity {
@@ -25,6 +39,7 @@ public class MainActivity extends TabActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        EventBus.getDefault().register(this);
         context = this;
  /*       if (Build.VERSION.SDK_INT == Build.VERSION_CODES.KITKAT) {
             // 设置全屏，并且不会Activity的布局让出状态栏的空间
@@ -37,8 +52,8 @@ public class MainActivity extends TabActivity {
         InitTextView();
         mainPresenter = new MainPresenter(this);
 
-      //  applySelectedColor();
-    //    applyTextColor(false);
+        //  applySelectedColor();
+        //    applyTextColor(false);
     }
 
     // 初始化视图,主页跳转的3个界面
@@ -59,18 +74,27 @@ public class MainActivity extends TabActivity {
     /**
      * 对外提供的方法
      */
-    public static void changeOne() {
+   /* public void changeOne() {
         tabHost.setCurrentTabByTag("one");
+        Intent intent = new Intent(context,  PlayerActivity.class);
+        intent.setFlags(FLAG_ACTIVITY_REORDER_TO_FRONT);
+        context.startActivity(intent);
     }
 
-    public static void changeTwo() {
+    public void changeTwo() {
         tabHost.setCurrentTabByTag("two");
+        Intent intent = new Intent(context, InterPhoneActivity.class);
+        intent.setFlags(FLAG_ACTIVITY_REORDER_TO_FRONT);
+        context.startActivity(intent);
     }
 
-    public static void changeThree() {
+    public void changeThree() {
         tabHost.setCurrentTabByTag("three");
+        Intent intent = new Intent(context, MineActivity.class);
+        intent.setFlags(FLAG_ACTIVITY_REORDER_TO_FRONT);
+        context.startActivity(intent);
     }
-
+*/
     // app退出时执行该操作
     private void stop() {
         mainPresenter.stop();
@@ -80,6 +104,7 @@ public class MainActivity extends TabActivity {
     protected void onDestroy() {
         super.onDestroy();
         stop();
+        EventBus.getDefault().unregister(this);
     }
 
 
@@ -87,7 +112,7 @@ public class MainActivity extends TabActivity {
         // -724225
 //        float[] colorHSV = new float[]{0f, 0f, 0f};
 //        int c = Color.HSVToColor(colorHSV);
-        int c= -1;
+        int c = -1;
         int color = Color.rgb(Color.red(c), Color.green(c), Color.blue(c));
         StatusBarUtil.setStatusBarColor(context, color, false);
 //        StatusBarUtil.setStatusBarColor(context, R.color.white, false);
@@ -100,4 +125,30 @@ public class MainActivity extends TabActivity {
             StatusBarUtil.StatusBarLightMode(context, true);
         }
     }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMoonEvent(MessageEvent messageEvent) {
+        if ("one".equals(messageEvent.getMessage())) {
+            tabHost.setCurrentTabByTag("one");
+            Intent intent = null;
+            if (AppManager.getAppManager().currentActivity() != null) {
+                intent = new Intent(context, AppManager.getAppManager().currentActivity().getClass());
+            } else {
+                intent = new Intent(context, PlayerActivity.class);
+            }
+            intent.setFlags(FLAG_ACTIVITY_REORDER_TO_FRONT);
+            startActivity(intent);
+        } else if ("two".equals(messageEvent.getMessage())) {
+            tabHost.setCurrentTabByTag("two");
+            Intent intent = new Intent(context, InterPhoneActivity.class);
+            intent.setFlags(FLAG_ACTIVITY_REORDER_TO_FRONT);
+            context.startActivity(intent);
+        } else if ("three".equals(messageEvent.getMessage())) {
+            tabHost.setCurrentTabByTag("three");
+            Intent intent = new Intent(context, MineActivity.class);
+            intent.setFlags(FLAG_ACTIVITY_REORDER_TO_FRONT);
+            context.startActivity(intent);
+        }
+    }
+
 }

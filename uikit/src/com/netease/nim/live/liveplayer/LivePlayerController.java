@@ -88,7 +88,7 @@ public class LivePlayerController implements PlayerContract.MediaPlayControllerB
     /**
      * time
      */
-    private long mDuration = 0 ;
+    private long mDuration = 0;
     private long mPlayableDuration = 0;
     private long mSeekWhenPrepared;
     private int mCurrentBufferPercentage;
@@ -96,7 +96,7 @@ public class LivePlayerController implements PlayerContract.MediaPlayControllerB
     /**
      * state
      */
-    private boolean  mIsPrepared;
+    private boolean mIsPrepared;
     private boolean isHwDecoder = false; //是否硬件解码
     private boolean mPauseInBackground = false; //进入后台时是否暂停
     private boolean isBackground; //是否在后台
@@ -125,7 +125,7 @@ public class LivePlayerController implements PlayerContract.MediaPlayControllerB
 
     NetworkChangeBroadcastReceiver receiver = new NetworkChangeBroadcastReceiver();
 
-    class NetworkChangeBroadcastReceiver extends BroadcastReceiver{
+    class NetworkChangeBroadcastReceiver extends BroadcastReceiver {
         //10S内网络是否刚发生过变化
         boolean justNetworkChanged = false;
         //是否启动了倒计时发送器
@@ -135,7 +135,7 @@ public class LivePlayerController implements PlayerContract.MediaPlayControllerB
 
         @Override
         public void onReceive(Context context, Intent intent) {
-            if(timer == null) timer = new Timer();
+            if (timer == null) timer = new Timer();
 
             justNetworkChanged = true;
 
@@ -171,14 +171,14 @@ public class LivePlayerController implements PlayerContract.MediaPlayControllerB
                 mMediaPlayer.setDisplay(mSurfaceHolder);
             }
             mVideoView.onSurfaceChanged(w, h);
-            if(!isHwDecoder && mPauseInBackground && mIsPrepared && mVideoView.isSizeNormal()){
-                if(isManualPaused()){
+            if (!isHwDecoder && mPauseInBackground && mIsPrepared && mVideoView.isSizeNormal()) {
+                if (isManualPaused()) {
                     pause();
-                }else{
+                } else {
                     start();
                 }
             }
-            if(mMediaControlLayout!=null){
+            if (mMediaControlLayout != null) {
                 mMediaControlLayout.show();
             }
         }
@@ -188,14 +188,12 @@ public class LivePlayerController implements PlayerContract.MediaPlayControllerB
 
             if (mNextState != RESUME && !isBackground) {
                 openVideo();
-            }
-            else {
+            } else {
                 if (isHwDecoder) {
                     openVideo();
                     mUi.showLoading(true);
                     isBackground = false; //不在后台
-                }
-                else if (mPauseInBackground) {
+                } else if (mPauseInBackground) {
                     isBackground = false; //不在后台
                 }
             }
@@ -205,7 +203,7 @@ public class LivePlayerController implements PlayerContract.MediaPlayControllerB
             mSurfaceHolder = null;
             if (mMediaControlLayout != null) mMediaControlLayout.hide();
             if (mMediaPlayer != null) {
-                if(isHwDecoder) {
+                if (isHwDecoder) {
                     mSeekWhenPrepared = getCurrentPosition();
                     if (mMediaPlayer != null) {
                         mMediaPlayer.setDisplay(null);
@@ -215,12 +213,10 @@ public class LivePlayerController implements PlayerContract.MediaPlayControllerB
                         mCurrState = IDLE;
                     }
                     isBackground = true;
-                }
-                else if (!mPauseInBackground) {
+                } else if (!mPauseInBackground) {
                     mMediaPlayer.setDisplay(null);
                     isBackground = true;
-                }
-                else {
+                } else {
                     pause();
                     isBackground = true;
                 }
@@ -236,7 +232,8 @@ public class LivePlayerController implements PlayerContract.MediaPlayControllerB
         mContext.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                mMediaPlayer.stop();
+                if (mMediaPlayer != null)
+                    mMediaPlayer.stop();
                 initVideo();
                 start();
             }
@@ -246,12 +243,12 @@ public class LivePlayerController implements PlayerContract.MediaPlayControllerB
     /**
      * 底层状态监听器
      */
-    private class SdkStateListener implements  NELivePlayer.OnVideoSizeChangedListener, NELivePlayer.OnPreparedListener, NELivePlayer.OnCompletionListener, NELivePlayer.OnErrorListener,
-            NELivePlayer.OnBufferingUpdateListener, NELivePlayer.OnInfoListener, NELivePlayer.OnSeekCompleteListener, NELivePlayer.OnVideoParseErrorListener{
+    private class SdkStateListener implements NELivePlayer.OnVideoSizeChangedListener, NELivePlayer.OnPreparedListener, NELivePlayer.OnCompletionListener, NELivePlayer.OnErrorListener,
+            NELivePlayer.OnBufferingUpdateListener, NELivePlayer.OnInfoListener, NELivePlayer.OnSeekCompleteListener, NELivePlayer.OnVideoParseErrorListener {
 
         public void onVideoSizeChanged(NELivePlayer mp, int width, int height,
                                        int sarNum, int sarDen) {
-            Log.d(TAG, "onVideoSizeChanged: " + width + "x"+ height + "sarNum:" + sarNum + "sarDen:" + sarDen);
+            Log.d(TAG, "onVideoSizeChanged: " + width + "x" + height + "sarNum:" + sarNum + "sarDen:" + sarDen);
             mVideoView.upDateVideoSize(mp.getVideoWidth(), mp.getVideoHeight(), sarNum, sarDen);
             if (mp.getVideoWidth() != 0 && mp.getVideoHeight() != 0)
                 setVideoScalingMode(mVideoScalingMode);
@@ -264,11 +261,11 @@ public class LivePlayerController implements PlayerContract.MediaPlayControllerB
             // briefly show the controlLayout
             mIsPrepared = true;
 
-            if(isHwDecoder){
+            if (isHwDecoder) {
                 mUi.showLoading(false);
             }
 
-            if(mMediaControlLayout!=null){
+            if (mMediaControlLayout != null) {
                 mMediaControlLayout.setEnabled(true);
             }
 
@@ -281,7 +278,7 @@ public class LivePlayerController implements PlayerContract.MediaPlayControllerB
                 }
                 if (!isManualPaused()) {
                     start();
-                }else{
+                } else {
                     pause();
                 }
                 if (mMediaControlLayout != null) {
@@ -298,11 +295,11 @@ public class LivePlayerController implements PlayerContract.MediaPlayControllerB
             if (mMediaControlLayout != null)
                 mMediaControlLayout.hide();
 
-            if(mUi.onCompletion()){
+            if (mUi.onCompletion()) {
                 return;
             }
 
-            if (mVideoView.getWindowToken() != null  && mMediaType.equals(TYPE_LIVE_STREAM)) {
+            if (mVideoView.getWindowToken() != null && mMediaType.equals(TYPE_LIVE_STREAM)) {
                 // 适配Android6.0
                 AlertDialog.Builder builder;
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -330,7 +327,7 @@ public class LivePlayerController implements PlayerContract.MediaPlayControllerB
                 mMediaControlLayout.hide();
             }
 
-            if(!receiver.justNetworkChanged){
+            if (!receiver.justNetworkChanged) {
                 mUi.onError("直播异常");
                 return true;
             }
@@ -339,10 +336,10 @@ public class LivePlayerController implements PlayerContract.MediaPlayControllerB
             NetworkMonitor monitor = new NetworkMonitor(new NetworkMonitor.NetworkListener() {
                 @Override
                 public void onNetworkChanged(final NetworkMonitor monitor, boolean connected, int newType) {
-                    if (connected && !hasReconnected){
-                        if(!canUse4GNetwork && newType == NetworkUtils.TYPE_MOBILE){
-                            if(!showConfirmDialog) {
-                                 showConfirmDialog(null, "正在使用手机流量,是否继续?", new DialogInterface.OnClickListener() {
+                    if (connected && !hasReconnected) {
+                        if (!canUse4GNetwork && newType == NetworkUtils.TYPE_MOBILE) {
+                            if (!showConfirmDialog) {
+                                showConfirmDialog(null, "正在使用手机流量,是否继续?", new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
                                         DialogMaker.showProgressDialog(mContext, "网络重连中");
@@ -360,7 +357,7 @@ public class LivePlayerController implements PlayerContract.MediaPlayControllerB
                                 DialogMaker.dismissProgressDialog();
                                 monitor.stop();
                             }
-                        }else {
+                        } else {
                             hasReconnected = true;
                             restart();
                             monitor.stop();
@@ -402,18 +399,18 @@ public class LivePlayerController implements PlayerContract.MediaPlayControllerB
                     mUi.showLoading(false);
                     mUi.showAudioAnimate(false);
                     DialogMaker.dismissProgressDialog();
-                } else if (what == NELivePlayer.NELP_FIRST_AUDIO_RENDERED){
+                } else if (what == NELivePlayer.NELP_FIRST_AUDIO_RENDERED) {
                     LogUtil.d(TAG, "onInfo: NELP_FIRST_AUDIO_RENDERED");
                     hasAudio = true;
                     mHandler.postDelayed(new Runnable() {
                         @Override
                         public void run() {
-                            if(!hasVideo) {
+                            if (!hasVideo) {
                                 mUi.showLoading(false);
                                 mUi.showAudioAnimate(true);
                             }
                         }
-                    },500);
+                    }, 500);
 
                 }
             }
@@ -432,7 +429,7 @@ public class LivePlayerController implements PlayerContract.MediaPlayControllerB
         }
     }
 
-    public LivePlayerController(Activity context, PlayerContract.PlayerUi ui, NEVideoView videoView, NEVideoControlLayout controlLayout, String videoPath, int videoScaleMode, boolean isLive, boolean isHwDecoder){
+    public LivePlayerController(Activity context, PlayerContract.PlayerUi ui, NEVideoView videoView, NEVideoControlLayout controlLayout, String videoPath, int videoScaleMode, boolean isLive, boolean isHwDecoder) {
         this.mContext = context;
         this.mHandler = new Handler(mContext.getMainLooper());
         this.mUi = ui;
@@ -440,9 +437,9 @@ public class LivePlayerController implements PlayerContract.MediaPlayControllerB
         this.mVideoPath = videoPath;
         this.isHwDecoder = isHwDecoder;
         this.mMediaType = isLive ? TYPE_LIVE_STREAM : TYPE_VIDEO_ON_DEMAND;
-        this.mBufferStrategy = isLive? 0 : 2; //0为直播低延时模式，1为直播流畅模式，2为点播抗抖动模式
+        this.mBufferStrategy = isLive ? 0 : 2; //0为直播低延时模式，1为直播流畅模式，2为点播抗抖动模式
         this.isHwDecoder = isHwDecoder;
-        if(isHwDecoder){
+        if (isHwDecoder) {
             //硬件编码时,进后台只能暂停播放
             mPauseInBackground = true;
         }
@@ -485,8 +482,7 @@ public class LivePlayerController implements PlayerContract.MediaPlayControllerB
                             mMediaControlLayout.hide();
                         }
                         return true;
-                    }
-                    else {
+                    } else {
                         toggleMediaControlLayoutVisibility();
                     }
                 }
@@ -495,14 +491,14 @@ public class LivePlayerController implements PlayerContract.MediaPlayControllerB
 
             @Override
             public void onTouchEvent(MotionEvent event) {
-                if(mIsPrepared && mMediaPlayer!=null && mMediaControlLayout!=null) {
+                if (mIsPrepared && mMediaPlayer != null && mMediaControlLayout != null) {
                     toggleMediaControlLayoutVisibility();
                 }
             }
 
             @Override
             public void onTrackballEvent(MotionEvent event) {
-                if(mIsPrepared && mMediaPlayer!=null && mMediaControlLayout!=null) {
+                if (mIsPrepared && mMediaPlayer != null && mMediaControlLayout != null) {
                     toggleMediaControlLayoutVisibility();
                 }
             }
@@ -614,7 +610,7 @@ public class LivePlayerController implements PlayerContract.MediaPlayControllerB
                     mMediaPlayer.setScreenOnWhilePlaying(true);
                     mMediaPlayer.prepareAsync(mContext);
                     mCurrState = PREPARING;
-                }  catch (Exception e) {
+                } catch (Exception e) {
                     mHandler.post(new Runnable() {
                         @Override
                         public void run() {
@@ -637,11 +633,11 @@ public class LivePlayerController implements PlayerContract.MediaPlayControllerB
 
     @Override
     public boolean switchPauseResume() {
-        if(isPlaying()){
+        if (isPlaying()) {
             pause();
             setManualPause(true);
             return true;
-        }else{
+        } else {
             start();
             setManualPause(false);
             return false;
@@ -729,12 +725,12 @@ public class LivePlayerController implements PlayerContract.MediaPlayControllerB
     @Override
     public int getCurrentPosition() {
         if (mMediaPlayer != null && mIsPrepared) {
-            long currentPosition =  mMediaPlayer.getCurrentPosition();
+            long currentPosition = mMediaPlayer.getCurrentPosition();
             //硬件解码直播时,当从后台切回前台,由于重启了Player,总时间需要加上上次播放的时长
-            if(isHwDecoder && isLiveStream()){
-                currentPosition +=mSeekWhenPrepared;
+            if (isHwDecoder && isLiveStream()) {
+                currentPosition += mSeekWhenPrepared;
             }
-            return (int)currentPosition;
+            return (int) currentPosition;
         }
         return 0;
     }
@@ -742,7 +738,7 @@ public class LivePlayerController implements PlayerContract.MediaPlayControllerB
     @SuppressLint("SdCardPath")
     @Override
     public void getSnapshot() {
-        if(!supportSnapShot()) return;
+        if (!supportSnapShot()) return;
 
         NEMediaInfo mediaInfo = mMediaPlayer.getMediaInfo();
         LogUtil.d(TAG, "VideoDecoderMode = " + mediaInfo.mVideoDecoderMode);
@@ -756,12 +752,9 @@ public class LivePlayerController implements PlayerContract.MediaPlayControllerB
             return;
         }
 
-        if (mediaInfo.mVideoDecoderMode.equals("MediaCodec"))
-        {
+        if (mediaInfo.mVideoDecoderMode.equals("MediaCodec")) {
             LogUtil.d(TAG, "================= hardware unsupport snapshot ==============");
-        }
-        else
-        {
+        } else {
             Bitmap bitmap = Bitmap.createBitmap(mVideoView.getVideoWidth(), mVideoView.getVideoHeight(), Bitmap.Config.ARGB_8888);
             mMediaPlayer.getSnapshot(bitmap);
 //            String picName = StorageUtil.getWritePath(
@@ -780,8 +773,7 @@ public class LivePlayerController implements PlayerContract.MediaPlayControllerB
                 fOut = new FileOutputStream(f);
                 if (picName.substring(picName.lastIndexOf(".") + 1, picName.length()).equals("jpg")) {
                     bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fOut);
-                }
-                else if (picName.substring(picName.lastIndexOf(".") + 1, picName.length()).equals("png")) {
+                } else if (picName.substring(picName.lastIndexOf(".") + 1, picName.length()).equals("png")) {
                     bitmap.compress(Bitmap.CompressFormat.PNG, 100, fOut);
                 }
                 fOut.flush();
@@ -798,7 +790,7 @@ public class LivePlayerController implements PlayerContract.MediaPlayControllerB
     }
 
     private boolean supportSnapShot() {
-        if(mMediaType.equals(TYPE_LOCAL_AUDIO) || isHwDecoder) {
+        if (mMediaType.equals(TYPE_LOCAL_AUDIO) || isHwDecoder) {
             mUi.onError(mMediaType.equals(TYPE_LOCAL_AUDIO) ? "音频播放不支持截图！" : "硬件解码不支持截图！");
             return false;
         }
@@ -880,7 +872,7 @@ public class LivePlayerController implements PlayerContract.MediaPlayControllerB
     @Override
     public void onActivityDestroy() {
         release_resource();
-        if(receiver!=null){
+        if (receiver != null) {
             mContext.unregisterReceiver(receiver);
         }
     }

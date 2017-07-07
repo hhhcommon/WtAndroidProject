@@ -34,6 +34,8 @@ import com.woting.commonplat.utils.ResourceUtil;
 import com.woting.commonplat.widget.LoadFrameLayout;
 import com.wotingfm.R;
 import com.wotingfm.common.adapter.PlayerAdapter;
+import com.wotingfm.common.application.BSApplication;
+import com.wotingfm.common.bean.MessageEvent;
 import com.wotingfm.common.bean.Player;
 import com.wotingfm.common.bean.Radio;
 import com.wotingfm.common.bean.SinglesBase;
@@ -128,6 +130,7 @@ public class PlayerActivity extends NoTitleBarBaseActivity implements View.OnCli
 
     @Override
     public int getLayoutId() {
+        BSApplication.E_CLASS = getClass().getName();
         return R.layout.activity_player;
     }
 
@@ -340,7 +343,8 @@ public class PlayerActivity extends NoTitleBarBaseActivity implements View.OnCli
                 GlobalStateConfig.mineFromType = 1;
                 GlobalStateConfig.activityA = "C";
                 GlobalStateConfig.activityB = "B";
-                MainActivity.changeThree();
+                EventBus.getDefault().post(new MessageEvent("three"));
+                //   MainActivity.changeThree();
                 Intent push = new Intent(BroadcastConstants.MINE_ACTIVITY_CHANGE);
                 Bundle bundle = new Bundle();
                 bundle.putInt("viewType", 3);

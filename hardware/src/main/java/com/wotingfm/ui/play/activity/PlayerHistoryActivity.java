@@ -12,6 +12,7 @@ import android.view.View;
 import com.woting.commonplat.widget.LoadFrameLayout;
 import com.wotingfm.R;
 import com.wotingfm.common.adapter.PlayerHistoryListAdapter;
+import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.bean.Player;
 import com.wotingfm.common.config.DbConfig;
 import com.wotingfm.common.database.HistoryHelper;
@@ -45,6 +46,7 @@ public class PlayerHistoryActivity extends BaseToolBarActivity {
 
     @Override
     public int getLayoutId() {
+        BSApplication.E_CLASS = getClass().getName();
         return R.layout.activity_play_history;
     }
 

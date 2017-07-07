@@ -65,7 +65,8 @@ public class LiveRoomInfoFragment extends BaseFragment {
         public void run() {
             recLen++;
             String hms = formatter.format(recLen * 1000);
-            tvTimeLeft.setText(hms);
+            if (tvTimeLeft != null)
+                tvTimeLeft.setText(hms);
             handler.postDelayed(this, 1000);
         }
     };

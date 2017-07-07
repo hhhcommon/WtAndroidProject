@@ -3,6 +3,7 @@ package com.wotingfm.common.net;
 
 import android.text.TextUtils;
 
+import com.wotingfm.R;
 import com.wotingfm.common.bean.AlbumInfo;
 import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.bean.AlbumsBean;
@@ -16,6 +17,7 @@ import com.wotingfm.common.bean.LiveBean;
 import com.wotingfm.common.bean.Player;
 import com.wotingfm.common.bean.Provinces;
 import com.wotingfm.common.bean.Radio;
+import com.wotingfm.common.bean.RadioInfo;
 import com.wotingfm.common.bean.Reports;
 import com.wotingfm.common.bean.Selected;
 import com.wotingfm.common.bean.SelectedMore;
@@ -247,6 +249,19 @@ public class RetrofitUtils {
                 });
     }
 
+    public Observable<RadioInfo.DataBean> getRadioInfo(String pid) {
+        return retrofitService.getRadioInfo(pid)
+                .map(new Func1<RadioInfo, RadioInfo.DataBean>() {
+                    @Override
+                    public RadioInfo.DataBean call(RadioInfo player) {
+                        if (player.ret != 0) {
+                            throw new IllegalStateException(player.msg);
+                        }
+                        return player.data;
+                    }
+                });
+    }
+
     public Observable<List<Provinces.DataBean.ProvincesBean>> getProvinces() {
         return retrofitService.getProvinces()
                 .map(new Func1<Provinces, List<Provinces.DataBean.ProvincesBean>>() {
@@ -371,8 +386,8 @@ public class RetrofitUtils {
                 });
     }
 
-    public Observable<BaseResult> subscriptionsAlbums() {
-        return retrofitService.subscriptionsAlbums()
+    public Observable<BaseResult> subscriptionsAlbums(String albumsId) {
+        return retrofitService.subscriptionsAlbums(albumsId)
                 .map(new Func1<BaseResult, BaseResult>() {
                     @Override
                     public BaseResult call(BaseResult s) {
@@ -381,8 +396,28 @@ public class RetrofitUtils {
                 });
     }
 
-    public Observable<BaseResult> deleteSubscriptionsAlbums() {
-        return retrofitService.deleteSubscriptionsAlbums()
+    public Observable<BaseResult> deleteSubscriptionsAlbums(String albumsId) {
+        return retrofitService.deleteSubscriptionsAlbums(albumsId)
+                .map(new Func1<BaseResult, BaseResult>() {
+                    @Override
+                    public BaseResult call(BaseResult s) {
+                        return s;
+                    }
+                });
+    }
+
+    public Observable<BaseResult> subscriptionsRadio(String albumsId) {
+        return retrofitService.subscriptionsRadio(albumsId)
+                .map(new Func1<BaseResult, BaseResult>() {
+                    @Override
+                    public BaseResult call(BaseResult s) {
+                        return s;
+                    }
+                });
+    }
+
+    public Observable<BaseResult> deleteSubscriptionsRadio(String albumsId) {
+        return retrofitService.deleteSubscriptionsRadio(albumsId)
                 .map(new Func1<BaseResult, BaseResult>() {
                     @Override
                     public BaseResult call(BaseResult s) {

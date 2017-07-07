@@ -71,6 +71,7 @@ public class AnchorPersonalCenterActivity extends NoTitleBarBaseActivity impleme
 
     @Override
     public int getLayoutId() {
+        BSApplication.E_CLASS = getClass().getName();
         return R.layout.activity_anchor_personal_center;
     }
 
@@ -188,20 +189,20 @@ public class AnchorPersonalCenterActivity extends NoTitleBarBaseActivity impleme
                                 setHeadViewData(s);
                                 dataBeanXes.addAll(s.data.user.data);
                                 mHeaderAndFooterWrapper.notifyDataSetChanged();
-                                } else {
-                                    loadLayout.showErrorView();
-                                }
+                            } else {
+                                loadLayout.showErrorView();
                             }
                         }
+                    }
 
 
-                    }, new Action1<Throwable>() {
-                        @Override
-                        public void call(Throwable throwable) {
-                            loadLayout.showErrorView();
-                        }
-                    });
-        }
+                }, new Action1<Throwable>() {
+                    @Override
+                    public void call(Throwable throwable) {
+                        loadLayout.showErrorView();
+                    }
+                });
+    }
 
     //headview
     private ImageView ivPhotoBg, ivPhoto;
@@ -242,7 +243,7 @@ public class AnchorPersonalCenterActivity extends NoTitleBarBaseActivity impleme
             @Override
             public void onClick(View v) {
                 boolean isLogin = CommonUtils.isLogin();
-                if(isLogin==false){
+                if (isLogin == false) {
                     LogoActivity.start(AnchorPersonalCenterActivity.this);
                     return;
                 }

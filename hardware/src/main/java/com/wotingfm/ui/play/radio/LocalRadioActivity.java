@@ -19,6 +19,7 @@ import com.woting.commonplat.constant.BroadcastConstants;
 import com.woting.commonplat.widget.TipView;
 import com.wotingfm.common.adapter.albumsAdapter.AlbumsAdapter;
 import com.wotingfm.common.adapter.radioAdapter.RadioAdapter;
+import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.bean.AlbumsBean;
 import com.wotingfm.common.bean.Radio;
 import com.wotingfm.common.config.LocationInfo;
@@ -57,6 +58,8 @@ public class LocalRadioActivity extends BaseToolBarActivity implements OnLoadMor
 
     @Override
     public int getLayoutId() {
+
+        BSApplication.E_CLASS = getClass().getName();
         return R.layout.activity_local_radio;
     }
 

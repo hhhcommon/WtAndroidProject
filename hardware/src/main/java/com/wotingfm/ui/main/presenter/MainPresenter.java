@@ -8,12 +8,15 @@ import android.util.Log;
 
 import com.iflytek.cloud.SpeechUtility;
 import com.woting.commonplat.receiver.NetWorkChangeReceiver;
+import com.wotingfm.common.bean.MessageEvent;
 import com.wotingfm.common.config.GlobalStateConfig;
 import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.common.service.FloatingWindowService;
 import com.wotingfm.ui.base.basepresenter.BasePresenter;
 import com.wotingfm.ui.main.model.MainModel;
 import com.wotingfm.ui.main.view.MainActivity;
+
+import org.greenrobot.eventbus.EventBus;
 
 /**
  * 作者：xinLong on 2017/5/16 14:28
@@ -57,14 +60,17 @@ public class MainPresenter extends BasePresenter {
             String action = intent.getAction();
             if (action.equals(BroadcastConstants.ACTIVITY_CHANGE)) {
                 // 按钮切换-----档位切换广播
-                int viewType = intent.getIntExtra("viewType",1);
+                int viewType = intent.getIntExtra("viewType", 1);
                 Log.e("界面显示状态", viewType + "");
                 if (viewType == 1) {
-                    mainActivity.changeOne();
-                } else if (viewType==2) {
-                    mainActivity.changeTwo();
+                    EventBus.getDefault().post(new MessageEvent("one"));
+                    //  mainActivity.changeOne();
+                } else if (viewType == 2) {
+                    EventBus.getDefault().post(new MessageEvent("two"));
+                    // mainActivity.changeTwo();
                 } else {
-                    mainActivity.changeThree();
+                    EventBus.getDefault().post(new MessageEvent("three"));
+                    // mainActivity.changeThree();
                 }
             }
         }

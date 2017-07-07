@@ -12,6 +12,7 @@ import android.view.View;
 
 import com.woting.commonplat.widget.LoadFrameLayout;
 import com.wotingfm.R;
+import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.bean.Channels;
 import com.wotingfm.common.bean.SelectedMore;
 import com.wotingfm.common.net.RetrofitUtils;
@@ -56,6 +57,7 @@ public class ClassificationActivity extends BaseToolBarActivity implements View.
 
     @Override
     public int getLayoutId() {
+        BSApplication.E_CLASS = getClass().getName();
         return R.layout.activity_classification;
     }
 

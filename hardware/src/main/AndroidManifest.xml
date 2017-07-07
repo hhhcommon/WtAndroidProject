@@ -153,6 +153,11 @@
             android:name=".ui.play.radio.ProvincesAndCitiesListRadioActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
+        <!--  电台详情-->
+        <activity
+            android:name=".ui.play.radio.RadioInfoActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" />
         <!-- 主播个人中心 -->
         <activity
             android:name=".ui.play.activity.AnchorPersonalCenterActivity"

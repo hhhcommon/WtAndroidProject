@@ -19,6 +19,7 @@ import android.view.inputmethod.InputMethodManager;
 import com.woting.commonplat.widget.LoadingDialog;
 import com.woting.commonplat.widget.WTToolbar;
 import com.wotingfm.R;
+import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.utils.ProgressDialogUtils;
 
 import butterknife.ButterKnife;

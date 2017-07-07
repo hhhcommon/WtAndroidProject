@@ -78,8 +78,11 @@ public class AlbumsInfoActivity extends NoTitleBarBaseActivity implements View.O
         activity.startActivityForResult(intent, 8088);
     }
 
+    private String albumsId;
+
     @Override
     public int getLayoutId() {
+        BSApplication.E_CLASS = getClass().getName();
         return R.layout.activity_albums_info;
     }
 
@@ -127,7 +130,7 @@ public class AlbumsInfoActivity extends NoTitleBarBaseActivity implements View.O
 
     private void subscriptionsAlbums() {
         showLodingDialog();
-        RetrofitUtils.getInstance().subscriptionsAlbums()
+        RetrofitUtils.getInstance().subscriptionsAlbums(albumsId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Action1<BaseResult>() {
@@ -159,7 +162,7 @@ public class AlbumsInfoActivity extends NoTitleBarBaseActivity implements View.O
 
     private void deleteSubscriptionsAlbums() {
         showLodingDialog();
-        RetrofitUtils.getInstance().deleteSubscriptionsAlbums()
+        RetrofitUtils.getInstance().deleteSubscriptionsAlbums(albumsId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Action1<BaseResult>() {
@@ -214,7 +217,7 @@ public class AlbumsInfoActivity extends NoTitleBarBaseActivity implements View.O
     @Override
     public void initView() {
         height = DementionUtil.dip2px(this, 210);
-        String albumsId = getIntent().getStringExtra("albumsId");
+        albumsId = getIntent().getStringExtra("albumsId");
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         ivBack.setOnClickListener(this);

@@ -19,6 +19,7 @@ import com.wotingfm.R;
 import com.wotingfm.common.adapter.albumsAdapter.AlbumsAdapter;
 import com.wotingfm.common.adapter.albumsAdapter.AlbumsInfoProgramAdapter;
 import com.wotingfm.common.adapter.downloadAdapter.DownloadSelectAdapter;
+import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.bean.Player;
 import com.wotingfm.common.bean.Subscrible;
 import com.wotingfm.common.net.RetrofitUtils;
@@ -74,6 +75,7 @@ public class DownloadSelectActivity extends NoTitleBarBaseActivity implements Vi
 
     @Override
     public int getLayoutId() {
+        BSApplication.E_CLASS = getClass().getName();
         return R.layout.activity_download_select;
     }
 

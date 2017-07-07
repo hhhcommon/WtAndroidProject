@@ -16,6 +16,7 @@ import com.woting.commonplat.constant.BroadcastConstants;
 import com.woting.commonplat.widget.LoadFrameLayout;
 import com.wotingfm.R;
 import com.wotingfm.common.adapter.radioAdapter.ProvincesAdapter;
+import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.bean.Provinces;
 import com.wotingfm.common.config.LocationInfo;
 import com.wotingfm.common.net.RetrofitUtils;
@@ -51,6 +52,7 @@ public class ProvincesAndCitiesActivity extends BaseToolBarActivity {
         return R.layout.activity_provinces_radio;
     }
 
+
     private LocationInfo locationInfo;
     private ProvincesAdapter mAdapter;
     private List<Provinces.DataBean.ProvincesBean> albumsBeanList = new ArrayList<>();
@@ -70,7 +72,7 @@ public class ProvincesAndCitiesActivity extends BaseToolBarActivity {
         mAdapter = new ProvincesAdapter(this, albumsBeanList, new ProvincesAdapter.ProvincesClick() {
             @Override
             public void clickAlbums(Provinces.DataBean.ProvincesBean singlesBean) {
-                ProvincesAndCitiesListRadioActivity.start(ProvincesAndCitiesActivity.this, singlesBean.title + "台");
+                ProvincesAndCitiesListRadioActivity.start(ProvincesAndCitiesActivity.this, singlesBean.title);
             }
         });
         headerAndFooterWrapper = new HeaderAndFooterWrapper(mAdapter);
@@ -135,7 +137,7 @@ public class ProvincesAndCitiesActivity extends BaseToolBarActivity {
                 }, new Action1<Throwable>() {
                     @Override
                     public void call(Throwable throwable) {
-                        loadLayout.showContentView();
+                        loadLayout.showErrorView();
                         throwable.printStackTrace();
                     }
                 });

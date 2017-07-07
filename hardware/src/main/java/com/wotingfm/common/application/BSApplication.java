@@ -56,7 +56,7 @@ import cn.finalteam.okhttpfinal.OkHttpFinalConfiguration;
 public class BSApplication extends Application {
     public static android.content.SharedPreferences SharedPreferences;   // 配置信息
     public static Context mContext;
-
+    public static String E_CLASS;
 
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(newBase);

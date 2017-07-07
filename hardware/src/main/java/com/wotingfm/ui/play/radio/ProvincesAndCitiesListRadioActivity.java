@@ -12,7 +12,9 @@ import com.woting.commonplat.amine.OnRefreshListener;
 import com.woting.commonplat.widget.LoadFrameLayout;
 import com.wotingfm.R;
 import com.wotingfm.common.adapter.radioAdapter.RadioAdapter;
+import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.bean.Radio;
+import com.wotingfm.common.bean.RadioInfo;
 import com.wotingfm.common.net.RetrofitUtils;
 import com.wotingfm.ui.base.baseactivity.BaseToolBarActivity;
 import com.wotingfm.ui.test.PlayerActivity;
@@ -44,6 +46,7 @@ public class ProvincesAndCitiesListRadioActivity extends BaseToolBarActivity imp
 
     @Override
     public int getLayoutId() {
+        BSApplication.E_CLASS = getClass().getName();
         return R.layout.activity_provinces_list_radio;
     }
 
@@ -53,7 +56,8 @@ public class ProvincesAndCitiesListRadioActivity extends BaseToolBarActivity imp
 
     @Override
     public void initView() {
-        setTitle(getIntent().getStringExtra("title"));
+        final String title = getIntent().getStringExtra("title");
+        setTitle(title + "台");
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         loadMoreFooterView = (LoadMoreFooterView) mRecyclerView.getLoadMoreFooterView();
@@ -63,7 +67,8 @@ public class ProvincesAndCitiesListRadioActivity extends BaseToolBarActivity imp
         mAdapter = new RadioAdapter(this, albumsBeanList, new RadioAdapter.RadioClick() {
             @Override
             public void clickAlbums(Radio.DataBean.ChannelsBean singlesBean) {
-                PlayerActivity.start(ProvincesAndCitiesListRadioActivity.this, singlesBean, null);
+                RadioInfoActivity.start(ProvincesAndCitiesListRadioActivity.this, title, singlesBean.id);
+                //     PlayerActivity.start(ProvincesAndCitiesListRadioActivity.this, singlesBean, null);
             }
         });
         mRecyclerView.setIAdapter(mAdapter);

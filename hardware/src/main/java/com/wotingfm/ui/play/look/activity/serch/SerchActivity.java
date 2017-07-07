@@ -20,6 +20,7 @@ import android.widget.TextView;
 import com.woting.commonplat.manager.VoiceRecognizer;
 import com.wotingfm.R;
 import com.wotingfm.common.adapter.MyAdapter;
+import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.ui.base.baseactivity.NoTitleBarBaseActivity;
 import com.wotingfm.ui.base.basefragment.BaseFragment;
@@ -58,6 +59,7 @@ public class SerchActivity extends NoTitleBarBaseActivity {
 
     @Override
     public int getLayoutId() {
+        BSApplication.E_CLASS = getClass().getName();
         return R.layout.activity_serch;
     }
 

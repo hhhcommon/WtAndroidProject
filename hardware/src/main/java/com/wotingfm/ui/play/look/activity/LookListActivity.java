@@ -79,6 +79,7 @@ public class LookListActivity extends NoTitleBarBaseActivity implements View.OnC
 
     @Override
     public int getLayoutId() {
+        BSApplication.E_CLASS = getClass().getName();
         return R.layout.activity_look_list;
     }
 

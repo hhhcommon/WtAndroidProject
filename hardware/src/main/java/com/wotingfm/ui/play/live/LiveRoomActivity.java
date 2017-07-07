@@ -25,6 +25,7 @@ import com.netease.nim.live.liveStreaming.CapturePreviewController;
 import com.netease.nim.live.liveStreaming.PublishParam;
 import com.netease.nim.live.server.DemoServerHttpClient;
 import com.netease.nim.live.util.VcloudFileUtils;
+import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.bean.BaseResult;
 import com.wotingfm.common.bean.LiveBean;
 import com.wotingfm.common.net.RetrofitUtils;
@@ -153,6 +154,7 @@ public class LiveRoomActivity extends BaseActivity implements NimContract.Ui {
 
     @Override
     protected void initView() {
+        BSApplication.E_CLASS = getClass().getName();
         //应用运行时，保持屏幕高亮，不锁屏
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         screenHeight = ScreenUtil.getDisplayHeight();
