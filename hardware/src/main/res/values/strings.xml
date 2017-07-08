@@ -50,11 +50,12 @@
     <string name="brief_introduction">简介</string>
     <string name="gender">性别</string>
     <string name="region">地区</string>
+    <string name="age">年龄</string>
     <string name="man">男</string>
     <string name="woman">女</string>
     <string name="beijing">北京</string>
 
-    <string name="current_phone_number">请输入当前手机号</string>
+    <string name="current_phone_number">请输入手机号</string>
     <string name="new_phone_number">请输入新手机号</string>
     <string name="input_phone_number">请输入手机号</string>
     <string name="verification_code">请输入验证码</string>

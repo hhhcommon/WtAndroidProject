@@ -145,7 +145,8 @@ public class ContactsFragment extends Fragment implements View.OnClickListener, 
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 // 此处数据-1
-                presenter.jump(position -1);
+                if(position!=0)  presenter.jump(position -1);
+
             }
         });
     }

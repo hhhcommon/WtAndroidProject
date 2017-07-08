@@ -94,7 +94,7 @@
 
     <!-- 个人中心 TextView -->
     <style name="MineTextStyle" parent="WrapContent">
-        <item name="android:layout_marginLeft">10dp</item>
+        <item name="android:layout_marginLeft">12dp</item>
         <item name="android:layout_centerVertical">true</item>
         <item name="android:textColor">@color/black_head_word</item>
         <item name="android:textSize">16sp</item>

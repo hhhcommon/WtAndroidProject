@@ -116,6 +116,22 @@ public class UserInfo  {
         }
 
         try {
+            String age = userInfo.getString("age");// 年龄
+            if (age != null && !age.equals("")) {
+                if (age.equals("&null")) {
+                    et.putString(StringConstant.AGE, "");
+                } else {
+                    et.putString(StringConstant.AGE, age);
+                }
+            } else {
+                et.putString(StringConstant.AGE, "");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            et.putString(StringConstant.AGE, "");
+        }
+
+        try {
             String starSign = userInfo.getString("starSign");// 星座
             et.putString(StringConstant.STAR_SIGN, starSign);
         } catch (Exception e) {
@@ -206,25 +222,60 @@ public class UserInfo  {
     }
 
     /**
+     * 保存用户手机号
+     * @param num
+     */
+    public void savePhoneNumber(String num) {
+        SharedPreferences.Editor et = BSApplication.SharedPreferences.edit();
+        et.putString(StringConstant.USER_PHONE_NUMBER,num);
+        if (!et.commit()) {
+            Log.v("commit", "token commit 失败!");
+        }
+    }
+
+    /**
      * 更改一下登录状态
      */
     public void unRegisterLogin() {
         SharedPreferences.Editor et = BSApplication.SharedPreferences.edit();
         et.putString(StringConstant.IS_LOGIN, "false");
         et.putString(StringConstant.USER_ID, "");
-        et.putString(StringConstant.USER_NUM, "");
         et.putString(StringConstant.PORTRAIT, "");
         et.putString(StringConstant.USER_PHONE_NUMBER, "");
         et.putString(StringConstant.USER_NUM, "");
         et.putString(StringConstant.GENDERUSR, "");
+        et.putString(StringConstant.AGE, "");
         et.putString(StringConstant.PHONE_NUMBER_FIND, "0");
         et.putString(StringConstant.EMAIL, "");
         et.putString(StringConstant.REGION, "");
         et.putString(StringConstant.BIRTHDAY, "");
         et.putString(StringConstant.USER_SIGN, "");
         et.putString(StringConstant.STAR_SIGN, "");
-//        et.putString(StringConstant.AGE, "");
         et.putString(StringConstant.NICK_NAME, "");
+        if (!et.commit()) {
+            Log.v("commit", "数据 commit 失败!");
+        }
+    }
+
+    /**
+     * 保存登录后数据==测试数据
+     */
+    public void saveTestLogin() {
+        SharedPreferences.Editor et = BSApplication.SharedPreferences.edit();
+        et.putString(StringConstant.IS_LOGIN, "true");
+        et.putString(StringConstant.USER_ID, "666666");
+        et.putString(StringConstant.USER_NUM, "666666");
+        et.putString(StringConstant.PORTRAIT, "");
+        et.putString(StringConstant.USER_PHONE_NUMBER, "13260018007");
+        et.putString(StringConstant.GENDERUSR, "男");
+        et.putString(StringConstant.AGE, "18");
+        et.putString(StringConstant.PHONE_NUMBER_FIND, "0");
+        et.putString(StringConstant.EMAIL, "645700751@qq.com");
+        et.putString(StringConstant.REGION, "北京");
+        et.putString(StringConstant.BIRTHDAY, "10.01");
+        et.putString(StringConstant.USER_SIGN, "我还是一个宝宝");
+        et.putString(StringConstant.STAR_SIGN, "天蝎");
+        et.putString(StringConstant.NICK_NAME, "测试==对象");
         if (!et.commit()) {
             Log.v("commit", "数据 commit 失败!");
         }

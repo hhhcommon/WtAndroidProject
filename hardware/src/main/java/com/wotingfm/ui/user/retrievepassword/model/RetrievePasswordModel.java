@@ -71,7 +71,7 @@ public class RetrievePasswordModel extends UserInfo {
                     @Override
                     public void call(Object o) {
                         try {
-                            Log.e("获取验证码返回数据",o.toString());
+                            Log.e("忘记密码返回数据",o.toString());
                             //填充UI
                             listener.onSuccess(o);
                         } catch (Exception e) {

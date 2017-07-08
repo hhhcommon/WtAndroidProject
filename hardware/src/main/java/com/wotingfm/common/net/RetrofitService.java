@@ -172,11 +172,17 @@ public interface RetrofitService {
     @POST(Api.URL_REGISTER_YZM)
     Observable<Object> registerForYzm(@Query("phone") String phone);
 
-    // 忘记密码重置
+    // 忘记密码/修改密码：共同
     @POST(Api.URL_RESET_PASSWORDS)
     Observable<Object> resetPasswords(@Query("phone") String phone,
                                       @Query("password") String password,
                                       @Query("code") String code);
+
+    // 修改手机号(X)
+    @POST(Api.URL_RESET_PHONE_NUMBER)
+    Observable<Object> resetPhoneNumber(@Query("s") String phone,
+                                        @Query("s") String password,
+                                        @Query("code") String code);
 
     // 好友列表
     @GET(Api.URL_GET_FRIENDS)
@@ -263,7 +269,7 @@ public interface RetrofitService {
                                    @Query("member_access_mode") int type,
                                    @Query("logo_url") String url);
 
-    // 设置群组备用频道
+    // 设置群组备用频道(X)
     @POST(Api.URL_SET_CHANNEL)
     Observable<Object> setChannel(@Path("id") String id,
                                   @Query("channel1") String channel1,
@@ -309,19 +315,19 @@ public interface RetrofitService {
     Observable<Object> groupNumAdd(@Path("id") String gid,
                                    @Query("member_user_id") String id);
 
-    // 偏好设置
+    // 偏好设置(X)
     @POST(Api.URL_PREFERENCE)
     Observable<Object> preference(@Query("s") String s);
 
-    // 注销登录
+    // 注销登录(X)
     @POST(Api.URL_CANCEL)
     Observable<Object> cancel(@Query("s") String s);
 
-    // 获取用户数据
+    // 获取用户数据(X)
     @POST(Api.URL_GET_USER_INFO)
     Observable<Object> getUserInfo(@Query("s") String s);
 
-    // 入组申请
+    // 入组申请(X)
     @POST(Api.URL_GROUP_APPLY)
     Observable<Object> groupApply(@Path("id") String gid,
                                   @Query("news") String news,
@@ -337,9 +343,41 @@ public interface RetrofitService {
                                  @Path("pid") String pid);
 
     // 移交群主
-    @DELETE(Api.URL_GROUP_TRANSFER_MANAGER)
-    Observable<Object> transferManager(@Path("gid") String gid,
-                                 @Path("pid") String pid);
+    @PUT(Api.URL_GROUP_TRANSFER_MANAGER)
+    Observable<Object> transferManager(@Path("id") String gid,
+                                       @Query("new_owner_id") String pid);
+
+    // 意见反馈(X)
+    @POST(Api.URL_FEED_BACK)
+    Observable<Object> feedback(@Path("id") String id,
+                                @Query("s") String information,
+                                @Query("s") String feedback);
+
+    // 修改用户自己昵称(X)
+    @POST(Api.URL_EDIT_USER)
+    Observable<Object> editUserForName(@Path("id") String id,
+                                       @Query("s") String news);
+
+    // 修改用户自己介绍(X)
+    @POST(Api.URL_EDIT_USER)
+    Observable<Object> editUserForIntroduce(@Path("id") String id,
+                                            @Query("s") String news);
+
+    // 修改用户自己年龄(X)
+    @POST(Api.URL_EDIT_USER)
+    Observable<Object> editUserForAge(@Path("id") String id,
+                                      @Query("s") String news);
+
+    // 修改用户自己位置(X)
+    @POST(Api.URL_EDIT_USER)
+    Observable<Object> editUserForAddress(@Path("id") String id,
+                                          @Query("s") String news);
+
+    // 修改用户自己性别(X)
+    @POST(Api.URL_EDIT_USER)
+    Observable<Object> editUserSex(@Path("id") String id,
+                                   @Query("s") String news);
+
 
 }
 

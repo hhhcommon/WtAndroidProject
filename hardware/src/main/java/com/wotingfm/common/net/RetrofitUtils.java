@@ -486,7 +486,7 @@ public class RetrofitUtils {
     }
 
     /**
-     * 忘记密码
+     * 忘记密码/修改密码：共同
      *
      * @param userName
      * @param password
@@ -502,6 +502,25 @@ public class RetrofitUtils {
                     }
                 });
     }
+
+    /**
+     * 修改手机号
+     *
+     * @param oldP
+     * @param newP
+     * @param yzm
+     * @return
+     */
+    public Observable<Object> resetPhoneNumber(String oldP, String newP, String yzm) {
+        return retrofitService.resetPhoneNumber(oldP, newP, yzm)
+                .map(new Func1<Object, Object>() {
+                    @Override
+                    public Object call(Object O) {
+                        return O;
+                    }
+                });
+    }
+
 
     /**
      * 登录
@@ -544,8 +563,8 @@ public class RetrofitUtils {
      * @param password
      * @return
      */
-    public Observable<Object> groupApply(String id,String news,String password) {
-        return retrofitService.groupApply(id,news,password)
+    public Observable<Object> groupApply(String id, String news, String password) {
+        return retrofitService.groupApply(id, news, password)
                 .map(new Func1<Object, Object>() {
                     @Override
                     public Object call(Object O) {
@@ -743,7 +762,7 @@ public class RetrofitUtils {
      * @return Objects
      */
     public Observable<Object> getSearchGroup(String s) {
-        return retrofitService.getSearchGroup("chat-groups",s)
+        return retrofitService.getSearchGroup("chat-groups", s)
                 .map(new Func1<Object, Object>() {
                     @Override
                     public Object call(Object O) {
@@ -759,7 +778,7 @@ public class RetrofitUtils {
      * @return Objects
      */
     public Observable<Object> getSearchPerson(String s) {
-        return retrofitService.getSearchPerson("users",s)
+        return retrofitService.getSearchPerson("users", s)
                 .map(new Func1<Object, Object>() {
                     @Override
                     public Object call(Object O) {
@@ -879,8 +898,8 @@ public class RetrofitUtils {
      * @param s
      * @return Objects
      */
-    public Observable<Object> setManager(String id,String s) {
-        return retrofitService.setManager(id,s)
+    public Observable<Object> setManager(String id, String s) {
+        return retrofitService.setManager(id, s)
                 .map(new Func1<Object, Object>() {
                     @Override
                     public Object call(Object O) {
@@ -895,8 +914,8 @@ public class RetrofitUtils {
      * @param s
      * @return Objects
      */
-    public Observable<Object> editGroupName(String id,String s) {
-        return retrofitService.editGroupName(id,s)
+    public Observable<Object> editGroupName(String id, String s) {
+        return retrofitService.editGroupName(id, s)
                 .map(new Func1<Object, Object>() {
                     @Override
                     public Object call(Object O) {
@@ -911,8 +930,8 @@ public class RetrofitUtils {
      * @param s
      * @return Objects
      */
-    public Observable<Object> editGroupAddress(String id,String s) {
-        return retrofitService.editGroupAddress(id,s)
+    public Observable<Object> editGroupAddress(String id, String s) {
+        return retrofitService.editGroupAddress(id, s)
                 .map(new Func1<Object, Object>() {
                     @Override
                     public Object call(Object O) {
@@ -927,8 +946,8 @@ public class RetrofitUtils {
      * @param s
      * @return Objects
      */
-    public Observable<Object> editGroupIntroduce(String id,String s) {
-        return retrofitService.editGroupIntroduce(id,s)
+    public Observable<Object> editGroupIntroduce(String id, String s) {
+        return retrofitService.editGroupIntroduce(id, s)
                 .map(new Func1<Object, Object>() {
                     @Override
                     public Object call(Object O) {
@@ -944,8 +963,8 @@ public class RetrofitUtils {
      * @param id
      * @return Objects
      */
-    public Observable<Object> groupNumDel(String gid,String id) {
-        return retrofitService.groupNumDel(gid,id)
+    public Observable<Object> groupNumDel(String gid, String id) {
+        return retrofitService.groupNumDel(gid, id)
                 .map(new Func1<Object, Object>() {
                     @Override
                     public Object call(Object O) {
@@ -961,8 +980,8 @@ public class RetrofitUtils {
      * @param id
      * @return Objects
      */
-    public Observable<Object> groupNumAdd(String gid,String id) {
-        return retrofitService.groupNumAdd(gid,id)
+    public Observable<Object> groupNumAdd(String gid, String id) {
+        return retrofitService.groupNumAdd(gid, id)
                 .map(new Func1<Object, Object>() {
                     @Override
                     public Object call(Object O) {
@@ -977,8 +996,8 @@ public class RetrofitUtils {
      * @param s
      * @return Objects
      */
-    public Observable<Object> editPersonNote(String id,String s) {
-        return retrofitService.editPersonNote(id,s)
+    public Observable<Object> editPersonNote(String id, String s) {
+        return retrofitService.editPersonNote(id, s)
                 .map(new Func1<Object, Object>() {
                     @Override
                     public Object call(Object O) {
@@ -1010,8 +1029,8 @@ public class RetrofitUtils {
      * @param pId
      * @return Objects
      */
-    public Observable<Object> exitGroup(String gId,String pId) {
-        return retrofitService.exitGroup( gId, pId)
+    public Observable<Object> exitGroup(String gId, String pId) {
+        return retrofitService.exitGroup(gId, pId)
                 .map(new Func1<Object, Object>() {
                     @Override
                     public Object call(Object O) {
@@ -1027,8 +1046,8 @@ public class RetrofitUtils {
      * @param pId
      * @return Objects
      */
-    public Observable<Object> transferManager(String gId,String pId) {
-        return retrofitService.transferManager( gId, pId)
+    public Observable<Object> transferManager(String gId, String pId) {
+        return retrofitService.transferManager(gId, pId)
                 .map(new Func1<Object, Object>() {
                     @Override
                     public Object call(Object O) {
@@ -1036,5 +1055,94 @@ public class RetrofitUtils {
                     }
                 });
     }
+
+
+    /**
+     * 移交群主
+     *
+     * @param id
+     * @param information
+     * @param feedback
+     * @return Objects
+     */
+    public Observable<Object> feedback(String id, String information, String feedback) {
+        return retrofitService.feedback(id, information, feedback)
+                .map(new Func1<Object, Object>() {
+                    @Override
+                    public Object call(Object O) {
+                        return O;
+                    }
+                });
+    }
+
+    /**
+     * 修改个人信息
+     *
+     * @param id
+     * @param news
+     * @param type
+     * @return Objects
+     */
+    public Observable<Object> editUser(String id, String news, int type) {
+        // 设置返回监听参数
+        if (type == 1) {
+            return retrofitService.editUserForName(id, news)
+                    .map(new Func1<Object, Object>() {
+                        @Override
+                        public Object call(Object O) {
+                            return O;
+                        }
+                    });
+        } else if (type == 2) {
+            return retrofitService.editUserForIntroduce(id, news)
+                    .map(new Func1<Object, Object>() {
+                        @Override
+                        public Object call(Object O) {
+                            return O;
+                        }
+                    });
+        } else {
+            return retrofitService.editUserForAge(id, news)
+                    .map(new Func1<Object, Object>() {
+                        @Override
+                        public Object call(Object O) {
+                            return O;
+                        }
+                    });
+        }
+    }
+
+    /**
+     * 修改个人地址
+     *
+     * @param s
+     * @return Objects
+     */
+    public Observable<Object> editUserAddress(String id, String s) {
+        return retrofitService.editUserForAddress(id, s)
+                .map(new Func1<Object, Object>() {
+                    @Override
+                    public Object call(Object O) {
+                        return O;
+                    }
+                });
+    }
+
+    /**
+     * 修改个人性别
+     *
+     * @param s
+     * @return Objects
+     */
+    public Observable<Object> editUserSex(String id, String s) {
+        return retrofitService.editUserSex(id, s)
+                .map(new Func1<Object, Object>() {
+                    @Override
+                    public Object call(Object O) {
+                        return O;
+                    }
+                });
+    }
+
 
 }

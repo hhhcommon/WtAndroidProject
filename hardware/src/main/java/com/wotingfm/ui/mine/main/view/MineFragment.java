@@ -1,6 +1,5 @@
 package com.wotingfm.ui.mine.main.view;
 
-import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -17,20 +16,20 @@ import com.wotingfm.common.config.GlobalStateConfig;
 import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.common.utils.GlideUtils;
 import com.wotingfm.ui.main.view.MainActivity;
-import com.wotingfm.ui.mine.fragment.BluetoothFragment;
-import com.wotingfm.ui.mine.fragment.FMSetFragment;
+import com.wotingfm.ui.mine.bluetooth.view.BluetoothFragment;
+import com.wotingfm.ui.mine.fm.view.FMSetFragment;
 import com.wotingfm.ui.mine.set.view.SettingFragment;
-import com.wotingfm.ui.mine.fragment.WIFIFragment;
+import com.wotingfm.ui.mine.wifi.view.WIFIFragment;
 import com.wotingfm.ui.mine.main.MineActivity;
 import com.wotingfm.ui.mine.main.presenter.MinePresenter;
 import com.wotingfm.ui.user.logo.LogoActivity;
 
 /**
  * 个人中心主界面
- * Created by Administrator on 2017/6/7.
+ * 作者：xinLong on 2017/5/16 14:28
+ * 邮箱：645700751@qq.com
  */
 public class MineFragment extends Fragment implements View.OnClickListener {
-    public static BluetoothAdapter blueAdapter = BluetoothAdapter.getDefaultAdapter();
 
     private View rootView;
     private FragmentActivity context;

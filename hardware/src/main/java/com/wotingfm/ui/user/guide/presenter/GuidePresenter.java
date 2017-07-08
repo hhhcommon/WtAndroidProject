@@ -98,8 +98,9 @@ public class GuidePresenter extends BasePresenter {
      */
     public void todo() {
         // 测试代码
-        if (true) {
+        if (GlobalStateConfig.test) {
             // 界面跳转
+            model.saveTestLogin();
             close();
         } else {
             // 正式代码

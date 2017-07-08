@@ -20,6 +20,7 @@ public class Contact implements Serializable {
         private boolean is_admin;
         private String introduction;               //
         private String location;                   //
+        private String age;                   //
 
         public String getLocation() {
             return location;
@@ -91,6 +92,14 @@ public class Contact implements Serializable {
 
         public void setId(String id) {
             this.id = id;
+        }
+
+        public String getAge() {
+            return age;
+        }
+
+        public void setAge(String age) {
+            this.age = age;
         }
 
         public String getName() {

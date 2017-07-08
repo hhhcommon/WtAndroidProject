@@ -10,8 +10,10 @@ public class Api {
     public static final String URL_REGISTER = "api/accounts/register";
     // 获取验证码
     public static final String URL_REGISTER_YZM = "api/accounts/verify-codes";
-    // 忘记密码重置
+    // 忘记密码/修改密码：共同
     public static final String URL_RESET_PASSWORDS = "api/accounts/reset-passwords";
+    // 修改手机号(X)
+    public static final String URL_RESET_PHONE_NUMBER = "";
     // 创建群组
     public static final String URL_CREATE_GROUP = "api/chat-groups";
     // 好友列表
@@ -50,8 +52,8 @@ public class Api {
     public static final String URL_PERSON_SUB = "api/users/{id}/subscriptions/albums";
     // 退出群组
     public static final String URL_GROUP_DELETE = "api/users/{pid}/chat-groups/{gid}";
-    // 移交群主(X)
-    public static final String URL_GROUP_TRANSFER_MANAGER = "";
+    // 移交群主
+    public static final String URL_GROUP_TRANSFER_MANAGER = "api/chat-groups/{id}/owners";
     // 推荐的成员(X)
     public static final String URL_GET_PERSON_RECOMMEND = "";
     // 推荐的群组(X)
@@ -70,5 +72,10 @@ public class Api {
     public static final String URL_SET_CHANNEL = "";
     // 修改好友备注(X)
     public static final String URL_CHANGE_PERSON_NOTE = "";
+    // 意见反馈(X)
+    public static final String URL_FEED_BACK = "";
+    // 修改用户信息(X)
+    public static final String URL_EDIT_USER = "";
+
 
 }

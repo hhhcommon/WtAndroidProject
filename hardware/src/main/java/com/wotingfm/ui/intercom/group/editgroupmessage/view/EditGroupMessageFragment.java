@@ -24,6 +24,7 @@ import com.wotingfm.common.view.pickview.LoopView;
 import com.wotingfm.common.view.pickview.OnItemSelectedListener;
 import com.wotingfm.ui.intercom.group.editgroupmessage.presenter.EditGroupMessagePresenter;
 import com.wotingfm.ui.intercom.main.view.InterPhoneActivity;
+
 import java.util.List;
 import java.util.Map;
 
@@ -234,9 +235,14 @@ public class EditGroupMessageFragment extends Fragment implements View.OnClickLi
             dialog.findViewById(R.id.tv_confirm).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    String name = positionMap.get(provinceList.get(provinceIndex)).get(cityIndex);
-                    presenter.sendAddress(name);
-                    cityDialog.dismiss();
+                    try {
+                        String name = positionMap.get(provinceList.get(provinceIndex)).get(cityIndex);
+                        presenter.sendAddress(name);
+                        cityDialog.dismiss();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
                 }
             });
         }
