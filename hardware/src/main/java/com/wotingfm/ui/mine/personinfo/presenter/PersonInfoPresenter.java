@@ -7,6 +7,14 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
 
+import com.alibaba.sdk.android.oss.ClientException;
+import com.alibaba.sdk.android.oss.ServiceException;
+import com.alibaba.sdk.android.oss.callback.OSSCompletedCallback;
+import com.alibaba.sdk.android.oss.callback.OSSProgressCallback;
+import com.alibaba.sdk.android.oss.internal.OSSAsyncTask;
+import com.alibaba.sdk.android.oss.model.ObjectMetadata;
+import com.alibaba.sdk.android.oss.model.PutObjectRequest;
+import com.alibaba.sdk.android.oss.model.PutObjectResult;
 import com.google.gson.Gson;
 import com.woting.commonplat.config.GlobalNetWorkConfig;
 import com.woting.commonplat.manager.FileManager;
@@ -14,6 +22,7 @@ import com.woting.commonplat.utils.BitmapUtils;
 import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.config.GlobalStateConfig;
 import com.wotingfm.common.constant.StringConstant;
+import com.wotingfm.common.net.upLoadImage;
 import com.wotingfm.common.utils.ToastUtils;
 import com.wotingfm.ui.intercom.group.editgroupmessage.model.AddressModel;
 import com.wotingfm.ui.intercom.group.editgroupmessage.model.EditGroupMessageModel;
@@ -129,75 +138,6 @@ public class PersonInfoPresenter {
     }
 
     /**
-     * 拍照
-     */
-    public void camera() {
-        String savePath = FileManager.getImageSaveFilePath(BSApplication.mContext);
-        FileManager.createDirectory(savePath);
-        String fileName = System.currentTimeMillis() + ".jpg";
-        File file = new File(savePath, fileName);
-        Uri outputFileUri = Uri.fromFile(file);
-        outputFilePath = file.getAbsolutePath();
-        Intent intents = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        intents.putExtra(MediaStore.EXTRA_OUTPUT, outputFileUri);
-        activity.getActivity().startActivityForResult(intents, TO_CAMERA);
-    }
-
-    /**
-     * 调用图库
-     */
-    public void photoAlbum() {
-        Intent intent = new Intent();
-        intent.setAction(Intent.ACTION_GET_CONTENT);
-        intent.setType("image/*");
-        activity.getActivity().startActivityForResult(intent, TO_GALLERY);
-    }
-
-    /**
-     * 返回值得监听
-     *
-     * @param requestCode
-     * @param resultCode
-     * @param data
-     */
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        switch (requestCode) {
-            case TO_GALLERY:                // 照片的原始资源地址
-                if (resultCode == -1) {
-                    Uri uri = data.getData();
-                    Log.e("URI:", uri.toString());
-                    String path = BitmapUtils.getFilePath(activity.getActivity(), uri);
-                    Log.e("path:", path + "");
-                    if (path != null && !path.trim().equals("")) startPhotoZoom(Uri.parse(path));
-                }
-                break;
-            case TO_CAMERA:
-                if (resultCode == Activity.RESULT_OK) {
-                    startPhotoZoom(Uri.parse(outputFilePath));
-                }
-                break;
-            case PHOTO_REQUEST_CUT:
-                if (resultCode == 1) {
-                    String Path = data.getStringExtra("return");
-                    upImageUrl(Path);
-                }
-                break;
-        }
-    }
-
-    // 图片裁剪
-    private void startPhotoZoom(Uri uri) {
-        Intent intent = new Intent(activity.getActivity(), PhotoCutActivity.class);
-        intent.putExtra("URI", uri.toString());
-        intent.putExtra("type", 1);
-        activity.getActivity().startActivityForResult(intent, PHOTO_REQUEST_CUT);
-    }
-
-    // 上传头像
-    private void upImageUrl(String path) {
-    }
-
-    /**
      * 跳转修改昵称界面
      */
     public void jumpName() {
@@ -308,7 +248,6 @@ public class PersonInfoPresenter {
         }
     }
 
-
     /**
      * 修改性别
      *
@@ -357,6 +296,131 @@ public class PersonInfoPresenter {
             // 设置数据出错界面
             ToastUtils.show_always(activity.getActivity(), "修改失败，请稍后再试！");
         }
+    }
+
+    /**
+     * 拍照
+     */
+    public void camera() {
+        String savePath = FileManager.getImageSaveFilePath(BSApplication.mContext);
+        FileManager.createDirectory(savePath);
+        String fileName = System.currentTimeMillis() + ".jpg";
+        File file = new File(savePath, fileName);
+        Uri outputFileUri = Uri.fromFile(file);
+        outputFilePath = file.getAbsolutePath();
+        Intent intents = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        intents.putExtra(MediaStore.EXTRA_OUTPUT, outputFileUri);
+        activity.getActivity().startActivityForResult(intents, TO_CAMERA);
+    }
+
+    /**
+     * 调用图库
+     */
+    public void photoAlbum() {
+        Intent intent = new Intent();
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        intent.setType("image/*");
+        activity.getActivity().startActivityForResult(intent, TO_GALLERY);
+    }
+
+    /**
+     * 返回值得监听
+     *
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
+    public void setResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode) {
+            case TO_GALLERY:                // 照片的原始资源地址
+                if (resultCode == -1) {
+                    Uri uri = data.getData();
+                    Log.e("URI:", uri.toString());
+                    String path = BitmapUtils.getFilePath(activity.getActivity(), uri);
+                    Log.e("path:", path + "");
+                    if (path != null && !path.trim().equals("")) startPhotoZoom(Uri.parse(path));
+                }
+                break;
+            case TO_CAMERA:
+                if (resultCode == Activity.RESULT_OK) {
+                    startPhotoZoom(Uri.parse(outputFilePath));
+                }
+                break;
+            case PHOTO_REQUEST_CUT:
+                if (resultCode == 1) {
+                    String Path = data.getStringExtra("return");
+                    upImageUrl(Path);
+                }
+                break;
+        }
+    }
+
+    // 图片裁剪
+    private void startPhotoZoom(Uri uri) {
+        Intent intent = new Intent(activity.getActivity(), PhotoCutActivity.class);
+        intent.putExtra("URI", uri.toString());
+        intent.putExtra("type", 1);
+        activity.getActivity().startActivityForResult(intent, PHOTO_REQUEST_CUT);
+    }
+
+    // 上传头像
+    private void upImageUrl(final String strPath) {
+        // 指定数据类型，没有指定会自动根据后缀名判断
+        ObjectMetadata objectMeta = new ObjectMetadata();
+        objectMeta.setContentType("image/jpeg");
+        // 构造上传请求
+        PutObjectRequest put = new PutObjectRequest(upLoadImage.BUCKET_NAME, upLoadImage.objectKey, strPath);
+        put.setMetadata(objectMeta);
+        try {
+            PutObjectResult putObjectResult = upLoadImage.getInstance().oss.putObject(put);
+        } catch (ClientException e) {
+            // 本地异常如网络异常等
+            e.printStackTrace();
+        } catch (ServiceException e) {
+            // 服务异常
+            Log.e("RequestId", e.getRequestId());
+            Log.e("ErrorCode", e.getErrorCode());
+            Log.e("HostId", e.getHostId());
+            Log.e("RawMessage", e.getRawMessage());
+        }
+
+        // 异步上传时可以设置进度回调
+        put.setProgressCallback(new OSSProgressCallback<PutObjectRequest>() {
+            @Override
+            public void onProgress(PutObjectRequest request, long currentSize, long totalSize) {
+                // 在这里可以实现进度条展现功能
+                Log.d("PutObject", "currentSize: " + currentSize + " totalSize: " + totalSize);
+            }
+        });
+        OSSAsyncTask task = upLoadImage.getInstance().oss.asyncPutObject(put, new OSSCompletedCallback<PutObjectRequest, PutObjectResult>() {
+            @Override
+            public void onSuccess(PutObjectRequest request, PutObjectResult result) {
+                Log.d("PutObject", "UploadSuccess");
+                Log.d("ETag", result.getETag());
+                Log.d("RequestId", result.getRequestId());
+                String url = upLoadImage.objectKey + strPath;
+                activity.setViewForImage(url);
+                ToastUtils.show_always(activity.getActivity(), "图片上传成功");
+            }
+
+            @Override
+            public void onFailure(PutObjectRequest request, ClientException clientExcepion, ServiceException serviceException) {
+                // 请求异常
+                if (clientExcepion != null) {
+                    // 本地异常如网络异常等
+                    clientExcepion.printStackTrace();
+                }
+                if (serviceException != null) {
+                    // 服务异常
+                    Log.e("ErrorCode", serviceException.getErrorCode());
+                    Log.e("RequestId", serviceException.getRequestId());
+                    Log.e("HostId", serviceException.getHostId());
+                    Log.e("RawMessage", serviceException.getRawMessage());
+                }
+                ToastUtils.show_always(activity.getActivity(), "图片上传失败，请重新上传");
+                return;
+            }
+        });
     }
 
 }

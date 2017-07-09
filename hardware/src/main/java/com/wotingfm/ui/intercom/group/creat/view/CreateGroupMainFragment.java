@@ -1,9 +1,12 @@
 package com.wotingfm.ui.intercom.group.creat.view;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +16,8 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.woting.commonplat.utils.BitmapUtils;
 import com.wotingfm.R;
 import com.wotingfm.common.utils.DialogUtils;
 import com.wotingfm.ui.intercom.group.creat.presenter.CreateGroupMainPresenter;
@@ -163,4 +168,15 @@ public class CreateGroupMainFragment extends Fragment implements View.OnClickLis
         if (dialog != null) dialog.dismiss();
     }
 
+
+    /**
+     * 返回值得监听
+     *
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        presenter.setResult( requestCode,  resultCode,  data);
+    }
 }

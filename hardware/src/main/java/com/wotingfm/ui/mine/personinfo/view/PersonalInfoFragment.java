@@ -1,10 +1,14 @@
 package com.wotingfm.ui.mine.personinfo.view;
 
+import android.app.Activity;
 import android.app.Dialog;
+import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -301,6 +305,17 @@ public class PersonalInfoFragment extends Fragment implements View.OnClickListen
      */
     public void dialogCancel() {
         if (dialog != null) dialog.dismiss();
+    }
+
+    /**
+     * 返回值得监听
+     *
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        presenter.setResult(requestCode, resultCode, data);
     }
 
     @Override

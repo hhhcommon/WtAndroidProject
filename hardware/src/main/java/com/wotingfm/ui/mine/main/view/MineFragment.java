@@ -16,6 +16,7 @@ import com.wotingfm.common.config.GlobalStateConfig;
 import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.common.utils.GlideUtils;
 import com.wotingfm.ui.main.view.MainActivity;
+import com.wotingfm.ui.message.megcenter.view.MsgCenterFragment;
 import com.wotingfm.ui.mine.bluetooth.view.BluetoothFragment;
 import com.wotingfm.ui.mine.fm.view.FMSetFragment;
 import com.wotingfm.ui.mine.set.view.SettingFragment;
@@ -151,7 +152,7 @@ public class MineFragment extends Fragment implements View.OnClickListener {
 
                 break;
             case R.id.image_info:// 消息中心
-
+                MineActivity.open(new MsgCenterFragment());
                 break;
             case R.id.image_qr_code:// 二维码
 

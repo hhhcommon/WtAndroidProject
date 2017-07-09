@@ -6,38 +6,40 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.alibaba.sdk.android.oss.ClientConfiguration;
+import com.alibaba.sdk.android.oss.ClientException;
+import com.alibaba.sdk.android.oss.OSS;
+import com.alibaba.sdk.android.oss.OSSClient;
+import com.alibaba.sdk.android.oss.ServiceException;
+import com.alibaba.sdk.android.oss.callback.OSSCompletedCallback;
+import com.alibaba.sdk.android.oss.callback.OSSProgressCallback;
+import com.alibaba.sdk.android.oss.common.auth.OSSCredentialProvider;
+import com.alibaba.sdk.android.oss.common.auth.OSSPlainTextAKSKCredentialProvider;
+import com.alibaba.sdk.android.oss.internal.OSSAsyncTask;
+import com.alibaba.sdk.android.oss.model.ObjectMetadata;
+import com.alibaba.sdk.android.oss.model.PutObjectRequest;
+import com.alibaba.sdk.android.oss.model.PutObjectResult;
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.woting.commonplat.config.GlobalNetWorkConfig;
 import com.woting.commonplat.manager.FileManager;
 import com.woting.commonplat.utils.BitmapUtils;
 import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.config.GlobalStateConfig;
 import com.wotingfm.common.constant.BroadcastConstants;
-import com.wotingfm.common.net.MyHttp;
+import com.wotingfm.common.net.RetrofitUtils;
+import com.wotingfm.common.net.upLoadImage;
 import com.wotingfm.common.utils.ToastUtils;
 import com.wotingfm.ui.intercom.group.creat.model.CreateGroupMainModel;
 import com.wotingfm.ui.intercom.group.creat.view.CreateGroupMainFragment;
-import com.wotingfm.ui.intercom.group.groupname.view.EditGroupNameFragment;
 import com.wotingfm.ui.intercom.group.standbychannel.view.StandbyChannelFragment;
-import com.wotingfm.ui.intercom.main.contacts.model.Contact;
 import com.wotingfm.ui.intercom.main.view.InterPhoneActivity;
-import com.wotingfm.ui.intercom.person.newfriend.model.NewFriendModel;
-import com.wotingfm.ui.intercom.person.newfriend.view.NewFriendFragment;
 import com.wotingfm.ui.photocut.PhotoCutActivity;
-import com.wotingfm.ui.user.login.model.Login;
-import com.wotingfm.ui.user.register.model.RegisterModel;
-
 import org.json.JSONObject;
-import org.json.JSONTokener;
-
 import java.io.File;
-import java.util.List;
 
 /**
  * 创建群处理中心
@@ -55,7 +57,8 @@ public class CreateGroupMainPresenter {
     private final int PHOTO_REQUEST_CUT = 7;    // 标识 跳转到图片裁剪界面
     private String outputFilePath;
     private boolean headViewShow = false;// 图片选择界面是否展示
-    private String url = "test"; // 阿里云返回的图片路径
+    private String url;
+
 
     public CreateGroupMainPresenter(CreateGroupMainFragment activity) {
         this.activity = activity;
@@ -124,65 +127,6 @@ public class CreateGroupMainPresenter {
         }
     }
 
-    /**
-     * 拍照
-     */
-    public void camera() {
-        String savePath = FileManager.getImageSaveFilePath(BSApplication.mContext);
-        FileManager.createDirectory(savePath);
-        String fileName = System.currentTimeMillis() + ".jpg";
-        File file = new File(savePath, fileName);
-        Uri outputFileUri = Uri.fromFile(file);
-        outputFilePath = file.getAbsolutePath();
-        Intent intents = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        intents.putExtra(MediaStore.EXTRA_OUTPUT, outputFileUri);
-        activity.getActivity().startActivityForResult(intents, TO_CAMERA);
-    }
-
-    /**
-     * 调用图库
-     */
-    public void photoAlbum() {
-        Intent intent = new Intent();
-        intent.setAction(Intent.ACTION_GET_CONTENT);
-        intent.setType("image/*");
-        activity.getActivity().startActivityForResult(intent, TO_GALLERY);
-    }
-
-    /**
-     * 返回值得监听
-     *
-     * @param requestCode
-     * @param resultCode
-     * @param data
-     */
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        switch (requestCode) {
-            case TO_GALLERY:                // 照片的原始资源地址
-                if (resultCode == -1) {
-                    Uri uri = data.getData();
-                    Log.e("URI:", uri.toString());
-                    String path = BitmapUtils.getFilePath(activity.getActivity(), uri);
-                    Log.e("path:", path + "");
-                    if (path != null && !path.trim().equals("")) startPhotoZoom(Uri.parse(path));
-                }
-                break;
-            case TO_CAMERA:
-                if (resultCode == Activity.RESULT_OK) {
-                    startPhotoZoom(Uri.parse(outputFilePath));
-                }
-                break;
-            case PHOTO_REQUEST_CUT:
-                if (resultCode == 1) {
-                    String Path = data.getStringExtra("return");
-                    activity.dialogShow();
-                    upImageUrl(Path);
-                }
-                break;
-        }
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////////////////////
     // 检查数据的正确性  检查通过则进行登录
     private boolean checkData(String name, String password) {
         if (name == null || name.trim().equals("")) {
@@ -250,50 +194,6 @@ public class CreateGroupMainPresenter {
         }
     }
 
-    // 图片裁剪
-    private void startPhotoZoom(Uri uri) {
-        Intent intent = new Intent(activity.getActivity(), PhotoCutActivity.class);
-        intent.putExtra("URI", uri.toString());
-        intent.putExtra("type", 1);
-        activity.getActivity().startActivityForResult(intent, PHOTO_REQUEST_CUT);
-    }
-
-    // 上传头像
-    private void upImageUrl(final String path) {
-        final Handler handler = new Handler() {
-            @Override
-            public void handleMessage(Message msg) {
-                super.handleMessage(msg);
-                activity.dialogCancel();
-                if (msg.what == 1) {
-                    activity.setImageUrl(url);
-                } else if (msg.what == 0) {
-
-                }
-            }
-        };
-
-        new Thread() {
-            @Override
-            public void run() {
-                super.run();
-                Message msg = new Message();
-                try {
-                    String ExtName = path.substring(path.lastIndexOf("."));
-                    String TestURI = "wt/common/upload4App.do?FType=GroupP&ExtName=";
-                    String Response = MyHttp.postFile(new File(path), TestURI + ExtName + "&PCDType=");
-                    url = "";
-                    msg.what = 1;
-                } catch (Exception e) {
-                    // 异常处理
-                    e.printStackTrace();
-                    msg.what = -1;
-                }
-                handler.sendMessage(msg);
-            }
-        }.start();
-    }
-
     // 跳转到设置频道界面
     private void jumpChannel(String id) {
         InterPhoneActivity.close();
@@ -303,5 +203,132 @@ public class CreateGroupMainPresenter {
         bundle.putString("groupId", id);
         fragment.setArguments(bundle);
         InterPhoneActivity.open(fragment);
+    }
+
+    /**
+     * 拍照
+     */
+    public void camera() {
+        String savePath = FileManager.getImageSaveFilePath(BSApplication.mContext);
+        FileManager.createDirectory(savePath);
+        String fileName = System.currentTimeMillis() + ".jpg";
+        File file = new File(savePath, fileName);
+        Uri outputFileUri = Uri.fromFile(file);
+        outputFilePath = file.getAbsolutePath();
+        Intent intents = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        intents.putExtra(MediaStore.EXTRA_OUTPUT, outputFileUri);
+        activity.getActivity().startActivityForResult(intents, TO_CAMERA);
+    }
+
+    /**
+     * 调用图库
+     */
+    public void photoAlbum() {
+        Intent intent = new Intent();
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        intent.setType("image/*");
+        activity.getActivity().startActivityForResult(intent, TO_GALLERY);
+    }
+
+    // 图片裁剪
+    private void startPhotoZoom(Uri uri) {
+        Intent intent = new Intent(activity.getActivity(), PhotoCutActivity.class);
+        intent.putExtra("URI", uri.toString());
+        intent.putExtra("type", 1);
+        activity.getActivity().startActivityForResult(intent, PHOTO_REQUEST_CUT);
+    }
+
+
+    /**
+     * 返回值得监听
+     *
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
+    public void setResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode) {
+            case TO_GALLERY:                // 照片的原始资源地址
+                if (resultCode == -1) {
+                    Uri uri = data.getData();
+                    Log.e("URI:", uri.toString());
+                    String path = BitmapUtils.getFilePath(activity.getActivity(), uri);
+                    Log.e("path:", path + "");
+                    if (path != null && !path.trim().equals("")) startPhotoZoom(Uri.parse(path));
+                }
+                break;
+            case TO_CAMERA:
+                if (resultCode == Activity.RESULT_OK) {
+                    startPhotoZoom(Uri.parse(outputFilePath));
+                }
+                break;
+            case PHOTO_REQUEST_CUT:
+                if (resultCode == 1) {
+                    String Path = data.getStringExtra("return");
+                    activity.dialogShow();
+                    upImageUrl(Path);
+                }
+                break;
+        }
+    }
+
+    // 上传头像
+    private void upImageUrl(final String strPath) {
+        // 指定数据类型，没有指定会自动根据后缀名判断
+        ObjectMetadata objectMeta = new ObjectMetadata();
+        objectMeta.setContentType("image/jpeg");
+        // 构造上传请求
+        PutObjectRequest put = new PutObjectRequest(upLoadImage.BUCKET_NAME, upLoadImage.objectKey, strPath);
+        put.setMetadata(objectMeta);
+        try {
+            PutObjectResult putObjectResult = upLoadImage.getInstance().oss.putObject(put);
+        } catch (ClientException e) {
+            // 本地异常如网络异常等
+            e.printStackTrace();
+        } catch (ServiceException e) {
+            // 服务异常
+            Log.e("RequestId", e.getRequestId());
+            Log.e("ErrorCode", e.getErrorCode());
+            Log.e("HostId", e.getHostId());
+            Log.e("RawMessage", e.getRawMessage());
+        }
+
+        // 异步上传时可以设置进度回调
+        put.setProgressCallback(new OSSProgressCallback<PutObjectRequest>() {
+            @Override
+            public void onProgress(PutObjectRequest request, long currentSize, long totalSize) {
+                // 在这里可以实现进度条展现功能
+                Log.d("PutObject", "currentSize: " + currentSize + " totalSize: " + totalSize);
+            }
+        });
+        OSSAsyncTask task = upLoadImage.getInstance().oss.asyncPutObject(put, new OSSCompletedCallback<PutObjectRequest, PutObjectResult>() {
+            @Override
+            public void onSuccess(PutObjectRequest request, PutObjectResult result) {
+                Log.d("PutObject", "UploadSuccess");
+                Log.d("ETag", result.getETag());
+                Log.d("RequestId", result.getRequestId());
+                url = upLoadImage.objectKey + strPath;
+                activity.setImageUrl(url);
+                ToastUtils.show_always(activity.getActivity(), "图片上传成功");
+            }
+
+            @Override
+            public void onFailure(PutObjectRequest request, ClientException clientExcepion, ServiceException serviceException) {
+                // 请求异常
+                if (clientExcepion != null) {
+                    // 本地异常如网络异常等
+                    clientExcepion.printStackTrace();
+                }
+                if (serviceException != null) {
+                    // 服务异常
+                    Log.e("ErrorCode", serviceException.getErrorCode());
+                    Log.e("RequestId", serviceException.getRequestId());
+                    Log.e("HostId", serviceException.getHostId());
+                    Log.e("RawMessage", serviceException.getRawMessage());
+                }
+                ToastUtils.show_always(activity.getActivity(), "图片上传失败，请重新上传");
+                return;
+            }
+        });
     }
 }
