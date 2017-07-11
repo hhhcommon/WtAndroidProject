@@ -57,7 +57,6 @@ public class ClassificationActivity extends BaseToolBarActivity implements View.
 
     @Override
     public int getLayoutId() {
-        BSApplication.E_CLASS = getClass().getName();
         return R.layout.activity_classification;
     }
 

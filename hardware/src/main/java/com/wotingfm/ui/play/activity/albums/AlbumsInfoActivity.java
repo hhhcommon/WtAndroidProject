@@ -25,6 +25,7 @@ import com.wotingfm.common.net.RetrofitUtils;
 import com.wotingfm.common.utils.L;
 import com.wotingfm.common.utils.T;
 import com.wotingfm.common.view.ObservableScrollView;
+import com.wotingfm.ui.base.baseactivity.AppManager;
 import com.wotingfm.ui.base.baseactivity.NoTitleBarBaseActivity;
 import com.wotingfm.ui.play.activity.albums.fragment.AlbumsInfoFragment;
 import com.wotingfm.ui.play.activity.albums.fragment.ProgramInfoFragment;
@@ -82,7 +83,6 @@ public class AlbumsInfoActivity extends NoTitleBarBaseActivity implements View.O
 
     @Override
     public int getLayoutId() {
-        BSApplication.E_CLASS = getClass().getName();
         return R.layout.activity_albums_info;
     }
 
@@ -197,6 +197,7 @@ public class AlbumsInfoActivity extends NoTitleBarBaseActivity implements View.O
         switch (v.getId()) {
             case R.id.ivBack:
                 finish();
+                AppManager.getAppManager().finishActivity();
                 break;
             case R.id.tvAlbumsInfo:
                 setTextColor(tvAlbumsInfo, 0);

@@ -154,7 +154,6 @@ public class LiveRoomActivity extends BaseActivity implements NimContract.Ui {
 
     @Override
     protected void initView() {
-        BSApplication.E_CLASS = getClass().getName();
         //应用运行时，保持屏幕高亮，不锁屏
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         screenHeight = ScreenUtil.getDisplayHeight();

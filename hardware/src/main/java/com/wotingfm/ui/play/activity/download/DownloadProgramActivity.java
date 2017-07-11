@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.wotingfm.R;
 import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.utils.L;
+import com.wotingfm.ui.base.baseactivity.AppManager;
 import com.wotingfm.ui.base.baseactivity.NoTitleBarBaseActivity;
 import com.wotingfm.ui.play.activity.PlayerHistoryActivity;
 import com.wotingfm.ui.play.activity.download.fragment.AlbumsFragment;
@@ -84,7 +85,6 @@ public class DownloadProgramActivity extends NoTitleBarBaseActivity implements V
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        BSApplication.E_CLASS = getClass().getName();
         EventBus.getDefault().register(this);
         //初始化frament
         initFragment(savedInstanceState);
@@ -133,6 +133,7 @@ public class DownloadProgramActivity extends NoTitleBarBaseActivity implements V
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.ivBack:
+                AppManager.getAppManager().finishActivity();
                 finish();
                 break;
             case R.id.tvAlbums:

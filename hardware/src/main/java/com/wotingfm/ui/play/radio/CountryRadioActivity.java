@@ -58,8 +58,7 @@ public class CountryRadioActivity extends BaseToolBarActivity implements OnLoadM
 
     @Override
     public int getLayoutId() {
-
-        BSApplication.E_CLASS = getClass().getName();return R.layout.activity_country_radio;
+        return R.layout.activity_country_radio;
     }
 
     private LoadMoreFooterView loadMoreFooterView;

@@ -58,7 +58,6 @@ public class SelectedMoreActivity extends BaseToolBarActivity implements OnLoadM
     @Override
     public int getLayoutId() {
 
-        BSApplication.E_CLASS = getClass().getName();
         return R.layout.activity_selected;
     }
 

@@ -22,6 +22,7 @@ import com.wotingfm.R;
 import com.wotingfm.common.adapter.MyAdapter;
 import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.constant.BroadcastConstants;
+import com.wotingfm.ui.base.baseactivity.AppManager;
 import com.wotingfm.ui.base.baseactivity.NoTitleBarBaseActivity;
 import com.wotingfm.ui.base.basefragment.BaseFragment;
 import com.wotingfm.ui.play.look.activity.LookListActivity;
@@ -59,7 +60,6 @@ public class SerchActivity extends NoTitleBarBaseActivity {
 
     @Override
     public int getLayoutId() {
-        BSApplication.E_CLASS = getClass().getName();
         return R.layout.activity_serch;
     }
 
@@ -103,6 +103,7 @@ public class SerchActivity extends NoTitleBarBaseActivity {
         tvCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                AppManager.getAppManager().finishActivity();
                 finish();
             }
         });

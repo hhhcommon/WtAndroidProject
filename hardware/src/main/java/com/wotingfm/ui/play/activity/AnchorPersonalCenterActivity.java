@@ -25,6 +25,7 @@ import com.wotingfm.common.utils.CommonUtils;
 import com.wotingfm.common.utils.L;
 import com.wotingfm.common.utils.T;
 import com.wotingfm.common.view.ReportsDialog;
+import com.wotingfm.ui.base.baseactivity.AppManager;
 import com.wotingfm.ui.base.baseactivity.NoTitleBarBaseActivity;
 import com.wotingfm.ui.play.activity.albums.AlbumsListActivity;
 import com.wotingfm.ui.user.login.view.LoginFragment;
@@ -71,7 +72,6 @@ public class AnchorPersonalCenterActivity extends NoTitleBarBaseActivity impleme
 
     @Override
     public int getLayoutId() {
-        BSApplication.E_CLASS = getClass().getName();
         return R.layout.activity_anchor_personal_center;
     }
 
@@ -159,6 +159,7 @@ public class AnchorPersonalCenterActivity extends NoTitleBarBaseActivity impleme
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.ivBack:
+                AppManager.getAppManager().finishActivity();
                 finish();
                 break;
             case R.id.ivMore:

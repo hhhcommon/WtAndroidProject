@@ -46,7 +46,6 @@ public class ProvincesAndCitiesListRadioActivity extends BaseToolBarActivity imp
 
     @Override
     public int getLayoutId() {
-        BSApplication.E_CLASS = getClass().getName();
         return R.layout.activity_provinces_list_radio;
     }
 

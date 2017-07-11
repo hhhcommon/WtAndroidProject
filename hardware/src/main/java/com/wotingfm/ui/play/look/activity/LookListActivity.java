@@ -35,6 +35,7 @@ import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.common.utils.NetUtils;
 import com.wotingfm.common.utils.T;
+import com.wotingfm.ui.base.baseactivity.AppManager;
 import com.wotingfm.ui.base.baseactivity.NoTitleBarBaseActivity;
 import com.wotingfm.ui.play.look.activity.serch.SerchActivity;
 import com.wotingfm.ui.play.look.fragment.ClassificationFragment;
@@ -79,7 +80,6 @@ public class LookListActivity extends NoTitleBarBaseActivity implements View.OnC
 
     @Override
     public int getLayoutId() {
-        BSApplication.E_CLASS = getClass().getName();
         return R.layout.activity_look_list;
     }
 
@@ -187,6 +187,7 @@ public class LookListActivity extends NoTitleBarBaseActivity implements View.OnC
                 break;
             case R.id.ivBack:
             case R.id.ivClose:
+                AppManager.getAppManager().finishActivity();
                 finish();
                 break;
             case R.id.ivVoice:

@@ -26,6 +26,7 @@ import com.wotingfm.common.bean.RadioInfo;
 import com.wotingfm.common.net.RetrofitUtils;
 import com.wotingfm.common.utils.T;
 import com.wotingfm.common.view.ObservableScrollView;
+import com.wotingfm.ui.base.baseactivity.AppManager;
 import com.wotingfm.ui.base.baseactivity.NoTitleBarBaseActivity;
 import com.wotingfm.ui.play.activity.albums.fragment.AlbumsInfoFragment;
 import com.wotingfm.ui.play.activity.albums.fragment.ProgramInfoFragment;
@@ -86,7 +87,6 @@ public class RadioInfoActivity extends NoTitleBarBaseActivity implements View.On
 
     @Override
     public int getLayoutId() {
-        BSApplication.E_CLASS = getClass().getName();
         return R.layout.activity_radio_info;
     }
 
@@ -321,6 +321,7 @@ public class RadioInfoActivity extends NoTitleBarBaseActivity implements View.On
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.ivBack:
+                AppManager.getAppManager().finishActivity();
                 finish();
                 break;
             case R.id.tvYesterday:

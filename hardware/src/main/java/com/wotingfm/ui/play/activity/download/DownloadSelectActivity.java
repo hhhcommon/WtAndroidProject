@@ -25,6 +25,7 @@ import com.wotingfm.common.bean.Subscrible;
 import com.wotingfm.common.net.RetrofitUtils;
 import com.wotingfm.common.utils.DownloadUtils;
 import com.wotingfm.common.utils.T;
+import com.wotingfm.ui.base.baseactivity.AppManager;
 import com.wotingfm.ui.base.baseactivity.NoTitleBarBaseActivity;
 import com.wotingfm.ui.play.activity.albums.AlbumsListActivity;
 
@@ -75,7 +76,6 @@ public class DownloadSelectActivity extends NoTitleBarBaseActivity implements Vi
 
     @Override
     public int getLayoutId() {
-        BSApplication.E_CLASS = getClass().getName();
         return R.layout.activity_download_select;
     }
 
@@ -211,9 +211,11 @@ public class DownloadSelectActivity extends NoTitleBarBaseActivity implements Vi
                 for (int w = 0, size = singlesBeanListSelect.size(); w < size; w++) {
                     DownloadUtils.downloadManger(singlesBeanListSelect.get(w));
                 }
+                AppManager.getAppManager().finishActivity();
                 finish();
                 break;
             case R.id.tvCancel:
+                AppManager.getAppManager().finishActivity();
                 finish();
                 break;
             case R.id.largeLabelSelect:

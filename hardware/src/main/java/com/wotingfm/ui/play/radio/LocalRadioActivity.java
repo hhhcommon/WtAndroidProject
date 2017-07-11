@@ -59,7 +59,6 @@ public class LocalRadioActivity extends BaseToolBarActivity implements OnLoadMor
     @Override
     public int getLayoutId() {
 
-        BSApplication.E_CLASS = getClass().getName();
         return R.layout.activity_local_radio;
     }
 

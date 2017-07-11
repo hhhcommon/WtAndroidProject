@@ -130,7 +130,6 @@ public class PlayerActivity extends NoTitleBarBaseActivity implements View.OnCli
 
     @Override
     public int getLayoutId() {
-        BSApplication.E_CLASS = getClass().getName();
         return R.layout.activity_player;
     }
 
