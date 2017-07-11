@@ -197,7 +197,7 @@ public class AlbumsInfoActivity extends NoTitleBarBaseActivity implements View.O
         switch (v.getId()) {
             case R.id.ivBack:
                 finish();
-                AppManager.getAppManager().finishActivity();
+                AppManager.getAppManager().finishActivity(this);
                 break;
             case R.id.tvAlbumsInfo:
                 setTextColor(tvAlbumsInfo, 0);

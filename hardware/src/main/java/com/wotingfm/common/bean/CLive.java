@@ -19,7 +19,7 @@ public class CLive implements Serializable {
          * voiceLive : {"audience_count":1,"audience_ids":",104a0a149b20","background":"http://nanzhu.oss-cn-shanghai.aliyuncs.com/voice-live-background.jpg","begin_at":"2017-07-04","channel":{},"cover":"http://nanzhu.oss-cn-shanghai.aliyuncs.com/voice-live-background.jpg","created_at":"2017-07-04 14:22:01","diff_from_real_begin":1000,"had_started":true,"id":165,"keywords":{},"live_number":9737375,"owner":{"avatar":"##userimg##user_4cfc.jpg","fans_count":11,"had_real_name_cert":true,"id":"104a0a149b20","idols_count":10,"name":"名酷123tyhhb"},"real_begin_at":{"date":"2017-07-04 14:22:01.000000","timezone":"Asia/Shanghai","timezone_type":3},"rtmp_push_pull_url_json":{"cid":"f3ecc8dc0a4b4b6398066be174296133","ctime":1499149321881,"hlsPullUrl":"http://pullhlsc7bdc021.live.126.net/live/f3ecc8dc0a4b4b6398066be174296133/playlist.m3u8","httpPullUrl":"http://flvc7bdc021.live.126.net/live/f3ecc8dc0a4b4b6398066be174296133.flv?netease=flvc7bdc021.live.126.net","name":"名酷123tyhhb的直播1499149321","pushUrl":"rtmp://pc7bdc021.live.126.net/live/f3ecc8dc0a4b4b6398066be174296133?wsSecret=9ab0bccbfcd1500d2a9b7f556e822510&wsTime=1499149321","rtmpPullUrl":"rtmp://vc7bdc021.live.126.net/live/f3ecc8dc0a4b4b6398066be174296133"},"title":"","updated_at":"2017-07-04 14:22:02","user_id":"104a0a149b20"}
          */
 
-        public VoiceLiveBean voiceLive;
+        public VoiceLiveBean voice_live;
 
 
         public static class VoiceLiveBean implements Serializable {

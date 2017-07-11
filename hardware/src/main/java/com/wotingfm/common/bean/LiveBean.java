@@ -21,7 +21,7 @@ public class LiveBean implements Serializable {
         public int audience_count;
         public String begin_at;
         public String cover;
-        public int id;
+        public String id;
         public String live_number;
         public String title;
         public String type;

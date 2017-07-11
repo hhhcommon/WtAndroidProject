@@ -133,7 +133,7 @@ public class DownloadProgramActivity extends NoTitleBarBaseActivity implements V
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.ivBack:
-                AppManager.getAppManager().finishActivity();
+                AppManager.getAppManager().finishActivity(this);
                 finish();
                 break;
             case R.id.tvAlbums:

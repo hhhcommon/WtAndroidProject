@@ -23,6 +23,7 @@ import com.wotingfm.common.bean.Selected;
 import com.wotingfm.common.bean.SelectedMore;
 import com.wotingfm.common.bean.SerchList;
 import com.wotingfm.common.bean.Subscrible;
+import com.wotingfm.common.bean.TrailerInfo;
 import com.wotingfm.common.constant.StringConstant;
 
 import java.io.IOException;
@@ -42,6 +43,7 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 
+import static android.R.attr.type;
 import static com.wotingfm.common.net.RetrofitService.BASE_URL;
 
 
@@ -157,6 +159,26 @@ public class RetrofitUtils {
                 });
     }
 
+    public Observable<Object> reservations(String uid) {
+        return retrofitService.reservations(uid)
+                .map(new Func1<Object, Object>() {
+                    @Override
+                    public Object call(Object s) {
+                        return s;
+                    }
+                });
+    }
+
+    public Observable<Object> deleteReservations(String pid) {
+        return retrofitService.deleteReservations(pid)
+                .map(new Func1<Object, Object>() {
+                    @Override
+                    public Object call(Object s) {
+                        return s;
+                    }
+                });
+    }
+
     public Observable<List<Classification.DataBeanX>> getClassifications() {
         return retrofitService.getClassifications()
                 .map(new Func1<Classification, List<Classification.DataBeanX>>() {
@@ -217,7 +239,20 @@ public class RetrofitUtils {
                         if (player.ret != 0) {
                             throw new IllegalStateException(player.msg);
                         }
-                        return player.data.voiceLive;
+                        return player.data.voice_live;
+                    }
+                });
+    }
+
+    public Observable<TrailerInfo.DataBean.VoiceLiveBean> getTrailerInfo(String userId) {
+        return retrofitService.getTrailerInfo(userId)
+                .map(new Func1<TrailerInfo, TrailerInfo.DataBean.VoiceLiveBean>() {
+                    @Override
+                    public TrailerInfo.DataBean.VoiceLiveBean call(TrailerInfo player) {
+                        if (player.ret != 0) {
+                            throw new IllegalStateException(player.msg);
+                        }
+                        return player.data.voice_live;
                     }
                 });
     }
@@ -277,6 +312,19 @@ public class RetrofitUtils {
 
     public Observable<List<Radio.DataBean.ChannelsBean>> getChannelsRadio(String type, int page) {
         return retrofitService.getChannelsRadio(type, page)
+                .map(new Func1<Radio, List<Radio.DataBean.ChannelsBean>>() {
+                    @Override
+                    public List<Radio.DataBean.ChannelsBean> call(Radio player) {
+                        if (player.ret != 0) {
+                            throw new IllegalStateException(player.msg);
+                        }
+                        return player.data.channels;
+                    }
+                });
+    }
+
+    public Observable<List<Radio.DataBean.ChannelsBean>> getChannelsRadioHots() {
+        return retrofitService.getChannelsRadioHots()
                 .map(new Func1<Radio, List<Radio.DataBean.ChannelsBean>>() {
                     @Override
                     public List<Radio.DataBean.ChannelsBean> call(Radio player) {

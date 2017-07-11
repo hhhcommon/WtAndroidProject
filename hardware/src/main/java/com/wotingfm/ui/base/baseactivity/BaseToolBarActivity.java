@@ -66,7 +66,7 @@ public abstract class BaseToolBarActivity extends BaseActivity implements View.O
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        AppManager.getAppManager().finishActivity();
+        AppManager.getAppManager().finishActivity(this);
         if (item.getItemId() == android.R.id.home && IS_BACK == false) {
             if (callBack != null)
                 callBack.call();

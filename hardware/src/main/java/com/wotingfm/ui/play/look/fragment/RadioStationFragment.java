@@ -15,6 +15,7 @@ import com.wotingfm.R;
 import com.wotingfm.common.adapter.findHome.RadioStationAdapter;
 import com.wotingfm.common.adapter.findHome.SelectedAdapter;
 import com.wotingfm.common.bean.HomeBanners;
+import com.wotingfm.common.bean.Radio;
 import com.wotingfm.common.bean.Radiostation;
 import com.wotingfm.common.bean.Selected;
 import com.wotingfm.common.net.RetrofitUtils;
@@ -23,6 +24,7 @@ import com.wotingfm.ui.base.basefragment.BaseFragment;
 import com.wotingfm.ui.play.radio.CountryRadioActivity;
 import com.wotingfm.ui.play.radio.LocalRadioActivity;
 import com.wotingfm.ui.play.radio.ProvincesAndCitiesActivity;
+import com.wotingfm.ui.test.PlayerActivity;
 import com.zhy.adapter.recyclerview.wrapper.HeaderAndFooterWrapper;
 
 import java.util.ArrayList;
@@ -72,8 +74,8 @@ public class RadioStationFragment extends BaseFragment implements SwipeRefreshLa
         mSwipeLayout.setOnRefreshListener(this);
         RadioStationAdapter selectedAdapter = new RadioStationAdapter(getActivity(), datas, new RadioStationAdapter.RadioStationClick() {
             @Override
-            public void click(Radiostation.DataBean dataBean) {
-
+            public void click(Radio.DataBean.ChannelsBean dataBean) {
+                PlayerActivity.start(getActivity(), dataBean, null);
             }
         });
         headview = LayoutInflater.from(getActivity()).inflate(R.layout.headview_radiostation, mRecyclerView, false);
@@ -91,12 +93,12 @@ public class RadioStationFragment extends BaseFragment implements SwipeRefreshLa
             @Override
             public void onClick(View v) {
                 loadLayout.showLoadingView();
-                // refresh();
+                refresh();
                 getBanners();
             }
         });
         getBanners();
-        //refresh();
+        refresh();
         tvLocal.setOnClickListener(this);
         tvCountry.setOnClickListener(this);
         tvProvince.setOnClickListener(this);
@@ -107,7 +109,6 @@ public class RadioStationFragment extends BaseFragment implements SwipeRefreshLa
 
     @Override
     public void onResume() {
-//        setVideoResume();
         super.onResume();
         if (mBannerView != null)
             mBannerView.startTurning(5000);
@@ -134,7 +135,7 @@ public class RadioStationFragment extends BaseFragment implements SwipeRefreshLa
         super.onHiddenChanged(hidden);
     }
 
-    private List<Radiostation.DataBean> datas = new ArrayList<>();
+    private List<Radio.DataBean.ChannelsBean> datas = new ArrayList<>();
     private BannerView mBannerView;
 
     private void getBanners() {
@@ -145,7 +146,6 @@ public class RadioStationFragment extends BaseFragment implements SwipeRefreshLa
                     @Override
                     public void call(List<HomeBanners.DataBean.BannersBean> banners) {
                         loadLayout.showContentView();
-                        mSwipeLayout.setRefreshing(false);
                         if (banners != null && !banners.isEmpty()) {
                             mBannerView.setData(banners);
                             mBannerView.setVisibility(View.VISIBLE);
@@ -156,19 +156,6 @@ public class RadioStationFragment extends BaseFragment implements SwipeRefreshLa
                         } else {
                             mBannerView.setVisibility(View.GONE);
                         }
-                        datas.clear();
-                        Radiostation.DataBean r = new Radiostation.DataBean();
-                        r.title1 = "北京新闻广播";
-                        r.title2 = "正在直播：新闻新天下";
-                        r.title3 = 1;
-                        r.logo = "http://";
-                        datas.add(r);
-                        Radiostation.DataBean r2 = new Radiostation.DataBean();
-                        r2.title1 = "北京新闻广播2";
-                        r2.title2 = "正在直播：新闻新天下";
-                        r2.title3 = 2;
-                        r2.logo = "http://";
-                        datas.add(r2);
                         mHeaderAndFooterWrapper.notifyDataSetChanged();
                     }
                 }, new Action1<Throwable>() {
@@ -180,12 +167,13 @@ public class RadioStationFragment extends BaseFragment implements SwipeRefreshLa
     }
 
     private void refresh() {
-       /* RetrofitUtils.getInstance().getSelecteds()
+        RetrofitUtils.getInstance().getChannelsRadioHots()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Action1<List<Selected.DataBeanX>>() {
+                .subscribe(new Action1<List<Radio.DataBean.ChannelsBean>>() {
                     @Override
-                    public void call(List<Selected.DataBeanX> dataBeanXes) {
+                    public void call(List<Radio.DataBean.ChannelsBean> dataBeanXes) {
+                        mSwipeLayout.setRefreshing(false);
                         loadLayout.showContentView();
                         datas.clear();
                         datas.addAll(dataBeanXes);
@@ -197,7 +185,7 @@ public class RadioStationFragment extends BaseFragment implements SwipeRefreshLa
                         throwable.printStackTrace();
                         loadLayout.showErrorView();
                     }
-                });*/
+                });
     }
 
     @Override
@@ -217,7 +205,7 @@ public class RadioStationFragment extends BaseFragment implements SwipeRefreshLa
 
     @Override
     public void onRefresh() {
-        getBanners();
+        refresh();
     }
 
 }

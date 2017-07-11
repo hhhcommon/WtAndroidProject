@@ -321,7 +321,7 @@ public class RadioInfoActivity extends NoTitleBarBaseActivity implements View.On
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.ivBack:
-                AppManager.getAppManager().finishActivity();
+                AppManager.getAppManager().finishActivity(this);
                 finish();
                 break;
             case R.id.tvYesterday:

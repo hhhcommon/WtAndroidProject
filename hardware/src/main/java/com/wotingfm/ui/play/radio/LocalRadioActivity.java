@@ -136,7 +136,7 @@ public class LocalRadioActivity extends BaseToolBarActivity implements OnLoadMor
 
     private void refresh() {
         mPage = 1;
-        RetrofitUtils.getInstance().getChannelsRadio("nations", mPage)
+        RetrofitUtils.getInstance().getChannelsRadio("local_areas", mPage)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Action1<List<Radio.DataBean.ChannelsBean>>() {
@@ -164,7 +164,7 @@ public class LocalRadioActivity extends BaseToolBarActivity implements OnLoadMor
     }
 
     private void loadMore() {
-        RetrofitUtils.getInstance().getChannelsRadio("nations", mPage)
+        RetrofitUtils.getInstance().getChannelsRadio("local_areas", mPage)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Action1<List<Radio.DataBean.ChannelsBean>>() {

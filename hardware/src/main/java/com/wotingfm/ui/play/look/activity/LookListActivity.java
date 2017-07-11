@@ -187,7 +187,7 @@ public class LookListActivity extends NoTitleBarBaseActivity implements View.OnC
                 break;
             case R.id.ivBack:
             case R.id.ivClose:
-                AppManager.getAppManager().finishActivity();
+                AppManager.getAppManager().finishActivity(this);
                 finish();
                 break;
             case R.id.ivVoice:

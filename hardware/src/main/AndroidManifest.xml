@@ -193,6 +193,11 @@
             android:name=".ui.play.live.LiveRoomActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
+        <!-- 预约 -->
+        <activity
+            android:name=".ui.play.live.TrailerInfoActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" />
         <activity
             android:name="com.netease.nim.live.activity.InputActivity"
             android:theme="@style/InputActivityTheme"

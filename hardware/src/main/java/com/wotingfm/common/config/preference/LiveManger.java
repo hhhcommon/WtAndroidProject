@@ -7,6 +7,7 @@ import com.netease.nim.live.DemoCache;
 import com.netease.nim.live.liveStreaming.PublishParam;
 import com.netease.nim.live.model.RoomInfoEntity;
 import com.wotingfm.common.bean.CLive;
+import com.wotingfm.common.bean.TrailerInfo;
 import com.wotingfm.common.net.RetrofitUtils;
 import com.wotingfm.common.utils.T;
 
@@ -72,7 +73,7 @@ public class LiveManger {
                             publishParam.useFilter = useFilter;
                             publishParam.faceBeauty = faceBeauty;
                             if (callBack != null)
-                                callBack.liveStatus(true, publishParam,cLive.live_number);
+                                callBack.liveStatus(true, publishParam, cLive.live_number);
                         }
                     }
                 }, new Action1<Throwable>() {
@@ -85,7 +86,30 @@ public class LiveManger {
                 });
     }
 
+    public void trailerInfo(String userId, final TrailerInfoCallBack callBack) {
+        RetrofitUtils.getInstance().getTrailerInfo(userId)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Action1<TrailerInfo.DataBean.VoiceLiveBean>() {
+                    @Override
+                    public void call(TrailerInfo.DataBean.VoiceLiveBean cLive) {
+                        if (callBack != null)
+                            callBack.trailerInfo(cLive);
+                    }
+                }, new Action1<Throwable>() {
+                    @Override
+                    public void call(Throwable throwable) {
+                        if (callBack != null)
+                            callBack.trailerInfo(null);
+                    }
+                });
+    }
+
     public interface LiveCallBack {
         void liveStatus(boolean status, PublishParam publishParam, int roomId);
+    }
+
+    public interface TrailerInfoCallBack {
+        void trailerInfo(TrailerInfo.DataBean.VoiceLiveBean voiceLiveBean);
     }
 }

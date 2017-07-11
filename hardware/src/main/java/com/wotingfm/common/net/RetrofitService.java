@@ -18,6 +18,7 @@ import com.wotingfm.common.bean.Selected;
 import com.wotingfm.common.bean.SelectedMore;
 import com.wotingfm.common.bean.SerchList;
 import com.wotingfm.common.bean.Subscrible;
+import com.wotingfm.common.bean.TrailerInfo;
 import com.wotingfm.ui.intercom.main.contacts.model.Contact;
 import com.wotingfm.ui.user.login.model.Login;
 
@@ -52,6 +53,22 @@ public interface RetrofitService {
     //首页播放fm列表
     @GET("api/listenings/player")
     Observable<Player> getPlayerList(@Query("album_id") String album_id, @Query("q") String q);
+
+    //预告详情
+    @GET("api/voice-lives/{voiceLiveId}")
+    Observable<TrailerInfo> getTrailerInfo(@Path("voiceLiveId") String voiceLiveId);
+
+    //预约
+    @POST("api/voice-lives/{id}/reservations")
+    Observable<BaseResult> reservations(@Path("id") String id);
+
+    //取消预约
+    @DELETE("api/voice-lives/{id}/reservations")
+    Observable<BaseResult> deleteReservations(@Path("id") String id);
+
+    //取消预约
+    @GET("api/listenings/radios/channels/hots")
+    Observable<BaseResult> channelsHots();
 
     //分类子页面-获取子分类
     @GET("api/listenings/channels/{id}/children-channels")
@@ -177,6 +194,10 @@ public interface RetrofitService {
     //获取省／国家／地区电台
     @GET("api/listenings/radios/channels/")
     Observable<Radio> getChannelsRadio(@Query("channel_type") String channel_type, @Query("page") int page);
+
+    //电台列表
+    @GET("api/listenings/radios/channels/hots")
+    Observable<Radio> getChannelsRadioHots();
 
     //获取省市列表
     @GET("/api/listenings/radios/channels/provinces")

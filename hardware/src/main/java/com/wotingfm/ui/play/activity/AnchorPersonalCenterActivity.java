@@ -159,7 +159,7 @@ public class AnchorPersonalCenterActivity extends NoTitleBarBaseActivity impleme
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.ivBack:
-                AppManager.getAppManager().finishActivity();
+                AppManager.getAppManager().finishActivity(this);
                 finish();
                 break;
             case R.id.ivMore:

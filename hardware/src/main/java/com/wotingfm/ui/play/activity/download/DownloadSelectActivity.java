@@ -211,11 +211,11 @@ public class DownloadSelectActivity extends NoTitleBarBaseActivity implements Vi
                 for (int w = 0, size = singlesBeanListSelect.size(); w < size; w++) {
                     DownloadUtils.downloadManger(singlesBeanListSelect.get(w));
                 }
-                AppManager.getAppManager().finishActivity();
+                AppManager.getAppManager().finishActivity(this);
                 finish();
                 break;
             case R.id.tvCancel:
-                AppManager.getAppManager().finishActivity();
+                AppManager.getAppManager().finishActivity(this);
                 finish();
                 break;
             case R.id.largeLabelSelect:

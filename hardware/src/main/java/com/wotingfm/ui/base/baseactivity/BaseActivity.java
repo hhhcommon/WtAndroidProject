@@ -44,6 +44,6 @@ public abstract class BaseActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        AppManager.getAppManager().finishActivity();
+        AppManager.getAppManager().finishActivity(this);
     }
 }

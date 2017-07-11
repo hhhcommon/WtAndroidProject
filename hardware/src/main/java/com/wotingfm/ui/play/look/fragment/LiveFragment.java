@@ -25,6 +25,7 @@ import com.wotingfm.common.utils.T;
 import com.wotingfm.common.view.BannerView;
 import com.wotingfm.ui.base.basefragment.BaseFragment;
 import com.wotingfm.ui.play.live.LiveRoomActivity;
+import com.wotingfm.ui.play.live.TrailerInfoActivity;
 import com.wotingfm.ui.user.logo.LogoActivity;
 import com.zhy.adapter.recyclerview.wrapper.HeaderAndFooterWrapper;
 
@@ -99,7 +100,7 @@ public class LiveFragment extends BaseFragment implements SwipeRefreshLayout.OnR
                         LogoActivity.start(getActivity());
                         return;
                     }
-                    LiveRoomActivity.startAudience(getActivity(), dataBean.live_number, dataBean.rtmp_push_pull_url_json.rtmpPullUrl, true,dataBean);
+                    LiveRoomActivity.startAudience(getActivity(), dataBean.live_number, dataBean.rtmp_push_pull_url_json.rtmpPullUrl, true, dataBean);
                    /* DialogMaker.showProgressDialog(getActivity(), null, "请稍等...", true, new DialogInterface.OnCancelListener() {
                         @Override
                         public void onCancel(DialogInterface dialog) {
@@ -115,7 +116,8 @@ public class LiveFragment extends BaseFragment implements SwipeRefreshLayout.OnR
                     });*/
 
                 } else {
-                    T.getInstance().showToast("预告");
+                    TrailerInfoActivity.start(getActivity(), dataBean.id);
+                   /* T.getInstance().showToast("预告");
                     DialogMaker.showProgressDialog(getActivity(), null, "请稍等...", true, new DialogInterface.OnCancelListener() {
                         @Override
                         public void onCancel(DialogInterface dialog) {
@@ -128,7 +130,7 @@ public class LiveFragment extends BaseFragment implements SwipeRefreshLayout.OnR
                             if (status == true)
                                 LiveRoomActivity.startLive(getActivity(), roomId + "", publishParam);
                         }
-                    });
+                    });*/
 
                 }
             }

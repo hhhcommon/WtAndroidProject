@@ -87,7 +87,7 @@ public class ProvincesAndCitiesListRadioActivity extends BaseToolBarActivity imp
 
     private void refresh() {
         mPage = 1;
-        RetrofitUtils.getInstance().getChannelsRadio("nations", mPage)
+        RetrofitUtils.getInstance().getChannelsRadio("provinces", mPage)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Action1<List<Radio.DataBean.ChannelsBean>>() {
@@ -115,7 +115,7 @@ public class ProvincesAndCitiesListRadioActivity extends BaseToolBarActivity imp
     }
 
     private void loadMore() {
-        RetrofitUtils.getInstance().getChannelsRadio("nations", mPage)
+        RetrofitUtils.getInstance().getChannelsRadio("provinces", mPage)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Action1<List<Radio.DataBean.ChannelsBean>>() {

@@ -103,7 +103,7 @@ public class SerchActivity extends NoTitleBarBaseActivity {
         tvCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AppManager.getAppManager().finishActivity();
+                AppManager.getAppManager().finishActivity(SerchActivity.this);
                 finish();
             }
         });
