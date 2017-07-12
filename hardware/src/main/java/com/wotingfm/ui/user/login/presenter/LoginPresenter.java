@@ -12,7 +12,6 @@ import com.netease.nimlib.sdk.RequestCallback;
 import com.netease.nimlib.sdk.auth.AuthService;
 import com.netease.nimlib.sdk.auth.LoginInfo;
 import com.google.gson.GsonBuilder;
-import com.google.gson.reflect.TypeToken;
 import com.woting.commonplat.config.GlobalNetWorkConfig;
 import com.wotingfm.common.application.BSApplication;
 import com.netease.nim.live.DemoCache;
@@ -144,10 +143,6 @@ public class LoginPresenter {
                     model.saveUserInfo(ui);
                     loginYx(ui.optString("acc_id"), ui.optString("net_ease_token"));
                 }
-                ToastUtils.show_always(activity.getActivity(), "登录成功");
-                // 发送登录广播通知所有界面
-                activity.getActivity().sendBroadcast(new Intent(BroadcastConstants.LOGIN));
-                LogoActivity.closeActivity();
             } else {
                 String msg = js.getString("msg");
                 if (msg != null && !msg.trim().equals("")) {
