@@ -292,7 +292,6 @@ public class PersonalInfoFragment extends Fragment implements View.OnClickListen
         }
     }
 
-
     /**
      * 展示弹出框
      */
@@ -305,17 +304,6 @@ public class PersonalInfoFragment extends Fragment implements View.OnClickListen
      */
     public void dialogCancel() {
         if (dialog != null) dialog.dismiss();
-    }
-
-    /**
-     * 返回值得监听
-     *
-     * @param requestCode
-     * @param resultCode
-     * @param data
-     */
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        presenter.setResult(requestCode, resultCode, data);
     }
 
     @Override

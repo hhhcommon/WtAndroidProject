@@ -42,9 +42,6 @@
             android:textSize="13.3sp" />
 
     </RelativeLayout>
-    <TextView
-        android:layout_width="match_parent"
-        android:background="@color/line_color"
-        android:layout_height="1dp" />
+    <include layout="@layout/include_tv" />
 
 </LinearLayout>

@@ -22,6 +22,7 @@ import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import com.woting.commonplat.manager.PhoneMsgManager;
 import com.woting.commonplat.widget.TipView;
 import com.wotingfm.R;
 import com.wotingfm.common.utils.DialogUtils;
@@ -56,7 +57,7 @@ public class GroupNewsForAddFragment extends Fragment implements View.OnClickLis
     private int height = 480;// 滑动开始变色的高
     private RelativeLayout mRelativeLayout;
     private ImageView head_left_btn, img_other;
-    private LinearLayout lin_chose;
+    private LinearLayout lin_chose, lin_channel;
     private ResultListener Listener;
 
     @Override
@@ -72,6 +73,9 @@ public class GroupNewsForAddFragment extends Fragment implements View.OnClickLis
             inItView();
             presenter = new GroupNewsForAddPresenter(this);
             presenter.getData();
+            if (PhoneMsgManager.ScreenWidth == 480) {
+                height = 240;
+            }
         }
         return rootView;
     }
@@ -108,6 +112,8 @@ public class GroupNewsForAddFragment extends Fragment implements View.OnClickLis
         gridView = (GridView) rootView.findViewById(R.id.gridView);// 成员展示
         gridView.setSelector(new ColorDrawable(Color.TRANSPARENT));
 
+
+        lin_channel = (LinearLayout) rootView.findViewById(R.id.lin_channel);
         tv_channel1 = (TextView) rootView.findViewById(R.id.tv_channel1);// 对讲频道1
         re_channel1 = (RelativeLayout) rootView.findViewById(R.id.re_channel1);
         re_channel1.setOnClickListener(this);
@@ -244,8 +250,21 @@ public class GroupNewsForAddFragment extends Fragment implements View.OnClickLis
         tv_groupNumber.setText(number);      // 群号
         tv_address.setText(address);         // 地址
         tv_groupIntroduce.setText(introduce);// 群介绍
-        tv_channel1.setText(channel1);       // 对讲频道1
-        tv_channel2.setText(channel2);       // 对讲频道2
+        if (channel1.equals("") && channel2.equals("")) {
+            lin_channel.setVisibility(View.GONE);
+        } else if (!channel1.equals("") && !channel2.equals("")) {
+            lin_channel.setVisibility(View.VISIBLE);
+            re_channel1.setVisibility(View.VISIBLE);
+            tv_channel1.setText(channel1);       // 对讲频道1
+            re_channel2.setVisibility(View.VISIBLE);
+            tv_channel2.setText(channel2);       // 对讲频道2
+        } else {
+            lin_channel.setVisibility(View.VISIBLE);
+            re_channel1.setVisibility(View.VISIBLE);
+            tv_channel1.setText(channel1);       // 对讲频道1
+            re_channel2.setVisibility(View.GONE);
+        }
+
     }
 
     /**
@@ -253,7 +272,7 @@ public class GroupNewsForAddFragment extends Fragment implements View.OnClickLis
      *
      * @param list
      */
-    public void setGridViewData(List<Contact.user> list,int num) {
+    public void setGridViewData(List<Contact.user> list, int num) {
         re_groupNumber.setVisibility(View.VISIBLE);
         if (adapter == null) {
             adapter = new GroupNewsPersonForAddAdapter(this.getActivity(), list);
@@ -325,7 +344,7 @@ public class GroupNewsForAddFragment extends Fragment implements View.OnClickLis
     /**
      * 设置退出组的返回监听
      */
-    public void exitResult(){
+    public void exitResult() {
         Listener.resultListener(true);
     }
 

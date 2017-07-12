@@ -38,8 +38,5 @@
             android:src="@mipmap/icon_select_n" />
 
     </RelativeLayout>
-    <TextView
-        android:layout_width="match_parent"
-        android:background="@color/line_color"
-        android:layout_height="1dp" />
+    <include layout="@layout/include_tv" />
 </LinearLayout>

@@ -3,6 +3,7 @@ package com.wotingfm.ui.intercom.add.search.net.model;
 import android.util.Log;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.config.GlobalStateConfig;
 import com.wotingfm.common.constant.StringConstant;
@@ -127,28 +128,33 @@ public class SearchContactsForNetModel extends CommonModel {
      */
     public void loadNewsForRecommendPerson(String type, final OnLoadInterface listener) {
         String id = BSApplication.SharedPreferences.getString(StringConstant.USER_ID, "");
-        RetrofitUtils.getInstance().getRecommendPerson(id, type)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Action1<Object>() {
-                    @Override
-                    public void call(Object o) {
-                        try {
-                            Log.e("好友列表返回数据", new Gson().toJson(o));
-                            //填充UI
-                            listener.onSuccess(o);
-                        } catch (Exception e) {
-                            e.printStackTrace();
+        try {
+            RetrofitUtils.getInstance().getRecommendPerson(id, type)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new Action1<Object>() {
+                        @Override
+                        public void call(Object o) {
+                            try {
+                                Log.e("好友列表返回数据", new GsonBuilder().serializeNulls().create().toJson(o));
+                                //填充UI
+                                listener.onSuccess(o);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                                listener.onFailure("");
+                            }
+                        }
+                    }, new Action1<Throwable>() {
+                        @Override
+                        public void call(Throwable throwable) {
+                            throwable.printStackTrace();
                             listener.onFailure("");
                         }
-                    }
-                }, new Action1<Throwable>() {
-                    @Override
-                    public void call(Throwable throwable) {
-                        throwable.printStackTrace();
-                        listener.onFailure("");
-                    }
-                });
+                    });
+        } catch (Exception e) {
+            e.printStackTrace();
+            listener.onFailure("");
+        }
     }
 
     /**
@@ -156,84 +162,99 @@ public class SearchContactsForNetModel extends CommonModel {
      */
     public void loadNewsForRecommendGroup(String type, final OnLoadInterface listener) {
         String id = BSApplication.SharedPreferences.getString(StringConstant.USER_ID, "");
-        RetrofitUtils.getInstance().getRecommendGroup(id, type)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Action1<Object>() {
-                    @Override
-                    public void call(Object o) {
-                        try {
-                            Log.e("好友列表返回数据", new Gson().toJson(o));
-                            //填充UI
-                            listener.onSuccess(o);
-                        } catch (Exception e) {
-                            e.printStackTrace();
+        try {
+            RetrofitUtils.getInstance().getRecommendGroup(id, type)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new Action1<Object>() {
+                        @Override
+                        public void call(Object o) {
+                            try {
+                                Log.e("好友列表返回数据",new GsonBuilder().serializeNulls().create().toJson(o));
+                                //填充UI
+                                listener.onSuccess(o);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                                listener.onFailure("");
+                            }
+                        }
+                    }, new Action1<Throwable>() {
+                        @Override
+                        public void call(Throwable throwable) {
+                            throwable.printStackTrace();
                             listener.onFailure("");
                         }
-                    }
-                }, new Action1<Throwable>() {
-                    @Override
-                    public void call(Throwable throwable) {
-                        throwable.printStackTrace();
-                        listener.onFailure("");
-                    }
-                });
+                    });
+        } catch (Exception e) {
+            e.printStackTrace();
+            listener.onFailure("");
+        }
     }
 
     /**
      * 获取搜索好友
      */
     public void loadNewsForSearchPerson(String s, final OnLoadInterface listener) {
-        RetrofitUtils.getInstance().getSearchPerson(s)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Action1<Object>() {
-                    @Override
-                    public void call(Object o) {
-                        try {
-                            Log.e("搜索好友列表返回数据", new Gson().toJson(o));
-                            //填充UI
-                            listener.onSuccess(o);
-                        } catch (Exception e) {
-                            e.printStackTrace();
+        try {
+            RetrofitUtils.getInstance().getSearchPerson(s)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new Action1<Object>() {
+                        @Override
+                        public void call(Object o) {
+                            try {
+                                Log.e("搜索好友列表返回数据",new GsonBuilder().serializeNulls().create().toJson(o));
+                                //填充UI
+                                listener.onSuccess(o);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                                listener.onFailure("");
+                            }
+                        }
+                    }, new Action1<Throwable>() {
+                        @Override
+                        public void call(Throwable throwable) {
+                            throwable.printStackTrace();
                             listener.onFailure("");
                         }
-                    }
-                }, new Action1<Throwable>() {
-                    @Override
-                    public void call(Throwable throwable) {
-                        throwable.printStackTrace();
-                        listener.onFailure("");
-                    }
-                });
+                    });
+        } catch (Exception e) {
+            e.printStackTrace();
+            listener.onFailure("");
+        }
     }
 
     /**
      * 获取搜索群组
      */
     public void loadNewsForSearchGroup(String s, final OnLoadInterface listener) {
-        RetrofitUtils.getInstance().getSearchGroup(s)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Action1<Object>() {
-                    @Override
-                    public void call(Object o) {
-                        try {
-                            Log.e("搜索群组列表返回数据", new Gson().toJson(o));
-                            //填充UI
-                            listener.onSuccess(o);
-                        } catch (Exception e) {
-                            e.printStackTrace();
+        try {
+            RetrofitUtils.getInstance().getSearchGroup(s)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new Action1<Object>() {
+                        @Override
+                        public void call(Object o) {
+                            try {
+                                Log.e("搜索群组列表返回数据", new GsonBuilder().serializeNulls().create().toJson(o));
+                                //填充UI
+                                listener.onSuccess(o);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                                listener.onFailure("");
+                            }
+                        }
+                    }, new Action1<Throwable>() {
+                        @Override
+                        public void call(Throwable throwable) {
+                            throwable.printStackTrace();
                             listener.onFailure("");
                         }
-                    }
-                }, new Action1<Throwable>() {
-                    @Override
-                    public void call(Throwable throwable) {
-                        throwable.printStackTrace();
-                        listener.onFailure("");
-                    }
-                });
+                    });
+        } catch (Exception e) {
+            e.printStackTrace();
+            listener.onFailure("");
+        }
     }
 
     public interface OnLoadInterface {

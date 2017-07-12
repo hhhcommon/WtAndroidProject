@@ -3,6 +3,7 @@ package com.wotingfm.ui.user.retrievepassword.model;
 
 import android.util.Log;
 
+import com.google.gson.GsonBuilder;
 import com.wotingfm.common.net.RetrofitUtils;
 import com.wotingfm.ui.base.baseinterface.OnLoadInterface;
 import com.wotingfm.ui.base.model.CommonModel;
@@ -30,29 +31,34 @@ public class RetrievePasswordModel extends UserInfo {
      * @param listener 监听
      */
     public void loadNewsForYzm(String userName, final OnLoadInterface listener) {
-        RetrofitUtils.getInstance().registerForYzm(userName)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Action1<Object>() {
-                    @Override
-                    public void call(Object o) {
-                        try {
-                            Log.e("获取验证码返回数据",o.toString());
-                            //填充UI
-                            listener.onSuccess(o);
-                        } catch (Exception e) {
-                            e.printStackTrace();
+        try {
+            RetrofitUtils.getInstance().registerForYzm(userName)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new Action1<Object>() {
+                        @Override
+                        public void call(Object o) {
+                            try {
+                                Log.e("获取验证码返回数据",new GsonBuilder().serializeNulls().create().toJson(o));
+                                //填充UI
+                                listener.onSuccess(o);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                                listener.onFailure("");
+                            }
+
+                        }
+                    }, new Action1<Throwable>() {
+                        @Override
+                        public void call(Throwable throwable) {
+                            throwable.printStackTrace();
                             listener.onFailure("");
                         }
-
-                    }
-                }, new Action1<Throwable>() {
-                    @Override
-                    public void call(Throwable throwable) {
-                        throwable.printStackTrace();
-                        listener.onFailure("");
-                    }
-                });
+                    });
+        } catch (Exception e) {
+            e.printStackTrace();
+            listener.onFailure("");
+        }
     }
 
     /**
@@ -64,30 +70,59 @@ public class RetrievePasswordModel extends UserInfo {
      * @param listener 监听
      */
     public void loadNews(String userName, String password, String yzm, final OnLoadInterface listener) {
-        RetrofitUtils.getInstance().resetPasswords(userName, password, yzm)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Action1<Object>() {
-                    @Override
-                    public void call(Object o) {
-                        try {
-                            Log.e("忘记密码返回数据",o.toString());
-                            //填充UI
-                            listener.onSuccess(o);
-                        } catch (Exception e) {
-                            e.printStackTrace();
+        try {
+            RetrofitUtils.getInstance().resetPasswords(userName, password, yzm)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new Action1<Object>() {
+                        @Override
+                        public void call(Object o) {
+                            try {
+                                Log.e("忘记密码返回数据",new GsonBuilder().serializeNulls().create().toJson(o));
+                                //填充UI
+                                listener.onSuccess(o);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                                listener.onFailure("");
+                            }
+                        }
+                    }, new Action1<Throwable>() {
+                        @Override
+                        public void call(Throwable throwable) {
+                            throwable.printStackTrace();
                             listener.onFailure("");
                         }
-                    }
-                }, new Action1<Throwable>() {
-                    @Override
-                    public void call(Throwable throwable) {
-                        throwable.printStackTrace();
-                        listener.onFailure("");
-                    }
-                });
+                    });
+        } catch (Exception e) {
+            e.printStackTrace();
+            listener.onFailure("");
+        }
     }
 
+    /**
+     * 获取数据参数
+     * @param userName
+     * @param password
+     * @param yzm
+     * @return
+     */
+    public boolean getBtViewType(String userName, String password, String yzm) {
+        boolean bt;
+        if (userName != null && !userName.trim().equals("")) {
+            if (yzm != null && !yzm.trim().equals("")&&yzm.length()>3) {
+                if (password != null && !password.trim().equals("") && password.length() > 5) {
+                    bt = true;
+                } else {
+                    bt = false;
+                }
+            } else {
+                bt = false;
+            }
+        } else {
+            bt = false;
+        }
+        return bt;
+    }
 
     public interface OnLoadInterface {
         void onSuccess(Object o);

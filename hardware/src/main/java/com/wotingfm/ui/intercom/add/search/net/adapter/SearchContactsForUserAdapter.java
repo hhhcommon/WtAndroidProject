@@ -22,7 +22,7 @@ import java.util.List;
  * 作者：xinLong on 2017/6/8 14:36
  * 邮箱：645700751@qq.com
  */
-public class SearchContactsForUserAdapter extends BaseAdapter  {
+public class SearchContactsForUserAdapter extends BaseAdapter {
     private List<Contact.user> list;
     private Context context;
 
@@ -74,7 +74,7 @@ public class SearchContactsForUserAdapter extends BaseAdapter  {
             holder.tv_name.setText(lists.getName());//名
         }
 
-        if (lists.getAvatar() != null &&!lists.getAvatar() .equals("") ) {
+        if (lists.getAvatar() != null && !lists.getAvatar().equals("") && lists.getAvatar().startsWith("http:")) {
             GlideUtils.loadImageViewSize(context, lists.getAvatar(), 60, 60, holder.img_touXiang, true);
         } else {
             Bitmap bmp = BitmapUtils.readBitMap(context, R.mipmap.icon_avatar_d);

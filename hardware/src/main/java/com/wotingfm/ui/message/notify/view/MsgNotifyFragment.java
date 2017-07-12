@@ -15,10 +15,8 @@ import com.woting.commonplat.widget.TipView;
 import com.wotingfm.R;
 import com.wotingfm.common.utils.DialogUtils;
 import com.wotingfm.ui.message.notify.adapter.NotifyMsgAdapter;
-import com.wotingfm.ui.message.notify.model.NotifyMsg;
+import com.wotingfm.ui.message.notify.model.DBNotifyMsg;
 import com.wotingfm.ui.message.notify.presenter.MsgNotifyPresenter;
-import com.wotingfm.ui.message.person.adapter.FriendMsgAdapter;
-import com.wotingfm.ui.message.person.model.FriendMsg;
 import com.wotingfm.ui.mine.main.MineActivity;
 
 import java.util.List;
@@ -59,7 +57,7 @@ public class MsgNotifyFragment extends Fragment implements NotifyMsgAdapter.IonS
         tip_view.setTipClick(this);
         rootView.findViewById(R.id.head_left_btn).setOnClickListener(this);
         TextView tv_center = (TextView) rootView.findViewById(R.id.tv_center);
-        tv_center.setText("通知消息");
+        tv_center.setText("消息中心");
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.recycler_view);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this.getActivity()));
     }
@@ -80,7 +78,7 @@ public class MsgNotifyFragment extends Fragment implements NotifyMsgAdapter.IonS
 
 
     // 适配数据
-    public void updateUI(List<NotifyMsg> list) {
+    public void updateUI(List<DBNotifyMsg> list) {
         if (mAdapter == null) {
             mAdapter = new NotifyMsgAdapter(this.getActivity(), list);
             mRecyclerView.setAdapter(mAdapter);

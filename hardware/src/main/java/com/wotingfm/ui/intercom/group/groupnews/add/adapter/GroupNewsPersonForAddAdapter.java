@@ -1,13 +1,18 @@
 package com.wotingfm.ui.intercom.group.groupnews.add.adapter;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+
+import com.woting.commonplat.utils.BitmapUtils;
 import com.wotingfm.R;
+import com.wotingfm.common.utils.GlideUtils;
 import com.wotingfm.ui.intercom.main.contacts.model.Contact;
+
 import java.util.List;
 
 /**
@@ -62,6 +67,12 @@ public class GroupNewsPersonForAddAdapter extends BaseAdapter {
         if (lists.getType() == 1) {
             // 正常
             holder.img_view.setVisibility(View.VISIBLE);
+            if (lists.getAvatar() != null && !lists.getAvatar().equals("") && lists.getAvatar().startsWith("http:")) {
+                GlideUtils.loadImageViewSize(context, lists.getAvatar(), 60, 60, holder.img_view, true);
+            } else {
+                Bitmap bmp = BitmapUtils.readBitMap(context, R.mipmap.icon_avatar_d);
+                holder.img_view.setImageBitmap(bmp);
+            }
             holder.img_add.setVisibility(View.GONE);
             holder.img_del.setVisibility(View.GONE);
         } else if (lists.getType() == 2) {
@@ -79,6 +90,6 @@ public class GroupNewsPersonForAddAdapter extends BaseAdapter {
     }
 
     class ViewHolder {
-        public ImageView img_view,img_add,img_del;
+        public ImageView img_view, img_add, img_del;
     }
 }

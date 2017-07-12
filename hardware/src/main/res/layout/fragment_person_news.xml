@@ -163,13 +163,15 @@
                         android:layout_marginRight="8dp"
                         android:src="@mipmap/chat_icon_next" />
                 </LinearLayout>
+
                 <RelativeLayout
                     android:id="@+id/re_sunNumber"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
                     android:background="@color/white"
-                    android:gravity="top">
+                    android:gravity="top"
+                    android:visibility="gone">
 
                     <TextView
                         android:id="@+id/tv_subName"
@@ -202,13 +204,14 @@
                     <GridView
                         android:id="@+id/gridView"
                         android:layout_width="match_parent"
-                        android:scrollbars="none"
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/tv_subName"
                         android:layout_margin="12dp"
-                        android:numColumns="3"></GridView>
+                        android:numColumns="3"
+                        android:scrollbars="none"></GridView>
 
                 </RelativeLayout>
+
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="0.5dp"

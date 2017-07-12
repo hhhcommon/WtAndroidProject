@@ -7,7 +7,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
 import com.wotingfm.R;
 import com.wotingfm.ui.user.login.view.LoginFragment;
 import com.wotingfm.ui.user.register.view.RegisterFragment;

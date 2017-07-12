@@ -18,9 +18,36 @@ public class Contact implements Serializable {
         private String gender;
         private String signature;
         private boolean is_admin;
+        private boolean is_owner;
         private String introduction;               //
         private String location;                   //
-        private String age;                   //
+        private String age;                        //
+        private String area;                       // 地区
+        private String fans_count;                 // 关注
+
+        public boolean is_owner() {
+            return is_owner;
+        }
+
+        public void setIs_owner(boolean is_owner) {
+            this.is_owner = is_owner;
+        }
+
+        public String getArea() {
+            return area;
+        }
+
+        public void setArea(String area) {
+            this.area = area;
+        }
+
+        public String getFans_count() {
+            return fans_count;
+        }
+
+        public void setFans_count(String fans_count) {
+            this.fans_count = fans_count;
+        }
 
         public String getLocation() {
             return location;
@@ -127,6 +154,24 @@ public class Contact implements Serializable {
         private String qr_code_url;                // string	@mock=
         private String title;                      // string	@mock=测试群聊123
         private String updated_at;//
+        private String channel;//
+        private String group_num;//
+
+        public String getGroup_num() {
+            return group_num;
+        }
+
+        public void setGroup_num(String group_num) {
+            this.group_num = group_num;
+        }
+
+        public String getChannel() {
+            return channel;
+        }
+
+        public void setChannel(String channel) {
+            this.channel = channel;
+        }
 
         public String getCreated_at() {
             return created_at;

@@ -29,28 +29,33 @@ public class FeedbackModel {
      */
     public void loadNews(String information,String feedback, final OnLoadInterface listener) {
         String id= BSApplication.SharedPreferences.getString(StringConstant.USER_ID,"");
-        RetrofitUtils.getInstance().feedback(id,information,feedback)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Action1<Object>() {
-                    @Override
-                    public void call(Object o) {
-                        try {
-                            Log.e("提交意见反馈返回数据",new Gson().toJson(o));
-                            //填充UI
-                            listener.onSuccess(o);
-                        } catch (Exception e) {
-                            e.printStackTrace();
+        try {
+            RetrofitUtils.getInstance().feedback(id,information,feedback)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new Action1<Object>() {
+                        @Override
+                        public void call(Object o) {
+                            try {
+                                Log.e("提交意见反馈返回数据",new Gson().toJson(o));
+                                //填充UI
+                                listener.onSuccess(o);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                                listener.onFailure("");
+                            }
+                        }
+                    }, new Action1<Throwable>() {
+                        @Override
+                        public void call(Throwable throwable) {
+                            throwable.printStackTrace();
                             listener.onFailure("");
                         }
-                    }
-                }, new Action1<Throwable>() {
-                    @Override
-                    public void call(Throwable throwable) {
-                        throwable.printStackTrace();
-                        listener.onFailure("");
-                    }
-                });
+                    });
+        } catch (Exception e) {
+            e.printStackTrace();
+            listener.onFailure("");
+        }
     }
 
     public interface OnLoadInterface {

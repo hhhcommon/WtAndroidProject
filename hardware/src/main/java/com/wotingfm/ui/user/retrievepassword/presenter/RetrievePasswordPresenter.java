@@ -3,12 +3,15 @@ package com.wotingfm.ui.user.retrievepassword.presenter;
 import android.os.CountDownTimer;
 import android.util.Log;
 import android.widget.Toast;
+
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.woting.commonplat.config.GlobalNetWorkConfig;
 import com.wotingfm.common.utils.ToastUtils;
 import com.wotingfm.ui.user.logo.LogoActivity;
 import com.wotingfm.ui.user.retrievepassword.model.RetrievePasswordModel;
 import com.wotingfm.ui.user.retrievepassword.view.RetrievePassWordFragment;
+
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
@@ -84,23 +87,10 @@ public class RetrievePasswordPresenter {
      *
      * @param userName 用户名
      * @param password 密码
-     * @param yzm 验证码
+     * @param yzm      验证码
      */
     public void getBtView(String userName, String password, String yzm) {
-        boolean bt;
-        if (userName != null && !userName.trim().equals("")) {
-            if (yzm != null && !yzm.trim().equals("")) {
-                if (password != null && !password.trim().equals("") && password.length() > 5) {
-                    bt = true;
-                } else {
-                    bt = false;
-                }
-            } else {
-                bt = false;
-            }
-        } else {
-            bt = false;
-        }
+        boolean bt = model.getBtViewType(userName, password, yzm);
         activity.setConfirmBackground(bt);
     }
 
@@ -126,7 +116,7 @@ public class RetrievePasswordPresenter {
      * 获取验证码
      */
     public void getYzm(String userName) {
-        if(userName!=null&&!userName.equals("")){
+        if (userName != null && !userName.equals("")) {
             if (GlobalNetWorkConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
                 if (mCountDownTimer == null) {
                     timerDown();
@@ -135,8 +125,8 @@ public class RetrievePasswordPresenter {
             } else {
                 ToastUtils.show_always(activity.getActivity(), "网络连接失败，请稍后再试！");
             }
-        }else{
-            ToastUtils.show_always(activity.getActivity(),"手机号不能为空");
+        } else {
+            ToastUtils.show_always(activity.getActivity(), "手机号不能为空");
         }
     }
 
@@ -160,7 +150,7 @@ public class RetrievePasswordPresenter {
     // 处理忘记密码返回数据
     private void dealSuccess(Object o) {
         try {
-            String s = new Gson().toJson(o);
+            String s = new GsonBuilder().serializeNulls().create().toJson(o);
             JSONObject js = new JSONObject(s);
             int ret = js.getInt("ret");
             Log.e("ret", String.valueOf(ret));
@@ -169,8 +159,10 @@ public class RetrievePasswordPresenter {
                 ToastUtils.show_always(activity.getActivity(), "修改密码成功");
             } else {
                 String msg = js.getString("msg");
-                ToastUtils.show_always(activity.getActivity(), msg);
-                ToastUtils.show_always(activity.getActivity(), "修改密码失败，请稍后再试");
+                if (msg != null && !msg.trim().equals("")) {
+                    Log.e("修改密码失败返回数据", msg);
+                    ToastUtils.show_always(activity.getActivity(), msg);
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -200,7 +192,7 @@ public class RetrievePasswordPresenter {
     // 处理户获取验证码返回数据
     private void dealGetYzmSuccess(Object o) {
         try {
-            String s = new Gson().toJson(o);
+            String s = new GsonBuilder().serializeNulls().create().toJson(o);
             JSONObject js = new JSONObject(s);
             int ret = js.getInt("ret");
             Log.e("ret", String.valueOf(ret));
@@ -210,11 +202,12 @@ public class RetrievePasswordPresenter {
                 JSONObject arg1 = (JSONObject) jsonParser.nextValue();
                 int code = arg1.getInt("code");
                 ToastUtils.show_always(activity.getActivity(), String.valueOf(code));
-                ToastUtils.show_always(activity.getActivity(), "获取验证码成功");
             } else {
                 String msg = js.getString("msg");
-                ToastUtils.show_always(activity.getActivity(), msg);
-                ToastUtils.show_always(activity.getActivity(), "获取验证码失败，请稍后再试");
+                if (msg != null && !msg.trim().equals("")) {
+                    Log.e("获取验证码失败返回数据", msg);
+                    ToastUtils.show_always(activity.getActivity(), msg);
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -222,6 +215,9 @@ public class RetrievePasswordPresenter {
         }
     }
 
+    /**
+     * 关闭定时器
+     */
     public void cancel() {
         if (mCountDownTimer != null) {
             mCountDownTimer.cancel();

@@ -40,27 +40,33 @@ public class SearchContactsForLocalModel {
 
     /**
      * 为 ListView 填充数据
+     *
      * @param person
      * @return
      */
     public List<Contact.user> filledData(List<Contact.user> person) {
-        for (int i = 0; i < person.size(); i++) {
-            person.get(i).setName(person.get(i).getName());
-            // 汉字转换成拼音
-            String pinyin = characterParser.getSelling(person.get(i).getName());
-            String sortString = pinyin.substring(0, 1).toUpperCase();
-            // 正则表达式，判断首字母是否是英文字母
-            if (sortString.matches("[A-Z]")) {
-                person.get(i).setSortLetters(sortString.toUpperCase());
-            } else {
-                person.get(i).setSortLetters("#");
+        if (person != null && person.size() > 0) {
+            for (int i = 0; i < person.size(); i++) {
+                person.get(i).setName(person.get(i).getName());
+                // 汉字转换成拼音
+                String pinyin = characterParser.getSelling(person.get(i).getName());
+                String sortString = pinyin.substring(0, 1).toUpperCase();
+                // 正则表达式，判断首字母是否是英文字母
+                if (sortString.matches("[A-Z]")) {
+                    person.get(i).setSortLetters(sortString.toUpperCase());
+                } else {
+                    person.get(i).setSortLetters("#");
+                }
             }
+            return person;
+        } else {
+            return null;
         }
-        return person;
     }
 
     /**
      * 根据输入框中的值来过滤数据
+     *
      * @param filterStr
      * @param srcList_p
      * @return

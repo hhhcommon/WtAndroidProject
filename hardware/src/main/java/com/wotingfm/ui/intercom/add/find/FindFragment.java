@@ -26,8 +26,11 @@ public class FindFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Bundle bundle = getArguments();
-        fromType = bundle.getString("type");
+        try {
+            fromType = getArguments().getString("type");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

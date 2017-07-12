@@ -3,6 +3,7 @@ package com.wotingfm.ui.intercom.group.groupnews.add.model;
 import android.util.Log;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.config.GlobalStateConfig;
 import com.wotingfm.common.constant.StringConstant;
@@ -51,28 +52,33 @@ public class GroupNewsForAddModel {
      * @param listener 监听
      */
     public void getGroupPerson(String id, final OnLoadInterface listener) {
-        RetrofitUtils.getInstance().getGroupPerson(id)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Action1<Object>() {
-                    @Override
-                    public void call(Object o) {
-                        try {
-                            Log.e("创建群组返回数据", new Gson().toJson(o));
-                            //填充UI
-                            listener.onSuccess(o);
-                        } catch (Exception e) {
-                            e.printStackTrace();
+        try {
+            RetrofitUtils.getInstance().getGroupPerson(id)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new Action1<Object>() {
+                        @Override
+                        public void call(Object o) {
+                            try {
+                                Log.e("获取群成员返回数据", new GsonBuilder().serializeNulls().create().toJson(o));
+                                //填充UI
+                                listener.onSuccess(o);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                                listener.onFailure("");
+                            }
+                        }
+                    }, new Action1<Throwable>() {
+                        @Override
+                        public void call(Throwable throwable) {
+                            throwable.printStackTrace();
                             listener.onFailure("");
                         }
-                    }
-                }, new Action1<Throwable>() {
-                    @Override
-                    public void call(Throwable throwable) {
-                        throwable.printStackTrace();
-                        listener.onFailure("");
-                    }
-                });
+                    });
+        } catch (Exception e) {
+            e.printStackTrace();
+            listener.onFailure("");
+        }
     }
 
     /**
@@ -82,28 +88,33 @@ public class GroupNewsForAddModel {
      * @param listener
      */
     public void getGroupNews(String id, final OnLoadInterface listener) {
-        RetrofitUtils.getInstance().getGroupNews(id)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Action1<Object>() {
-                    @Override
-                    public void call(Object o) {
-                        try {
-                            Log.e("获取群详情返回数据", new Gson().toJson(o));
-                            //填充UI
-                            listener.onSuccess(o);
-                        } catch (Exception e) {
-                            e.printStackTrace();
+        try {
+            RetrofitUtils.getInstance().getGroupNews(id)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new Action1<Object>() {
+                        @Override
+                        public void call(Object o) {
+                            try {
+                                Log.e("获取群详情返回数据", new GsonBuilder().serializeNulls().create().toJson(o));
+                                //填充UI
+                                listener.onSuccess(o);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                                listener.onFailure("");
+                            }
+                        }
+                    }, new Action1<Throwable>() {
+                        @Override
+                        public void call(Throwable throwable) {
+                            throwable.printStackTrace();
                             listener.onFailure("");
                         }
-                    }
-                }, new Action1<Throwable>() {
-                    @Override
-                    public void call(Throwable throwable) {
-                        throwable.printStackTrace();
-                        listener.onFailure("");
-                    }
-                });
+                    });
+        } catch (Exception e) {
+            e.printStackTrace();
+            listener.onFailure("");
+        }
     }
 
     /**
@@ -113,28 +124,33 @@ public class GroupNewsForAddModel {
      */
     public void exitGroup(String Gid, final OnLoadInterface listener) {
         String Pid = BSApplication.SharedPreferences.getString(StringConstant.USER_ID, "");
-        RetrofitUtils.getInstance().exitGroup(Gid, Pid)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Action1<Object>() {
-                    @Override
-                    public void call(Object o) {
-                        try {
-                            Log.e("退出群组返回数据", new Gson().toJson(o));
-                            //填充UI
-                            listener.onSuccess(o);
-                        } catch (Exception e) {
-                            e.printStackTrace();
+        try {
+            RetrofitUtils.getInstance().exitGroup(Gid, Pid)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new Action1<Object>() {
+                        @Override
+                        public void call(Object o) {
+                            try {
+                                Log.e("退出群组返回数据", new GsonBuilder().serializeNulls().create().toJson(o));
+                                //填充UI
+                                listener.onSuccess(o);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                                listener.onFailure("");
+                            }
+                        }
+                    }, new Action1<Throwable>() {
+                        @Override
+                        public void call(Throwable throwable) {
+                            throwable.printStackTrace();
                             listener.onFailure("");
                         }
-                    }
-                }, new Action1<Throwable>() {
-                    @Override
-                    public void call(Throwable throwable) {
-                        throwable.printStackTrace();
-                        listener.onFailure("");
-                    }
-                });
+                    });
+        } catch (Exception e) {
+            e.printStackTrace();
+            listener.onFailure("");
+        }
     }
 
     public interface OnLoadInterface {
@@ -242,7 +258,7 @@ public class GroupNewsForAddModel {
     }
 
     /**
-     * 判断当前用户是都是群管理员
+     * 判断当前用户是不是群管理员
      *
      * @param list
      * @return
@@ -255,8 +271,14 @@ public class GroupNewsForAddModel {
                 String id = list.get(i).getId();
                 if (id != null && !id.equals("")) {
                     if (id.equals(_id)) {
-                        b = list.get(i).is_admin();
-                        break;
+                        boolean  b1 = list.get(i).is_admin();
+                        boolean b2 = list.get(i).is_owner();
+                        if(b1||b2){
+                            b = true;
+                            break;
+                        }else{
+                            b = false;
+                        }
                     }
                 }
             }

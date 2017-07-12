@@ -17,8 +17,7 @@ import com.woting.commonplat.utils.BitmapUtils;
 import com.wotingfm.R;
 import com.wotingfm.common.utils.GlideUtils;
 import com.wotingfm.common.view.slidingbutton.SlidingButtonView;
-import com.wotingfm.ui.message.notify.model.NotifyMsg;
-import com.wotingfm.ui.message.person.model.FriendMsg;
+import com.wotingfm.ui.message.notify.model.DBNotifyMsg;
 
 import java.util.List;
 
@@ -29,18 +28,18 @@ import java.util.List;
  */
 
 public class NotifyMsgAdapter extends RecyclerView.Adapter<NotifyMsgAdapter.SimpleHolder> implements SlidingButtonView.IonSlidingButtonListener {
-    private List<NotifyMsg> mData;
+    private List<DBNotifyMsg> mData;
     private Context mContext;
 
     private IonSlidingViewClickListener mIDeleteBtnClickListener;
     private SlidingButtonView mMenu;
 
-    public NotifyMsgAdapter(Context context, List<NotifyMsg> friendList) {
+    public NotifyMsgAdapter(Context context, List<DBNotifyMsg> friendList) {
         this.mContext = context;
         this.mData = friendList;
     }
 
-    public void changeData(List<NotifyMsg> friendList) {
+    public void changeData(List<DBNotifyMsg> friendList) {
         this.mData = friendList;
         notifyDataSetChanged();
     }
@@ -54,22 +53,12 @@ public class NotifyMsgAdapter extends RecyclerView.Adapter<NotifyMsgAdapter.Simp
     // 数据绑定
     @Override
     public void onBindViewHolder(final SimpleHolder holder, int position) {
-        NotifyMsg m = mData.get(position);
+        DBNotifyMsg m = mData.get(position);
 
-        if (m.getApply_type().equals("1")) {
-            holder.layout_content.getLayoutParams().width = getScreenWidth(mContext);
-            holder.tv_name.setText(m.getName());
-            holder.tv_oks.setVisibility(View.GONE);
-            holder.tv_ok.setVisibility(View.VISIBLE);
-        } else {
-            holder.layout_content.getLayoutParams().width = getScreenWidth(mContext);
-            holder.tv_name.setText(m.getName());
-            holder.tv_oks.setVisibility(View.VISIBLE);
-            holder.tv_ok.setVisibility(View.GONE);
-        }
 
-        if (m.getAvatar() != null && !m.getAvatar().equals("")) {
-            GlideUtils.loadImageViewSize(mContext, m.getAvatar(), 60, 60, holder.img_url, true);
+
+        if (m.getApply_avatar() != null && !m.getApply_avatar().equals("")) {
+            GlideUtils.loadImageViewSize(mContext, m.getApply_avatar(), 60, 60, holder.img_url, true);
         } else {
             Bitmap bmp = BitmapUtils.readBitMap(mContext, R.mipmap.icon_avatar_d);
             holder.img_url.setImageBitmap(bmp);

@@ -102,23 +102,27 @@ public class ChannelPresenter {
      * 完成按钮的操作
      */
     public void over() {
-        if (GlobalNetWorkConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
-            activity.dialogShow();
-            model.loadNews(channel1, channel2, groupId, new ChannelModel.OnLoadInterface() {
-                @Override
-                public void onSuccess(Object o) {
-                    activity.dialogCancel();
-                    dealSuccess(o);
-                }
+        if(true){
+            jump();
+        }else{
+            if (GlobalNetWorkConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
+                activity.dialogShow();
+                model.loadNews(channel1, channel2, groupId, new ChannelModel.OnLoadInterface() {
+                    @Override
+                    public void onSuccess(Object o) {
+                        activity.dialogCancel();
+                        dealSuccess(o);
+                    }
 
-                @Override
-                public void onFailure(String msg) {
-                    activity.dialogCancel();
-                    ToastUtils.show_always(activity.getActivity(), "设置失败，请稍后再试！");
-                }
-            });
-        } else {
-            ToastUtils.show_always(activity.getActivity(), "网络连接失败，请稍后再试！");
+                    @Override
+                    public void onFailure(String msg) {
+                        activity.dialogCancel();
+                        ToastUtils.show_always(activity.getActivity(), "设置失败，请稍后再试！");
+                    }
+                });
+            } else {
+                ToastUtils.show_always(activity.getActivity(), "网络连接失败，请稍后再试！");
+            }
         }
     }
 

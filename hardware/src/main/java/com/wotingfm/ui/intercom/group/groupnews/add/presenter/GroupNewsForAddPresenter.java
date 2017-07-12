@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.woting.commonplat.config.GlobalNetWorkConfig;
 import com.wotingfm.common.config.GlobalStateConfig;
@@ -69,7 +70,7 @@ public class GroupNewsForAddPresenter {
                 if (list != null && list.size() > 0) {
                     ArrayList<Contact.user> _list = model.assemblyDataForGroup(list, true);// 组装群成员展示数据
                     if (_list != null && _list.size() > 0) {
-                        activity.setGridViewData(_list,list.size());
+                        activity.setGridViewData(_list, list.size());
                     } else {
                         activity.setViewForNoGroupPerson();
                     }
@@ -110,7 +111,7 @@ public class GroupNewsForAddPresenter {
     // 处理返回的数据
     private void dealSuccess(Object o) {
         try {
-            String s = new Gson().toJson(o);
+            String s = new GsonBuilder().serializeNulls().create().toJson(o);
             JSONObject js = new JSONObject(s);
             int ret = js.getInt("ret");
             Log.e("获取群详情==ret", String.valueOf(ret));
@@ -151,24 +152,45 @@ public class GroupNewsForAddPresenter {
         }
         String number = "";
         try {
-            number = g_news.getId();
+            number = g_news.getGroup_num();
         } catch (Exception e) {
             e.printStackTrace();
         }
-        String address = "";
+        String address = "暂未填写";
         try {
             address = g_news.getLocation();
         } catch (Exception e) {
             e.printStackTrace();
         }
-        String introduce = "";
+        String introduce = "暂无群介绍";
         try {
             introduce = g_news.getIntroduction();
+            if (introduce == null || introduce.equals("")) {
+                introduce = "暂无群介绍";
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
-        String channel1 = "CH100-100000";
-        String channel2 = "CH100-100000";
+
+        String channel = "";
+        String channel1 = "";
+        String channel2 = "";
+        try {
+            channel = g_news.getChannel();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        if (channel != null && !channel.equals("")) {
+            if (channel.contains(",")) {
+                String[] strArray = channel.split(","); //拆分字符为"," ,然后把结果交给数组strArray
+                channel1 = strArray[0];
+                channel2 = strArray[1];
+            } else {
+                channel1 = "CH100-100000";
+                channel2 = "";
+            }
+        }
+
         String cid = "";
         try {
             cid = g_news.getCreator_id();
@@ -210,7 +232,7 @@ public class GroupNewsForAddPresenter {
     // 处理群成员返回的数据
     private void dealGroupPersonSuccess(Object o) {
         try {
-            String s = new Gson().toJson(o);
+            String s = new GsonBuilder().serializeNulls().create().toJson(o);
             JSONObject js = new JSONObject(s);
             int ret = js.getInt("ret");
             Log.e("获取群成员==ret", String.valueOf(ret));
@@ -218,7 +240,7 @@ public class GroupNewsForAddPresenter {
                 String msg = js.getString("data");
                 JSONTokener jsonParser = new JSONTokener(msg);
                 JSONObject arg1 = (JSONObject) jsonParser.nextValue();
-                String group = arg1.getString("chat_group");
+                String group = arg1.getString("users");
                 // 群成员
                 list = new Gson().fromJson(group, new TypeToken<List<Contact.user>>() {
                 }.getType());
@@ -227,7 +249,7 @@ public class GroupNewsForAddPresenter {
                     boolean b = model.isAdmin(list);// 判断当前用户是否是管理员
                     ArrayList<Contact.user> _list = model.assemblyDataForGroup(list, b);
                     if (_list != null && _list.size() > 0) {
-                        activity.setGridViewData(_list,list.size());
+                        activity.setGridViewData(_list, list.size());
                     } else {
                         activity.setViewForNoGroupPerson();
                     }

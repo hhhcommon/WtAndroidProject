@@ -26,8 +26,6 @@ public class PhotoCutActivity extends Activity implements OnClickListener {
     private ClipImageLayout mClipImageLayout;
     private int type;
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,19 +69,18 @@ public class PhotoCutActivity extends Activity implements OnClickListener {
                             Intent intent = new Intent();
                             intent.putExtra("return", Environment.getExternalStorageDirectory() + "/woting/image/" + s + ".png");
                             setResult(1, intent);
-                            finish();
                         } else {
                             FileOutputStream out = new FileOutputStream(new File(Environment.getExternalStorageDirectory() + "/woting/image/portaitUser.png"));
                             out.write(outputStream.toByteArray());
                             out.flush();
                             out.close();
                             setResult(1);
-                            finish();
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
                 }
+                finish();
                 break;
             case R.id.head_left_btn:
                 finish();

@@ -2,6 +2,7 @@ package com.wotingfm.ui.intercom.person.personmessage.view;
 
 import android.app.Dialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -19,10 +20,13 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.woting.commonplat.manager.PhoneMsgManager;
+import com.woting.commonplat.utils.BitmapUtils;
 import com.woting.commonplat.widget.TipView;
 import com.wotingfm.R;
 import com.wotingfm.common.bean.AlbumsBean;
 import com.wotingfm.common.utils.DialogUtils;
+import com.wotingfm.common.utils.GlideUtils;
 import com.wotingfm.common.utils.ToastUtils;
 import com.wotingfm.common.view.myscrollview.ObservableScrollView;
 import com.wotingfm.ui.base.baseinterface.ScrollViewListener;
@@ -54,7 +58,7 @@ public class PersonMessageFragment extends Fragment implements View.OnClickListe
     private ObservableScrollView scrollView;
     private int height = 480;// 滑动开始变色的高
     private RelativeLayout mRelativeLayout, re_sunNumber;
-    private ImageView head_left_btn, img_other, img_call;
+    private ImageView head_left_btn, img_other, img_call,img_url;
     private GridView gridView;
     private PersonMessageSubAdapter adapter;
     private Dialog confirmDialog;
@@ -69,6 +73,9 @@ public class PersonMessageFragment extends Fragment implements View.OnClickListe
             isLoginView(-1);
             presenter = new PersonMessagePresenter(this);
             presenter.getData();
+            if (PhoneMsgManager.ScreenWidth == 480) {
+                height = 240;
+            }
         }
         return rootView;
     }
@@ -92,6 +99,9 @@ public class PersonMessageFragment extends Fragment implements View.OnClickListe
         img_call = (ImageView) rootView.findViewById(R.id.img_call);          // 呼叫展示图片
         lin_note = (LinearLayout) rootView.findViewById(R.id.lin_note);       // 备注
         lin_note.setOnClickListener(this);
+
+
+        img_url = (ImageView) rootView.findViewById(R.id.img_url);            // 头像展示图片
         tv_name = (TextView) rootView.findViewById(R.id.tv_name);             // 姓名
         tv_introduce = (TextView) rootView.findViewById(R.id.tv_introduce);   // 介绍
         tv_number = (TextView) rootView.findViewById(R.id.tv_number);         // 听号
@@ -109,6 +119,7 @@ public class PersonMessageFragment extends Fragment implements View.OnClickListe
         tv_del = (TextView) rootView.findViewById(R.id.tv_del);               // 删除好友
         tv_del.setOnClickListener(this);
         rootView.findViewById(R.id.tv_quxiao).setOnClickListener(this);       // 取消
+
     }
 
     @Override
@@ -207,7 +218,7 @@ public class PersonMessageFragment extends Fragment implements View.OnClickListe
     /**
      * 隐藏订阅展示
      */
-    public void setViewForNoGroupPerson() {
+    public void setGridViewDataNull() {
         re_sunNumber.setVisibility(View.GONE);
     }
 
@@ -253,12 +264,19 @@ public class PersonMessageFragment extends Fragment implements View.OnClickListe
     /**
      * 设置界面展示数据
      *
+     * @param url       头像
      * @param name      姓名
      * @param introduce 介绍
      * @param number    听号
      * @param address   地址
      */
-    public void setViewData(String name, String introduce, String number, String address, String focus) {
+    public void setViewData(String url, String name, String introduce, String number, String address, String focus) {
+        if (url!= null && !url.equals("")&&url.startsWith("http")) {
+            GlideUtils.loadImageViewSize(this.getActivity(), url, 60, 60, img_url, true);
+        } else {
+            Bitmap bmp = BitmapUtils.readBitMap(this.getActivity(), R.mipmap.icon_avatar_d);
+            img_url.setImageBitmap(bmp);
+        }
         tv_name.setText(name);             // 姓名
         tvTitle.setText(name);             // 姓名
         tv_introduce.setText(introduce);   // 介绍

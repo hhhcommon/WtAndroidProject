@@ -11,7 +11,6 @@ import android.widget.TextView;
 
 import com.wotingfm.R;
 import com.wotingfm.common.utils.DialogUtils;
-import com.wotingfm.ui.intercom.main.view.InterPhoneActivity;
 import com.wotingfm.ui.mine.editusermessage.presenter.EditUserPresenter;
 import com.wotingfm.ui.mine.main.MineActivity;
 

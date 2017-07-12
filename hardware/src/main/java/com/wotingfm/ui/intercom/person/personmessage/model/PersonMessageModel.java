@@ -2,6 +2,7 @@ package com.wotingfm.ui.intercom.person.personmessage.model;
 
 import android.util.Log;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.bean.AlbumsBean;
 import com.wotingfm.common.constant.StringConstant;
@@ -82,28 +83,33 @@ public class PersonMessageModel  {
      */
     public void loadNews(String id,final OnLoadInterface listener) {
         String token= BSApplication.SharedPreferences.getString(StringConstant.TOKEN,"000");
-        RetrofitUtils.getInstance().getPersonNews(id, token)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Action1<Object>() {
-                    @Override
-                    public void call(Object o) {
-                        try {
-                            Log.e("获取好友信息返回数据",new Gson().toJson(o));
-                            //填充UI
-                            listener.onSuccess(o);
-                        } catch (Exception e) {
-                            e.printStackTrace();
+        try {
+            RetrofitUtils.getInstance().getPersonNews(id, token)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new Action1<Object>() {
+                        @Override
+                        public void call(Object o) {
+                            try {
+                                Log.e("获取好友信息返回数据",new GsonBuilder().serializeNulls().create().toJson(o));
+                                //填充UI
+                                listener.onSuccess(o);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                                listener.onFailure("");
+                            }
+                        }
+                    }, new Action1<Throwable>() {
+                        @Override
+                        public void call(Throwable throwable) {
+                            throwable.printStackTrace();
                             listener.onFailure("");
                         }
-                    }
-                }, new Action1<Throwable>() {
-                    @Override
-                    public void call(Throwable throwable) {
-                        throwable.printStackTrace();
-                        listener.onFailure("");
-                    }
-                });
+                    });
+        } catch (Exception e) {
+            e.printStackTrace();
+            listener.onFailure("");
+        }
     }
 
     /**
@@ -111,28 +117,33 @@ public class PersonMessageModel  {
      * @param listener 监听
      */
     public void loadSubNews(String id,final OnLoadInterface listener) {
-        RetrofitUtils.getInstance().getPersonSub(id)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Action1<Object>() {
-                    @Override
-                    public void call(Object o) {
-                        try {
-                            Log.e("获取好友订阅专辑返回数据",new Gson().toJson(o));
-                            //填充UI
-                            listener.onSuccess(o);
-                        } catch (Exception e) {
-                            e.printStackTrace();
+        try {
+            RetrofitUtils.getInstance().getPersonSub(id)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new Action1<Object>() {
+                        @Override
+                        public void call(Object o) {
+                            try {
+                                Log.e("获取好友订阅专辑返回数据",new Gson().toJson(o));
+                                //填充UI
+                                listener.onSuccess(o);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                                listener.onFailure("");
+                            }
+                        }
+                    }, new Action1<Throwable>() {
+                        @Override
+                        public void call(Throwable throwable) {
+                            throwable.printStackTrace();
                             listener.onFailure("");
                         }
-                    }
-                }, new Action1<Throwable>() {
-                    @Override
-                    public void call(Throwable throwable) {
-                        throwable.printStackTrace();
-                        listener.onFailure("");
-                    }
-                });
+                    });
+        } catch (Exception e) {
+            e.printStackTrace();
+            listener.onFailure("");
+        }
     }
 
     public interface OnLoadInterface {

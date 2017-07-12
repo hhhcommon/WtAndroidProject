@@ -1,12 +1,17 @@
 package com.wotingfm.ui.intercom.group.creat.presenter;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.provider.MediaStore;
+import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -24,9 +29,11 @@ import com.alibaba.sdk.android.oss.model.ObjectMetadata;
 import com.alibaba.sdk.android.oss.model.PutObjectRequest;
 import com.alibaba.sdk.android.oss.model.PutObjectResult;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.woting.commonplat.config.GlobalNetWorkConfig;
 import com.woting.commonplat.manager.FileManager;
 import com.woting.commonplat.utils.BitmapUtils;
+import com.woting.commonplat.utils.SequenceUUID;
 import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.config.GlobalStateConfig;
 import com.wotingfm.common.constant.BroadcastConstants;
@@ -38,7 +45,11 @@ import com.wotingfm.ui.intercom.group.creat.view.CreateGroupMainFragment;
 import com.wotingfm.ui.intercom.group.standbychannel.view.StandbyChannelFragment;
 import com.wotingfm.ui.intercom.main.view.InterPhoneActivity;
 import com.wotingfm.ui.photocut.PhotoCutActivity;
+
+import org.json.JSONException;
 import org.json.JSONObject;
+import org.json.JSONTokener;
+
 import java.io.File;
 
 /**
@@ -52,17 +63,21 @@ public class CreateGroupMainPresenter {
     private final CreateGroupMainModel model;
     private boolean b1 = false;// 密码群 选择状态
     private boolean b2 = false;// 审核群 选择状态
-    private final int TO_GALLERY = 1;           // 标识 打开系统图库
-    private final int TO_CAMERA = 2;            // 标识 打开系统照相机
+    private final int TO_GALLERY = 5;
+    private final int TO_CAMERA = 6;
     private final int PHOTO_REQUEST_CUT = 7;    // 标识 跳转到图片裁剪界面
+    private int Code;    // 标识
     private String outputFilePath;
     private boolean headViewShow = false;// 图片选择界面是否展示
     private String url;
+    private MessageReceiver Receiver;
+    private String UUID;
 
 
     public CreateGroupMainPresenter(CreateGroupMainFragment activity) {
         this.activity = activity;
         this.model = new CreateGroupMainModel();
+        setReceiver();
     }
 
     /**
@@ -139,7 +154,7 @@ public class CreateGroupMainPresenter {
                 return false;
             }
         }
-        if (b1 && b2) {
+        if (!b1 && !b2) {
             Toast.makeText(activity.getActivity(), "请选择加群方式", Toast.LENGTH_LONG).show();
             return false;
         }
@@ -176,15 +191,29 @@ public class CreateGroupMainPresenter {
     // 处理返回数据
     private void dealSuccess(Object o) {
         try {
-            String s = new Gson().toJson(o);
+            String s = new GsonBuilder().serializeNulls().create().toJson(o);
             JSONObject js = new JSONObject(s);
             int ret = js.getInt("ret");
             Log.e("创建群==ret", String.valueOf(ret));
             if (ret == 0) {
                 // 创建成功后返回的数据
                 activity.getActivity().sendBroadcast(new Intent(BroadcastConstants.GROUP_GET));
-                String gid = "000";
-                jumpChannel(gid);
+
+                String msg = js.getString("data");
+                JSONTokener jsonParser = new JSONTokener(msg);
+                JSONObject arg1 = (JSONObject) jsonParser.nextValue();
+                try {
+                    String gid  = arg1.getString("id");
+                    if (gid != null && !gid.trim().equals("")) {
+                        jumpChannel(gid);
+                    }else{
+                        InterPhoneActivity.close();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    InterPhoneActivity.close();
+                }
+                ToastUtils.show_always(activity.getActivity(), "创建成功");
             } else {
                 ToastUtils.show_always(activity.getActivity(), "创建失败，请稍后再试！");
             }
@@ -217,7 +246,9 @@ public class CreateGroupMainPresenter {
         outputFilePath = file.getAbsolutePath();
         Intent intents = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         intents.putExtra(MediaStore.EXTRA_OUTPUT, outputFileUri);
+        Code = TO_CAMERA;
         activity.getActivity().startActivityForResult(intents, TO_CAMERA);
+
     }
 
     /**
@@ -227,7 +258,9 @@ public class CreateGroupMainPresenter {
         Intent intent = new Intent();
         intent.setAction(Intent.ACTION_GET_CONTENT);
         intent.setType("image/*");
-        activity.getActivity().startActivityForResult(intent, TO_GALLERY);
+        Code = TO_GALLERY;
+        activity.startActivityForResult(intent, TO_GALLERY);
+
     }
 
     // 图片裁剪
@@ -235,26 +268,22 @@ public class CreateGroupMainPresenter {
         Intent intent = new Intent(activity.getActivity(), PhotoCutActivity.class);
         intent.putExtra("URI", uri.toString());
         intent.putExtra("type", 1);
-        activity.getActivity().startActivityForResult(intent, PHOTO_REQUEST_CUT);
+        Code = PHOTO_REQUEST_CUT;
+        activity.startActivityForResult(intent, PHOTO_REQUEST_CUT);
     }
 
-
-    /**
-     * 返回值得监听
-     *
-     * @param requestCode
-     * @param resultCode
-     * @param data
-     */
-    public void setResult(int requestCode, int resultCode, Intent data) {
-        switch (requestCode) {
-            case TO_GALLERY:                // 照片的原始资源地址
-                if (resultCode == -1) {
-                    Uri uri = data.getData();
-                    Log.e("URI:", uri.toString());
-                    String path = BitmapUtils.getFilePath(activity.getActivity(), uri);
-                    Log.e("path:", path + "");
-                    if (path != null && !path.trim().equals("")) startPhotoZoom(Uri.parse(path));
+    private void setResults(int resultCode, Uri uri, String Path) {
+        switch (Code) {
+            case TO_GALLERY:// 照片的原始资源地址
+                if (resultCode == Activity.RESULT_OK) {
+                    String path;
+                    int sdkVersion = Integer.valueOf(Build.VERSION.SDK);
+                    if (sdkVersion >= 19) {
+                        path = model.getPath_above19(activity.getActivity(), uri);
+                    } else {
+                        path = model.getFilePath_below19(activity.getActivity(), uri);
+                    }
+                    startPhotoZoom(Uri.parse(path));
                 }
                 break;
             case TO_CAMERA:
@@ -264,35 +293,22 @@ public class CreateGroupMainPresenter {
                 break;
             case PHOTO_REQUEST_CUT:
                 if (resultCode == 1) {
-                    String Path = data.getStringExtra("return");
                     activity.dialogShow();
-                    upImageUrl(Path);
+                    chuLi(Path);
                 }
                 break;
         }
     }
 
-    // 上传头像
+    // 上传头像==异步
     private void upImageUrl(final String strPath) {
         // 指定数据类型，没有指定会自动根据后缀名判断
         ObjectMetadata objectMeta = new ObjectMetadata();
         objectMeta.setContentType("image/jpeg");
         // 构造上传请求
-        PutObjectRequest put = new PutObjectRequest(upLoadImage.BUCKET_NAME, upLoadImage.objectKey, strPath);
+        final String UUID = SequenceUUID.getPureUUID() + ".jpg";
+        PutObjectRequest put = new PutObjectRequest(upLoadImage.BUCKET_NAME, upLoadImage.objectKey + UUID, strPath);
         put.setMetadata(objectMeta);
-        try {
-            PutObjectResult putObjectResult = upLoadImage.getInstance().oss.putObject(put);
-        } catch (ClientException e) {
-            // 本地异常如网络异常等
-            e.printStackTrace();
-        } catch (ServiceException e) {
-            // 服务异常
-            Log.e("RequestId", e.getRequestId());
-            Log.e("ErrorCode", e.getErrorCode());
-            Log.e("HostId", e.getHostId());
-            Log.e("RawMessage", e.getRawMessage());
-        }
-
         // 异步上传时可以设置进度回调
         put.setProgressCallback(new OSSProgressCallback<PutObjectRequest>() {
             @Override
@@ -304,12 +320,10 @@ public class CreateGroupMainPresenter {
         OSSAsyncTask task = upLoadImage.getInstance().oss.asyncPutObject(put, new OSSCompletedCallback<PutObjectRequest, PutObjectResult>() {
             @Override
             public void onSuccess(PutObjectRequest request, PutObjectResult result) {
+                activity.dialogCancel();
                 Log.d("PutObject", "UploadSuccess");
                 Log.d("ETag", result.getETag());
                 Log.d("RequestId", result.getRequestId());
-                url = upLoadImage.objectKey + strPath;
-                activity.setImageUrl(url);
-                ToastUtils.show_always(activity.getActivity(), "图片上传成功");
             }
 
             @Override
@@ -326,9 +340,110 @@ public class CreateGroupMainPresenter {
                     Log.e("HostId", serviceException.getHostId());
                     Log.e("RawMessage", serviceException.getRawMessage());
                 }
-                ToastUtils.show_always(activity.getActivity(), "图片上传失败，请重新上传");
                 return;
             }
         });
     }
+
+    // 上传头像==同步步
+    private void chuLi(final String strPath) {
+        final Handler handler = new Handler() {
+            @Override
+            public void handleMessage(Message msg) {
+                super.handleMessage(msg);
+                if (msg.what == 1) {
+                    activity.dialogCancel();
+                    url = upLoadImage.URL+UUID;
+                    activity.setImageUrl(url);
+                    ToastUtils.show_always(activity.getActivity(), "图片上传成功");
+                } else  {
+                    activity.dialogCancel();
+                    ToastUtils.show_always(activity.getActivity(), "图片上传失败，请重新上传");
+                }
+            }
+        };
+
+        new Thread() {
+            @Override
+            public void run() {
+                super.run();
+                Message msg = new Message();
+                try {
+                    // 指定数据类型，没有指定会自动根据后缀名判断
+                    ObjectMetadata objectMeta = new ObjectMetadata();
+                    objectMeta.setContentType("image/jpeg");
+                    // 构造上传请求
+                    UUID = SequenceUUID.getPureUUID() + ".jpg";
+                    PutObjectRequest put = new PutObjectRequest(upLoadImage.BUCKET_NAME, upLoadImage.objectKey + UUID, strPath);
+                    put.setMetadata(objectMeta);
+                    try {
+                        PutObjectResult putObjectResult = upLoadImage.getInstance().oss.putObject(put);
+                        Log.d("PutObject", "UploadSuccess");
+                        Log.d("ETag", putObjectResult.getETag());
+                        Log.d("RequestId", putObjectResult.getRequestId());
+                        msg.what = 1;
+                    } catch (ClientException e) {
+                        // 本地异常如网络异常等
+                        e.printStackTrace();
+                        msg.what = -1;
+                    } catch (ServiceException e) {
+                        // 服务异常
+                        Log.e("RequestId", e.getRequestId());
+                        Log.e("ErrorCode", e.getErrorCode());
+                        Log.e("HostId", e.getHostId());
+                        Log.e("RawMessage", e.getRawMessage());
+                        msg.what = -1;
+                    }
+                } catch (Exception e) {
+                    // 异常处理
+                    msg.what = -1;
+                }
+                handler.sendMessage(msg);
+            }
+        }.start();
+    }
+
+    // 设置广播接收器
+    private void setReceiver() {
+        if (Receiver == null) {
+            Receiver = new MessageReceiver();
+            IntentFilter filter = new IntentFilter();
+            filter.addAction(BroadcastConstants.IMAGE_UPLOAD);
+            activity.getActivity().registerReceiver(Receiver, filter);
+        }
+    }
+
+    class MessageReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            if (action.equals(BroadcastConstants.IMAGE_UPLOAD)) {
+                int resultCode = intent.getIntExtra("resultCode", 0);
+                Uri uri = null;
+                try {
+                    uri = Uri.parse(intent.getStringExtra("uri"));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                String path = null;
+                try {
+                    path = intent.getStringExtra("path");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                setResults(resultCode, uri, path);
+            }
+        }
+    }
+
+    /**
+     * 界面销毁,注销广播
+     */
+    public void destroy() {
+        if (Receiver != null) {
+            activity.getActivity().unregisterReceiver(Receiver);
+            Receiver = null;
+        }
+    }
+
 }

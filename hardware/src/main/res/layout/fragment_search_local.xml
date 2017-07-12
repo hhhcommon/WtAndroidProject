@@ -45,11 +45,7 @@
             android:src="@mipmap/chat_icon_call_copy" />
     </RelativeLayout>
 
-    <include
-        layout="@layout/common_line"
-        android:layout_width="match_parent"
-        android:layout_height="1dp" />
-
+    <include layout="@layout/include_tv" />
     <LinearLayout
         android:id="@+id/lin_background"
         android:layout_width="match_parent"

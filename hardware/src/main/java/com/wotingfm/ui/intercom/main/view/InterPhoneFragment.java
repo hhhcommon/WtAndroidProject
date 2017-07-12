@@ -122,7 +122,7 @@ public class InterPhoneFragment extends Fragment implements View.OnClickListener
                     addDialog.dismiss();
                 } else {
                     if (addDialog != null) {
-                        addDialog.showAsDropDown(img_more);
+                        addDialog.showAsDropDown(img_more,0,-10);
                     }
                 }
                 break;

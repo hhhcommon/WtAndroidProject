@@ -31,23 +31,28 @@ public class ChannelModel extends UserInfo {
      * @param listener 监听
      */
     public void loadNews(String channel1, String channel2,String id, final OnLoadInterface listener) {
-        RetrofitUtils.getInstance().setChannel(channel1, channel2,id)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Action1<Object>() {
-                    @Override
-                    public void call(Object o) {
-                        Log.e("设置备用频道返回数据",new Gson().toJson(o));
-                        //填充UI
-                        listener.onSuccess(o);
-                    }
-                }, new Action1<Throwable>() {
-                    @Override
-                    public void call(Throwable throwable) {
-                        throwable.printStackTrace();
-                        listener.onFailure("");
-                    }
-                });
+        try {
+            RetrofitUtils.getInstance().setChannel(channel1, channel2,id)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new Action1<Object>() {
+                        @Override
+                        public void call(Object o) {
+                            Log.e("设置备用频道返回数据",new Gson().toJson(o));
+                            //填充UI
+                            listener.onSuccess(o);
+                        }
+                    }, new Action1<Throwable>() {
+                        @Override
+                        public void call(Throwable throwable) {
+                            throwable.printStackTrace();
+                            listener.onFailure("");
+                        }
+                    });
+        } catch (Exception e) {
+            e.printStackTrace();
+            listener.onFailure("");
+        }
     }
 
     public interface OnLoadInterface {

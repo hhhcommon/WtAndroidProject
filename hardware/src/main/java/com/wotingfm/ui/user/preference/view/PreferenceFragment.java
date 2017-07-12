@@ -132,6 +132,7 @@ public class PreferenceFragment extends Fragment implements View.OnClickListener
             MineActivity.close();
         }else if (fromType.equals("login")) {
             LogoActivity.close();
+            LogoActivity.closeActivity();
         }
     }
 

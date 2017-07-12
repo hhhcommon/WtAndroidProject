@@ -49,6 +49,7 @@ public class MinePresenter {
             IntentFilter filter = new IntentFilter();
             filter.addAction(BroadcastConstants.CANCEL);
             filter.addAction(BroadcastConstants.LOGIN);
+            filter.addAction(BroadcastConstants.MINE_CHANGE);
             activity.getActivity().registerReceiver(Receiver, filter);
         }
     }
@@ -58,11 +59,13 @@ public class MinePresenter {
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
             if (action.equals(BroadcastConstants.CANCEL)) {
-                // 设置未登录界面
-                activity.setView();
+                activity.setView();// 设置未登录界面
             }else if(action.equals(BroadcastConstants.LOGIN)){
                 getData();
+            }else if(action.equals(BroadcastConstants.MINE_CHANGE)){
+                getData();// 个人中心界面数据更改
             }
+
         }
     }
 

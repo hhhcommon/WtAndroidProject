@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.woting.commonplat.config.GlobalNetWorkConfig;
 import com.wotingfm.common.config.GlobalStateConfig;
@@ -54,7 +55,7 @@ public class SearchContactsForNetPresenter {
      */
     public void getRecommendedData() {
         if (GlobalNetWorkConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
-            if (GlobalStateConfig.test) {
+            if (true) {
                 // 测试数据
                 if (fromType.trim().equals("group")) {
                     List<Contact.group> srcList_G = model.getDataForGroup();
@@ -71,7 +72,8 @@ public class SearchContactsForNetPresenter {
                     getRecommendedDataForGroup();
                 } else {
                     // 获取推荐的好友
-                    getRecommendedDataForPerson();
+                        getRecommendedDataForPerson();
+
                 }
             }
         } else {
@@ -125,7 +127,7 @@ public class SearchContactsForNetPresenter {
     // 处理返回好友的数据
     private void dealUserSuccess(Object o) {
         try {
-            String s = new Gson().toJson(o);
+            String s = new GsonBuilder().serializeNulls().create().toJson(o);
             JSONObject js = new JSONObject(s);
             int ret = js.getInt("ret");
             Log.e("获取推荐好友列表==ret", String.valueOf(ret));
@@ -155,7 +157,7 @@ public class SearchContactsForNetPresenter {
     // 处理返回组的数据
     private void dealGroupSuccess(Object o) {
         try {
-            String s = new Gson().toJson(o);
+            String s = new GsonBuilder().serializeNulls().create().toJson(o);
             JSONObject js = new JSONObject(s);
             int ret = js.getInt("ret");
             Log.e("获取推荐群组列表==ret", String.valueOf(ret));
@@ -328,7 +330,7 @@ public class SearchContactsForNetPresenter {
     // 处理搜索返回好友的数据
     private void dealSearchUserSuccess(Object o, String str) {
         try {
-            String s = new Gson().toJson(o);
+            String s = new GsonBuilder().serializeNulls().create().toJson(o);
             JSONObject js = new JSONObject(s);
             int ret = js.getInt("ret");
             Log.e("获取搜索好友列表==ret", String.valueOf(ret));
@@ -363,7 +365,7 @@ public class SearchContactsForNetPresenter {
     // 处理搜索返回组的数据
     private void dealSearchGroupSuccess(Object o, String str) {
         try {
-            String s = new Gson().toJson(o);
+            String s = new GsonBuilder().serializeNulls().create().toJson(o);
             JSONObject js = new JSONObject(s);
             int ret = js.getInt("ret");
             Log.e("获取搜索群组列表==ret", String.valueOf(ret));

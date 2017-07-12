@@ -1,9 +1,15 @@
 package com.wotingfm.ui.mine.personinfo.presenter;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.provider.MediaStore;
 import android.util.Log;
 
@@ -16,11 +22,14 @@ import com.alibaba.sdk.android.oss.model.ObjectMetadata;
 import com.alibaba.sdk.android.oss.model.PutObjectRequest;
 import com.alibaba.sdk.android.oss.model.PutObjectResult;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.woting.commonplat.config.GlobalNetWorkConfig;
 import com.woting.commonplat.manager.FileManager;
 import com.woting.commonplat.utils.BitmapUtils;
+import com.woting.commonplat.utils.SequenceUUID;
 import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.config.GlobalStateConfig;
+import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.common.net.upLoadImage;
 import com.wotingfm.common.utils.ToastUtils;
@@ -54,16 +63,22 @@ public class PersonInfoPresenter {
 
     private final PersonalInfoFragment activity;
     private final PersonInfoModel model;
-    private final int TO_GALLERY = 1;           // 标识 打开系统图库
-    private final int TO_CAMERA = 2;            // 标识 打开系统照相机
+    private String sex;
+    private final int TO_GALLERY = 5;
+    private final int TO_CAMERA = 6;
     private final int PHOTO_REQUEST_CUT = 7;    // 标识 跳转到图片裁剪界面
+    private int Code;    // 标识
     private String outputFilePath;
     private boolean headViewShow = false;// 图片选择界面是否展示
-    private String sex;
+    private String url;
+    private MessageReceiver Receiver;
+    private String UUID;
+
 
     public PersonInfoPresenter(PersonalInfoFragment activity) {
         this.activity = activity;
         this.model = new PersonInfoModel(activity);
+        setReceiver();
         getData();
         getAddress();
     }
@@ -93,12 +108,12 @@ public class PersonInfoPresenter {
             activity.setViewForGender(user.getGender());
             activity.setViewForAge(user.getAge());
             activity.setViewForAddress(user.getLocation());
-            sex=user.getGender();
+            sex = user.getGender();
         } else {
             String url = BSApplication.SharedPreferences.getString(StringConstant.PORTRAIT, "");
-            String name = BSApplication.SharedPreferences.getString(StringConstant.USER_NAME, "");
+            String name = BSApplication.SharedPreferences.getString(StringConstant.NICK_NAME, "");
             String introduce = BSApplication.SharedPreferences.getString(StringConstant.USER_SIGN, "");
-            sex = BSApplication.SharedPreferences.getString(StringConstant.GENDERUSR, "男");
+            sex = BSApplication.SharedPreferences.getString(StringConstant.GENDER, "男");
             String age = BSApplication.SharedPreferences.getString(StringConstant.AGE, "0");
             String address = BSApplication.SharedPreferences.getString(StringConstant.REGION, "");
 
@@ -130,9 +145,9 @@ public class PersonInfoPresenter {
      * 设置性别
      */
     public void setSex() {
-        if(sex.equals("女")){
+        if (sex.equals("女")) {
             sendSex("男");
-        }else{
+        } else {
             sendSex("女");
         }
     }
@@ -231,12 +246,13 @@ public class PersonInfoPresenter {
 
     private void dealSuccess(Object o, String name) {
         try {
-            String s = new Gson().toJson(o);
+            String s = new GsonBuilder().serializeNulls().create().toJson(o);
             JSONObject js = new JSONObject(s);
             int ret = js.getInt("ret");
             Log.e("修改个人地址=ret", String.valueOf(ret));
             if (ret == 0) {
                 activity.setViewForAddress(name);
+                model.saveAddress(name);
                 ToastUtils.show_always(activity.getActivity(), "地理位置修改成功");
             } else {
                 ToastUtils.show_always(activity.getActivity(), "修改失败，请稍后再试！");
@@ -254,40 +270,48 @@ public class PersonInfoPresenter {
      * @param name
      */
     public void sendSex(final String name) {
-            if (GlobalStateConfig.test) {
-                activity.setViewForGender(name);
-                sex=name;
-            } else {
-                if (GlobalNetWorkConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
-                    activity.dialogShow();
-                    model.loadNewsForSex(name, new PersonInfoModel.OnLoadInterface() {
-                        @Override
-                        public void onSuccess(Object o) {
-                            activity.dialogCancel();
-                            dealSexSuccess(o, name);
-                        }
-
-                        @Override
-                        public void onFailure(String msg) {
-                            activity.dialogCancel();
-                            ToastUtils.show_always(activity.getActivity(), "修改失败，请稍后再试！");
-                        }
-                    });
+        if (GlobalStateConfig.test) {
+            activity.setViewForGender(name);
+            sex = name;
+            model.saveSex(name);
+        } else {
+            if (GlobalNetWorkConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
+                activity.dialogShow();
+                String news;
+                if (name.equals("女")) {
+                    news = "0";
                 } else {
-                    ToastUtils.show_always(activity.getActivity(), "网络连接失败，请稍后再试！");
+                    news = "1";
                 }
+                model.loadNewsForSex(news, new PersonInfoModel.OnLoadInterface() {
+                    @Override
+                    public void onSuccess(Object o) {
+                        activity.dialogCancel();
+                        dealSexSuccess(o, name);
+                    }
+
+                    @Override
+                    public void onFailure(String msg) {
+                        activity.dialogCancel();
+                        ToastUtils.show_always(activity.getActivity(), "修改失败，请稍后再试！");
+                    }
+                });
+            } else {
+                ToastUtils.show_always(activity.getActivity(), "网络连接失败，请稍后再试！");
             }
+        }
     }
 
     private void dealSexSuccess(Object o, String name) {
         try {
-            String s = new Gson().toJson(o);
+            String s = new GsonBuilder().serializeNulls().create().toJson(o);
             JSONObject js = new JSONObject(s);
             int ret = js.getInt("ret");
             Log.e("修改性别=ret", String.valueOf(ret));
             if (ret == 0) {
                 activity.setViewForGender(name);
-                sex=name;
+                sex = name;
+                model.saveSex(name);
             } else {
                 ToastUtils.show_always(activity.getActivity(), "修改失败，请稍后再试！");
             }
@@ -295,6 +319,54 @@ public class PersonInfoPresenter {
             e.printStackTrace();
             // 设置数据出错界面
             ToastUtils.show_always(activity.getActivity(), "修改失败，请稍后再试！");
+        }
+    }
+
+    /**
+     * 修改用户头像
+     *
+     * @param name
+     */
+    public void sendImg(final String name) {
+        if (name != null && !name.equals("")) {
+                if (GlobalNetWorkConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
+                    model.loadNewsForImg(name, new PersonInfoModel.OnLoadInterface() {
+                        @Override
+                        public void onSuccess(Object o) {
+                            activity.dialogCancel();
+                            dealImgSuccess(o, name);
+                        }
+
+                        @Override
+                        public void onFailure(String msg) {
+                            activity.dialogCancel();
+                            ToastUtils.show_always(activity.getActivity(), "头像修改失败，请稍后再试！");
+                        }
+                    });
+                } else {
+                    ToastUtils.show_always(activity.getActivity(), "网络连接失败，请稍后再试！");
+            }
+        }
+    }
+
+    private void dealImgSuccess(Object o, String name) {
+        try {
+            String s = new GsonBuilder().serializeNulls().create().toJson(o);
+            JSONObject js = new JSONObject(s);
+            int ret = js.getInt("ret");
+            Log.e("修改个人头像=ret", String.valueOf(ret));
+            if (ret == 0) {
+                activity.setViewForImage(name);
+                model.saveImg(name);
+                activity.getActivity().sendBroadcast(new Intent(BroadcastConstants.MINE_CHANGE));
+                ToastUtils.show_always(activity.getActivity(), "头像修改成功");
+            } else {
+                ToastUtils.show_always(activity.getActivity(), "头像修改失败，请稍后再试！");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            // 设置数据出错界面
+            ToastUtils.show_always(activity.getActivity(), "头像修改失败，请稍后再试！");
         }
     }
 
@@ -310,6 +382,7 @@ public class PersonInfoPresenter {
         outputFilePath = file.getAbsolutePath();
         Intent intents = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         intents.putExtra(MediaStore.EXTRA_OUTPUT, outputFileUri);
+        Code = TO_CAMERA;
         activity.getActivity().startActivityForResult(intents, TO_CAMERA);
     }
 
@@ -320,25 +393,31 @@ public class PersonInfoPresenter {
         Intent intent = new Intent();
         intent.setAction(Intent.ACTION_GET_CONTENT);
         intent.setType("image/*");
+        Code = TO_GALLERY;
         activity.getActivity().startActivityForResult(intent, TO_GALLERY);
     }
 
-    /**
-     * 返回值得监听
-     *
-     * @param requestCode
-     * @param resultCode
-     * @param data
-     */
-    public void setResult(int requestCode, int resultCode, Intent data) {
-        switch (requestCode) {
-            case TO_GALLERY:                // 照片的原始资源地址
-                if (resultCode == -1) {
-                    Uri uri = data.getData();
-                    Log.e("URI:", uri.toString());
-                    String path = BitmapUtils.getFilePath(activity.getActivity(), uri);
-                    Log.e("path:", path + "");
-                    if (path != null && !path.trim().equals("")) startPhotoZoom(Uri.parse(path));
+    // 图片裁剪
+    private void startPhotoZoom(Uri uri) {
+        Intent intent = new Intent(activity.getActivity(), PhotoCutActivity.class);
+        intent.putExtra("URI", uri.toString());
+        intent.putExtra("type", 1);
+        Code = PHOTO_REQUEST_CUT;
+        activity.getActivity().startActivityForResult(intent, PHOTO_REQUEST_CUT);
+    }
+
+    private void setResults(int resultCode, Uri uri, String Path) {
+        switch (Code) {
+            case TO_GALLERY:// 照片的原始资源地址
+                if (resultCode == Activity.RESULT_OK) {
+                    String path;
+                    int sdkVersion = Integer.valueOf(Build.VERSION.SDK);
+                    if (sdkVersion >= 19) {
+                        path = model.getPath_above19(activity.getActivity(), uri);
+                    } else {
+                        path = model.getFilePath_below19(activity.getActivity(), uri);
+                    }
+                    startPhotoZoom(Uri.parse(path));
                 }
                 break;
             case TO_CAMERA:
@@ -348,42 +427,22 @@ public class PersonInfoPresenter {
                 break;
             case PHOTO_REQUEST_CUT:
                 if (resultCode == 1) {
-                    String Path = data.getStringExtra("return");
-                    upImageUrl(Path);
+                    activity.dialogShow();
+                    chuLi(Path);
                 }
                 break;
         }
     }
 
-    // 图片裁剪
-    private void startPhotoZoom(Uri uri) {
-        Intent intent = new Intent(activity.getActivity(), PhotoCutActivity.class);
-        intent.putExtra("URI", uri.toString());
-        intent.putExtra("type", 1);
-        activity.getActivity().startActivityForResult(intent, PHOTO_REQUEST_CUT);
-    }
-
-    // 上传头像
+    // 上传头像==异步
     private void upImageUrl(final String strPath) {
         // 指定数据类型，没有指定会自动根据后缀名判断
         ObjectMetadata objectMeta = new ObjectMetadata();
         objectMeta.setContentType("image/jpeg");
         // 构造上传请求
-        PutObjectRequest put = new PutObjectRequest(upLoadImage.BUCKET_NAME, upLoadImage.objectKey, strPath);
+        final String UUID = SequenceUUID.getPureUUID() + ".jpg";
+        PutObjectRequest put = new PutObjectRequest(upLoadImage.BUCKET_NAME, upLoadImage.objectKey + UUID, strPath);
         put.setMetadata(objectMeta);
-        try {
-            PutObjectResult putObjectResult = upLoadImage.getInstance().oss.putObject(put);
-        } catch (ClientException e) {
-            // 本地异常如网络异常等
-            e.printStackTrace();
-        } catch (ServiceException e) {
-            // 服务异常
-            Log.e("RequestId", e.getRequestId());
-            Log.e("ErrorCode", e.getErrorCode());
-            Log.e("HostId", e.getHostId());
-            Log.e("RawMessage", e.getRawMessage());
-        }
-
         // 异步上传时可以设置进度回调
         put.setProgressCallback(new OSSProgressCallback<PutObjectRequest>() {
             @Override
@@ -395,12 +454,10 @@ public class PersonInfoPresenter {
         OSSAsyncTask task = upLoadImage.getInstance().oss.asyncPutObject(put, new OSSCompletedCallback<PutObjectRequest, PutObjectResult>() {
             @Override
             public void onSuccess(PutObjectRequest request, PutObjectResult result) {
+                activity.dialogCancel();
                 Log.d("PutObject", "UploadSuccess");
                 Log.d("ETag", result.getETag());
                 Log.d("RequestId", result.getRequestId());
-                String url = upLoadImage.objectKey + strPath;
-                activity.setViewForImage(url);
-                ToastUtils.show_always(activity.getActivity(), "图片上传成功");
             }
 
             @Override
@@ -417,10 +474,108 @@ public class PersonInfoPresenter {
                     Log.e("HostId", serviceException.getHostId());
                     Log.e("RawMessage", serviceException.getRawMessage());
                 }
-                ToastUtils.show_always(activity.getActivity(), "图片上传失败，请重新上传");
                 return;
             }
         });
     }
 
+    // 上传头像==同步步
+    private void chuLi(final String strPath) {
+        final Handler handler = new Handler() {
+            @Override
+            public void handleMessage(Message msg) {
+                super.handleMessage(msg);
+                if (msg.what == 1) {
+                    url = upLoadImage.URL+UUID;
+                    sendImg(url);
+
+                } else  {
+                    activity.dialogCancel();
+                    ToastUtils.show_always(activity.getActivity(), "图片上传失败，请重新上传");
+                }
+            }
+        };
+
+        new Thread() {
+            @Override
+            public void run() {
+                super.run();
+                Message msg = new Message();
+                try {
+                    // 指定数据类型，没有指定会自动根据后缀名判断
+                    ObjectMetadata objectMeta = new ObjectMetadata();
+                    objectMeta.setContentType("image/jpeg");
+                    // 构造上传请求
+                    UUID = SequenceUUID.getPureUUID() + ".jpg";
+                    PutObjectRequest put = new PutObjectRequest(upLoadImage.BUCKET_NAME, upLoadImage.objectKey + UUID, strPath);
+                    put.setMetadata(objectMeta);
+                    try {
+                        PutObjectResult putObjectResult = upLoadImage.getInstance().oss.putObject(put);
+                        Log.d("PutObject", "UploadSuccess");
+                        Log.d("ETag", putObjectResult.getETag());
+                        Log.d("RequestId", putObjectResult.getRequestId());
+                        msg.what = 1;
+                    } catch (ClientException e) {
+                        // 本地异常如网络异常等
+                        e.printStackTrace();
+                        msg.what = -1;
+                    } catch (ServiceException e) {
+                        // 服务异常
+                        Log.e("RequestId", e.getRequestId());
+                        Log.e("ErrorCode", e.getErrorCode());
+                        Log.e("HostId", e.getHostId());
+                        Log.e("RawMessage", e.getRawMessage());
+                        msg.what = -1;
+                    }
+                } catch (Exception e) {
+                    // 异常处理
+                    msg.what = -1;
+                }
+                handler.sendMessage(msg);
+            }
+        }.start();
+    }
+
+    // 设置广播接收器
+    private void setReceiver() {
+        if (Receiver == null) {
+            Receiver = new MessageReceiver();
+            IntentFilter filter = new IntentFilter();
+            filter.addAction(BroadcastConstants.IMAGE_UPLOAD);
+            activity.getActivity().registerReceiver(Receiver, filter);
+        }
+    }
+
+    class MessageReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            if (action.equals(BroadcastConstants.IMAGE_UPLOAD)) {
+                int resultCode = intent.getIntExtra("resultCode", 0);
+                Uri uri = null;
+                try {
+                    uri = Uri.parse(intent.getStringExtra("uri"));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                String path = null;
+                try {
+                    path = intent.getStringExtra("path");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                setResults(resultCode, uri, path);
+            }
+        }
+    }
+
+    /**
+     * 界面销毁,注销广播
+     */
+    public void destroy() {
+        if (Receiver != null) {
+            activity.getActivity().unregisterReceiver(Receiver);
+            Receiver = null;
+        }
+    }
 }

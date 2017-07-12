@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.woting.commonplat.manager.PhoneMsgManager;
 import com.woting.commonplat.widget.TipView;
 import com.wotingfm.R;
 import com.wotingfm.common.utils.DialogUtils;
@@ -58,6 +59,9 @@ public class GroupNewsForNoAddFragment extends Fragment implements View.OnClickL
             inItView();
             presenter = new GroupNewsForNoAddPresenter(this);
             presenter.getData();
+            if(PhoneMsgManager.ScreenWidth==480){
+                height=240;
+            }
         }
         return rootView;
     }

@@ -18,7 +18,7 @@ public class GroupApplyForNewsPresenter {
 
     private final GroupApplyForNewsFragment activity;
     private final GroupApplyForNewsModel model;
-    private  String gid;// 组id
+    private String gid;// 组id
 
 
     public GroupApplyForNewsPresenter(GroupApplyForNewsFragment activity) {
@@ -83,7 +83,11 @@ public class GroupApplyForNewsPresenter {
      * @param src
      */
     public void textChange(String src) {
-
-        activity.setTextViewChange("");
+        if (src == null || src.trim().equals("")) {
+            int l = src.length();
+            activity.setTextViewChange(String.valueOf(90 - l));
+        } else {
+            activity.setTextViewChange("90");
+        }
     }
 }

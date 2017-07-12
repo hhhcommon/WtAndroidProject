@@ -55,4 +55,9 @@ public class BroadcastConstants {
     // 接收单对单呼叫成功
     public static final String PUSH_CALL_REC = "PUSH_CALL_REC";
 
+    // 头像上传
+    public static final String IMAGE_UPLOAD = "IMAGE_UPLOAD";
+
+    // 个人中心界面数据更改
+    public static final String MINE_CHANGE = "MINE_CHANGE";
 }

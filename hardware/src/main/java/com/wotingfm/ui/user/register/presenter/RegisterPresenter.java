@@ -7,6 +7,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.woting.commonplat.config.GlobalNetWorkConfig;
 import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.common.utils.ToastUtils;
@@ -129,20 +130,7 @@ public class RegisterPresenter {
      * @param yzm      验证码
      */
     public void getBtView(String userName, String password, String yzm) {
-        boolean bt;
-        if (userName != null && !userName.trim().equals("")) {
-            if (yzm != null && !yzm.trim().equals("")) {
-                if (password != null && !password.trim().equals("") && password.length() > 5) {
-                    bt = true;
-                } else {
-                    bt = false;
-                }
-            } else {
-                bt = false;
-            }
-        } else {
-            bt = false;
-        }
+        boolean bt = model.getBtViewType(userName, password, yzm);
         activity.setRegisterBackground(bt);
     }
 
@@ -168,7 +156,7 @@ public class RegisterPresenter {
     // 处理注册返回数据
     private void dealRegisterSuccess(Object o) {
         try {
-            String s = new Gson().toJson(o);
+            String s = new GsonBuilder().serializeNulls().create().toJson(o);
             JSONObject js = new JSONObject(s);
             int ret = js.getInt("ret");
             Log.e("ret", String.valueOf(ret));
@@ -181,7 +169,6 @@ public class RegisterPresenter {
                 // 保存后台获取到的token
                 if (token != null && !token.trim().equals("")) {
                     model.saveToken(token);
-                    ToastUtils.show_always(activity.getActivity(), token);
                 }
 
                 JSONObject ui = (JSONObject) new JSONTokener(arg1.getString("user")).nextValue();
@@ -195,8 +182,9 @@ public class RegisterPresenter {
                 jump();// 跳转到偏好设置界面
             } else {
                 String msg = js.getString("msg");
-                ToastUtils.show_always(activity.getActivity(), msg);
-                ToastUtils.show_always(activity.getActivity(), "注册失败，请稍后再试");
+                if (msg != null && !msg.trim().equals("")) {
+                    ToastUtils.show_always(activity.getActivity(), msg);
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -234,7 +222,7 @@ public class RegisterPresenter {
     // 处理户获取验证码返回数据
     private void dealGetYzmSuccess(Object o) {
         try {
-            String s = new Gson().toJson(o);
+            String s = new GsonBuilder().serializeNulls().create().toJson(o);
             JSONObject js = new JSONObject(s);
             int ret = js.getInt("ret");
             Log.e("ret", String.valueOf(ret));
@@ -244,11 +232,12 @@ public class RegisterPresenter {
                 JSONObject arg1 = (JSONObject) jsonParser.nextValue();
                 int code = arg1.getInt("code");
                 ToastUtils.show_always(activity.getActivity(), String.valueOf(code));
-                ToastUtils.show_always(activity.getActivity(), "获取验证码成功");
             } else {
                 String msg = js.getString("msg");
-                ToastUtils.show_always(activity.getActivity(), msg);
-                ToastUtils.show_always(activity.getActivity(), "获取验证码失败，请稍后再试");
+                if (msg != null && !msg.trim().equals("")) {
+                    Log.e("登录失败返回数据", msg);
+                    ToastUtils.show_always(activity.getActivity(), msg);
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -256,6 +245,9 @@ public class RegisterPresenter {
         }
     }
 
+    /**
+     * 关闭定时器
+     */
     public void cancel() {
         if (mCountDownTimer != null) {
             mCountDownTimer.cancel();

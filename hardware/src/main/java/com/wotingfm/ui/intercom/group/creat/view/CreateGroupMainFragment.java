@@ -1,12 +1,10 @@
 package com.wotingfm.ui.intercom.group.creat.view;
 
-import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
-import android.net.Uri;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +18,7 @@ import android.widget.TextView;
 import com.woting.commonplat.utils.BitmapUtils;
 import com.wotingfm.R;
 import com.wotingfm.common.utils.DialogUtils;
+import com.wotingfm.common.utils.GlideUtils;
 import com.wotingfm.ui.intercom.group.creat.presenter.CreateGroupMainPresenter;
 import com.wotingfm.ui.intercom.main.view.InterPhoneActivity;
 
@@ -32,7 +31,7 @@ public class CreateGroupMainFragment extends Fragment implements View.OnClickLis
     private View rootView;
     private ImageView img_url, img_password, img_shen;
     private EditText et_phoneNumber, et_password;
-    private TextView tv_send;
+    private TextView tv_send,tv_show;
     private CreateGroupMainPresenter presenter;
     private LinearLayout lin_chose;// 图片来源选择
     private Dialog dialog;
@@ -56,6 +55,7 @@ public class CreateGroupMainFragment extends Fragment implements View.OnClickLis
     private void inItView() {
         rootView.findViewById(R.id.head_left_btn).setOnClickListener(this);
         img_url = (ImageView) rootView.findViewById(R.id.img_url);          // 群头像
+        tv_show = (TextView) rootView.findViewById(R.id.tv_show);              // 提示
         img_url.setOnClickListener(this);
         img_password = (ImageView) rootView.findViewById(R.id.img_password);// 密码群
         img_password.setOnClickListener(this);
@@ -129,7 +129,14 @@ public class CreateGroupMainFragment extends Fragment implements View.OnClickLis
      * @param url
      */
     public void setImageUrl(String url) {
-        // img_url
+        if (url != null && !url.equals("")) {
+            GlideUtils.loadImageViewSize(this.getActivity(),url, 72, 72, img_url, true);
+            tv_show.setVisibility(View.GONE);
+        } else {
+            Bitmap bmp = BitmapUtils.readBitMap(this.getActivity(), R.mipmap.icon_avatar_d);
+            img_url.setImageBitmap(bmp);
+            tv_show.setVisibility(View.VISIBLE);
+        }
     }
 
     /**
@@ -168,15 +175,9 @@ public class CreateGroupMainFragment extends Fragment implements View.OnClickLis
         if (dialog != null) dialog.dismiss();
     }
 
-
-    /**
-     * 返回值得监听
-     *
-     * @param requestCode
-     * @param resultCode
-     * @param data
-     */
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        presenter.setResult( requestCode,  resultCode,  data);
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        presenter.destroy();
     }
 }

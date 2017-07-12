@@ -4,9 +4,7 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-
 import com.wotingfm.ui.user.guide.presenter.GuidePresenter;
-
 import java.lang.ref.WeakReference;
 
 /**

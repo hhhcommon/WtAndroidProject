@@ -1,12 +1,15 @@
 package com.wotingfm.ui.mine.editusermessage.presenter;
 
+import android.content.Intent;
 import android.util.Log;
 import android.view.View;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.woting.commonplat.config.GlobalNetWorkConfig;
 import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.config.GlobalStateConfig;
+import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.common.utils.ToastUtils;
 import com.wotingfm.ui.intercom.main.view.InterPhoneActivity;
@@ -92,7 +95,7 @@ public class EditUserPresenter {
 
     private void dealSuccess(Object o, String name, String introduce, String age) {
         try {
-            String s = new Gson().toJson(o);
+            String s = new GsonBuilder().serializeNulls().create().toJson(o);
             JSONObject js = new JSONObject(s);
             int ret = js.getInt("ret");
             Log.e("ret", String.valueOf(ret));
@@ -135,10 +138,14 @@ public class EditUserPresenter {
     private void setResult(String name, String introduce, String age) {
         if (type == 1) {
             activity.setResult(true, name);
+            model.saveName(name);
+            activity.getActivity().sendBroadcast(new Intent(BroadcastConstants.MINE_CHANGE));
         } else if (type == 2) {
             activity.setResult(true, introduce);
+            model.saveSign(introduce);
         } else {
             activity.setResult(true, age);
+            model.saveAge(age);
         }
     }
 

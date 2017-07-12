@@ -12,8 +12,6 @@ public class Api {
     public static final String URL_REGISTER_YZM = "api/accounts/verify-codes";
     // 忘记密码/修改密码：共同
     public static final String URL_RESET_PASSWORDS = "api/accounts/reset-passwords";
-    // 修改手机号(X)
-    public static final String URL_RESET_PHONE_NUMBER = "";
     // 创建群组
     public static final String URL_CREATE_GROUP = "api/chat-groups";
     // 好友列表
@@ -55,27 +53,28 @@ public class Api {
     // 移交群主
     public static final String URL_GROUP_TRANSFER_MANAGER = "api/chat-groups/{id}/owners";
     // 推荐的成员(X)
-    public static final String URL_GET_PERSON_RECOMMEND = "";
+    public static final String URL_GET_PERSON_RECOMMEND = "test";
     // 推荐的群组(X)
-    public static final String URL_GET_GROUP__RECOMMEND = "";
+    public static final String URL_GET_GROUP__RECOMMEND = "test";
     // 加群方式(X)
-    public static final String URL_APPLY_GROUP_TYPE = "";
+    public static final String URL_APPLY_GROUP_TYPE = "test";
     // 入组申请(X)
-    public static final String URL_GROUP_APPLY = "";
+    public static final String URL_GROUP_APPLY = "test";
     // 偏好设置(X)
-    public static final String URL_PREFERENCE = "";
+    public static final String URL_PREFERENCE = "test";
     // 注销登录(X)
-    public static final String URL_CANCEL = "";
-    // 获取用户自身数据引导页(X)
-    public static final String URL_GET_USER_INFO = "";
+    public static final String URL_CANCEL = "test";
     // 设置群组备用频道(X)
-    public static final String URL_SET_CHANNEL = "";
+    public static final String URL_SET_CHANNEL = "test";
     // 修改好友备注(X)
-    public static final String URL_CHANGE_PERSON_NOTE = "";
+    public static final String URL_CHANGE_PERSON_NOTE = "test";
     // 意见反馈(X)
-    public static final String URL_FEED_BACK = "";
-    // 修改用户信息(X)
-    public static final String URL_EDIT_USER = "";
-
+    public static final String URL_FEED_BACK = "test";
+    // 获取用户自身数据引导页
+    public static final String URL_GET_USER_INFO = "/api/users/{id}";
+    // 修改用户信息
+    public static final String URL_EDIT_USER = "/api/users/{id}";
+    // 修改手机号(X)
+    public static final String URL_RESET_PHONE_NUMBER = "test";
 
 }

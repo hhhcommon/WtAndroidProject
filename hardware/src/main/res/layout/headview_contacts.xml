@@ -19,10 +19,7 @@
         android:textColor="#959698"
         android:textSize="12sp" />
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/line_color" />
+    <include layout="@layout/include_tv" />
 
     <RelativeLayout
         android:id="@+id/re_newFriend"
@@ -70,10 +67,7 @@
             android:visibility="invisible" />
     </RelativeLayout>
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/line_color" />
+    <include layout="@layout/include_tv" />
 
     <RelativeLayout
         android:id="@+id/re_newGroup"
@@ -89,6 +83,7 @@
             android:src="@mipmap/icon_newgroup" />
 
         <TextView
+            android:id="@+id/textView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
@@ -123,8 +118,5 @@
 
     </RelativeLayout>
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/line_color" />
+    <include layout="@layout/include_tv" />
 </LinearLayout>

@@ -22,11 +22,7 @@
 
     </RelativeLayout>
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/line_color" />
-
+    <include layout="@layout/include_tv" />
 
     <LinearLayout
         android:id="@+id/lin_channel1"

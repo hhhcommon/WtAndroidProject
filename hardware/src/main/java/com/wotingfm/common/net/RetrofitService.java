@@ -14,9 +14,6 @@ import com.wotingfm.common.bean.Selected;
 import com.wotingfm.common.bean.SelectedMore;
 import com.wotingfm.common.bean.SerchList;
 import com.wotingfm.common.bean.Subscrible;
-import com.wotingfm.ui.intercom.main.contacts.model.Contact;
-import com.wotingfm.ui.user.login.model.Login;
-
 import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
@@ -24,8 +21,6 @@ import retrofit2.http.PUT;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 import rx.Observable;
-
-import static com.google.zxing.qrcode.decoder.ErrorCorrectionLevel.Q;
 
 
 /**
@@ -40,8 +35,8 @@ public interface RetrofitService {
     boolean isOfficialServer = true;
     //是否输出日志
     boolean isLOG = true;
-    String HOST = "http://woting.suitingwei.com/";
-    String TEST_HOST = "http://woting.suitingwei.com/";
+    String HOST = "http://api.wotingfm.com/";
+    String TEST_HOST = "http://api.wotingfm.com/";
     String BASE_URL = (isOfficialServer ? HOST : TEST_HOST);
 
     //首页播放fm列表
@@ -323,9 +318,9 @@ public interface RetrofitService {
     @POST(Api.URL_CANCEL)
     Observable<Object> cancel(@Query("s") String s);
 
-    // 获取用户数据(X)
-    @POST(Api.URL_GET_USER_INFO)
-    Observable<Object> getUserInfo(@Query("s") String s);
+    // 获取用户数据
+    @GET(Api.URL_GET_USER_INFO)
+    Observable<Object> getUserInfo(@Path("id") String id);
 
     // 入组申请(X)
     @POST(Api.URL_GROUP_APPLY)
@@ -334,8 +329,8 @@ public interface RetrofitService {
                                   @Query("password") String password);
 
     // 好友订阅专辑
-    @POST(Api.URL_PERSON_SUB)
-    Observable<Object> getPersonSub(@Path("id") String gid);
+    @GET(Api.URL_PERSON_SUB)
+    Observable<Object> getPersonSub(@Path("id") String id);
 
     // 退出群组
     @DELETE(Api.URL_GROUP_DELETE)
@@ -353,30 +348,35 @@ public interface RetrofitService {
                                 @Query("s") String information,
                                 @Query("s") String feedback);
 
-    // 修改用户自己昵称(X)
+    // 修改用户自己昵称
     @POST(Api.URL_EDIT_USER)
     Observable<Object> editUserForName(@Path("id") String id,
-                                       @Query("s") String news);
+                                       @Query("nickName") String news);
 
-    // 修改用户自己介绍(X)
+    // 修改用户自己介绍
     @POST(Api.URL_EDIT_USER)
     Observable<Object> editUserForIntroduce(@Path("id") String id,
-                                            @Query("s") String news);
+                                            @Query("userSign") String news);
 
-    // 修改用户自己年龄(X)
+    // 修改用户自己年龄
     @POST(Api.URL_EDIT_USER)
     Observable<Object> editUserForAge(@Path("id") String id,
-                                      @Query("s") String news);
+                                      @Query("userAge") String news);
 
-    // 修改用户自己位置(X)
+    // 修改用户自己位置
     @POST(Api.URL_EDIT_USER)
     Observable<Object> editUserForAddress(@Path("id") String id,
-                                          @Query("s") String news);
+                                          @Query("area") String news);
 
-    // 修改用户自己性别(X)
+    // 修改用户自己性别
     @POST(Api.URL_EDIT_USER)
     Observable<Object> editUserSex(@Path("id") String id,
-                                   @Query("s") String news);
+                                   @Query("gender") String news);
+
+    // 修改用户自己头像
+    @POST(Api.URL_EDIT_USER)
+    Observable<Object> editUserImg(@Path("id") String id,
+                                   @Query("portraitMini") String news);
 
 
 }

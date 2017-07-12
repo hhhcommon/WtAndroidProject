@@ -1,6 +1,7 @@
 package com.wotingfm.ui.intercom.main.view;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Bundle;
@@ -13,6 +14,8 @@ import android.widget.Toast;
 
 import com.woting.commonplat.utils.SequenceUUID;
 import com.wotingfm.R;
+import com.wotingfm.common.constant.BroadcastConstants;
+import com.wotingfm.ui.base.baseactivity.BaseFragmentActivity;
 
 /**
  * 对讲模块主页
@@ -20,7 +23,7 @@ import com.wotingfm.R;
  * 邮箱：645700751@qq.com
  */
 
-public class InterPhoneActivity extends AppCompatActivity {
+public class InterPhoneActivity extends BaseFragmentActivity {
     public static InterPhoneActivity context;
 
     @Override
@@ -33,6 +36,7 @@ public class InterPhoneActivity extends AppCompatActivity {
 
     /**
      * 打开新的 Fragment
+     *
      * @param frg
      */
     public static void open(Fragment frg) {
@@ -98,6 +102,24 @@ public class InterPhoneActivity extends AppCompatActivity {
         config.setToDefaults();
         res.updateConfiguration(config, res.getDisplayMetrics());
         return res;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+            Intent in = new Intent(BroadcastConstants.IMAGE_UPLOAD);
+            in.putExtra("resultCode", resultCode);
+            try {
+                in.putExtra("uri", data.getData().toString());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            try {
+                in.putExtra("path", data.getStringExtra("return"));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            sendBroadcast(in);
     }
 
     private long tempTime;

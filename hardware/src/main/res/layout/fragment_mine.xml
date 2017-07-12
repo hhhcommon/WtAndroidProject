@@ -67,10 +67,7 @@
 
             </RelativeLayout>
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="0.5dp"
-                android:background="@color/line_color" />
+            <include layout="@layout/include_tv" />
 
             <RelativeLayout
                 android:id="@+id/bluetooth_set"
@@ -90,19 +87,13 @@
 
             </RelativeLayout>
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="0.5dp"
-                android:background="@color/line_color" />
+            <include layout="@layout/include_tv" />
 
             <TextView
                 style="@style/MineIdentifyingTextStyle"
                 android:text="@string/connection_device" />
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="0.5dp"
-                android:background="@color/line_color" />
+            <include layout="@layout/include_tv" />
 
             <RelativeLayout
                 android:id="@+id/wifi_set"
@@ -136,10 +127,7 @@
 
             </RelativeLayout>
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="0.5dp"
-                android:background="@color/line_color" />
+            <include layout="@layout/include_tv" />
 
             <RelativeLayout
                 android:id="@+id/flow_set"

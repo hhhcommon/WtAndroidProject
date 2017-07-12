@@ -5,12 +5,10 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
+import android.widget.TextView;
 import com.wotingfm.R;
-import com.wotingfm.ui.message.group.view.MsgGroupFragment;
 import com.wotingfm.ui.message.megcenter.presenter.MsgCenterPresenter;
 import com.wotingfm.ui.message.notify.view.MsgNotifyFragment;
-import com.wotingfm.ui.message.person.view.MsgPersonFragment;
 import com.wotingfm.ui.mine.main.MineActivity;
 
 /**
@@ -21,6 +19,7 @@ import com.wotingfm.ui.mine.main.MineActivity;
 public class MsgCenterFragment extends Fragment implements View.OnClickListener {
     private View rootView;
     private MsgCenterPresenter presenter;
+    private TextView tv_title_notify, tv_time_notify, tv_news_notify, tv_title_group, tv_time_group, tv_news_group;
 
 
     @Override
@@ -43,8 +42,15 @@ public class MsgCenterFragment extends Fragment implements View.OnClickListener 
     private void inItView() {
         rootView.findViewById(R.id.head_left_btn).setOnClickListener(this);
         rootView.findViewById(R.id.re_notify).setOnClickListener(this);// 通知消息
-        rootView.findViewById(R.id.re_person).setOnClickListener(this);// 好友消息
         rootView.findViewById(R.id.re_group).setOnClickListener(this);// 群组消息
+
+        // tv_title_notify=(TextView)rootView.findViewById(R.id.tv_title_notify);//
+        tv_time_notify = (TextView) rootView.findViewById(R.id.tv_time_notify);//
+        tv_news_notify = (TextView) rootView.findViewById(R.id.tv_news_notify);//
+
+        // tv_title_group=(TextView)rootView.findViewById(R.id.tv_title_group);//
+        tv_time_group = (TextView) rootView.findViewById(R.id.tv_time_group);//
+        tv_news_group = (TextView) rootView.findViewById(R.id.tv_news_group);//
 
     }
 
@@ -57,14 +63,47 @@ public class MsgCenterFragment extends Fragment implements View.OnClickListener 
             case R.id.re_notify:
                 MineActivity.open(new MsgNotifyFragment());
                 break;
-            case R.id.re_person:
-                MineActivity.open(new MsgPersonFragment());
-                break;
             case R.id.re_group:
-                MineActivity.open(new MsgGroupFragment());
                 break;
         }
     }
 
+    /**
+     * 设置消息界面
+     *
+     * @param news
+     * @param time
+     */
+    public void setViewForNotify(String news, String time) {
+        if (news != null && !news.trim().equals("")) {
+            tv_news_notify.setText(news);
+        } else {
+            tv_news_notify.setText("暂无消息");
+        }
+        if (time != null && !time.trim().equals("")) {
+            tv_time_notify.setText(time);
+        } else {
+            tv_time_notify.setText("00:00");
+        }
+    }
+
+    /**
+     * 设置组界面
+     *
+     * @param news
+     * @param time
+     */
+    public void setViewForGroup(String news, String time) {
+        if (news != null && !news.trim().equals("")) {
+            tv_news_group.setText(news);
+        } else {
+            tv_news_group.setText("暂无消息");
+        }
+        if (time != null && !time.trim().equals("")) {
+            tv_time_group.setText(time);
+        } else {
+            tv_time_group.setText("00:00");
+        }
+    }
 
 }

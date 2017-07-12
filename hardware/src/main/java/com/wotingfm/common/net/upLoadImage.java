@@ -13,15 +13,15 @@ import com.wotingfm.common.application.BSApplication;
  */
 public class upLoadImage {
     public static upLoadImage INSTANCE;
-    private String OSS_ENDPOINT = "http://oss-cn-hangzhou.aliyuncs.com";
-    private String ACCESS_ID = "";
-    private String ACCESS_KEY = "";
+    private String OSS_ENDPOINT = "http://oss-cn-beijing.aliyuncs.com";
+    private String ACCESS_ID = "LTAI1SiUYNVeHiNc";
+    private String ACCESS_KEY = "tQ2aXUuRmWzeiPqO0EUZOWCsSsJnBv";
     public static OSSClient oss;
-    public static String BUCKET_NAME = "";
+    public static String BUCKET_NAME = "woting";
     // 这里的objectKey其实就是服务器上的路径，即目录+文件名
     //String objectKey = keyPath + "/" + carArr[times] + ".jpg";
-    public static String objectKey = "";
-
+    public static String objectKey = "test_img/";
+    public static String URL = "http://woting.oss-cn-beijing.aliyuncs.com/"+objectKey;
     /**
      * 单例模式创建网络连接
      *

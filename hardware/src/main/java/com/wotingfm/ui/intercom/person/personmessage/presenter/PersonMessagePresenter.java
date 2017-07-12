@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.woting.commonplat.config.GlobalNetWorkConfig;
 import com.wotingfm.common.bean.AlbumsBean;
@@ -23,6 +24,7 @@ import com.wotingfm.ui.intercom.person.personmessage.view.PersonMessageFragment;
 import com.wotingfm.ui.intercom.person.personmessage.model.PersonMessageModel;
 import com.wotingfm.ui.intercom.person.personnote.view.EditPersonNoteFragment;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
@@ -50,7 +52,7 @@ public class PersonMessagePresenter {
     }
 
     // 获取上级界面传递的数据 type用来判断是否是好友，id是该用户的id
-    private void getArguments(){
+    private void getArguments() {
         try {
             type = activity.getArguments().getString("type");
         } catch (Exception e) {
@@ -79,12 +81,12 @@ public class PersonMessagePresenter {
                 String number = "518518";
                 String address = "北京朝阳";
                 String focus = "0";
-                activity.setViewData(name, sign, number, address , focus);
+                activity.setViewData("",name, sign, number, address, focus);
                 List<AlbumsBean> list = model.getTestData();
                 if (list != null && list.size() > 0) {
                     activity.setGridViewData(list);
                 } else {
-                    activity.setViewForNoGroupPerson();
+                    activity.setGridViewDataNull();
                 }
                 activity.isLoginView(0);
             } else {
@@ -94,7 +96,7 @@ public class PersonMessagePresenter {
                     if (list != null && list.size() > 0) {
                         activity.setGridViewData(list);
                     } else {
-                        activity.setViewForNoGroupPerson();
+                        activity.setGridViewDataNull();
                     }
                 } else {
                     getPersonSub();
@@ -124,7 +126,7 @@ public class PersonMessagePresenter {
     // 处理订阅返回数据
     private void dealSubSuccess(Object o) {
         try {
-            String s = new Gson().toJson(o);
+            String s = new GsonBuilder().serializeNulls().create().toJson(o);
             JSONObject js = new JSONObject(s);
             int ret = js.getInt("ret");
             Log.e("ret", String.valueOf(ret));
@@ -132,25 +134,30 @@ public class PersonMessagePresenter {
                 String msg = js.getString("data");
                 JSONTokener jsonParser = new JSONTokener(msg);
                 JSONObject arg1 = (JSONObject) jsonParser.nextValue();
-                String albums = arg1.getString("albums");
-                // 专辑
-                album = new Gson().fromJson(albums, new TypeToken<List<AlbumsBean>>() {
-                }.getType());
+                try {
+                    String albums = arg1.getString("albums");
+                    // 专辑
+                    album = new Gson().fromJson(albums, new TypeToken<List<AlbumsBean>>() {
+                    }.getType());
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
                 if (album != null && album.size() > 0) {
                     activity.setGridViewData(album);
                 } else {
-                    activity.setViewForNoGroupPerson();
+                    activity.setGridViewDataNull();
                 }
             } else {
                 String msg = js.getString("msg");
                 if (msg != null && !msg.trim().equals("")) {
                     ToastUtils.show_always(activity.getActivity(), msg);
                 }
-                activity.setViewForNoGroupPerson();
+                activity.setGridViewDataNull();
             }
         } catch (Exception e) {
             e.printStackTrace();
-            activity.setViewForNoGroupPerson();
+            activity.setGridViewDataNull();
         }
     }
 
@@ -173,7 +180,7 @@ public class PersonMessagePresenter {
     // 处理返回数据
     private void dealSuccess(Object o) {
         try {
-            String s = new Gson().toJson(o);
+            String s = new GsonBuilder().serializeNulls().create().toJson(o);
             JSONObject js = new JSONObject(s);
             int ret = js.getInt("ret");
             Log.e("ret", String.valueOf(ret));
@@ -212,12 +219,7 @@ public class PersonMessagePresenter {
         } catch (Exception e) {
             e.printStackTrace();
         }
-//        String introduce = "";
-//        try {
-//            introduce = user.getIntroduction();
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
+
         String sign = "";
         try {
             sign = user.getSignature();
@@ -232,13 +234,23 @@ public class PersonMessagePresenter {
         }
         String address = "";
         try {
-            address = user.getLocation();
+            address = user.getArea();
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-        String focus = "0";// 该字段待对接
-        activity.setViewData(name, sign, number, address, focus);
+        String focus = "0";
+        try {
+            focus = user.getFans_count();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        String url = "";
+        try {
+            url = user.getAvatar();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        activity.setViewData(url,name, sign, number, address, focus);
         activity.isLoginView(0);
     }
 
@@ -286,13 +298,13 @@ public class PersonMessagePresenter {
      * 添加到申请好友界面
      */
     public void apply() {
-        if(id!=null&&!id.trim().equals("")){
+        if (id != null && !id.trim().equals("")) {
             PersonApplyFragment fragment = new PersonApplyFragment();
             Bundle bundle = new Bundle();
             bundle.putString("id", id);
             fragment.setArguments(bundle);
             InterPhoneActivity.open(fragment);
-        }else{
+        } else {
             ToastUtils.show_always(activity.getActivity(), "数据出错了，请稍后再试！");
         }
 
@@ -302,7 +314,7 @@ public class PersonMessagePresenter {
      * 跳转到添加备注界面
      */
     public void jumpNote() {
-        if(id!=null&&!id.trim().equals("")){
+        if (id != null && !id.trim().equals("")) {
             EditPersonNoteFragment fragment = new EditPersonNoteFragment();
             Bundle bundle = new Bundle();
             bundle.putString("id", id);
@@ -319,7 +331,7 @@ public class PersonMessagePresenter {
                     }
                 }
             });
-        }else{
+        } else {
             ToastUtils.show_always(activity.getActivity(), "数据出错了，请稍后再试！");
         }
 

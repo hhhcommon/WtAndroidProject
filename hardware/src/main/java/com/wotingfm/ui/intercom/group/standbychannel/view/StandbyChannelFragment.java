@@ -174,5 +174,4 @@ public class StandbyChannelFragment extends Fragment implements View.OnClickList
         if (dialog != null) dialog.dismiss();
     }
 
-
 }

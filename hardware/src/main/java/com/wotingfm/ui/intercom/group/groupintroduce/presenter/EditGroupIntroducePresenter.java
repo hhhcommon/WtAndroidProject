@@ -101,6 +101,11 @@ public class EditGroupIntroducePresenter {
      * @param src
      */
     public void textChange(String src) {
-        activity.setTextViewChange("");
+        if (src == null || src.trim().equals("")) {
+            int l = src.length();
+            activity.setTextViewChange(String.valueOf(90 - l));
+        } else {
+            activity.setTextViewChange("90");
+        }
     }
 }

@@ -5,6 +5,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.woting.commonplat.config.GlobalNetWorkConfig;
 import com.wotingfm.common.constant.BroadcastConstants;
@@ -13,6 +14,7 @@ import com.wotingfm.ui.user.login.model.LoginModel;
 import com.wotingfm.ui.user.login.view.LoginFragment;
 import com.wotingfm.ui.user.logo.LogoActivity;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
@@ -28,7 +30,6 @@ public class LoginPresenter {
     private final LoginFragment activity;
     private final LoginModel model;
     private boolean eyeShow = false;
-
 
     public LoginPresenter(LoginFragment activity) {
         this.activity = activity;
@@ -108,7 +109,8 @@ public class LoginPresenter {
     // 处理返回数据
     private void dealSuccess(Object o) {
         try {
-            String s = new Gson().toJson(o);
+            Gson g = new GsonBuilder().serializeNulls().create();
+            String s = g.toJson(o);
             JSONObject js = new JSONObject(s);
             int ret = js.getInt("ret");
             Log.e("ret", String.valueOf(ret));
@@ -116,12 +118,14 @@ public class LoginPresenter {
                 String msg = js.getString("data");
                 JSONTokener jsonParser = new JSONTokener(msg);
                 JSONObject arg1 = (JSONObject) jsonParser.nextValue();
-                String token = arg1.getString("token");
-
-                // 保存后台获取到的token
-                if (token != null && !token.trim().equals("")) {
-                    model.saveToken(token);
-                    ToastUtils.show_always(activity.getActivity(), token);
+                try {
+                    String token = arg1.getString("token");
+                    // 保存后台获取到的token
+                    if (token != null && !token.trim().equals("")) {
+                        model.saveToken(token);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
 
                 JSONObject ui = (JSONObject) new JSONTokener(arg1.getString("user")).nextValue();
@@ -136,9 +140,9 @@ public class LoginPresenter {
             } else {
                 String msg = js.getString("msg");
                 if (msg != null && !msg.trim().equals("")) {
+                    Log.e("登录失败返回数据", msg);
                     ToastUtils.show_always(activity.getActivity(), msg);
                 }
-                ToastUtils.show_always(activity.getActivity(), "登录失败，请稍后再试");
             }
         } catch (Exception e) {
             e.printStackTrace();

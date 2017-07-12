@@ -23,19 +23,20 @@
 
     </RelativeLayout>
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/line_color" />
+    <include layout="@layout/include_tv" />
+
     <com.woting.commonplat.widget.TipView
         android:id="@+id/tip_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:visibility="gone" />
+
     <ExpandableListView
         android:id="@+id/expandableListView"
         android:layout_width="match_parent"
-        android:divider="@color/white"
-        android:layout_height="match_parent" />
+        android:scrollbars="none"
+        android:dividerHeight="0.7dp"
+        android:layout_height="match_parent"
+        android:divider="@color/line_color" />
 
 </LinearLayout>

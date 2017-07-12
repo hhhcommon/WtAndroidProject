@@ -26,7 +26,7 @@ import com.wotingfm.ui.user.register.presenter.RegisterPresenter;
 public class RegisterFragment extends Fragment implements View.OnClickListener {
     private TextView tv_yzm, tv_confirm;
     private ImageView left, img_eye;
-    private EditText et_phoneNumber, et_passWord,et_yzm;
+    private EditText et_phoneNumber, et_passWord, et_yzm;
     private RegisterPresenter registerPresenter;
     private View rootView;
     private Dialog dialog;
@@ -36,9 +36,8 @@ public class RegisterFragment extends Fragment implements View.OnClickListener {
         if (rootView == null) {
             rootView = inflater.inflate(R.layout.fragment_register, container, false);
             inItView();
-            inItListener();
             setEditListener();
-            registerPresenter=new RegisterPresenter(this);
+            registerPresenter = new RegisterPresenter(this);
             registerPresenter.setEye();
         }
         return rootView;
@@ -46,25 +45,24 @@ public class RegisterFragment extends Fragment implements View.OnClickListener {
 
     // 设置界面
     private void inItView() {
-        img_eye = (ImageView) rootView.findViewById(R.id.img_eye);                 // 密码显示
-        left = (ImageView)rootView. findViewById(R.id.head_left_btn);              // 删除按钮
+
+        left = (ImageView) rootView.findViewById(R.id.head_left_btn);              // 删除按钮
+        left.setOnClickListener(this);
         TextView tv_center = (TextView) rootView.findViewById(R.id.tv_center);     // 标头
         tv_center.setText("注册");
 
+        img_eye = (ImageView) rootView.findViewById(R.id.img_eye);                 // 密码显示
+        img_eye.setOnClickListener(this);
+
         et_phoneNumber = (EditText) rootView.findViewById(R.id.et_phoneNumber);    // 手机号输入框
-        et_yzm = (EditText)rootView. findViewById(R.id.et_yzm);                    // 验证码输入框
+        et_yzm = (EditText) rootView.findViewById(R.id.et_yzm);                    // 验证码输入框
         et_passWord = (EditText) rootView.findViewById(R.id.et_passWord);          // 密码输入框
 
-        tv_yzm= (TextView)rootView. findViewById(R.id.tv_yzm);                     // 获取验证码
-        tv_confirm = (TextView)rootView. findViewById(R.id.tv_confirm);            // 注册
-    }
-
-    // 设置监听
-    private void inItListener() {
-        img_eye.setOnClickListener(this);
-        left.setOnClickListener(this);
+        tv_yzm = (TextView) rootView.findViewById(R.id.tv_yzm);                    // 获取验证码
         tv_yzm.setOnClickListener(this);
+        tv_confirm = (TextView) rootView.findViewById(R.id.tv_confirm);            // 注册
         tv_confirm.setOnClickListener(this);
+
     }
 
     // 监听
@@ -100,7 +98,7 @@ public class RegisterFragment extends Fragment implements View.OnClickListener {
                 String userName = et_phoneNumber.getText().toString().trim();
                 String password = et_passWord.getText().toString().trim();
                 String yzm = et_yzm.getText().toString().trim();
-                registerPresenter.getBtView(userName, password,yzm);
+                registerPresenter.getBtView(userName, password, yzm);
             }
 
             @Override
@@ -119,7 +117,7 @@ public class RegisterFragment extends Fragment implements View.OnClickListener {
                 String userName = et_phoneNumber.getText().toString().trim();
                 String password = et_passWord.getText().toString().trim();
                 String yzm = et_yzm.getText().toString().trim();
-                registerPresenter.getBtView(userName, password,yzm);
+                registerPresenter.getBtView(userName, password, yzm);
             }
 
             @Override
@@ -138,7 +136,7 @@ public class RegisterFragment extends Fragment implements View.OnClickListener {
                 String userName = et_phoneNumber.getText().toString().trim();
                 String password = et_passWord.getText().toString().trim();
                 String yzm = et_yzm.getText().toString().trim();
-                registerPresenter.getBtView(userName, password,yzm);
+                registerPresenter.getBtView(userName, password, yzm);
             }
 
             @Override
@@ -152,7 +150,7 @@ public class RegisterFragment extends Fragment implements View.OnClickListener {
         String userName = et_phoneNumber.getText().toString().trim();
         String password = et_passWord.getText().toString().trim();
         String yzm = et_yzm.getText().toString().trim();
-        registerPresenter.register(userName, password,yzm);
+        registerPresenter.register(userName, password, yzm);
     }
 
     /**
@@ -166,7 +164,7 @@ public class RegisterFragment extends Fragment implements View.OnClickListener {
             et_passWord.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
         } else {
             img_eye.setImageResource(R.mipmap.login_icon_password_unlook);
-            et_passWord.setInputType(InputType.TYPE_CLASS_TEXT |InputType.TYPE_TEXT_VARIATION_PASSWORD);
+            et_passWord.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
         }
     }
 
@@ -185,11 +183,11 @@ public class RegisterFragment extends Fragment implements View.OnClickListener {
 
     /**
      * 设置获取验证码的样式
-     * @param type 完成状态
+     *
+     * @param type       完成状态
      * @param timeString 文字展示内容
      */
     public void setYzmStyle(boolean type, String timeString) {
-
         if (type) {
             tv_yzm.setText(timeString);
             tv_yzm.setTextColor(this.getResources().getColor(R.color.gray_edit_hint_word));

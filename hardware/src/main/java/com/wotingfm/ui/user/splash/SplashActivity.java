@@ -6,8 +6,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 
-import com.wotingfm.ui.main.view.MainActivity;
 import com.wotingfm.ui.user.guide.view.GuideActivity;
+
 import java.lang.ref.WeakReference;
 
 /**
@@ -44,13 +44,9 @@ public class SplashActivity extends Activity {
     }
 
     // 跳转到引导页
-    private void todo(){
+    private void todo() {
         startActivity(new Intent(this, GuideActivity.class));
         finish();
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-    }
 }

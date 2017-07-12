@@ -2,6 +2,7 @@ package com.woting.commonplat.widget.photocut;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
@@ -16,6 +17,8 @@ import android.view.View;
 import android.view.View.OnTouchListener;
 import android.view.ViewTreeObserver;
 import android.widget.ImageView;
+
+import com.woting.commonplat.manager.PhoneMsgManager;
 
 /**
  * 裁剪
@@ -313,16 +316,15 @@ public class ClipZoomImageView extends ImageView implements OnScaleGestureListen
      * @return
      */
     public Bitmap clip() {
-//        int h= PhoneMessage.ScreenHeight;
-//        int w=PhoneMessage.ScreenWidth;
-//
-//        int HorizontalPadding = (PhoneMessage.ScreenHeight - PhoneMessage.ScreenWidth) / 2;
-//        Bitmap bitmap = Bitmap.createBitmap(w, h, Bitmap.Config.RGB_565);
-//        Canvas canvas = new Canvas(bitmap);
-//        draw(canvas);
-//
-//        return Bitmap.createBitmap(bitmap,0, HorizontalPadding, PhoneMessage.ScreenWidth, PhoneMessage.ScreenHeight-HorizontalPadding);
-        return null;
+        int h= PhoneMsgManager.ScreenHeight;
+        int w=PhoneMsgManager.ScreenWidth;
+
+        int HorizontalPadding = (PhoneMsgManager.ScreenHeight - PhoneMsgManager.ScreenWidth) / 2;
+        Bitmap bitmap = Bitmap.createBitmap(w, h, Bitmap.Config.RGB_565);
+        Canvas canvas = new Canvas(bitmap);
+        draw(canvas);
+
+        return Bitmap.createBitmap(bitmap,0, HorizontalPadding, PhoneMsgManager.ScreenWidth, PhoneMsgManager.ScreenHeight-HorizontalPadding);
     }
 
     /*
