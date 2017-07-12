@@ -13,6 +13,7 @@ import com.woting.commonplat.amine.OnRefreshListener;
 import com.woting.commonplat.widget.LoadFrameLayout;
 import com.wotingfm.R;
 import com.wotingfm.common.adapter.albumsAdapter.AlbumsAdapter;
+import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.bean.AlbumsBean;
 import com.wotingfm.common.bean.Subscrible;
 import com.wotingfm.common.net.RetrofitUtils;
@@ -97,7 +98,7 @@ public class AlbumsListActivity extends BaseToolBarActivity implements OnLoadMor
     private String user_id;
 
     private void refresh() {
-        mPage=1;
+        mPage = 1;
         RetrofitUtils.getInstance().getAlbumsList(user_id, mPage)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

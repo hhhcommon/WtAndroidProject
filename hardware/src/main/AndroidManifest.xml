@@ -1,6 +1,72 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.wotingfm">
+
+    <!-- 权限声明 -->
+    <!-- 访问网络状态-->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <!-- 控制呼吸灯，振动器等，用于新消息提醒 -->
+    <uses-permission android:name="android.permission.FLASHLIGHT" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <!-- 外置存储存取权限 -->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
+    <!-- 允许挂载和反挂载文件系统 -->
+    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
+    <!-- 允许程序创建显示在其他程序之上，并且类型为TYPE_SYSTEM_ALERT的窗体 -->
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <!-- 允许程序向外部存储设备写数据 -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <!-- 外置存储存取权限 -->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <!-- 允许程序获取网络相关信息 -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <!-- 允许程序写音频数据 -->
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <!-- 允许程序使用PowerManager WakeLocks以防止处理器休眠或者屏幕锁屏 -->
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <!-- 允许程序获取Wifi网络状态信息 -->
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <!-- 允许程序使用设备的camera -->
+    <uses-permission android:name="android.permission.CAMERA" />
+    <!-- 允许程序使用闪光灯 -->
+    <uses-permission android:name="android.permission.FLASHLIGHT" />
+    <!-- 允许程序获得设备信息 -->
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <!-- 配置一个程序用于调试 -->
+    <uses-permission android:name="android.permission.SET_DEBUG_APP" />
+
+    <!-- 云信SDK 权限申明, 第三方 APP 接入时，请将 com.netease.vcloud.live 替换为自己的包名 -->
+    <!-- 和下面的 uses-permission 一起加入到你的 AndroidManifest 文件中。 -->
+    <permission
+        android:name="com.wotingfm.permission.RECEIVE_MSG"
+        android:protectionLevel="signature" />
+    <!-- 接收 SDK 消息广播权限， 第三方 APP 接入时，请将 com.netease.vcloud.live 替换为自己的包名 -->
+    <uses-permission android:name="com.wotingfm.permission.RECEIVE_MSG" />
+    <!-- 定位包、导航包需要的额外权限（注：基础权限也需要） -->
+    <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS" />
+    <!-- <uses-permission android:name="android.permission.ACCESS_MOCK_LOCATION" /> -->
+    <!-- 用于进行网络定位 -->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <!-- 用于访问GPS定位 -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
+    <!-- Needed to use our own Contact editor -->
+    <uses-permission android:name="android.permission.WRITE_CONTACTS" />
+    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
+
+    <!-- 声明程序使用camera和自动对焦功能 -->
+    <uses-feature android:name="android.hardware.camera" />
+    <uses-feature android:name="android.hardware.camera.autofocus" />
+    <!-- 声明程序使用OpenGL ES 2.0 -->
+    <uses-feature
+        android:glEsVersion="0x00020000"
+        android:required="true" />
+
+
     <!-- supportsRtl 从左到右 -->
     <!-- android:screenOrientation="portrait" 强制竖屏 -->
     <application
@@ -69,6 +135,29 @@
             android:name=".ui.play.activity.ReportsPlayerActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
+        <!-- 本地台 -->
+        <activity
+            android:name=".ui.play.radio.LocalRadioActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" />
+        <!-- 国家台 -->
+        <activity
+            android:name=".ui.play.radio.CountryRadioActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".ui.play.radio.ProvincesAndCitiesActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".ui.play.radio.ProvincesAndCitiesListRadioActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" />
+        <!--  电台详情-->
+        <activity
+            android:name=".ui.play.radio.RadioInfoActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" />
         <!-- 主播个人中心 -->
         <activity
             android:name=".ui.play.activity.AnchorPersonalCenterActivity"
@@ -99,6 +188,25 @@
             android:name=".ui.play.activity.albums.AlbumsInfoActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
+        <!-- 直播页面  主播 -->
+        <activity
+            android:name=".ui.play.live.LiveRoomActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" />
+        <!-- 预约 -->
+        <activity
+            android:name=".ui.play.live.TrailerInfoActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" />
+        <!-- 热门电台列表 -->
+        <activity
+            android:name=".ui.play.look.activity.RadioMoreActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name="com.netease.nim.live.activity.InputActivity"
+            android:theme="@style/InputActivityTheme"
+            android:windowSoftInputMode="stateUnspecified|adjustResize" />
         <!--下载选择 -->
         <activity
             android:name=".ui.play.activity.download.DownloadSelectActivity"
@@ -142,7 +250,42 @@
             android:name=".ui.mine.main.MineActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
+        <!-- APP key, 可以在这里设置，也可以在 SDKOptions 中提供。
+                    如果 SDKOptions 中提供了，取 SDKOptions 中的值。 -->
+        <meta-data
+            android:name="com.netease.nim.appKey"
+            android:value="14fb7ad37a6489960435071dd1b0c837" />
 
+        <!-- 声明云信后台服务，如需保持后台推送，使用独立进程效果会更好。 -->
+        <service
+            android:name="com.netease.nimlib.service.NimService"
+            android:process=":core" />
+
+        <service
+            android:name="com.netease.nimlib.service.NimService$Aux"
+            android:process=":core" />
+
+        <!-- 云信SDK的监视系统启动和网络变化的广播接收器，用户开机自启动以及网络变化时候重新登录，
+            保持和 NimService 同一进程 -->
+        <receiver
+            android:name="com.netease.nimlib.service.NimReceiver"
+            android:exported="false"
+            android:process=":core">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+            </intent-filter>
+        </receiver>
+
+        <!-- 云信进程间通信 Receiver -->
+        <receiver android:name="com.netease.nimlib.service.ResponseReceiver" />
+        <!-- 云信SDK相关 结束                                                              -->
+
+
+        <!-- 高德地图用户Key -->
+        <meta-data
+            android:name="com.amap.api.v2.apikey"
+            android:value="7dabc8027d924f36cd758732c895c261" />
         <!--  -->
         <activity
             android:name=".ui.intercom.alert.receive.view.ReceiveAlertActivity"
@@ -156,7 +299,6 @@
             android:theme="@style/MyAppTheme" />
 
         <service android:name=".common.service.FloatingWindowService" />
-
     </application>
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
 

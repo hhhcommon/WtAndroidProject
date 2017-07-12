@@ -18,7 +18,15 @@ public class StringConstant {
     public static final String GENDER = "GENDER";                                   // 性别
     public static final String REGION = "REGION";                                   // 用户地区
     public static final String USER_SIGN = "USER_SIGN";                             // 用户签名
-    public static final String AGE = "AGE";                                         // 年龄
+    public static final String AGE = "AGE";                                       // 年龄
+
+    /*
+     * 电台城市列表
+     */
+    public static final String LATITUDE = "latitude";
+    public static final String LONGITUDE = "longitude";
+    public static final String CITYID = "cityid";//选中的城市id 对应导航返回的ADcode
+    public static final String CITYNAME = "cityname";//选中的城市
 
     public static final String WIFI_SLEEP_POLICY_DEFAULT = "WIFI_SLEEP_POLICY_DEFAULT";// WiFi连接状态
     public static final String SPP_UUID = "00001101-0000-1000-8000-00805F9B34FB";      // 蓝牙连接 UUID

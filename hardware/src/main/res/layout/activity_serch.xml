@@ -50,10 +50,6 @@
         android:layout_height="@dimen/toolbar_height"
         android:layout_centerInParent="true"
         android:layout_gravity="center"
-        android:layout_toLeftOf="@+id/ivVoice"
-        android:layout_toRightOf="@+id/ivClose"
-        android:paddingLeft="12dp"
-        android:paddingRight="12dp"
         app:tabGravity="fill"
         app:tabMode="fixed" />
 

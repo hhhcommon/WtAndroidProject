@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.woting.commonplat.widget.WTToolbar xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/tools"
+    android:id="@+id/toolbar"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/toolbar_height"
+    android:background="#000000"
+    android:fitsSystemWindows="true"
+    app:elevation="0dp" />

@@ -25,6 +25,7 @@ import com.wotingfm.common.utils.CommonUtils;
 import com.wotingfm.common.utils.L;
 import com.wotingfm.common.utils.T;
 import com.wotingfm.common.view.ReportsDialog;
+import com.wotingfm.ui.base.baseactivity.AppManager;
 import com.wotingfm.ui.base.baseactivity.NoTitleBarBaseActivity;
 import com.wotingfm.ui.play.activity.albums.AlbumsListActivity;
 import com.wotingfm.ui.user.login.view.LoginFragment;
@@ -158,6 +159,7 @@ public class AnchorPersonalCenterActivity extends NoTitleBarBaseActivity impleme
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.ivBack:
+                AppManager.getAppManager().finishActivity(this);
                 finish();
                 break;
             case R.id.ivMore:
@@ -188,20 +190,20 @@ public class AnchorPersonalCenterActivity extends NoTitleBarBaseActivity impleme
                                 setHeadViewData(s);
                                 dataBeanXes.addAll(s.data.user.data);
                                 mHeaderAndFooterWrapper.notifyDataSetChanged();
-                                } else {
-                                    loadLayout.showErrorView();
-                                }
+                            } else {
+                                loadLayout.showErrorView();
                             }
                         }
+                    }
 
 
-                    }, new Action1<Throwable>() {
-                        @Override
-                        public void call(Throwable throwable) {
-                            loadLayout.showErrorView();
-                        }
-                    });
-        }
+                }, new Action1<Throwable>() {
+                    @Override
+                    public void call(Throwable throwable) {
+                        loadLayout.showErrorView();
+                    }
+                });
+    }
 
     //headview
     private ImageView ivPhotoBg, ivPhoto;
@@ -242,7 +244,7 @@ public class AnchorPersonalCenterActivity extends NoTitleBarBaseActivity impleme
             @Override
             public void onClick(View v) {
                 boolean isLogin = CommonUtils.isLogin();
-                if(isLogin==false){
+                if (isLogin == false) {
                     LogoActivity.start(AnchorPersonalCenterActivity.this);
                     return;
                 }

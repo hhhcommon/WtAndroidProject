@@ -24,5 +24,6 @@ public class SerchList implements Serializable {
         public List<SinglesBase> singles;
         public List<AlbumsBean> albums;
         public List<UserBean> users;
+        public List<ChannelsBean> radios;
     }
 }

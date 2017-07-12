@@ -19,6 +19,7 @@ import com.wotingfm.common.adapter.findHome.ClassificationAdapter;
 import com.wotingfm.common.bean.AlbumInfo;
 import com.wotingfm.common.bean.AlbumsBean;
 import com.wotingfm.common.bean.Channels;
+import com.wotingfm.common.bean.ChannelsBean;
 import com.wotingfm.common.bean.Classification;
 import com.wotingfm.common.bean.Player;
 import com.wotingfm.common.bean.Subscrible;
@@ -60,7 +61,7 @@ public class SubcategoryFragment extends BaseFragment implements OnLoadMoreListe
         return R.layout.fragment_subcategory;
     }
 
-    public static SubcategoryFragment newInstance(Channels.DataBean.ChannelsBean albumInfo) {
+    public static SubcategoryFragment newInstance(ChannelsBean albumInfo) {
         SubcategoryFragment fragment = new SubcategoryFragment();
         Bundle bundle = new Bundle();
         bundle.putSerializable("albumInfo", albumInfo);
@@ -72,13 +73,13 @@ public class SubcategoryFragment extends BaseFragment implements OnLoadMoreListe
     private LoadMoreFooterView loadMoreFooterView;
     private List<AlbumsBean> albumsBeanList = new ArrayList<>();
     private AlbumsAdapter mAdapter;
-    private Channels.DataBean.ChannelsBean albumInfo;
+    private ChannelsBean albumInfo;
 
     @Override
     public void initView() {
         Bundle bundle = getArguments();
         if (bundle != null)
-            albumInfo = (Channels.DataBean.ChannelsBean) bundle.getSerializable("albumInfo");
+            albumInfo = (ChannelsBean) bundle.getSerializable("albumInfo");
         if (albumInfo == null)
             return;
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());

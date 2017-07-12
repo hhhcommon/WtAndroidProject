@@ -25,6 +25,7 @@ import com.wotingfm.common.net.RetrofitUtils;
 import com.wotingfm.common.utils.L;
 import com.wotingfm.common.utils.T;
 import com.wotingfm.common.view.ObservableScrollView;
+import com.wotingfm.ui.base.baseactivity.AppManager;
 import com.wotingfm.ui.base.baseactivity.NoTitleBarBaseActivity;
 import com.wotingfm.ui.play.activity.albums.fragment.AlbumsInfoFragment;
 import com.wotingfm.ui.play.activity.albums.fragment.ProgramInfoFragment;
@@ -78,6 +79,8 @@ public class AlbumsInfoActivity extends NoTitleBarBaseActivity implements View.O
         activity.startActivityForResult(intent, 8088);
     }
 
+    private String albumsId;
+
     @Override
     public int getLayoutId() {
         return R.layout.activity_albums_info;
@@ -127,7 +130,7 @@ public class AlbumsInfoActivity extends NoTitleBarBaseActivity implements View.O
 
     private void subscriptionsAlbums() {
         showLodingDialog();
-        RetrofitUtils.getInstance().subscriptionsAlbums()
+        RetrofitUtils.getInstance().subscriptionsAlbums(albumsId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Action1<BaseResult>() {
@@ -159,7 +162,7 @@ public class AlbumsInfoActivity extends NoTitleBarBaseActivity implements View.O
 
     private void deleteSubscriptionsAlbums() {
         showLodingDialog();
-        RetrofitUtils.getInstance().deleteSubscriptionsAlbums()
+        RetrofitUtils.getInstance().deleteSubscriptionsAlbums(albumsId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Action1<BaseResult>() {
@@ -194,6 +197,7 @@ public class AlbumsInfoActivity extends NoTitleBarBaseActivity implements View.O
         switch (v.getId()) {
             case R.id.ivBack:
                 finish();
+                AppManager.getAppManager().finishActivity(this);
                 break;
             case R.id.tvAlbumsInfo:
                 setTextColor(tvAlbumsInfo, 0);
@@ -214,7 +218,7 @@ public class AlbumsInfoActivity extends NoTitleBarBaseActivity implements View.O
     @Override
     public void initView() {
         height = DementionUtil.dip2px(this, 210);
-        String albumsId = getIntent().getStringExtra("albumsId");
+        albumsId = getIntent().getStringExtra("albumsId");
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         ivBack.setOnClickListener(this);

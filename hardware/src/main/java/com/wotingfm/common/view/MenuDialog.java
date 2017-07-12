@@ -12,6 +12,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -19,7 +20,9 @@ import com.woting.commonplat.utils.FileSizeUtil;
 import com.wotingfm.R;
 import com.wotingfm.common.adapter.PlayerListAdapter;
 import com.wotingfm.common.application.BSApplication;
+import com.wotingfm.common.bean.ChannelsBean;
 import com.wotingfm.common.bean.Player;
+import com.wotingfm.common.bean.Radio;
 import com.wotingfm.common.bean.SinglesBase;
 import com.wotingfm.common.bean.SinglesDownload;
 import com.wotingfm.common.config.DbConfig;
@@ -54,6 +57,7 @@ import rx.schedulers.Schedulers;
 import static android.R.attr.breadCrumbShortTitle;
 import static android.R.attr.data;
 import static android.icu.lang.UCharacter.GraphemeClusterBreak.T;
+import static com.loc.e.e;
 import static com.loc.e.m;
 import static com.woting.commonplat.gather.GatherData.url;
 import static com.wotingfm.R.id.mRecyclerViewList;
@@ -63,6 +67,7 @@ public class MenuDialog extends Dialog implements View.OnClickListener {
 
     private TextView tvClose, tvLike, tvAlbums, tvAnchor, tvReport, tvDownload, tvAgo, tvSubscription, tvLocal;
     private Activity activity;
+    private LinearLayout largeLabel;
 
     public MenuDialog(@NonNull Activity context) {
         super(context, R.style.BottomDialog);
@@ -76,6 +81,7 @@ public class MenuDialog extends Dialog implements View.OnClickListener {
         tvClose = (TextView) findViewById(R.id.tvClose);
         tvLike = (TextView) findViewById(R.id.tvLike);
         tvAlbums = (TextView) findViewById(R.id.tvAlbums);
+        largeLabel = (LinearLayout) findViewById(R.id.largeLabel);
         tvAnchor = (TextView) findViewById(R.id.tvAnchor);
         tvReport = (TextView) findViewById(R.id.tvReport);
         tvDownload = (TextView) findViewById(R.id.tvDownload);
@@ -95,12 +101,19 @@ public class MenuDialog extends Dialog implements View.OnClickListener {
 
     private SinglesBase pdsBase;
     private FollowCallBack followCallBack;
+    private ChannelsBean channelsBean;
 
-    public void setMenuData(SinglesBase pds, FollowCallBack followCallBack) {
+    public void setMenuData(SinglesBase pds, FollowCallBack followCallBack, ChannelsBean channelsBean) {
         this.followCallBack = followCallBack;
+        this.channelsBean = channelsBean;
         if (pds != null) {
             pdsBase = pds;
             setLikeImg(pds.had_liked);
+            if (channelsBean != null) {
+                largeLabel.setVisibility(View.GONE);
+            } else {
+                largeLabel.setVisibility(View.VISIBLE);
+            }
         }
     }
 

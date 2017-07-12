@@ -172,7 +172,6 @@ public class GDLocation {
 
     // 停止定位
     public void stopLocation() {
-        mGDLocation.stopLocation();
         mLocationClient.stopLocation();
     }
 }

@@ -8,7 +8,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Color;
 import android.media.AudioManager;
-import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
@@ -27,7 +26,6 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.woting.commonplat.manager.VoiceRecognizer;
 import com.woting.commonplat.utils.KeyboardChangeListener;
@@ -37,6 +35,7 @@ import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.common.utils.NetUtils;
 import com.wotingfm.common.utils.T;
+import com.wotingfm.ui.base.baseactivity.AppManager;
 import com.wotingfm.ui.base.baseactivity.NoTitleBarBaseActivity;
 import com.wotingfm.ui.play.look.activity.serch.SerchActivity;
 import com.wotingfm.ui.play.look.fragment.ClassificationFragment;
@@ -50,9 +49,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
-
-import static com.wotingfm.R.id.tvContent;
 
 /**
  * Created by amine on 2017/6/21.
@@ -191,6 +187,7 @@ public class LookListActivity extends NoTitleBarBaseActivity implements View.OnC
                 break;
             case R.id.ivBack:
             case R.id.ivClose:
+                AppManager.getAppManager().finishActivity(this);
                 finish();
                 break;
             case R.id.ivVoice:
@@ -265,4 +262,11 @@ public class LookListActivity extends NoTitleBarBaseActivity implements View.OnC
 
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (mBroadcastReceiver != null)
+            unregisterReceiver(mBroadcastReceiver
+            );
+    }
 }

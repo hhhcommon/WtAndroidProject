@@ -203,11 +203,13 @@ public class BannerView extends FrameLayout {
 
         @Override
         public void onBindViewHolder(final PagerHolder holder, final int position) {
-            final int realPosition = position % mBanners.size();
-            final HomeBanners.DataBean.BannersBean data = mBanners.get(realPosition);
-            Context context = holder.itemView.getContext();
-            holder.mImageView.setVisibility(View.VISIBLE);
-            Glide.with(context).load(data.logo_url).into(holder.mImageView);
+            if (mBanners != null && !mBanners.isEmpty()) {
+                final int realPosition = position % mBanners.size();
+                final HomeBanners.DataBean.BannersBean data = mBanners.get(realPosition);
+                Context context = holder.itemView.getContext();
+                holder.mImageView.setVisibility(View.VISIBLE);
+                Glide.with(context).load(data.logo_url).into(holder.mImageView);
+            }
         }
 
         @Override

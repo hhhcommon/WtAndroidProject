@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.wotingfm.R;
+import com.wotingfm.common.bean.MessageEvent;
 import com.wotingfm.common.config.GlobalStateConfig;
 import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.common.utils.GlideUtils;
@@ -24,6 +25,8 @@ import com.wotingfm.ui.mine.wifi.view.WIFIFragment;
 import com.wotingfm.ui.mine.main.MineActivity;
 import com.wotingfm.ui.mine.main.presenter.MinePresenter;
 import com.wotingfm.ui.user.logo.LogoActivity;
+
+import org.greenrobot.eventbus.EventBus;
 
 /**
  * 个人中心主界面
@@ -119,7 +122,8 @@ public class MineFragment extends Fragment implements View.OnClickListener {
                 if (GlobalStateConfig.mineFromType == 1) {
                     GlobalStateConfig.mineFromType = 0;
                     GlobalStateConfig.activityA = "A";
-                    MainActivity.changeOne();
+                    //  MainActivity.changeOne();
+                    EventBus.getDefault().post(new MessageEvent("one"));
                     Intent push = new Intent(BroadcastConstants.MINE_ACTIVITY_CHANGE);
                     Bundle bundle = new Bundle();
                     bundle.putInt("viewType", 1);
@@ -128,7 +132,8 @@ public class MineFragment extends Fragment implements View.OnClickListener {
                 } else if (GlobalStateConfig.mineFromType == 2) {
                     GlobalStateConfig.mineFromType = 0;
                     GlobalStateConfig.activityB = "B";
-                    MainActivity.changeTwo();
+                    //  MainActivity.changeTwo();
+                    EventBus.getDefault().post(new MessageEvent("two"));
                     Intent push = new Intent(BroadcastConstants.MINE_ACTIVITY_CHANGE);
                     Bundle bundle = new Bundle();
                     bundle.putInt("viewType", 2);

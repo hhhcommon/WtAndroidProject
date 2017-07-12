@@ -20,22 +20,7 @@ public class Channels implements Serializable {
     public int ret;
 
 
-
     public static class DataBean implements Serializable {
         public List<ChannelsBean> channels;
-
-        public static class ChannelsBean implements Serializable {
-            /**
-             * id : cn3_1
-             * logo : http://www.wotingfm.com:908/CM//dataCenter/group04/8c5d15f2e090467aa9b7e74ac95e85cd.100_100.png
-             * title : 宝贝
-             */
-
-            public String id;
-            public String logo;
-            public String title;
-
-
-        }
     }
 }

@@ -15,6 +15,7 @@ import com.woting.commonplat.widget.LoadFrameLayout;
 import com.wotingfm.R;
 import com.wotingfm.common.adapter.albumsAdapter.AlbumsAdapter;
 import com.wotingfm.common.adapter.findHome.ItemSelected1Adapter;
+import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.bean.AlbumsBean;
 import com.wotingfm.common.bean.Player;
 import com.wotingfm.common.bean.Selected;
@@ -56,6 +57,7 @@ public class SelectedMoreActivity extends BaseToolBarActivity implements OnLoadM
 
     @Override
     public int getLayoutId() {
+
         return R.layout.activity_selected;
     }
 

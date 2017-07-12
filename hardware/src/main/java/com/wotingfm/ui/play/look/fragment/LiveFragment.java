@@ -1,5 +1,6 @@
 package com.wotingfm.ui.play.look.fragment;
 
+import android.content.DialogInterface;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -10,19 +11,22 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.woting.commonplat.amine.ARecyclerView;
-import com.woting.commonplat.amine.LoadMoreFooterView;
-import com.woting.commonplat.amine.OnLoadMoreListener;
+import com.netease.nim.live.liveStreaming.PublishParam;
+import com.netease.nim.uikit.common.ui.dialog.DialogMaker;
 import com.woting.commonplat.widget.LoadFrameLayout;
 import com.wotingfm.R;
 import com.wotingfm.common.adapter.findHome.LiveListAdapter;
-import com.wotingfm.common.bean.AlbumsBean;
 import com.wotingfm.common.bean.HomeBanners;
 import com.wotingfm.common.bean.LiveBean;
+import com.wotingfm.common.config.preference.LiveManger;
 import com.wotingfm.common.net.RetrofitUtils;
+import com.wotingfm.common.utils.CommonUtils;
 import com.wotingfm.common.utils.T;
 import com.wotingfm.common.view.BannerView;
 import com.wotingfm.ui.base.basefragment.BaseFragment;
+import com.wotingfm.ui.play.live.LiveRoomActivity;
+import com.wotingfm.ui.play.live.TrailerInfoActivity;
+import com.wotingfm.ui.user.logo.LogoActivity;
 import com.zhy.adapter.recyclerview.wrapper.HeaderAndFooterWrapper;
 
 import java.util.ArrayList;
@@ -32,6 +36,7 @@ import butterknife.BindView;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.schedulers.Schedulers;
+
 
 /**
  * Created by amine on 2017/6/14.
@@ -57,6 +62,7 @@ public class LiveFragment extends BaseFragment implements SwipeRefreshLayout.OnR
         LiveFragment fragment = new LiveFragment();
         return fragment;
     }
+
 
     private View headview;
     private TextView tvTitle;
@@ -89,9 +95,43 @@ public class LiveFragment extends BaseFragment implements SwipeRefreshLayout.OnR
             @Override
             public void click(LiveBean.DataBean dataBean) {
                 if ("living".equals(dataBean.type)) {
-                    T.getInstance().showToast("直播");
+                    //   LiveActivity.start(getActivity(), false, true);
+                    if (CommonUtils.isLogin() == false) {
+                        LogoActivity.start(getActivity());
+                        return;
+                    }
+                    LiveRoomActivity.startAudience(getActivity(), dataBean.live_number, dataBean.rtmp_push_pull_url_json.rtmpPullUrl, true, dataBean);
+                   /* DialogMaker.showProgressDialog(getActivity(), null, "请稍等...", true, new DialogInterface.OnCancelListener() {
+                        @Override
+                        public void onCancel(DialogInterface dialog) {
+                        }
+                    }).setCanceledOnTouchOutside(false);
+                    LiveManger.getInstance().startLive( CommonUtils.getUserId(), new LiveManger.LiveCallBack() {
+                        @Override
+                        public void liveStatus(boolean status, PublishParam publishParam, int roomId) {
+                            DialogMaker.dismissProgressDialog();
+                            if (status == true)
+                                LiveRoomActivity.startLive(getActivity(), roomId+"", publishParam);
+                        }
+                    });*/
+
                 } else {
-                    T.getInstance().showToast("预告");
+                    TrailerInfoActivity.start(getActivity(), dataBean.id);
+                   /* T.getInstance().showToast("预告");
+                    DialogMaker.showProgressDialog(getActivity(), null, "请稍等...", true, new DialogInterface.OnCancelListener() {
+                        @Override
+                        public void onCancel(DialogInterface dialog) {
+                        }
+                    }).setCanceledOnTouchOutside(false);
+                    LiveManger.getInstance().startLive(CommonUtils.getUserId(), new LiveManger.LiveCallBack() {
+                        @Override
+                        public void liveStatus(boolean status, PublishParam publishParam, int roomId) {
+                            DialogMaker.dismissProgressDialog();
+                            if (status == true)
+                                LiveRoomActivity.startLive(getActivity(), roomId + "", publishParam);
+                        }
+                    });*/
+
                 }
             }
         });

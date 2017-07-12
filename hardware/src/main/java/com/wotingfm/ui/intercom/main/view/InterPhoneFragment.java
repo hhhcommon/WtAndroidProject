@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import com.wotingfm.R;
 import com.wotingfm.common.application.BSApplication;
+import com.wotingfm.common.bean.MessageEvent;
 import com.wotingfm.common.config.GlobalStateConfig;
 import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.common.constant.StringConstant;
@@ -28,6 +29,8 @@ import com.wotingfm.ui.intercom.main.simulation.SimulationInterPhoneFragment;
 import com.wotingfm.ui.main.view.MainActivity;
 import com.wotingfm.ui.intercom.scanning.activity.CaptureActivity;
 import com.wotingfm.ui.user.logo.LogoActivity;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 
@@ -174,7 +177,8 @@ public class InterPhoneFragment extends Fragment implements View.OnClickListener
                 GlobalStateConfig.mineFromType = 2;
                 GlobalStateConfig.activityA = "A";
                 GlobalStateConfig.activityB = "C";
-                MainActivity.changeThree();
+              //  MainActivity.changeThree();
+                EventBus.getDefault().post(new MessageEvent("three"));
                 Intent push = new Intent(BroadcastConstants.MINE_ACTIVITY_CHANGE);
                 Bundle bundle = new Bundle();
                 bundle.putInt("viewType", 3);

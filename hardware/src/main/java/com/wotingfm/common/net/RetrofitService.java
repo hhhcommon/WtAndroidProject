@@ -4,16 +4,24 @@ package com.wotingfm.common.net;
 import com.wotingfm.common.bean.AlbumInfo;
 import com.wotingfm.common.bean.AnchorInfo;
 import com.wotingfm.common.bean.BaseResult;
+import com.wotingfm.common.bean.CLive;
 import com.wotingfm.common.bean.Channels;
 import com.wotingfm.common.bean.Classification;
 import com.wotingfm.common.bean.HomeBanners;
 import com.wotingfm.common.bean.LiveBean;
 import com.wotingfm.common.bean.Player;
+import com.wotingfm.common.bean.Provinces;
+import com.wotingfm.common.bean.Radio;
+import com.wotingfm.common.bean.RadioInfo;
 import com.wotingfm.common.bean.Reports;
 import com.wotingfm.common.bean.Selected;
 import com.wotingfm.common.bean.SelectedMore;
 import com.wotingfm.common.bean.SerchList;
 import com.wotingfm.common.bean.Subscrible;
+import com.wotingfm.common.bean.TrailerInfo;
+import com.wotingfm.ui.intercom.main.contacts.model.Contact;
+import com.wotingfm.ui.user.login.model.Login;
+
 import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
@@ -21,6 +29,9 @@ import retrofit2.http.PUT;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 import rx.Observable;
+
+import static com.google.zxing.qrcode.decoder.ErrorCorrectionLevel.Q;
+import static com.wotingfm.R.mipmap.p;
 
 
 /**
@@ -43,6 +54,22 @@ public interface RetrofitService {
     @GET("api/listenings/player")
     Observable<Player> getPlayerList(@Query("album_id") String album_id, @Query("q") String q);
 
+    //预告详情
+    @GET("api/voice-lives/{voiceLiveId}")
+    Observable<TrailerInfo> getTrailerInfo(@Path("voiceLiveId") String voiceLiveId);
+
+    //预约
+    @POST("api/voice-lives/{id}/reservations")
+    Observable<BaseResult> reservations(@Path("id") String id);
+
+    //取消预约
+    @DELETE("api/voice-lives/{id}/reservations")
+    Observable<BaseResult> deleteReservations(@Path("id") String id);
+
+    //取消预约
+    @GET("api/listenings/radios/channels/hots")
+    Observable<BaseResult> channelsHots();
+
     //分类子页面-获取子分类
     @GET("api/listenings/channels/{id}/children-channels")
     Observable<Channels> getChannels(@Path("id") String id);
@@ -54,6 +81,10 @@ public interface RetrofitService {
     //直播模块首页列表
     @GET("api/voice-lives/editor-recommandations")
     Observable<LiveBean> getRecommandations(@Query("page") int page);
+
+    //直播模块首页列表
+    @GET("/api/voice-lives/{voiceLiveId}/status")
+    Observable<BaseResult> endLive(@Path("voiceLiveId") String voiceLiveId, @Query("user_id") String user_id, @Query("action") String action);
 
     //获取用户订阅的专辑
     @GET("api/users/{id}/subscriptions/albums")
@@ -84,11 +115,23 @@ public interface RetrofitService {
 
     //订阅专辑
     @POST("api/listenings/albums/{id}/subscriptions")
-    Observable<BaseResult> subscriptionsAlbums();
+    Observable<BaseResult> subscriptionsAlbums(@Path("id") String albumsId);
+
+    //订阅电台
+    @POST("api/listenings/radios/channels/{channelId}/subscriptions")
+    Observable<BaseResult> subscriptionsRadio(@Path("channelId") String channelId);
+
+    //取消订阅电台
+    @DELETE("api/listenings/radios/channels/{channelId}/subscriptions")
+    Observable<BaseResult> deleteSubscriptionsRadio(@Path("channelId") String channelId);
+
+    //创建直播
+    @POST("api/voice-lives")
+    Observable<CLive> carteLive(@Query("user_id") String user_id);
 
     //取消订阅
     @DELETE("api/listenings/albums/{id}/subscriptions")
-    Observable<BaseResult> deleteSubscriptionsAlbums();
+    Observable<BaseResult> deleteSubscriptionsAlbums(@Path("id") String albumsId);
 
     //关注
     @POST("/api/fans")
@@ -147,6 +190,26 @@ public interface RetrofitService {
     //相似推荐
     @GET("api/listenings/albums/{id}/similars")
     Observable<Subscrible> albumsSimilars(@Path("id") String id);
+
+    //获取省／国家／地区电台
+    @GET("api/listenings/radios/channels/")
+    Observable<Radio> getChannelsRadio(@Query("channel_type") String channel_type, @Query("page") int page);
+
+    //电台列表 热门
+    @GET("api/listenings/radios/channels/hots")
+    Observable<Radio> getChannelsRadioHots(@Query("scope") String scope);
+
+    //电台列表
+    @GET("api/listenings/radios/channels/hots")
+    Observable<Radio> getChannelsRadioList(@Query("scope") String scope,@Query("page") int page);
+
+    //获取省市列表
+    @GET("/api/listenings/radios/channels/provinces")
+    Observable<Provinces> getProvinces();
+
+    //获取省市列表
+    @GET("api/listenings/radios/channels/{id}")
+    Observable<RadioInfo> getRadioInfo(@Path("id") String id);
 
     //获取专辑所有节目
     @GET("api/listenings/albums/{id}/singles")

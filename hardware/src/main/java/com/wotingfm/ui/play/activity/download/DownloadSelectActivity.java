@@ -19,11 +19,13 @@ import com.wotingfm.R;
 import com.wotingfm.common.adapter.albumsAdapter.AlbumsAdapter;
 import com.wotingfm.common.adapter.albumsAdapter.AlbumsInfoProgramAdapter;
 import com.wotingfm.common.adapter.downloadAdapter.DownloadSelectAdapter;
+import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.bean.Player;
 import com.wotingfm.common.bean.Subscrible;
 import com.wotingfm.common.net.RetrofitUtils;
 import com.wotingfm.common.utils.DownloadUtils;
 import com.wotingfm.common.utils.T;
+import com.wotingfm.ui.base.baseactivity.AppManager;
 import com.wotingfm.ui.base.baseactivity.NoTitleBarBaseActivity;
 import com.wotingfm.ui.play.activity.albums.AlbumsListActivity;
 
@@ -209,9 +211,11 @@ public class DownloadSelectActivity extends NoTitleBarBaseActivity implements Vi
                 for (int w = 0, size = singlesBeanListSelect.size(); w < size; w++) {
                     DownloadUtils.downloadManger(singlesBeanListSelect.get(w));
                 }
+                AppManager.getAppManager().finishActivity(this);
                 finish();
                 break;
             case R.id.tvCancel:
+                AppManager.getAppManager().finishActivity(this);
                 finish();
                 break;
             case R.id.largeLabelSelect:

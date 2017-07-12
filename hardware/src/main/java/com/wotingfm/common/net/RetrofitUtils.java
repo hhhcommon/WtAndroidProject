@@ -3,26 +3,31 @@ package com.wotingfm.common.net;
 
 import android.text.TextUtils;
 
+import com.wotingfm.R;
 import com.wotingfm.common.bean.AlbumInfo;
 import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.bean.AlbumsBean;
 import com.wotingfm.common.bean.AnchorInfo;
 import com.wotingfm.common.bean.BaseResult;
+import com.wotingfm.common.bean.CLive;
 import com.wotingfm.common.bean.Channels;
+import com.wotingfm.common.bean.ChannelsBean;
 import com.wotingfm.common.bean.Classification;
 import com.wotingfm.common.bean.HomeBanners;
 import com.wotingfm.common.bean.LiveBean;
 import com.wotingfm.common.bean.Player;
+import com.wotingfm.common.bean.Provinces;
+import com.wotingfm.common.bean.Radio;
+import com.wotingfm.common.bean.RadioInfo;
 import com.wotingfm.common.bean.Reports;
 import com.wotingfm.common.bean.Selected;
 import com.wotingfm.common.bean.SelectedMore;
 import com.wotingfm.common.bean.SerchList;
 import com.wotingfm.common.bean.Subscrible;
-import com.wotingfm.ui.play.activity.albums.fragment.AlbumsInfoFragment;
+import com.wotingfm.common.bean.TrailerInfo;
 import com.wotingfm.common.constant.StringConstant;
 
 import java.io.IOException;
-import java.nio.channels.Channel;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -39,6 +44,7 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 
+import static android.R.attr.type;
 import static com.wotingfm.common.net.RetrofitService.BASE_URL;
 
 
@@ -48,7 +54,7 @@ import static com.wotingfm.common.net.RetrofitService.BASE_URL;
 
 public class RetrofitUtils {
 
-    private static final int DEFAULT_TIMEOUT = 3000;
+    private static final int DEFAULT_TIMEOUT = 20000;
     private RetrofitService retrofitService;
     public static RetrofitUtils INSTANCE;
     private OkHttpClient.Builder builder;
@@ -154,6 +160,26 @@ public class RetrofitUtils {
                 });
     }
 
+    public Observable<Object> reservations(String uid) {
+        return retrofitService.reservations(uid)
+                .map(new Func1<Object, Object>() {
+                    @Override
+                    public Object call(Object s) {
+                        return s;
+                    }
+                });
+    }
+
+    public Observable<Object> deleteReservations(String pid) {
+        return retrofitService.deleteReservations(pid)
+                .map(new Func1<Object, Object>() {
+                    @Override
+                    public Object call(Object s) {
+                        return s;
+                    }
+                });
+    }
+
     public Observable<List<Classification.DataBeanX>> getClassifications() {
         return retrofitService.getClassifications()
                 .map(new Func1<Classification, List<Classification.DataBeanX>>() {
@@ -193,15 +219,41 @@ public class RetrofitUtils {
                 });
     }
 
-    public Observable<List<Channels.DataBean.ChannelsBean>> getChannels(String albums) {
+    public Observable<List<ChannelsBean>> getChannels(String albums) {
         return retrofitService.getChannels(albums)
-                .map(new Func1<Channels, List<Channels.DataBean.ChannelsBean>>() {
+                .map(new Func1<Channels, List<ChannelsBean>>() {
                     @Override
-                    public List<Channels.DataBean.ChannelsBean> call(Channels player) {
+                    public List<ChannelsBean> call(Channels player) {
                         if (player.ret != 0) {
                             throw new IllegalStateException(player.msg);
                         }
                         return player.data.channels;
+                    }
+                });
+    }
+
+    public Observable<CLive.DataBean.VoiceLiveBean> carteLive(String userId) {
+        return retrofitService.carteLive(userId)
+                .map(new Func1<CLive, CLive.DataBean.VoiceLiveBean>() {
+                    @Override
+                    public CLive.DataBean.VoiceLiveBean call(CLive player) {
+                        if (player.ret != 0) {
+                            throw new IllegalStateException(player.msg);
+                        }
+                        return player.data.voice_live;
+                    }
+                });
+    }
+
+    public Observable<TrailerInfo.DataBean.VoiceLiveBean> getTrailerInfo(String userId) {
+        return retrofitService.getTrailerInfo(userId)
+                .map(new Func1<TrailerInfo, TrailerInfo.DataBean.VoiceLiveBean>() {
+                    @Override
+                    public TrailerInfo.DataBean.VoiceLiveBean call(TrailerInfo player) {
+                        if (player.ret != 0) {
+                            throw new IllegalStateException(player.msg);
+                        }
+                        return player.data.voice_live;
                     }
                 });
     }
@@ -233,6 +285,70 @@ public class RetrofitUtils {
                 });
     }
 
+    public Observable<RadioInfo.DataBean> getRadioInfo(String pid) {
+        return retrofitService.getRadioInfo(pid)
+                .map(new Func1<RadioInfo, RadioInfo.DataBean>() {
+                    @Override
+                    public RadioInfo.DataBean call(RadioInfo player) {
+                        if (player.ret != 0) {
+                            throw new IllegalStateException(player.msg);
+                        }
+                        return player.data;
+                    }
+                });
+    }
+
+    public Observable<List<Provinces.DataBean.ProvincesBean>> getProvinces() {
+        return retrofitService.getProvinces()
+                .map(new Func1<Provinces, List<Provinces.DataBean.ProvincesBean>>() {
+                    @Override
+                    public List<Provinces.DataBean.ProvincesBean> call(Provinces player) {
+                        if (player.ret != 0) {
+                            throw new IllegalStateException(player.msg);
+                        }
+                        return player.data.provinces;
+                    }
+                });
+    }
+
+    public Observable<List<ChannelsBean>> getChannelsRadio(String type, int page) {
+        return retrofitService.getChannelsRadio(type, page)
+                .map(new Func1<Radio, List<ChannelsBean>>() {
+                    @Override
+                    public List<ChannelsBean> call(Radio player) {
+                        if (player.ret != 0) {
+                            throw new IllegalStateException(player.msg);
+                        }
+                        return player.data.channels;
+                    }
+                });
+    }
+
+    public Observable<List<ChannelsBean>> getChannelsRadioHots(String scope) {
+        return retrofitService.getChannelsRadioHots(scope)
+                .map(new Func1<Radio, List<ChannelsBean>>() {
+                    @Override
+                    public List<ChannelsBean> call(Radio player) {
+                        if (player.ret != 0) {
+                            throw new IllegalStateException(player.msg);
+                        }
+                        return player.data.channels;
+                    }
+                });
+    }
+
+    public Observable<List<ChannelsBean>> getChannelsRadioList(String scope,int page) {
+        return retrofitService.getChannelsRadioList(scope,page)
+                .map(new Func1<Radio, List<ChannelsBean>>() {
+                    @Override
+                    public List<ChannelsBean> call(Radio player) {
+                        if (player.ret != 0) {
+                            throw new IllegalStateException(player.msg);
+                        }
+                        return player.data.channels;
+                    }
+                });
+    }
     public Observable<List<LiveBean.DataBean>> getRecommandations(int page) {
         return retrofitService.getRecommandations(page)
                 .map(new Func1<LiveBean, List<LiveBean.DataBean>>() {
@@ -321,8 +437,8 @@ public class RetrofitUtils {
                 });
     }
 
-    public Observable<BaseResult> subscriptionsAlbums() {
-        return retrofitService.subscriptionsAlbums()
+    public Observable<BaseResult> endLive(String voiceLiveId, String user_id) {
+        return retrofitService.endLive(voiceLiveId, user_id, "end")
                 .map(new Func1<BaseResult, BaseResult>() {
                     @Override
                     public BaseResult call(BaseResult s) {
@@ -331,8 +447,38 @@ public class RetrofitUtils {
                 });
     }
 
-    public Observable<BaseResult> deleteSubscriptionsAlbums() {
-        return retrofitService.deleteSubscriptionsAlbums()
+    public Observable<BaseResult> subscriptionsAlbums(String albumsId) {
+        return retrofitService.subscriptionsAlbums(albumsId)
+                .map(new Func1<BaseResult, BaseResult>() {
+                    @Override
+                    public BaseResult call(BaseResult s) {
+                        return s;
+                    }
+                });
+    }
+
+    public Observable<BaseResult> deleteSubscriptionsAlbums(String albumsId) {
+        return retrofitService.deleteSubscriptionsAlbums(albumsId)
+                .map(new Func1<BaseResult, BaseResult>() {
+                    @Override
+                    public BaseResult call(BaseResult s) {
+                        return s;
+                    }
+                });
+    }
+
+    public Observable<BaseResult> subscriptionsRadio(String albumsId) {
+        return retrofitService.subscriptionsRadio(albumsId)
+                .map(new Func1<BaseResult, BaseResult>() {
+                    @Override
+                    public BaseResult call(BaseResult s) {
+                        return s;
+                    }
+                });
+    }
+
+    public Observable<BaseResult> deleteSubscriptionsRadio(String albumsId) {
+        return retrofitService.deleteSubscriptionsRadio(albumsId)
                 .map(new Func1<BaseResult, BaseResult>() {
                     @Override
                     public BaseResult call(BaseResult s) {

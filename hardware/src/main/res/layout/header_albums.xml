@@ -10,7 +10,7 @@
         android:layout_height="210dp"
         android:scaleType="centerCrop" />
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="210dp"
         android:layout_gravity="center|top"
@@ -22,8 +22,8 @@
             android:id="@+id/ivPhoto"
             android:layout_width="90dp"
             android:layout_height="90dp"
-            android:layout_gravity="center|top"
-            android:layout_marginTop="50dp"
+            android:layout_gravity="center"
+            android:layout_centerInParent="true"
             android:scaleType="centerCrop"
             android:src="@mipmap/oval_defut_other" />
 
@@ -33,6 +33,7 @@
             android:layout_height="32dp"
             android:layout_gravity="center"
             android:layout_marginTop="16dp"
+            android:visibility="gone"
             android:background="@drawable/anchor_personal_n"
             android:drawableLeft="@mipmap/icon_subscription_n"
             android:gravity="center"
@@ -42,5 +43,5 @@
             android:text="订阅(01000)"
             android:textColor="#ffffff"
             android:textSize="14sp" />
-    </LinearLayout>
+    </RelativeLayout>
 </FrameLayout>

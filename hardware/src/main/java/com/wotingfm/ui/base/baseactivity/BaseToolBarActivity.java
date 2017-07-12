@@ -19,6 +19,7 @@ import android.view.inputmethod.InputMethodManager;
 import com.woting.commonplat.widget.LoadingDialog;
 import com.woting.commonplat.widget.WTToolbar;
 import com.wotingfm.R;
+import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.utils.ProgressDialogUtils;
 
 import butterknife.ButterKnife;
@@ -65,6 +66,7 @@ public abstract class BaseToolBarActivity extends BaseActivity implements View.O
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        AppManager.getAppManager().finishActivity(this);
         if (item.getItemId() == android.R.id.home && IS_BACK == false) {
             if (callBack != null)
                 callBack.call();

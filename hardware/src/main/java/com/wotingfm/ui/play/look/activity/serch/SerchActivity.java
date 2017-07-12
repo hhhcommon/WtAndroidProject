@@ -20,7 +20,9 @@ import android.widget.TextView;
 import com.woting.commonplat.manager.VoiceRecognizer;
 import com.wotingfm.R;
 import com.wotingfm.common.adapter.MyAdapter;
+import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.constant.BroadcastConstants;
+import com.wotingfm.ui.base.baseactivity.AppManager;
 import com.wotingfm.ui.base.baseactivity.NoTitleBarBaseActivity;
 import com.wotingfm.ui.base.basefragment.BaseFragment;
 import com.wotingfm.ui.play.look.activity.LookListActivity;
@@ -101,6 +103,7 @@ public class SerchActivity extends NoTitleBarBaseActivity {
         tvCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                AppManager.getAppManager().finishActivity(SerchActivity.this);
                 finish();
             }
         });

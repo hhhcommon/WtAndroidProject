@@ -54,6 +54,8 @@
                 android:layout_gravity="center|left"
                 android:layout_marginTop="4dp"
                 android:gravity="center"
+                android:singleLine="true"
+                android:ellipsize="end"
                 android:text="发现更多节目"
                 android:textColor="#959698"
                 android:textSize="12sp" />
