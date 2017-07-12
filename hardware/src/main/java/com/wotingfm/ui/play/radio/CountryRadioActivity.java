@@ -22,6 +22,7 @@ import com.wotingfm.common.adapter.albumsAdapter.AlbumsAdapter;
 import com.wotingfm.common.adapter.radioAdapter.RadioAdapter;
 import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.bean.AlbumsBean;
+import com.wotingfm.common.bean.ChannelsBean;
 import com.wotingfm.common.bean.Radio;
 import com.wotingfm.common.config.LocationInfo;
 import com.wotingfm.common.net.RetrofitUtils;
@@ -63,7 +64,7 @@ public class CountryRadioActivity extends BaseToolBarActivity implements OnLoadM
 
     private LoadMoreFooterView loadMoreFooterView;
     private RadioAdapter mAdapter;
-    private List<Radio.DataBean.ChannelsBean> albumsBeanList = new ArrayList<>();
+    private List<ChannelsBean> albumsBeanList = new ArrayList<>();
 
     @Override
     public void initView() {
@@ -76,8 +77,9 @@ public class CountryRadioActivity extends BaseToolBarActivity implements OnLoadM
         mRecyclerView.setLayoutManager(layoutManager);
         mAdapter = new RadioAdapter(this, albumsBeanList, new RadioAdapter.RadioClick() {
             @Override
-            public void clickAlbums(Radio.DataBean.ChannelsBean singlesBean) {
-                PlayerActivity.start(CountryRadioActivity.this, singlesBean, null);
+            public void clickAlbums(ChannelsBean singlesBean) {
+               // PlayerActivity.start(CountryRadioActivity.this, singlesBean, null);
+                RadioInfoActivity.start(CountryRadioActivity.this, singlesBean.title, singlesBean.id);
             }
         });
         mRecyclerView.setIAdapter(mAdapter);
@@ -100,9 +102,9 @@ public class CountryRadioActivity extends BaseToolBarActivity implements OnLoadM
         RetrofitUtils.getInstance().getChannelsRadio("nations", mPage)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Action1<List<Radio.DataBean.ChannelsBean>>() {
+                .subscribe(new Action1<List<ChannelsBean>>() {
                     @Override
-                    public void call(List<Radio.DataBean.ChannelsBean> albumsBeen) {
+                    public void call(List<ChannelsBean> albumsBeen) {
                         mRecyclerView.setRefreshing(false);
                         if (albumsBeen != null && !albumsBeen.isEmpty()) {
                             mPage++;
@@ -128,9 +130,9 @@ public class CountryRadioActivity extends BaseToolBarActivity implements OnLoadM
         RetrofitUtils.getInstance().getChannelsRadio("nations", mPage)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Action1<List<Radio.DataBean.ChannelsBean>>() {
+                .subscribe(new Action1<List<ChannelsBean>>() {
                     @Override
-                    public void call(List<Radio.DataBean.ChannelsBean> albumsBeen) {
+                    public void call(List<ChannelsBean> albumsBeen) {
                         mRecyclerView.setRefreshing(false);
                         if (albumsBeen != null && !albumsBeen.isEmpty()) {
                             mPage++;

@@ -195,9 +195,13 @@ public interface RetrofitService {
     @GET("api/listenings/radios/channels/")
     Observable<Radio> getChannelsRadio(@Query("channel_type") String channel_type, @Query("page") int page);
 
+    //电台列表 热门
+    @GET("api/listenings/radios/channels/hots")
+    Observable<Radio> getChannelsRadioHots(@Query("scope") String scope);
+
     //电台列表
     @GET("api/listenings/radios/channels/hots")
-    Observable<Radio> getChannelsRadioHots();
+    Observable<Radio> getChannelsRadioList(@Query("scope") String scope,@Query("page") int page);
 
     //获取省市列表
     @GET("/api/listenings/radios/channels/provinces")

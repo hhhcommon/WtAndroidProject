@@ -1,8 +1,10 @@
-package com.wotingfm.ui.play.radio;
+package com.wotingfm.ui.play.look.activity;
 
-import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import com.woting.commonplat.amine.ARecyclerView;
@@ -11,13 +13,14 @@ import com.woting.commonplat.amine.OnLoadMoreListener;
 import com.woting.commonplat.amine.OnRefreshListener;
 import com.woting.commonplat.widget.LoadFrameLayout;
 import com.wotingfm.R;
-import com.wotingfm.common.adapter.radioAdapter.RadioAdapter;
-import com.wotingfm.common.application.BSApplication;
+import com.wotingfm.common.adapter.findHome.ItemSelected1Adapter;
+import com.wotingfm.common.adapter.findHome.RadioStationAdapter;
+import com.wotingfm.common.bean.AlbumsBean;
 import com.wotingfm.common.bean.ChannelsBean;
 import com.wotingfm.common.bean.Radio;
-import com.wotingfm.common.bean.RadioInfo;
 import com.wotingfm.common.net.RetrofitUtils;
 import com.wotingfm.ui.base.baseactivity.BaseToolBarActivity;
+import com.wotingfm.ui.play.radio.RadioInfoActivity;
 import com.wotingfm.ui.test.PlayerActivity;
 
 import java.util.ArrayList;
@@ -28,50 +31,50 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 
+import static android.R.attr.type;
+
 /**
- * Created by amine on 2017/7/6.
- * 国家台
+ * Created by amine on 2017/6/22.
+ * 精选，每日  列表，
  */
 
-public class ProvincesAndCitiesListRadioActivity extends BaseToolBarActivity implements OnLoadMoreListener, OnRefreshListener {
+public class RadioMoreActivity extends BaseToolBarActivity implements OnLoadMoreListener, OnRefreshListener {
+
     @BindView(R.id.mRecyclerView)
     ARecyclerView mRecyclerView;
     @BindView(R.id.loadLayout)
     LoadFrameLayout loadLayout;
 
-    public static void start(Activity activity, String title) {
-        Intent intent = new Intent(activity, ProvincesAndCitiesListRadioActivity.class);
-        intent.putExtra("title", title);
+    public static void start(Context activity) {
+        Intent intent = new Intent(activity, RadioMoreActivity.class);
         activity.startActivity(intent);
     }
 
     @Override
     public int getLayoutId() {
-        return R.layout.activity_provinces_list_radio;
+        return R.layout.activity_radio_more;
     }
 
     private LoadMoreFooterView loadMoreFooterView;
-    private RadioAdapter mAdapter;
-    private List<ChannelsBean> albumsBeanList = new ArrayList<>();
+    private RadioStationAdapter selectedAdapter;
 
     @Override
     public void initView() {
-        final String title = getIntent().getStringExtra("title");
-        setTitle(title + "台");
+        setTitle("热门电台");
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         loadMoreFooterView = (LoadMoreFooterView) mRecyclerView.getLoadMoreFooterView();
         mRecyclerView.setOnLoadMoreListener(this);
         mRecyclerView.setOnRefreshListener(this);
         mRecyclerView.setLayoutManager(layoutManager);
-        mAdapter = new RadioAdapter(this, albumsBeanList, new RadioAdapter.RadioClick() {
+        selectedAdapter = new RadioStationAdapter(this, datas, new RadioStationAdapter.RadioStationClick() {
             @Override
-            public void clickAlbums(ChannelsBean singlesBean) {
-                RadioInfoActivity.start(ProvincesAndCitiesListRadioActivity.this, title, singlesBean.id);
-                //     PlayerActivity.start(ProvincesAndCitiesListRadioActivity.this, singlesBean, null);
+            public void click(ChannelsBean dataBean) {
+                //PlayerActivity.start(getActivity(), dataBean, null);
+                RadioInfoActivity.start(RadioMoreActivity.this, dataBean.title, dataBean.id);
             }
         });
-        mRecyclerView.setIAdapter(mAdapter);
+        mRecyclerView.setIAdapter(selectedAdapter);
         loadLayout.findViewById(R.id.btnTryAgain).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -83,50 +86,44 @@ public class ProvincesAndCitiesListRadioActivity extends BaseToolBarActivity imp
         refresh();
     }
 
+    private List<ChannelsBean> datas = new ArrayList<>();
     private int mPage;
-
 
     private void refresh() {
         mPage = 1;
-        RetrofitUtils.getInstance().getChannelsRadio("provinces", mPage)
+        RetrofitUtils.getInstance().getChannelsRadioList("all", mPage)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Action1<List<ChannelsBean>>() {
                     @Override
-                    public void call(List<ChannelsBean> albumsBeen) {
+                    public void call(List<ChannelsBean> dataBeanXes) {
                         mRecyclerView.setRefreshing(false);
-                        if (albumsBeen != null && !albumsBeen.isEmpty()) {
-                            mPage++;
-                            albumsBeanList.clear();
-                            albumsBeanList.addAll(albumsBeen);
-                            loadLayout.showContentView();
-                            mAdapter.notifyDataSetChanged();
-                        } else {
-                            loadLayout.showEmptyView();
-                        }
+                        loadLayout.showContentView();
+                        datas.clear();
+                        datas.addAll(dataBeanXes);
+                        selectedAdapter.notifyDataSetChanged();
                     }
                 }, new Action1<Throwable>() {
                     @Override
                     public void call(Throwable throwable) {
-                        loadLayout.showErrorView();
                         throwable.printStackTrace();
+                        loadLayout.showErrorView();
                     }
                 });
-
     }
 
     private void loadMore() {
-        RetrofitUtils.getInstance().getChannelsRadio("provinces", mPage)
+        RetrofitUtils.getInstance().getChannelsRadioList("all", mPage)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Action1<List<ChannelsBean>>() {
                     @Override
-                    public void call(List<ChannelsBean> albumsBeen) {
+                    public void call(List<ChannelsBean> dataBeanXes) {
                         mRecyclerView.setRefreshing(false);
-                        if (albumsBeen != null && !albumsBeen.isEmpty()) {
+                        if (dataBeanXes != null && !dataBeanXes.isEmpty()) {
                             mPage++;
-                            albumsBeanList.addAll(albumsBeen);
-                            mAdapter.notifyDataSetChanged();
+                            datas.addAll(dataBeanXes);
+                            selectedAdapter.notifyDataSetChanged();
                             loadMoreFooterView.setStatus(LoadMoreFooterView.Status.GONE);
                         } else {
                             loadMoreFooterView.setStatus(LoadMoreFooterView.Status.THE_END);
@@ -143,7 +140,7 @@ public class ProvincesAndCitiesListRadioActivity extends BaseToolBarActivity imp
 
     @Override
     public void onLoadMore(View loadMoreView) {
-        if (loadMoreFooterView.canLoadMore() && mAdapter.getItemCount() > 0) {
+        if (loadMoreFooterView.canLoadMore() && selectedAdapter.getItemCount() > 0) {
             loadMoreFooterView.setStatus(LoadMoreFooterView.Status.LOADING);
             loadMore();
         }

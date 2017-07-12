@@ -11,6 +11,7 @@ import com.wotingfm.common.bean.AnchorInfo;
 import com.wotingfm.common.bean.BaseResult;
 import com.wotingfm.common.bean.CLive;
 import com.wotingfm.common.bean.Channels;
+import com.wotingfm.common.bean.ChannelsBean;
 import com.wotingfm.common.bean.Classification;
 import com.wotingfm.common.bean.HomeBanners;
 import com.wotingfm.common.bean.LiveBean;
@@ -218,11 +219,11 @@ public class RetrofitUtils {
                 });
     }
 
-    public Observable<List<Channels.DataBean.ChannelsBean>> getChannels(String albums) {
+    public Observable<List<ChannelsBean>> getChannels(String albums) {
         return retrofitService.getChannels(albums)
-                .map(new Func1<Channels, List<Channels.DataBean.ChannelsBean>>() {
+                .map(new Func1<Channels, List<ChannelsBean>>() {
                     @Override
-                    public List<Channels.DataBean.ChannelsBean> call(Channels player) {
+                    public List<ChannelsBean> call(Channels player) {
                         if (player.ret != 0) {
                             throw new IllegalStateException(player.msg);
                         }
@@ -310,11 +311,11 @@ public class RetrofitUtils {
                 });
     }
 
-    public Observable<List<Radio.DataBean.ChannelsBean>> getChannelsRadio(String type, int page) {
+    public Observable<List<ChannelsBean>> getChannelsRadio(String type, int page) {
         return retrofitService.getChannelsRadio(type, page)
-                .map(new Func1<Radio, List<Radio.DataBean.ChannelsBean>>() {
+                .map(new Func1<Radio, List<ChannelsBean>>() {
                     @Override
-                    public List<Radio.DataBean.ChannelsBean> call(Radio player) {
+                    public List<ChannelsBean> call(Radio player) {
                         if (player.ret != 0) {
                             throw new IllegalStateException(player.msg);
                         }
@@ -323,11 +324,11 @@ public class RetrofitUtils {
                 });
     }
 
-    public Observable<List<Radio.DataBean.ChannelsBean>> getChannelsRadioHots() {
-        return retrofitService.getChannelsRadioHots()
-                .map(new Func1<Radio, List<Radio.DataBean.ChannelsBean>>() {
+    public Observable<List<ChannelsBean>> getChannelsRadioHots(String scope) {
+        return retrofitService.getChannelsRadioHots(scope)
+                .map(new Func1<Radio, List<ChannelsBean>>() {
                     @Override
-                    public List<Radio.DataBean.ChannelsBean> call(Radio player) {
+                    public List<ChannelsBean> call(Radio player) {
                         if (player.ret != 0) {
                             throw new IllegalStateException(player.msg);
                         }
@@ -336,6 +337,18 @@ public class RetrofitUtils {
                 });
     }
 
+    public Observable<List<ChannelsBean>> getChannelsRadioList(String scope,int page) {
+        return retrofitService.getChannelsRadioList(scope,page)
+                .map(new Func1<Radio, List<ChannelsBean>>() {
+                    @Override
+                    public List<ChannelsBean> call(Radio player) {
+                        if (player.ret != 0) {
+                            throw new IllegalStateException(player.msg);
+                        }
+                        return player.data.channels;
+                    }
+                });
+    }
     public Observable<List<LiveBean.DataBean>> getRecommandations(int page) {
         return retrofitService.getRecommandations(page)
                 .map(new Func1<LiveBean, List<LiveBean.DataBean>>() {

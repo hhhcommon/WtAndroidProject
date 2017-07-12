@@ -21,6 +21,7 @@ import com.wotingfm.common.adapter.albumsAdapter.AlbumsAdapter;
 import com.wotingfm.common.adapter.radioAdapter.RadioAdapter;
 import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.bean.AlbumsBean;
+import com.wotingfm.common.bean.ChannelsBean;
 import com.wotingfm.common.bean.Radio;
 import com.wotingfm.common.config.LocationInfo;
 import com.woting.commonplat.widget.LoadFrameLayout;
@@ -66,7 +67,7 @@ public class LocalRadioActivity extends BaseToolBarActivity implements OnLoadMor
     private LoadMoreFooterView loadMoreFooterView;
     private RadioAdapter mAdapter;
     private HeaderAndFooterWrapper mHeaderAndFooterWrapper;
-    private List<Radio.DataBean.ChannelsBean> albumsBeanList = new ArrayList<>();
+    private List<ChannelsBean> albumsBeanList = new ArrayList<>();
     private View headview;
     private TextView tvLocal;
 
@@ -84,8 +85,9 @@ public class LocalRadioActivity extends BaseToolBarActivity implements OnLoadMor
         mRecyclerView.setLayoutManager(layoutManager);
         mAdapter = new RadioAdapter(this, albumsBeanList, new RadioAdapter.RadioClick() {
             @Override
-            public void clickAlbums(Radio.DataBean.ChannelsBean singlesBean) {
-                PlayerActivity.start(LocalRadioActivity.this, singlesBean, null);
+            public void clickAlbums(ChannelsBean singlesBean) {
+                RadioInfoActivity.start(LocalRadioActivity.this, singlesBean.title, singlesBean.id);
+              //  PlayerActivity.start(LocalRadioActivity.this, singlesBean, null);
             }
         });
         mHeaderAndFooterWrapper = new HeaderAndFooterWrapper(mAdapter);
@@ -139,9 +141,9 @@ public class LocalRadioActivity extends BaseToolBarActivity implements OnLoadMor
         RetrofitUtils.getInstance().getChannelsRadio("local_areas", mPage)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Action1<List<Radio.DataBean.ChannelsBean>>() {
+                .subscribe(new Action1<List<ChannelsBean>>() {
                     @Override
-                    public void call(List<Radio.DataBean.ChannelsBean> albumsBeen) {
+                    public void call(List<ChannelsBean> albumsBeen) {
                         mRecyclerView.setRefreshing(false);
                         if (albumsBeen != null && !albumsBeen.isEmpty()) {
                             mPage++;
@@ -167,9 +169,9 @@ public class LocalRadioActivity extends BaseToolBarActivity implements OnLoadMor
         RetrofitUtils.getInstance().getChannelsRadio("local_areas", mPage)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Action1<List<Radio.DataBean.ChannelsBean>>() {
+                .subscribe(new Action1<List<ChannelsBean>>() {
                     @Override
-                    public void call(List<Radio.DataBean.ChannelsBean> albumsBeen) {
+                    public void call(List<ChannelsBean> albumsBeen) {
                         mRecyclerView.setRefreshing(false);
                         if (albumsBeen != null && !albumsBeen.isEmpty()) {
                             mPage++;

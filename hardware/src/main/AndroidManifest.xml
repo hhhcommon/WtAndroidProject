@@ -198,6 +198,11 @@
             android:name=".ui.play.live.TrailerInfoActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
+        <!-- 热门电台列表 -->
+        <activity
+            android:name=".ui.play.look.activity.RadioMoreActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" />
         <activity
             android:name="com.netease.nim.live.activity.InputActivity"
             android:theme="@style/InputActivityTheme"

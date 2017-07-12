@@ -35,6 +35,7 @@ import com.woting.commonplat.widget.LoadFrameLayout;
 import com.wotingfm.R;
 import com.wotingfm.common.adapter.PlayerAdapter;
 import com.wotingfm.common.application.BSApplication;
+import com.wotingfm.common.bean.ChannelsBean;
 import com.wotingfm.common.bean.MessageEvent;
 import com.wotingfm.common.bean.Player;
 import com.wotingfm.common.bean.Radio;
@@ -104,7 +105,7 @@ public class PlayerActivity extends NoTitleBarBaseActivity implements View.OnCli
         activity.startActivity(intent);
     }
 
-    public static void start(Context activity, Radio.DataBean.ChannelsBean channelsBean, String serchQ) {
+    public static void start(Context activity, ChannelsBean channelsBean, String serchQ) {
         EventBus.getDefault().postSticky("stop");
         AppManager.getAppManager().finishAllActivity();
         Intent intent = new Intent(activity, PlayerActivity.class);
@@ -133,7 +134,7 @@ public class PlayerActivity extends NoTitleBarBaseActivity implements View.OnCli
         return R.layout.activity_player;
     }
 
-    private Radio.DataBean.ChannelsBean channelsBean;
+    private ChannelsBean channelsBean;
     private static final int MESSAGE_ID_RECONNECTING = 0x01;
 
     private PLMediaPlayer mMediaPlayer;
@@ -192,7 +193,7 @@ public class PlayerActivity extends NoTitleBarBaseActivity implements View.OnCli
         albumsId = intent.getStringExtra("albumsId");
         loadLayout.showLoadingView();
         SinglesBase singlesBase = (SinglesBase) intent.getSerializableExtra("singlesBase");
-        channelsBean = (Radio.DataBean.ChannelsBean) intent.getSerializableExtra("channelsBean");
+        channelsBean = (ChannelsBean) intent.getSerializableExtra("channelsBean");
         relatiBottom.setVisibility(View.VISIBLE);
         if (singlesBase != null) {
             loadLayout.showContentView();

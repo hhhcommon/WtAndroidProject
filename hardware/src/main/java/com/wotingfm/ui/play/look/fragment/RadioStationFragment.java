@@ -14,6 +14,7 @@ import com.woting.commonplat.widget.LoadFrameLayout;
 import com.wotingfm.R;
 import com.wotingfm.common.adapter.findHome.RadioStationAdapter;
 import com.wotingfm.common.adapter.findHome.SelectedAdapter;
+import com.wotingfm.common.bean.ChannelsBean;
 import com.wotingfm.common.bean.HomeBanners;
 import com.wotingfm.common.bean.Radio;
 import com.wotingfm.common.bean.Radiostation;
@@ -21,9 +22,11 @@ import com.wotingfm.common.bean.Selected;
 import com.wotingfm.common.net.RetrofitUtils;
 import com.wotingfm.common.view.BannerView;
 import com.wotingfm.ui.base.basefragment.BaseFragment;
+import com.wotingfm.ui.play.look.activity.RadioMoreActivity;
 import com.wotingfm.ui.play.radio.CountryRadioActivity;
 import com.wotingfm.ui.play.radio.LocalRadioActivity;
 import com.wotingfm.ui.play.radio.ProvincesAndCitiesActivity;
+import com.wotingfm.ui.play.radio.RadioInfoActivity;
 import com.wotingfm.ui.test.PlayerActivity;
 import com.zhy.adapter.recyclerview.wrapper.HeaderAndFooterWrapper;
 
@@ -74,8 +77,9 @@ public class RadioStationFragment extends BaseFragment implements SwipeRefreshLa
         mSwipeLayout.setOnRefreshListener(this);
         RadioStationAdapter selectedAdapter = new RadioStationAdapter(getActivity(), datas, new RadioStationAdapter.RadioStationClick() {
             @Override
-            public void click(Radio.DataBean.ChannelsBean dataBean) {
-                PlayerActivity.start(getActivity(), dataBean, null);
+            public void click(ChannelsBean dataBean) {
+                // PlayerActivity.start(getActivity(), dataBean, null);
+                RadioInfoActivity.start(getActivity(), dataBean.title, dataBean.id);
             }
         });
         headview = LayoutInflater.from(getActivity()).inflate(R.layout.headview_radiostation, mRecyclerView, false);
@@ -88,6 +92,7 @@ public class RadioStationFragment extends BaseFragment implements SwipeRefreshLa
         tvLocal = (TextView) headview.findViewById(R.id.tvLocal);
         tvCountry = (TextView) headview.findViewById(R.id.tvCountry);
         tvProvince = (TextView) headview.findViewById(R.id.tvProvince);
+        tvTitle = (TextView) headview.findViewById(R.id.tvTitle);
         loadLayout.showLoadingView();
         loadLayout.findViewById(R.id.btnTryAgain).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -102,9 +107,10 @@ public class RadioStationFragment extends BaseFragment implements SwipeRefreshLa
         tvLocal.setOnClickListener(this);
         tvCountry.setOnClickListener(this);
         tvProvince.setOnClickListener(this);
+        tvTitle.setOnClickListener(this);
     }
 
-    private TextView tvLocal, tvCountry, tvProvince;
+    private TextView tvLocal, tvCountry, tvProvince, tvTitle;
 
 
     @Override
@@ -135,7 +141,7 @@ public class RadioStationFragment extends BaseFragment implements SwipeRefreshLa
         super.onHiddenChanged(hidden);
     }
 
-    private List<Radio.DataBean.ChannelsBean> datas = new ArrayList<>();
+    private List<ChannelsBean> datas = new ArrayList<>();
     private BannerView mBannerView;
 
     private void getBanners() {
@@ -167,12 +173,12 @@ public class RadioStationFragment extends BaseFragment implements SwipeRefreshLa
     }
 
     private void refresh() {
-        RetrofitUtils.getInstance().getChannelsRadioHots()
+        RetrofitUtils.getInstance().getChannelsRadioHots("part")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Action1<List<Radio.DataBean.ChannelsBean>>() {
+                .subscribe(new Action1<List<ChannelsBean>>() {
                     @Override
-                    public void call(List<Radio.DataBean.ChannelsBean> dataBeanXes) {
+                    public void call(List<ChannelsBean> dataBeanXes) {
                         mSwipeLayout.setRefreshing(false);
                         loadLayout.showContentView();
                         datas.clear();
@@ -199,6 +205,9 @@ public class RadioStationFragment extends BaseFragment implements SwipeRefreshLa
                 break;
             case R.id.tvProvince:
                 ProvincesAndCitiesActivity.start(getActivity());
+                break;
+            case R.id.tvTitle:
+                RadioMoreActivity.start(getActivity());
                 break;
         }
     }

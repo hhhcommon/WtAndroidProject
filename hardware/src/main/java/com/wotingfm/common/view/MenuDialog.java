@@ -20,6 +20,7 @@ import com.woting.commonplat.utils.FileSizeUtil;
 import com.wotingfm.R;
 import com.wotingfm.common.adapter.PlayerListAdapter;
 import com.wotingfm.common.application.BSApplication;
+import com.wotingfm.common.bean.ChannelsBean;
 import com.wotingfm.common.bean.Player;
 import com.wotingfm.common.bean.Radio;
 import com.wotingfm.common.bean.SinglesBase;
@@ -100,9 +101,9 @@ public class MenuDialog extends Dialog implements View.OnClickListener {
 
     private SinglesBase pdsBase;
     private FollowCallBack followCallBack;
-    private Radio.DataBean.ChannelsBean channelsBean;
+    private ChannelsBean channelsBean;
 
-    public void setMenuData(SinglesBase pds, FollowCallBack followCallBack, Radio.DataBean.ChannelsBean channelsBean) {
+    public void setMenuData(SinglesBase pds, FollowCallBack followCallBack, ChannelsBean channelsBean) {
         this.followCallBack = followCallBack;
         this.channelsBean = channelsBean;
         if (pds != null) {

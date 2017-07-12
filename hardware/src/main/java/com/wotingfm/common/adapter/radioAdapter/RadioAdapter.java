@@ -9,6 +9,7 @@ import com.bumptech.glide.Glide;
 import com.wotingfm.R;
 import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.bean.AlbumsBean;
+import com.wotingfm.common.bean.ChannelsBean;
 import com.wotingfm.common.bean.Radio;
 import com.zhy.adapter.recyclerview.CommonAdapter;
 import com.zhy.adapter.recyclerview.base.ViewHolder;
@@ -19,16 +20,16 @@ import java.util.List;
  * Created by amine on 2017/6/7.
  */
 
-public class RadioAdapter extends CommonAdapter<Radio.DataBean.ChannelsBean> {
+public class RadioAdapter extends CommonAdapter<ChannelsBean> {
     private RadioClick playerClick;
 
-    public RadioAdapter(Context context, List<Radio.DataBean.ChannelsBean> datas, RadioClick radioClick) {
+    public RadioAdapter(Context context, List<ChannelsBean> datas, RadioClick radioClick) {
         super(context, R.layout.item_radio, datas);
         this.playerClick = radioClick;
     }
 
     @Override
-    protected void convert(ViewHolder holder, final Radio.DataBean.ChannelsBean s, final int position) {
+    protected void convert(ViewHolder holder, final ChannelsBean s, final int position) {
         ImageView ivPhoto = (ImageView) holder.itemView.findViewById(R.id.ivPhoto);
         TextView tvTitle = (TextView) holder.itemView.findViewById(R.id.tvTitle);
         TextView tvContent = (TextView) holder.itemView.findViewById(R.id.tvContent);
@@ -51,7 +52,7 @@ public class RadioAdapter extends CommonAdapter<Radio.DataBean.ChannelsBean> {
 
 
     public interface RadioClick {
-        void clickAlbums(Radio.DataBean.ChannelsBean singlesBean);
+        void clickAlbums(ChannelsBean singlesBean);
     }
 
 }

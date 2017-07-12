@@ -9,6 +9,7 @@ import com.bumptech.glide.Glide;
 import com.woting.commonplat.utils.DementionUtil;
 import com.wotingfm.R;
 import com.wotingfm.common.application.BSApplication;
+import com.wotingfm.common.bean.ChannelsBean;
 import com.wotingfm.common.bean.Radio;
 import com.wotingfm.common.bean.Radiostation;
 import com.wotingfm.common.bean.Selected;
@@ -22,17 +23,17 @@ import java.util.List;
  * 发现，电台列表
  */
 
-public class RadioStationAdapter extends CommonAdapter<Radio.DataBean.ChannelsBean> {
+public class RadioStationAdapter extends CommonAdapter<ChannelsBean> {
     private RadioStationClick radioStationClick;
 
-    public RadioStationAdapter(Context context, List<Radio.DataBean.ChannelsBean> datas, RadioStationClick radioStationClick) {
+    public RadioStationAdapter(Context context, List<ChannelsBean> datas, RadioStationClick radioStationClick) {
         super(context, R.layout.item_radiostation, datas);
         this.radioStationClick = radioStationClick;
 
     }
 
     @Override
-    protected void convert(ViewHolder holder, final Radio.DataBean.ChannelsBean dataBean, int position) {
+    protected void convert(ViewHolder holder, final ChannelsBean dataBean, int position) {
         holder.setText(R.id.tvTitle, dataBean.title);
         holder.setText(R.id.tvContent, dataBean.desc);
         holder.setText(R.id.tvTime, dataBean.listen_count + "人听过");
@@ -51,7 +52,7 @@ public class RadioStationAdapter extends CommonAdapter<Radio.DataBean.ChannelsBe
     }
 
     public interface RadioStationClick {
-        void click(Radio.DataBean.ChannelsBean dataBean);
+        void click(ChannelsBean dataBean);
     }
 
 

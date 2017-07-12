@@ -14,6 +14,7 @@ import com.woting.commonplat.widget.LoadFrameLayout;
 import com.wotingfm.R;
 import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.bean.Channels;
+import com.wotingfm.common.bean.ChannelsBean;
 import com.wotingfm.common.bean.SelectedMore;
 import com.wotingfm.common.net.RetrofitUtils;
 import com.wotingfm.ui.base.baseactivity.BaseToolBarActivity;
@@ -62,10 +63,10 @@ public class ClassificationActivity extends BaseToolBarActivity implements View.
 
     public class MyAdapter extends FragmentPagerAdapter {
 
-        private List<Channels.DataBean.ChannelsBean> title;
+        private List<ChannelsBean> title;
         private List<Fragment> views;
 
-        public MyAdapter(FragmentManager fm, List<Channels.DataBean.ChannelsBean> title, List<Fragment> views) {
+        public MyAdapter(FragmentManager fm, List<ChannelsBean> title, List<Fragment> views) {
             super(fm);
             this.title = title;
             this.views = views;
@@ -112,9 +113,9 @@ public class ClassificationActivity extends BaseToolBarActivity implements View.
         RetrofitUtils.getInstance().getChannels(albumId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Action1<List<Channels.DataBean.ChannelsBean>>() {
+                .subscribe(new Action1<List<ChannelsBean>>() {
                     @Override
-                    public void call(List<Channels.DataBean.ChannelsBean> albumsBeen) {
+                    public void call(List<ChannelsBean> albumsBeen) {
                         if (albumsBeen != null && !albumsBeen.isEmpty()) {
                             for (int i = 0; i < albumsBeen.size(); i++) {
                                 SubcategoryFragment fragment = SubcategoryFragment.newInstance(albumsBeen.get(i));

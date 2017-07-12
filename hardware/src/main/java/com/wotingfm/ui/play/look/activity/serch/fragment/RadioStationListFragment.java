@@ -11,10 +11,13 @@ import com.woting.commonplat.amine.OnRefreshListener;
 import com.woting.commonplat.widget.LoadFrameLayout;
 import com.wotingfm.R;
 import com.wotingfm.common.adapter.albumsAdapter.AlbumsAdapter;
+import com.wotingfm.common.adapter.findHome.RadioStationAdapter;
 import com.wotingfm.common.bean.AlbumsBean;
+import com.wotingfm.common.bean.ChannelsBean;
 import com.wotingfm.common.bean.SerchList;
 import com.wotingfm.common.net.RetrofitUtils;
 import com.wotingfm.ui.base.basefragment.BaseFragment;
+import com.wotingfm.ui.play.radio.RadioInfoActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -68,10 +71,10 @@ public class RadioStationListFragment extends BaseFragment implements OnLoadMore
                 loadLayout.showLoadingView();
             }
         });
-        mAdapter = new AlbumsAdapter(getActivity(), albumsBeanList);
-        mAdapter.setPlayerClick(new AlbumsAdapter.PlayerClick() {
+        mAdapter = new RadioStationAdapter(getActivity(), albumsBeanList, new RadioStationAdapter.RadioStationClick() {
             @Override
-            public void clickAlbums(AlbumsBean singlesBean) {
+            public void click(ChannelsBean dataBean) {
+                RadioInfoActivity.start(getActivity(), dataBean.title, dataBean.id);
             }
         });
         mRecyclerView.setIAdapter(mAdapter);
@@ -82,8 +85,8 @@ public class RadioStationListFragment extends BaseFragment implements OnLoadMore
     }
 
     private int mPage;
-    private AlbumsAdapter mAdapter;
-    private List<AlbumsBean> albumsBeanList = new ArrayList<>();
+    private RadioStationAdapter mAdapter;
+    private List<ChannelsBean> albumsBeanList = new ArrayList<>();
 
     public void refresh() {
         mPage = 1;
@@ -94,10 +97,10 @@ public class RadioStationListFragment extends BaseFragment implements OnLoadMore
                     @Override
                     public void call(SerchList serchList) {
                         mRecyclerView.setRefreshing(false);
-                        if (serchList != null && serchList.ret == 0 && serchList.data != null && serchList.data.albums != null && !serchList.data.albums.isEmpty()) {
+                        if (serchList != null && serchList.ret == 0 && serchList.data != null && serchList.data.radios != null && !serchList.data.radios.isEmpty()) {
                             mPage++;
                             albumsBeanList.clear();
-                            albumsBeanList.addAll(serchList.data.albums);
+                            albumsBeanList.addAll(serchList.data.radios);
                             loadLayout.showContentView();
                             mAdapter.notifyDataSetChanged();
                         } else {
@@ -122,9 +125,9 @@ public class RadioStationListFragment extends BaseFragment implements OnLoadMore
                     @Override
                     public void call(SerchList serchList) {
                         mRecyclerView.setRefreshing(false);
-                        if (serchList != null && serchList.ret == 0 && serchList.data != null && serchList.data.albums != null && !serchList.data.albums.isEmpty()) {
+                        if (serchList != null && serchList.ret == 0 && serchList.data != null && serchList.data.radios != null && !serchList.data.radios.isEmpty()) {
                             mPage++;
-                            albumsBeanList.addAll(serchList.data.albums);
+                            albumsBeanList.addAll(serchList.data.radios);
                             mAdapter.notifyDataSetChanged();
                             loadMoreFooterView.setStatus(LoadMoreFooterView.Status.GONE);
                         } else {
