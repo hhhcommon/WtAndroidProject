@@ -66,6 +66,14 @@ public interface RetrofitService {
     @DELETE("api/voice-lives/{id}/reservations")
     Observable<BaseResult> deleteReservations(@Path("id") String id);
 
+    //预约电台
+    @POST("api/listenings/radios/channels/playbills/{id}/reservations")
+    Observable<BaseResult> reservationsRadio(@Path("id") String id);
+
+    //取消预约电台
+    @DELETE("api/listenings/radios/channels/playbills/{id}/reservations")
+    Observable<BaseResult> deleteReservationsRadio(@Path("id") String id);
+
     //取消预约
     @GET("api/listenings/radios/channels/hots")
     Observable<BaseResult> channelsHots();
@@ -201,7 +209,7 @@ public interface RetrofitService {
 
     //电台列表
     @GET("api/listenings/radios/channels/hots")
-    Observable<Radio> getChannelsRadioList(@Query("scope") String scope,@Query("page") int page);
+    Observable<Radio> getChannelsRadioList(@Query("scope") String scope, @Query("page") int page);
 
     //获取省市列表
     @GET("/api/listenings/radios/channels/provinces")

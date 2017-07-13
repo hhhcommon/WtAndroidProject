@@ -22,6 +22,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
+import static com.wotingfm.R.id.loadLayout;
+
 
 /**
  * 电台详情，昨天
@@ -31,8 +33,6 @@ public class RadioInfoYesterdayFragment extends BaseFragment {
 
     @BindView(R.id.mRecyclerView)
     RecyclerView mRecyclerView;
-    @BindView(R.id.loadLayout)
-    LoadFrameLayout loadLayout;
 
     @Override
     protected int getLayoutResource() {
@@ -56,7 +56,6 @@ public class RadioInfoYesterdayFragment extends BaseFragment {
         if (bundle != null)
             dataBean = (RadioInfo.DataBean) bundle.getSerializable("dataBean");
         if (dataBean != null && dataBean.yesterday != null && !dataBean.yesterday.isEmpty()) {
-            loadLayout.showContentView();
             LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
             layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
             mRecyclerView.setNestedScrollingEnabled(false);
@@ -68,8 +67,6 @@ public class RadioInfoYesterdayFragment extends BaseFragment {
                 }
             });
             mRecyclerView.setAdapter(mAdapter);
-        } else {
-            loadLayout.showEmptyView();
         }
     }
 }
