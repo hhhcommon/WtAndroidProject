@@ -158,7 +158,7 @@ public class InterPhonePresenter {
             } else if (action.equals(BroadcastConstants.GROUP_GET)) {
                 getGroup();// 重新获取群组
             } else if (action.equals(BroadcastConstants.PERSON_GET)) {
-                getGroup();// 重新获取好友
+                getUser();// 重新获取好友
             }
         }
     }

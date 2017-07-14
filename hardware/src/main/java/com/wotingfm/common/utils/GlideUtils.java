@@ -10,6 +10,9 @@ import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.woting.commonplat.widget.GlideCircleTransform;
+import com.wotingfm.R;
+
+import jp.wasabeef.glide.transformations.BlurTransformation;
 
 /**
  * 作者：xinLong on 2017/6/15 17:54
@@ -32,32 +35,45 @@ public class GlideUtils {
 
     /**
      * 默认加载
+     *
      * @param mContext
-     * @param path 路径
+     * @param path       路径
      * @param mImageView 图片
-     * @param b 是否是圆形图
+     * @param b          是否是圆形图
      */
-    public static void loadImageView(Context mContext, String path, ImageView mImageView,boolean b) {
-        if(b){
+    public static void loadImageView(Context mContext, String path, ImageView mImageView, boolean b) {
+        if (b) {
             Glide.with(mContext).load(path).transform(new GlideCircleTransform(mContext)).into(mImageView);
-        }else{
+        } else {
             Glide.with(mContext).load(path).into(mImageView);
+            Glide.with(mContext).load(path).bitmapTransform(new BlurTransformation(mContext, 15)).into(mImageView);
         }
     }
 
     /**
-     * 加载指定大小
+     * 默认加载
+     *
      * @param mContext
-     * @param path 路径
-     * @param width 宽度
-     * @param height 高度
+     * @param path       路径
      * @param mImageView 图片
-     * @param b 是否是圆形图
      */
-    public static void loadImageViewSize(Context mContext, String path, int width, int height, ImageView mImageView,boolean b) {
-        if(b){
+    public static void loadImageViewBlur(Context mContext, String path, ImageView mImageView) {
+        Glide.with(mContext).load(path).crossFade(1000).placeholder(R.mipmap.p).bitmapTransform(new BlurTransformation(mContext, 23, 18)).into(mImageView);
+    }
+    /**
+     * 加载指定大小
+     *
+     * @param mContext
+     * @param path       路径
+     * @param width      宽度
+     * @param height     高度
+     * @param mImageView 图片
+     * @param b          是否是圆形图
+     */
+    public static void loadImageViewSize(Context mContext, String path, int width, int height, ImageView mImageView, boolean b) {
+        if (b) {
             Glide.with(mContext).load(path).transform(new GlideCircleTransform(mContext)).override(width, height).into(mImageView);
-        }else{
+        } else {
             Glide.with(mContext).load(path).override(width, height).into(mImageView);
         }
 
@@ -65,22 +81,24 @@ public class GlideUtils {
 
     /**
      * 设置加载中以及加载失败图片
+     *
      * @param mContext
      * @param path
      * @param mImageView
      * @param loadingImage
      * @param errorImageView
      */
-    public static void loadImageViewLoding(Context mContext, String path, ImageView mImageView, int loadingImage, int errorImageView,boolean b) {
-        if(b){
+    public static void loadImageViewLoding(Context mContext, String path, ImageView mImageView, int loadingImage, int errorImageView, boolean b) {
+        if (b) {
             Glide.with(mContext).load(path).transform(new GlideCircleTransform(mContext)).placeholder(loadingImage).error(errorImageView).into(mImageView);
-        }else{
+        } else {
             Glide.with(mContext).load(path).placeholder(loadingImage).error(errorImageView).into(mImageView);
         }
     }
 
     /**
      * 设置加载中以及加载失败图片并且指定大小
+     *
      * @param mContext
      * @param path
      * @param width
@@ -89,10 +107,10 @@ public class GlideUtils {
      * @param loadingImage
      * @param errorImageView
      */
-    public static void loadImageViewLodingSize(Context mContext, String path, int width, int height, ImageView mImageView, int loadingImage, int errorImageView,boolean b) {
-        if(b){
+    public static void loadImageViewLodingSize(Context mContext, String path, int width, int height, ImageView mImageView, int loadingImage, int errorImageView, boolean b) {
+        if (b) {
             Glide.with(mContext).load(path).transform(new GlideCircleTransform(mContext)).override(width, height).placeholder(loadingImage).error(errorImageView).into(mImageView);
-        }else{
+        } else {
             Glide.with(mContext).load(path).override(width, height).placeholder(loadingImage).error(errorImageView).into(mImageView);
         }
 
@@ -100,6 +118,7 @@ public class GlideUtils {
 
     /**
      * 设置跳过内存缓存
+     *
      * @param mContext
      * @param path
      * @param mImageView
@@ -110,6 +129,7 @@ public class GlideUtils {
 
     /**
      * 设置下载优先级
+     *
      * @param mContext
      * @param path
      * @param mImageView
@@ -132,6 +152,7 @@ public class GlideUtils {
 
     /**
      * 设置缓存策略
+     *
      * @param mContext
      * @param path
      * @param mImageView
@@ -143,6 +164,7 @@ public class GlideUtils {
     /**
      * 设置加载动画
      * api也提供了几个常用的动画：比如crossFade()
+     *
      * @param mContext
      * @param path
      * @param anim
@@ -155,6 +177,7 @@ public class GlideUtils {
     /**
      * 设置缩略图支持
      * 会先加载缩略图
+     *
      * @param mContext
      * @param path
      * @param mImageView
@@ -166,6 +189,7 @@ public class GlideUtils {
     /**
      * 设置动态转换
      * api提供了比如：centerCrop()、fitCenter()等
+     *
      * @param mContext
      * @param path
      * @param mImageView
@@ -176,6 +200,7 @@ public class GlideUtils {
 
     /**
      * 设置动态GIF加载方式
+     *
      * @param mContext
      * @param path
      * @param mImageView
@@ -186,6 +211,7 @@ public class GlideUtils {
 
     /**
      * 设置静态GIF加载方式
+     *
      * @param mContext
      * @param path
      * @param mImageView
@@ -197,6 +223,7 @@ public class GlideUtils {
     /**
      * 设置监听请求接口
      * 设置监听的用处 可以用于监控请求发生错误来源，以及图片来源 是内存还是磁盘
+     *
      * @param mContext
      * @param path
      * @param mImageView
@@ -209,6 +236,7 @@ public class GlideUtils {
     /**
      * 设置要加载的内容
      * 项目中有很多需要先下载图片然后再做一些合成的功能，比如项目中出现的图文混排
+     *
      * @param mContext
      * @param path
      * @param simpleTarget
@@ -219,6 +247,7 @@ public class GlideUtils {
 
     /**
      * 清理磁盘缓存
+     *
      * @param mContext
      */
     public static void GuideClearDiskCache(Context mContext) {
@@ -228,6 +257,7 @@ public class GlideUtils {
 
     /**
      * 清理内存缓存
+     *
      * @param mContext
      */
     public static void GuideClearMemory(Context mContext) {

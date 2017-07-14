@@ -43,8 +43,6 @@ import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Func1;
 import rx.schedulers.Schedulers;
-
-import static android.R.attr.type;
 import static com.wotingfm.common.net.RetrofitService.BASE_URL;
 
 
@@ -908,7 +906,7 @@ public class RetrofitUtils {
      * @return Objects
      */
     public Observable<Object> getSearchGroup(String s) throws Exception{
-        return retrofitService.getSearchGroup("chat-groups", s)
+        return retrofitService.getSearchGroup("GROUP", s)
                 .map(new Func1<Object, Object>() {
                     @Override
                     public Object call(Object O) {
@@ -924,7 +922,7 @@ public class RetrofitUtils {
      * @return Objects
      */
     public Observable<Object> getSearchPerson(String s) throws Exception{
-        return retrofitService.getSearchPerson("users", s)
+        return retrofitService.getSearchPerson("USER", s)
                 .map(new Func1<Object, Object>() {
                     @Override
                     public Object call(Object O) {

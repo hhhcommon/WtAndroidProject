@@ -3,6 +3,7 @@ package com.wotingfm.ui.intercom.person.newfriend.model;
 import android.util.Log;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.common.net.RetrofitUtils;
@@ -40,7 +41,7 @@ public class NewFriendModel extends UserInfo {
                         @Override
                         public void call(Object o) {
                             try {
-                                Log.e("新的好友申请请求返回数据",new Gson().toJson(o));
+                                Log.e("新的好友申请请求返回数据",new GsonBuilder().serializeNulls().create().toJson(o));
                                 //填充UI
                                 listener.onSuccess(o);
                             } catch (Exception e) {
@@ -75,7 +76,7 @@ public class NewFriendModel extends UserInfo {
                         @Override
                         public void call(Object o) {
                             try {
-                                Log.e("新的好友申请删除==返回数据",new Gson().toJson(o));
+                                Log.e("新的好友申请删除==返回数据",new GsonBuilder().serializeNulls().create().toJson(o));
                                 //填充UI
                                 listener.onSuccess(o);
                             } catch (Exception e) {
@@ -110,7 +111,7 @@ public class NewFriendModel extends UserInfo {
                         @Override
                         public void call(Object o) {
                             try {
-                                Log.e("新的好友申请同意==返回数据",new Gson().toJson(o));
+                                Log.e("新的好友申请同意==返回数据",new GsonBuilder().serializeNulls().create().toJson(o));
                                 //填充UI
                                 listener.onSuccess(o);
                             } catch (Exception e) {
@@ -145,7 +146,7 @@ public class NewFriendModel extends UserInfo {
                         @Override
                         public void call(Object o) {
                             try {
-                                Log.e("新的好友申请同意==返回数据",new Gson().toJson(o));
+                                Log.e("新的好友申请同意==返回数据",new GsonBuilder().serializeNulls().create().toJson(o));
                                 //填充UI
                                 listener.onSuccess(o);
                             } catch (Exception e) {
@@ -190,8 +191,8 @@ public class NewFriendModel extends UserInfo {
     // 生成一条用户数据
     private static NewFriend getUser(String name, String id) {
         NewFriend user = new NewFriend();
-        user.setName(name);
-        user.setId(id);
+        user.getApply_user().setName(name);
+        user.setApply_id(id);
         return user;
     }
 

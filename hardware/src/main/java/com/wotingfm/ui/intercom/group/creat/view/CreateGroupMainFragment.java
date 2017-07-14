@@ -131,7 +131,7 @@ public class CreateGroupMainFragment extends Fragment implements View.OnClickLis
     public void setImageUrl(String url) {
         if (url != null && !url.equals("")) {
             GlideUtils.loadImageViewSize(this.getActivity(),url, 72, 72, img_url, true);
-            tv_show.setVisibility(View.GONE);
+            tv_show.setVisibility(View.INVISIBLE);
         } else {
             Bitmap bmp = BitmapUtils.readBitMap(this.getActivity(), R.mipmap.icon_avatar_d);
             img_url.setImageBitmap(bmp);

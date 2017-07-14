@@ -45,9 +45,23 @@ public class GroupNumberAddPresenter {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        if (list != null && list.size() > 0) {
-            activity.setView(list);
+        List<Contact.user> src_list = null;// 成员列表
+        try {
+            src_list = (List<Contact.user>) activity.getArguments().getSerializable("list");
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+        if (list != null && list.size() > 0&&src_list != null && src_list.size() > 0) {
+            List<Contact.user> _list = model.assemblyData(src_list, list);
+            if (_list != null && _list.size() > 0) {
+                activity.setView(_list);
+            }else{
+
+            }
+        } else {
+
+        }
+
     }
 
     /**

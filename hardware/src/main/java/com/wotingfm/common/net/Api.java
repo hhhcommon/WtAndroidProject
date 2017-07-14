@@ -43,9 +43,9 @@ public class Api {
     // 添加群成员
     public static final String URL_ADD_GROUP_NUM = "api/chat-groups/{id}/members";
     // 搜索的好友
-    public static final String URL_GET_PERSON__SEARCH = "api/listenings/search";
+    public static final String URL_GET_PERSON__SEARCH = "/api/searchUserAndGroup/{type}";
     // 搜索的群组
-    public static final String URL_GET_GROUP__SEARCH = "api/listenings/search";
+    public static final String URL_GET_GROUP__SEARCH = "/api/searchUserAndGroup/{type}";
     // 好友订阅的专辑
     public static final String URL_PERSON_SUB = "api/users/{id}/subscriptions/albums";
     // 退出群组

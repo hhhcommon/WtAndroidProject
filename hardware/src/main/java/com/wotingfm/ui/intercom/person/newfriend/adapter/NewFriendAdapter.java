@@ -55,26 +55,38 @@ public class NewFriendAdapter extends RecyclerView.Adapter<NewFriendAdapter.Simp
     @Override
     public void onBindViewHolder(final SimpleHolder holder, int position) {
         NewFriend m = mData.get(position);
-
-        if (m.getApply_type().equals("1")) {
+        String name="未知";
+        try {
+           name=  m.getApply_user().getName();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        String news="未知";
+        try {
+            news=  m.getApply_message();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        if (!m.isHad_approved()) {
             holder.layout_content.getLayoutParams().width = getScreenWidth(mContext);
-            holder.tv_name.setText(m.getName());
+            holder.tv_name.setText(name);
+            holder.tv_news.setText(news);
             holder.tv_oks.setVisibility(View.GONE);
             holder.tv_ok.setVisibility(View.VISIBLE);
         } else {
             holder.layout_content.getLayoutParams().width = getScreenWidth(mContext);
-            holder.tv_name.setText(m.getName());
+            holder.tv_name.setText(name);
+            holder.tv_news.setText(news);
             holder.tv_oks.setVisibility(View.VISIBLE);
             holder.tv_ok.setVisibility(View.GONE);
         }
 
-        if (m.getAvatar() != null && !m.getAvatar().equals("")) {
-            GlideUtils.loadImageViewSize(mContext, m.getAvatar(), 60, 60, holder.img_url, true);
+        if(m.getApply_user()!= null && m.getApply_user().getAvatar() != null && !m.getApply_user().getAvatar().equals("")&& m.getApply_user().getAvatar().startsWith("http")) {
+            GlideUtils.loadImageViewSize(mContext, m.getApply_user().getAvatar(), 60, 60, holder.img_url, true);
         } else {
             Bitmap bmp = BitmapUtils.readBitMap(mContext, R.mipmap.icon_avatar_d);
             holder.img_url.setImageBitmap(bmp);
         }
-
 
         holder.tv_ok.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -170,6 +182,13 @@ public class NewFriendAdapter extends RecyclerView.Adapter<NewFriendAdapter.Simp
         mIDeleteBtnClickListener = listener;
     }
 
+    public static int getScreenWidth(Context context) {
+        WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+        DisplayMetrics outMetrics = new DisplayMetrics();
+        wm.getDefaultDisplay().getMetrics(outMetrics);
+        return outMetrics.widthPixels;
+    }
+
     public interface IonSlidingViewClickListener {
         void onItemClick(View view, int position);
 
@@ -178,23 +197,5 @@ public class NewFriendAdapter extends RecyclerView.Adapter<NewFriendAdapter.Simp
         void onDeleteBtnClick(View view, int position);
     }
 
-    /**
-     * dpתpx
-     *
-     * @param context
-     * @param dp
-     * @return
-     */
-    public static int dp2px(Context context, float dp) {
-        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
-                dp, context.getResources().getDisplayMetrics());
-    }
 
-    public static int getScreenWidth(Context context) {
-        WindowManager wm = (WindowManager) context
-                .getSystemService(Context.WINDOW_SERVICE);
-        DisplayMetrics outMetrics = new DisplayMetrics();
-        wm.getDefaultDisplay().getMetrics(outMetrics);
-        return outMetrics.widthPixels;
-    }
 }

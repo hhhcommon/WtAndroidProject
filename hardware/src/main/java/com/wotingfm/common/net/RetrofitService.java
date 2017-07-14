@@ -19,9 +19,6 @@ import com.wotingfm.common.bean.SelectedMore;
 import com.wotingfm.common.bean.SerchList;
 import com.wotingfm.common.bean.Subscrible;
 import com.wotingfm.common.bean.TrailerInfo;
-import com.wotingfm.ui.intercom.main.contacts.model.Contact;
-import com.wotingfm.ui.user.login.model.Login;
-
 import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
@@ -29,9 +26,6 @@ import retrofit2.http.PUT;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 import rx.Observable;
-
-import static com.google.zxing.qrcode.decoder.ErrorCorrectionLevel.Q;
-import static com.wotingfm.R.mipmap.p;
 
 
 /**
@@ -282,12 +276,12 @@ public interface RetrofitService {
 
     // 搜索的群组
     @GET(Api.URL_GET_GROUP__SEARCH)
-    Observable<Object> getSearchGroup(@Query("type") String type,
+    Observable<Object> getSearchGroup(@Path("type") String type,
                                       @Query("q") String s);
 
     // 搜索的好友
     @GET(Api.URL_GET_PERSON__SEARCH)
-    Observable<Object> getSearchPerson(@Query("type") String type,
+    Observable<Object> getSearchPerson(@Path("type") String type,
                                        @Query("q") String s);
 
     // 加群方式

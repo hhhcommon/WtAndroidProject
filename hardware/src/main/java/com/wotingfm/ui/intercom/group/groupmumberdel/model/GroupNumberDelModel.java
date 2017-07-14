@@ -85,7 +85,7 @@ public class GroupNumberDelModel {
         if (id != null && !id.trim().equals("")) {
             // 添加群主
             for (int i = 0; i < list.size(); i++) {
-                boolean b = list.get(i).is_admin();
+                boolean b = list.get(i).is_owner()  ;
                 if (b) {
                     String _id = list.get(i).getId();
                     if (_id != null && !_id.trim().equals("")) {

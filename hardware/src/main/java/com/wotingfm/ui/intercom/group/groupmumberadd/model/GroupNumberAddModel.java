@@ -8,6 +8,7 @@ import com.wotingfm.common.net.RetrofitUtils;
 import com.wotingfm.common.utils.GetTestData;
 import com.wotingfm.ui.intercom.main.contacts.model.Contact;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import rx.android.schedulers.AndroidSchedulers;
@@ -28,6 +29,32 @@ public class GroupNumberAddModel {
         List<Contact.user> list = GetTestData.getFriendList();
         return list;
     }
+
+    /**
+     * 组装数据
+     *
+     * @param src_list 群成员
+     * @param list 好友列表
+     */
+    public List<Contact.user> assemblyData(List<Contact.user> src_list, List<Contact.user> list) {
+        for(int i=0;i<src_list.size();i++){
+            String src_id=src_list.get(i).getId();
+            if(src_id!=null&&!src_id.trim().equals("")){
+                for(int j=0;j<list.size();j++){
+                    String id=list.get(i).getId();
+                    if(id!=null&&!id.trim().equals("")){
+                        if(id.equals(src_id)){
+                            list.remove(j);
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+
+        return list;
+    }
+
     /**
      * 群成员==添加
      *
