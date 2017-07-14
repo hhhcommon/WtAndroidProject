@@ -30,6 +30,8 @@ import com.wotingfm.common.bean.HomeBanners;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.wotingfm.R.id.index;
+
 /**
  * banner
  * <p>
@@ -192,9 +194,11 @@ public class BannerView extends FrameLayout {
                 @Override
                 public void onClick(View v) {
                     if (mOnItemClickListener != null) {
-                        int position = holder.getAdapterPosition() % mBanners.size();
-                        HomeBanners.DataBean.BannersBean banner = mBanners.get(position);
-                        mOnItemClickListener.onItemClick(v, position, banner);
+                        if (mBanners != null && !mBanners.isEmpty()) {
+                            int position = holder.getAdapterPosition() % mBanners.size();
+                            HomeBanners.DataBean.BannersBean banner = mBanners.get(position);
+                            mOnItemClickListener.onItemClick(v, position, banner);
+                        }
                     }
                 }
             });
@@ -230,18 +234,22 @@ public class BannerView extends FrameLayout {
         @Override
         public void onViewAttachedToWindow(PagerHolder holder) {
             super.onViewAttachedToWindow(holder);
-            int index = holder.getAdapterPosition() % mBanners.size();
-            if (index < 0 || index >= mBanners.size()) {
-                return;
+            if (mBanners != null && !mBanners.isEmpty()) {
+                int index = holder.getAdapterPosition() % mBanners.size();
+                if (index < 0 || index >= mBanners.size()) {
+                    return;
+                }
             }
         }
 
         @Override
         public void onViewDetachedFromWindow(PagerHolder holder) {
             super.onViewDetachedFromWindow(holder);
-            int index = holder.getAdapterPosition() % mBanners.size();
-            if (index < 0 || index >= mBanners.size()) {
-                return;
+            if (mBanners != null && !mBanners.isEmpty()) {
+                int index = holder.getAdapterPosition() % mBanners.size();
+                if (index < 0 || index >= mBanners.size()) {
+                    return;
+                }
             }
         }
     }

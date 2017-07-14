@@ -805,7 +805,7 @@ public class PlayerActivity extends NoTitleBarBaseActivity implements View.OnCli
             if (isNeedReconnect) {
                 sendReconnectMessage();
             } else {
-                finish();
+               // finish();
             }
             // Return true means the error has been handled
             // If return false, then `onCompletion` will be called
@@ -843,7 +843,7 @@ public class PlayerActivity extends NoTitleBarBaseActivity implements View.OnCli
                 return;
             }
             if (mIsActivityPaused || !ResourceUtil.isLiveStreamingAvailable()) {
-                finish();
+               // finish();
                 return;
             }
             if (!ResourceUtil.isNetworkAvailable(PlayerActivity.this)) {

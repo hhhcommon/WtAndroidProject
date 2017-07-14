@@ -43,6 +43,8 @@ import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Func1;
 import rx.schedulers.Schedulers;
+
+import static android.R.attr.type;
 import static com.wotingfm.common.net.RetrofitService.BASE_URL;
 
 
@@ -335,8 +337,8 @@ public class RetrofitUtils {
                 });
     }
 
-    public Observable<List<ChannelsBean>> getChannelsRadioList(String scope,int page) {
-        return retrofitService.getChannelsRadioList(scope,page)
+    public Observable<List<ChannelsBean>> getChannelsRadioList(String scope, int page) {
+        return retrofitService.getChannelsRadioList(scope, page)
                 .map(new Func1<Radio, List<ChannelsBean>>() {
                     @Override
                     public List<ChannelsBean> call(Radio player) {
@@ -347,6 +349,7 @@ public class RetrofitUtils {
                     }
                 });
     }
+
     public Observable<List<LiveBean.DataBean>> getRecommandations(int page) {
         return retrofitService.getRecommandations(page)
                 .map(new Func1<LiveBean, List<LiveBean.DataBean>>() {
@@ -437,6 +440,26 @@ public class RetrofitUtils {
 
     public Observable<BaseResult> endLive(String voiceLiveId, String user_id) {
         return retrofitService.endLive(voiceLiveId, user_id, "end")
+                .map(new Func1<BaseResult, BaseResult>() {
+                    @Override
+                    public BaseResult call(BaseResult s) {
+                        return s;
+                    }
+                });
+    }
+
+    public Observable<BaseResult> reservationsRadio(String albumsId) {
+        return retrofitService.reservationsRadio(albumsId)
+                .map(new Func1<BaseResult, BaseResult>() {
+                    @Override
+                    public BaseResult call(BaseResult s) {
+                        return s;
+                    }
+                });
+    }
+
+    public Observable<BaseResult> deleteReservationsRadio(String albumsId) {
+        return retrofitService.deleteReservationsRadio(albumsId)
                 .map(new Func1<BaseResult, BaseResult>() {
                     @Override
                     public BaseResult call(BaseResult s) {
@@ -619,7 +642,7 @@ public class RetrofitUtils {
      * @param yzm      验证码
      * @return Object
      */
-    public Observable<Object> register(String userName, String password, String yzm) throws Exception{
+    public Observable<Object> register(String userName, String password, String yzm) throws Exception {
         return retrofitService.register(userName, password, yzm)
                 .map(new Func1<Object, Object>() {
                     @Override
@@ -906,7 +929,7 @@ public class RetrofitUtils {
      * @return Objects
      */
     public Observable<Object> getSearchGroup(String s) throws Exception{
-        return retrofitService.getSearchGroup("GROUP", s)
+        return retrofitService.getSearchGroup("chat-groups", s)
                 .map(new Func1<Object, Object>() {
                     @Override
                     public Object call(Object O) {
@@ -922,7 +945,7 @@ public class RetrofitUtils {
      * @return Objects
      */
     public Observable<Object> getSearchPerson(String s) throws Exception{
-        return retrofitService.getSearchPerson("USER", s)
+        return retrofitService.getSearchPerson("users", s)
                 .map(new Func1<Object, Object>() {
                     @Override
                     public Object call(Object O) {
