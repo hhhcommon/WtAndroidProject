@@ -51,7 +51,7 @@ public class PersonMessageFragment extends Fragment implements View.OnClickListe
     private TextView tv_send, tv_name, tv_introduce, tv_number, tv_address, tv_del, tvTitle, tv_subNum, tv_focus;
     private LinearLayout lin_note, lin_chose;
     private PersonMessagePresenter presenter;
-    private Dialog dialog;
+    private Dialog dialog,confirmDialog;
     private int type;
     private TipView tip_view;
     private boolean b;
@@ -61,7 +61,7 @@ public class PersonMessageFragment extends Fragment implements View.OnClickListe
     private ImageView head_left_btn, img_other, img_call,img_url;
     private GridView gridView;
     private PersonMessageSubAdapter adapter;
-    private Dialog confirmDialog;
+    private ResultListener Listener;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -403,5 +403,29 @@ public class PersonMessageFragment extends Fragment implements View.OnClickListe
     public void confirmDialogCancel() {
         confirmDialog.dismiss();
     }
+
+    /**
+     * 返回值设置
+     *
+     * @param type
+     * @param name
+     */
+    public void setResult(boolean type, String name) {
+        Listener.resultListener(type, name);
+    }
+
+    /**
+     * 回调结果值
+     *
+     * @param l
+     */
+    public void setResultListener(ResultListener l) {
+        Listener = l;
+    }
+
+    public interface ResultListener {
+        void resultListener(boolean type, String name);
+    }
+
 
 }

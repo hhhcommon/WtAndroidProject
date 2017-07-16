@@ -64,7 +64,7 @@ public class GroupNumberDelAdapter extends RecyclerView.Adapter<GroupNumberDelAd
             holder.tv_name.setText("未知");
         }
 
-        if (lists.getAvatar() != null && !lists.getAvatar().equals("")) {
+        if (lists.getAvatar() != null && !lists.getAvatar().equals("")&&lists.getAvatar().startsWith("http")) {
             GlideUtils.loadImageViewSize(mContext, lists.getAvatar(), 60, 60, holder.img_url, true);
         } else {
             Bitmap bmp = BitmapUtils.readBitMap(mContext, R.mipmap.icon_avatar_d);

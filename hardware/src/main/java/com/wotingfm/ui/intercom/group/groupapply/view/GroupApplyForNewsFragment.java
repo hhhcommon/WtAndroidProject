@@ -30,11 +30,6 @@ public class GroupApplyForNewsFragment extends Fragment implements View.OnClickL
     private Dialog dialog;
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         if (rootView == null) {
             rootView = inflater.inflate(R.layout.fragment_apply_news, container, false);
@@ -104,25 +99,5 @@ public class GroupApplyForNewsFragment extends Fragment implements View.OnClickL
         if (dialog != null) dialog.dismiss();
     }
 
-
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-    }
 
 }

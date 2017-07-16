@@ -114,8 +114,8 @@ public class GroupNumberDelModel {
             // 添加成员
             for (int i = 0; i < list.size(); i++) {
                 boolean b = list.get(i).is_admin();
-                if (!b) {
-
+                boolean b1 = list.get(i).is_owner();
+                if (!b&&!b1) {
                     list.get(i).setType(3);
                     _list.add(list.get(i));
                 }
@@ -132,8 +132,8 @@ public class GroupNumberDelModel {
             // 添加成员
             for (int i = 0; i < list.size(); i++) {
                 boolean b = list.get(i).is_admin();
-                if (!b) {
-
+                boolean b1 = list.get(i).is_owner();
+                if (!b&&!b1) {
                     list.get(i).setType(3);
                     _list.add(list.get(i));
                 }

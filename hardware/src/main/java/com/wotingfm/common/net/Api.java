@@ -58,16 +58,16 @@ public class Api {
     public static final String URL_GET_GROUP__RECOMMEND = "test";
     // 加群方式(X)
     public static final String URL_APPLY_GROUP_TYPE = "test";
-    // 入组申请(X)
-    public static final String URL_GROUP_APPLY = "test";
+    // 入组申请
+    public static final String URL_GROUP_APPLY = "/api/chat-groups/{id}/applies";
     // 偏好设置(X)
     public static final String URL_PREFERENCE = "test";
     // 注销登录(X)
     public static final String URL_CANCEL = "test";
     // 设置群组备用频道(X)
     public static final String URL_SET_CHANNEL = "test";
-    // 修改好友备注(X)
-    public static final String URL_CHANGE_PERSON_NOTE = "test";
+    // 修改好友备注
+    public static final String URL_CHANGE_PERSON_NOTE = "/api/users/{userId}/friends/{friendId}/alias";
     // 意见反馈(X)
     public static final String URL_FEED_BACK = "test";
     // 获取用户自身数据引导页
@@ -76,5 +76,6 @@ public class Api {
     public static final String URL_EDIT_USER = "/api/users/{id}";
     // 修改手机号(X)
     public static final String URL_RESET_PHONE_NUMBER = "test";
-
+    // 删除好友
+    public static final String URL_PERSON_DEL = " api/users/{userId}/friends/{friendId}";
 }

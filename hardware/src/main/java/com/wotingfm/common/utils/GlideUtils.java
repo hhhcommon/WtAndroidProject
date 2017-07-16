@@ -46,7 +46,6 @@ public class GlideUtils {
             Glide.with(mContext).load(path).transform(new GlideCircleTransform(mContext)).into(mImageView);
         } else {
             Glide.with(mContext).load(path).into(mImageView);
-            Glide.with(mContext).load(path).bitmapTransform(new BlurTransformation(mContext, 15)).into(mImageView);
         }
     }
 
@@ -58,7 +57,7 @@ public class GlideUtils {
      * @param mImageView 图片
      */
     public static void loadImageViewBlur(Context mContext, String path, ImageView mImageView) {
-        Glide.with(mContext).load(path).crossFade(1000).placeholder(R.mipmap.p).bitmapTransform(new BlurTransformation(mContext, 23, 18)).into(mImageView);
+        Glide.with(mContext).load(path).crossFade(1000).placeholder(R.mipmap.p).bitmapTransform(new BlurTransformation(mContext, 10, 5)).into(mImageView);
     }
     /**
      * 加载指定大小

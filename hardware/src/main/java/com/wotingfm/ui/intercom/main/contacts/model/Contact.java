@@ -19,11 +19,38 @@ public class Contact implements Serializable {
         private String signature;
         private boolean is_admin;
         private boolean is_owner;
-        private String introduction;               //
-        private String location;                   //
-        private String age;                        //
+        private String introduction;               // 简介
+        private String location;                   // 地区
+        private String age;                        // 年龄
         private String area;                       // 地区
         private String fans_count;                 // 关注
+        private String nickName;                   // 昵称
+        private String portraitMini;               // 头像
+        private String alias_name;                 // 别名
+
+        public String getAlias_name() {
+            return alias_name;
+        }
+
+        public void setAlias_name(String alias_name) {
+            this.alias_name = alias_name;
+        }
+
+        public String getNickName() {
+            return nickName;
+        }
+
+        public void setNickName(String nickName) {
+            this.nickName = nickName;
+        }
+
+        public String getPortraitMini() {
+            return portraitMini;
+        }
+
+        public void setPortraitMini(String portraitMini) {
+            this.portraitMini = portraitMini;
+        }
 
         public boolean is_owner() {
             return is_owner;

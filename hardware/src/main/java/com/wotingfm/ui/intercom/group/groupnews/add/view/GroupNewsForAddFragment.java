@@ -1,14 +1,11 @@
 package com.wotingfm.ui.intercom.group.groupnews.add.view;
 
 import android.app.Dialog;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.support.design.widget.AppBarLayout;
 import android.support.v4.app.Fragment;
-import android.support.v4.widget.NestedScrollView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,9 +17,7 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.ScrollView;
 import android.widget.TextView;
-
 import com.woting.commonplat.manager.PhoneMsgManager;
 import com.woting.commonplat.utils.BitmapUtils;
 import com.woting.commonplat.widget.TipView;
@@ -32,13 +27,11 @@ import com.wotingfm.common.utils.GlideUtils;
 import com.wotingfm.common.utils.ToastUtils;
 import com.wotingfm.common.view.myscrollview.ObservableScrollView;
 import com.wotingfm.ui.base.baseinterface.ScrollViewListener;
-import com.wotingfm.ui.intercom.group.groupmanage.GroupManageFragment;
 import com.wotingfm.ui.intercom.group.groupnews.add.adapter.GroupNewsPersonForAddAdapter;
 import com.wotingfm.ui.intercom.group.groupnews.add.presenter.GroupNewsForAddPresenter;
 import com.wotingfm.ui.intercom.main.contacts.model.Contact;
 import com.wotingfm.ui.intercom.main.simulation.SimulationInterPhoneFragment;
 import com.wotingfm.ui.intercom.main.view.InterPhoneActivity;
-
 import java.util.List;
 
 /**
@@ -384,4 +377,5 @@ public class GroupNewsForAddFragment extends Fragment implements View.OnClickLis
     public interface ResultListener {
         void resultListener(boolean type);
     }
+
 }

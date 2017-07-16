@@ -10,12 +10,14 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.woting.commonplat.config.GlobalNetWorkConfig;
 import com.wotingfm.common.constant.BroadcastConstants;
+import com.wotingfm.common.net.RetrofitUtils;
 import com.wotingfm.common.utils.ToastUtils;
 import com.wotingfm.ui.user.logo.LogoActivity;
 import com.wotingfm.ui.user.preference.view.PreferenceFragment;
 import com.wotingfm.ui.user.register.model.RegisterModel;
 import com.wotingfm.ui.user.register.view.RegisterFragment;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
@@ -164,11 +166,14 @@ public class RegisterPresenter {
                 String msg = js.getString("data");
                 JSONTokener jsonParser = new JSONTokener(msg);
                 JSONObject arg1 = (JSONObject) jsonParser.nextValue();
-                String token = arg1.getString("token");
-
-                // 保存后台获取到的token
-                if (token != null && !token.trim().equals("")) {
-                    model.saveToken(token);
+                try {
+                    String  token = arg1.getString("token");
+                    // 保存后台获取到的token
+                    if (token != null && !token.trim().equals("")) {
+                        model.saveToken(token);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
 
                 JSONObject ui = (JSONObject) new JSONTokener(arg1.getString("user")).nextValue();
@@ -176,6 +181,7 @@ public class RegisterPresenter {
                 if (ui != null) {
                     model.saveUserInfo(ui);
                 }
+                RetrofitUtils.INSTANCE=null;
                 ToastUtils.show_always(activity.getActivity(), "注册成功");
                 // 发送登录广播通知所有界面
                 activity.getActivity().sendBroadcast(new Intent(BroadcastConstants.LOGIN));

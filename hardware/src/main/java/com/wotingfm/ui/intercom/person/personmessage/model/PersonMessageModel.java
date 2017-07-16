@@ -125,7 +125,42 @@ public class PersonMessageModel  {
                         @Override
                         public void call(Object o) {
                             try {
-                                Log.e("获取好友订阅专辑返回数据",new Gson().toJson(o));
+                                Log.e("获取好友订阅专辑返回数据",new GsonBuilder().serializeNulls().create().toJson(o));
+                                //填充UI
+                                listener.onSuccess(o);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                                listener.onFailure("");
+                            }
+                        }
+                    }, new Action1<Throwable>() {
+                        @Override
+                        public void call(Throwable throwable) {
+                            throwable.printStackTrace();
+                            listener.onFailure("");
+                        }
+                    });
+        } catch (Exception e) {
+            e.printStackTrace();
+            listener.onFailure("");
+        }
+    }
+
+    /**
+     * 删除好友
+     * @param listener 监听
+     */
+    public void loadNewsDel(String id,final OnLoadInterface listener) {
+        try {
+            String pid= BSApplication.SharedPreferences.getString(StringConstant.USER_ID,"");
+            RetrofitUtils.getInstance().delPerson(pid,id)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new Action1<Object>() {
+                        @Override
+                        public void call(Object o) {
+                            try {
+                                Log.e("删除好友返回数据",new GsonBuilder().serializeNulls().create().toJson(o));
                                 //填充UI
                                 listener.onSuccess(o);
                             } catch (Exception e) {

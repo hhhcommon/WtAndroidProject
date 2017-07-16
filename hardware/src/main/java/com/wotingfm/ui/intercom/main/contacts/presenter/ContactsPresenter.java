@@ -26,6 +26,7 @@ import com.wotingfm.ui.intercom.main.contacts.view.PinyinComparator;
 import com.wotingfm.ui.intercom.main.view.InterPhoneActivity;
 import com.wotingfm.ui.intercom.main.view.InterPhoneFragment;
 import com.wotingfm.ui.intercom.person.personmessage.view.PersonMessageFragment;
+import com.wotingfm.ui.intercom.person.personnote.view.EditPersonNoteFragment;
 import com.wotingfm.ui.user.logo.LogoActivity;
 
 import java.util.Collections;
@@ -188,7 +189,7 @@ public class ContactsPresenter {
      *
      * @param position
      */
-    public void jump(int position) {
+    public void jump(final int position) {
         String id = list.get(position).getId();
         if (id != null && !id.equals("")) {
             PersonMessageFragment fragment = new PersonMessageFragment();
@@ -197,10 +198,26 @@ public class ContactsPresenter {
             bundle.putString("id", id);// 好友的id
             fragment.setArguments(bundle);
             InterPhoneActivity.open(fragment);
+            fragment.setResultListener(new PersonMessageFragment.ResultListener() {
+                @Override
+                public void resultListener(boolean type, String name) {
+                    if (type) {
+                        if (name != null & !name.equals("")) {
+                            changeData(position,name);
+                        }
+                    }
+                }
+            });
         } else {
             ToastUtils.show_always(activity.getActivity(), "数据出错了，请稍后再试");
         }
 
+    }
+
+    // 修改备注的返回监听
+    private void changeData(int pos,String name){
+        list.get(pos).setAlias_name(name);
+        activity.setData(list);
     }
 
     // 设置广播接收器

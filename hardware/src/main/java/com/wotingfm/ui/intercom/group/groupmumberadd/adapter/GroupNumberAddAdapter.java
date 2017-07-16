@@ -76,7 +76,7 @@ public class GroupNumberAddAdapter extends BaseAdapter {
             holder.tv_name.setText("未知");
         }
 
-        if (lists.getAvatar() != null && !lists.getAvatar().equals("")) {
+        if (lists.getAvatar() != null && !lists.getAvatar().equals("")&&lists.getAvatar().startsWith("http")) {
             GlideUtils.loadImageViewSize(context, lists.getAvatar(), 60, 60, holder.img_view, true);
         } else {
             Bitmap bmp = BitmapUtils.readBitMap(context, R.mipmap.icon_avatar_d);

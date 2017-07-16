@@ -39,7 +39,7 @@ public class GroupNumberAddPresenter {
      * 获取数据设置界面数据
      */
     public void getData() {
-        list = GlobalStateConfig.list_person;
+        List<Contact.user> _list = GlobalStateConfig.list_person;
         try {
             gid = activity.getArguments().getString("gid");// 群id
         } catch (Exception e) {
@@ -51,15 +51,16 @@ public class GroupNumberAddPresenter {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        if (list != null && list.size() > 0&&src_list != null && src_list.size() > 0) {
-            List<Contact.user> _list = model.assemblyData(src_list, list);
-            if (_list != null && _list.size() > 0) {
-                activity.setView(_list);
+        if (_list != null && _list.size() > 0&&src_list != null && src_list.size() > 0) {
+            List<Contact.user> list = model.assemblyData(src_list, _list);
+            if (list != null && list.size() > 0) {
+                activity.setView(list);
+                activity.isLoginView(0);
             }else{
-
+                activity.isLoginView(1);
             }
         } else {
-
+            activity.isLoginView(1);
         }
 
     }

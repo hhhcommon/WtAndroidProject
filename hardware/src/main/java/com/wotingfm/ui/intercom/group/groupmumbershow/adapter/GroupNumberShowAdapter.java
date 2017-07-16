@@ -72,26 +72,28 @@ public class GroupNumberShowAdapter extends BaseAdapter {
             holder.tv_name.setText("未知");
         }
 
-        if (lists.getAvatar() != null && !lists.getAvatar().equals("")) {
+        if (lists.getAvatar() != null && !lists.getAvatar().equals("") && lists.getAvatar().startsWith("http")) {
             GlideUtils.loadImageViewSize(context, lists.getAvatar(), 60, 60, holder.img_view, true);
         } else {
             Bitmap bmp = BitmapUtils.readBitMap(context, R.mipmap.icon_avatar_d);
             holder.img_view.setImageBitmap(bmp);
         }
 
-        if (lists.getType() == 1) {
+        if (lists.is_owner()) {
             // 群主
             holder.tv_type.setVisibility(View.VISIBLE);
             holder.tv_type.setText("群主");
             holder.tv_type.setBackgroundResource(R.drawable.background_circle_orange);
-        } else if (lists.getType() == 2) {
-            // 管理员
-            holder.tv_type.setVisibility(View.VISIBLE);
-            holder.tv_type.setText("管理员");
-            holder.tv_type.setBackgroundResource(R.drawable.background_circle_blue);
         } else {
-            // 成员
-            holder.tv_type.setVisibility(View.GONE);
+            if (lists.is_admin()) {
+                // 管理员
+                holder.tv_type.setVisibility(View.VISIBLE);
+                holder.tv_type.setText("管理员");
+                holder.tv_type.setBackgroundResource(R.drawable.background_circle_blue);
+            } else {
+                // 成员
+                holder.tv_type.setVisibility(View.GONE);
+            }
         }
         return convertView;
     }

@@ -209,4 +209,9 @@ public class GroupChatFragment extends Fragment implements View.OnClickListener,
         confirmDialog.dismiss();
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        presenter.destroy();
+    }
 }

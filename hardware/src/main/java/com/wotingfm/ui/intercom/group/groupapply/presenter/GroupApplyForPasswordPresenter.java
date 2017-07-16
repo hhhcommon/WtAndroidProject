@@ -1,12 +1,16 @@
 package com.wotingfm.ui.intercom.group.groupapply.presenter;
 
+import android.content.Intent;
 import android.util.Log;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.woting.commonplat.config.GlobalNetWorkConfig;
+import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.common.utils.ToastUtils;
 import com.wotingfm.ui.intercom.group.groupapply.model.GroupApplyForPasswordModel;
 import com.wotingfm.ui.intercom.group.groupapply.view.GroupApplyForPasswordFragment;
+
 import org.json.JSONObject;
 
 /**
@@ -17,7 +21,7 @@ public class GroupApplyForPasswordPresenter {
 
     private final GroupApplyForPasswordFragment activity;
     private final GroupApplyForPasswordModel model;
-    private  String gid;// 组id
+    private String gid;// 组id
 
 
     public GroupApplyForPasswordPresenter(GroupApplyForPasswordFragment activity) {
@@ -39,7 +43,7 @@ public class GroupApplyForPasswordPresenter {
         if (s != null && !s.trim().equals("")) {
             if (GlobalNetWorkConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
                 activity.dialogShow();
-                model.loadNews(gid,  s, new GroupApplyForPasswordModel.OnLoadInterface() {
+                model.loadNews(gid, s, new GroupApplyForPasswordModel.OnLoadInterface() {
                     @Override
                     public void onSuccess(Object o) {
                         activity.dialogCancel();
@@ -62,17 +66,18 @@ public class GroupApplyForPasswordPresenter {
 
     private void dealSuccess(Object o) {
         try {
-            String s = new Gson().toJson(o);
+            String s = new GsonBuilder().serializeNulls().create().toJson(o);
             JSONObject js = new JSONObject(s);
             int ret = js.getInt("ret");
             Log.e("加入群：密码==ret", String.valueOf(ret));
             if (ret == 0) {
-
+                activity.getActivity().sendBroadcast(new Intent(BroadcastConstants.GROUP_GET));
             } else {
+                ToastUtils.show_always(activity.getActivity(), "添加失败，请稍后再试！");
             }
         } catch (Exception e) {
             e.printStackTrace();
-            // 设置数据出错界面
+            ToastUtils.show_always(activity.getActivity(), "添加失败，请稍后再试！");
         }
     }
 

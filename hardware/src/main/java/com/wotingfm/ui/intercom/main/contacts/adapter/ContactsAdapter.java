@@ -23,7 +23,7 @@ import java.util.List;
  * 作者：xinLong on 2017/6/8 14:36
  * 邮箱：645700751@qq.com
  */
-public class ContactsAdapter extends BaseAdapter implements  SectionIndexer {
+public class ContactsAdapter extends BaseAdapter implements SectionIndexer {
     private List<Contact.user> list;
     private Context context;
     private OnListener onListener;
@@ -87,13 +87,27 @@ public class ContactsAdapter extends BaseAdapter implements  SectionIndexer {
             holder.indexLayout.setVisibility(View.GONE);
         }
 
-        if (lists.getName() == null || lists.getName().equals("")) {
-            holder.tv_name.setText("名称");//名
-        } else {
-            holder.tv_name.setText(lists.getName());//名
+        String nickName = "名称";
+        try {
+            String name = lists.getName();
+            if (name != null && !name.equals("")) {
+                nickName = name;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+        try {
+            String name = lists.getAlias_name();
+            if (name != null && !name.equals("")) {
+                nickName = name;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        holder.tv_name.setText(nickName);//名
 
-        if (lists.getAvatar() != null && !lists.getAvatar().equals("")&& lists.getAvatar().startsWith("http")) {
+
+        if (lists.getAvatar() != null && !lists.getAvatar().equals("") && lists.getAvatar().startsWith("http")) {
             GlideUtils.loadImageViewSize(context, lists.getAvatar(), 60, 60, holder.img_touXiang, true);
         } else {
             Bitmap bmp = BitmapUtils.readBitMap(context, R.mipmap.icon_avatar_d);
@@ -109,7 +123,7 @@ public class ContactsAdapter extends BaseAdapter implements  SectionIndexer {
     }
 
     public interface OnListener {
-         void add(int position);
+        void add(int position);
     }
 
     class ViewHolder {

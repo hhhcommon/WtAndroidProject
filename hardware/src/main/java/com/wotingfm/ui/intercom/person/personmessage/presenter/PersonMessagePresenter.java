@@ -213,12 +213,24 @@ public class PersonMessagePresenter {
 
     // 处理数据
     private void assemblyData(Contact.user user) {
-        String name = "";
+        String nickName = "未知";
         try {
-            name = user.getName();
+            String  name = user.getName();
+            if(name!=null&&!name.equals("")){
+                nickName=name;
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
+        try {
+            String  name = user.getAlias_name();
+            if(name!=null&&!name.equals("")){
+                nickName=name;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        // 以上是以别名为主
 
         String sign = "";
         try {
@@ -250,7 +262,7 @@ public class PersonMessagePresenter {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        activity.setViewData(url,name, sign, number, address, focus);
+        activity.setViewData(url,nickName, sign, number, address, focus);
         activity.isLoginView(0);
     }
 
@@ -271,12 +283,45 @@ public class PersonMessagePresenter {
      * 删除好友的请求
      */
     public void delFriend() {
-        dealDelFriend(false);
+        model.loadNewsDel(id, new PersonMessageModel.OnLoadInterface() {
+            @Override
+            public void onSuccess(Object o) {
+                activity.dialogCancel();
+                dealDelSuccess(o);
+            }
+
+            @Override
+            public void onFailure(String msg) {
+                activity.dialogCancel();
+            }
+        });
+
     }
+
+
+    // 处理返回数据
+    private void dealDelSuccess(Object o) {
+        try {
+            String s = new GsonBuilder().serializeNulls().create().toJson(o);
+            JSONObject js = new JSONObject(s);
+            int ret = js.getInt("ret");
+            Log.e("ret", String.valueOf(ret));
+            if (ret == 0) {
+                dealDelFriend(true);
+            } else {
+                dealDelFriend(false);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            dealDelFriend(false);
+        }
+    }
+
 
     // 请求后台数据删除好友是否成功
     private void dealDelFriend(boolean b) {
         if (b) {
+            activity.getActivity().sendBroadcast(new Intent(BroadcastConstants.PERSON_GET));
             activity.close();
         } else {
             ToastUtils.show_always(activity.getActivity(), "删除好友失败，请稍后再试");
@@ -326,6 +371,9 @@ public class PersonMessagePresenter {
                 public void resultListener(boolean type, String name) {
                     if (type) {
                         if (name != null & !name.equals("")) {
+                            // 通知上层界面进行数据修改
+                            activity.setResult(true, name);
+                            // 修改本级界面数据
                             activity.setViewDataForName(name);
                         }
                     }
@@ -334,7 +382,6 @@ public class PersonMessagePresenter {
         } else {
             ToastUtils.show_always(activity.getActivity(), "数据出错了，请稍后再试！");
         }
-
     }
 
     /**

@@ -929,7 +929,7 @@ public class RetrofitUtils {
      * @return Objects
      */
     public Observable<Object> getSearchGroup(String s) throws Exception{
-        return retrofitService.getSearchGroup("chat-groups", s)
+        return retrofitService.getSearchGroup("GROUP", s)
                 .map(new Func1<Object, Object>() {
                     @Override
                     public Object call(Object O) {
@@ -945,7 +945,7 @@ public class RetrofitUtils {
      * @return Objects
      */
     public Observable<Object> getSearchPerson(String s) throws Exception{
-        return retrofitService.getSearchPerson("users", s)
+        return retrofitService.getSearchPerson("USER", s)
                 .map(new Func1<Object, Object>() {
                     @Override
                     public Object call(Object O) {
@@ -1163,8 +1163,8 @@ public class RetrofitUtils {
      * @param s
      * @return Objects
      */
-    public Observable<Object> editPersonNote(String id, String s)throws Exception {
-        return retrofitService.editPersonNote(id, s)
+    public Observable<Object> editPersonNote(String pid,String id, String s)throws Exception {
+        return retrofitService.editPersonNote(pid,id, s)
                 .map(new Func1<Object, Object>() {
                     @Override
                     public Object call(Object O) {
@@ -1327,6 +1327,22 @@ public class RetrofitUtils {
                 });
     }
 
+    /**
+     * 删除好友
+     *
+     * @param pid
+     * @param id
+     * @return Objects
+     */
+    public Observable<Object> delPerson(String pid, String id) throws Exception{
+        return retrofitService.delPerson(pid, id)
+                .map(new Func1<Object, Object>() {
+                    @Override
+                    public Object call(Object O) {
+                        return O;
+                    }
+                });
+    }
 
 
 }

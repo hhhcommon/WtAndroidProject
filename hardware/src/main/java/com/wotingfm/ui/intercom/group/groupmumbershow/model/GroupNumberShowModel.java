@@ -79,7 +79,6 @@ public class GroupNumberShowModel  {
                     String _id = list.get(i).getId();
                     if (_id != null && !_id.trim().equals("")) {
                         if (id.equals(_id)) {
-                            list.get(i).setType(1);
                             _list.add(list.get(i));
                         }
                     }
@@ -93,7 +92,6 @@ public class GroupNumberShowModel  {
                     String _id = list.get(i).getId();
                     if (_id != null && !_id.trim().equals("")) {
                         if (!id.equals(_id)) {
-                            list.get(i).setType(2);
                             _list.add(list.get(i));
                         }
                     }
@@ -104,8 +102,6 @@ public class GroupNumberShowModel  {
             for (int i = 0; i < list.size(); i++) {
                 boolean b = list.get(i).is_admin();
                 if (!b) {
-
-                    list.get(i).setType(3);
                     _list.add(list.get(i));
                 }
             }
@@ -114,7 +110,6 @@ public class GroupNumberShowModel  {
             for (int i = 0; i < list.size(); i++) {
                 boolean b = list.get(i).is_admin();
                 if (b) {
-                    list.get(i).setType(2);
                     _list.add(list.get(i));
                 }
             }
@@ -122,8 +117,6 @@ public class GroupNumberShowModel  {
             for (int i = 0; i < list.size(); i++) {
                 boolean b = list.get(i).is_admin();
                 if (!b) {
-
-                    list.get(i).setType(3);
                     _list.add(list.get(i));
                 }
             }

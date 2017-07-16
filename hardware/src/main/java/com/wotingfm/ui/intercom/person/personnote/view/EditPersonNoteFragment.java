@@ -66,16 +66,6 @@ public class EditPersonNoteFragment extends Fragment implements View.OnClickList
     }
 
     /**
-     * 返回值设置
-     *
-     * @param type
-     * @param name
-     */
-    public void setResult(boolean type, String name) {
-        Listener.resultListener(type, name);
-    }
-
-    /**
      * 展示弹出框
      */
     public void dialogShow() {
@@ -87,6 +77,16 @@ public class EditPersonNoteFragment extends Fragment implements View.OnClickList
      */
     public void dialogCancel() {
         if (dialog != null) dialog.dismiss();
+    }
+
+    /**
+     * 返回值设置
+     *
+     * @param type
+     * @param name
+     */
+    public void setResult(boolean type, String name) {
+        Listener.resultListener(type, name);
     }
 
     /**

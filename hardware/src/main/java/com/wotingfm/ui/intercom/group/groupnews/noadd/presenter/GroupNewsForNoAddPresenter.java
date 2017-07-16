@@ -201,9 +201,9 @@ public class GroupNewsForNoAddPresenter {
                 String msg = js.getString("data");
                 JSONTokener jsonParser = new JSONTokener(msg);
                 JSONObject arg1 = (JSONObject) jsonParser.nextValue();
-                String group = arg1.getString("chat_group");
+                String users = arg1.getString("users");
                 // 群成员
-                List<Contact.user> list = new Gson().fromJson(group, new TypeToken<List<Contact.user>>() {
+                List<Contact.user> list = new Gson().fromJson(users, new TypeToken<List<Contact.user>>() {
                 }.getType());
                 if (list != null) {
                     // 处理数据

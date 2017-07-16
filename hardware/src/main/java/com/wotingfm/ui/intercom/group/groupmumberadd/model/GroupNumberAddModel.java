@@ -23,6 +23,7 @@ public class GroupNumberAddModel {
 
     /**
      * 测试数据
+     *
      * @return
      */
     public List<Contact.user> getData() {
@@ -31,28 +32,31 @@ public class GroupNumberAddModel {
     }
 
     /**
-     * 组装数据
+     * 组装数据,去除已经是群成员的好友
      *
      * @param src_list 群成员
-     * @param list 好友列表
+     * @param list     好友列表
      */
     public List<Contact.user> assemblyData(List<Contact.user> src_list, List<Contact.user> list) {
-        for(int i=0;i<src_list.size();i++){
-            String src_id=src_list.get(i).getId();
-            if(src_id!=null&&!src_id.trim().equals("")){
-                for(int j=0;j<list.size();j++){
-                    String id=list.get(i).getId();
-                    if(id!=null&&!id.trim().equals("")){
-                        if(id.equals(src_id)){
-                            list.remove(j);
+        List<Contact.user> _list = new ArrayList<>();
+        // 遍历好友列表
+        for (int i = 0; i < list.size(); i++) {
+            String src_id = list.get(i).getId();
+            if (src_id != null && !src_id.trim().equals("")) {
+                boolean b = false;
+                for (int j = 0; j < src_list.size(); j++) {
+                    String id = src_list.get(j).getId();
+                    if (id != null && !id.trim().equals("")) {
+                        if (id.equals(src_id)) {
+                            b = true;
                             break;
                         }
                     }
                 }
+                if (!b) _list.add(list.get(i));
             }
         }
-
-        return list;
+        return _list;
     }
 
     /**
@@ -60,7 +64,7 @@ public class GroupNumberAddModel {
      *
      * @param listener 监听
      */
-    public void loadNewsForAdd(String gid,String id,  final OnLoadInterface listener) {
+    public void loadNewsForAdd(String gid, String id, final OnLoadInterface listener) {
         try {
             RetrofitUtils.getInstance().groupNumAdd(gid, id)
                     .subscribeOn(Schedulers.io())

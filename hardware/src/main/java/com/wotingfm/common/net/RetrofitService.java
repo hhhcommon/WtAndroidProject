@@ -19,6 +19,7 @@ import com.wotingfm.common.bean.SelectedMore;
 import com.wotingfm.common.bean.SerchList;
 import com.wotingfm.common.bean.Subscrible;
 import com.wotingfm.common.bean.TrailerInfo;
+
 import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
@@ -360,17 +361,18 @@ public interface RetrofitService {
     Observable<Object> editGroupMM(@Path("id") String id,
                                    @Query("password") String s);
 
-    // 修改好友备注（X）
-    @PUT(Api.URL_CHANGE_PERSON_NOTE)
-    Observable<Object> editPersonNote(@Path("id") String id,
-                                      @Query("note") String s);
+    // 修改好友备注
+    @POST(Api.URL_CHANGE_PERSON_NOTE)
+    Observable<Object> editPersonNote(@Path("userId") String pid,
+                                      @Path("friendId") String id,
+                                      @Query("aliasName") String s);
 
     // 删除群成员
     @DELETE(Api.URL_DEL_GROUP_NUM)
     Observable<Object> groupNumDel(@Path("id") String gid,
                                    @Query("member_user_id") String id);
 
-    // 删除群成员
+    // 添加群成员
     @POST(Api.URL_ADD_GROUP_NUM)
     Observable<Object> groupNumAdd(@Path("id") String gid,
                                    @Query("member_user_id") String id);
@@ -387,10 +389,10 @@ public interface RetrofitService {
     @GET(Api.URL_GET_USER_INFO)
     Observable<Object> getUserInfo(@Path("id") String id);
 
-    // 入组申请(X)
+    // 入组申请
     @POST(Api.URL_GROUP_APPLY)
     Observable<Object> groupApply(@Path("id") String gid,
-                                  @Query("news") String news,
+                                  @Query("apply_message") String news,
                                   @Query("password") String password);
 
     // 好友订阅专辑
@@ -443,6 +445,10 @@ public interface RetrofitService {
     Observable<Object> editUserImg(@Path("id") String id,
                                    @Query("portraitMini") String news);
 
+    // 删除好友
+    @DELETE(Api.URL_PERSON_DEL)
+    Observable<Object> delPerson(@Path("userId") String pid,
+                                 @Path("friendId") String id);
 
 }
 
