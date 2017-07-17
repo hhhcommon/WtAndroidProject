@@ -1,4 +1,4 @@
-package com.wotingfm.ui.intercom.group.setmanager.adapter;
+package com.wotingfm.ui.intercom.group.transfergroup.adapter;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -21,11 +21,11 @@ import java.util.List;
  * 作者：xinLong on 2017/6/8 14:36
  * 邮箱：645700751@qq.com
  */
-public class SetManagerAdapter extends BaseAdapter {
+public class TransferManagerAdapter extends BaseAdapter {
     private List<Contact.user> list;
     private Context context;
 
-    public SetManagerAdapter(Context context, List<Contact.user> list) {
+    public TransferManagerAdapter(Context context, List<Contact.user> list) {
         super();
         this.list = list;
         this.context = context;

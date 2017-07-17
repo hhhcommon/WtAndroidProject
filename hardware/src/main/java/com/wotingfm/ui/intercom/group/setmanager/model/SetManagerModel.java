@@ -39,63 +39,24 @@ public class SetManagerModel {
      * 组装数据
      *
      * @param list
-     * @param id
      */
-    public List<Contact.user> assemblyData(List<Contact.user> list, String id) {
+    public List<Contact.user> assemblyData(List<Contact.user> list) {
         List<Contact.user> _list = new ArrayList<>();
-        // 有群主
-        if (id != null && !id.trim().equals("")) {
-            // 添加管理员
-            for (int i = 0; i < list.size(); i++) {
-                // 是管理员
-                boolean b = false;
-                try {
-                    b = list.get(i).is_admin();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                if (b) {
-                    String _id = null;
-                    try {
-                        _id = list.get(i).getId();
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                    // 剔除群主
-                    if (_id != null && !_id.trim().equals("")) {
-                        if (!id.equals(_id)) {
-                            list.get(i).setType(2);
-                            _list.add(list.get(i));
-                        }
-                    }
-                }
-            }
-            // 添加成员
-            for (int i = 0; i < list.size(); i++) {
-                boolean b = list.get(i).is_admin();
-                if (!b) {
-                    list.get(i).setType(3);
-                    _list.add(list.get(i));
-                }
-            }
-        } else {
             // 添加管理员
             for (int i = 0; i < list.size(); i++) {
                 boolean b = list.get(i).is_admin();
                 if (b) {
-                    list.get(i).setType(2);
                     _list.add(list.get(i));
                 }
             }
             // 添加成员
             for (int i = 0; i < list.size(); i++) {
                 boolean b = list.get(i).is_admin();
-                if (!b) {
-                    list.get(i).setType(3);
+                boolean b1 = list.get(i).is_owner();
+                if (!b&&!b1) {
                     _list.add(list.get(i));
                 }
             }
-        }
 
         return _list;
     }
@@ -110,7 +71,7 @@ public class SetManagerModel {
         String S = "";
         if (list != null && list.size() > 0) {
             for (int i = 0; i < list.size(); i++) {
-                if (list.get(i).getType() == 2) {
+                if (list.get(i).is_admin()) {
                     String id = list.get(i).getId();
                     s.append(id + ",");
                 }

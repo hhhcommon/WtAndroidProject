@@ -95,7 +95,6 @@ public class GroupManageFragment extends Fragment implements View.OnClickListene
                         SetManagerFragment fragment = new SetManagerFragment();
                         Bundle bundle = new Bundle();
                         bundle.putSerializable("list", (Serializable) list);
-                        bundle.putString("id", group.getCreator_id());
                         bundle.putString("gid", group.getId());
                         fragment.setArguments(bundle);
                         InterPhoneActivity.open(fragment);
@@ -116,12 +115,31 @@ public class GroupManageFragment extends Fragment implements View.OnClickListene
                     InterPhoneActivity.open(fragment);
                 } else {
                     if (group != null && group.getId() != null) {
+                        String channel = "";
+                        String channel1 = "";
+                        String channel2 = "";
+                        try {
+                            channel = group.getChannel();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        if (channel != null && !channel.equals("")) {
+                            if (channel.contains(",")) {
+                                String[] strArray = channel.split(","); //拆分字符为"," ,然后把结果交给数组strArray
+                                channel1 = strArray[0];
+                                channel2 = strArray[1];
+                            } else {
+                                channel1 = channel;
+                                channel2 = "";
+                            }
+                        }
+
                         StandbyChannelFragment fragment = new StandbyChannelFragment();
                         Bundle bundle = new Bundle();
                         bundle.putString("fromType", "message");
                         bundle.putString("groupId", group.getId());
-                        bundle.putString("channel1", "");
-                        bundle.putString("channel2", "");
+                        bundle.putString("channel1", channel1);
+                        bundle.putString("channel2", channel2);
                         fragment.setArguments(bundle);
                         InterPhoneActivity.open(fragment);
                     } else {
@@ -170,7 +188,6 @@ public class GroupManageFragment extends Fragment implements View.OnClickListene
                         fragment.setArguments(bundle);
                         InterPhoneActivity.open(fragment);
                     } else {
-
                         ToastUtils.show_always(this.getActivity(), "数据出错了，请您稍后再试！");
                     }
                 }

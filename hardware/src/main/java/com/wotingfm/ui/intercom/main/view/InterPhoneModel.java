@@ -3,6 +3,7 @@ package com.wotingfm.ui.intercom.main.view;
 import android.util.Log;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.common.net.RetrofitUtils;
@@ -32,7 +33,7 @@ public class InterPhoneModel {
                         @Override
                         public void call(Object o) {
                             try {
-                                Log.e("好友列表返回数据", new Gson().toJson(o));
+                                Log.e("好友列表返回数据", new GsonBuilder().serializeNulls().create().toJson(o));
                                 //填充UI
                                 listener.onSuccess(o);
                             } catch (Exception e) {
@@ -67,7 +68,7 @@ public class InterPhoneModel {
                         @Override
                         public void call(Object o) {
                             try {
-                                Log.e("群组列表返回数据", new Gson().toJson(o));
+                                Log.e("群组列表返回数据", new GsonBuilder().serializeNulls().create().toJson(o));
                                 //填充UI
                                 listener.onSuccess(o);
                             } catch (Exception e) {

@@ -1,4 +1,4 @@
-package com.wotingfm.ui.message.notify.model;
+package com.wotingfm.ui.mine.message.notify.model;
 
 /**
  * 消息的存储

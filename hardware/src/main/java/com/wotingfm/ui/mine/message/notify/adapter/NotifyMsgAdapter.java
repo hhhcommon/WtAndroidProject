@@ -1,4 +1,4 @@
-package com.wotingfm.ui.message.notify.adapter;
+package com.wotingfm.ui.mine.message.notify.adapter;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -17,7 +17,7 @@ import com.woting.commonplat.utils.BitmapUtils;
 import com.wotingfm.R;
 import com.wotingfm.common.utils.GlideUtils;
 import com.wotingfm.common.view.slidingbutton.SlidingButtonView;
-import com.wotingfm.ui.message.notify.model.DBNotifyMsg;
+import com.wotingfm.ui.mine.message.notify.model.DBNotifyMsg;
 
 import java.util.List;
 

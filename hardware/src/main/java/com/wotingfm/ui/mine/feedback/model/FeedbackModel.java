@@ -3,6 +3,7 @@ package com.wotingfm.ui.mine.feedback.model;
 import android.util.Log;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.common.net.RetrofitUtils;
@@ -28,16 +29,15 @@ public class FeedbackModel {
      * @param listener 监听
      */
     public void loadNews(String information,String feedback, final OnLoadInterface listener) {
-        String id= BSApplication.SharedPreferences.getString(StringConstant.USER_ID,"");
         try {
-            RetrofitUtils.getInstance().feedback(id,information,feedback)
+            RetrofitUtils.getInstance().feedback(information,feedback)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(new Action1<Object>() {
                         @Override
                         public void call(Object o) {
                             try {
-                                Log.e("提交意见反馈返回数据",new Gson().toJson(o));
+                                Log.e("提交意见反馈返回数据",new GsonBuilder().serializeNulls().create().toJson(o));
                                 //填充UI
                                 listener.onSuccess(o);
                             } catch (Exception e) {

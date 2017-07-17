@@ -54,12 +54,6 @@ public class SetManagerPresenter {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        String id = null;// 群创建者id
-        try {
-            id = activity.getArguments().getString("id");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
         List<Contact.user> list = null;// 群成员列表
         try {
             list = (List<Contact.user>) activity.getArguments().getSerializable("list");
@@ -68,7 +62,7 @@ public class SetManagerPresenter {
         }
 
         if(list!=null&&list.size()>0){
-            List<Contact.user> _list = model.assemblyData(list, id);
+            List<Contact.user> _list = model.assemblyData(list);
             return _list;
         }else{
             return null;
@@ -83,11 +77,11 @@ public class SetManagerPresenter {
      * @param position
      */
     public void changeData(int position) {
-        int type = list.get(position).getType();
-        if (type == 3) {
-            list.get(position).setType(2);
+        boolean type = list.get(position).is_admin();
+        if (type) {
+            list.get(position).setIs_admin(false);
         } else {
-            list.get(position).setType(3);
+            list.get(position).setIs_admin(true);
         }
         activity.setView(list);
     }

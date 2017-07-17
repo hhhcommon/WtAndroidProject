@@ -1,4 +1,4 @@
-package com.wotingfm.ui.message.notify.view;
+package com.wotingfm.ui.mine.message.notify.view;
 
 import android.app.Dialog;
 import android.os.Bundle;
@@ -14,9 +14,9 @@ import android.widget.TextView;
 import com.woting.commonplat.widget.TipView;
 import com.wotingfm.R;
 import com.wotingfm.common.utils.DialogUtils;
-import com.wotingfm.ui.message.notify.adapter.NotifyMsgAdapter;
-import com.wotingfm.ui.message.notify.model.DBNotifyMsg;
-import com.wotingfm.ui.message.notify.presenter.MsgNotifyPresenter;
+import com.wotingfm.ui.mine.message.notify.adapter.NotifyMsgAdapter;
+import com.wotingfm.ui.mine.message.notify.model.DBNotifyMsg;
+import com.wotingfm.ui.mine.message.notify.presenter.MsgNotifyPresenter;
 import com.wotingfm.ui.mine.main.MineActivity;
 
 import java.util.List;

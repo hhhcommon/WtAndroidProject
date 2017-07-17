@@ -147,7 +147,7 @@ public class GroupChatAdapter extends BaseExpandableListAdapter {
             holder.tv_name.setText(lists.getTitle());//名
         }
 
-        if (lists.getLogo_url() != null && !lists.getLogo_url().equals("")) {
+        if (lists.getLogo_url() != null && !lists.getLogo_url().equals("") && lists.getLogo_url().startsWith("http")) {
             GlideUtils.loadImageViewSize(context, lists.getLogo_url(), 60, 60, holder.img_touXiang, true);
         } else {
             Bitmap bmp = BitmapUtils.readBitMap(context, R.mipmap.icon_avatar_d);

@@ -3,6 +3,7 @@ package com.wotingfm.ui.mine.security.password.model;
 
 import android.util.Log;
 
+import com.google.gson.GsonBuilder;
 import com.wotingfm.common.net.RetrofitUtils;
 import com.wotingfm.ui.base.model.UserInfo;
 
@@ -31,7 +32,7 @@ public class ModifyPasswordModel extends UserInfo {
                         @Override
                         public void call(Object o) {
                             try {
-                                Log.e("获取验证码返回数据",o.toString());
+                                Log.e("获取验证码返回数据",new GsonBuilder().serializeNulls().create().toJson(o));
                                 //填充UI
                                 listener.onSuccess(o);
                             } catch (Exception e) {
@@ -70,7 +71,7 @@ public class ModifyPasswordModel extends UserInfo {
                         @Override
                         public void call(Object o) {
                             try {
-                                Log.e("获取修改密码返回数据",o.toString());
+                                Log.e("获取修改密码返回数据",new GsonBuilder().serializeNulls().create().toJson(o));
                                 //填充UI
                                 listener.onSuccess(o);
                             } catch (Exception e) {

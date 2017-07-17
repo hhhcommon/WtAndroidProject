@@ -10,6 +10,7 @@ import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.common.utils.ToastUtils;
 import com.wotingfm.ui.intercom.group.groupapply.model.GroupApplyForPasswordModel;
 import com.wotingfm.ui.intercom.group.groupapply.view.GroupApplyForPasswordFragment;
+import com.wotingfm.ui.intercom.main.view.InterPhoneActivity;
 
 import org.json.JSONObject;
 
@@ -72,8 +73,13 @@ public class GroupApplyForPasswordPresenter {
             Log.e("加入群：密码==ret", String.valueOf(ret));
             if (ret == 0) {
                 activity.getActivity().sendBroadcast(new Intent(BroadcastConstants.GROUP_GET));
+                ToastUtils.show_always(activity.getActivity(), "加入成功！");
+                InterPhoneActivity.close();
             } else {
-                ToastUtils.show_always(activity.getActivity(), "添加失败，请稍后再试！");
+                String msg = js.getString("msg");
+                if (msg != null && !msg.trim().equals("")) {
+                    ToastUtils.show_always(activity.getActivity(), msg);
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();

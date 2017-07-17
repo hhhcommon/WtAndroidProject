@@ -239,10 +239,10 @@ public interface RetrofitService {
                                       @Query("password") String password,
                                       @Query("code") String code);
 
-    // 修改手机号(X)
+    // 修改手机号
     @POST(Api.URL_RESET_PHONE_NUMBER)
-    Observable<Object> resetPhoneNumber(@Query("s") String phone,
-                                        @Query("s") String password,
+    Observable<Object> resetPhoneNumber(@Query("phone") String phone,
+                                        @Query("newPhone") String newPhone,
                                         @Query("code") String code);
 
     // 好友列表
@@ -293,11 +293,6 @@ public interface RetrofitService {
     Observable<Object> getSearchPerson(@Path("type") String type,
                                        @Query("q") String s);
 
-    // 加群方式
-    @POST(Api.URL_APPLY_GROUP_TYPE)
-    Observable<Object> applyGroupType(@Query("password") String password,
-                                      @Query("token") int type);
-
     // 删除好友申请
     @DELETE(Api.URL_NEW_FRIEND_DEL)
     Observable<Object> newFriendDel(@Path("id") String id,
@@ -330,11 +325,10 @@ public interface RetrofitService {
                                    @Query("member_access_mode") int type,
                                    @Query("logo_url") String url);
 
-    // 设置群组备用频道(X)
-    @POST(Api.URL_SET_CHANNEL)
+    // 修改群信息(备用频道)
+    @PUT(Api.URL_EDIT_GROUP)
     Observable<Object> setChannel(@Path("id") String id,
-                                  @Query("channel1") String channel1,
-                                  @Query("channel2") String channel2);
+                                  @Query("channel") String c);
 
     // 修改群信息(群名称)
     @PUT(Api.URL_EDIT_GROUP)
@@ -360,7 +354,11 @@ public interface RetrofitService {
     @PUT(Api.URL_EDIT_GROUP)
     Observable<Object> editGroupMM(@Path("id") String id,
                                    @Query("password") String s);
-
+    // 修改群信息(加群方式)
+    @PUT(Api.URL_EDIT_GROUP)
+    Observable<Object> applyGroupType(@Path("id") String id,
+                                      @Query("password") String password,
+                                      @Query("member_access_mode") int type);
     // 修改好友备注
     @POST(Api.URL_CHANGE_PERSON_NOTE)
     Observable<Object> editPersonNote(@Path("userId") String pid,
@@ -409,11 +407,10 @@ public interface RetrofitService {
     Observable<Object> transferManager(@Path("id") String gid,
                                        @Query("new_owner_id") String pid);
 
-    // 意见反馈(X)
+    // 意见反馈
     @POST(Api.URL_FEED_BACK)
-    Observable<Object> feedback(@Path("id") String id,
-                                @Query("s") String information,
-                                @Query("s") String feedback);
+    Observable<Object> feedback(@Query("contact_way") String information,
+                                @Query("content") String feedback);
 
     // 修改用户自己昵称
     @POST(Api.URL_EDIT_USER)
@@ -449,7 +446,9 @@ public interface RetrofitService {
     @DELETE(Api.URL_PERSON_DEL)
     Observable<Object> delPerson(@Path("userId") String pid,
                                  @Path("friendId") String id);
-
+    // 获取消息（待修改）
+    @DELETE(Api.URL_MSG_APPLY)
+    Observable<Object> applies();
 }
 
 

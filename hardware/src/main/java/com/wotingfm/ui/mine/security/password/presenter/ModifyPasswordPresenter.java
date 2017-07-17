@@ -4,6 +4,7 @@ import android.os.CountDownTimer;
 import android.util.Log;
 import android.widget.Toast;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.woting.commonplat.config.GlobalNetWorkConfig;
 import com.wotingfm.common.utils.ToastUtils;
 import com.wotingfm.ui.mine.main.MineActivity;
@@ -122,7 +123,7 @@ public class ModifyPasswordPresenter {
     // 处理修改密码返回数据
     private void dealSuccess(Object o) {
         try {
-            String s = new Gson().toJson(o);
+            String s = new GsonBuilder().serializeNulls().create().toJson(o);
             JSONObject js = new JSONObject(s);
             int ret = js.getInt("ret");
             Log.e("ret", String.valueOf(ret));
@@ -162,7 +163,7 @@ public class ModifyPasswordPresenter {
     // 处理户获取验证码返回数据
     private void dealGetYzmSuccess(Object o) {
         try {
-            String s = new Gson().toJson(o);
+            String s = new GsonBuilder().serializeNulls().create().toJson(o);
             JSONObject js = new JSONObject(s);
             int ret = js.getInt("ret");
             Log.e("ret", String.valueOf(ret));

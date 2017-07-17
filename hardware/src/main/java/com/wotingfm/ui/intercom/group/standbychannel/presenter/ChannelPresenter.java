@@ -6,6 +6,7 @@ import android.util.Log;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.woting.commonplat.config.GlobalNetWorkConfig;
+import com.wotingfm.common.config.GlobalStateConfig;
 import com.wotingfm.common.utils.ToastUtils;
 import com.wotingfm.ui.intercom.group.groupnews.add.view.GroupNewsForAddFragment;
 import com.wotingfm.ui.intercom.group.groupnews.noadd.model.GroupNewsForNoAddModel;
@@ -30,8 +31,8 @@ public class ChannelPresenter {
 
     private final StandbyChannelFragment activity;
     private final ChannelModel model;
-    private String fromType, channel1, channel2, groupId;
-    private int type;
+    private String fromType, groupId;
+    private int type=1;
     private List<String> list;
 
 
@@ -57,6 +58,7 @@ public class ChannelPresenter {
             // 从创建界面来，不需要设置默认界面
         } else if (fromType != null && fromType.trim().equals("message")) {
             // 从群详情界面来
+            String channel1 = null;
             try {
                 channel1 = activity.getArguments().getString("channel1");
             } catch (Exception e) {
@@ -65,6 +67,7 @@ public class ChannelPresenter {
             if (channel1 != null && !channel1.trim().equals("")) {
                 activity.setChannel(1, channel1);
             }
+            String channel2 = null;
             try {
                 channel2 = activity.getArguments().getString("channel2");
             } catch (Exception e) {
@@ -101,25 +104,30 @@ public class ChannelPresenter {
     /**
      * 完成按钮的操作
      */
-    public void over() {
-        if(true){
+    public void over(String channel1, String channel2) {
+        if (GlobalStateConfig.test) {
             jump();
-        }else{
+        } else {
             if (GlobalNetWorkConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
-                activity.dialogShow();
-                model.loadNews(channel1, channel2, groupId, new ChannelModel.OnLoadInterface() {
-                    @Override
-                    public void onSuccess(Object o) {
-                        activity.dialogCancel();
-                        dealSuccess(o);
-                    }
+                if (model.checkData(channel1, channel2)) {
+                    activity.dialogShow();
+                    String s = model.assemblyData(channel1, channel2);
+                    model.loadNews(s, groupId, new ChannelModel.OnLoadInterface() {
+                        @Override
+                        public void onSuccess(Object o) {
+                            activity.dialogCancel();
+                            dealSuccess(o);
+                        }
 
-                    @Override
-                    public void onFailure(String msg) {
-                        activity.dialogCancel();
-                        ToastUtils.show_always(activity.getActivity(), "设置失败，请稍后再试！");
-                    }
-                });
+                        @Override
+                        public void onFailure(String msg) {
+                            activity.dialogCancel();
+                            ToastUtils.show_always(activity.getActivity(), "设置失败，请稍后再试！");
+                        }
+                    });
+                } else {
+                    ToastUtils.show_always(activity.getActivity(), "频道不能设置为空！");
+                }
             } else {
                 ToastUtils.show_always(activity.getActivity(), "网络连接失败，请稍后再试！");
             }
@@ -153,11 +161,6 @@ public class ChannelPresenter {
         if (list != null && list.size() > 0) {
             String s = list.get(channelIndex);
             if (s != null && !s.trim().equals("")) {
-                if (type == 1) {
-                    channel1 = s;
-                } else {
-                    channel2 = s;
-                }
                 activity.setChannel(type, s);
             }
         }
@@ -166,7 +169,7 @@ public class ChannelPresenter {
     /**
      * 业务逻辑跳转；群详情还是关闭当前页面
      */
-    public void jump(){
+    public void jump() {
         if (fromType != null && fromType.trim().equals("create")) {
             InterPhoneActivity.close();
             GroupNewsForAddFragment fragment = new GroupNewsForAddFragment();

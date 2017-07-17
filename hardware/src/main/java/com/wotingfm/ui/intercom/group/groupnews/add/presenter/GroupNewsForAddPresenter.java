@@ -196,7 +196,7 @@ public class GroupNewsForAddPresenter {
                 channel1 = strArray[0];
                 channel2 = strArray[1];
             } else {
-                channel1 = "CH100-100000";
+                channel1 = channel;
                 channel2 = "";
             }
         }

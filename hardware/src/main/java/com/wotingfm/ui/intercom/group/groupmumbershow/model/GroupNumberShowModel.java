@@ -74,7 +74,7 @@ public class GroupNumberShowModel  {
         if (id != null && !id.trim().equals("")) {
             // 添加群主
             for (int i = 0; i < list.size(); i++) {
-                boolean b = list.get(i).is_admin();
+                boolean b = list.get(i).is_owner();
                 if (b) {
                     String _id = list.get(i).getId();
                     if (_id != null && !_id.trim().equals("")) {
@@ -101,7 +101,8 @@ public class GroupNumberShowModel  {
             // 添加成员
             for (int i = 0; i < list.size(); i++) {
                 boolean b = list.get(i).is_admin();
-                if (!b) {
+                boolean b1 = list.get(i).is_owner();
+                if (!b&&!b1) {
                     _list.add(list.get(i));
                 }
             }
@@ -116,9 +117,11 @@ public class GroupNumberShowModel  {
             // 添加成员
             for (int i = 0; i < list.size(); i++) {
                 boolean b = list.get(i).is_admin();
-                if (!b) {
+                boolean b1 = list.get(i).is_owner();
+                if (!b&&!b1) {
                     _list.add(list.get(i));
                 }
+
             }
         }
 

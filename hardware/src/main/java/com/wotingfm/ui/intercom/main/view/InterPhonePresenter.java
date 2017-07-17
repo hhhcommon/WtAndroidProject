@@ -7,6 +7,7 @@ import android.content.IntentFilter;
 import android.util.Log;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.woting.commonplat.config.GlobalNetWorkConfig;
 import com.wotingfm.common.config.GlobalStateConfig;
@@ -85,7 +86,7 @@ public class InterPhonePresenter {
     // 处理返回好友的数据
     private void dealUserSuccess(Object o) {
         try {
-            String s = new Gson().toJson(o);
+            String s = new GsonBuilder().serializeNulls().create().toJson(o);
             JSONObject js = new JSONObject(s);
             int ret = js.getInt("ret");
             Log.e("获取好友列表==ret", String.valueOf(ret));
@@ -110,7 +111,7 @@ public class InterPhonePresenter {
     // 处理返回组的数据
     private void dealGroupSuccess(Object o) {
         try {
-            String s = new Gson().toJson(o);
+            String s = new GsonBuilder().serializeNulls().create().toJson(o);
             JSONObject js = new JSONObject(s);
             int ret = js.getInt("ret");
             Log.e("获取群组列表==ret", String.valueOf(ret));
