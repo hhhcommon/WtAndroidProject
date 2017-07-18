@@ -17,7 +17,7 @@ import com.wotingfm.common.bean.SerchList;
 import com.wotingfm.common.bean.UserBean;
 import com.wotingfm.common.net.RetrofitUtils;
 import com.wotingfm.ui.base.basefragment.BaseFragment;
-import com.wotingfm.ui.play.activity.AnchorPersonalCenterActivity;
+import com.wotingfm.ui.play.activity.AnchorPersonalCenterFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -74,7 +74,7 @@ public class AnchorListFragment extends BaseFragment implements OnLoadMoreListen
         mAdapter = new UsersSerchAdapter(getActivity(), albumsBeanList, new UsersSerchAdapter.OnClick() {
             @Override
             public void click(UserBean s) {
-                AnchorPersonalCenterActivity.start(getActivity(),s.id);
+                openFragment(AnchorPersonalCenterFragment.newInstance(s.id));
             }
         });
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
@@ -86,7 +86,7 @@ public class AnchorListFragment extends BaseFragment implements OnLoadMoreListen
 
     private int mPage;
     private UsersSerchAdapter mAdapter;
-        private List<UserBean> albumsBeanList = new ArrayList<>();
+    private List<UserBean> albumsBeanList = new ArrayList<>();
 
     public void refresh() {
         mPage = 1;

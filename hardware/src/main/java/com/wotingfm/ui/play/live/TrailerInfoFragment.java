@@ -29,7 +29,9 @@ import com.wotingfm.common.utils.T;
 import com.wotingfm.ui.base.baseactivity.AppManager;
 import com.wotingfm.ui.base.baseactivity.BaseToolBarActivity;
 import com.wotingfm.ui.base.baseactivity.NoTitleBarBaseActivity;
-import com.wotingfm.ui.play.activity.AnchorPersonalCenterActivity;
+import com.wotingfm.ui.base.basefragment.BaseFragment;
+import com.wotingfm.ui.play.activity.AnchorPersonalCenterFragment;
+import com.wotingfm.ui.play.look.activity.serch.fragment.AnchorListFragment;
 import com.wotingfm.ui.user.logo.LogoActivity;
 
 import butterknife.BindView;
@@ -43,7 +45,7 @@ import rx.schedulers.Schedulers;
  * 预告详情
  */
 
-public class TrailerInfoActivity extends NoTitleBarBaseActivity {
+public class TrailerInfoFragment extends BaseFragment {
     @BindView(R.id.tvTrailerTitle)
     TextView tvTrailerTitle;
     @BindView(R.id.tvTrailerContent)
@@ -69,29 +71,33 @@ public class TrailerInfoActivity extends NoTitleBarBaseActivity {
     @BindView(R.id.relativeLable)
     RelativeLayout relativeLable;
 
-    @Override
-    public int getLayoutId() {
-        return R.layout.activity_trailer_info;
+    public static TrailerInfoFragment newInstance(String id) {
+        TrailerInfoFragment fragment = new TrailerInfoFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString("id", id);
+        fragment.setArguments(bundle);
+        return fragment;
     }
 
-    public static void start(Activity activity, String id) {
-        Intent intent = new Intent(activity, TrailerInfoActivity.class);
-        intent.putExtra("id", id);
-        activity.startActivity(intent);
-    }
 
     private String id;
     private String userId;
 
     @Override
+    protected int getLayoutResource() {
+        return R.layout.activity_trailer_info;
+    }
+
+    @Override
     public void initView() {
-        id = getIntent().getStringExtra("id");
+        Bundle bundle = getArguments();
+        if (bundle != null)
+            id = bundle.getString("id");
         userId = CommonUtils.getUserId();
         ivBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AppManager.getAppManager().finishActivity(TrailerInfoActivity.this);
-                finish();
+                closeFragment();
             }
         });
         loadLayout.findViewById(R.id.btnTryAgain).setOnClickListener(new View.OnClickListener() {
@@ -126,7 +132,7 @@ public class TrailerInfoActivity extends NoTitleBarBaseActivity {
                         @Override
                         public void onClick(View v) {
                             if (CommonUtils.isLogin() == false) {
-                                LogoActivity.start(TrailerInfoActivity.this);
+                                LogoActivity.start(getActivity());
                                 return;
                             }
                             if (voiceLiveBean.had_reserved == true) {
@@ -143,7 +149,7 @@ public class TrailerInfoActivity extends NoTitleBarBaseActivity {
                             @Override
                             public void onClick(View v) {
                                 if (CommonUtils.isLogin() == false) {
-                                    LogoActivity.start(TrailerInfoActivity.this);
+                                    LogoActivity.start(getActivity());
                                     return;
                                 }
                                 if (voiceLiveBean.owner.had_followed == true) {
@@ -161,7 +167,7 @@ public class TrailerInfoActivity extends NoTitleBarBaseActivity {
                         ivPhoto.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                AnchorPersonalCenterActivity.start(TrailerInfoActivity.this, voiceLiveBean.owner.id);
+                                openFragment(AnchorPersonalCenterFragment.newInstance(voiceLiveBean.owner.id));
                             }
                         });
                         tvName.setText(voiceLiveBean.owner.name);
@@ -185,7 +191,7 @@ public class TrailerInfoActivity extends NoTitleBarBaseActivity {
                         dissmisDialog();
                         sw.owner.fans_count = sw.owner.fans_count + 1;
                         tvFens.setText("粉丝  " + sw.owner.fans_count);
-                        sw.owner.had_followed=true;
+                        sw.owner.had_followed = true;
                         isFollow(true);
                     }
                 }, new Action1<Throwable>() {
@@ -208,7 +214,7 @@ public class TrailerInfoActivity extends NoTitleBarBaseActivity {
                         dissmisDialog();
                         sw.owner.fans_count = sw.owner.fans_count - 1;
                         tvFens.setText("粉丝  " + sw.owner.fans_count);
-                        sw.owner.had_followed=false;
+                        sw.owner.had_followed = false;
                         isFollow(false);
                     }
                 }, new Action1<Throwable>() {
@@ -231,7 +237,7 @@ public class TrailerInfoActivity extends NoTitleBarBaseActivity {
                         isDeleteReservations(true);
                         voiceLiveBean.reserved_count = voiceLiveBean.reserved_count + 1;
                         tvTrailerNumber.setText(voiceLiveBean.reserved_count + "人预约");
-                        voiceLiveBean.had_reserved=true;
+                        voiceLiveBean.had_reserved = true;
                         dissmisDialog();
                     }
                 }, new Action1<Throwable>() {
@@ -253,7 +259,7 @@ public class TrailerInfoActivity extends NoTitleBarBaseActivity {
                     public void call(Object s) {
                         isDeleteReservations(false);
                         voiceLiveBean.reserved_count = voiceLiveBean.reserved_count - 1;
-                        voiceLiveBean.had_reserved=false;
+                        voiceLiveBean.had_reserved = false;
                         tvTrailerNumber.setText(voiceLiveBean.reserved_count + "人预约");
                         dissmisDialog();
                     }

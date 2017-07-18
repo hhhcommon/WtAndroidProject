@@ -19,6 +19,9 @@ import com.wotingfm.common.database.HistoryHelper;
 import com.wotingfm.common.utils.T;
 import com.wotingfm.common.view.RecyclerViewDivider;
 import com.wotingfm.ui.base.baseactivity.BaseToolBarActivity;
+import com.wotingfm.ui.base.basefragment.BaseFragment;
+import com.wotingfm.ui.test.PlayerActivity;
+import com.wotingfm.ui.test.PlayerFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,16 +29,17 @@ import java.util.List;
 import butterknife.BindView;
 
 import static android.R.id.list;
+import static android.app.Activity.RESULT_OK;
 
 /**
  * Created by amine on 2017/6/9.
  * f播放历史
  */
 
-public class PlayerHistoryActivity extends BaseToolBarActivity {
-    public static void start(Activity activity) {
-        Intent intent = new Intent(activity, PlayerHistoryActivity.class);
-        activity.startActivityForResult(intent, 9090);
+public class PlayerHistoryFragment extends BaseFragment {
+    public static PlayerHistoryFragment newInstance() {
+        PlayerHistoryFragment fragment = new PlayerHistoryFragment();
+        return fragment;
     }
 
     @BindView(R.id.mRecyclerView)
@@ -44,8 +48,9 @@ public class PlayerHistoryActivity extends BaseToolBarActivity {
     LoadFrameLayout loadLayout;
     private PlayerHistoryListAdapter playerHistoryListAdapter;
 
+
     @Override
-    public int getLayoutId() {
+    protected int getLayoutResource() {
         return R.layout.activity_play_history;
     }
 
@@ -59,22 +64,19 @@ public class PlayerHistoryActivity extends BaseToolBarActivity {
                 loadLayout.showLoadingView();
             }
         });
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         mRecyclerView.setLayoutManager(layoutManager);
 /*        mRecyclerView.addItemDecoration(new RecyclerViewDivider(
                 this, LinearLayoutManager.VERTICAL, 1, R.color.color_efefef));*/
-        final HistoryHelper historyHelper = new HistoryHelper(getApplicationContext());
+        final HistoryHelper historyHelper = new HistoryHelper(BSApplication.getInstance());
         if (historyHelper != null) {
             final List<Player.DataBean.SinglesBean> list = historyHelper.findPlayHistoryList();
             if (list != null && !list.isEmpty()) {
-                playerHistoryListAdapter = new PlayerHistoryListAdapter(this, list, new PlayerHistoryListAdapter.PlayerHistoryClick() {
+                playerHistoryListAdapter = new PlayerHistoryListAdapter(getActivity(), list, new PlayerHistoryListAdapter.PlayerHistoryClick() {
                     @Override
                     public void click(Player.DataBean.SinglesBean singlesBean) {
-                        Intent intent = getIntent();
-                        intent.putExtra("singlesBean", singlesBean);
-                        setResult(RESULT_OK, intent);
-                        finish();
+                        openFragment(PlayerFragment.newInstance(singlesBean));
                     }
 
                     @Override

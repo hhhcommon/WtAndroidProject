@@ -2,6 +2,7 @@ package com.wotingfm.ui.play.radio;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
 
@@ -18,7 +19,10 @@ import com.wotingfm.common.bean.Radio;
 import com.wotingfm.common.bean.RadioInfo;
 import com.wotingfm.common.net.RetrofitUtils;
 import com.wotingfm.ui.base.baseactivity.BaseToolBarActivity;
+import com.wotingfm.ui.base.basefragment.BaseFragment;
+import com.wotingfm.ui.play.radio.fragment.RadioInfoTodayFragment;
 import com.wotingfm.ui.test.PlayerActivity;
+import com.wotingfm.ui.test.PlayerFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,21 +37,19 @@ import rx.schedulers.Schedulers;
  * 国家台
  */
 
-public class ProvincesAndCitiesListRadioActivity extends BaseToolBarActivity implements OnLoadMoreListener, OnRefreshListener {
+public class ProvincesAndCitiesListRadioFragment extends BaseFragment implements OnLoadMoreListener, OnRefreshListener {
     @BindView(R.id.mRecyclerView)
     ARecyclerView mRecyclerView;
     @BindView(R.id.loadLayout)
     LoadFrameLayout loadLayout;
 
-    public static void start(Activity activity, String title) {
-        Intent intent = new Intent(activity, ProvincesAndCitiesListRadioActivity.class);
-        intent.putExtra("title", title);
-        activity.startActivity(intent);
-    }
 
-    @Override
-    public int getLayoutId() {
-        return R.layout.activity_provinces_list_radio;
+    public static ProvincesAndCitiesListRadioFragment newInstance(String title) {
+        ProvincesAndCitiesListRadioFragment fragment = new ProvincesAndCitiesListRadioFragment();
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("title", title);
+        fragment.setArguments(bundle);
+        return fragment;
     }
 
     private LoadMoreFooterView loadMoreFooterView;
@@ -55,32 +57,40 @@ public class ProvincesAndCitiesListRadioActivity extends BaseToolBarActivity imp
     private List<ChannelsBean> albumsBeanList = new ArrayList<>();
 
     @Override
+    protected int getLayoutResource() {
+        return R.layout.activity_provinces_list_radio;
+    }
+
+    @Override
     public void initView() {
-        final String title = getIntent().getStringExtra("title");
-        setTitle(title + "台");
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        loadMoreFooterView = (LoadMoreFooterView) mRecyclerView.getLoadMoreFooterView();
-        mRecyclerView.setOnLoadMoreListener(this);
-        mRecyclerView.setOnRefreshListener(this);
-        mRecyclerView.setLayoutManager(layoutManager);
-        mAdapter = new RadioAdapter(this, albumsBeanList, new RadioAdapter.RadioClick() {
-            @Override
-            public void clickAlbums(ChannelsBean singlesBean) {
-                RadioInfoActivity.start(ProvincesAndCitiesListRadioActivity.this, title, singlesBean.id);
-                //     PlayerActivity.start(ProvincesAndCitiesListRadioActivity.this, singlesBean, null);
-            }
-        });
-        mRecyclerView.setIAdapter(mAdapter);
-        loadLayout.findViewById(R.id.btnTryAgain).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                loadLayout.showLoadingView();
-                refresh();
-            }
-        });
-        loadLayout.showLoadingView();
-        refresh();
+        Bundle bundle = getArguments();
+        if (bundle != null) {
+            final String title = bundle.getString("title");
+            setTitle(title + "台");
+            LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
+            layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+            loadMoreFooterView = (LoadMoreFooterView) mRecyclerView.getLoadMoreFooterView();
+            mRecyclerView.setOnLoadMoreListener(this);
+            mRecyclerView.setOnRefreshListener(this);
+            mRecyclerView.setLayoutManager(layoutManager);
+            mAdapter = new RadioAdapter(getActivity(), albumsBeanList, new RadioAdapter.RadioClick() {
+                @Override
+                public void clickAlbums(ChannelsBean singlesBean) {
+                    // RadioInfoActivity.start(ProvincesAndCitiesListRadioActivity.this, title, singlesBean.id);
+                    openFragment(PlayerFragment.newInstance(singlesBean));
+                }
+            });
+            mRecyclerView.setIAdapter(mAdapter);
+            loadLayout.findViewById(R.id.btnTryAgain).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    loadLayout.showLoadingView();
+                    refresh();
+                }
+            });
+            loadLayout.showLoadingView();
+            refresh();
+        }
     }
 
     private int mPage;

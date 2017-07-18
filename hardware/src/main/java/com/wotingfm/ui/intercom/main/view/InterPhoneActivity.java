@@ -15,6 +15,7 @@ import android.widget.Toast;
 import com.woting.commonplat.utils.SequenceUUID;
 import com.wotingfm.R;
 import com.wotingfm.common.constant.BroadcastConstants;
+import com.wotingfm.ui.base.baseactivity.AppManager;
 import com.wotingfm.ui.base.baseactivity.BaseFragmentActivity;
 
 /**
@@ -30,6 +31,7 @@ public class InterPhoneActivity extends BaseFragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_main);
+        AppManager.getAppManager().addActivity(this);
         context = this;
         open(new InterPhoneFragment());
     }
@@ -55,8 +57,10 @@ public class InterPhoneActivity extends BaseFragmentActivity {
      * 关闭已经打开的 Fragment
      */
     public static void close() {
-        context.getSupportFragmentManager().popBackStackImmediate();// 立即删除回退栈中的数据
-        hintKbTwo();
+        if (context != null && context.getSupportFragmentManager() != null) {
+            context.getSupportFragmentManager().popBackStackImmediate();// 立即删除回退栈中的数据
+            hintKbTwo();
+        }
     }
 
     /**
@@ -78,10 +82,12 @@ public class InterPhoneActivity extends BaseFragmentActivity {
 
     //此方法只是关闭软键盘
     private static void hintKbTwo() {
-        InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
-        if (imm.isActive() && context.getCurrentFocus() != null) {
-            if (context.getCurrentFocus().getWindowToken() != null) {
-                imm.hideSoftInputFromWindow(context.getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+        if (context != null) {
+            InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+            if (imm.isActive() && context.getCurrentFocus() != null) {
+                if (context.getCurrentFocus().getWindowToken() != null) {
+                    imm.hideSoftInputFromWindow(context.getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+                }
             }
         }
     }
@@ -107,19 +113,19 @@ public class InterPhoneActivity extends BaseFragmentActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-            Intent in = new Intent(BroadcastConstants.IMAGE_UPLOAD);
-            in.putExtra("resultCode", resultCode);
-            try {
-                in.putExtra("uri", data.getData().toString());
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            try {
-                in.putExtra("path", data.getStringExtra("return"));
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            sendBroadcast(in);
+        Intent in = new Intent(BroadcastConstants.IMAGE_UPLOAD);
+        in.putExtra("resultCode", resultCode);
+        try {
+            in.putExtra("uri", data.getData().toString());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        try {
+            in.putExtra("path", data.getStringExtra("return"));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        sendBroadcast(in);
     }
 
     private long tempTime;

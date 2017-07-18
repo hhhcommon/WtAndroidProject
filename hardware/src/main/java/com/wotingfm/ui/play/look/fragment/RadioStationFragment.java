@@ -22,12 +22,13 @@ import com.wotingfm.common.bean.Selected;
 import com.wotingfm.common.net.RetrofitUtils;
 import com.wotingfm.common.view.BannerView;
 import com.wotingfm.ui.base.basefragment.BaseFragment;
-import com.wotingfm.ui.play.look.activity.RadioMoreActivity;
-import com.wotingfm.ui.play.radio.CountryRadioActivity;
-import com.wotingfm.ui.play.radio.LocalRadioActivity;
-import com.wotingfm.ui.play.radio.ProvincesAndCitiesActivity;
-import com.wotingfm.ui.play.radio.RadioInfoActivity;
+import com.wotingfm.ui.play.look.activity.LookListFragment;
+import com.wotingfm.ui.play.look.activity.RadioMoreFragment;
+import com.wotingfm.ui.play.radio.CountryRadioFragment;
+import com.wotingfm.ui.play.radio.LocalRadioFragment;
+import com.wotingfm.ui.play.radio.ProvincesAndCitiesFragment;
 import com.wotingfm.ui.test.PlayerActivity;
+import com.wotingfm.ui.test.PlayerFragment;
 import com.zhy.adapter.recyclerview.wrapper.HeaderAndFooterWrapper;
 
 import java.util.ArrayList;
@@ -78,8 +79,8 @@ public class RadioStationFragment extends BaseFragment implements SwipeRefreshLa
         RadioStationAdapter selectedAdapter = new RadioStationAdapter(getActivity(), datas, new RadioStationAdapter.RadioStationClick() {
             @Override
             public void click(ChannelsBean dataBean) {
-                // PlayerActivity.start(getActivity(), dataBean, null);
-                RadioInfoActivity.start(getActivity(), dataBean.title, dataBean.id);
+                openFragment(PlayerFragment.newInstance(dataBean));
+                // RadioInfoActivity.start(getActivity(), dataBean.title, dataBean.id);
             }
         });
         headview = LayoutInflater.from(getActivity()).inflate(R.layout.headview_radiostation, mRecyclerView, false);
@@ -198,16 +199,16 @@ public class RadioStationFragment extends BaseFragment implements SwipeRefreshLa
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.tvLocal:
-                LocalRadioActivity.start(getActivity());
+                openFragment(LocalRadioFragment.newInstance());
                 break;
             case R.id.tvCountry:
-                CountryRadioActivity.start(getActivity());
+                openFragment(CountryRadioFragment.newInstance());
                 break;
             case R.id.tvProvince:
-                ProvincesAndCitiesActivity.start(getActivity());
+                openFragment(ProvincesAndCitiesFragment.newInstance());
                 break;
             case R.id.tvTitle:
-                RadioMoreActivity.start(getActivity());
+                openFragment(RadioMoreFragment.newInstance());
                 break;
         }
     }

@@ -3,6 +3,7 @@ package com.wotingfm.ui.play.activity;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -27,7 +28,11 @@ import com.wotingfm.common.utils.T;
 import com.wotingfm.common.view.ReportsDialog;
 import com.wotingfm.ui.base.baseactivity.AppManager;
 import com.wotingfm.ui.base.baseactivity.NoTitleBarBaseActivity;
-import com.wotingfm.ui.play.activity.albums.AlbumsListActivity;
+import com.wotingfm.ui.base.basefragment.BaseFragment;
+import com.wotingfm.ui.play.activity.albums.AlbumsListMeFragment;
+import com.wotingfm.ui.play.look.activity.serch.fragment.AlbumsListFragment;
+import com.wotingfm.ui.test.PlayerActivity;
+import com.wotingfm.ui.test.PlayerFragment;
 import com.wotingfm.ui.user.login.view.LoginFragment;
 import com.wotingfm.ui.user.logo.LogoActivity;
 import com.zhy.adapter.recyclerview.wrapper.HeaderAndFooterWrapper;
@@ -41,12 +46,14 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 
+import static android.app.Activity.RESULT_OK;
+
 /**
  * Created by amine on 2017/6/12.
  * 主播个人中心
  */
 
-public class AnchorPersonalCenterActivity extends NoTitleBarBaseActivity implements View.OnClickListener {
+public class AnchorPersonalCenterFragment extends BaseFragment implements View.OnClickListener {
     @BindView(R.id.ivBack)
     ImageView ivBack;
     @BindView(R.id.ivMore)
@@ -60,20 +67,18 @@ public class AnchorPersonalCenterActivity extends NoTitleBarBaseActivity impleme
     @BindView(R.id.tvTitle)
     TextView tvTitle;
 
-    public static void start(Activity activity, String uid) {
-        Intent intent = new Intent(activity, AnchorPersonalCenterActivity.class);
-        intent.putExtra("uid", uid);
-        activity.startActivityForResult(intent, 8080);
+    public static AnchorPersonalCenterFragment newInstance(String uid) {
+        AnchorPersonalCenterFragment fragment = new AnchorPersonalCenterFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString("uid", uid);
+        fragment.setArguments(bundle);
+        return fragment;
     }
 
 
     private int height = 640;// 滑动开始变色的高,真实项目中此高度是由广告轮播或其他首页view高度决定
     private int overallXScroll = 0;
 
-    @Override
-    public int getLayoutId() {
-        return R.layout.activity_anchor_personal_center;
-    }
 
     private AnchorPersonalCenterInfoAdapter anchorPersonalCenterInfoAdapter;
     private HeaderAndFooterWrapper mHeaderAndFooterWrapper;
@@ -84,8 +89,10 @@ public class AnchorPersonalCenterActivity extends NoTitleBarBaseActivity impleme
         userId = CommonUtils.getUserId();
         ivMore.setOnClickListener(this);
         ivBack.setOnClickListener(this);
-        height = DementionUtil.dip2px(this, 200);
-        uid = getIntent().getStringExtra("uid");
+        height = DementionUtil.dip2px(getActivity(), 200);
+        Bundle bundle = getArguments();
+        if (bundle != null)
+            uid = bundle.getString("uid");
         loadLayout.findViewById(R.id.btnTryAgain).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -93,27 +100,24 @@ public class AnchorPersonalCenterActivity extends NoTitleBarBaseActivity impleme
                 reportsPlayer(uid);
             }
         });
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         mRecyclerView.setLayoutManager(layoutManager);
-        anchorPersonalCenterInfoAdapter = new AnchorPersonalCenterInfoAdapter(this, dataBeanXes);
+        anchorPersonalCenterInfoAdapter = new AnchorPersonalCenterInfoAdapter(getActivity(), dataBeanXes);
         anchorPersonalCenterInfoAdapter.setAlbumsMoreClick(new AnchorPersonalCenterInfoAdapter.AlbumsMoreClick() {
             @Override
             public void ItmeClick(String albumsId) {
-                Intent intent = getIntent();
-                intent.putExtra("albumsId", albumsId);
-                setResult(RESULT_OK, intent);
-                finish();
+                openFragment(PlayerFragment.newInstance(albumsId));
             }
 
             @Override
             public void MoreClick(AnchorInfo.DataBeanXX.UserBean.DataBeanX s) {
-                AlbumsListActivity.start(AnchorPersonalCenterActivity.this, uid, "全部专辑(" + s.total_count + ")");
+                AlbumsListMeFragment.newInstance(uid, "全部专辑(" + s.total_count + ")");
             }
 
         });
         mHeaderAndFooterWrapper = new HeaderAndFooterWrapper(anchorPersonalCenterInfoAdapter);
-        View headview = LayoutInflater.from(this).inflate(R.layout.header_anchor_personal, mRecyclerView, false);
+        View headview = LayoutInflater.from(getActivity()).inflate(R.layout.header_anchor_personal, mRecyclerView, false);
         ivPhotoBg = (ImageView) headview.findViewById(R.id.ivPhotoBg);
         ivPhoto = (ImageView) headview.findViewById(R.id.ivPhoto);
         tvFensNub = (TextView) headview.findViewById(R.id.tvFensNub);
@@ -123,7 +127,6 @@ public class AnchorPersonalCenterActivity extends NoTitleBarBaseActivity impleme
         tvContent = (TextView) headview.findViewById(R.id.tvContent);
         mHeaderAndFooterWrapper.addHeaderView(headview);
         mRecyclerView.setAdapter(mHeaderAndFooterWrapper);
-        L.i("mingku", "uid=" + uid);
         reportsPlayer(uid);
         mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -159,19 +162,23 @@ public class AnchorPersonalCenterActivity extends NoTitleBarBaseActivity impleme
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.ivBack:
-                AppManager.getAppManager().finishActivity(this);
-                finish();
+                closeFragment();
                 break;
             case R.id.ivMore:
                 if (TextUtils.isEmpty(uid))
                     return;
                 if (dialog == null) {
-                    dialog = new ReportsDialog(this);
+                    dialog = new ReportsDialog(getActivity());
                 }
                 dialog.setUserId(uid);
                 dialog.show();
                 break;
         }
+    }
+
+    @Override
+    protected int getLayoutResource() {
+        return R.layout.activity_anchor_personal_center;
     }
 
     private void reportsPlayer(String uid) {
@@ -210,12 +217,12 @@ public class AnchorPersonalCenterActivity extends NoTitleBarBaseActivity impleme
     private TextView tvName, tvFensNub, tvFollowNub, tvFollow, tvContent;
 
     private void setHeadViewData(final AnchorInfo s) {
-        Glide.with(context)
+        Glide.with(getActivity())
                 .load(s.data.user.avatar)
                 .placeholder(R.mipmap.oval_defut_other)
                 .error(R.mipmap.oval_defut_other)
                 .crossFade(1000)
-                .bitmapTransform(new BlurTransformation(context, 23, 4))  // “23”：设置模糊度(在0.0到25.0之间)，默认”25";"4":图片缩放比例,默认“1”。
+                .bitmapTransform(new BlurTransformation(getActivity(), 23, 4))  // “23”：设置模糊度(在0.0到25.0之间)，默认”25";"4":图片缩放比例,默认“1”。
                 .into(ivPhotoBg);
         Glide.with(BSApplication.getInstance()).load(s.data.user.avatar)// Glide
                 .transform(new GlideCircleTransform(BSApplication.getInstance()))
@@ -245,7 +252,7 @@ public class AnchorPersonalCenterActivity extends NoTitleBarBaseActivity impleme
             public void onClick(View v) {
                 boolean isLogin = CommonUtils.isLogin();
                 if (isLogin == false) {
-                    LogoActivity.start(AnchorPersonalCenterActivity.this);
+                    LogoActivity.start(getActivity());
                     return;
                 }
                 showLodingDialog();
@@ -307,13 +314,10 @@ public class AnchorPersonalCenterActivity extends NoTitleBarBaseActivity impleme
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == 7070 && resultCode == RESULT_OK && data != null) {
             String albumsId = data.getStringExtra("albumsId");
-            Intent intent = getIntent();
-            intent.putExtra("albumsId", albumsId);
-            setResult(RESULT_OK, intent);
-            finish();
+            openFragment(PlayerFragment.newInstance(albumsId));
         }
     }
 }

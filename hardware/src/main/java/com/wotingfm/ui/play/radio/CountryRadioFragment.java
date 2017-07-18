@@ -5,6 +5,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,21 +17,23 @@ import com.woting.commonplat.amine.OnLoadMoreListener;
 import com.woting.commonplat.amine.OnRefreshListener;
 import com.woting.commonplat.config.GlobalAddressConfig;
 import com.woting.commonplat.constant.BroadcastConstants;
-import com.woting.commonplat.widget.TipView;
+import com.woting.commonplat.widget.LoadFrameLayout;
+import com.wotingfm.R;
 import com.wotingfm.common.adapter.albumsAdapter.AlbumsAdapter;
 import com.wotingfm.common.adapter.radioAdapter.RadioAdapter;
 import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.bean.AlbumsBean;
 import com.wotingfm.common.bean.ChannelsBean;
 import com.wotingfm.common.bean.Radio;
+import com.wotingfm.common.bean.RadioInfo;
 import com.wotingfm.common.config.LocationInfo;
-import com.woting.commonplat.widget.LoadFrameLayout;
-import com.wotingfm.R;
 import com.wotingfm.common.net.RetrofitUtils;
 import com.wotingfm.common.utils.CommonUtils;
 import com.wotingfm.ui.base.baseactivity.BaseToolBarActivity;
-import com.wotingfm.ui.play.activity.albums.AlbumsInfoActivity;
+import com.wotingfm.ui.base.basefragment.BaseFragment;
+import com.wotingfm.ui.play.radio.fragment.RadioInfoTodayFragment;
 import com.wotingfm.ui.test.PlayerActivity;
+import com.wotingfm.ui.test.PlayerFragment;
 import com.zhy.adapter.recyclerview.wrapper.HeaderAndFooterWrapper;
 
 import java.util.ArrayList;
@@ -41,58 +44,50 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 
+import static com.wotingfm.R.id.tvLocal;
+
 /**
  * Created by amine on 2017/7/6.
- * 本地台
+ * 国家台
  */
 
-public class LocalRadioActivity extends BaseToolBarActivity implements OnLoadMoreListener, OnRefreshListener {
+public class CountryRadioFragment extends BaseFragment implements OnLoadMoreListener, OnRefreshListener {
     @BindView(R.id.mRecyclerView)
     ARecyclerView mRecyclerView;
     @BindView(R.id.loadLayout)
     LoadFrameLayout loadLayout;
 
-    public static void start(Activity activity) {
-        Intent intent = new Intent(activity, LocalRadioActivity.class);
-        activity.startActivity(intent);
+    public static CountryRadioFragment newInstance() {
+        CountryRadioFragment fragment = new CountryRadioFragment();
+        return fragment;
     }
 
-    @Override
-    public int getLayoutId() {
-
-        return R.layout.activity_local_radio;
-    }
-
-    private LocationInfo locationInfo;
     private LoadMoreFooterView loadMoreFooterView;
     private RadioAdapter mAdapter;
-    private HeaderAndFooterWrapper mHeaderAndFooterWrapper;
     private List<ChannelsBean> albumsBeanList = new ArrayList<>();
-    private View headview;
-    private TextView tvLocal;
+
+    @Override
+    protected int getLayoutResource() {
+        return R.layout.activity_country_radio;
+    }
 
     @Override
     public void initView() {
-        setTitle("本地台");
-        locationInfo = new LocationInfo(getApplicationContext());
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        setTitle("国家台");
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        headview = LayoutInflater.from(this).inflate(R.layout.local_headview, null);
-        tvLocal = (TextView) headview.findViewById(R.id.tvLocal);
         loadMoreFooterView = (LoadMoreFooterView) mRecyclerView.getLoadMoreFooterView();
         mRecyclerView.setOnLoadMoreListener(this);
         mRecyclerView.setOnRefreshListener(this);
         mRecyclerView.setLayoutManager(layoutManager);
-        mAdapter = new RadioAdapter(this, albumsBeanList, new RadioAdapter.RadioClick() {
+        mAdapter = new RadioAdapter(getActivity(), albumsBeanList, new RadioAdapter.RadioClick() {
             @Override
             public void clickAlbums(ChannelsBean singlesBean) {
-                RadioInfoActivity.start(LocalRadioActivity.this, singlesBean.title, singlesBean.id);
-              //  PlayerActivity.start(LocalRadioActivity.this, singlesBean, null);
+                openFragment(PlayerFragment.newInstance(singlesBean));
+                //RadioInfoActivity.start(CountryRadioActivity.this, singlesBean.title, singlesBean.id);
             }
         });
-        mHeaderAndFooterWrapper = new HeaderAndFooterWrapper(mAdapter);
-        mHeaderAndFooterWrapper.addHeaderView(headview);
-        mRecyclerView.setIAdapter(mHeaderAndFooterWrapper);
+        mRecyclerView.setIAdapter(mAdapter);
         loadLayout.findViewById(R.id.btnTryAgain).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -101,44 +96,15 @@ public class LocalRadioActivity extends BaseToolBarActivity implements OnLoadMor
             }
         });
         loadLayout.showLoadingView();
-        if (messageReceiver == null) {
-            messageReceiver = new MessageReceiver();
-            IntentFilter filter = new IntentFilter();
-            filter.addAction(BroadcastConstants.CITY_CHANGE);
-            context.registerReceiver(messageReceiver, filter);
-        }
         refresh();
-    }
-
-    private MessageReceiver messageReceiver;
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        if (locationInfo != null)
-            locationInfo.stopLocation();
-        if (messageReceiver != null)
-            unregisterReceiver(messageReceiver);
     }
 
     private int mPage;
 
 
-    class MessageReceiver extends BroadcastReceiver {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            String action = intent.getAction();
-            if (action.equals(BroadcastConstants.CITY_CHANGE)) {
-                if (GlobalAddressConfig.CityName != null)
-                    tvLocal.setText(GlobalAddressConfig.CityName);
-            }
-        }
-
-    }
-
     private void refresh() {
         mPage = 1;
-        RetrofitUtils.getInstance().getChannelsRadio("local_areas", mPage)
+        RetrofitUtils.getInstance().getChannelsRadio("nations", mPage)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Action1<List<ChannelsBean>>() {
@@ -152,13 +118,13 @@ public class LocalRadioActivity extends BaseToolBarActivity implements OnLoadMor
                             loadLayout.showContentView();
                             mAdapter.notifyDataSetChanged();
                         } else {
-                            loadLayout.showContentView();
+                            loadLayout.showEmptyView();
                         }
                     }
                 }, new Action1<Throwable>() {
                     @Override
                     public void call(Throwable throwable) {
-                        loadLayout.showContentView();
+                        loadLayout.showErrorView();
                         throwable.printStackTrace();
                     }
                 });
@@ -166,7 +132,7 @@ public class LocalRadioActivity extends BaseToolBarActivity implements OnLoadMor
     }
 
     private void loadMore() {
-        RetrofitUtils.getInstance().getChannelsRadio("local_areas", mPage)
+        RetrofitUtils.getInstance().getChannelsRadio("nations", mPage)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Action1<List<ChannelsBean>>() {

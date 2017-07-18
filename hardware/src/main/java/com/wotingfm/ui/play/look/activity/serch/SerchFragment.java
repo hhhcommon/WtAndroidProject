@@ -25,7 +25,7 @@ import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.ui.base.baseactivity.AppManager;
 import com.wotingfm.ui.base.baseactivity.NoTitleBarBaseActivity;
 import com.wotingfm.ui.base.basefragment.BaseFragment;
-import com.wotingfm.ui.play.look.activity.LookListActivity;
+import com.wotingfm.ui.play.look.activity.LookListFragment;
 import com.wotingfm.ui.play.look.activity.serch.fragment.AlbumsListFragment;
 import com.wotingfm.ui.play.look.activity.serch.fragment.AnchorListFragment;
 import com.wotingfm.ui.play.look.activity.serch.fragment.ProgramListFragment;
@@ -48,7 +48,7 @@ import static com.wotingfm.R.id.ivVoice;
  * Created by amine on 2017/6/26.
  */
 
-public class SerchActivity extends NoTitleBarBaseActivity {
+public class SerchFragment extends BaseFragment {
     @BindView(R.id.et_searchlike)
     EditText etSearchlike;
     @BindView(R.id.tvCancel)
@@ -58,16 +58,15 @@ public class SerchActivity extends NoTitleBarBaseActivity {
     @BindView(R.id.viewPager)
     ViewPager viewPager;
 
-    @Override
-    public int getLayoutId() {
-        return R.layout.activity_serch;
+
+    public static SerchFragment newInstance(String q) {
+        SerchFragment fragment = new SerchFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString("q", "q");
+        fragment.setArguments(bundle);
+        return fragment;
     }
 
-    public static void start(Context activity, String q) {
-        Intent intent = new Intent(activity, SerchActivity.class);
-        intent.putExtra("q", q);
-        activity.startActivity(intent);
-    }
 
     private List<Fragment> mFragment = new ArrayList<>();
     private MyAdapter mAdapter;
@@ -78,63 +77,73 @@ public class SerchActivity extends NoTitleBarBaseActivity {
     private RadioStationListFragment radioStationListFragment;
 
     @Override
+    protected int getLayoutResource() {
+        return R.layout.activity_serch;
+    }
+
+    private String q;
+
+    @Override
     public void initView() {
         List<String> type = new ArrayList<>();
-        String q = getIntent().getStringExtra("q");
-        etSearchlike.setText(q);
-        if (!TextUtils.isEmpty(q))
-            etSearchlike.setSelection(q.length());
-        type.add("专辑");
-        type.add("节目");
-        type.add("主播");
-        type.add("电台");
-        albumsListFragment = AlbumsListFragment.newInstance(q);
-        programListFragment = ProgramListFragment.newInstance(q);
-        anchorListFragment = AnchorListFragment.newInstance(q);
-        radioStationListFragment = RadioStationListFragment.newInstance(q);
-        mFragment.add(albumsListFragment);
-        mFragment.add(programListFragment);
-        mFragment.add(anchorListFragment);
-        mFragment.add(radioStationListFragment);
-        mAdapter = new MyAdapter(getSupportFragmentManager(), type, mFragment);
-        viewPager.setAdapter(mAdapter);
-        viewPager.setOffscreenPageLimit(3);
-        tabLayout.setupWithViewPager(viewPager);
-        tvCancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                AppManager.getAppManager().finishActivity(SerchActivity.this);
-                finish();
-            }
-        });
-        etSearchlike.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
-            }
+        Bundle bundle = getArguments();
+        if (bundle != null) {
+            q = bundle.getString("q");
+            etSearchlike.setText(q);
+            if (!TextUtils.isEmpty(q))
+                etSearchlike.setSelection(q.length());
+            type.add("专辑");
+            type.add("节目");
+            type.add("主播");
+            type.add("电台");
+            albumsListFragment = AlbumsListFragment.newInstance(q);
+            programListFragment = ProgramListFragment.newInstance(q);
+            anchorListFragment = AnchorListFragment.newInstance(q);
+            radioStationListFragment = RadioStationListFragment.newInstance(q);
+            mFragment.add(albumsListFragment);
+            mFragment.add(programListFragment);
+            mFragment.add(anchorListFragment);
+            mFragment.add(radioStationListFragment);
+            mAdapter = new MyAdapter(getChildFragmentManager(), type, mFragment);
+            viewPager.setAdapter(mAdapter);
+            viewPager.setOffscreenPageLimit(3);
+            tabLayout.setupWithViewPager(viewPager);
+            tvCancel.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    closeFragment();
+                }
+            });
+            etSearchlike.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                }
 
-            }
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
 
-            @Override
-            public void afterTextChanged(Editable s) {
-                serch(s + "");
-            }
-        });
-        etSearchlike.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-                                                   @Override
-                                                   public boolean onEditorAction(TextView v, int arg1, KeyEvent event) {
-                                                       if (arg1 == EditorInfo.IME_ACTION_SEARCH) {
-                                                           String content = etSearchlike.getText().toString().trim();
-                                                           serch(content);
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+                    serch(s + "");
+                }
+            });
+            etSearchlike.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+                                                       @Override
+                                                       public boolean onEditorAction(TextView v, int arg1, KeyEvent event) {
+                                                           if (arg1 == EditorInfo.IME_ACTION_SEARCH) {
+                                                               String content = etSearchlike.getText().toString().trim();
+                                                               serch(content);
+                                                           }
+                                                           return false;
                                                        }
-                                                       return false;
                                                    }
-                                               }
 
-        );
+            );
+        }
     }
 
     private void serch(String content) {

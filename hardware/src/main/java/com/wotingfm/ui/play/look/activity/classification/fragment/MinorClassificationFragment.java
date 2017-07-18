@@ -1,7 +1,5 @@
-package com.wotingfm.ui.play.look.activity.classification;
+package com.wotingfm.ui.play.look.activity.classification.fragment;
 
-import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -12,36 +10,25 @@ import android.view.View;
 
 import com.woting.commonplat.widget.LoadFrameLayout;
 import com.wotingfm.R;
-import com.wotingfm.common.application.BSApplication;
-import com.wotingfm.common.bean.Channels;
 import com.wotingfm.common.bean.ChannelsBean;
-import com.wotingfm.common.bean.SelectedMore;
 import com.wotingfm.common.net.RetrofitUtils;
-import com.wotingfm.ui.base.baseactivity.BaseToolBarActivity;
-import com.wotingfm.ui.play.look.activity.classification.fragment.SubcategoryFragment;
+import com.wotingfm.ui.base.basefragment.BaseFragment;
 import com.wotingfm.ui.play.look.fragment.ClassificationFragment;
-import com.wotingfm.ui.play.look.fragment.LiveFragment;
-import com.wotingfm.ui.play.look.fragment.RadioStationFragment;
-import com.wotingfm.ui.play.look.fragment.SelectedFragment;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.schedulers.Schedulers;
-
-import static com.wotingfm.R.id.mRecyclerView;
-import static com.wotingfm.ui.play.look.activity.classification.fragment.SubcategoryFragment.newInstance;
 
 /**
  * Created by amine on 2017/6/21.
  * 发现分类中的小分类
  */
 
-public class ClassificationActivity extends BaseToolBarActivity implements View.OnClickListener {
+public class MinorClassificationFragment extends BaseFragment implements View.OnClickListener {
     @BindView(R.id.tabs)
     TabLayout tabLayout;
     @BindView(R.id.viewPager)
@@ -49,17 +36,15 @@ public class ClassificationActivity extends BaseToolBarActivity implements View.
     @BindView(R.id.loadLayout)
     LoadFrameLayout loadLayout;
 
-    public static void start(Context activity, String albumId, String title) {
-        Intent intent = new Intent(activity, ClassificationActivity.class);
-        intent.putExtra("albumId", albumId);
-        intent.putExtra("title", title);
-        activity.startActivity(intent);
+    public static MinorClassificationFragment newInstance(String albumId, String title) {
+        MinorClassificationFragment fragment = new MinorClassificationFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString("albumId", albumId);
+        bundle.putString("title", title);
+        fragment.setArguments(bundle);
+        return fragment;
     }
 
-    @Override
-    public int getLayoutId() {
-        return R.layout.activity_classification;
-    }
 
     public class MyAdapter extends FragmentPagerAdapter {
 
@@ -95,18 +80,26 @@ public class ClassificationActivity extends BaseToolBarActivity implements View.
     private String albumId;
 
     @Override
+    protected int getLayoutResource() {
+        return R.layout.activity_classification;
+    }
+
+    @Override
     public void initView() {
-        setTitle(getIntent().getStringExtra("title"));
-        albumId = getIntent().getStringExtra("albumId");
-        loadLayout.findViewById(R.id.btnTryAgain).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                loadLayout.showLoadingView();
-                refresh();
-            }
-        });
-        loadLayout.showLoadingView();
-        refresh();
+        Bundle bundle = getArguments();
+        if (bundle != null) {
+            albumId = bundle.getString("albumId");
+            setTitle(bundle.getString("title"));
+            loadLayout.findViewById(R.id.btnTryAgain).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    loadLayout.showLoadingView();
+                    refresh();
+                }
+            });
+            loadLayout.showLoadingView();
+            refresh();
+        }
     }
 
     private void refresh() {
@@ -121,15 +114,15 @@ public class ClassificationActivity extends BaseToolBarActivity implements View.
                                 SubcategoryFragment fragment = SubcategoryFragment.newInstance(albumsBeen.get(i));
                                 mFragment.add(fragment);
                             }
-                            mAdapter = new MyAdapter(getSupportFragmentManager(), albumsBeen, mFragment);
+                            mAdapter = new MyAdapter(getChildFragmentManager(), albumsBeen, mFragment);
                             viewPager.setAdapter(mAdapter);
                             if (albumsBeen.size() > 6) {
                                 tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
                             } else {
                                 tabLayout.setTabMode(TabLayout.MODE_FIXED);
                             }
-                            if (albumsBeen.size() > 1)
-                                viewPager.setOffscreenPageLimit(albumsBeen.size() - 1);
+                           /* if (albumsBeen.size() > 1)
+                                viewPager.setOffscreenPageLimit(albumsBeen.size() - 1);*/
                             tabLayout.setupWithViewPager(viewPager);
                             loadLayout.showContentView();
                         } else {

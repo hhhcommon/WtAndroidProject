@@ -258,8 +258,8 @@ public class RetrofitUtils {
                 });
     }
 
-    public Observable<List<Player.DataBean.SinglesBean>> getPlayerList(String albums, String q) {
-        return retrofitService.getPlayerList(albums, q)
+    public Observable<List<Player.DataBean.SinglesBean>> getPlayerList(String albums) {
+        return retrofitService.getPlayerList(albums)
                 .map(new Func1<Player, List<Player.DataBean.SinglesBean>>() {
                     @Override
                     public List<Player.DataBean.SinglesBean> call(Player player) {

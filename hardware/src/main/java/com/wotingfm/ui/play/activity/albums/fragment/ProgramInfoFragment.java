@@ -24,7 +24,8 @@ import com.wotingfm.common.net.RetrofitUtils;
 import com.wotingfm.common.utils.DownloadUtils;
 import com.wotingfm.common.utils.T;
 import com.wotingfm.ui.base.basefragment.BaseFragment;
-import com.wotingfm.ui.play.activity.download.DownloadSelectActivity;
+import com.wotingfm.ui.play.activity.download.DownloadSelectFragment;
+import com.wotingfm.ui.test.PlayerFragment;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -118,10 +119,7 @@ public class ProgramInfoFragment extends BaseFragment {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.relativeLable:
-                Intent intent = getActivity().getIntent();
-                intent.putExtra("albumsId", albumsID);
-                getActivity().setResult(RESULT_OK, intent);
-                getActivity().finish();
+                openFragment(PlayerFragment.newInstance(albumsID));
                 break;
             case R.id.ivSequence:
                 Collections.reverse(singlesBeanList);
@@ -129,8 +127,7 @@ public class ProgramInfoFragment extends BaseFragment {
                 T.getInstance().showToast("排序成功");
                 break;
             case R.id.ivDownload:
-                DownloadSelectActivity.start(getActivity(), albumsID);
-
+                openFragment(DownloadSelectFragment.newInstance(albumsID));
                 break;
         }
     }

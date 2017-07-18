@@ -14,10 +14,8 @@ import com.wotingfm.R;
 import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.bean.Player;
 import com.wotingfm.common.net.RetrofitUtils;
-import com.wotingfm.ui.play.activity.AnchorPersonalCenterActivity;
-import com.wotingfm.ui.play.activity.MeSubscribeListActivity;
-import com.wotingfm.ui.play.activity.PlayerHistoryActivity;
-import com.wotingfm.ui.play.activity.ReportsPlayerActivity;
+import com.wotingfm.ui.play.activity.ReportsPlayerFragment;
+import com.wotingfm.ui.test.PlayerActivity;
 
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
@@ -35,11 +33,12 @@ import static com.wotingfm.R.id.tvSubscription;
 public class ReportsDialog extends Dialog implements View.OnClickListener {
 
     private TextView tvClose, tvReport;
-    private Activity activity;
+    private PlayerActivity activity;
 
     public ReportsDialog(@NonNull Activity context) {
         super(context, R.style.BottomDialog);
-        this.activity = context;
+        if (context instanceof PlayerActivity)
+            activity = (PlayerActivity) context;
         setContentView(R.layout.reports_dialog);
         getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         getWindow().setGravity(Gravity.BOTTOM);
@@ -66,8 +65,9 @@ public class ReportsDialog extends Dialog implements View.OnClickListener {
                 dismiss();
                 break;
             case R.id.tvReport:
-                ReportsPlayerActivity.start(activity, userId, "REPORT_USER");
                 dismiss();
+                if (activity != null)
+                    ReportsPlayerFragment.newInstance(userId, "REPORT_USER");
                 break;
         }
     }

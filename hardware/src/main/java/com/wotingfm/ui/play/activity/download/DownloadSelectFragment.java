@@ -27,7 +27,8 @@ import com.wotingfm.common.utils.DownloadUtils;
 import com.wotingfm.common.utils.T;
 import com.wotingfm.ui.base.baseactivity.AppManager;
 import com.wotingfm.ui.base.baseactivity.NoTitleBarBaseActivity;
-import com.wotingfm.ui.play.activity.albums.AlbumsListActivity;
+import com.wotingfm.ui.base.basefragment.BaseFragment;
+import com.wotingfm.ui.play.activity.ReportsPlayerFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,6 +39,7 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 
+import static android.R.attr.type;
 import static android.media.CamcorderProfile.get;
 import static com.loc.a.t;
 import static com.wotingfm.R.id.ivDownload;
@@ -51,7 +53,7 @@ import static com.wotingfm.R.id.tvTotal;
  * 节目下载选择页面
  */
 
-public class DownloadSelectActivity extends NoTitleBarBaseActivity implements View.OnClickListener, OnLoadMoreListener, OnRefreshListener {
+public class DownloadSelectFragment extends BaseFragment implements View.OnClickListener, OnLoadMoreListener, OnRefreshListener {
     @BindView(R.id.tvCancel)
     TextView tvCancel;
     @BindView(R.id.tvDownload)
@@ -68,55 +70,55 @@ public class DownloadSelectActivity extends NoTitleBarBaseActivity implements Vi
 
     private DownloadSelectAdapter downloadSelectAdapter;
 
-    public static void start(Activity activity, String albumsID) {
-        Intent intent = new Intent(activity, DownloadSelectActivity.class);
-        intent.putExtra("albumsID", albumsID);
-        activity.startActivityForResult(intent, 4040);
+    public static ReportsPlayerFragment newInstance(String albumsID) {
+        ReportsPlayerFragment fragment = new ReportsPlayerFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString("albumsID", albumsID);
+        fragment.setArguments(bundle);
+        return fragment;
     }
 
-    @Override
-    public int getLayoutId() {
-        return R.layout.activity_download_select;
-    }
 
     private LoadMoreFooterView loadMoreFooterView;
     private String albumsID;
 
     @Override
     public void initView() {
-        Intent intent = getIntent();
-        albumsID = intent.getStringExtra("albumsID");
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-        mRecyclerView.setNestedScrollingEnabled(false);
-        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        mRecyclerView.setLayoutManager(layoutManager);
-        loadMoreFooterView = (LoadMoreFooterView) mRecyclerView.getLoadMoreFooterView();
-        downloadSelectAdapter = new DownloadSelectAdapter(this, singlesBeanList);
-        downloadSelectAdapter.setPlayerClick(new DownloadSelectAdapter.AlbumsInfoClick() {
-            @Override
-            public void player(Player.DataBean.SinglesBean albumsBean, boolean isSelect, int postion) {
-                if (isSelect == true) {
-                    singlesBeanListSelect.add(albumsBean);
-                } else {
-                    singlesBeanListSelect.remove(albumsBean);
+        Bundle bundle = getArguments();
+        if (bundle != null) {
+            albumsID = bundle.getString("albumsID");
+            LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
+            mRecyclerView.setNestedScrollingEnabled(false);
+            layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+            mRecyclerView.setLayoutManager(layoutManager);
+            loadMoreFooterView = (LoadMoreFooterView) mRecyclerView.getLoadMoreFooterView();
+            downloadSelectAdapter = new DownloadSelectAdapter(getActivity(), singlesBeanList);
+            downloadSelectAdapter.setPlayerClick(new DownloadSelectAdapter.AlbumsInfoClick() {
+                @Override
+                public void player(Player.DataBean.SinglesBean albumsBean, boolean isSelect, int postion) {
+                    if (isSelect == true) {
+                        singlesBeanListSelect.add(albumsBean);
+                    } else {
+                        singlesBeanListSelect.remove(albumsBean);
+                    }
                 }
-            }
-        });
-        mRecyclerView.setIAdapter(downloadSelectAdapter);
-        mRecyclerView.setOnRefreshListener(this);
-        mRecyclerView.setOnLoadMoreListener(this);
-        largeLabelSelect.setOnClickListener(this);
-        tvCancel.setOnClickListener(this);
-        tvDownload.setOnClickListener(this);
-        loadLayout.findViewById(R.id.btnTryAgain).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                loadLayout.showLoadingView();
-                refresh();
-            }
-        });
-        loadLayout.showLoadingView();
-        refresh();
+            });
+            mRecyclerView.setIAdapter(downloadSelectAdapter);
+            mRecyclerView.setOnRefreshListener(this);
+            mRecyclerView.setOnLoadMoreListener(this);
+            largeLabelSelect.setOnClickListener(this);
+            tvCancel.setOnClickListener(this);
+            tvDownload.setOnClickListener(this);
+            loadLayout.findViewById(R.id.btnTryAgain).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    loadLayout.showLoadingView();
+                    refresh();
+                }
+            });
+            loadLayout.showLoadingView();
+            refresh();
+        }
     }
 
     private int mPage;
@@ -211,12 +213,10 @@ public class DownloadSelectActivity extends NoTitleBarBaseActivity implements Vi
                 for (int w = 0, size = singlesBeanListSelect.size(); w < size; w++) {
                     DownloadUtils.downloadManger(singlesBeanListSelect.get(w));
                 }
-                AppManager.getAppManager().finishActivity(this);
-                finish();
+                closeFragment();
                 break;
             case R.id.tvCancel:
-                AppManager.getAppManager().finishActivity(this);
-                finish();
+                closeFragment();
                 break;
             case R.id.largeLabelSelect:
                 for (int i = 0, size = singlesBeanList.size(); i < size; i++) {
@@ -237,5 +237,10 @@ public class DownloadSelectActivity extends NoTitleBarBaseActivity implements Vi
                 downloadSelectAdapter.setMore(isSelect);
                 break;
         }
+    }
+
+    @Override
+    protected int getLayoutResource() {
+        return R.layout.activity_download_select;
     }
 }

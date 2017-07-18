@@ -20,8 +20,10 @@ import com.wotingfm.common.bean.ChannelsBean;
 import com.wotingfm.common.bean.Radio;
 import com.wotingfm.common.net.RetrofitUtils;
 import com.wotingfm.ui.base.baseactivity.BaseToolBarActivity;
-import com.wotingfm.ui.play.radio.RadioInfoActivity;
+import com.wotingfm.ui.base.basefragment.BaseFragment;
+import com.wotingfm.ui.play.radio.LocalRadioFragment;
 import com.wotingfm.ui.test.PlayerActivity;
+import com.wotingfm.ui.test.PlayerFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,40 +40,40 @@ import static android.R.attr.type;
  * 精选，每日  列表，
  */
 
-public class RadioMoreActivity extends BaseToolBarActivity implements OnLoadMoreListener, OnRefreshListener {
+public class RadioMoreFragment extends BaseFragment implements OnLoadMoreListener, OnRefreshListener {
 
     @BindView(R.id.mRecyclerView)
     ARecyclerView mRecyclerView;
     @BindView(R.id.loadLayout)
     LoadFrameLayout loadLayout;
 
-    public static void start(Context activity) {
-        Intent intent = new Intent(activity, RadioMoreActivity.class);
-        activity.startActivity(intent);
-    }
-
-    @Override
-    public int getLayoutId() {
-        return R.layout.activity_radio_more;
+    public static RadioMoreFragment newInstance() {
+        RadioMoreFragment fragment = new RadioMoreFragment();
+        return fragment;
     }
 
     private LoadMoreFooterView loadMoreFooterView;
     private RadioStationAdapter selectedAdapter;
 
     @Override
+    protected int getLayoutResource() {
+        return R.layout.activity_radio_more;
+    }
+
+    @Override
     public void initView() {
         setTitle("热门电台");
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         loadMoreFooterView = (LoadMoreFooterView) mRecyclerView.getLoadMoreFooterView();
         mRecyclerView.setOnLoadMoreListener(this);
         mRecyclerView.setOnRefreshListener(this);
         mRecyclerView.setLayoutManager(layoutManager);
-        selectedAdapter = new RadioStationAdapter(this, datas, new RadioStationAdapter.RadioStationClick() {
+        selectedAdapter = new RadioStationAdapter(getActivity(), datas, new RadioStationAdapter.RadioStationClick() {
             @Override
             public void click(ChannelsBean dataBean) {
-                //PlayerActivity.start(getActivity(), dataBean, null);
-                RadioInfoActivity.start(RadioMoreActivity.this, dataBean.title, dataBean.id);
+                openFragment(PlayerFragment.newInstance(dataBean));
+                //RadioInfoActivity.start(RadioMoreActivity.this, dataBean.title, dataBean.id);
             }
         });
         mRecyclerView.setIAdapter(selectedAdapter);

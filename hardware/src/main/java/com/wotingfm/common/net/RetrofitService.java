@@ -52,7 +52,7 @@ public interface RetrofitService {
 
     //首页播放fm列表
     @GET("api/listenings/player")
-    Observable<Player> getPlayerList(@Query("album_id") String album_id, @Query("q") String q);
+    Observable<Player> getPlayerList(@Query("album_id") String album_id);
 
     //预告详情
     @GET("api/voice-lives/{voiceLiveId}")

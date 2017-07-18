@@ -15,6 +15,7 @@ import com.wotingfm.common.net.RetrofitUtils;
 import com.wotingfm.common.utils.T;
 import com.wotingfm.ui.base.basefragment.BaseFragment;
 import com.wotingfm.ui.test.PlayerActivity;
+import com.wotingfm.ui.test.PlayerFragment;
 
 import butterknife.BindView;
 import rx.android.schedulers.AndroidSchedulers;
@@ -70,7 +71,7 @@ public class RadioInfoTodayFragment extends BaseFragment {
                     c.desc = dataBean.channel.desc;
                     c.radio_url = singlesBean.fileUrl;
                     c.title = singlesBean.title;
-                    PlayerActivity.start(getActivity(), c, "");
+                    openFragment(PlayerFragment.newInstance(c));
                 }
 
                 @Override

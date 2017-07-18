@@ -51,6 +51,8 @@ public class PlayerAdapter extends CommonAdapter<SinglesBase> {
         Glide.with(BSApplication.getInstance()).load(s.single_logo_url)// Glide
                 .transform(new GlideCircleTransform(BSApplication.getInstance()))
                 .override(with, with)
+                .error(R.mipmap.oval_defut_photo)
+                .placeholder(R.mipmap.oval_defut_photo)
                 .into(imageView);
         imageView.setLayoutParams(layoutParams);
     }

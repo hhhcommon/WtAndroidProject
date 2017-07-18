@@ -25,7 +25,7 @@ import com.wotingfm.common.utils.T;
 import com.wotingfm.common.view.BannerView;
 import com.wotingfm.ui.base.basefragment.BaseFragment;
 import com.wotingfm.ui.play.live.LiveRoomActivity;
-import com.wotingfm.ui.play.live.TrailerInfoActivity;
+import com.wotingfm.ui.play.live.TrailerInfoFragment;
 import com.wotingfm.ui.user.logo.LogoActivity;
 import com.zhy.adapter.recyclerview.wrapper.HeaderAndFooterWrapper;
 
@@ -116,7 +116,7 @@ public class LiveFragment extends BaseFragment implements SwipeRefreshLayout.OnR
                     });*/
 
                 } else {
-                    TrailerInfoActivity.start(getActivity(), dataBean.id);
+                    openFragment(TrailerInfoFragment.newInstance(dataBean.id));
                    /* T.getInstance().showToast("预告");
                     DialogMaker.showProgressDialog(getActivity(), null, "请稍等...", true, new DialogInterface.OnCancelListener() {
                         @Override

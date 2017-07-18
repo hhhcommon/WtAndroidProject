@@ -28,6 +28,7 @@ import com.wotingfm.common.database.HistoryHelper;
 import com.wotingfm.common.net.RetrofitUtils;
 import com.wotingfm.common.utils.T;
 import com.wotingfm.ui.base.basefragment.BaseFragment;
+import com.wotingfm.ui.test.PlayerFragment;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -101,10 +102,7 @@ public class DownloadingFragment extends BaseFragment {
                         if(getActivity()!=null) {
                             List<SinglesDownload> singlesDownloads = new ArrayList<>();
                             singlesDownloads.add(singlesDownload);
-                            Intent intent = getActivity().getIntent();
-                            intent.putExtra("singles", (Serializable) singlesDownloads);
-                            getActivity().setResult(RESULT_OK,intent);
-                            getActivity().finish();
+                            openFragment(PlayerFragment.newInstance(singlesDownloads));
                         }
                     }
                 });

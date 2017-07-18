@@ -19,7 +19,7 @@ import com.wotingfm.common.net.RetrofitUtils;
 import com.wotingfm.common.utils.T;
 import com.wotingfm.common.view.BannerView;
 import com.wotingfm.ui.base.basefragment.BaseFragment;
-import com.wotingfm.ui.play.look.activity.classification.ClassificationActivity;
+import com.wotingfm.ui.play.look.activity.classification.fragment.MinorClassificationFragment;
 import com.zhy.adapter.recyclerview.wrapper.HeaderAndFooterWrapper;
 
 import java.util.ArrayList;
@@ -70,7 +70,7 @@ public class ClassificationFragment extends BaseFragment implements SwipeRefresh
         mAdapter = new ClassificationAdapter(getActivity(), commons, new ClassificationAdapter.TagClickBase() {
             @Override
             public void click(Classification.DataBeanX.DataBean dataBean) {
-                ClassificationActivity.start(getActivity(), dataBean.id, dataBean.title);
+                openFragment(MinorClassificationFragment.newInstance(dataBean.id, dataBean.title));
             }
         });
         mSwipeLayout.setColorSchemeResources(R.color.app_basic, R.color.app_basic,
