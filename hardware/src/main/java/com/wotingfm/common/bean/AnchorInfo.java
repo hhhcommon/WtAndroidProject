@@ -80,10 +80,12 @@ public class AnchorInfo implements Serializable {
                     public String logo_url;
                     public String play_count;
                     public String lastest_news;
+                    public String album_id;
                     public String single_logo_url;
                     public String single_title;
                     public String album_title;
                     public String published_at;
+                    public String single_file_url;
                     public int audience_count;
                     public String live_number;
                     public String begin_at;

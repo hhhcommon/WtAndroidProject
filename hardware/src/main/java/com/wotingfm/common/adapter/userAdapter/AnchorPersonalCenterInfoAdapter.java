@@ -109,7 +109,7 @@ public class AnchorPersonalCenterInfoAdapter extends CommonAdapter<AnchorInfo.Da
                 linearDiscount.addView(itemw);
             } else if ("singles".equals(s.type)) {
                 View itemww = LayoutInflater.from(context).inflate(R.layout.item_singles, null);
-                AnchorInfo.DataBeanXX.UserBean.DataBeanX.DataBean d = s.data.get(i);
+                final AnchorInfo.DataBeanXX.UserBean.DataBeanX.DataBean d = s.data.get(i);
                 TextView tvTitle = (TextView) itemww.findViewById(R.id.tvTitle);
                 TextView tvContent = (TextView) itemww.findViewById(R.id.tvContent);
                 TextView tvTime = (TextView) itemww.findViewById(R.id.tvTime);
@@ -117,6 +117,13 @@ public class AnchorPersonalCenterInfoAdapter extends CommonAdapter<AnchorInfo.Da
                 tvContent.setText(d.album_title + "");
                 tvTime.setText(d.published_at + "");
                 linearSendDiscount.addView(itemww);
+                itemww.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (albumsMoreClick != null)
+                            albumsMoreClick.ItmeSendClick(d);
+                    }
+                });
             }
         }
 
@@ -130,6 +137,8 @@ public class AnchorPersonalCenterInfoAdapter extends CommonAdapter<AnchorInfo.Da
 
     public interface AlbumsMoreClick {
         void ItmeClick(String albumsId);
+
+        void ItmeSendClick(AnchorInfo.DataBeanXX.UserBean.DataBeanX.DataBean dataBean);
 
         void MoreClick(AnchorInfo.DataBeanXX.UserBean.DataBeanX s);
     }

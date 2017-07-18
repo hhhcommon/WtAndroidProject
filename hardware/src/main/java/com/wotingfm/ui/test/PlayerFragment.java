@@ -207,6 +207,7 @@ public class PlayerFragment extends BaseFragment implements View.OnClickListener
                 bdPlayer.setVideoPath(singlesBase.single_file_url);
                 bdPlayer.start();
                 largeLabelSeekbar.setVisibility(View.VISIBLE);
+                ivPlayList.setVisibility(View.VISIBLE);
                 setBeforeOrNext(singlesBase);
                 mPlayerAdapter.notifyDataSetChanged();
             } else {
@@ -217,6 +218,8 @@ public class PlayerFragment extends BaseFragment implements View.OnClickListener
                         singLesBeans.clear();
                     singLesBeans.addAll(singlesBeanList);
                     mPlayerAdapter.notifyDataSetChanged();
+                    largeLabelSeekbar.setVisibility(View.VISIBLE);
+                    ivPlayList.setVisibility(View.VISIBLE);
                     if (singLesBeans != null && !singLesBeans.isEmpty()) {
                         postionPlayer = 0;
                         SinglesBase sb = singLesBeans.get(0);
@@ -239,16 +242,19 @@ public class PlayerFragment extends BaseFragment implements View.OnClickListener
                         singLesBeans.add(s);
                         postionPlayer = 0;
                         largeLabelSeekbar.setVisibility(View.INVISIBLE);
+                        ivPlayList.setVisibility(View.INVISIBLE);
                         prepare();
                         setBeforeOrNext(s);
                         mPlayerAdapter.notifyDataSetChanged();
                     } else {
                         largeLabelSeekbar.setVisibility(View.VISIBLE);
+                        ivPlayList.setVisibility(View.VISIBLE);
                         getPlayerList(TextUtils.isEmpty(albumsId) ? "" : albumsId);
                     }
                 }
             }
         } else {
+            ivPlayList.setVisibility(View.VISIBLE);
             getPlayerList(TextUtils.isEmpty(albumsId) ? "" : albumsId);
         }
 
@@ -360,6 +366,24 @@ public class PlayerFragment extends BaseFragment implements View.OnClickListener
     @BindView(R.id.ivMore)
     ImageView ivMore;
 
+    private void PlayerResult() {
+        if (mMediaPlayer != null && mMediaPlayer.isPlaying() == true) {
+            if (mMediaPlayer != null) {
+                mMediaPlayer.pause();
+            }
+            ivPause.setImageResource(R.mipmap.music_play_icon_play);
+        } else {
+            if (mIsStopped) {
+                prepare();
+            } else {
+                if (mMediaPlayer != null) {
+                    mMediaPlayer.start();
+                }
+            }
+            ivPause.setImageResource(R.mipmap.music_play_icon_pause);
+        }
+    }
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -397,21 +421,7 @@ public class PlayerFragment extends BaseFragment implements View.OnClickListener
             case R.id.ivPause:
                 BDPlayer.PlayerState isPause = bdPlayer.getCurrentPlayerState();
                 if (channelsBean != null) {
-                    if (mMediaPlayer != null && mMediaPlayer.isPlaying() == true) {
-                        if (mMediaPlayer != null) {
-                            mMediaPlayer.pause();
-                        }
-                        ivPause.setImageResource(R.mipmap.music_play_icon_play);
-                    } else {
-                        if (mIsStopped) {
-                            prepare();
-                        } else {
-                            if (mMediaPlayer != null) {
-                                mMediaPlayer.start();
-                            }
-                        }
-                        ivPause.setImageResource(R.mipmap.music_play_icon_pause);
-                    }
+                    PlayerResult();
                 } else {
                     if (bdPlayer.getCurrentPlayerState() == isPause.STATE_PLAYING) {
                         bdPlayer.pause();
@@ -552,13 +562,20 @@ public class PlayerFragment extends BaseFragment implements View.OnClickListener
             if (bdPlayer != null) {
                 bdPlayer.stopPlayback();
             }
+            release();
         } else if (!TextUtils.isEmpty(event) && "pause".equals(event)) {
             if (bdPlayer != null) {
                 bdPlayer.pause();
             }
+            if (mMediaPlayer != null) {
+                mMediaPlayer.pause();
+            }
         } else if (!TextUtils.isEmpty(event) && "start".equals(event)) {
             if (bdPlayer != null) {
                 bdPlayer.start();
+            }
+            if (mMediaPlayer != null) {
+                mMediaPlayer.start();
             }
         }
     }

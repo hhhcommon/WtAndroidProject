@@ -8,6 +8,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Environment;
 import android.support.multidex.MultiDex;
+import android.support.multidex.MultiDexApplication;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -53,15 +54,10 @@ import cn.finalteam.okhttpfinal.OkHttpFinalConfiguration;
  * 作者：xinlong on 2016/8/23 21:18
  * 邮箱：645700751@qq.com
  */
-public class BSApplication extends Application {
+public class BSApplication extends MultiDexApplication {
     public static android.content.SharedPreferences SharedPreferences;   // 配置信息
     public static Context mContext;
-    public static String E_CLASS;
 
-    protected void attachBaseContext(Context newBase) {
-        super.attachBaseContext(newBase);
-        MultiDex.install(this);
-    }
 
     public void onCreate() {
         super.onCreate();
