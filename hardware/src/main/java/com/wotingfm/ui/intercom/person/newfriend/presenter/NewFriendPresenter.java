@@ -135,10 +135,20 @@ public class NewFriendPresenter {
      * @param position
      */
     public void onClick(int position) {
-        String id = list.get(position).getId();
+        String id = null;
+        try {
+            id = list.get(position).getApply_user().getId();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         if (id != null && !id.equals("")) {
-            String type = list.get(position).getApply_type();
-            if (type != null && !type.equals("") && type.equals("1")) {
+            boolean b = false;
+            try {
+                 b = list.get(position).isHad_approved();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            if (!b) {
                 PersonMessageFragment fragment = new PersonMessageFragment();
                 Bundle bundle = new Bundle();
                 bundle.putString("type", "false");
@@ -187,7 +197,7 @@ public class NewFriendPresenter {
         if (GlobalNetWorkConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
             if (GlobalStateConfig.test) {
                 // 测试数据==同意
-                list.get(position).setApply_type("2");
+                list.get(position).setHad_approved(true);
                 activity.updateUI(list);
             } else {
                 // 获取网络数据
@@ -244,7 +254,7 @@ public class NewFriendPresenter {
             int ret = js.getInt("ret");
             Log.e("ret", String.valueOf(ret));
             if (ret == 0) {
-                list.get(position).setApply_type("2");
+                list.get(position).setHad_approved(true);
                 activity.updateUI(list);
                 activity.getActivity().sendBroadcast(new Intent(BroadcastConstants.PERSON_GET));
             } else {

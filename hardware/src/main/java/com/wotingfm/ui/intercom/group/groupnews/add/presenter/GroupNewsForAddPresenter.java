@@ -65,7 +65,7 @@ public class GroupNewsForAddPresenter {
                 String introduce = "这是一个钓鱼交流群";
                 String channel1 = "CH100-100000";
                 String channel2 = "CH100-100000";
-                activity.setViewData(name, number, address, introduce, channel1, channel2);
+                activity.setViewData("",name, number, address, introduce, channel1, channel2);
                 list = model.getPersonList();// 获取群成员数据
                 if (list != null && list.size() > 0) {
                     ArrayList<Contact.user> _list = model.assemblyDataForGroup(list, true);// 组装群成员展示数据
@@ -144,6 +144,13 @@ public class GroupNewsForAddPresenter {
 
     // 组装数据
     private void assemblyData(Contact.group g_news) {
+        String url = "";
+        try {
+            url = g_news.getLogo_url();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         String name = "";
         try {
             name = g_news.getTitle();
@@ -159,6 +166,9 @@ public class GroupNewsForAddPresenter {
         String address = "暂未填写";
         try {
             address = g_news.getLocation();
+            if(address.toString().equals("")){
+                address = "暂未填写";
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -186,7 +196,7 @@ public class GroupNewsForAddPresenter {
                 channel1 = strArray[0];
                 channel2 = strArray[1];
             } else {
-                channel1 = "CH100-100000";
+                channel1 = channel;
                 channel2 = "";
             }
         }
@@ -206,7 +216,7 @@ public class GroupNewsForAddPresenter {
         } else {
             activity.setViewForMy(false);
         }
-        activity.setViewData(name, number, address, introduce, channel1, channel2);
+        activity.setViewData(url,name, number, address, introduce, channel1, channel2);
     }
 
 
@@ -403,14 +413,14 @@ public class GroupNewsForAddPresenter {
     /**
      * Grid的点击事件
      *
-     * @param list
+     * @param _list
      * @param position
      */
-    public void setGridItemClick(List<Contact.user> list, int position) {
-        if (list != null && list.size() > 0) {
-            int type = list.get(position).getType();
+    public void setGridItemClick(List<Contact.user> _list, int position) {
+        if (_list != null && _list.size() > 0) {
+            int type = _list.get(position).getType();
             if (type == 1) {// 跳转到群成员界面，判断是否是自己好友
-                String id = list.get(position).getId().trim();
+                String id = _list.get(position).getId().trim();
                 if (id != null && !id.equals("")) {
                     if (model.judgeFriends(id)) {
                         PersonMessageFragment fragment = new PersonMessageFragment();
@@ -434,6 +444,7 @@ public class GroupNewsForAddPresenter {
                 GroupNumberAddFragment fragment = new GroupNumberAddFragment();
                 Bundle bundle = new Bundle();
                 bundle.putString("gid", gid);
+                bundle.putSerializable("list", (Serializable) list);// 成员列表
                 fragment.setArguments(bundle);
                 InterPhoneActivity.open(fragment);
             } else if (type == 3) {// 删除群成员

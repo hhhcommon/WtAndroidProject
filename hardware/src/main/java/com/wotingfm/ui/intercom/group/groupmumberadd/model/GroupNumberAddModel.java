@@ -8,6 +8,7 @@ import com.wotingfm.common.net.RetrofitUtils;
 import com.wotingfm.common.utils.GetTestData;
 import com.wotingfm.ui.intercom.main.contacts.model.Contact;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import rx.android.schedulers.AndroidSchedulers;
@@ -22,18 +23,48 @@ public class GroupNumberAddModel {
 
     /**
      * 测试数据
+     *
      * @return
      */
     public List<Contact.user> getData() {
         List<Contact.user> list = GetTestData.getFriendList();
         return list;
     }
+
+    /**
+     * 组装数据,去除已经是群成员的好友
+     *
+     * @param src_list 群成员
+     * @param list     好友列表
+     */
+    public List<Contact.user> assemblyData(List<Contact.user> src_list, List<Contact.user> list) {
+        List<Contact.user> _list = new ArrayList<>();
+        // 遍历好友列表
+        for (int i = 0; i < list.size(); i++) {
+            String src_id = list.get(i).getId();
+            if (src_id != null && !src_id.trim().equals("")) {
+                boolean b = false;
+                for (int j = 0; j < src_list.size(); j++) {
+                    String id = src_list.get(j).getId();
+                    if (id != null && !id.trim().equals("")) {
+                        if (id.equals(src_id)) {
+                            b = true;
+                            break;
+                        }
+                    }
+                }
+                if (!b) _list.add(list.get(i));
+            }
+        }
+        return _list;
+    }
+
     /**
      * 群成员==添加
      *
      * @param listener 监听
      */
-    public void loadNewsForAdd(String gid,String id,  final OnLoadInterface listener) {
+    public void loadNewsForAdd(String gid, String id, final OnLoadInterface listener) {
         try {
             RetrofitUtils.getInstance().groupNumAdd(gid, id)
                     .subscribeOn(Schedulers.io())

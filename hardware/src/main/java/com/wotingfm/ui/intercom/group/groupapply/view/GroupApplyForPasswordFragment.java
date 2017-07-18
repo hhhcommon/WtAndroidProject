@@ -29,11 +29,6 @@ public class GroupApplyForPasswordFragment extends Fragment implements View.OnCl
     private Dialog dialog;
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         if (rootView == null) {
             rootView = inflater.inflate(R.layout.fragment_apply_password, container, false);

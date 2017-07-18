@@ -73,13 +73,13 @@ public class SetManagerAdapter extends BaseAdapter {
             holder.tv_name.setText(lists.getName());//名
         }
 
-        if (lists.getType() == 3) {
+        if (!lists.is_admin()) {
             holder.img_choose.setImageResource(R.mipmap.icon_select_n);
         } else {
             holder.img_choose.setImageResource(R.mipmap.icon_select_s);
         }
 
-        if (lists.getAvatar() != null && !lists.getAvatar().equals("")) {
+        if (lists.getAvatar() != null && !lists.getAvatar().equals("")&&lists.getAvatar().startsWith("http")) {
             GlideUtils.loadImageViewSize(context, lists.getAvatar(), 60, 60, holder.img_touXiang, true);
         } else {
             Bitmap bmp = BitmapUtils.readBitMap(context, R.mipmap.icon_avatar_d);

@@ -1,4 +1,4 @@
-package com.wotingfm.ui.message.megcenter.view;
+package com.wotingfm.ui.mine.message.megcenter.view;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -7,8 +7,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import com.wotingfm.R;
-import com.wotingfm.ui.message.megcenter.presenter.MsgCenterPresenter;
-import com.wotingfm.ui.message.notify.view.MsgNotifyFragment;
+import com.wotingfm.ui.mine.message.megcenter.presenter.MsgCenterPresenter;
+import com.wotingfm.ui.mine.message.notify.view.MsgNotifyFragment;
 import com.wotingfm.ui.mine.main.MineActivity;
 
 /**

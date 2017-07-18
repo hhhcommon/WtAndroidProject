@@ -1,6 +1,9 @@
 package com.wotingfm.ui.intercom.group.groupchat.presenter;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 
 import com.wotingfm.common.application.BSApplication;
@@ -34,10 +37,12 @@ public class GroupChatPresenter {
     private final GroupChatFragment activity;
     private final GroupChatModel model;
     private List<GroupChat> list;
+    private MessageReceiver Receiver;
 
     public GroupChatPresenter(GroupChatFragment activity) {
         this.activity = activity;
         this.model = new GroupChatModel(activity);
+        setReceiver();
         getData();    // 组装数据
     }
 
@@ -182,5 +187,35 @@ public class GroupChatPresenter {
         // 关闭对讲页面好友数据
         activity.getActivity().sendBroadcast(new Intent(BroadcastConstants.VIEW_PERSON_CLOSE));
         enterGroup(groupId);
+    }
+
+    // 设置广播接收器
+    private void setReceiver() {
+        if (Receiver == null) {
+            Receiver = new MessageReceiver();
+            IntentFilter filter = new IntentFilter();
+            filter.addAction(BroadcastConstants.GROUP_CHANGE);// 好友更改广播
+            activity.getActivity().registerReceiver(Receiver, filter);
+        }
+    }
+
+    class MessageReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            if (action.equals(BroadcastConstants.GROUP_CHANGE)) {
+                getData();
+            }
+        }
+    }
+
+    /**
+     * 界面销毁,注销广播
+     */
+    public void destroy() {
+        if (Receiver != null) {
+            activity.getActivity().unregisterReceiver(Receiver);
+            Receiver = null;
+        }
     }
 }

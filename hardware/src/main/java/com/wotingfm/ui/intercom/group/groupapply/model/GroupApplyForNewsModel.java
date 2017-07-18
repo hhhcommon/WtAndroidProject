@@ -2,6 +2,7 @@ package com.wotingfm.ui.intercom.group.groupapply.model;
 
 import android.util.Log;
 
+import com.google.gson.GsonBuilder;
 import com.wotingfm.common.net.RetrofitUtils;
 import com.wotingfm.ui.base.model.UserInfo;
 
@@ -30,7 +31,7 @@ public class GroupApplyForNewsModel extends UserInfo {
                         @Override
                         public void call(Object o) {
                             try {
-                                Log.e("入组申请返回数据", o.toString());
+                                Log.e("入组申请返回数据", new GsonBuilder().serializeNulls().create().toJson(o));
                                 //填充UI
                                 listener.onSuccess(o);
                             } catch (Exception e) {

@@ -81,62 +81,21 @@ public class GroupNumberDelModel {
      */
     public List<Contact.user> assemblyData(List<Contact.user> list, String id) {
         List<Contact.user> _list = new ArrayList<>();
-        // 有群主
-        if (id != null && !id.trim().equals("")) {
-            // 添加群主
-            for (int i = 0; i < list.size(); i++) {
-                boolean b = list.get(i).is_admin();
-                if (b) {
-                    String _id = list.get(i).getId();
-                    if (_id != null && !_id.trim().equals("")) {
-                        if (id.equals(_id)) {
-                            list.get(i).setType(1);
-                            _list.add(list.get(i));
-                        }
-                    }
-                }
+        // 添加管理员
+        for (int i = 0; i < list.size(); i++) {
+            boolean b = list.get(i).is_admin();
+            if (b) {
+                list.get(i).setType(2);
+                _list.add(list.get(i));
             }
-
-            // 添加管理员
-            for (int i = 0; i < list.size(); i++) {
-                boolean b = list.get(i).is_admin();
-                if (b) {
-                    String _id = list.get(i).getId();
-                    if (_id != null && !_id.trim().equals("")) {
-                        if (!id.equals(_id)) {
-                            list.get(i).setType(2);
-                            _list.add(list.get(i));
-                        }
-                    }
-                }
-            }
-
-            // 添加成员
-            for (int i = 0; i < list.size(); i++) {
-                boolean b = list.get(i).is_admin();
-                if (!b) {
-
-                    list.get(i).setType(3);
-                    _list.add(list.get(i));
-                }
-            }
-        } else {
-            // 添加管理员
-            for (int i = 0; i < list.size(); i++) {
-                boolean b = list.get(i).is_admin();
-                if (b) {
-                    list.get(i).setType(2);
-                    _list.add(list.get(i));
-                }
-            }
-            // 添加成员
-            for (int i = 0; i < list.size(); i++) {
-                boolean b = list.get(i).is_admin();
-                if (!b) {
-
-                    list.get(i).setType(3);
-                    _list.add(list.get(i));
-                }
+        }
+        // 添加成员
+        for (int i = 0; i < list.size(); i++) {
+            boolean b = list.get(i).is_admin();
+            boolean b1 = list.get(i).is_owner();
+            if (!b && !b1) {
+                list.get(i).setType(3);
+                _list.add(list.get(i));
             }
         }
 

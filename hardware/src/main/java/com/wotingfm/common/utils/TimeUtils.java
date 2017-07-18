@@ -16,7 +16,7 @@ public class TimeUtils {
         return hms;
     }
 
-    /*
+    /**
      * 将时间戳转换为时间
      */
     public static String stampToDate(String s) {
@@ -27,4 +27,23 @@ public class TimeUtils {
         res = simpleDateFormat.format(date);
         return res;
     }
+
+    /**
+     * 将时间戳转换为时间 mm:ss
+     * @param s
+     * @return
+     */
+    public static String stampToDateForH(String s) {
+        String res = "00:00";
+        try {
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("mm:ss");
+            long lt = new Long(s);
+            Date date = new Date(lt);
+            res = simpleDateFormat.format(date);
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+        }
+        return res;
+    }
+
 }

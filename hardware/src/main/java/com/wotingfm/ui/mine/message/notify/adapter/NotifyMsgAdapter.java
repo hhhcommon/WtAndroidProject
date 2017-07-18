@@ -1,10 +1,9 @@
-package com.wotingfm.ui.message.notify.adapter;
+package com.wotingfm.ui.mine.message.notify.adapter;
 
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,54 +15,93 @@ import android.widget.TextView;
 import com.woting.commonplat.utils.BitmapUtils;
 import com.wotingfm.R;
 import com.wotingfm.common.utils.GlideUtils;
+import com.wotingfm.common.utils.TimeUtils;
 import com.wotingfm.common.view.slidingbutton.SlidingButtonView;
-import com.wotingfm.ui.message.notify.model.DBNotifyMsg;
+import com.wotingfm.ui.mine.message.notify.model.Msg;
+import com.wotingfm.ui.mine.message.notify.model.SrcMsg;
 
 import java.util.List;
 
 /**
- *
  * 作者：xinLong on 2017/6/12 13:42
  * 邮箱：645700751@qq.com
  */
 
 public class NotifyMsgAdapter extends RecyclerView.Adapter<NotifyMsgAdapter.SimpleHolder> implements SlidingButtonView.IonSlidingButtonListener {
-    private List<DBNotifyMsg> mData;
+    private List<Msg> mData;
     private Context mContext;
 
     private IonSlidingViewClickListener mIDeleteBtnClickListener;
     private SlidingButtonView mMenu;
 
-    public NotifyMsgAdapter(Context context, List<DBNotifyMsg> friendList) {
+    public NotifyMsgAdapter(Context context, List<Msg> Msg) {
         this.mContext = context;
-        this.mData = friendList;
+        this.mData = Msg;
     }
 
-    public void changeData(List<DBNotifyMsg> friendList) {
-        this.mData = friendList;
+    public void changeData(List<Msg> Msg) {
+        this.mData = Msg;
         notifyDataSetChanged();
     }
 
     @Override
     public SimpleHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(mContext).inflate(R.layout.adapter_new_friend, parent, false);
+        View view = LayoutInflater.from(mContext).inflate(R.layout.adapter_msg, parent, false);
         return new SimpleHolder(view);
     }
 
     // 数据绑定
     @Override
     public void onBindViewHolder(final SimpleHolder holder, int position) {
-        DBNotifyMsg m = mData.get(position);
+        holder.layout_content.getLayoutParams().width = getScreenWidth(mContext);
+        Msg m = mData.get(position);
+        if (m.getMsg_type() != null && m.getMsg_type().equals("1")) {
+            holder.tv_introduce.setVisibility(View.GONE);
+            holder.tv_ok.setVisibility(View.GONE);
+            holder.tv_oks.setVisibility(View.GONE);
+        } else if (m.getMsg_type() != null && m.getMsg_type().equals("2")) {
+            holder.tv_introduce.setVisibility(View.GONE);
+            holder.tv_ok.setVisibility(View.GONE);
+            holder.tv_oks.setVisibility(View.GONE);
+        } else if (m.getMsg_type() != null && m.getMsg_type().equals("3")) {
+            holder.tv_introduce.setVisibility(View.GONE);
+            holder.tv_ok.setVisibility(View.GONE);
+            holder.tv_oks.setVisibility(View.GONE);
+        } else if (m.getMsg_type() != null && m.getMsg_type().equals("4")) {
+            holder.tv_introduce.setVisibility(View.GONE);
+            if (m.getStatus() != null && m.getStatus().equals("0")) {
+                holder.tv_ok.setVisibility(View.VISIBLE);
+                holder.tv_oks.setVisibility(View.GONE);
+            } else if (m.getStatus() != null && m.getStatus().equals("1")) {
+                holder.tv_ok.setVisibility(View.GONE);
+                holder.tv_oks.setVisibility(View.VISIBLE);
+            } else {
+                holder.tv_ok.setVisibility(View.GONE);
+                holder.tv_oks.setVisibility(View.GONE);
+            }
 
-
-
-        if (m.getApply_avatar() != null && !m.getApply_avatar().equals("")) {
-            GlideUtils.loadImageViewSize(mContext, m.getApply_avatar(), 60, 60, holder.img_url, true);
+        }
+        if (m.getAvatar() != null && !m.getAvatar().equals("") && m.getAvatar().startsWith("http")) {
+            GlideUtils.loadImageViewSize(mContext, m.getAvatar(), 60, 60, holder.img_url, true);
         } else {
             Bitmap bmp = BitmapUtils.readBitMap(mContext, R.mipmap.icon_avatar_d);
             holder.img_url.setImageBitmap(bmp);
         }
-
+        if (m.getTime() != null && !m.getTime().equals("")) {
+            holder.tv_time.setText(TimeUtils.stampToDateForH(m.getTime()));
+        } else {
+            holder.tv_time.setText("00:00");
+        }
+        if (m.getTitle() != null && !m.getTitle().equals("")) {
+            holder.tv_title.setText(m.getTitle());
+        } else {
+            holder.tv_title.setText("我听");
+        }
+        if (m.getNews() != null && !m.getNews().equals("")) {
+            holder.tv_news.setText(m.getNews());
+        } else {
+            holder.tv_news.setText("我听");
+        }
 
         holder.tv_ok.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -105,17 +143,22 @@ public class NotifyMsgAdapter extends RecyclerView.Adapter<NotifyMsgAdapter.Simp
 
     class SimpleHolder extends RecyclerView.ViewHolder {
         public ImageView img_url;
-        public TextView tv_name, tv_news, tv_ok, tv_Delete, tv_oks;
+        public TextView tv_title, tv_news, tv_ok, tv_Delete, tv_oks, tv_introduce, tv_time;
         public RelativeLayout layout_content, re_adapter;
 
         public SimpleHolder(View itemView) {
             super(itemView);
-            tv_Delete = (TextView) itemView.findViewById(R.id.tv_delete);
-            img_url = (ImageView) itemView.findViewById(R.id.img_url);
-            tv_name = (TextView) itemView.findViewById(R.id.tv_name);
+            tv_Delete = (TextView) itemView.findViewById(R.id.tv_delete);// 删除按钮
+            img_url = (ImageView) itemView.findViewById(R.id.img_url);// 头像
+
+            tv_title = (TextView) itemView.findViewById(R.id.tv_title);
             tv_news = (TextView) itemView.findViewById(R.id.tv_news);
-            tv_oks = (TextView) itemView.findViewById(R.id.tv_oks);
-            tv_ok = (TextView) itemView.findViewById(R.id.tv_ok);
+            tv_introduce = (TextView) itemView.findViewById(R.id.tv_introduce);
+            tv_time = (TextView) itemView.findViewById(R.id.tv_time);
+
+            tv_oks = (TextView) itemView.findViewById(R.id.tv_oks);// 已同意
+            tv_ok = (TextView) itemView.findViewById(R.id.tv_ok);// 同意
+
             re_adapter = (RelativeLayout) itemView.findViewById(R.id.re_adapter);
             layout_content = (RelativeLayout) itemView.findViewById(R.id.layout_content);
             ((SlidingButtonView) itemView).setSlidingButtonListener(NotifyMsgAdapter.this);
@@ -167,21 +210,8 @@ public class NotifyMsgAdapter extends RecyclerView.Adapter<NotifyMsgAdapter.Simp
         void onDeleteBtnClick(View view, int position);
     }
 
-    /**
-     * dpתpx
-     *
-     * @param context
-     * @param dp
-     * @return
-     */
-    public static int dp2px(Context context, float dp) {
-        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
-                dp, context.getResources().getDisplayMetrics());
-    }
-
     public static int getScreenWidth(Context context) {
-        WindowManager wm = (WindowManager) context
-                .getSystemService(Context.WINDOW_SERVICE);
+        WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         DisplayMetrics outMetrics = new DisplayMetrics();
         wm.getDefaultDisplay().getMetrics(outMetrics);
         return outMetrics.widthPixels;

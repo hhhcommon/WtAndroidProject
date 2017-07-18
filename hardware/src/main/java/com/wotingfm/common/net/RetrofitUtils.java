@@ -713,8 +713,8 @@ public class RetrofitUtils {
      * @param type
      * @return
      */
-    public Observable<Object> applyGroupType(String password, int type) throws Exception {
-        return retrofitService.applyGroupType(password, type)
+    public Observable<Object> applyGroupType(String id, String password, int type) throws Exception {
+        return retrofitService.applyGroupType(id, password, type)
                 .map(new Func1<Object, Object>() {
                     @Override
                     public Object call(Object O) {
@@ -929,7 +929,7 @@ public class RetrofitUtils {
      * @return Objects
      */
     public Observable<Object> getSearchGroup(String s) throws Exception {
-        return retrofitService.getSearchGroup("chat-groups", s)
+        return retrofitService.getSearchGroup("GROUP", s)
                 .map(new Func1<Object, Object>() {
                     @Override
                     public Object call(Object O) {
@@ -945,7 +945,7 @@ public class RetrofitUtils {
      * @return Objects
      */
     public Observable<Object> getSearchPerson(String s) throws Exception {
-        return retrofitService.getSearchPerson("users", s)
+        return retrofitService.getSearchPerson("USER", s)
                 .map(new Func1<Object, Object>() {
                     @Override
                     public Object call(Object O) {
@@ -1044,13 +1044,12 @@ public class RetrofitUtils {
     /**
      * 设置群组备用频道
      *
-     * @param channel1
-     * @param channel2
+     * @param c
      * @param id
      * @return Objects
      */
-    public Observable<Object> setChannel(String channel1, String channel2, String id) throws Exception {
-        return retrofitService.setChannel(channel1, channel2, id)
+    public Observable<Object> setChannel(String id, String c) throws Exception {
+        return retrofitService.setChannel(id, c)
                 .map(new Func1<Object, Object>() {
                     @Override
                     public Object call(Object O) {
@@ -1124,6 +1123,22 @@ public class RetrofitUtils {
     }
 
     /**
+     * 修改群头像
+     *
+     * @param s
+     * @return Objects
+     */
+    public Observable<Object> editGroupUrl(String id, String s) throws Exception {
+        return retrofitService.editGroupUrl(id, s)
+                .map(new Func1<Object, Object>() {
+                    @Override
+                    public Object call(Object O) {
+                        return O;
+                    }
+                });
+    }
+
+    /**
      * 删除群成员
      *
      * @param gid
@@ -1163,8 +1178,8 @@ public class RetrofitUtils {
      * @param s
      * @return Objects
      */
-    public Observable<Object> editPersonNote(String id, String s) throws Exception {
-        return retrofitService.editPersonNote(id, s)
+    public Observable<Object> editPersonNote(String pid, String id, String s) throws Exception {
+        return retrofitService.editPersonNote(pid, id, s)
                 .map(new Func1<Object, Object>() {
                     @Override
                     public Object call(Object O) {
@@ -1227,13 +1242,12 @@ public class RetrofitUtils {
     /**
      * 移交群主
      *
-     * @param id
      * @param information
      * @param feedback
      * @return Objects
      */
-    public Observable<Object> feedback(String id, String information, String feedback) throws Exception {
-        return retrofitService.feedback(id, information, feedback)
+    public Observable<Object> feedback(String information, String feedback) throws Exception {
+        return retrofitService.feedback(information, feedback)
                 .map(new Func1<Object, Object>() {
                     @Override
                     public Object call(Object O) {
@@ -1319,6 +1333,38 @@ public class RetrofitUtils {
      */
     public Observable<Object> editUserImg(String id, String s) throws Exception {
         return retrofitService.editUserImg(id, s)
+                .map(new Func1<Object, Object>() {
+                    @Override
+                    public Object call(Object O) {
+                        return O;
+                    }
+                });
+    }
+
+    /**
+     * 删除好友
+     *
+     * @param pid
+     * @param id
+     * @return Objects
+     */
+    public Observable<Object> delPerson(String pid, String id) throws Exception {
+        return retrofitService.delPerson(pid, id)
+                .map(new Func1<Object, Object>() {
+                    @Override
+                    public Object call(Object O) {
+                        return O;
+                    }
+                });
+    }
+
+    /**
+     * 获取消息
+     *
+     * @return Objects
+     */
+    public Observable<Object> applies() throws Exception {
+        return retrofitService.applies()
                 .map(new Func1<Object, Object>() {
                     @Override
                     public Object call(Object O) {

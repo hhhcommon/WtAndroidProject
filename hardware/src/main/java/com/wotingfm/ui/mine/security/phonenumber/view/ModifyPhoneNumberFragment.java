@@ -72,11 +72,11 @@ public class ModifyPhoneNumberFragment extends Fragment implements View.OnClickL
             case R.id.head_left_btn:
                 MineActivity.close();
                 break;
-            case R.id.tv_yzm:
+            case R.id.text_send_verification_code:
                 String userName = editOldPhone.getText().toString().trim();
                 presenter.getYzm(userName);
                 break;
-            case R.id.tv_confirm:
+            case R.id.text_confirm:
                 confirm();
                 break;
 

@@ -19,8 +19,6 @@ import com.wotingfm.common.bean.SelectedMore;
 import com.wotingfm.common.bean.SerchList;
 import com.wotingfm.common.bean.Subscrible;
 import com.wotingfm.common.bean.TrailerInfo;
-import com.wotingfm.ui.intercom.main.contacts.model.Contact;
-import com.wotingfm.ui.user.login.model.Login;
 
 import retrofit2.http.DELETE;
 import retrofit2.http.GET;
@@ -29,9 +27,6 @@ import retrofit2.http.PUT;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 import rx.Observable;
-
-import static com.google.zxing.qrcode.decoder.ErrorCorrectionLevel.Q;
-import static com.wotingfm.R.mipmap.p;
 
 
 /**
@@ -244,10 +239,10 @@ public interface RetrofitService {
                                       @Query("password") String password,
                                       @Query("code") String code);
 
-    // 修改手机号(X)
+    // 修改手机号
     @POST(Api.URL_RESET_PHONE_NUMBER)
-    Observable<Object> resetPhoneNumber(@Query("s") String phone,
-                                        @Query("s") String password,
+    Observable<Object> resetPhoneNumber(@Query("phone") String phone,
+                                        @Query("newPhone") String newPhone,
                                         @Query("code") String code);
 
     // 好友列表
@@ -290,18 +285,13 @@ public interface RetrofitService {
 
     // 搜索的群组
     @GET(Api.URL_GET_GROUP__SEARCH)
-    Observable<Object> getSearchGroup(@Query("type") String type,
+    Observable<Object> getSearchGroup(@Path("type") String type,
                                       @Query("q") String s);
 
     // 搜索的好友
     @GET(Api.URL_GET_PERSON__SEARCH)
-    Observable<Object> getSearchPerson(@Query("type") String type,
+    Observable<Object> getSearchPerson(@Path("type") String type,
                                        @Query("q") String s);
-
-    // 加群方式
-    @POST(Api.URL_APPLY_GROUP_TYPE)
-    Observable<Object> applyGroupType(@Query("password") String password,
-                                      @Query("token") int type);
 
     // 删除好友申请
     @DELETE(Api.URL_NEW_FRIEND_DEL)
@@ -335,11 +325,10 @@ public interface RetrofitService {
                                    @Query("member_access_mode") int type,
                                    @Query("logo_url") String url);
 
-    // 设置群组备用频道(X)
-    @POST(Api.URL_SET_CHANNEL)
+    // 修改群信息(备用频道)
+    @PUT(Api.URL_EDIT_GROUP)
     Observable<Object> setChannel(@Path("id") String id,
-                                  @Query("channel1") String channel1,
-                                  @Query("channel2") String channel2);
+                                  @Query("channel") String c);
 
     // 修改群信息(群名称)
     @PUT(Api.URL_EDIT_GROUP)
@@ -365,18 +354,23 @@ public interface RetrofitService {
     @PUT(Api.URL_EDIT_GROUP)
     Observable<Object> editGroupMM(@Path("id") String id,
                                    @Query("password") String s);
-
-    // 修改好友备注（X）
-    @PUT(Api.URL_CHANGE_PERSON_NOTE)
-    Observable<Object> editPersonNote(@Path("id") String id,
-                                      @Query("note") String s);
+    // 修改群信息(加群方式)
+    @PUT(Api.URL_EDIT_GROUP)
+    Observable<Object> applyGroupType(@Path("id") String id,
+                                      @Query("password") String password,
+                                      @Query("member_access_mode") int type);
+    // 修改好友备注
+    @POST(Api.URL_CHANGE_PERSON_NOTE)
+    Observable<Object> editPersonNote(@Path("userId") String pid,
+                                      @Path("friendId") String id,
+                                      @Query("aliasName") String s);
 
     // 删除群成员
     @DELETE(Api.URL_DEL_GROUP_NUM)
     Observable<Object> groupNumDel(@Path("id") String gid,
                                    @Query("member_user_id") String id);
 
-    // 删除群成员
+    // 添加群成员
     @POST(Api.URL_ADD_GROUP_NUM)
     Observable<Object> groupNumAdd(@Path("id") String gid,
                                    @Query("member_user_id") String id);
@@ -393,10 +387,10 @@ public interface RetrofitService {
     @GET(Api.URL_GET_USER_INFO)
     Observable<Object> getUserInfo(@Path("id") String id);
 
-    // 入组申请(X)
+    // 入组申请
     @POST(Api.URL_GROUP_APPLY)
     Observable<Object> groupApply(@Path("id") String gid,
-                                  @Query("news") String news,
+                                  @Query("apply_message") String news,
                                   @Query("password") String password);
 
     // 好友订阅专辑
@@ -413,11 +407,10 @@ public interface RetrofitService {
     Observable<Object> transferManager(@Path("id") String gid,
                                        @Query("new_owner_id") String pid);
 
-    // 意见反馈(X)
+    // 意见反馈
     @POST(Api.URL_FEED_BACK)
-    Observable<Object> feedback(@Path("id") String id,
-                                @Query("s") String information,
-                                @Query("s") String feedback);
+    Observable<Object> feedback(@Query("contact_way") String information,
+                                @Query("content") String feedback);
 
     // 修改用户自己昵称
     @POST(Api.URL_EDIT_USER)
@@ -449,7 +442,13 @@ public interface RetrofitService {
     Observable<Object> editUserImg(@Path("id") String id,
                                    @Query("portraitMini") String news);
 
-
+    // 删除好友
+    @DELETE(Api.URL_PERSON_DEL)
+    Observable<Object> delPerson(@Path("userId") String pid,
+                                 @Path("friendId") String id);
+    // 获取消息
+    @GET(Api.URL_MSG_APPLY)
+    Observable<Object> applies();
 }
 
 

@@ -51,17 +51,17 @@ public class PersonMessageFragment extends Fragment implements View.OnClickListe
     private TextView tv_send, tv_name, tv_introduce, tv_number, tv_address, tv_del, tvTitle, tv_subNum, tv_focus;
     private LinearLayout lin_note, lin_chose;
     private PersonMessagePresenter presenter;
-    private Dialog dialog;
+    private Dialog dialog, confirmDialog;
     private int type;
     private TipView tip_view;
     private boolean b;
     private ObservableScrollView scrollView;
     private int height = 480;// 滑动开始变色的高
     private RelativeLayout mRelativeLayout, re_sunNumber;
-    private ImageView head_left_btn, img_other, img_call,img_url;
+    private ImageView head_left_btn, img_other, img_call, img_url,img_bg;
     private GridView gridView;
     private PersonMessageSubAdapter adapter;
-    private Dialog confirmDialog;
+    private ResultListener Listener;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -101,6 +101,7 @@ public class PersonMessageFragment extends Fragment implements View.OnClickListe
         lin_note.setOnClickListener(this);
 
 
+        img_bg = (ImageView) rootView.findViewById(R.id.img_bg);              // 背景图片
         img_url = (ImageView) rootView.findViewById(R.id.img_url);            // 头像展示图片
         tv_name = (TextView) rootView.findViewById(R.id.tv_name);             // 姓名
         tv_introduce = (TextView) rootView.findViewById(R.id.tv_introduce);   // 介绍
@@ -272,6 +273,13 @@ public class PersonMessageFragment extends Fragment implements View.OnClickListe
      */
     public void setViewData(String url, String name, String introduce, String number, String address, String focus) {
         if (url!= null && !url.equals("")&&url.startsWith("http")) {
+            GlideUtils.loadImageViewBlur(this.getActivity(), url, img_bg);
+        } else {
+            Bitmap bmp = BitmapUtils.readBitMap(this.getActivity(), R.mipmap.p);
+            img_bg.setImageBitmap(bmp);
+        }
+
+        if (url != null && !url.equals("") && url.startsWith("http")) {
             GlideUtils.loadImageViewSize(this.getActivity(), url, 60, 60, img_url, true);
         } else {
             Bitmap bmp = BitmapUtils.readBitMap(this.getActivity(), R.mipmap.icon_avatar_d);
@@ -403,5 +411,29 @@ public class PersonMessageFragment extends Fragment implements View.OnClickListe
     public void confirmDialogCancel() {
         confirmDialog.dismiss();
     }
+
+    /**
+     * 返回值设置
+     *
+     * @param type
+     * @param name
+     */
+    public void setResult(boolean type, String name) {
+        Listener.resultListener(type, name);
+    }
+
+    /**
+     * 回调结果值
+     *
+     * @param l
+     */
+    public void setResultListener(ResultListener l) {
+        Listener = l;
+    }
+
+    public interface ResultListener {
+        void resultListener(boolean type, String name);
+    }
+
 
 }

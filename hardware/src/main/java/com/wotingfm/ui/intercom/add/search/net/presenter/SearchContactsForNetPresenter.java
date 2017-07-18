@@ -336,11 +336,11 @@ public class SearchContactsForNetPresenter {
             Log.e("获取搜索好友列表==ret", String.valueOf(ret));
             if (ret == 0) {
                 String msg = js.getString("data");
-                JSONTokener jsonParser = new JSONTokener(msg);
-                JSONObject arg1 = (JSONObject) jsonParser.nextValue();
-                String friends = arg1.getString("users");
+//                JSONTokener jsonParser = new JSONTokener(msg);
+//                JSONObject arg1 = (JSONObject) jsonParser.nextValue();
+//                String friends = arg1.getString("users");
                 // 好友列表
-                List<Contact.user> list = new Gson().fromJson(friends, new TypeToken<List<Contact.user>>() {
+                List<Contact.user> list = new Gson().fromJson(msg, new TypeToken<List<Contact.user>>() {
                 }.getType());
                 if (list != null && list.size() > 0) {
                     List<Contact.user> _list = model.assemblyDataForPerson(list);
@@ -371,11 +371,11 @@ public class SearchContactsForNetPresenter {
             Log.e("获取搜索群组列表==ret", String.valueOf(ret));
             if (ret == 0) {
                 String msg = js.getString("data");
-                JSONTokener jsonParser = new JSONTokener(msg);
-                JSONObject arg1 = (JSONObject) jsonParser.nextValue();
-                String groups = arg1.getString("chat_groups");
+//                JSONTokener jsonParser = new JSONTokener(msg);
+//                JSONObject arg1 = (JSONObject) jsonParser.nextValue();
+//                String groups = arg1.getString("chat_groups");
                 // 好友列表
-                List<Contact.group> list = new Gson().fromJson(groups, new TypeToken<List<Contact.group>>() {
+                List<Contact.group> list = new Gson().fromJson(msg, new TypeToken<List<Contact.group>>() {
                 }.getType());
                 if (list != null && list.size() > 0) {
                     List<Contact.group> _list = model.assemblyDataForGroup(list);

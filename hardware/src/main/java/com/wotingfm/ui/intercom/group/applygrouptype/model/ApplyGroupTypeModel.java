@@ -2,6 +2,7 @@ package com.wotingfm.ui.intercom.group.applygrouptype.model;
 
 import android.util.Log;
 
+import com.google.gson.GsonBuilder;
 import com.wotingfm.common.net.RetrofitUtils;
 import com.wotingfm.ui.base.model.UserInfo;
 import com.wotingfm.ui.user.login.model.Login;
@@ -21,16 +22,17 @@ public class ApplyGroupTypeModel extends UserInfo {
      * @param password
      * @param listener 监听
      */
-    public void loadNews( String password,int type, final OnLoadInterface listener) {
+    public void loadNews(String groupId,String password,int type, final OnLoadInterface listener) {
         try {
-            RetrofitUtils.getInstance().applyGroupType(password, type)
+
+            RetrofitUtils.getInstance().applyGroupType(groupId,password, type)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(new Action1<Object>() {
                         @Override
                         public void call(Object o) {
                             try {
-                                Log.e("更改加群方式返回数据",o.toString());
+                                Log.e("更改加群方式返回数据",new GsonBuilder().serializeNulls().create().toJson(o));
                                 //填充UI
                                 listener.onSuccess(o);
                             } catch (Exception e) {

@@ -68,9 +68,9 @@ public class GroupApplyFragment extends Fragment implements View.OnClickListener
     private void setView() {
         if (type != null && !type.equals("")) {
             if (type.equals("0")) {
-                ViewShowNews();
-            } else if (type.equals("1")) {
                 ViewShowMM();
+            } else if (type.equals("1")) {
+                ViewShowNews();
             } else if (type.equals("2")) {
                 ViewShowAll();
             } else {

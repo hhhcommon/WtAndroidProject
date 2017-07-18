@@ -53,9 +53,12 @@ public class GroupNumberShowPresenter {
             }
             if (list != null && list.size() > 0) {
                 activity.setView(list);
+                activity.isLoginView(0);
+            }else{
+                activity.isLoginView(1);
             }
         } else {
-            ToastUtils.show_always(activity.getActivity(), "网络连接失败，请稍后再试！");
+            activity.isLoginView(2);
         }
     }
 

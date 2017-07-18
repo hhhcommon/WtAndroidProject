@@ -68,14 +68,14 @@ public class SearchContactsForUserAdapter extends BaseAdapter {
         }
         Contact.user lists = list.get(position);
 
-        if (lists.getName() == null || lists.getName().equals("")) {
+        if (lists.getNickName() == null || lists.getNickName().equals("")) {
             holder.tv_name.setText("名称");//名
         } else {
-            holder.tv_name.setText(lists.getName());//名
+            holder.tv_name.setText(lists.getNickName());//名
         }
 
-        if (lists.getAvatar() != null && !lists.getAvatar().equals("") && lists.getAvatar().startsWith("http:")) {
-            GlideUtils.loadImageViewSize(context, lists.getAvatar(), 60, 60, holder.img_touXiang, true);
+        if (lists.getPortraitMini()!= null && !lists.getPortraitMini().equals("") && lists.getPortraitMini().startsWith("http:")) {
+            GlideUtils.loadImageViewSize(context, lists.getPortraitMini(), 60, 60, holder.img_touXiang, true);
         } else {
             Bitmap bmp = BitmapUtils.readBitMap(context, R.mipmap.icon_avatar_d);
             holder.img_touXiang.setImageBitmap(bmp);

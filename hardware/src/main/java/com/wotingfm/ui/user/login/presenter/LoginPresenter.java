@@ -18,6 +18,7 @@ import com.netease.nim.live.DemoCache;
 import com.wotingfm.common.config.preference.Preferences;
 import com.wotingfm.common.config.preference.UserPreferences;
 import com.wotingfm.common.constant.BroadcastConstants;
+import com.wotingfm.common.net.RetrofitUtils;
 import com.wotingfm.common.utils.ToastUtils;
 import com.wotingfm.ui.user.login.model.LoginModel;
 import com.wotingfm.ui.user.login.view.LoginFragment;
@@ -175,6 +176,7 @@ public class LoginPresenter {
                 NIMClient.updateStatusBarNotificationConfig(UserPreferences.getStatusConfig());
                 ToastUtils.show_always(activity.getActivity(), "登录成功");
                 // 发送登录广播通知所有界面
+                RetrofitUtils.INSTANCE=null;
                 activity.getActivity().sendBroadcast(new Intent(BroadcastConstants.LOGIN));
                 LogoActivity.closeActivity();
             }

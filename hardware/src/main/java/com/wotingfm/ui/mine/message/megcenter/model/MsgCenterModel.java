@@ -1,4 +1,4 @@
-package com.wotingfm.ui.message.megcenter.model;
+package com.wotingfm.ui.mine.message.megcenter.model;
 
 /**
  * 作者：xinLong on 2017/5/16 14:28

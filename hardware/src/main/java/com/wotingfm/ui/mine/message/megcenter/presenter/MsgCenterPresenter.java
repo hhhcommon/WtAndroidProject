@@ -1,7 +1,7 @@
-package com.wotingfm.ui.message.megcenter.presenter;
+package com.wotingfm.ui.mine.message.megcenter.presenter;
 
-import com.wotingfm.ui.message.megcenter.model.MsgCenterModel;
-import com.wotingfm.ui.message.megcenter.view.MsgCenterFragment;
+import com.wotingfm.ui.mine.message.megcenter.model.MsgCenterModel;
+import com.wotingfm.ui.mine.message.megcenter.view.MsgCenterFragment;
 
 /**
  * 作者：xinLong on 2017/6/5 13:55

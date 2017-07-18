@@ -4,6 +4,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.woting.commonplat.config.GlobalNetWorkConfig;
 import com.wotingfm.common.config.GlobalStateConfig;
 import com.wotingfm.common.utils.ToastUtils;
@@ -88,22 +89,32 @@ public class ApplyGroupTypePresenter {
                 }
                 activity.setPasswordView(true);
                 activity.setShenView(false);
+                b1 = true;// 密码群
+                b2 = false;// 审核群
             } else if (type.equals("1")) {
                 activity.setPasswordView(false);
                 activity.setShenView(true);
+                b1 = false;// 密码群
+                b2 = true;// 审核群
             } else if (type.equals("2")) {
                 if (password != null && !password.equals("")) {
                     activity.setPasswordViewNews(password);
                 }
                 activity.setPasswordView(true);
                 activity.setShenView(true);
+                b1 = true;// 密码群
+                b2 = true;// 审核群
             } else {
                 activity.setPasswordView(false);
                 activity.setShenView(false);
+                b1 = false;// 密码群
+                b2 = false;// 审核群
             }
         } else {
             activity.setPasswordView(false);
             activity.setShenView(false);
+            b1 = false;// 密码群
+            b2 = false;// 审核群
         }
 
     }
@@ -142,7 +153,7 @@ public class ApplyGroupTypePresenter {
                 return false;
             }
         }
-        if (b1 && b2) {
+        if (!b1 && !b2) {
             Toast.makeText(activity.getActivity(), "请选择加群方式", Toast.LENGTH_LONG).show();
             return false;
         }
@@ -163,7 +174,7 @@ public class ApplyGroupTypePresenter {
         }
         final int FType = type;
         activity.dialogShow();
-        model.loadNews(mm, type, new ApplyGroupTypeModel.OnLoadInterface() {
+        model.loadNews(groupId,mm, type, new ApplyGroupTypeModel.OnLoadInterface() {
             @Override
             public void onSuccess(Object o) {
                 activity.dialogCancel();
@@ -181,7 +192,7 @@ public class ApplyGroupTypePresenter {
     // 处理返回数据
     private void dealLoginSuccess(Object o, String mm, int FType) {
         try {
-            String s = new Gson().toJson(o);
+            String s = new GsonBuilder().serializeNulls().create().toJson(o);
             JSONObject js = new JSONObject(s);
             int ret = js.getInt("ret");
             Log.e("修改入群方式=ret", String.valueOf(ret));

@@ -14,6 +14,7 @@ import com.wotingfm.R;
 import com.wotingfm.common.utils.DialogUtils;
 import com.wotingfm.ui.intercom.group.setmanager.adapter.SetManagerAdapter;
 import com.wotingfm.ui.intercom.group.setmanager.presenter.SetManagerPresenter;
+import com.wotingfm.ui.intercom.group.transfergroup.adapter.TransferManagerAdapter;
 import com.wotingfm.ui.intercom.group.transfergroup.presenter.TransferManagerPresenter;
 import com.wotingfm.ui.intercom.main.contacts.model.Contact;
 import com.wotingfm.ui.intercom.main.view.InterPhoneActivity;
@@ -21,7 +22,7 @@ import com.wotingfm.ui.intercom.main.view.InterPhoneActivity;
 import java.util.List;
 
 /**
- * 设置管理员界面
+ * 移交群主界面
  * 作者：xinLong on 2017/6/5 01:30
  * 邮箱：645700751@qq.com
  */
@@ -29,7 +30,7 @@ public class TransferGroupFragment extends Fragment implements View.OnClickListe
     private View rootView;
     private TransferManagerPresenter presenter;
     private ListView listView;
-    private SetManagerAdapter adapter;
+    private TransferManagerAdapter adapter;
     private Dialog dialog;
     private TipView tip_view;
     private int type;
@@ -77,19 +78,19 @@ public class TransferGroupFragment extends Fragment implements View.OnClickListe
      */
     public void setView(List<Contact.user> list) {
         if (adapter == null) {
-            adapter = new SetManagerAdapter(this.getActivity(), list);
+            adapter = new TransferManagerAdapter(this.getActivity(), list);
             listView.setAdapter(adapter);
         } else {
             adapter.ChangeDate(list);
         }
-        setOnItemClickListener();
+        setOnItemClickListener(list);
     }
 
-    private void setOnItemClickListener() {
+    private void setOnItemClickListener(final List<Contact.user> list) {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                presenter.changeData(position);
+                presenter.changeData(list,position);
             }
         });
     }

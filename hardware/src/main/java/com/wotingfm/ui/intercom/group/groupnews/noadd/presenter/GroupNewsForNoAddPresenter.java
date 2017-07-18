@@ -29,7 +29,7 @@ public class GroupNewsForNoAddPresenter {
 
     private final GroupNewsForNoAddFragment activity;
     private final GroupNewsForNoAddModel model;
-    private  String id;
+    private String id;
     private List<Contact.user> _list;
     private String access = "2";//  0密码群，1审核群，2密码审核群
 
@@ -54,7 +54,7 @@ public class GroupNewsForNoAddPresenter {
                 String number = "518518";
                 String address = "北京朝阳";
                 String introduce = "这是一个钓鱼交流群";
-                activity.setViewData(name, number, address, introduce);
+                activity.setViewData("", name, number, address, introduce);
                 List<Contact.user> list = model.getPersonList();
                 if (list != null && list.size() > 0) {
                     activity.setGridViewData(list);
@@ -123,6 +123,13 @@ public class GroupNewsForNoAddPresenter {
 
     // 组装数据
     private void assemblyData(Contact.group g_news) {
+        String url = "";
+        try {
+            url = g_news.getLogo_url();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         String name = "";
         try {
             name = g_news.getTitle();
@@ -131,30 +138,35 @@ public class GroupNewsForNoAddPresenter {
         }
         String number = "";
         try {
-            number = g_news.getId();
+            number = g_news.getGroup_num();
         } catch (Exception e) {
             e.printStackTrace();
         }
-        String address = "";
+        String address = "暂未填写";
         try {
             address = g_news.getLocation();
+            if (address.toString().equals("")) {
+                address = "暂未填写";
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
-        String introduce = "";
+        String introduce = "暂无群介绍";
         try {
             introduce = g_news.getIntroduction();
+            if (introduce == null || introduce.equals("")) {
+                introduce = "暂无群介绍";
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
-
 
         try {
             access = g_news.getMember_access_mode();
         } catch (Exception e) {
             e.printStackTrace();
         }
-        activity.setViewData(name, number, address, introduce);
+        activity.setViewData(url, name, number, address, introduce);
         activity.isLoginView(0);
     }
 
@@ -189,9 +201,9 @@ public class GroupNewsForNoAddPresenter {
                 String msg = js.getString("data");
                 JSONTokener jsonParser = new JSONTokener(msg);
                 JSONObject arg1 = (JSONObject) jsonParser.nextValue();
-                String group = arg1.getString("chat_group");
+                String users = arg1.getString("users");
                 // 群成员
-                List<Contact.user> list = new Gson().fromJson(group, new TypeToken<List<Contact.user>>() {
+                List<Contact.user> list = new Gson().fromJson(users, new TypeToken<List<Contact.user>>() {
                 }.getType());
                 if (list != null) {
                     // 处理数据

@@ -7,6 +7,7 @@ import android.content.IntentFilter;
 import android.util.Log;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.woting.commonplat.config.GlobalNetWorkConfig;
 import com.wotingfm.common.config.GlobalStateConfig;
@@ -85,7 +86,7 @@ public class InterPhonePresenter {
     // 处理返回好友的数据
     private void dealUserSuccess(Object o) {
         try {
-            String s = new Gson().toJson(o);
+            String s = new GsonBuilder().serializeNulls().create().toJson(o);
             JSONObject js = new JSONObject(s);
             int ret = js.getInt("ret");
             Log.e("获取好友列表==ret", String.valueOf(ret));
@@ -97,11 +98,10 @@ public class InterPhonePresenter {
                 // 好友列表
                 List<Contact.user> list = new Gson().fromJson(friends, new TypeToken<List<Contact.user>>() {
                 }.getType());
-                if (list != null && list.size() > 0) {
-                    GlobalStateConfig.list_person = list;
-                    // 发送好友数据更改广播通知所有界面
-                    activity.getActivity().sendBroadcast(new Intent(BroadcastConstants.PERSON_CHANGE));
-                }
+                // 此处不需要判断空状态，需要交给上层去处理
+                GlobalStateConfig.list_person = list;
+                // 发送好友数据更改广播通知所有界面
+                activity.getActivity().sendBroadcast(new Intent(BroadcastConstants.PERSON_CHANGE));
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -111,7 +111,7 @@ public class InterPhonePresenter {
     // 处理返回组的数据
     private void dealGroupSuccess(Object o) {
         try {
-            String s = new Gson().toJson(o);
+            String s = new GsonBuilder().serializeNulls().create().toJson(o);
             JSONObject js = new JSONObject(s);
             int ret = js.getInt("ret");
             Log.e("获取群组列表==ret", String.valueOf(ret));
@@ -123,11 +123,10 @@ public class InterPhonePresenter {
                 // 好友列表
                 List<Contact.group> list = new Gson().fromJson(groups, new TypeToken<List<Contact.group>>() {
                 }.getType());
-                if (list != null && list.size() > 0) {
-                    GlobalStateConfig.list_group = list;
-                    // 发送群组数据更改广播通知所有界面
-                    activity.getActivity().sendBroadcast(new Intent(BroadcastConstants.GROUP_CHANGE));
-                }
+                // 此处不需要判断空状态，需要交给上层去处理
+                GlobalStateConfig.list_group = list;
+                // 发送群组数据更改广播通知所有界面
+                activity.getActivity().sendBroadcast(new Intent(BroadcastConstants.GROUP_CHANGE));
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -158,7 +157,7 @@ public class InterPhonePresenter {
             } else if (action.equals(BroadcastConstants.GROUP_GET)) {
                 getGroup();// 重新获取群组
             } else if (action.equals(BroadcastConstants.PERSON_GET)) {
-                getGroup();// 重新获取好友
+                getUser();// 重新获取好友
             }
         }
     }

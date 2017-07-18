@@ -39,15 +39,30 @@ public class GroupNumberAddPresenter {
      * 获取数据设置界面数据
      */
     public void getData() {
-        list = GlobalStateConfig.list_person;
+        List<Contact.user> _list = GlobalStateConfig.list_person;
         try {
             gid = activity.getArguments().getString("gid");// 群id
         } catch (Exception e) {
             e.printStackTrace();
         }
-        if (list != null && list.size() > 0) {
-            activity.setView(list);
+        List<Contact.user> src_list = null;// 成员列表
+        try {
+            src_list = (List<Contact.user>) activity.getArguments().getSerializable("list");
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+        if (_list != null && _list.size() > 0&&src_list != null && src_list.size() > 0) {
+            list = model.assemblyData(src_list, _list);
+            if (list != null && list.size() > 0) {
+                activity.setView(list);
+                activity.isLoginView(0);
+            }else{
+                activity.isLoginView(1);
+            }
+        } else {
+            activity.isLoginView(1);
+        }
+
     }
 
     /**
@@ -95,10 +110,10 @@ public class GroupNumberAddPresenter {
 
     // 发送申请请求
     private void sendApply(final int position) {
-        activity.dialogShow();
         if (list != null && list.size() > 0) {
             String id = list.get(position).getId();
             if (id != null && !id.equals("")) {
+                activity.dialogShow();
                 model.loadNewsForAdd(gid, id, new GroupNumberAddModel.OnLoadInterface() {
                     @Override
                     public void onSuccess(Object o) {
@@ -109,6 +124,7 @@ public class GroupNumberAddPresenter {
                     @Override
                     public void onFailure(String msg) {
                         activity.dialogCancel();
+                        ToastUtils.show_always(activity.getActivity(), "出错了，请您稍后再试！");
                     }
                 });
             }

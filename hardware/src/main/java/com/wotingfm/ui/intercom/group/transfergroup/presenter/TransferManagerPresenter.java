@@ -86,15 +86,17 @@ public class TransferManagerPresenter {
      *
      * @param position
      */
-    public void changeData(int position) {
-        int type = list.get(position).getType();
-        if (type == 3) {
+    public void changeData(List<Contact.user>list,int position) {
+        boolean type = list.get(position).is_admin();
+        if (type ) {
             for (int i = 0; i < list.size(); i++) {
-                list.get(i).setType(3);
+                list.get(i).setIs_admin(false);
             }
-            list.get(position).setType(2);
         } else {
-            list.get(position).setType(3);
+            for (int i = 0; i < list.size(); i++) {
+                list.get(i).setIs_admin(false);
+            }
+            list.get(position).setIs_admin(true);
         }
         activity.setView(list);
     }

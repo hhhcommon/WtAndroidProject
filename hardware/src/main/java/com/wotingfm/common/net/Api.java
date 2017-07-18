@@ -43,9 +43,9 @@ public class Api {
     // 添加群成员
     public static final String URL_ADD_GROUP_NUM = "api/chat-groups/{id}/members";
     // 搜索的好友
-    public static final String URL_GET_PERSON__SEARCH = "api/listenings/search";
+    public static final String URL_GET_PERSON__SEARCH = "api/searchUserAndGroup/{type}";
     // 搜索的群组
-    public static final String URL_GET_GROUP__SEARCH = "api/listenings/search";
+    public static final String URL_GET_GROUP__SEARCH = "api/searchUserAndGroup/{type}";
     // 好友订阅的专辑
     public static final String URL_PERSON_SUB = "api/users/{id}/subscriptions/albums";
     // 退出群组
@@ -56,25 +56,25 @@ public class Api {
     public static final String URL_GET_PERSON_RECOMMEND = "test";
     // 推荐的群组(X)
     public static final String URL_GET_GROUP__RECOMMEND = "test";
-    // 加群方式(X)
-    public static final String URL_APPLY_GROUP_TYPE = "test";
-    // 入组申请(X)
-    public static final String URL_GROUP_APPLY = "test";
+    // 入组申请
+    public static final String URL_GROUP_APPLY = "api/chat-groups/{id}/applies";
     // 偏好设置(X)
     public static final String URL_PREFERENCE = "test";
     // 注销登录(X)
     public static final String URL_CANCEL = "test";
-    // 设置群组备用频道(X)
-    public static final String URL_SET_CHANNEL = "test";
-    // 修改好友备注(X)
-    public static final String URL_CHANGE_PERSON_NOTE = "test";
-    // 意见反馈(X)
-    public static final String URL_FEED_BACK = "test";
+    // 修改好友备注
+    public static final String URL_CHANGE_PERSON_NOTE = "api/users/{userId}/friends/{friendId}/alias";
+    // 意见反馈
+    public static final String URL_FEED_BACK = "api/advices";
     // 获取用户自身数据引导页
-    public static final String URL_GET_USER_INFO = "/api/users/{id}";
+    public static final String URL_GET_USER_INFO = "api/users/{id}";
     // 修改用户信息
-    public static final String URL_EDIT_USER = "/api/users/{id}";
-    // 修改手机号(X)
-    public static final String URL_RESET_PHONE_NUMBER = "test";
+    public static final String URL_EDIT_USER = "api/users/{id}";
+    // 修改手机号
+    public static final String URL_RESET_PHONE_NUMBER = "api/reset-phoneNum";
+    // 删除好友
+    public static final String URL_PERSON_DEL = "api/users/{userId}/friends/{friendId}";
+    // 获取消息（待修改）
+    public static final String URL_MSG_APPLY = "api/chat-groups/getMes/applies";
 
 }

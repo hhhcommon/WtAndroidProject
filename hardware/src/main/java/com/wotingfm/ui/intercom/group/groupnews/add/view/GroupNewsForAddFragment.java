@@ -1,13 +1,11 @@
 package com.wotingfm.ui.intercom.group.groupnews.add.view;
 
 import android.app.Dialog;
-import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.support.design.widget.AppBarLayout;
 import android.support.v4.app.Fragment;
-import android.support.v4.widget.NestedScrollView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,23 +17,21 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.ScrollView;
 import android.widget.TextView;
-
 import com.woting.commonplat.manager.PhoneMsgManager;
+import com.woting.commonplat.utils.BitmapUtils;
 import com.woting.commonplat.widget.TipView;
 import com.wotingfm.R;
 import com.wotingfm.common.utils.DialogUtils;
+import com.wotingfm.common.utils.GlideUtils;
 import com.wotingfm.common.utils.ToastUtils;
 import com.wotingfm.common.view.myscrollview.ObservableScrollView;
 import com.wotingfm.ui.base.baseinterface.ScrollViewListener;
-import com.wotingfm.ui.intercom.group.groupmanage.GroupManageFragment;
 import com.wotingfm.ui.intercom.group.groupnews.add.adapter.GroupNewsPersonForAddAdapter;
 import com.wotingfm.ui.intercom.group.groupnews.add.presenter.GroupNewsForAddPresenter;
 import com.wotingfm.ui.intercom.main.contacts.model.Contact;
 import com.wotingfm.ui.intercom.main.simulation.SimulationInterPhoneFragment;
 import com.wotingfm.ui.intercom.main.view.InterPhoneActivity;
-
 import java.util.List;
 
 /**
@@ -56,7 +52,7 @@ public class GroupNewsForAddFragment extends Fragment implements View.OnClickLis
     private ObservableScrollView scrollView;
     private int height = 480;// 滑动开始变色的高
     private RelativeLayout mRelativeLayout;
-    private ImageView head_left_btn, img_other;
+    private ImageView head_left_btn, img_other,img_url;
     private LinearLayout lin_chose, lin_channel;
     private ResultListener Listener;
 
@@ -93,6 +89,8 @@ public class GroupNewsForAddFragment extends Fragment implements View.OnClickLis
 
         scrollView = (ObservableScrollView) rootView.findViewById(R.id.scrollView);//
         scrollView.setScrollViewListener(this);
+
+        img_url = (ImageView) rootView.findViewById(R.id.img_url);// 群头像
         tv_groupName = (TextView) rootView.findViewById(R.id.tv_groupName);// 群名称
         tv_groupNumber = (TextView) rootView.findViewById(R.id.tv_groupNumber);// 群号
         tv_address = (TextView) rootView.findViewById(R.id.tv_address);// 地址
@@ -111,7 +109,6 @@ public class GroupNewsForAddFragment extends Fragment implements View.OnClickLis
         tv_number = (TextView) rootView.findViewById(R.id.tv_number);// 成员数
         gridView = (GridView) rootView.findViewById(R.id.gridView);// 成员展示
         gridView.setSelector(new ColorDrawable(Color.TRANSPARENT));
-
 
         lin_channel = (LinearLayout) rootView.findViewById(R.id.lin_channel);
         tv_channel1 = (TextView) rootView.findViewById(R.id.tv_channel1);// 对讲频道1
@@ -244,7 +241,13 @@ public class GroupNewsForAddFragment extends Fragment implements View.OnClickLis
      * @param address
      * @param introduce
      */
-    public void setViewData(String name, String number, String address, String introduce, String channel1, String channel2) {
+    public void setViewData(String url,String name, String number, String address, String introduce, String channel1, String channel2) {
+        if (url!= null && !url.equals("")&&url.startsWith("http")) {
+            GlideUtils.loadImageViewBlur(this.getActivity(), url, img_url);
+        } else {
+            Bitmap bmp = BitmapUtils.readBitMap(this.getActivity(), R.mipmap.p);
+            img_url.setImageBitmap(bmp);
+        }
         tv_groupName.setText(name);          // 群名称
         tvTitle.setText(name);               // 群名称
         tv_groupNumber.setText(number);      // 群号
@@ -374,4 +377,5 @@ public class GroupNewsForAddFragment extends Fragment implements View.OnClickLis
     public interface ResultListener {
         void resultListener(boolean type);
     }
+
 }

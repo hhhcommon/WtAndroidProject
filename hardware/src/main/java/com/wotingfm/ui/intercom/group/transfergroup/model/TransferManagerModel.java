@@ -43,10 +43,11 @@ public class TransferManagerModel {
     public List<Contact.user> assemblyData(List<Contact.user> list, String id) {
         // 有群主
         if (id != null && !id.trim().equals("")) {
-            for(int i=0;i<list.size();i++){
-              String _id=  list.get(i).getId();
+            for (int i = 0; i < list.size(); i++) {
+                String _id = list.get(i).getId();
                 if (_id != null && !_id.trim().equals("")) {
-                    if(id.equals(_id)){
+                    list.get(i).setIs_admin(false);
+                    if (id.equals(_id)) {
                         list.remove(i);
                     }
                 }
@@ -65,7 +66,7 @@ public class TransferManagerModel {
         String S = "";
         if (list != null && list.size() > 0) {
             for (int i = 0; i < list.size(); i++) {
-                if (list.get(i).getType() == 2) {
+                if (list.get(i).is_admin()) {
                     String id = list.get(i).getId();
                     s.append(id + ",");
                 }

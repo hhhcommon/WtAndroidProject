@@ -86,7 +86,7 @@ public class GetTestData {
     // 生成一条用户数据
     private static Contact.user getUser(String name, String id) {
         Contact.user user = new Contact.user();
-        user.setName(name);
+        user.setNickName(name);
         user.setId(id);
         return user;
     }

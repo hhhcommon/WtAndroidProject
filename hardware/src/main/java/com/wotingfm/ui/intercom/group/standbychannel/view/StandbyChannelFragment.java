@@ -35,9 +35,9 @@ public class StandbyChannelFragment extends Fragment implements View.OnClickList
     private View rootView;
     private FragmentActivity context;
     private Dialog CDialog;
-    public int channelIndex=1;
+    public int channelIndex = 1;
     private ChannelPresenter presenter;
-    private TextView tv_channel1,tv_channel2;
+    private TextView tv_channel1, tv_channel2;
     private Dialog dialog;
 
     @Override
@@ -70,7 +70,7 @@ public class StandbyChannelFragment extends Fragment implements View.OnClickList
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.head_left_btn:
                 presenter.jump();
                 break;
@@ -81,7 +81,9 @@ public class StandbyChannelFragment extends Fragment implements View.OnClickList
                 presenter.setChannel(2);
                 break;
             case R.id.tv_send:
-                presenter.over();
+                String channel1 = tv_channel1.getText().toString();
+                String channel2 = tv_channel2.getText().toString();
+                presenter.over(channel1,channel2);
                 break;
             case R.id.tv_quxiao:
                 showDialog(false);
@@ -105,7 +107,7 @@ public class StandbyChannelFragment extends Fragment implements View.OnClickList
         dialog.findViewById(R.id.tv_ok).setOnClickListener(this);
 
         // 设置字体样式
-        pickChannel.setTextSize(15,17);
+        pickChannel.setTextSize(15, 17);
         pickChannel.setItems(tempList);
         pickChannel.setInitPosition(10);
 
@@ -135,12 +137,13 @@ public class StandbyChannelFragment extends Fragment implements View.OnClickList
 
     /**
      * dialog的展示情况
+     *
      * @param b true=展示/false=不展示
      */
-    public void showDialog(boolean b){
-        if(b){
+    public void showDialog(boolean b) {
+        if (b) {
             CDialog.show();
-        }else{
+        } else {
             if (CDialog.isShowing()) {
                 CDialog.dismiss();
             }
@@ -149,13 +152,14 @@ public class StandbyChannelFragment extends Fragment implements View.OnClickList
 
     /**
      * 频道的tv展示
+     *
      * @param type 1=channel1,2=channel2
      * @param s
      */
-    public void setChannel(int type,String s){
-        if(type==1){
+    public void setChannel(int type, String s) {
+        if (type == 1) {
             tv_channel1.setText(s);
-        }else{
+        } else {
             tv_channel2.setText(s);
         }
     }
