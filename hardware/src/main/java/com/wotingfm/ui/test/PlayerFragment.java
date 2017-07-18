@@ -98,6 +98,7 @@ public class PlayerFragment extends BaseFragment implements View.OnClickListener
 
 
     public static PlayerFragment newInstance(String albumsId) {
+        EventBus.getDefault().postSticky("pause");
         PlayerFragment fragment = new PlayerFragment();
         Bundle bundle = new Bundle();
         bundle.putSerializable("albumsId", albumsId);
@@ -106,6 +107,7 @@ public class PlayerFragment extends BaseFragment implements View.OnClickListener
     }
 
     public static PlayerFragment newInstance(ChannelsBean singlesBase) {
+        EventBus.getDefault().postSticky("pause");
         PlayerFragment fragment = new PlayerFragment();
         Bundle bundle = new Bundle();
         bundle.putSerializable("channelsBean", singlesBase);
@@ -114,6 +116,7 @@ public class PlayerFragment extends BaseFragment implements View.OnClickListener
     }
 
     public static PlayerFragment newInstance(SinglesBase singlesBase) {
+        EventBus.getDefault().postSticky("pause");
         PlayerFragment fragment = new PlayerFragment();
         Bundle bundle = new Bundle();
         bundle.putSerializable("singlesBase", singlesBase);
@@ -122,6 +125,7 @@ public class PlayerFragment extends BaseFragment implements View.OnClickListener
     }
 
     public static PlayerFragment newInstance(List<SinglesDownload> singlesDownloads) {
+        EventBus.getDefault().postSticky("pause");
         PlayerFragment fragment = new PlayerFragment();
         Bundle bundle = new Bundle();
         bundle.putSerializable("singlesDownloads", (Serializable) singlesDownloads);
@@ -244,7 +248,7 @@ public class PlayerFragment extends BaseFragment implements View.OnClickListener
                     }
                 }
             }
-        }else {
+        } else {
             getPlayerList(TextUtils.isEmpty(albumsId) ? "" : albumsId);
         }
 
@@ -508,6 +512,7 @@ public class PlayerFragment extends BaseFragment implements View.OnClickListener
                             relatiBottom.setVisibility(View.VISIBLE);
                             setBeforeOrNext(sb);
                         } else {
+                            bdPlayer.stopPlayback();
                             loadLayout.showEmptyView();
                         }
                     }
@@ -536,45 +541,6 @@ public class PlayerFragment extends BaseFragment implements View.OnClickListener
                         txtVideoStarttime.setText(TimeUtils.formatterTime(bdPlayer.getCurrentPosition()) + "");
                     }
                 });//每隔一秒发送数据
-    }
-
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        //播放历史
-        if (requestCode == 9090 && resultCode == RESULT_OK && data != null) {
-            Player.DataBean.SinglesBean sb = (Player.DataBean.SinglesBean) data.getSerializableExtra("singlesBean");
-            if (sb != null && singLesBeans != null && !singLesBeans.isEmpty()) {
-                for (int i = 0, size = singLesBeans.size(); i < size; i++) {
-                    if (sb.id.equals(singLesBeans.get(i).id)) {
-                        postionPlayer = i;
-                        seekbarVideo.setProgress(0);
-                        bdPlayer.stopPlayback();
-                        bdPlayer.setVideoPath(singLesBeans.get(postionPlayer).single_file_url);
-                        bdPlayer.start();
-                        mRecyclerView.smoothScrollToPosition(postionPlayer);
-                        setBeforeOrNext(singLesBeans.get(postionPlayer));
-                        return;
-                    }
-                }
-            }
-        }
-        //选择专辑
-        else if (requestCode == 8080 && resultCode == RESULT_OK && data != null) {
-            String albumsId = data.getStringExtra("albumsId");
-            if (bdPlayer != null)
-                bdPlayer.stopPlayback();
-            loadLayout.showLoadingView();
-            getPlayerList(albumsId);
-        }
-        //专辑详情一系列，resultCode =RESULT_OK 代表是选择详情所有节目
-        else if (requestCode == 8088 && resultCode == RESULT_OK && data != null) {
-            String albumsId = data.getStringExtra("albumsId");
-            if (bdPlayer != null)
-                bdPlayer.stopPlayback();
-            loadLayout.showLoadingView();
-            getPlayerList(albumsId);
-        }
     }
 
 
@@ -656,7 +622,6 @@ public class PlayerFragment extends BaseFragment implements View.OnClickListener
     @Override
     public void onDestroy() {
         super.onDestroy();
-        Log.i("mingku", "测试onDestroy=" + channelsBean);
         EventBus.getDefault().unregister(this);
         stopTelephonyListener();
         release();
