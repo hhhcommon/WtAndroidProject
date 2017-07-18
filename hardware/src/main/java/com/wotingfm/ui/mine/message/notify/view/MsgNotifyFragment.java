@@ -15,7 +15,8 @@ import com.woting.commonplat.widget.TipView;
 import com.wotingfm.R;
 import com.wotingfm.common.utils.DialogUtils;
 import com.wotingfm.ui.mine.message.notify.adapter.NotifyMsgAdapter;
-import com.wotingfm.ui.mine.message.notify.model.DBNotifyMsg;
+import com.wotingfm.ui.mine.message.notify.model.Msg;
+import com.wotingfm.ui.mine.message.notify.model.SrcMsg;
 import com.wotingfm.ui.mine.message.notify.presenter.MsgNotifyPresenter;
 import com.wotingfm.ui.mine.main.MineActivity;
 
@@ -76,9 +77,8 @@ public class MsgNotifyFragment extends Fragment implements NotifyMsgAdapter.IonS
         }
     }
 
-
     // 适配数据
-    public void updateUI(List<DBNotifyMsg> list) {
+    public void updateUI(List<Msg> list) {
         if (mAdapter == null) {
             mAdapter = new NotifyMsgAdapter(this.getActivity(), list);
             mRecyclerView.setAdapter(mAdapter);

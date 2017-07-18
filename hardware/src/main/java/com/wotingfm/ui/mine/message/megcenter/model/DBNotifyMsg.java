@@ -1,4 +1,4 @@
-package com.wotingfm.ui.mine.message.notify.model;
+package com.wotingfm.ui.mine.message.megcenter.model;
 
 /**
  * 消息的存储
@@ -26,9 +26,9 @@ public class DBNotifyMsg {
 
 
     public DBNotifyMsg(String _BJUserId, String _msg_id, String _msg_type,
-                       String _deal_type,String _html, String _apply_avatar,
-                       String _apply_id,String _apply_name, String _apply_message,
-                       String _group_avatar,String _group_id, String _group_name,String _show_time,String _add_time) {
+                       String _deal_type, String _html, String _apply_avatar,
+                       String _apply_id, String _apply_name, String _apply_message,
+                       String _group_avatar, String _group_id, String _group_name, String _show_time, String _add_time) {
         super();
         BJUserId = _BJUserId;
         msg_id = _msg_id;

@@ -446,8 +446,8 @@ public interface RetrofitService {
     @DELETE(Api.URL_PERSON_DEL)
     Observable<Object> delPerson(@Path("userId") String pid,
                                  @Path("friendId") String id);
-    // 获取消息（待修改）
-    @DELETE(Api.URL_MSG_APPLY)
+    // 获取消息
+    @GET(Api.URL_MSG_APPLY)
     Observable<Object> applies();
 }
 

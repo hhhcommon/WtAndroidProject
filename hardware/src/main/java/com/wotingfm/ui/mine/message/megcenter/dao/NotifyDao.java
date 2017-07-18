@@ -1,4 +1,4 @@
-package com.wotingfm.ui.mine.message.notify.dao;
+package com.wotingfm.ui.mine.message.megcenter.dao;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -6,7 +6,7 @@ import android.database.sqlite.SQLiteDatabase;
 
 import com.wotingfm.common.database.SQLiteHelper;
 import com.wotingfm.common.utils.CommonUtils;
-import com.wotingfm.ui.mine.message.notify.model.DBNotifyMsg;
+import com.wotingfm.ui.mine.message.megcenter.model.DBNotifyMsg;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1359,7 +1359,7 @@ public class RetrofitUtils {
     }
 
     /**
-     * 获取消息（待修改）
+     * 获取消息
      *
      * @return Objects
      */
