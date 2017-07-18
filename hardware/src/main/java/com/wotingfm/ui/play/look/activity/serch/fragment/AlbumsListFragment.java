@@ -28,6 +28,7 @@ import com.wotingfm.common.database.DownloadHelper;
 import com.wotingfm.common.net.RetrofitUtils;
 import com.wotingfm.ui.base.basefragment.BaseFragment;
 import com.wotingfm.ui.test.PlayerActivity;
+import com.wotingfm.ui.test.PlayerFragment;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -92,7 +93,7 @@ public class AlbumsListFragment extends BaseFragment implements OnLoadMoreListen
         mAdapter.setPlayerClick(new AlbumsAdapter.PlayerClick() {
             @Override
             public void clickAlbums(AlbumsBean singlesBean) {
-                PlayerActivity.start(getActivity(), singlesBean.id, "");
+                openFragment(PlayerFragment.newInstance(singlesBean.id));
             }
         });
         mRecyclerView.setIAdapter(mAdapter);

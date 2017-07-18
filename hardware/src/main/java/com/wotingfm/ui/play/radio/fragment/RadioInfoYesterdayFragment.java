@@ -15,7 +15,6 @@ import com.wotingfm.common.adapter.radioAdapter.RadioYesterdayAdapter;
 import com.wotingfm.common.bean.Radio;
 import com.wotingfm.common.bean.RadioInfo;
 import com.wotingfm.ui.base.basefragment.BaseFragment;
-import com.wotingfm.ui.play.radio.CountryRadioActivity;
 import com.wotingfm.ui.test.PlayerActivity;
 
 import butterknife.BindView;

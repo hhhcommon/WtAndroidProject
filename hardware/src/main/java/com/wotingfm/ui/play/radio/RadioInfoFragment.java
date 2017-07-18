@@ -29,6 +29,7 @@ import com.wotingfm.common.utils.T;
 import com.wotingfm.common.view.ObservableScrollView;
 import com.wotingfm.ui.base.baseactivity.AppManager;
 import com.wotingfm.ui.base.baseactivity.NoTitleBarBaseActivity;
+import com.wotingfm.ui.base.basefragment.BaseFragment;
 import com.wotingfm.ui.play.activity.albums.fragment.AlbumsInfoFragment;
 import com.wotingfm.ui.play.activity.albums.fragment.ProgramInfoFragment;
 import com.wotingfm.ui.play.activity.albums.fragment.SimilarInfoFragment;
@@ -55,7 +56,7 @@ import static com.wotingfm.R.id.tvSimilarInfo;
  * 电台详情
  */
 
-public class RadioInfoActivity extends NoTitleBarBaseActivity implements View.OnClickListener {
+public class RadioInfoFragment extends BaseFragment implements View.OnClickListener {
     @BindView(R.id.ivPhotoBg)
     ImageView ivPhotoBg;
     @BindView(R.id.ivPhoto)
@@ -79,16 +80,14 @@ public class RadioInfoActivity extends NoTitleBarBaseActivity implements View.On
     @BindView(R.id.mRelativeLayout)
     RelativeLayout mRelativeLayout;
 
-    public static void start(Activity activity, String title, String rId) {
-        Intent intent = new Intent(activity, RadioInfoActivity.class);
-        intent.putExtra("title", title);
-        intent.putExtra("rId", rId);
-        activity.startActivity(intent);
-    }
 
-    @Override
-    public int getLayoutId() {
-        return R.layout.activity_radio_info;
+    public static RadioInfoFragment newInstance(String rId, String title) {
+        RadioInfoFragment fragment = new RadioInfoFragment();
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("rId", rId);
+        bundle.putSerializable("title", title);
+        fragment.setArguments(bundle);
+        return fragment;
     }
 
     private String rid;
@@ -96,7 +95,7 @@ public class RadioInfoActivity extends NoTitleBarBaseActivity implements View.On
 
     @Override
     public void initView() {
-        height = DementionUtil.dip2px(this, 210);
+        height = DementionUtil.dip2px(getActivity(), 210);
         loadLayout.findViewById(R.id.btnTryAgain).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -105,31 +104,34 @@ public class RadioInfoActivity extends NoTitleBarBaseActivity implements View.On
             }
         });
         loadLayout.showLoadingView();
-        Intent intent = getIntent();
-        tvTitle.setText(intent.getStringExtra("title") + "电视台");
-        rid = intent.getStringExtra("rId");
-        ivBack.setOnClickListener(this);
-        tvYesterday.setOnClickListener(this);
-        tvToday.setOnClickListener(this);
-        tvTomorrow.setOnClickListener(this);
-        mObservableScrollView.setScrollViewListener(new ObservableScrollView.ScrollViewListener() {
-            @Override
-            public void onScrollChanged(ObservableScrollView scrollView, int x, int dy, int oldx, int oldy) {
-                if (dy <= 0) {   //设置标题的背景颜色
-                    mRelativeLayout.setBackgroundColor(Color.argb((int) 0, 255, 255, 255));
-                    tvTitle.setTextColor(Color.argb((int) 0, 22, 24, 26));
-                } else if (dy > 0 && dy <= height) { //滑动距离小于banner图的高度时，设置背景和字体颜色颜色透明度渐变
-                    float scale = (float) dy / height;
-                    float alpha = (255 * scale);
-                    mRelativeLayout.setBackgroundColor(Color.argb((int) alpha, 255, 255, 255));
-                    tvTitle.setTextColor(Color.argb((int) alpha, 22, 24, 26));
-                } else {
-                    mRelativeLayout.setBackgroundColor(Color.argb((int) 255, 255, 255, 255));
-                    tvTitle.setTextColor(Color.argb((int) 255, 22, 24, 26));
+        Bundle bundle = getArguments();
+        if (bundle != null) {
+            final String title = bundle.getString("title");
+            tvTitle.setText(title + "电视台");
+            rid = bundle.getString("rId");
+            ivBack.setOnClickListener(this);
+            tvYesterday.setOnClickListener(this);
+            tvToday.setOnClickListener(this);
+            tvTomorrow.setOnClickListener(this);
+            mObservableScrollView.setScrollViewListener(new ObservableScrollView.ScrollViewListener() {
+                @Override
+                public void onScrollChanged(ObservableScrollView scrollView, int x, int dy, int oldx, int oldy) {
+                    if (dy <= 0) {   //设置标题的背景颜色
+                        mRelativeLayout.setBackgroundColor(Color.argb((int) 0, 255, 255, 255));
+                        tvTitle.setTextColor(Color.argb((int) 0, 22, 24, 26));
+                    } else if (dy > 0 && dy <= height) { //滑动距离小于banner图的高度时，设置背景和字体颜色颜色透明度渐变
+                        float scale = (float) dy / height;
+                        float alpha = (255 * scale);
+                        mRelativeLayout.setBackgroundColor(Color.argb((int) alpha, 255, 255, 255));
+                        tvTitle.setTextColor(Color.argb((int) alpha, 22, 24, 26));
+                    } else {
+                        mRelativeLayout.setBackgroundColor(Color.argb((int) 255, 255, 255, 255));
+                        tvTitle.setTextColor(Color.argb((int) 255, 22, 24, 26));
+                    }
                 }
-            }
-        });
-        refresh();
+            });
+            refresh();
+        }
     }
 
 
@@ -160,12 +162,12 @@ public class RadioInfoActivity extends NoTitleBarBaseActivity implements View.On
     }
 
     private void setResultData(final RadioInfo.DataBean s) {
-        Glide.with(context)
+        Glide.with(getActivity())
                 .load(s.channel.image_url)
                 .placeholder(R.mipmap.oval_defut_other)
                 .error(R.mipmap.oval_defut_other)
                 .crossFade(1000)
-                .bitmapTransform(new BlurTransformation(context, 23, 4))  // “23”：设置模糊度(在0.0到25.0之间)，默认”25";"4":图片缩放比例,默认“1”。
+                .bitmapTransform(new BlurTransformation(getActivity(), 23, 4))  // “23”：设置模糊度(在0.0到25.0之间)，默认”25";"4":图片缩放比例,默认“1”。
                 .into(ivPhotoBg);
         Glide.with(BSApplication.getInstance()).load(s.channel.image_url)// Glide
                 .error(R.mipmap.oval_defut_other)
@@ -201,7 +203,7 @@ public class RadioInfoActivity extends NoTitleBarBaseActivity implements View.On
     private RadioInfoTomorrowFragment radioTomorrowFragment;
 
     private void initFragment(RadioInfo.DataBean s) {
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
         radioYesterdayFragment = RadioInfoYesterdayFragment.newInstance(s);
         radioTodayFragment = RadioInfoTodayFragment.newInstance(s);
         radioTomorrowFragment = RadioInfoTomorrowFragment.newInstance(s);
@@ -213,7 +215,7 @@ public class RadioInfoActivity extends NoTitleBarBaseActivity implements View.On
     }
 
     private void SwitchTo(int position) {
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
         switch (position) {
             case 0:
                 transaction.hide(radioTodayFragment);
@@ -322,8 +324,7 @@ public class RadioInfoActivity extends NoTitleBarBaseActivity implements View.On
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.ivBack:
-                AppManager.getAppManager().finishActivity(this);
-                finish();
+                closeFragment();
                 break;
             case R.id.tvYesterday:
                 setTextColor(tvYesterday, 0);
@@ -335,6 +336,11 @@ public class RadioInfoActivity extends NoTitleBarBaseActivity implements View.On
                 setTextColor(tvTomorrow, 2);
                 break;
         }
+    }
+
+    @Override
+    protected int getLayoutResource() {
+        return R.layout.activity_radio_info;
     }
 
 

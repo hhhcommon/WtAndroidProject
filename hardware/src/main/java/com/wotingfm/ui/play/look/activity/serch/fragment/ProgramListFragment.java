@@ -18,6 +18,7 @@ import com.wotingfm.common.bean.SinglesBase;
 import com.wotingfm.common.net.RetrofitUtils;
 import com.wotingfm.ui.base.basefragment.BaseFragment;
 import com.wotingfm.ui.test.PlayerActivity;
+import com.wotingfm.ui.test.PlayerFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -74,8 +75,7 @@ public class ProgramListFragment extends BaseFragment implements OnLoadMoreListe
         mAdapter = new ProgramSerchAdapter(getActivity(), albumsBeanList, new ProgramSerchAdapter.OnClick() {
             @Override
             public void click(SinglesBase s) {
-                getActivity().finish();
-                PlayerActivity.start(getActivity(), s, null);
+                openFragment(PlayerFragment.newInstance(s));
             }
         });
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());

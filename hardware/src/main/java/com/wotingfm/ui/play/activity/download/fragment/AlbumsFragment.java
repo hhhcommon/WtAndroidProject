@@ -24,6 +24,7 @@ import com.wotingfm.common.database.HistoryHelper;
 import com.wotingfm.common.net.RetrofitUtils;
 import com.wotingfm.common.utils.T;
 import com.wotingfm.ui.base.basefragment.BaseFragment;
+import com.wotingfm.ui.test.PlayerFragment;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -140,12 +141,7 @@ public class AlbumsFragment extends BaseFragment {
 
                         @Override
                         public void click(List<SinglesDownload> singlesDownloads) {
-                            if(getActivity()!=null) {
-                                Intent intent = getActivity().getIntent();
-                                intent.putExtra("singles", (Serializable) singlesDownloads);
-                                getActivity().setResult(RESULT_OK,intent);
-                                getActivity().finish();
-                            }
+                            openFragment(PlayerFragment.newInstance(singlesDownloads));
                         }
                     });
                     mRecyclerView.setAdapter(albumsDownloadAdapter);

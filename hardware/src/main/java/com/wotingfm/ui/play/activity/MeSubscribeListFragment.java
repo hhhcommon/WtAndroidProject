@@ -3,6 +3,7 @@ package com.wotingfm.ui.play.activity;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -21,6 +22,8 @@ import com.wotingfm.common.net.RetrofitUtils;
 import com.wotingfm.common.utils.CommonUtils;
 import com.wotingfm.common.utils.T;
 import com.wotingfm.ui.base.baseactivity.BaseToolBarActivity;
+import com.wotingfm.ui.base.basefragment.BaseFragment;
+import com.wotingfm.ui.play.live.TrailerInfoFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,10 +41,10 @@ import static com.wotingfm.R.id.relatiBottom;
  * 我的订阅列表
  */
 
-public class MeSubscribeListActivity extends BaseToolBarActivity {
-    public static void start(Context activity) {
-        Intent intent = new Intent(activity, MeSubscribeListActivity.class);
-        activity.startActivity(intent);
+public class MeSubscribeListFragment extends BaseFragment {
+    public static MeSubscribeListFragment newInstance() {
+        MeSubscribeListFragment fragment = new MeSubscribeListFragment();
+        return fragment;
     }
 
     @BindView(R.id.mRecyclerView)
@@ -50,8 +53,9 @@ public class MeSubscribeListActivity extends BaseToolBarActivity {
     LoadFrameLayout loadLayout;
     private PlayerSubscribleListAdapter playerHistoryListAdapter;
 
+
     @Override
-    public int getLayoutId() {
+    protected int getLayoutResource() {
         return R.layout.activity_play_subscrible;
     }
 
@@ -64,10 +68,10 @@ public class MeSubscribeListActivity extends BaseToolBarActivity {
                 loadLayout.showLoadingView();
             }
         });
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         mRecyclerView.setLayoutManager(layoutManager);
-        playerHistoryListAdapter = new PlayerSubscribleListAdapter(this, albumsBeens, new PlayerSubscribleListAdapter.PlayerHistoryClick() {
+        playerHistoryListAdapter = new PlayerSubscribleListAdapter(getActivity(), albumsBeens, new PlayerSubscribleListAdapter.PlayerHistoryClick() {
             @Override
             public void click(AlbumsBean singlesBean) {
                 T.getInstance().showToast("点击订阅列表");

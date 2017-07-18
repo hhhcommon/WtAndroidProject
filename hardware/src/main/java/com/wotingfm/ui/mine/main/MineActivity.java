@@ -9,6 +9,7 @@ import com.woting.commonplat.utils.SequenceUUID;
 import com.wotingfm.R;
 import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.common.utils.L;
+import com.wotingfm.ui.base.baseactivity.AppManager;
 import com.wotingfm.ui.base.baseactivity.BaseFragmentActivity;
 import com.wotingfm.ui.mine.main.view.MineFragment;
 
@@ -24,6 +25,7 @@ public class MineActivity extends BaseFragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mine);
+        AppManager.getAppManager().addActivity(this);
         context = this;
         MineActivity.open(new MineFragment());
     }
@@ -42,7 +44,9 @@ public class MineActivity extends BaseFragmentActivity {
      * 关闭已经打开的 Fragment
      */
     public static void close() {
-        context.getSupportFragmentManager().popBackStackImmediate();
+        if (context != null && context.getSupportFragmentManager() != null) {
+            context.getSupportFragmentManager().popBackStackImmediate();
+        }
     }
 
     @Override
@@ -62,6 +66,7 @@ public class MineActivity extends BaseFragmentActivity {
         }
         sendBroadcast(in);
     }
+
     private long tempTime;
 
     @Override

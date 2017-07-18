@@ -21,8 +21,11 @@ import android.widget.LinearLayout;
 
 import com.woting.commonplat.manager.PhoneMsgManager;
 import com.wotingfm.R;
+import com.wotingfm.common.bean.MessageEvent;
 import com.wotingfm.common.config.GlobalStateConfig;
 import com.wotingfm.common.constant.BroadcastConstants;
+
+import org.greenrobot.eventbus.EventBus;
 
 /**
  * 悬浮窗服务----在主页中启动
@@ -60,15 +63,17 @@ public class FloatingWindowService extends Service {
     @Override
     public void onStart(Intent intent, int startId) {
         super.onStart(intent, startId);
-        int operation = intent.getIntExtra(OPERATION, OPERATION_SHOW);
-        switch (operation) {
-            case OPERATION_SHOW:
-                mHandler.removeMessages(HANDLE_CHECK_ACTIVITY);
-                mHandler.sendEmptyMessage(HANDLE_CHECK_ACTIVITY);
-                break;
-            case OPERATION_HIDE:
-                mHandler.removeMessages(HANDLE_CHECK_ACTIVITY);
-                break;
+        if (intent != null) {
+            int operation = intent.getIntExtra(OPERATION, OPERATION_SHOW);
+            switch (operation) {
+                case OPERATION_SHOW:
+                    mHandler.removeMessages(HANDLE_CHECK_ACTIVITY);
+                    mHandler.sendEmptyMessage(HANDLE_CHECK_ACTIVITY);
+                    break;
+                case OPERATION_HIDE:
+                    mHandler.removeMessages(HANDLE_CHECK_ACTIVITY);
+                    break;
+            }
         }
     }
 
@@ -228,7 +233,7 @@ public class FloatingWindowService extends Service {
             String action = intent.getAction();
             if (action.equals(BroadcastConstants.MINE_ACTIVITY_CHANGE)) {
                 // 按钮切换-----档位切换广播
-                int viewType = intent.getIntExtra("viewType",1);
+                int viewType = intent.getIntExtra("viewType", 1);
                 if (viewType == 1) {
                     lin_d.setBackgroundResource(R.mipmap.test_bb);
                 } else if (viewType == 2) {

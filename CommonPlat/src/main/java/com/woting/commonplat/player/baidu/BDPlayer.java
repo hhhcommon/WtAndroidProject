@@ -26,7 +26,7 @@ public class BDPlayer extends FrameLayout {
     private Uri mUri; // 播放链接
 
     // 监听
-    private BDCloudMediaPlayer mMediaPlayer = null;
+    private BDCloudMediaPlayer mMediaPlayerBase = null;
     private IMediaPlayer.OnCompletionListener mOnCompletionListener;
     private IMediaPlayer.OnPreparedListener mOnPreparedListener;
     private IMediaPlayer.OnErrorListener mOnErrorListener;
@@ -114,17 +114,17 @@ public class BDPlayer extends FrameLayout {
         AudioManager am = (AudioManager) mAppContext.getSystemService(Context.AUDIO_SERVICE);
         am.requestAudioFocus(null, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN);
         try {
-            mMediaPlayer = createPlayer();
-            mMediaPlayer.setOnPreparedListener(mPreparedListener);
-            mMediaPlayer.setOnCompletionListener(mCompletionListener);
-            mMediaPlayer.setOnErrorListener(mErrorListener);
-            mMediaPlayer.setOnInfoListener(mInfoListener);
-            mMediaPlayer.setOnBufferingUpdateListener(mBufferingUpdateListener);
-            mMediaPlayer.setOnSeekCompleteListener(mSeekCompleteListener);
-            mMediaPlayer.setDataSource(mAppContext, mUri);
-            mMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-            mMediaPlayer.setScreenOnWhilePlaying(true);
-            mMediaPlayer.prepareAsync();
+            mMediaPlayerBase = createPlayer();
+            mMediaPlayerBase.setOnPreparedListener(mPreparedListener);
+            mMediaPlayerBase.setOnCompletionListener(mCompletionListener);
+            mMediaPlayerBase.setOnErrorListener(mErrorListener);
+            mMediaPlayerBase.setOnInfoListener(mInfoListener);
+            mMediaPlayerBase.setOnBufferingUpdateListener(mBufferingUpdateListener);
+            mMediaPlayerBase.setOnSeekCompleteListener(mSeekCompleteListener);
+            mMediaPlayerBase.setDataSource(mAppContext, mUri);
+            mMediaPlayerBase.setAudioStreamType(AudioManager.STREAM_MUSIC);
+            mMediaPlayerBase.setScreenOnWhilePlaying(true);
+            mMediaPlayerBase.prepareAsync();
 
             // we don't set the target state here either, but preserve the
             // target state that was there before.
@@ -135,13 +135,13 @@ public class BDPlayer extends FrameLayout {
             setCurrentState(PlayerState.STATE_ERROR);
             // mTargetState = STATE_ERROR;
             isTryToPlaying = false;
-            mErrorListener.onError(mMediaPlayer, MediaPlayer.MEDIA_ERROR_UNKNOWN, 0);
+            mErrorListener.onError(mMediaPlayerBase, MediaPlayer.MEDIA_ERROR_UNKNOWN, 0);
         } catch (IllegalArgumentException ex) {
             Log.e(TAG, "Unable to open content: " + mUri, ex);
             setCurrentState(PlayerState.STATE_ERROR);
             // mTargetState = STATE_ERROR;
             isTryToPlaying = false;
-            mErrorListener.onError(mMediaPlayer, MediaPlayer.MEDIA_ERROR_UNKNOWN, 0);
+            mErrorListener.onError(mMediaPlayerBase, MediaPlayer.MEDIA_ERROR_UNKNOWN, 0);
         } finally {
             // REMOVED: mPendingSubtitleTracks.clear();
         }
@@ -193,7 +193,7 @@ public class BDPlayer extends FrameLayout {
             Log.e(TAG, "onPrepared");
             setCurrentState(PlayerState.STATE_PREPARED);
             if (mOnPreparedListener != null) {
-                mOnPreparedListener.onPrepared(mMediaPlayer);
+                mOnPreparedListener.onPrepared(mMediaPlayerBase);
             }
             if (isTryToPlaying) {
                 start();
@@ -208,7 +208,7 @@ public class BDPlayer extends FrameLayout {
                     setCurrentState(PlayerState.STATE_PLAYBACK_COMPLETED);
                     isTryToPlaying = false;
                     if (mOnCompletionListener != null) {
-                        mOnCompletionListener.onCompletion(mMediaPlayer);
+                        mOnCompletionListener.onCompletion(mMediaPlayerBase);
                     }
                 }
             };
@@ -270,7 +270,7 @@ public class BDPlayer extends FrameLayout {
                     isTryToPlaying = false;
                     /* If an error handler has been supplied, use it and finish. */
                     if (mOnErrorListener != null) {
-                        if (mOnErrorListener.onError(mMediaPlayer, framework_err, impl_err)) {
+                        if (mOnErrorListener.onError(mMediaPlayerBase, framework_err, impl_err)) {
                             return true;
                         }
                     }
@@ -302,7 +302,7 @@ public class BDPlayer extends FrameLayout {
     // 内部实现方法//////////////////////////////////////////////////////////////////////////////////
 
     private boolean isInPlaybackState() {
-        return (mMediaPlayer != null &&
+        return (mMediaPlayerBase != null &&
                 mCurrentState != PlayerState.STATE_ERROR &&
                 mCurrentState != PlayerState.STATE_IDLE &&
                 mCurrentState != PlayerState.STATE_PREPARING);
@@ -310,11 +310,11 @@ public class BDPlayer extends FrameLayout {
 
     // release the media player in any state
     private void release(boolean cleartargetstate) {
-        if (mMediaPlayer != null) {
+        if (mMediaPlayerBase != null) {
             // comment this line: may anr
-            // mMediaPlayer.reset();
-            mMediaPlayer.release();
-            mMediaPlayer = null;
+            // mMediaPlayerBase.reset();
+            mMediaPlayerBase.release();
+            mMediaPlayerBase = null;
             setCurrentState(PlayerState.STATE_IDLE);
             if (cleartargetstate) {
                 isTryToPlaying = false;
@@ -398,19 +398,19 @@ public class BDPlayer extends FrameLayout {
      * 为何complete需要重新prepare：有些情况下，直播中断会返回complete，此时需要重新prepareAsync.
      */
     public void start() {
-        if (mMediaPlayer != null && (mCurrentState == PlayerState.STATE_ERROR)
+        if (mMediaPlayerBase != null && (mCurrentState == PlayerState.STATE_ERROR)
                 || mCurrentState == PlayerState.STATE_PLAYBACK_COMPLETED) {
 
             // if your link is not live link, you can comment the following if block
             if (mCurrentState == PlayerState.STATE_PLAYBACK_COMPLETED) {
                 // complete --> stop --> prepareAsync
-                mMediaPlayer.stop();
+                mMediaPlayerBase.stop();
             }
 
-            mMediaPlayer.prepareAsync(); // will start() in onPrepared, because isTryToPlaying = true
+            mMediaPlayerBase.prepareAsync(); // will start() in onPrepared, because isTryToPlaying = true
             setCurrentState(PlayerState.STATE_PREPARING);
         } else if (isInPlaybackState()) {
-            mMediaPlayer.start();
+            mMediaPlayerBase.start();
             setCurrentState(PlayerState.STATE_PLAYING);
         }
         isTryToPlaying = true;
@@ -421,8 +421,8 @@ public class BDPlayer extends FrameLayout {
      */
     public void pause() {
         if (isInPlaybackState()) {
-            if (mMediaPlayer.isPlaying()) {
-                mMediaPlayer.pause();
+            if (mMediaPlayerBase.isPlaying()) {
+                mMediaPlayerBase.pause();
                 setCurrentState(PlayerState.STATE_PAUSED);
             }
         }
@@ -434,10 +434,10 @@ public class BDPlayer extends FrameLayout {
      * 如果仅想停止播放，请调用pause()
      */
     public void stopPlayback() {
-        if (mMediaPlayer != null) {
-            mMediaPlayer.stop();
-            mMediaPlayer.release();
-            mMediaPlayer = null;
+        if (mMediaPlayerBase != null) {
+            mMediaPlayerBase.stop();
+            mMediaPlayerBase.release();
+            mMediaPlayerBase = null;
             setCurrentState(PlayerState.STATE_IDLE);
             isTryToPlaying = false;
             AudioManager am = (AudioManager) mAppContext.getSystemService(Context.AUDIO_SERVICE);
@@ -470,7 +470,7 @@ public class BDPlayer extends FrameLayout {
      * @return 返回当前的player对象，可能为null
      */
     public IMediaPlayer getCurrentMediaPlayer() {
-        return mMediaPlayer;
+        return mMediaPlayerBase;
     }
 
     /**
@@ -489,7 +489,7 @@ public class BDPlayer extends FrameLayout {
      * @return
      */
     public boolean isPlaying() {
-        return isInPlaybackState() && mMediaPlayer.isPlaying();
+        return isInPlaybackState() && mMediaPlayerBase.isPlaying();
     }
 
     /**
@@ -499,7 +499,7 @@ public class BDPlayer extends FrameLayout {
      */
     public void seekTo(long msec) {
         if (isInPlaybackState()) {
-            mMediaPlayer.seekTo(msec);
+            mMediaPlayerBase.seekTo(msec);
         }
     }
 
@@ -510,7 +510,7 @@ public class BDPlayer extends FrameLayout {
      */
     public int getCurrentPosition() {
         if (isInPlaybackState()) {
-            return (int) mMediaPlayer.getCurrentPosition();
+            return (int) mMediaPlayerBase.getCurrentPosition();
         }
         return 0;
     }
@@ -522,7 +522,7 @@ public class BDPlayer extends FrameLayout {
      */
     public int getDuration() {
         if (isInPlaybackState()) {
-            return (int) mMediaPlayer.getDuration();
+            return (int) mMediaPlayerBase.getDuration();
         }
 
         return 0;
@@ -535,8 +535,8 @@ public class BDPlayer extends FrameLayout {
      * @return
      */
     public String[] getVariantInfo() {
-        if (mMediaPlayer != null) {
-            return mMediaPlayer.getVariantInfo();
+        if (mMediaPlayerBase != null) {
+            return mMediaPlayerBase.getVariantInfo();
         }
         return null;
     }
@@ -547,8 +547,8 @@ public class BDPlayer extends FrameLayout {
      * @return
      */
     public long getDownloadSpeed() {
-        if (mMediaPlayer != null) {
-            return mMediaPlayer.getDownloadSpeed();
+        if (mMediaPlayerBase != null) {
+            return mMediaPlayerBase.getDownloadSpeed();
 
         }
         return 0L;
@@ -578,14 +578,14 @@ public class BDPlayer extends FrameLayout {
 
     /**
      * 设置"加载中"触发时，缓存多长时间的数据才结束
-     * * 注意：若mMediaPlayer为null时，实际上会在createPlayer()中设置，这是mCacheTimeInMilliSeconds成员在此赋值的原因；
+     * * 注意：若mMediaPlayerBase为null时，实际上会在createPlayer()中设置，这是mCacheTimeInMilliSeconds成员在此赋值的原因；
      *
      * @param milliSeconds
      */
     public void setBufferTimeInMs(int milliSeconds) {
         this.mCacheTimeInMilliSeconds = milliSeconds;
-        if (mMediaPlayer != null) {
-            mMediaPlayer.setBufferTimeInMs(mCacheTimeInMilliSeconds);
+        if (mMediaPlayerBase != null) {
+            mMediaPlayerBase.setBufferTimeInMs(mCacheTimeInMilliSeconds);
         }
     }
 
@@ -596,8 +596,8 @@ public class BDPlayer extends FrameLayout {
      */
     public void setBufferSizeInBytes(int sizeInBytes) {
         this.mBufferSizeInBytes = sizeInBytes;
-        if (mMediaPlayer != null) {
-            mMediaPlayer.setBufferSizeInBytes(mBufferSizeInBytes);
+        if (mMediaPlayerBase != null) {
+            mMediaPlayerBase.setBufferSizeInBytes(mBufferSizeInBytes);
         }
     }
 
@@ -608,8 +608,8 @@ public class BDPlayer extends FrameLayout {
      */
     public void setLooping(boolean isLoop) {
         this.mLooping = isLoop;
-        if (mMediaPlayer != null) {
-            mMediaPlayer.setLooping(mLooping);
+        if (mMediaPlayerBase != null) {
+            mMediaPlayerBase.setLooping(mLooping);
         }
     }
 
@@ -620,8 +620,8 @@ public class BDPlayer extends FrameLayout {
      */
     public void setMaxCacheSizeInBytes(int sizeInBytes) {
         mMaxCacheSizeInBytes = sizeInBytes;
-        if (mMediaPlayer != null) {
-            mMediaPlayer.setMaxCacheSizeInBytes(mMaxCacheSizeInBytes);
+        if (mMediaPlayerBase != null) {
+            mMediaPlayerBase.setMaxCacheSizeInBytes(mMaxCacheSizeInBytes);
         }
     }
 
@@ -632,8 +632,8 @@ public class BDPlayer extends FrameLayout {
      */
     public void setMaxProbeSize(int maxProbeSizeInBytes) {
         mMaxProbeSizeInBytes = maxProbeSizeInBytes;
-        if (mMediaPlayer != null) {
-            mMediaPlayer.setMaxProbeSize(mMaxProbeSizeInBytes);
+        if (mMediaPlayerBase != null) {
+            mMediaPlayerBase.setMaxProbeSize(mMaxProbeSizeInBytes);
         }
     }
 
@@ -645,8 +645,8 @@ public class BDPlayer extends FrameLayout {
      */
     public void setMaxProbeTime(int maxProbeTimeInMs) {
         mMaxProbeTimeInMs = maxProbeTimeInMs;
-        if (mMediaPlayer != null) {
-            mMediaPlayer.setMaxProbeTime(mMaxProbeTimeInMs);
+        if (mMediaPlayerBase != null) {
+            mMediaPlayerBase.setMaxProbeTime(mMaxProbeTimeInMs);
         }
     }
 
@@ -657,8 +657,8 @@ public class BDPlayer extends FrameLayout {
      */
     public void setUseApmDetect(boolean useApmDetect) {
         mUseApmDetect = useApmDetect;
-        if (mMediaPlayer != null) {
-            mMediaPlayer.setUseApmDetect(mUseApmDetect);
+        if (mMediaPlayerBase != null) {
+            mMediaPlayerBase.setUseApmDetect(mUseApmDetect);
         }
     }
 
@@ -671,8 +671,8 @@ public class BDPlayer extends FrameLayout {
     public void setVolume(float leftVolume, float rightVolume) {
         mLeftVolume = leftVolume;
         mRightVolume = rightVolume;
-        if (mMediaPlayer != null) {
-            mMediaPlayer.setVolume(mLeftVolume, mRightVolume);
+        if (mMediaPlayerBase != null) {
+            mMediaPlayerBase.setVolume(mLeftVolume, mRightVolume);
         }
     }
 
@@ -684,21 +684,21 @@ public class BDPlayer extends FrameLayout {
      */
     public void setWakeMode(Context context, int mode) {
         mWakeMode = mode;
-        if (mMediaPlayer != null) {
-            mMediaPlayer.setWakeMode(context, mWakeMode);
+        if (mMediaPlayerBase != null) {
+            mMediaPlayerBase.setWakeMode(context, mWakeMode);
         }
     }
 
     /**
      * 设置初始播放位置
-     * 注意：若mMediaPlayer为null时，实际上会在createPlayer()中设置，这是mInitPlayPositionInMilliSec成员在此赋值的原因；
+     * 注意：若mMediaPlayerBase为null时，实际上会在createPlayer()中设置，这是mInitPlayPositionInMilliSec成员在此赋值的原因；
      *
      * @param milliSeconds
      */
     public void setInitPlayPosition(long milliSeconds) {
         mInitPlayPositionInMilliSec = milliSeconds;
-        if (mMediaPlayer != null) {
-            mMediaPlayer.setInitPlayPosition(mInitPlayPositionInMilliSec);
+        if (mMediaPlayerBase != null) {
+            mMediaPlayerBase.setInitPlayPosition(mInitPlayPositionInMilliSec);
             // 设置给mediaplayer后重置为-1，防止影响新播放源的播放
             mInitPlayPositionInMilliSec = -1;
         }
@@ -706,27 +706,27 @@ public class BDPlayer extends FrameLayout {
 
     /**
      * 设置是否显示日志
-     * 注意：若mMediaPlayer为null时，实际上会在createPlayer()中设置，这是mLogEnable成员在此赋值的原因；
+     * 注意：若mMediaPlayerBase为null时，实际上会在createPlayer()中设置，这是mLogEnable成员在此赋值的原因；
      *
      * @param enabled
      */
     public void setLogEnabled(boolean enabled) {
         mLogEnabled = enabled;
-        if (mMediaPlayer != null) {
-            mMediaPlayer.setLogEnabled(mLogEnabled);
+        if (mMediaPlayerBase != null) {
+            mMediaPlayerBase.setLogEnabled(mLogEnabled);
         }
     }
 
     /**
      * 设置解码模式
-     * 注意：若mMediaPlayer为null时，实际上会在createPlayer()中设置，这是mDecodeMode成员在此赋值的原因；
+     * 注意：若mMediaPlayerBase为null时，实际上会在createPlayer()中设置，这是mDecodeMode成员在此赋值的原因；
      *
      * @param decodeMode DECODE_AUTO(优先硬解，找不到硬解解码器则软解)或DECODE_SW(软解)
      */
     public void setDecodeMode(int decodeMode) {
         mDecodeMode = decodeMode;
-        if (mMediaPlayer != null) {
-            mMediaPlayer.setDecodeMode(mDecodeMode);
+        if (mMediaPlayerBase != null) {
+            mMediaPlayerBase.setDecodeMode(mDecodeMode);
         }
     }
 }

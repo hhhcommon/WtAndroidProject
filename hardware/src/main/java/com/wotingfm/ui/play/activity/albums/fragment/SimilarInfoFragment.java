@@ -23,6 +23,7 @@ import com.wotingfm.common.bean.Subscrible;
 import com.wotingfm.common.database.DownloadHelper;
 import com.wotingfm.common.net.RetrofitUtils;
 import com.wotingfm.ui.base.basefragment.BaseFragment;
+import com.wotingfm.ui.test.PlayerFragment;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -84,10 +85,7 @@ public class SimilarInfoFragment extends BaseFragment {
         albumsAdapter.setPlayerClick(new AlbumsAdapter.PlayerClick() {
             @Override
             public void clickAlbums(AlbumsBean singlesBean) {
-                Intent intent = getActivity().getIntent();
-                intent.putExtra("albumsId", albumsID);
-                getActivity().setResult(RESULT_OK, intent);
-                getActivity().finish();
+                openFragment(PlayerFragment.newInstance(albumsID));
             }
         });
         mRecyclerView.setAdapter(albumsAdapter);

@@ -16,7 +16,8 @@ import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.utils.L;
 import com.wotingfm.ui.base.baseactivity.AppManager;
 import com.wotingfm.ui.base.baseactivity.NoTitleBarBaseActivity;
-import com.wotingfm.ui.play.activity.PlayerHistoryActivity;
+import com.wotingfm.ui.base.basefragment.BaseFragment;
+import com.wotingfm.ui.play.activity.ReportsPlayerFragment;
 import com.wotingfm.ui.play.activity.download.fragment.AlbumsFragment;
 import com.wotingfm.ui.play.activity.download.fragment.DownloadingFragment;
 import com.wotingfm.ui.play.activity.download.fragment.ProgramFragment;
@@ -31,21 +32,16 @@ import butterknife.BindView;
  * Created by amine on 2017/6/13.
  */
 
-public class DownloadProgramActivity extends NoTitleBarBaseActivity implements View.OnClickListener {
+public class DownloadProgramFragment extends BaseFragment implements View.OnClickListener {
 
 
-    @Override
-    public int getLayoutId() {
-        return R.layout.activity_download_program;
-    }
-
-    public static void start(Activity activity) {
-        Intent intent = new Intent(activity, DownloadProgramActivity.class);
-        activity.startActivityForResult(intent, 6060);
+    public static DownloadProgramFragment newInstance() {
+        DownloadProgramFragment fragment = new DownloadProgramFragment();
+        return fragment;
     }
 
     @Override
-    protected void onDestroy() {
+    public void onDestroy() {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
     }
@@ -63,12 +59,12 @@ public class DownloadProgramActivity extends NoTitleBarBaseActivity implements V
     private DownloadingFragment downloadingFragment;
 
     private void initFragment(Bundle savedInstanceState) {
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        int currentTabPosition = getIntent().getIntExtra("TO_DOWNLOAD", 0);
+        FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+        int currentTabPosition = getActivity().getIntent().getIntExtra("TO_DOWNLOAD", 0);
         if (savedInstanceState != null) {
-            albumsFragment = (AlbumsFragment) getSupportFragmentManager().findFragmentByTag("albumsFragment");
-            programFragment = (ProgramFragment) getSupportFragmentManager().findFragmentByTag("programFragment");
-            downloadingFragment = (DownloadingFragment) getSupportFragmentManager().findFragmentByTag("downloadingFragment");
+            albumsFragment = (AlbumsFragment) getActivity().getSupportFragmentManager().findFragmentByTag("albumsFragment");
+            programFragment = (ProgramFragment) getActivity().getSupportFragmentManager().findFragmentByTag("programFragment");
+            downloadingFragment = (DownloadingFragment) getActivity().getSupportFragmentManager().findFragmentByTag("downloadingFragment");
         } else {
             albumsFragment = AlbumsFragment.newInstance();
             programFragment = ProgramFragment.newInstance();
@@ -91,7 +87,7 @@ public class DownloadProgramActivity extends NoTitleBarBaseActivity implements V
     }
 
     private void SwitchTo(int position) {
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
         switch (position) {
             //专辑
             case 0:
@@ -133,8 +129,7 @@ public class DownloadProgramActivity extends NoTitleBarBaseActivity implements V
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.ivBack:
-                AppManager.getAppManager().finishActivity(this);
-                finish();
+                closeFragment();
                 break;
             case R.id.tvAlbums:
                 setTextColor(tvAlbums, 0);
@@ -147,6 +142,11 @@ public class DownloadProgramActivity extends NoTitleBarBaseActivity implements V
                 break;
 
         }
+    }
+
+    @Override
+    protected int getLayoutResource() {
+        return R.layout.activity_download_program;
     }
 
     /**

@@ -18,6 +18,7 @@ import com.wotingfm.common.bean.Reports;
 import com.wotingfm.common.net.RetrofitUtils;
 import com.wotingfm.common.utils.T;
 import com.wotingfm.ui.base.baseactivity.BaseToolBarActivity;
+import com.wotingfm.ui.base.basefragment.BaseFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,6 +29,7 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 
+import static android.R.attr.id;
 import static android.R.attr.type;
 import static com.loc.e.i;
 import static com.loc.e.l;
@@ -37,22 +39,22 @@ import static com.loc.e.l;
  * 举报节目
  */
 
-public class ReportsPlayerActivity extends BaseToolBarActivity {
+public class ReportsPlayerFragment extends BaseFragment {
     @BindView(R.id.edContent)
     EditText edContent;
 
     /**
-     * @param activity
      * @param playerId 举报的id(节目的id或者个人的userid)
      * @param type     REPORT_USER:举报用户; REPORT_ALBUM:举报专辑;REPORT_CHAT_GROUP:举报群聊;REPORT_SINGLE:举报节目
      */
-    public static void start(Context activity, String playerId, String type) {
-        Intent intent = new Intent(activity, ReportsPlayerActivity.class);
-        intent.putExtra("playerId", playerId);
-        intent.putExtra("type", type);
-        activity.startActivity(intent);
+    public static ReportsPlayerFragment newInstance(String playerId, String type) {
+        ReportsPlayerFragment fragment = new ReportsPlayerFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString("playerId", playerId);
+        bundle.putString("type", type);
+        fragment.setArguments(bundle);
+        return fragment;
     }
-
 
     @BindView(R.id.mRecyclerView)
     RecyclerView mRecyclerView;
@@ -64,8 +66,9 @@ public class ReportsPlayerActivity extends BaseToolBarActivity {
     private String playerId;
     private String type;
 
+
     @Override
-    public int getLayoutId() {
+    protected int getLayoutResource() {
         return R.layout.activity_play_reports;
     }
 
@@ -73,41 +76,42 @@ public class ReportsPlayerActivity extends BaseToolBarActivity {
     public void initView() {
         setTitle("举报");
         tvSubmit.setText("提交");
-        Intent intent = getIntent();
-        type = intent.getStringExtra("type");
-        playerId = intent.getStringExtra("playerId");
-        loadLayout.findViewById(R.id.btnTryAgain).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                loadLayout.showLoadingView();
-                getPlayerReports(type);
-            }
-        });
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        mRecyclerView.setLayoutManager(layoutManager);
-        playerReportsListAdapter = new PlayerReportsListAdapter(this, reports, new PlayerReportsListAdapter.ReportsSelect() {
-            @Override
-            public void select(Reports.DataBean.Reasons reasons) {
-                if (reasons != null) {
-                    reasonsBase = reasons;
+        Bundle bundle = getArguments();
+        if (bundle != null) {
+            type = bundle.getString("type");
+            playerId = bundle.getString("playerId");
+            loadLayout.findViewById(R.id.btnTryAgain).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    loadLayout.showLoadingView();
+                    getPlayerReports(type);
                 }
-
-            }
-        });
-        mRecyclerView.setAdapter(playerReportsListAdapter);
-        loadLayout.showLoadingView();
-        getPlayerReports(type);
-        tvSubmit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if ("REPORT_SINGLE".equals(type)) {
-                    reportsPlayer();
-                } else if ("REPORT_USER".equals(type)) {
-                    reportsPersonal();
+            });
+            LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
+            layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+            mRecyclerView.setLayoutManager(layoutManager);
+            playerReportsListAdapter = new PlayerReportsListAdapter(getActivity(), reports, new PlayerReportsListAdapter.ReportsSelect() {
+                @Override
+                public void select(Reports.DataBean.Reasons reasons) {
+                    if (reasons != null) {
+                        reasonsBase = reasons;
+                    }
                 }
-            }
-        });
+            });
+            mRecyclerView.setAdapter(playerReportsListAdapter);
+            loadLayout.showLoadingView();
+            getPlayerReports(type);
+            tvSubmit.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if ("REPORT_SINGLE".equals(type)) {
+                        reportsPlayer();
+                    } else if ("REPORT_USER".equals(type)) {
+                        reportsPersonal();
+                    }
+                }
+            });
+        }
     }
 
     private List<Reports.DataBean.Reasons> reports = new ArrayList<>();
@@ -156,7 +160,7 @@ public class ReportsPlayerActivity extends BaseToolBarActivity {
                     public void call(Object s) {
                         dissmisDialog();
                         T.getInstance().showToast("举报成功");
-                        finish();
+                        closeFragment();
                     }
                 }, new Action1<Throwable>() {
                     @Override
@@ -186,7 +190,7 @@ public class ReportsPlayerActivity extends BaseToolBarActivity {
                     public void call(Object s) {
                         dissmisDialog();
                         T.getInstance().showToast("举报成功");
-                        finish();
+                        closeFragment();
                     }
                 }, new Action1<Throwable>() {
                     @Override

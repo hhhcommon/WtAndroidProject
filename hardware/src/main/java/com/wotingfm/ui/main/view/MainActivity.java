@@ -14,6 +14,7 @@ import android.widget.Toast;
 import com.wotingfm.R;
 import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.bean.MessageEvent;
+import com.wotingfm.common.utils.L;
 import com.wotingfm.common.utils.StatusBarUtil;
 import com.wotingfm.ui.base.baseactivity.AppManager;
 import com.wotingfm.ui.base.baseactivity.BaseActivity;
@@ -130,25 +131,12 @@ public class MainActivity extends TabActivity {
     public void onMoonEvent(MessageEvent messageEvent) {
         if ("one".equals(messageEvent.getMessage())) {
             tabHost.setCurrentTabByTag("one");
-            Intent intent = null;
-            if (AppManager.getAppManager().currentActivity() != null) {
-                intent = new Intent(context, AppManager.getAppManager().currentActivity().getClass());
-            } else {
-                intent = new Intent(context, PlayerActivity.class);
-            }
-            intent.setFlags(FLAG_ACTIVITY_REORDER_TO_FRONT);
-            startActivity(intent);
         } else if ("two".equals(messageEvent.getMessage())) {
             tabHost.setCurrentTabByTag("two");
-            Intent intent = new Intent(context, InterPhoneActivity.class);
-            intent.setFlags(FLAG_ACTIVITY_REORDER_TO_FRONT);
-            context.startActivity(intent);
         } else if ("three".equals(messageEvent.getMessage())) {
             tabHost.setCurrentTabByTag("three");
-            Intent intent = new Intent(context, MineActivity.class);
-            intent.setFlags(FLAG_ACTIVITY_REORDER_TO_FRONT);
-            context.startActivity(intent);
         }
+
     }
 
 }

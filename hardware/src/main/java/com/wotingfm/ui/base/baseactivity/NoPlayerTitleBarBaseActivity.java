@@ -6,12 +6,10 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 
 import com.woting.commonplat.widget.LoadingDialog;
-import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.utils.ProgressDialogUtils;
 import com.wotingfm.ui.test.PlayerActivity;
 
@@ -21,7 +19,7 @@ import butterknife.ButterKnife;
  * App
  * Created by Administrator on 9/6/2016.
  */
-public abstract class NoTitleBarBaseActivity extends BaseActivity {
+public abstract class NoPlayerTitleBarBaseActivity extends BaseActivity {
     protected Context context;
 
 
@@ -64,7 +62,6 @@ public abstract class NoTitleBarBaseActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         context = this;
         setContentView(getLayoutId());
-        AppManager.getAppManager().addActivity(this);
         ButterKnife.bind(this);
         this.initView();
     }

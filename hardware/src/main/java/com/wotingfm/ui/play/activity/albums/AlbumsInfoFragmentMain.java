@@ -27,6 +27,8 @@ import com.wotingfm.common.utils.T;
 import com.wotingfm.common.view.ObservableScrollView;
 import com.wotingfm.ui.base.baseactivity.AppManager;
 import com.wotingfm.ui.base.baseactivity.NoTitleBarBaseActivity;
+import com.wotingfm.ui.base.basefragment.BaseFragment;
+import com.wotingfm.ui.play.activity.ReportsPlayerFragment;
 import com.wotingfm.ui.play.activity.albums.fragment.AlbumsInfoFragment;
 import com.wotingfm.ui.play.activity.albums.fragment.ProgramInfoFragment;
 import com.wotingfm.ui.play.activity.albums.fragment.SimilarInfoFragment;
@@ -46,7 +48,7 @@ import rx.schedulers.Schedulers;
  * 专辑详情
  */
 
-public class AlbumsInfoActivity extends NoTitleBarBaseActivity implements View.OnClickListener {
+public class AlbumsInfoFragmentMain extends BaseFragment implements View.OnClickListener {
 
     @BindView(R.id.ivBack)
     ImageView ivBack;
@@ -73,27 +75,25 @@ public class AlbumsInfoActivity extends NoTitleBarBaseActivity implements View.O
     TextView tvSimilarInfo;
     private int height = 640;// 滑动开始变色的高,真实项目中此高度是由广告轮播或其他首页view高度决定
 
-    public static void start(Activity activity, String albumsId) {
-        Intent intent = new Intent(activity, AlbumsInfoActivity.class);
-        intent.putExtra("albumsId", albumsId);
-        activity.startActivityForResult(intent, 8088);
-    }
 
     private String albumsId;
 
-    @Override
-    public int getLayoutId() {
-        return R.layout.activity_albums_info;
+    public static AlbumsInfoFragmentMain newInstance(String albumsID) {
+        AlbumsInfoFragmentMain fragment = new AlbumsInfoFragmentMain();
+        Bundle bundle = new Bundle();
+        bundle.putString("albumsID", albumsID);
+        fragment.setArguments(bundle);
+        return fragment;
     }
 
     private void setResultData(final AlbumInfo s) {
         tvTitle.setText(s.data.album.title);
-        Glide.with(context)
+        Glide.with(getActivity())
                 .load(s.data.album.owner.avatar)
                 .placeholder(R.mipmap.oval_defut_other)
                 .error(R.mipmap.oval_defut_other)
                 .crossFade(1000)
-                .bitmapTransform(new BlurTransformation(context, 23, 4))  // “23”：设置模糊度(在0.0到25.0之间)，默认”25";"4":图片缩放比例,默认“1”。
+                .bitmapTransform(new BlurTransformation(getActivity(), 23, 4))  // “23”：设置模糊度(在0.0到25.0之间)，默认”25";"4":图片缩放比例,默认“1”。
                 .into(ivPhotoBg);
         Glide.with(BSApplication.getInstance()).load(s.data.album.owner.avatar)// Glide
                 .transform(new GlideCircleTransform(BSApplication.getInstance()))
@@ -196,8 +196,7 @@ public class AlbumsInfoActivity extends NoTitleBarBaseActivity implements View.O
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.ivBack:
-                finish();
-                AppManager.getAppManager().finishActivity(this);
+                closeFragment();
                 break;
             case R.id.tvAlbumsInfo:
                 setTextColor(tvAlbumsInfo, 0);
@@ -211,38 +210,46 @@ public class AlbumsInfoActivity extends NoTitleBarBaseActivity implements View.O
         }
     }
 
+    @Override
+    protected int getLayoutResource() {
+        return 0;
+    }
+
 
     @BindView(R.id.loadLayout)
     LoadFrameLayout loadLayout;
 
     @Override
     public void initView() {
-        height = DementionUtil.dip2px(this, 210);
-        albumsId = getIntent().getStringExtra("albumsId");
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        ivBack.setOnClickListener(this);
-        tvAlbumsInfo.setOnClickListener(this);
-        tvProgramInfo.setOnClickListener(this);
-        tvSimilarInfo.setOnClickListener(this);
-        mObservableScrollView.setScrollViewListener(new ObservableScrollView.ScrollViewListener() {
-            @Override
-            public void onScrollChanged(ObservableScrollView scrollView, int x, int dy, int oldx, int oldy) {
-                if (dy <= 0) {   //设置标题的背景颜色
-                    mRelativeLayout.setBackgroundColor(Color.argb((int) 0, 255, 255, 255));
-                    tvTitle.setTextColor(Color.argb((int) 0, 22, 24, 26));
-                } else if (dy > 0 && dy <= height) { //滑动距离小于banner图的高度时，设置背景和字体颜色颜色透明度渐变
-                    float scale = (float) dy / height;
-                    float alpha = (255 * scale);
-                    mRelativeLayout.setBackgroundColor(Color.argb((int) alpha, 255, 255, 255));
-                    tvTitle.setTextColor(Color.argb((int) alpha, 22, 24, 26));
-                } else {
-                    mRelativeLayout.setBackgroundColor(Color.argb((int) 255, 255, 255, 255));
-                    tvTitle.setTextColor(Color.argb((int) 255, 22, 24, 26));
+        height = DementionUtil.dip2px(getActivity(), 210);
+        Bundle bundle = getArguments();
+        if (bundle != null) {
+            albumsId = bundle.getString("albumsId");
+            LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
+            layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+            ivBack.setOnClickListener(this);
+            tvAlbumsInfo.setOnClickListener(this);
+            tvProgramInfo.setOnClickListener(this);
+            tvSimilarInfo.setOnClickListener(this);
+            mObservableScrollView.setScrollViewListener(new ObservableScrollView.ScrollViewListener() {
+                @Override
+                public void onScrollChanged(ObservableScrollView scrollView, int x, int dy, int oldx, int oldy) {
+                    if (dy <= 0) {   //设置标题的背景颜色
+                        mRelativeLayout.setBackgroundColor(Color.argb((int) 0, 255, 255, 255));
+                        tvTitle.setTextColor(Color.argb((int) 0, 22, 24, 26));
+                    } else if (dy > 0 && dy <= height) { //滑动距离小于banner图的高度时，设置背景和字体颜色颜色透明度渐变
+                        float scale = (float) dy / height;
+                        float alpha = (255 * scale);
+                        mRelativeLayout.setBackgroundColor(Color.argb((int) alpha, 255, 255, 255));
+                        tvTitle.setTextColor(Color.argb((int) alpha, 22, 24, 26));
+                    } else {
+                        mRelativeLayout.setBackgroundColor(Color.argb((int) 255, 255, 255, 255));
+                        tvTitle.setTextColor(Color.argb((int) 255, 22, 24, 26));
+                    }
                 }
-            }
-        });
-        getAlbumInfo(albumsId);
+            });
+            getAlbumInfo(albumsId);
+        }
     }
 
     private AlbumsInfoFragment albumsFragment;
@@ -250,7 +257,7 @@ public class AlbumsInfoActivity extends NoTitleBarBaseActivity implements View.O
     private SimilarInfoFragment similarInfoFragment;
 
     private void initFragment(AlbumInfo s) {
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
         albumsFragment = AlbumsInfoFragment.newInstance(s);
         programFragment = ProgramInfoFragment.newInstance(s.data.album.id);
         similarInfoFragment = SimilarInfoFragment.newInstance(s.data.album.id);
@@ -262,7 +269,7 @@ public class AlbumsInfoActivity extends NoTitleBarBaseActivity implements View.O
     }
 
     private void SwitchTo(int position) {
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
         switch (position) {
             case 0:
                 transaction.hide(programFragment);

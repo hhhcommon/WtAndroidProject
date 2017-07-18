@@ -17,7 +17,8 @@ import com.wotingfm.common.bean.ChannelsBean;
 import com.wotingfm.common.bean.SerchList;
 import com.wotingfm.common.net.RetrofitUtils;
 import com.wotingfm.ui.base.basefragment.BaseFragment;
-import com.wotingfm.ui.play.radio.RadioInfoActivity;
+import com.wotingfm.ui.test.PlayerActivity;
+import com.wotingfm.ui.test.PlayerFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -74,7 +75,8 @@ public class RadioStationListFragment extends BaseFragment implements OnLoadMore
         mAdapter = new RadioStationAdapter(getActivity(), albumsBeanList, new RadioStationAdapter.RadioStationClick() {
             @Override
             public void click(ChannelsBean dataBean) {
-                RadioInfoActivity.start(getActivity(), dataBean.title, dataBean.id);
+                openFragment(PlayerFragment.newInstance(dataBean));
+               // RadioInfoActivity.start(getActivity(), dataBean.title, dataBean.id);
             }
         });
         mRecyclerView.setIAdapter(mAdapter);

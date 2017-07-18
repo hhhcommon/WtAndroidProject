@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Color;
 import android.media.AudioManager;
+import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
@@ -32,16 +33,23 @@ import com.woting.commonplat.utils.KeyboardChangeListener;
 import com.wotingfm.R;
 import com.wotingfm.common.adapter.MyAdapter;
 import com.wotingfm.common.application.BSApplication;
+import com.wotingfm.common.bean.ChannelsBean;
+import com.wotingfm.common.bean.MessageEvent;
+import com.wotingfm.common.bean.SinglesBase;
+import com.wotingfm.common.config.GlobalStateConfig;
 import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.common.utils.NetUtils;
 import com.wotingfm.common.utils.T;
 import com.wotingfm.ui.base.baseactivity.AppManager;
 import com.wotingfm.ui.base.baseactivity.NoTitleBarBaseActivity;
-import com.wotingfm.ui.play.look.activity.serch.SerchActivity;
+import com.wotingfm.ui.base.basefragment.BaseFragment;
+import com.wotingfm.ui.play.look.activity.serch.SerchFragment;
 import com.wotingfm.ui.play.look.fragment.ClassificationFragment;
 import com.wotingfm.ui.play.look.fragment.LiveFragment;
 import com.wotingfm.ui.play.look.fragment.RadioStationFragment;
 import com.wotingfm.ui.play.look.fragment.SelectedFragment;
+import com.wotingfm.ui.test.PlayerActivity;
+import com.wotingfm.ui.test.PlayerFragment;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -55,7 +63,7 @@ import butterknife.BindView;
  * 发现列表
  */
 
-public class LookListActivity extends NoTitleBarBaseActivity implements View.OnClickListener {
+public class LookListFragment extends BaseFragment implements View.OnClickListener {
     @BindView(R.id.ivClose)
     ImageView ivClose;
     @BindView(R.id.tabs)
@@ -73,14 +81,9 @@ public class LookListActivity extends NoTitleBarBaseActivity implements View.OnC
     @BindView(R.id.tvSubmitSerch)
     TextView tvSubmitSerch;
 
-    public static void start(Context activity) {
-        Intent intent = new Intent(activity, LookListActivity.class);
-        activity.startActivity(intent);
-    }
-
-    @Override
-    public int getLayoutId() {
-        return R.layout.activity_look_list;
+    public static LookListFragment newInstance() {
+        LookListFragment fragment = new LookListFragment();
+        return fragment;
     }
 
 
@@ -99,10 +102,12 @@ public class LookListActivity extends NoTitleBarBaseActivity implements View.OnC
         imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
     }
 
+    private PlayerActivity playerActivity;
+
     @Override
     public void initView() {
-        imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        new KeyboardChangeListener(this).setKeyBoardListener(new KeyboardChangeListener.KeyBoardListener() {
+        imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        new KeyboardChangeListener(getActivity()).setKeyBoardListener(new KeyboardChangeListener.KeyBoardListener() {
             @Override
             public void onKeyboardChange(boolean isShow, int keyboardHeight) {
                 relatLable.setVisibility(isShow == true ? View.VISIBLE : View.GONE);
@@ -121,22 +126,22 @@ public class LookListActivity extends NoTitleBarBaseActivity implements View.OnC
         mFragment.add(ClassificationFragment.newInstance());
         mFragment.add(RadioStationFragment.newInstance());
         mFragment.add(LiveFragment.newInstance());
-        mAdapter = new MyAdapter(getSupportFragmentManager(), type, mFragment);
+        mAdapter = new MyAdapter(getChildFragmentManager(), type, mFragment);
         viewPager.setAdapter(mAdapter);
         viewPager.setOffscreenPageLimit(3);
         tabLayout.setupWithViewPager(viewPager);
 
-        mVoiceRecognizer = VoiceRecognizer.getInstance(context, BroadcastConstants.SEARCH_VOICE);// 初始化语音搜索
+        mVoiceRecognizer = VoiceRecognizer.getInstance(getActivity(), com.woting.commonplat.constant.BroadcastConstants.SEARCHVOICE);// 初始化语音搜索
         IntentFilter mFilter = new IntentFilter();
-        mFilter.addAction(BroadcastConstants.SEARCH_VOICE);
-        context.registerReceiver(mBroadcastReceiver, mFilter);
+        mFilter.addAction(com.woting.commonplat.constant.BroadcastConstants.SEARCHVOICE);
+        getActivity().registerReceiver(mBroadcastReceiver, mFilter);
         etSearchlike.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int arg1, KeyEvent event) {
                 if (arg1 == EditorInfo.IME_ACTION_SEARCH) {
                     String content = etSearchlike.getText().toString().trim();
                     if (!TextUtils.isEmpty(content)) {
-                        SerchActivity.start(LookListActivity.this, content);
+                        openFragment(SerchFragment.newInstance(content));
                         etSearchlike.setText("");
                     }
                 }
@@ -149,7 +154,7 @@ public class LookListActivity extends NoTitleBarBaseActivity implements View.OnC
     private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, final Intent intent) {
-            if (intent.getAction().equals(BroadcastConstants.SEARCH_VOICE)) {
+            if (intent.getAction().equals(com.woting.commonplat.constant.BroadcastConstants.SEARCHVOICE)) {
                 final String str = intent.getStringExtra("VoiceContent");
                 tvContent.setText("正在为您查找: " + str);
                 new Handler().postDelayed(new Runnable() {
@@ -157,7 +162,7 @@ public class LookListActivity extends NoTitleBarBaseActivity implements View.OnC
                     public void run() {
                         if (videoDialog != null) videoDialog.dismiss();
                         etSearchlike.setText("");
-                        SerchActivity.start(LookListActivity.this, str.trim());
+                        openFragment(SerchFragment.newInstance(str.trim()));
                     }
                 }, 1000);
                 if (NetUtils.isNetworkAvailable(context)) {
@@ -182,21 +187,30 @@ public class LookListActivity extends NoTitleBarBaseActivity implements View.OnC
                     return;
                 }
                 hideSoftKeyboard();
-                SerchActivity.start(this, content);
+                openFragment(SerchFragment.newInstance(content));
                 etSearchlike.setText("");
                 break;
             case R.id.ivBack:
             case R.id.ivClose:
-                AppManager.getAppManager().finishActivity(this);
-                finish();
+                PlayerActivity playerActivity = (PlayerActivity) getActivity();
+                if (playerActivity != null)
+                    playerActivity.close();
+                GlobalStateConfig.mineFromType = 0;
+                GlobalStateConfig.activityA = "A";
+                EventBus.getDefault().post(new MessageEvent("one"));
                 break;
             case R.id.ivVoice:
                 if (videoDialog == null) {
-                    videoDialog = new VideoDialog(this);
+                    videoDialog = new VideoDialog(getActivity());
                 }
                 videoDialog.show();
                 break;
         }
+    }
+
+    @Override
+    protected int getLayoutResource() {
+        return R.layout.activity_look_list;
     }
 
     private TextView tvTitle, tvContent;
@@ -262,11 +276,20 @@ public class LookListActivity extends NoTitleBarBaseActivity implements View.OnC
 
     }
 
+/*    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        GlobalStateConfig.mineFromType = 0;
+        GlobalStateConfig.activityA = "A";
+        AppManager.getAppManager().finishActivity(this);
+        EventBus.getDefault().post(new MessageEvent("one"));
+    }*/
+
     @Override
-    protected void onDestroy() {
+    public void onDestroy() {
         super.onDestroy();
-        if (mBroadcastReceiver != null)
-            unregisterReceiver(mBroadcastReceiver
+        if (mBroadcastReceiver != null && getActivity() != null)
+            getActivity().unregisterReceiver(mBroadcastReceiver
             );
     }
 }
