@@ -25,7 +25,7 @@
         android:paddingLeft="4dp"
         android:paddingRight="4dp"
         android:gravity="center|left"
-        android:maxLines="2"
+        android:singleLine="true"
         android:text="科技动态科技动态"
         android:textColor="#16181a"
         android:textSize="13sp" />
