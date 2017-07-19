@@ -27,7 +27,7 @@ import java.util.List;
  * 作者：xinLong on 2017/6/5 01:30
  * 邮箱：645700751@qq.com
  */
-public class MsgNotifyFragment extends Fragment implements NotifyMsgAdapter.IonSlidingViewClickListener, View.OnClickListener, TipView.TipViewClick {
+public class MsgNotifyFragment extends Fragment implements NotifyMsgAdapter.IonSlidingViewClickListener, View.OnClickListener{
     private View rootView;
     private MsgNotifyPresenter presenter;
     private RecyclerView mRecyclerView;
@@ -55,17 +55,11 @@ public class MsgNotifyFragment extends Fragment implements NotifyMsgAdapter.IonS
     // 设置界面
     private void inItView() {
         tip_view = (TipView) rootView.findViewById(R.id.tip_view);// 提示界面
-        tip_view.setTipClick(this);
         rootView.findViewById(R.id.head_left_btn).setOnClickListener(this);
         TextView tv_center = (TextView) rootView.findViewById(R.id.tv_center);
         tv_center.setText("消息中心");
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.recycler_view);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this.getActivity()));
-    }
-
-    @Override
-    public void onTipViewClick() {
-        presenter.tipClick(type);
     }
 
     @Override

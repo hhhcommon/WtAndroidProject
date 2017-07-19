@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,11 +13,9 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.wotingfm.R;
-import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.bean.MessageEvent;
 import com.wotingfm.common.config.GlobalStateConfig;
 import com.wotingfm.common.constant.BroadcastConstants;
-import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.common.utils.CommonUtils;
 import com.wotingfm.ui.base.baseadapter.MyFragmentPagerAdapter;
 import com.wotingfm.ui.intercom.add.find.FindFragment;
@@ -26,8 +23,7 @@ import com.wotingfm.ui.intercom.group.creat.view.CreateGroupMainFragment;
 import com.wotingfm.ui.intercom.main.chat.view.ChatFragment;
 import com.wotingfm.ui.intercom.main.contacts.fragment.ContactsFragment;
 import com.wotingfm.ui.intercom.main.simulation.SimulationInterPhoneFragment;
-import com.wotingfm.ui.main.view.MainActivity;
-import com.wotingfm.ui.intercom.scanning.activity.CaptureActivity;
+import com.wotingfm.ui.intercom.scanning.activity.CaptureFragment;
 import com.wotingfm.ui.user.logo.LogoActivity;
 
 import org.greenrobot.eventbus.EventBus;
@@ -163,7 +159,7 @@ public class InterPhoneFragment extends Fragment implements View.OnClickListener
                 break;
             case R.id.tv_scanning:
                 if (CommonUtils.isLogin()) {
-                    startActivity(new Intent(this.getActivity(), CaptureActivity.class));
+                    InterPhoneActivity.open(new CaptureFragment());
                 } else {
                     startActivity(new Intent(this.getActivity(), LogoActivity.class));
                 }

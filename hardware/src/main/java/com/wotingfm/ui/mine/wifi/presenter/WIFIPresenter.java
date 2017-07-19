@@ -10,6 +10,8 @@ import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
+
 import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.common.utils.L;
@@ -17,6 +19,8 @@ import com.wotingfm.ui.mine.main.MineActivity;
 import com.wotingfm.ui.mine.wifi.model.WIFIModel;
 import com.wotingfm.ui.mine.wifi.view.ConfigWiFiFragment;
 import com.wotingfm.ui.mine.wifi.view.WIFIFragment;
+
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -28,42 +32,50 @@ public class WIFIPresenter {
     private final WIFIFragment activity;
     private final WIFIModel model;
     private WifiManager wifiManager;
-    private WifiInfo mWifiInfo;
-    private List<ScanResult> scanResultList;
+
     private ScanResult wiFiName;
 
     public WIFIPresenter(WIFIFragment activity) {
         this.activity = activity;
         this.model = new WIFIModel();
         wifiManager = (WifiManager) activity.getActivity().getSystemService(Context.WIFI_SERVICE);
+        setView();
         setReceiver();
     }
 
     // 设置界面
-    public void setView() {
+    private void setView() {
         if (wifiManager.isWifiEnabled()) {
             activity.setViewOpen();// WiFi 打开
+            getData();// 设置数据
         } else {
             activity.setViewClose();// WiFi 关闭
         }
-        getData();// 设置数据
     }
 
     // 设置数据
     private void getData() {
-        mWifiInfo = wifiManager.getConnectionInfo();
+        WifiInfo mWifiInfo = wifiManager.getConnectionInfo();
         L.i("TAG", mWifiInfo.toString());
-        scanResultList = model.getScanResultList(wifiManager);
+        // 获取扫描列表
+         List<ScanResult> scanResultList = model.getScanResultList(wifiManager);
+        // 获取当前连接数据
         String id = model.getSSID(mWifiInfo);
-
+        // 设置当前的连接信息
         if (id != null && !id.equals("")) {
             activity.setViewID(id);
+        } else {
+            activity.setViewID("00000000");
         }
+        // 去掉自己的数据后进行适配
         if (id != null && !id.equals("") && scanResultList != null && scanResultList.size() > 0) {
             scanResultList = model.dealList(id, scanResultList);
         }
         if (scanResultList != null && scanResultList.size() > 0) {
             activity.setData(scanResultList);
+        } else {
+            List<ScanResult> list=new ArrayList<>();
+            activity.setData(list);
         }
     }
 
@@ -77,7 +89,6 @@ public class WIFIPresenter {
         } else {
             // 否则打开 WiFi
             wifiManager.setWifiEnabled(true);
-            scanResultList = wifiManager.getScanResults();
         }
     }
 
@@ -86,7 +97,8 @@ public class WIFIPresenter {
      *
      * @param position
      */
-    public void link(int position) {
+    public void link(List<ScanResult> scanResultList, int position) {
+        WifiInfo mWifiInfo = wifiManager.getConnectionInfo();
         String ID = model.getSSID(mWifiInfo);
         String _ID = scanResultList.get(position).SSID;
         if (ID.equals(_ID)) {// 点击的是已经连接的网络
@@ -126,6 +138,7 @@ public class WIFIPresenter {
 
     /**
      * 处理接收结果的逻辑
+     *
      * @param result
      */
     public void setAddCardResult(String result) {
@@ -152,7 +165,7 @@ public class WIFIPresenter {
         @Override
         public void onReceive(Context context, Intent intent) {
             if (intent.getAction().equals(BroadcastConstants.UPDATE_WIFI_LIST)) {// 更新 WiFi 列表
-                L.i("扫描WiFi");
+                Log.e("扫描WiFi", "扫描WiFi ");
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
@@ -161,12 +174,12 @@ public class WIFIPresenter {
                 }, 1200L);
             } else if (WifiManager.WIFI_STATE_CHANGED_ACTION.equals(intent.getAction())) {// 监听 wifi 的打开与关闭，与连接无关
                 int wifiState = intent.getIntExtra(WifiManager.EXTRA_WIFI_STATE, 0);
-                L.e("H3c", "wifiState : " + wifiState);
+                Log.e("WIFI状态", "wifiState : " + wifiState);
                 switch (wifiState) {
                     case WifiManager.WIFI_STATE_DISABLED:// WiFi 关闭
                         activity.setViewClose();
-                        scanResultList.clear();
-                        activity.setData(scanResultList);
+                        List<ScanResult> list=new ArrayList<>();
+                        activity.setData(list);
                         break;
                     case WifiManager.WIFI_STATE_ENABLED:// WiFi 打开
                         activity.setViewOpen();
@@ -177,6 +190,10 @@ public class WIFIPresenter {
         }
     };
 
+
+    /**
+     * 取消广播
+     */
     public void destroy() {
         if (mBroadcastReceiver != null) {
             activity.getActivity().unregisterReceiver(mBroadcastReceiver);

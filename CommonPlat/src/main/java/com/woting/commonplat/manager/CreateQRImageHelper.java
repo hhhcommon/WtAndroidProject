@@ -55,11 +55,8 @@ public class CreateQRImageHelper {
 	 * QR_WIDTH
 	 * QR_HEIGHT
 	 */
-	public Bitmap createQRImage(int type, int QR_WIDTH, int QR_HEIGHT) {
+	public Bitmap createQRImage(String url, int QR_WIDTH, int QR_HEIGHT) {
 		try {
-			Map<String, Object> map = new HashMap<>();
-			String url="";
-
 			//判断URL合法性
 			if (url == null || "".equals(url) || url.length() < 1) {
 				return null;
@@ -91,70 +88,6 @@ public class CreateQRImageHelper {
 			return null;
 		}
 	}
-
-	/**
-	 * id:组id或者个人id
-	 * type:类型
-	 * creator:群组创建者
-	 * QR_WIDTH
-	 * QR_HEIGHT
-	 */
-//	public Bitmap createQRImage(int type, GroupInfo news, UserInviteMeInside newss, int QR_WIDTH, int QR_HEIGHT) {
-//		try {
-//			Map<String, Object> map = new HashMap<>();
-//			String url;
-//			if (type == 1) {
-//				map.put("Type", type);
-//				Map<String, Object> DataMap = new HashMap<>();
-//				DataMap.put("UserId", newss.getUserId());
-//				DataMap.put("UserName", newss.getNickName());
-//				DataMap.put("PortraitMini", newss.getPortraitMini());
-//				map.put("UserInviteMeInside", DataMap);
-//				url = jsonEnclose(map).toString();
-//			} else {
-//				map.put("Type", type);
-//				Map<String, Object> DataMap = new HashMap<>();
-//				DataMap.put("GroupName", news.getGroupName());
-//				DataMap.put("GroupType", news.getGroupType());
-//				DataMap.put("GroupCreator", news.getGroupCreator());
-//				DataMap.put("GroupImg", news.getGroupImg());
-//				DataMap.put("GroupId", news.getGroupId());
-//				DataMap.put("GroupNum", news.getGroupNum());
-//				map.put("FindGroupNews", DataMap);
-//				url = jsonEnclose(map).toString();
-//			}
-//
-//			//判断URL合法性
-//			if (url == null || "".equals(url) || url.length() < 1) {
-//				return null;
-//			} else {
-//				Hashtable<EncodeHintType, String> hints = new Hashtable<>();
-//				hints.put(EncodeHintType.CHARACTER_SET, "utf-8");
-//				//图像数据转换，使用了矩阵转换
-//				bitMatrix = qrcwr.encode(url, BarcodeFormat.QR_CODE, QR_WIDTH, QR_HEIGHT, hints);
-//				int[] pixels = new int[QR_WIDTH * QR_HEIGHT];
-//				//下面这里按照二维码的算法，逐个生成二维码的图片，
-//				//两个for循环是图片横列扫描的结果
-//				for (int y = 0; y < QR_HEIGHT; y++) {
-//					for (int x = 0; x < QR_WIDTH; x++) {
-//						if (bitMatrix.get(x, y)) {
-//							pixels[y * QR_WIDTH + x] = 0xff000000;
-//						} else {
-//							pixels[y * QR_WIDTH + x] = 0xffffffff;
-//						}
-//					}
-//				}
-//				//生成二维码图片的格式，使用ARGB_8888
-//				Bitmap bitmap = Bitmap.createBitmap(QR_WIDTH, QR_HEIGHT, Bitmap.Config.ARGB_8888);
-//				bitmap.setPixels(pixels, 0, QR_WIDTH, 0, 0, QR_WIDTH, QR_HEIGHT);
-//
-//				return bitmap;
-//			}
-//		} catch (WriterException e) {
-//			e.printStackTrace();
-//			return null;
-//		}
-//	}
 
 	/**
 	 * 将对象分装为json字符串 (json + 递归)

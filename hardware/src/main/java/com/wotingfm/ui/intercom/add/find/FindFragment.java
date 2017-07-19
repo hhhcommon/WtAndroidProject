@@ -1,9 +1,7 @@
 package com.wotingfm.ui.intercom.add.find;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,7 +10,7 @@ import android.widget.TextView;
 import com.wotingfm.R;
 import com.wotingfm.ui.intercom.add.search.net.view.SearchContactsForNetFragment;
 import com.wotingfm.ui.intercom.main.view.InterPhoneActivity;
-import com.wotingfm.ui.intercom.scanning.activity.CaptureActivity;
+import com.wotingfm.ui.intercom.scanning.activity.CaptureFragment;
 
 /**
  * 查找群组与好友（已完成）
@@ -64,7 +62,7 @@ public class FindFragment extends Fragment implements View.OnClickListener {
                 InterPhoneActivity.close();
                 break;
             case R.id.re_sao:
-                startActivity(new Intent(getActivity(), CaptureActivity.class));
+                InterPhoneActivity.open(new CaptureFragment());
                 break;
             case R.id.tv_search:
                 // 根据界面来源设置界面展示

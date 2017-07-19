@@ -54,6 +54,7 @@ public class NotifyMsgAdapter extends RecyclerView.Adapter<NotifyMsgAdapter.Simp
     @Override
     public void onBindViewHolder(final SimpleHolder holder, int position) {
         holder.layout_content.getLayoutParams().width = getScreenWidth(mContext);
+
         Msg m = mData.get(position);
         if (m.getMsg_type() != null && m.getMsg_type().equals("1")) {
             holder.tv_introduce.setVisibility(View.GONE);
@@ -68,8 +69,14 @@ public class NotifyMsgAdapter extends RecyclerView.Adapter<NotifyMsgAdapter.Simp
             holder.tv_ok.setVisibility(View.GONE);
             holder.tv_oks.setVisibility(View.GONE);
         } else if (m.getMsg_type() != null && m.getMsg_type().equals("4")) {
-            holder.tv_introduce.setVisibility(View.GONE);
-            if (m.getStatus() != null && m.getStatus().equals("0")) {
+            holder.tv_introduce.setVisibility(View.VISIBLE);
+            if (m.getIntroduce()!= null && !m.getIntroduce().equals("")) {
+                holder.tv_introduce.setText(m.getIntroduce());
+            } else {
+                holder.tv_introduce.setText("验证消息");
+            }
+
+            if (m.getStatus() != null && m.getStatus().equals("2")) {
                 holder.tv_ok.setVisibility(View.VISIBLE);
                 holder.tv_oks.setVisibility(View.GONE);
             } else if (m.getStatus() != null && m.getStatus().equals("1")) {

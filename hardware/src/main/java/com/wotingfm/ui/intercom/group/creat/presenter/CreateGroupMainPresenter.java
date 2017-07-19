@@ -152,6 +152,9 @@ public class CreateGroupMainPresenter {
             if (password == null || password.trim().equals("")) {
                 Toast.makeText(activity.getActivity(), "进群密码不能为空", Toast.LENGTH_LONG).show();
                 return false;
+            }else if(password.length()!=4){
+                Toast.makeText(activity.getActivity(), "密码必须为4位呦", Toast.LENGTH_LONG).show();
+                return false;
             }
         }
         if (!b1 && !b2) {

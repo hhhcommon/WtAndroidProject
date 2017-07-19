@@ -17,6 +17,7 @@ import com.wotingfm.ui.mine.bluetooth.view.BluetoothFragment;
 import com.wotingfm.ui.mine.bluetooth.model.BluetoothInfo;
 
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
@@ -32,8 +33,6 @@ public class BlueToothPresenter {
     private final BluetoothAdapter blue;
     private DeviceReceiver Receiver;
     private boolean isScan = true;             // 是否正在扫描蓝牙
-    private List<BluetoothInfo> userList;      // 附近可以配对的蓝牙列表
-    private List<BluetoothInfo> pairList;      // 已经配对的蓝牙列表
     private int index;                         // 配对的蓝牙在列表中的位置
 
     public BlueToothPresenter(BluetoothFragment activity) {
@@ -42,17 +41,17 @@ public class BlueToothPresenter {
         blue = BluetoothAdapter.getDefaultAdapter();
         getData();
         setReceiver();
-        setView();
     }
 
     // 获取数据
     private void getData() {
-        pairList = model.findAvailableDevice(blue);
-        userList = model.getUserList();
+        List<BluetoothInfo> pairList = model.findAvailableDevice(blue);// 已经配对的蓝牙列表
+        List<BluetoothInfo> userList = model.getUserList();// 附近可以配对的蓝牙列表
+        setView(userList, pairList);
     }
 
     // 设置界面
-    private void setView() {
+    private void setView(List<BluetoothInfo> userList, List<BluetoothInfo> pairList) {
         // 检查蓝牙是否打开
         if (blue.isEnabled()) {
             blue.startDiscovery();
@@ -66,8 +65,12 @@ public class BlueToothPresenter {
         }
     }
 
-    // 蓝牙连接
-    public void link(int position) {
+    /**
+     * 蓝牙连接
+     * @param pairList
+     * @param position
+     */
+    public void link(List<BluetoothInfo> pairList, int position) {
         String address = pairList.get(position).getBluetoothAddress();
         BluetoothDevice mBluetoothDevice = blue.getRemoteDevice(address);
         connect(mBluetoothDevice);
@@ -94,7 +97,7 @@ public class BlueToothPresenter {
      *
      * @param position
      */
-    public void bond(int position) {
+    public void bond(List<BluetoothInfo> userList, int position) {
         if (!blue.isEnabled() || isScan || userList.size() == 0) {
             return;
         }
@@ -166,12 +169,12 @@ public class BlueToothPresenter {
             if (BluetoothAdapter.ACTION_STATE_CHANGED.equals(action)) {
                 if (blue.getState() == BluetoothAdapter.STATE_OFF) {
                     activity.setViewForClose();
-                    if (userList != null) userList.clear();
-                    activity.setAdapterUser(userList);
+                    List<BluetoothInfo> list = new ArrayList<>();
+                    activity.setAdapterUser(list);
                 } else if (blue.getState() == BluetoothAdapter.STATE_ON) {
                     blue.startDiscovery();
                     activity.setViewForOpen();
-                    pairList = model.findAvailableDevice(blue);
+                    List<BluetoothInfo> pairList = model.findAvailableDevice(blue);
                     activity.setAdapterPair(pairList);
                 }
             } else if (BluetoothDevice.ACTION_FOUND.equals(action)) {// 搜索到新设备
@@ -184,7 +187,7 @@ public class BlueToothPresenter {
                     isScan = false;
                     Set<BluetoothDevice> device = model.getDevice();
                     if (device != null && device.size() > 0) { // 存在已经配对过的蓝牙设备
-                        userList = model.delUserList(device);
+                        List<BluetoothInfo> userList = model.delUserList(device);
                         activity.setAdapterUser(userList);
                     }
                 }
@@ -196,10 +199,7 @@ public class BlueToothPresenter {
                         break;
                     case BluetoothDevice.BOND_BONDED:
                         Toast.makeText(context, "配对成功!", Toast.LENGTH_SHORT).show();
-                        pairList.add(userList.get(index));
-                        userList.remove(index);
-                        activity.setAdapterPair(pairList);
-                        activity.setAdapterUser(userList);
+                        getData();
                         isScan = true;
                         connect(device);// 连接设备
                         break;

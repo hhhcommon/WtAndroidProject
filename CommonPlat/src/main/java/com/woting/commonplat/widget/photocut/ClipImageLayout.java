@@ -8,6 +8,8 @@ import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.widget.RelativeLayout;
 
+import com.woting.commonplat.manager.PhoneMsgManager;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 
@@ -40,8 +42,8 @@ public class ClipImageLayout extends RelativeLayout {
         // 计算padding的dp
         mHorizontalPadding = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, mHorizontalPadding, getResources().getDisplayMetrics());
         mZoomImageView.setHorizontalPadding(mHorizontalPadding);
-
-//        HorizontalPadding = (PhoneMessage.ScreenHeight - PhoneMessage.ScreenWidth) / 2;z
+//
+        HorizontalPadding = (PhoneMsgManager.ScreenHeight - PhoneMsgManager.ScreenWidth) / 2;
         // HorizontalPadding = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, HorizontalPadding, getResources().getDisplayMetrics());
         mClipImageView.setHorizontalPadding(HorizontalPadding);
     }

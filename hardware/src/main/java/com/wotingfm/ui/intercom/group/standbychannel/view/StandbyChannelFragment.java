@@ -35,7 +35,7 @@ public class StandbyChannelFragment extends Fragment implements View.OnClickList
     private View rootView;
     private FragmentActivity context;
     private Dialog CDialog;
-    public int channelIndex = 1;
+    public int channelIndex = 10;
     private ChannelPresenter presenter;
     private TextView tv_channel1, tv_channel2;
     private Dialog dialog;

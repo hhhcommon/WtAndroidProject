@@ -146,7 +146,7 @@ public class NewFriendModel extends UserInfo {
                         @Override
                         public void call(Object o) {
                             try {
-                                Log.e("新的好友申请同意==返回数据",new GsonBuilder().serializeNulls().create().toJson(o));
+                                Log.e("新的好友申请拒绝==返回数据",new GsonBuilder().serializeNulls().create().toJson(o));
                                 //填充UI
                                 listener.onSuccess(o);
                             } catch (Exception e) {

@@ -47,6 +47,7 @@
             android:layout_toRightOf="@+id/img_icon_phone"
             android:background="@color/white"
             android:hint="请输入手机号码"
+            android:maxLength="11"
             android:textColor="@color/black_head_word"
             android:textColorHint="@color/gray_edit_hint_word"
             android:textSize="14.7sp" />
@@ -79,6 +80,7 @@
             android:layout_weight="1"
             android:background="@color/white"
             android:hint="请输入密码(6-20位)"
+            android:maxLength="20"
             android:textColor="@color/black_head_word"
             android:textColorHint="@color/gray_edit_hint_word"
             android:textSize="14.7sp" />

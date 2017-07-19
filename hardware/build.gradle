@@ -12,6 +12,21 @@ android {
         versionName "1.0"
         multiDexEnabled true
     }
+
+    signingConfigs {
+        release {
+            storeFile file("wtHardwareFM.jks")
+            keyAlias "com.wotingfm"
+            keyPassword "wt@201509"
+            storePassword "wt@201509"
+        }
+        debug {
+            storeFile file("wtHardwareFM.jks")
+            keyAlias "com.wotingfm"
+            keyPassword "wt@201509"
+            storePassword "wt@201509"
+        }
+    }
     defaultConfig {
         ndk {
             //设置支持的SO库架构
@@ -22,6 +37,7 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
         }
     }
     lintOptions {

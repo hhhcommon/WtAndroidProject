@@ -17,7 +17,7 @@ import com.google.zxing.Result;
 import com.google.zxing.common.HybridBinarizer;
 import com.wotingfm.R;
 import com.wotingfm.ui.intercom.scanning.DecodeThread;
-import com.wotingfm.ui.intercom.scanning.activity.CaptureActivity;
+import com.wotingfm.ui.intercom.scanning.activity.CaptureFragment;
 
 import java.io.ByteArrayOutputStream;
 import java.util.Map;
@@ -25,11 +25,11 @@ import java.util.Map;
 
 public class DecodeHandler extends Handler {
 
-	private final CaptureActivity activity;
+	private final CaptureFragment activity;
 	private final MultiFormatReader multiFormatReader;
 	private boolean running = true;
 
-	public DecodeHandler(CaptureActivity activity, Map<DecodeHintType, Object> hints) {
+	public DecodeHandler(CaptureFragment activity, Map<DecodeHintType, Object> hints) {
 		multiFormatReader = new MultiFormatReader();
 		multiFormatReader.setHints(hints);
 		this.activity = activity;

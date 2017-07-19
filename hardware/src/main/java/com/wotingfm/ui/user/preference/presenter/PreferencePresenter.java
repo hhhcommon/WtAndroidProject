@@ -104,8 +104,7 @@ public class PreferencePresenter {
         }
     }
 
-    // 先判断有没有选中状态的数据
-    // 发送数据，待实现
+    // 发送数据
     public void postData() {
         // 测试代码
         if(GlobalStateConfig.test){
@@ -113,25 +112,59 @@ public class PreferencePresenter {
         }else{
             // 实际代码
             if (GlobalNetWorkConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
-                activity.dialogShow();
-                String s = "";
-                model.loadNews(s, new PreferenceModel.OnLoadInterface() {
-                    @Override
-                    public void onSuccess(Object result) {
-                        activity.dialogCancel();
-                        activity.close();
-                    }
+                String s = getS();
+                if(!s.equals("")){
+                    activity.dialogShow();
+                    model.loadNews(s, new PreferenceModel.OnLoadInterface() {
+                        @Override
+                        public void onSuccess(Object result) {
+                            activity.dialogCancel();
+                            activity.close();
+                        }
 
-                    @Override
-                    public void onFailure(String msg) {
-                        activity.dialogCancel();
-                        activity.close();
-                    }
-                });
+                        @Override
+                        public void onFailure(String msg) {
+                            activity.dialogCancel();
+                            activity.close();
+                        }
+                    });
+                }else{
+                    activity.close();
+                }
             } else {
                 ToastUtils.show_always(activity.getActivity(), "网络连接失败，请稍后再试！");
             }
         }
     }
 
+    // 组装传输数据
+    private String getS(){
+        String s = "";
+        if(type1){// 热爱文艺
+            s="1,";
+        }
+        if(type2){// 放眼看世界
+            s=s+"4,";
+        }
+        if(type3){// 涨知识
+            s=s+"6,";
+        }
+        if(type4){// 享受生活
+            s=s+"2,";
+        }
+        if(type5){// 听故事听小说
+            s=s+"5,";
+        }
+        if(type6){// 有情趣
+            s=s+"7,";
+        }
+        if(type7){// 喜剧
+            s=s+"3,";
+        }
+        // 去掉最后一个逗号
+        if (s.length() > 0) {
+            s= s.substring(0, s.length() - 1);
+        }
+        return s;
+    }
 }

@@ -33,7 +33,7 @@ public class AboutFragment extends Fragment implements View.OnClickListener {
     private void initView() {
         rootView.findViewById(R.id.head_left_btn).setOnClickListener(this);      // 返回
         TextView textVersion = (TextView) rootView.findViewById(R.id.tv_verson); // 版本号
-        textVersion.setText(PhoneMsgManager.appVersionName);
+        textVersion.setText("版本号："+PhoneMsgManager.appVersionName);
     }
 
     @Override

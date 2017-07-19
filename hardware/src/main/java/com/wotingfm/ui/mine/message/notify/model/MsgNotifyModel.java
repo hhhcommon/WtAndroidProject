@@ -3,6 +3,8 @@ package com.wotingfm.ui.mine.message.notify.model;
 import android.util.Log;
 
 import com.google.gson.GsonBuilder;
+import com.wotingfm.common.application.BSApplication;
+import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.common.net.RetrofitUtils;
 
 import java.text.ParsePosition;
@@ -68,9 +70,9 @@ public class MsgNotifyModel {
         }
 
         // 按照时间进行排序
-        if(msg!=null&&msg.size()>0){
+        if (msg != null && msg.size() > 0) {
             return sorting(msg);
-        }else{
+        } else {
             return msg;
         }
 
@@ -140,22 +142,22 @@ public class MsgNotifyModel {
                 _msg.setAvatar("");
             }
 
-            if (approve.get(i).getUser_name() != null && !approve.get(i).getUser_name().equals("")) {
-                _msg.setTitle(approve.get(i).getUser_name());
+            if (approve.get(i).getApplier_name() != null && !approve.get(i).getApplier_name().equals("")) {
+                _msg.setTitle(approve.get(i).getApplier_name());
             } else {
                 _msg.setTitle("群消息");
             }
 
-            if (approve.get(i).getGroup_name()!= null && !approve.get(i).getGroup_name().equals("")) {
-                _msg.setNews("申请加入 "+approve.get(i).getGroup_name());
+            if (approve.get(i).getGroup_name() != null && !approve.get(i).getGroup_name().equals("")) {
+                _msg.setNews("申请加入   " + approve.get(i).getGroup_name());
             } else {
-                _msg.setNews("申请加入 ");
+                _msg.setNews("申请加入群");
             }
 
-            if (approve.get(i).getIntroduce() != null && !approve.get(i).getIntroduce().equals("")) {
-                _msg.setIntroduce("验证信息： "+approve.get(i).getIntroduce());
+            if (approve.get(i).getContent() != null && !approve.get(i).getContent().trim().equals("")) {
+                _msg.setIntroduce("验证信息： " + approve.get(i).getContent());
             } else {
-                _msg.setIntroduce("验证信息： ");
+                _msg.setIntroduce("暂无验证信息");
             }
 
             if (approve.get(i).getGroup_id() != null && !approve.get(i).getGroup_id().equals("")) {
@@ -170,7 +172,7 @@ public class MsgNotifyModel {
                 _msg.setApply_id("");
             }
 
-            if (approve.get(i).getStatus()!= null && !approve.get(i).getStatus().equals("")) {
+            if (approve.get(i).getStatus() != null && !approve.get(i).getStatus().equals("")) {
                 _msg.setStatus(approve.get(i).getStatus());
             } else {
                 _msg.setStatus("0");
@@ -199,8 +201,8 @@ public class MsgNotifyModel {
             }
             _msg.setMsg_type("2");
 
-            if (person.get(i).getAvatar() != null && !person.get(i).getAvatar().equals("")) {
-                _msg.setAvatar(person.get(i).getAvatar());
+            if (person.get(i).getReceiver_avatar() != null && !person.get(i).getReceiver_avatar().equals("")) {
+                _msg.setAvatar(person.get(i).getReceiver_avatar());
             } else {
                 _msg.setAvatar("");
             }
@@ -232,16 +234,13 @@ public class MsgNotifyModel {
      * @return
      */
     private List<Msg> sorting(List<Msg> msg) {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Msg temp_r = new Msg();
         //冒泡排序，大的在数组的前列
         for (int i = 0; i < msg.size() - 1; i++) {
             for (int j = i + 1; j < msg.size(); j++) {
-                ParsePosition pos1 = new ParsePosition(0);
-                ParsePosition pos2 = new ParsePosition(0);
-                Date d1 = sdf.parse(msg.get(i).getTime(), pos1);
-                Date d2 = sdf.parse(msg.get(j).getTime(), pos2);
-                if (d1.before(d2)) {
+                long d1 = Long.parseLong(msg.get(i).getTime());
+                long d2 = Long.parseLong(msg.get(j).getTime());
+                if (d1 < d2) {
                     //如果队前日期靠前，调换顺序
                     temp_r = msg.get(i);
                     msg.set(i, msg.get(j));
@@ -268,6 +267,111 @@ public class MsgNotifyModel {
                         public void call(Object o) {
                             try {
                                 Log.e("获取消息返回数据", new GsonBuilder().serializeNulls().create().toJson(o));
+                                //填充UI
+                                listener.onSuccess(o);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                                listener.onFailure("");
+                            }
+                        }
+                    }, new Action1<Throwable>() {
+                        @Override
+                        public void call(Throwable throwable) {
+                            throwable.printStackTrace();
+                            listener.onFailure("");
+                        }
+                    });
+        } catch (Exception e) {
+            e.printStackTrace();
+            listener.onFailure("");
+        }
+    }
+
+    /**
+     * 消息==删除
+     *
+     * @param listener 监听
+     */
+    public void loadNewsForDel(String id,String type, final OnLoadInterface listener) {
+        try {
+            RetrofitUtils.getInstance().msgDel(id,type)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new Action1<Object>() {
+                        @Override
+                        public void call(Object o) {
+                            try {
+                                Log.e("消息处理删除==返回数据", new GsonBuilder().serializeNulls().create().toJson(o));
+                                //填充UI
+                                listener.onSuccess(o);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                                listener.onFailure("");
+                            }
+                        }
+                    }, new Action1<Throwable>() {
+                        @Override
+                        public void call(Throwable throwable) {
+                            throwable.printStackTrace();
+                            listener.onFailure("");
+                        }
+                    });
+        } catch (Exception e) {
+            e.printStackTrace();
+            listener.onFailure("");
+        }
+    }
+
+    /**
+     * 消息==同意
+     *
+     * @param listener 监听
+     */
+    public void loadNewsForApply(String gid, String pid, final OnLoadInterface listener) {
+        try {
+            RetrofitUtils.getInstance().msgApply(gid, pid)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new Action1<Object>() {
+                        @Override
+                        public void call(Object o) {
+                            try {
+                                Log.e("消息处理同意==返回数据", new GsonBuilder().serializeNulls().create().toJson(o));
+                                //填充UI
+                                listener.onSuccess(o);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                                listener.onFailure("");
+                            }
+                        }
+                    }, new Action1<Throwable>() {
+                        @Override
+                        public void call(Throwable throwable) {
+                            throwable.printStackTrace();
+                            listener.onFailure("");
+                        }
+                    });
+        } catch (Exception e) {
+            e.printStackTrace();
+            listener.onFailure("");
+        }
+    }
+
+    /**
+     * 消息==拒绝
+     *
+     * @param listener 监听
+     */
+    public void loadNewsForRefuse(String gid, String pid, final OnLoadInterface listener) {
+        try {
+            RetrofitUtils.getInstance().msgRefuse(gid, pid)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new Action1<Object>() {
+                        @Override
+                        public void call(Object o) {
+                            try {
+                                Log.e("消息处理拒绝==返回数据", new GsonBuilder().serializeNulls().create().toJson(o));
                                 //填充UI
                                 listener.onSuccess(o);
                             } catch (Exception e) {

@@ -32,6 +32,7 @@ import com.wotingfm.ui.intercom.group.groupnews.add.presenter.GroupNewsForAddPre
 import com.wotingfm.ui.intercom.main.contacts.model.Contact;
 import com.wotingfm.ui.intercom.main.simulation.SimulationInterPhoneFragment;
 import com.wotingfm.ui.intercom.main.view.InterPhoneActivity;
+
 import java.util.List;
 
 /**
@@ -141,7 +142,7 @@ public class GroupNewsForAddFragment extends Fragment implements View.OnClickLis
                 presenter.headViewShow();
                 break;
             case R.id.re_groupEwm:
-                ToastUtils.show_always(this.getActivity(), "二维码界面");
+               presenter.jumpEWM();
                 break;
             case R.id.re_groupManager:
                 presenter.jumpManager();

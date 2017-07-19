@@ -120,13 +120,6 @@
             android:windowSoftInputMode="stateUnspecified|adjustResize" />
 
 
-        <!-- 扫一扫 -->
-        <activity
-            android:name="com.wotingfm.ui.intercom.scanning.activity.CaptureActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme" />
-
-
         <!-- 扫一扫结果 -->
         <activity
             android:name="com.wotingfm.ui.intercom.scanning.activity.ResultActivity"
@@ -191,7 +184,7 @@
         <!-- 高德地图用户Key -->
         <meta-data
             android:name="com.amap.api.v2.apikey"
-            android:value="7dabc8027d924f36cd758732c895c261" />
+            android:value="d799e19bdab96fa46566397bab5437c7" />
         <!--  -->
         <activity
             android:name=".ui.intercom.alert.receive.view.ReceiveAlertActivity"

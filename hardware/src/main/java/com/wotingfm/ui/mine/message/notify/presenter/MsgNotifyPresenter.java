@@ -1,5 +1,6 @@
 package com.wotingfm.ui.mine.message.notify.presenter;
 
+import android.animation.TypeEvaluator;
 import android.util.Log;
 
 import com.google.gson.Gson;
@@ -23,6 +24,7 @@ public class MsgNotifyPresenter {
 
     private final MsgNotifyFragment activity;
     private final MsgNotifyModel model;
+    private List<Msg> msg;
 
     public MsgNotifyPresenter(MsgNotifyFragment activity) {
         this.activity = activity;
@@ -52,6 +54,101 @@ public class MsgNotifyPresenter {
         }
     }
 
+    /**
+     * 同意的操作
+     *
+     * @param position
+     */
+    public void apply(final int position) {
+        String type = msg.get(position).getMsg_type();
+        if (type != null && type.equals("4")) {
+            String gid = msg.get(position).getGroup_id();
+            String pid = msg.get(position).getApply_id();
+            activity.dialogShow();
+            model.loadNewsForApply(gid, pid, new MsgNotifyModel.OnLoadInterface() {
+                @Override
+                public void onSuccess(Object o) {
+                    activity.dialogCancel();
+                    dealApplySuccess(o, position);
+                }
+
+                @Override
+                public void onFailure(String msg) {
+                    activity.dialogCancel();
+                }
+            });
+        }
+    }
+
+    /**
+     * 删除该条消息
+     *
+     * @param position
+     */
+    public void del(final int position) {
+        String type = msg.get(position).getMsg_type();
+        if (type != null && !type.equals("4")) {
+            String id = msg.get(position).getMsg_id();
+            if (id != null && !id.equals("")) {
+                activity.dialogShow();
+                String dType = "";
+                if (type.equals("2")) {
+                    dType = "friend";
+                } else if (type.equals("3")) {
+                    dType = "group";
+                }
+                model.loadNewsForDel(id, dType, new MsgNotifyModel.OnLoadInterface() {
+                    @Override
+                    public void onSuccess(Object o) {
+                        activity.dialogCancel();
+                        dealDelSuccess(o, position);
+                    }
+
+                    @Override
+                    public void onFailure(String msg) {
+                        activity.dialogCancel();
+                    }
+                });
+            }
+        } else if (type != null && type.equals("4")) {
+            String status = msg.get(position).getStatus();
+            if (status.equals("1")) {
+                activity.dialogShow();
+                String dType = "group";
+                String id = msg.get(position).getMsg_id();
+                model.loadNewsForDel(id, dType, new MsgNotifyModel.OnLoadInterface() {
+                    @Override
+                    public void onSuccess(Object o) {
+                        activity.dialogCancel();
+                        dealDelSuccess(o, position);
+                    }
+
+                    @Override
+                    public void onFailure(String msg) {
+                        activity.dialogCancel();
+                    }
+                });
+            } else {
+                String gid = msg.get(position).getGroup_id();
+                String pid = msg.get(position).getApply_id();
+                activity.dialogShow();
+                model.loadNewsForRefuse(gid, pid, new MsgNotifyModel.OnLoadInterface() {
+                    @Override
+                    public void onSuccess(Object o) {
+                        activity.dialogCancel();
+                        dealRefuseSuccess(o, position);
+                    }
+
+                    @Override
+                    public void onFailure(String msg) {
+                        activity.dialogCancel();
+                    }
+                });
+            }
+        }
+    }
+
+    // 处理获取数据的消息
     private void dealSuccess(Object o) {
         try {
             String s = new GsonBuilder().serializeNulls().create().toJson(o);
@@ -63,9 +160,10 @@ public class MsgNotifyPresenter {
                 SrcMsg s_msg = new Gson().fromJson(data, new TypeToken<SrcMsg>() {
                 }.getType());
                 if (s_msg != null) {
-                    List<Msg> msg = model.assemblyData(s_msg);
+                    msg = model.assemblyData(s_msg);
                     if (msg != null && msg.size() > 0) {
                         activity.updateUI(msg);
+                        activity.isLoginView(0);
                     } else {
                         activity.isLoginView(1);
                     }
@@ -81,21 +179,56 @@ public class MsgNotifyPresenter {
         }
     }
 
-    public void apply(int position) {
-
+    // 处理同意消息
+    private void dealApplySuccess(Object o, int position) {
+        try {
+            String s = new GsonBuilder().serializeNulls().create().toJson(o);
+            JSONObject js = new JSONObject(s);
+            int ret = js.getInt("ret");
+            Log.e("ret", String.valueOf(ret));
+            if (ret == 0) {
+                msg.get(position).setStatus("1");
+                activity.updateUI(msg);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
-    public void del(int position) {
+    // 处理拒绝消息
+    private void dealRefuseSuccess(Object o, int position) {
+        try {
+            String s = new GsonBuilder().serializeNulls().create().toJson(o);
+            JSONObject js = new JSONObject(s);
+            int ret = js.getInt("ret");
+            Log.e("ret", String.valueOf(ret));
+            if (ret == 0) {
+                msg.remove(position);
+                activity.updateUI(msg);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
+    // 处理删除消息
+    private void dealDelSuccess(Object o, int position) {
+        try {
+            String s = new GsonBuilder().serializeNulls().create().toJson(o);
+            JSONObject js = new JSONObject(s);
+            int ret = js.getInt("ret");
+            Log.e("ret", String.valueOf(ret));
+            if (ret == 0) {
+                msg.remove(position);
+                activity.updateUI(msg);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void onClick(int position) {
 
     }
-
-    public void tipClick(int position) {
-
-    }
-
 
 }

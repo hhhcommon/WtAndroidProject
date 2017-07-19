@@ -24,8 +24,6 @@ public class PreferenceFragment extends Fragment implements View.OnClickListener
 
     private TextView tv_pass, tv_enter, tv_RAWY, tv_FYKSJ, tv_ZZS, tv_XSSH, tv_TGSTXS, tv_YQQ, tv_XJ;
     private ImageView left;
-
-
     private View rootView;
     private Dialog dialog;
     private PreferencePresenter presenter;
@@ -95,7 +93,11 @@ public class PreferenceFragment extends Fragment implements View.OnClickListener
                 close();
                 break;
             case R.id.tv_pass:
-                close();
+                if (fromType.equals("login")) {
+                    close();
+                } else if (fromType.equals("person")) {
+                    presenter.postData();
+                }
                 break;
             case R.id.tv_enter:
                 presenter.postData();

@@ -129,7 +129,7 @@ public class GroupChatModel extends UserInfo {
             ArrayList<Contact.group> srcList_O = new ArrayList<>();// 我创建的群
             if (id != null && !id.equals("")) {
                 for (int i = 0; i < list.size(); i++) {
-                    if (list.get(i).getCreator_id() != null && !list.get(i).getCreator_id().equals("") && list.get(i).getCreator_id().trim().equals(id)) {
+                    if (list.get(i).getOwner_id() != null && !list.get(i).getOwner_id().equals("") && list.get(i).getOwner_id().trim().equals(id)) {
                         srcList_O.add(list.get(i));
                     } else {
                         srcList_G.add(list.get(i));

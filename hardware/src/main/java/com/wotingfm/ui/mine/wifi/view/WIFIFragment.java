@@ -12,14 +12,17 @@ import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+
 import com.wotingfm.R;
+import com.wotingfm.ui.intercom.main.contacts.adapter.NoAdapter;
 import com.wotingfm.ui.mine.main.MineActivity;
 import com.wotingfm.ui.mine.wifi.adapter.WiFiListAdapter;
 import com.wotingfm.ui.mine.wifi.presenter.WIFIPresenter;
+
 import java.util.List;
 
 /**
- *  WIFI 界面
+ * WIFI 界面
  * 作者：xinLong on 2017/5/16 14:28
  * 邮箱：645700751@qq.com
  */
@@ -33,6 +36,7 @@ public class WIFIFragment extends Fragment implements View.OnClickListener {
     private View viewConnSuccess;
     private TextView textWifiName;
     private WIFIPresenter presenter;
+    private ResultListener Listener;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -40,8 +44,8 @@ public class WIFIFragment extends Fragment implements View.OnClickListener {
             rootView = inflater.inflate(R.layout.fragment_wifi, container, false);
             rootView.setOnClickListener(this);
             init();
-            presenter=new WIFIPresenter(this);
-            presenter.setView();
+            presenter = new WIFIPresenter(this);
+
         }
         return rootView;
     }
@@ -66,15 +70,15 @@ public class WIFIFragment extends Fragment implements View.OnClickListener {
     /**
      * WiFi 打开
      */
-    public void setViewOpen(){
+    public void setViewOpen() {
         textUserWiFi.setVisibility(View.VISIBLE);
         imageWiFiSet.setImageResource(R.mipmap.on_switch);
     }
 
     /**
-     *  WiFi 关闭
+     * WiFi 关闭
      */
-    public void setViewClose(){
+    public void setViewClose() {
         textUserWiFi.setVisibility(View.GONE);
         imageWiFiSet.setImageResource(R.mipmap.close_switch);
         viewConnSuccess.setVisibility(View.GONE);
@@ -82,25 +86,27 @@ public class WIFIFragment extends Fragment implements View.OnClickListener {
 
     /**
      * 设置连接的id
+     *
      * @param ssid
      */
-    public void setViewID(String ssid){
+    public void setViewID(String ssid) {
         viewConnSuccess.setVisibility(View.VISIBLE);
         textWifiName.setText(ssid);
     }
 
     /**
      * 设置list数据
+     *
      * @param scanResultList
      */
-    public void setData(List<ScanResult> scanResultList){
-        if(adapter==null){
+    public void setData(List<ScanResult> scanResultList) {
+        if (adapter == null) {
             adapter = new WiFiListAdapter(this.getActivity(), scanResultList);
             wifiListView.setAdapter(adapter);
-        }else{
-            adapter .notifyDataSetChanged();
+        } else {
+            adapter.setList(scanResultList);
         }
-        setItemListener();
+        setItemListener(scanResultList);
     }
 
     @Override
@@ -110,18 +116,18 @@ public class WIFIFragment extends Fragment implements View.OnClickListener {
                 MineActivity.close();
                 break;
             case R.id.wifi_set:     // WiFi 开关
-              presenter.WIFISet();
+                presenter.WIFISet();
                 break;
         }
     }
 
     // ListView 子条目点击事件  连接 WiFi
-    private void setItemListener() {
+    private void setItemListener(final List<ScanResult> scanResultList) {
         wifiListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
                 if (position - 1 >= 0) {
-                   presenter.link(position-1);
+                    presenter.link(scanResultList, position - 1);
                 }
             }
         });
@@ -132,8 +138,33 @@ public class WIFIFragment extends Fragment implements View.OnClickListener {
         presenter.setAddCardResult(result);
     }
 
+
+    /**
+     * 返回值设置
+     *
+     * @param type
+     */
+    public void setResult(boolean type) {
+        Listener.resultListener(type);
+    }
+
+    /**
+     * 回调结果值
+     *
+     * @param l
+     */
+    public void setResultListener(ResultListener l) {
+        Listener = l;
+    }
+
+    public interface ResultListener {
+        void resultListener(boolean type);
+    }
+
     @Override
     public void onDestroy() {
         super.onDestroy();
+        setResult(true);
+        presenter.destroy();
     }
 }

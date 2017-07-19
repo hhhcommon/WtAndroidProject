@@ -743,11 +743,12 @@ public class RetrofitUtils {
     /**
      * 提交偏好设置
      *
+     * @param id 用户id
      * @param s 提交的数据
      * @return Object
      */
-    public Observable<Object> preference(String s) throws Exception {
-        return retrofitService.preference(s)
+    public Observable<Object> preference(String id,String s) throws Exception {
+        return retrofitService.preference(id,s)
                 .map(new Func1<Object, Object>() {
                     @Override
                     public Object call(Object O) {
@@ -1358,6 +1359,7 @@ public class RetrofitUtils {
                 });
     }
 
+
     /**
      * 获取消息
      *
@@ -1373,5 +1375,49 @@ public class RetrofitUtils {
                 });
     }
 
+    /**
+     * 消息==删除
+     *
+     * @return Objects
+     */
+    public Observable<Object> msgDel(String id,String type) throws Exception {
+        return retrofitService.msgDel(id,type)
+                .map(new Func1<Object, Object>() {
+                    @Override
+                    public Object call(Object O) {
+                        return O;
+                    }
+                });
+    }
+
+    /**
+     * 消息==同意
+     *
+     * @return Objects
+     */
+    public Observable<Object> msgApply(String gid, String pid) throws Exception {
+        return retrofitService.msgApply(gid, pid, "1")
+                .map(new Func1<Object, Object>() {
+                    @Override
+                    public Object call(Object O) {
+                        return O;
+                    }
+                });
+    }
+
+    /**
+     * 消息==拒绝
+     *
+     * @return Objects
+     */
+    public Observable<Object> msgRefuse(String gid, String pid) throws Exception {
+        return retrofitService.msgRefuse(gid, pid, "0")
+                .map(new Func1<Object, Object>() {
+                    @Override
+                    public Object call(Object O) {
+                        return O;
+                    }
+                });
+    }
 
 }

@@ -18,7 +18,7 @@ public class StringConstant {
     public static final String GENDER = "GENDER";                                   // 性别
     public static final String REGION = "REGION";                                   // 用户地区
     public static final String USER_SIGN = "USER_SIGN";                             // 用户签名
-    public static final String AGE = "AGE";                                       // 年龄
+    public static final String AGE = "AGE";                                         // 年龄
 
     /*
      * 电台城市列表

@@ -291,17 +291,17 @@ public class SearchContactsForNetPresenter {
      * 获取搜索的好友
      */
     public void getSearchDataForPerson(final String s) {
-        activity.dialogShow();
+//        activity.dialogShow();
         model.loadNewsForSearchPerson(s, new SearchContactsForNetModel.OnLoadInterface() {
             @Override
             public void onSuccess(Object o) {
-                activity.dialogCancel();
+//                activity.dialogCancel();
                 dealSearchUserSuccess(o, s);
             }
 
             @Override
             public void onFailure(String msg) {
-                activity.dialogCancel();
+//                activity.dialogCancel();
                 activity.isLoginView(4);
             }
         });
@@ -311,17 +311,17 @@ public class SearchContactsForNetPresenter {
      * 获取搜索的群组
      */
     public void getSearchDataForGroup(final String s) {
-        activity.dialogShow();
+//        activity.dialogShow();
         model.loadNewsForSearchGroup(s, new SearchContactsForNetModel.OnLoadInterface() {
             @Override
             public void onSuccess(Object o) {
-                activity.dialogCancel();
+//                activity.dialogCancel();
                 dealSearchGroupSuccess(o, s);
             }
 
             @Override
             public void onFailure(String msg) {
-                activity.dialogCancel();
+//                activity.dialogCancel();
                 activity.isLoginView(4);
             }
         });

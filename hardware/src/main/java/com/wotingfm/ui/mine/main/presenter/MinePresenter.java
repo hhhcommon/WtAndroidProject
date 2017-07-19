@@ -4,6 +4,8 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.net.wifi.WifiManager;
+import android.util.Log;
 
 import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.constant.BroadcastConstants;
@@ -20,9 +22,11 @@ public class MinePresenter {
 
     private final MineFragment activity;
     private MessageReceiver Receiver;
+    private WifiManager wifiManager;
 
     public MinePresenter(MineFragment activity) {
         this.activity = activity;
+        wifiManager = (WifiManager) activity.getActivity().getSystemService(Context.WIFI_SERVICE);
         setReceiver();// 设置广播接收器
     }
 
@@ -39,6 +43,15 @@ public class MinePresenter {
         }else{
             // 设置未登录界面
             activity.setView();
+        }
+        wifiSet();
+    }
+
+    public void wifiSet(){
+        if (wifiManager.isWifiEnabled()) {
+            activity.wifiSet(true);// WiFi 打开
+        } else {
+            activity.wifiSet(false);// WiFi 关闭
         }
     }
 

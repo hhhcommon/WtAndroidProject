@@ -144,7 +144,7 @@ public class NewFriendPresenter {
         if (id != null && !id.equals("")) {
             boolean b = false;
             try {
-                 b = list.get(position).isHad_approved();
+                b = list.get(position).isHad_approved();
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -208,26 +208,6 @@ public class NewFriendPresenter {
         }
     }
 
-    /**
-     * 拒绝
-     *
-     * @param position
-     */
-    public void refuse(int position) {
-        if (GlobalNetWorkConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
-            if (GlobalStateConfig.test) {
-                // 测试数据==同意
-                list.remove(position);
-                activity.updateUI(list);
-            } else {
-                // 获取网络数据
-                sendRefuse(position);
-            }
-        } else {
-            ToastUtils.show_always(activity.getActivity(), "网络连接失败，请稍后再试！");
-        }
-    }
-
     // 新的好友申请==同意
     private void sendApply(final int position) {
         activity.dialogShow();
@@ -244,6 +224,43 @@ public class NewFriendPresenter {
                 activity.dialogCancel();
             }
         });
+    }
+
+    // 新的好友申请==删除
+    private void sendDel(final int position) {
+        boolean approve = list.get(position).isHad_approved();
+        if (approve) {
+            // 执行删除操作
+            activity.dialogShow();
+            String s = list.get(position).getApply_id();
+            model.loadNewsForDel(s, new NewFriendModel.OnLoadInterface() {
+                @Override
+                public void onSuccess(Object o) {
+                    activity.dialogCancel();
+                    dealDelSuccess(o, position);
+                }
+                @Override
+                public void onFailure(String msg) {
+                    activity.dialogCancel();
+                }
+            });
+        } else {
+            // 执行拒绝操作
+            activity.dialogShow();
+            String s = list.get(position).getApply_id();
+            model.loadNewsForRefuse(s, new NewFriendModel.OnLoadInterface() {
+                @Override
+                public void onSuccess(Object o) {
+                    activity.dialogCancel();
+                    dealRefuseSuccess(o, position);
+                }
+
+                @Override
+                public void onFailure(String msg) {
+                    activity.dialogCancel();
+                }
+            });
+        }
     }
 
     // 处理新的好友申请==同意=返回数据
@@ -271,24 +288,6 @@ public class NewFriendPresenter {
         }
     }
 
-    // 新的好友申请==删除
-    private void sendDel(final int position) {
-        activity.dialogShow();
-        String s = list.get(position).getApply_id();
-        model.loadNewsForDel(s, new NewFriendModel.OnLoadInterface() {
-            @Override
-            public void onSuccess(Object o) {
-                activity.dialogCancel();
-                dealDelSuccess(o, position);
-            }
-
-            @Override
-            public void onFailure(String msg) {
-                activity.dialogCancel();
-            }
-        });
-    }
-
     // 处理新的好友申请==删除=返回数据
     private void dealDelSuccess(Object o, int position) {
         try {
@@ -311,24 +310,6 @@ public class NewFriendPresenter {
             e.printStackTrace();
             ToastUtils.show_always(activity.getActivity(), "出错了，请您稍后再试！");
         }
-    }
-
-    // 新的好友申请==拒绝
-    private void sendRefuse(final int position) {
-        activity.dialogShow();
-        String s = list.get(position).getApply_id();
-        model.loadNewsForRefuse(s, new NewFriendModel.OnLoadInterface() {
-            @Override
-            public void onSuccess(Object o) {
-                activity.dialogCancel();
-                dealRefuseSuccess(o, position);
-            }
-
-            @Override
-            public void onFailure(String msg) {
-                activity.dialogCancel();
-            }
-        });
     }
 
     // 处理新的好友申请==拒绝=返回数据

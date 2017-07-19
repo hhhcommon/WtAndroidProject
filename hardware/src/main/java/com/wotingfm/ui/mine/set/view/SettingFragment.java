@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.wotingfm.R;
@@ -32,6 +33,7 @@ public class SettingFragment extends Fragment implements View.OnClickListener {
     private TextView tv_close;
     private Dialog clearCacheDialog;
     private TextView textCache;
+    private LinearLayout lin_login;
 
     @Nullable
     @Override
@@ -50,6 +52,8 @@ public class SettingFragment extends Fragment implements View.OnClickListener {
 
     // 初始化视图
     private void initView() {
+
+        lin_login = (LinearLayout) rootView.findViewById(R.id.lin_login);//
         tv_close = (TextView) rootView.findViewById(R.id.tv_close);// 注销登录
         tv_close.setOnClickListener(this);
         TextView textTitle = (TextView) rootView.findViewById(R.id.tv_center);// 标题
@@ -86,13 +90,19 @@ public class SettingFragment extends Fragment implements View.OnClickListener {
                 MineActivity.open(new PersonalInfoFragment());
                 break;
             case R.id.view_my_concern:// 我关注的
-
+                /**
+                 * 此处跳转传递参数，根据参数关闭的时候执行MineActivity.close();
+                 */
                 break;
             case R.id.view_my_sub:// 我订阅的
-
+                /**
+                 * 此处跳转传递参数，根据参数关闭的时候执行MineActivity.close();
+                 */
                 break;
             case R.id.view_like:// 我喜欢的
-
+                /**
+                 * 此处跳转传递参数，根据参数关闭的时候执行MineActivity.close();
+                 */
                 break;
             case R.id.view_preference_setting:// 偏好设置
                 PreferenceFragment fragment = new PreferenceFragment();
@@ -135,8 +145,10 @@ public class SettingFragment extends Fragment implements View.OnClickListener {
      */
     public void setCloseView(boolean b) {
         if (b) {
+            lin_login.setVisibility(View.VISIBLE);
             tv_close.setVisibility(View.VISIBLE);
         } else {
+            lin_login.setVisibility(View.GONE);
             tv_close.setVisibility(View.GONE);
         }
     }
@@ -200,4 +212,6 @@ public class SettingFragment extends Fragment implements View.OnClickListener {
             ((ViewGroup) rootView.getParent()).removeView(rootView);
         }
     }
+
+
 }

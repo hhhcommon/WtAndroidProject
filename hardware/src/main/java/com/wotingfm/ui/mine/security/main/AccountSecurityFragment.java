@@ -42,7 +42,10 @@ public class AccountSecurityFragment extends Fragment implements View.OnClickLis
         TextView text_phone_number = (TextView) rootView.findViewById(R.id.text_phone_number);// 手机号
         TextView text_password = (TextView) rootView.findViewById(R.id.text_password);        // 密码
         String num = BSApplication.SharedPreferences.getString(StringConstant.USER_PHONE_NUMBER, "******");
-        text_phone_number.setText(num);
+        String bb =num.substring(3,7);
+        //字符串替换
+        String cc = num.replace(bb,"****");
+        text_phone_number.setText(cc);
 
     }
 

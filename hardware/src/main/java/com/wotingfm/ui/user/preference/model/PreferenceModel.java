@@ -3,6 +3,8 @@ package com.wotingfm.ui.user.preference.model;
 import android.util.Log;
 
 import com.google.gson.GsonBuilder;
+import com.wotingfm.common.application.BSApplication;
+import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.common.net.RetrofitUtils;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
@@ -23,7 +25,8 @@ public class PreferenceModel  {
      */
     public void loadNews(String s, final OnLoadInterface listener) {
         try {
-            RetrofitUtils.getInstance().preference(s)
+            String id= BSApplication.SharedPreferences.getString(StringConstant.USER_ID,"");
+            RetrofitUtils.getInstance().preference(id,s)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(new Action1<Object>() {

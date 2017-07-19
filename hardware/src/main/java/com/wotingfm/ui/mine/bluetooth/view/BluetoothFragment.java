@@ -90,7 +90,7 @@ public class BluetoothFragment extends Fragment implements View.OnClickListener 
         } else {
             pairAdapter.changeData(pairList);
         }
-        setItemForPair();
+        setItemForPair(pairList);
     }
 
     public void setAdapterUser(List<BluetoothInfo> userList){
@@ -100,30 +100,31 @@ public class BluetoothFragment extends Fragment implements View.OnClickListener 
         } else {
             userAdapter.changeData(userList);
         }
-        setItemForUser();
+        setItemForUser(userList);
     }
 
     // 子条目点击事件  发送配对请求
-    private void setItemForPair() {
+    private void setItemForPair(final List<BluetoothInfo> pairList) {
+        // 已经配对过的设备点击则直接连接
+        pairBluetoothList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                presenter.link(pairList,position);
+
+            }
+        });
+
+    }
+
+    // 子条目点击事件  发送配对请求
+    private void setItemForUser(final List<BluetoothInfo> userList) {
         // 没有配对的设备点进行配对
         userBluetoothList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if (position - 1 >= 0) {
-                    presenter.bond(position - 1);
+                    presenter.bond(userList,position - 1);
                 }
-            }
-        });
-    }
-
-    // 子条目点击事件  发送配对请求
-    private void setItemForUser() {
-        // 已经配对过的设备点击则直接连接
-        pairBluetoothList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                presenter.link(position);
-
             }
         });
     }

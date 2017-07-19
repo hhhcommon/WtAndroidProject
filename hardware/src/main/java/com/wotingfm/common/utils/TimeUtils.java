@@ -29,14 +29,14 @@ public class TimeUtils {
     }
 
     /**
-     * 将时间戳转换为时间 mm:ss
+     * 将时间戳转换为时间 HH:mm
      * @param s
      * @return
      */
     public static String stampToDateForH(String s) {
         String res = "00:00";
         try {
-            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("mm:ss");
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm");
             long lt = new Long(s);
             Date date = new Date(lt);
             res = simpleDateFormat.format(date);

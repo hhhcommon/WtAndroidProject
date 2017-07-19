@@ -151,7 +151,6 @@
             <RelativeLayout
                 android:id="@+id/setting"
                 style="@style/MineRelativeStyle"
-                android:layout_marginBottom="240dp"
                 android:layout_marginTop="20dp">
 
                 <ImageView

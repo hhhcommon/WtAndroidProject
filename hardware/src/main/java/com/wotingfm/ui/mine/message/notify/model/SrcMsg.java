@@ -111,18 +111,18 @@ public class SrcMsg implements Serializable {
         private String group_name;      // 被申请群的名字
         private String status;          // 申请状态	number
         private String user_id;         // 申请者的id
-        private String user_name;       // 申请者的昵称
+        private String applier_name;    // 申请者的昵称
         private String id;              // 消息id
         private String approve_at;      // 时间
         private String avatar;          // 头像
-        private String introduce;       // 验证消息
+        private String content;         // 验证消息
 
-        public String getUser_name() {
-            return user_name;
+        public String getApplier_name() {
+            return applier_name;
         }
 
-        public void setUser_name(String user_name) {
-            this.user_name = user_name;
+        public void setApplier_name(String applier_name) {
+            this.applier_name = applier_name;
         }
 
         public String getId() {
@@ -149,12 +149,12 @@ public class SrcMsg implements Serializable {
             this.avatar = avatar;
         }
 
-        public String getIntroduce() {
-            return introduce;
+        public String getContent() {
+            return content;
         }
 
-        public void setIntroduce(String introduce) {
-            this.introduce = introduce;
+        public void setContent(String content) {
+            this.content = content;
         }
 
         public String getGroup_id() {
@@ -191,10 +191,11 @@ public class SrcMsg implements Serializable {
     }
 
     public static class MesPerson implements Serializable {
+        // applier_id 暂无用
         private String id;              // 消息id
         private String status;          // 状态
         private String approved_at;     // 时间
-        private String avatar;          // 头像
+        private String receiver_avatar; // 头像
         private String receiver_name;   // 消息处理者昵称
         private String receiver_id;     // 消息处理者id
 
@@ -222,12 +223,12 @@ public class SrcMsg implements Serializable {
             this.approved_at = approved_at;
         }
 
-        public String getAvatar() {
-            return avatar;
+        public String getReceiver_avatar() {
+            return receiver_avatar;
         }
 
-        public void setAvatar(String avatar) {
-            this.avatar = avatar;
+        public void setReceiver_avatar(String receiver_avatar) {
+            this.receiver_avatar = receiver_avatar;
         }
 
         public String getReceiver_name() {

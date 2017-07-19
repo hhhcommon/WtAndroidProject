@@ -20,6 +20,7 @@ import com.wotingfm.ui.intercom.group.groupnews.add.view.GroupNewsForAddFragment
 import com.wotingfm.ui.intercom.main.contacts.model.Contact;
 import com.wotingfm.ui.intercom.main.view.InterPhoneActivity;
 import com.wotingfm.ui.intercom.person.personmessage.view.PersonMessageFragment;
+import com.wotingfm.ui.mine.qrcodes.EWMShowFragment;
 
 import org.json.JSONObject;
 import org.json.JSONTokener;
@@ -467,5 +468,40 @@ public class GroupNewsForAddPresenter {
         }
     }
 
+    /**
+     * 跳转到二维码界面
+     */
+    public void jumpEWM() {
+        if (g_news != null) {
 
+            String image= "";
+            String news= "";
+            String name= "";
+            try {
+                image = g_news.getLogo_url();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            try {
+                news = g_news.getIntroduction();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            try {
+                name = g_news.getTitle();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            EWMShowFragment fragment = new EWMShowFragment();
+            Bundle bundle = new Bundle();
+            bundle.putString("from","interPhone" );// 路径来源
+            bundle.putString("image",image);// 头像
+            bundle.putString("news",news);// 简介
+            bundle.putString("name",name);// 姓名
+            bundle.putString("uri", "测试群组数据");// 内容路径
+            fragment.setArguments(bundle);
+            InterPhoneActivity.open(fragment);
+        }
+    }
 }

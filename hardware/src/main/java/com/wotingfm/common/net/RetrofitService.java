@@ -354,11 +354,13 @@ public interface RetrofitService {
     @PUT(Api.URL_EDIT_GROUP)
     Observable<Object> editGroupMM(@Path("id") String id,
                                    @Query("password") String s);
+
     // 修改群信息(加群方式)
     @PUT(Api.URL_EDIT_GROUP)
     Observable<Object> applyGroupType(@Path("id") String id,
                                       @Query("password") String password,
                                       @Query("member_access_mode") int type);
+
     // 修改好友备注
     @POST(Api.URL_CHANGE_PERSON_NOTE)
     Observable<Object> editPersonNote(@Path("userId") String pid,
@@ -375,9 +377,10 @@ public interface RetrofitService {
     Observable<Object> groupNumAdd(@Path("id") String gid,
                                    @Query("member_user_id") String id);
 
-    // 偏好设置(X)
+    // 偏好设置
     @POST(Api.URL_PREFERENCE)
-    Observable<Object> preference(@Query("s") String s);
+    Observable<Object> preference(@Path("id") String id,
+                                  @Query("interest_id") String s);
 
     // 注销登录(X)
     @POST(Api.URL_CANCEL)
@@ -446,9 +449,27 @@ public interface RetrofitService {
     @DELETE(Api.URL_PERSON_DEL)
     Observable<Object> delPerson(@Path("userId") String pid,
                                  @Path("friendId") String id);
+
     // 获取消息
     @GET(Api.URL_MSG_APPLY)
     Observable<Object> applies();
+
+    // 消息删除
+    @DELETE(Api.URL_MESSAGE_DEL)
+    Observable<Object> msgDel(@Path("id") String id,
+                              @Query("type") String type);
+
+    // 消息同意
+    @POST(Api.URL_MESSAGE)
+    Observable<Object> msgApply(@Path("GroupId") String gid,
+                                @Path("applierId") String pid,
+                                @Query("status") String status);
+
+    // 消息拒绝
+    @POST(Api.URL_MESSAGE)
+    Observable<Object> msgRefuse(@Path("GroupId") String gid,
+                                 @Path("applierId") String pid,
+                                 @Query("status") String status);
 }
 
 

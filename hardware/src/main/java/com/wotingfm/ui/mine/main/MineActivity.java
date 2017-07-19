@@ -83,4 +83,5 @@ public class MineActivity extends BaseFragmentActivity {
             close();
         }
     }
+
 }

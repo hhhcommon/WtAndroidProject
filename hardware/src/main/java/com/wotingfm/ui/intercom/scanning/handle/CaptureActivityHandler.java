@@ -9,12 +9,12 @@ import android.os.Message;
 import com.google.zxing.Result;
 import com.wotingfm.R;
 import com.wotingfm.ui.intercom.scanning.DecodeThread;
-import com.wotingfm.ui.intercom.scanning.activity.CaptureActivity;
+import com.wotingfm.ui.intercom.scanning.activity.CaptureFragment;
 import com.wotingfm.ui.intercom.scanning.manager.CameraManager;
 
 public class CaptureActivityHandler extends Handler {
 
-	private final CaptureActivity activity;
+	private final CaptureFragment activity;
 	private final DecodeThread decodeThread;
 	private final CameraManager cameraManager;
 	private State state;
@@ -23,7 +23,7 @@ public class CaptureActivityHandler extends Handler {
 		PREVIEW, SUCCESS, DONE
 	}
 
-	public CaptureActivityHandler(CaptureActivity activity, CameraManager cameraManager, int decodeMode) {
+	public CaptureActivityHandler(CaptureFragment activity, CameraManager cameraManager, int decodeMode) {
 		this.activity = activity;
 		decodeThread = new DecodeThread(activity, decodeMode);
 		decodeThread.start();
@@ -54,8 +54,7 @@ public class CaptureActivityHandler extends Handler {
 			cameraManager.requestPreviewFrame(decodeThread.getHandler(), R.id.decode);
 			break;
 		case R.id.return_scan_result:
-			activity.setResult(Activity.RESULT_OK, (Intent) message.obj);
-			activity.finish();
+			activity.handleDecode((Result) message.obj);
 			break;
 		}
 	}
