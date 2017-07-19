@@ -1,24 +1,15 @@
 package com.wotingfm.ui.main.view;
 
 import android.app.TabActivity;
-import android.content.ComponentName;
 import android.content.Intent;
 import android.graphics.Color;
-import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.WindowManager;
 import android.widget.TabHost;
-import android.widget.Toast;
 
 import com.wotingfm.R;
-import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.bean.MessageEvent;
-import com.wotingfm.common.utils.L;
 import com.wotingfm.common.utils.StatusBarUtil;
-import com.wotingfm.ui.base.baseactivity.AppManager;
-import com.wotingfm.ui.base.baseactivity.BaseActivity;
-import com.wotingfm.ui.base.baseactivity.NoTitleBarBaseActivity;
 import com.wotingfm.ui.intercom.main.view.InterPhoneActivity;
 import com.wotingfm.ui.main.presenter.MainPresenter;
 import com.wotingfm.ui.test.PlayerActivity;
@@ -27,8 +18,6 @@ import com.wotingfm.ui.mine.main.MineActivity;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
-
-import static android.content.Intent.FLAG_ACTIVITY_REORDER_TO_FRONT;
 
 
 public class MainActivity extends TabActivity {
@@ -48,13 +37,13 @@ public class MainActivity extends TabActivity {
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
         }
 */
-//        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);        // 透明状态栏
-//        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);    // 透明导航栏
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);        // 透明状态栏
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);    // 透明导航栏
         InitTextView();
         mainPresenter = new MainPresenter(this);
 
-        //  applySelectedColor();
-        //    applyTextColor(false);
+//        applySelectedColor();
+        applyTextColor(false);
     }
 
     // 初始化视图,主页跳转的3个界面

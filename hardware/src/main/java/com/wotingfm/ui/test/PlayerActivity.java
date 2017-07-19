@@ -24,10 +24,12 @@ public class PlayerActivity extends NoTitleBarBaseActivity {
         open(PlayerFragment.newInstance());
     }
 
-
     public void open(Fragment frg) {
         getSupportFragmentManager().beginTransaction()
-                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+//                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                .setCustomAnimations(
+                        R.anim.slide_right_in, R.anim.slide_left_out,
+                        R.anim.slide_left_in, R.anim.slide_right_out)
                 .add(R.id.fragment, frg)
                 .addToBackStack(SequenceUUID.getUUID())
                 .commitAllowingStateLoss();

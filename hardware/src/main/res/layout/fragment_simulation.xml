@@ -2,11 +2,15 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/black"
     android:orientation="vertical">
-
+<ImageView
+    android:layout_width="match_parent"
+    android:src="@mipmap/simulation_bg"
+    android:scaleType="centerCrop"
+    android:layout_height="match_parent" />
     <RelativeLayout
         android:id="@+id/re_headView"
+        android:layout_marginTop="20dp"
         android:layout_width="match_parent"
         android:layout_height="44dp">
 
@@ -47,7 +51,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="4dp"
-        android:layout_marginTop="59dp"
+        android:layout_marginTop="79dp"
         android:layout_toRightOf="@+id/tv_green"
         android:text="当前频道为空，请设置频率"
         android:textColor="#ffffff"
@@ -60,7 +64,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/tv_text"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="43.5dp"
+        android:layout_marginTop="13.5dp"
         android:gravity="center_horizontal"
         android:text="CH00-000.0000"
         android:textColor="#d8d8d8"

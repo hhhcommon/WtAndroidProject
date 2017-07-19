@@ -130,7 +130,7 @@
         <activity
             android:name=".ui.intercom.main.view.InterPhoneActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/MyAppTheme" />
+            android:theme="@style/AppTheme" />
 
         <!-- 图片剪切 -->
         <activity

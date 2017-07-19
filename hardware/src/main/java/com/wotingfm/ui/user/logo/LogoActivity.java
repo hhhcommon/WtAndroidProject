@@ -45,7 +45,10 @@ public class LogoActivity extends FragmentActivity {
     // 打开新的 Fragment
     public static void open(Fragment frg) {
         context.getSupportFragmentManager().beginTransaction()
-                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+//                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                .setCustomAnimations(
+                        R.anim.slide_right_in, R.anim.slide_left_out,
+                        R.anim.slide_left_in, R.anim.slide_right_out)
                 .add(R.id.fragment_content, frg)
                 .addToBackStack(SequenceUUID.getUUID())
                 .commitAllowingStateLoss();

@@ -9,6 +9,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Window;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
@@ -43,10 +45,10 @@ public class InterPhoneActivity extends BaseFragmentActivity {
      */
     public static void open(Fragment frg) {
         context.getSupportFragmentManager().beginTransaction()
-                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-//                .setCustomAnimations(
-//                        R.animator.fragment_slide_right_in, R.animator.fragment_slide_left_out,
-//                        R.animator.fragment_slide_left_in, R.animator.fragment_slide_right_out)
+//                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                .setCustomAnimations(
+                        R.anim.slide_right_in, R.anim.slide_left_out,
+                        R.anim.slide_left_in, R.anim.slide_right_out)
                 .add(R.id.fragment_content, frg)
                 .addToBackStack(SequenceUUID.getUUID())
                 .commitAllowingStateLoss();

@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.wotingfm.R;
 import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.constant.StringConstant;
+import com.wotingfm.common.utils.StatusBarUtil;
 import com.wotingfm.ui.mine.main.MineActivity;
 
 /**
