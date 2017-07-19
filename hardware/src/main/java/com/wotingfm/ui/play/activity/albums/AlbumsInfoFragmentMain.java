@@ -212,7 +212,7 @@ public class AlbumsInfoFragmentMain extends BaseFragment implements View.OnClick
 
     @Override
     protected int getLayoutResource() {
-        return 0;
+        return R.layout.activity_albums_info;
     }
 
 
@@ -224,7 +224,7 @@ public class AlbumsInfoFragmentMain extends BaseFragment implements View.OnClick
         height = DementionUtil.dip2px(getActivity(), 210);
         Bundle bundle = getArguments();
         if (bundle != null) {
-            albumsId = bundle.getString("albumsId");
+            albumsId = bundle.getString("albumsID");
             LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
             layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
             ivBack.setOnClickListener(this);

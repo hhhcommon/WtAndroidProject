@@ -21,6 +21,7 @@ import com.wotingfm.R;
 import com.wotingfm.common.adapter.userAdapter.AnchorPersonalCenterInfoAdapter;
 import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.bean.AnchorInfo;
+import com.wotingfm.common.bean.SinglesBase;
 import com.wotingfm.common.net.RetrofitUtils;
 import com.wotingfm.common.utils.CommonUtils;
 import com.wotingfm.common.utils.L;
@@ -91,8 +92,9 @@ public class AnchorPersonalCenterFragment extends BaseFragment implements View.O
         ivBack.setOnClickListener(this);
         height = DementionUtil.dip2px(getActivity(), 200);
         Bundle bundle = getArguments();
-        if (bundle != null)
+        if (bundle != null) {
             uid = bundle.getString("uid");
+        }
         loadLayout.findViewById(R.id.btnTryAgain).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -111,8 +113,20 @@ public class AnchorPersonalCenterFragment extends BaseFragment implements View.O
             }
 
             @Override
+            public void ItmeSendClick(AnchorInfo.DataBeanXX.UserBean.DataBeanX.DataBean dataBean) {
+                SinglesBase singlesBase = new SinglesBase();
+                singlesBase.album_logo_url = dataBean.single_logo_url;
+                singlesBase.album_title = dataBean.single_title;
+                singlesBase.album_lastest_news = dataBean.album_title;
+                singlesBase.album_id = dataBean.album_id;
+                singlesBase.creator_id = uid;
+                singlesBase.single_file_url = dataBean.single_file_url;
+                openFragment(PlayerFragment.newInstance(singlesBase));
+            }
+
+            @Override
             public void MoreClick(AnchorInfo.DataBeanXX.UserBean.DataBeanX s) {
-                AlbumsListMeFragment.newInstance(uid, "全部专辑(" + s.total_count + ")");
+                openFragment(AlbumsListMeFragment.newInstance(uid, "全部专辑(" + s.total_count + ")"));
             }
 
         });
