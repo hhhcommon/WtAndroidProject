@@ -18,8 +18,8 @@ import com.wotingfm.common.bean.MessageEvent;
 import com.wotingfm.common.config.GlobalStateConfig;
 import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.common.constant.StringConstant;
+import com.wotingfm.common.utils.CommonUtils;
 import com.wotingfm.common.utils.GlideUtils;
-import com.wotingfm.ui.intercom.person.personnote.view.EditPersonNoteFragment;
 import com.wotingfm.ui.mine.bluetooth.view.BluetoothFragment;
 import com.wotingfm.ui.mine.fm.view.FMSetFragment;
 import com.wotingfm.ui.mine.message.notify.view.MsgNotifyFragment;
@@ -113,14 +113,6 @@ public class MineFragment extends Fragment implements View.OnClickListener {
     }
 
     @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        if (rootView != null) {
-            ((ViewGroup) rootView.getParent()).removeView(rootView);
-        }
-    }
-
-    @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.head_left_btn:// 返回
@@ -171,21 +163,23 @@ public class MineFragment extends Fragment implements View.OnClickListener {
 
                 break;
             case R.id.image_info:// 消息中心
-                MineActivity.open(new MsgNotifyFragment());
+                if (CommonUtils.isLogin()) MineActivity.open(new MsgNotifyFragment());
                 break;
             case R.id.image_qr_code:// 二维码
-                EWMShowFragment fragment = new EWMShowFragment();
-                Bundle bundle = new Bundle();
-                bundle.putString("from","person" );// 路径来源
-                bundle.putString("image", BSApplication.SharedPreferences.getString(StringConstant.PORTRAIT,""));// 头像
-                bundle.putString("news", BSApplication.SharedPreferences.getString(StringConstant.USER_SIGN,""));// 简介
-                bundle.putString("name", BSApplication.SharedPreferences.getString(StringConstant.NICK_NAME,""));// 姓名
-                bundle.putString("uri", "测试数据");// 内容路径
-                fragment.setArguments(bundle);
-                MineActivity.open(fragment);
+                if (CommonUtils.isLogin()){
+                    EWMShowFragment fragment = new EWMShowFragment();
+                    Bundle bundle = new Bundle();
+                    bundle.putString("from","person" );// 路径来源
+                    bundle.putString("image", BSApplication.SharedPreferences.getString(StringConstant.PORTRAIT,""));// 头像
+                    bundle.putString("news", BSApplication.SharedPreferences.getString(StringConstant.USER_SIGN,""));// 简介
+                    bundle.putString("name", BSApplication.SharedPreferences.getString(StringConstant.NICK_NAME,""));// 姓名
+                    bundle.putString("uri", "测试数据");// 内容路径
+                    fragment.setArguments(bundle);
+                    MineActivity.open(fragment);
+                }
                 break;
             case R.id.image_head:// 登录
-                startActivity(new Intent(this.getActivity(), LogoActivity.class));
+                if (!CommonUtils.isLogin()) startActivity(new Intent(this.getActivity(), LogoActivity.class));
                 break;
         }
     }

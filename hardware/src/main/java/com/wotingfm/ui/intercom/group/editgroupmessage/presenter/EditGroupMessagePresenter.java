@@ -62,7 +62,6 @@ public class EditGroupMessagePresenter {
     private String UUID;
     private Contact.group group;
     private String outputFilePath;
-    private boolean headViewShow = false;// 图片选择界面是否展示
 
     public EditGroupMessagePresenter(EditGroupMessageFragment activity) {
         this.activity = activity;
@@ -123,19 +122,6 @@ public class EditGroupMessagePresenter {
             activity.setViewForGroupIntroduce(groupIntroduce);
         } else {
             activity.setViewForGroupIntroduce("");
-        }
-    }
-
-    /**
-     * 判断界面展示
-     */
-    public void headViewShow() {
-        if (headViewShow) {
-            activity.imageShow(false);
-            headViewShow = false;
-        } else {
-            activity.imageShow(true);
-            headViewShow = true;
         }
     }
 

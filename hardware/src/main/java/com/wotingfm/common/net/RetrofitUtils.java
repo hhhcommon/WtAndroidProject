@@ -1420,4 +1420,22 @@ public class RetrofitUtils {
                 });
     }
 
+    /**
+     * 完善个人信息
+     *
+     * @param id
+     * @param news
+     * @param url
+     * @return Objects
+     */
+    public Observable<Object> editInformation(String id, String news, String url) throws Exception {
+        // 设置返回监听参数
+            return retrofitService.editUserForInformation(id, news,url)
+                    .map(new Func1<Object, Object>() {
+                        @Override
+                        public Object call(Object O) {
+                            return O;
+                        }
+                    });
+    }
 }

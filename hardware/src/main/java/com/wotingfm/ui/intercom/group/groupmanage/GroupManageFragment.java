@@ -29,7 +29,7 @@ public class GroupManageFragment extends Fragment implements View.OnClickListene
     private View rootView;
     private Contact.group group;
     private List<Contact.user> list;
-
+    private ResultListener Listener;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,6 +72,7 @@ public class GroupManageFragment extends Fragment implements View.OnClickListene
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.head_left_btn:
+                setResult(true);
                 InterPhoneActivity.close();
                 break;
             case R.id.re_groupNews:// 编辑资料
@@ -194,5 +195,25 @@ public class GroupManageFragment extends Fragment implements View.OnClickListene
                 break;
         }
     }
+    /**
+     * 返回值设置
+     *
+     * @param type
+     */
+    public void setResult(boolean type) {
+        Listener.resultListener(type);
+    }
 
+    /**
+     * 回调结果值
+     *
+     * @param l
+     */
+    public void setResultListener(ResultListener l) {
+        Listener = l;
+    }
+
+    public interface ResultListener {
+        void resultListener(boolean type);
+    }
 }

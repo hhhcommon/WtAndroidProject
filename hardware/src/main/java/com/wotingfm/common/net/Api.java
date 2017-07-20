@@ -71,7 +71,7 @@ public class Api {
     // 修改用户信息
     public static final String URL_EDIT_USER = "api/users/{id}";
     // 修改手机号
-    public static final String URL_RESET_PHONE_NUMBER = "api/reset-phoneNum";
+    public static final String URL_RESET_PHONE_NUMBER = "api/accounts/reset-phoneNum  ";
     // 删除好友
     public static final String URL_PERSON_DEL = "api/users/{userId}/friends/{friendId}";
     // 获取消息（待修改）

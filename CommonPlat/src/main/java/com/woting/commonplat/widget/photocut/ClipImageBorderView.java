@@ -9,6 +9,9 @@ import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.View;
 
+import com.woting.commonplat.manager.PhoneMsgManager;
+
+
 /**
  * 裁剪内页
  * 作者：xinlong on 2016/11/6 21:18
@@ -46,17 +49,19 @@ public class ClipImageBorderView extends View {
 //        // 绘制右边2
 //        canvas.drawRect(getWidth(), mHorizontalPadding, getWidth(), getHeight()-mHorizontalPadding, mPaint);
         // 绘制上边3
-//        canvas.drawRect(0, 0, PhoneMessage.ScreenWidth, mHorizontalPadding, mPaint);zz
+        canvas.drawRect(0, 0, PhoneMsgManager.ScreenWidth,mHorizontalPadding, mPaint);
         // 绘制下边4
-//        canvas.drawRect(0, PhoneMessage.ScreenHeight - mHorizontalPadding, PhoneMessage.ScreenWidth, PhoneMessage.ScreenHeight, mPaint);zz
+        canvas.drawRect(0, PhoneMsgManager.ScreenHeight - mHorizontalPadding,PhoneMsgManager.ScreenWidth, PhoneMsgManager.ScreenHeight, mPaint);
         // 绘制外边框
-        mPaint.setColor(Color.parseColor("#66000000"));
+        mPaint.setColor( Color.parseColor("#66000000"));
         mPaint.setStrokeWidth(mBorderWidth);
         mPaint.setStyle(Style.STROKE);
-//        canvas.drawRect(0, mHorizontalPadding, PhoneMessage.ScreenWidth, PhoneMessage.ScreenHeight - mHorizontalPadding, mPaint);zz
+        canvas.drawRect(0, mHorizontalPadding, PhoneMsgManager.ScreenWidth, PhoneMsgManager.ScreenHeight-mHorizontalPadding, mPaint);
+
     }
 
     public void setHorizontalPadding(int mHorizontalPadding) {
         this.mHorizontalPadding = mHorizontalPadding;
     }
+
 }

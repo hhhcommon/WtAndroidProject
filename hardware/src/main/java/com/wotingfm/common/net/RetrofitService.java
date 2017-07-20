@@ -420,6 +420,13 @@ public interface RetrofitService {
     Observable<Object> editUserForName(@Path("id") String id,
                                        @Query("nickName") String news);
 
+    // 完善自己的信息
+    @POST(Api.URL_EDIT_USER)
+    Observable<Object> editUserForInformation(@Path("id") String id,
+                                              @Query("nickName") String name,
+                                              @Query("portraitMini") String url);
+
+
     // 修改用户自己介绍
     @POST(Api.URL_EDIT_USER)
     Observable<Object> editUserForIntroduce(@Path("id") String id,

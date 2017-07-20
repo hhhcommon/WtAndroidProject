@@ -18,7 +18,7 @@
             android:gravity="right">
 
             <TextView
-                android:id="@+id/tv_confirm"
+                android:id="@+id/tv_confirm_age"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:gravity="center"
@@ -40,17 +40,46 @@
             android:gravity="center"
             android:orientation="horizontal">
 
-            <com.wotingfm.common.view.pickview.LoopView
-                android:id="@+id/pick_province"
-                android:layout_width="150dp"
-                android:layout_height="match_parent"
-                android:paddingRight="40dp" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="年"
+                android:textColor="@color/black"
+                android:textSize="12sp" />
 
             <com.wotingfm.common.view.pickview.LoopView
-                android:id="@+id/pick_city"
-                android:layout_width="150dp"
-                android:layout_height="match_parent"
-                android:paddingRight="40dp" />
+                android:id="@+id/pick_year"
+                android:layout_width="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_height="match_parent" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="月"
+                android:textColor="@color/black"
+                android:layout_marginLeft="30dp"
+                android:textSize="12sp" />
+
+            <com.wotingfm.common.view.pickview.LoopView
+                android:id="@+id/pick_month"
+                android:layout_width="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_height="match_parent"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="日"
+                android:layout_marginLeft="30dp"
+                android:textColor="@color/black"
+                android:textSize="12sp" />
+
+            <com.wotingfm.common.view.pickview.LoopView
+                android:id="@+id/pick_day"
+                android:layout_width="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_height="match_parent"/>
 
         </LinearLayout>
 

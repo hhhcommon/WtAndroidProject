@@ -11,6 +11,8 @@ import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 
+import com.wotingfm.common.config.GlobalStateConfig;
+
 import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -63,9 +65,9 @@ public class LoopView extends View {
     int itemsVisible;// 显示几个条目
 
     int measuredHeight;
-    int measuredWidth;
-    int paddingLeft = 0;
-    int paddingRight = 0;
+    int measuredWidth= GlobalStateConfig.LoopViewW;
+    int paddingLeft = 10;
+    int paddingRight = 10;
 
     int halfCircumference;// 半圆周长
     int radius;// 半径
@@ -143,7 +145,7 @@ public class LoopView extends View {
         if (paddingRight <= extraRightWidth) {
             paddingRight = extraRightWidth;
         }
-        measuredWidth = maxTextWidth + paddingLeft + paddingRight;
+//        measuredWidth = maxTextWidth + paddingLeft + paddingRight;
         firstLineY = (int) ((measuredHeight - lineSpacingMultiplier * maxTextHeight) / 2.0F);
         secondLineY = (int) ((measuredHeight + lineSpacingMultiplier * maxTextHeight) / 2.0F);
         if (initPosition == -1) {

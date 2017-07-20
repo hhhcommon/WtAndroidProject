@@ -97,7 +97,7 @@ public class PhotoCutActivity extends Activity implements OnClickListener {
             bitmap = null;
         }
         if (mClipImageLayout != null) {
-            mClipImageLayout.closeResource();
+            mClipImageLayout.CloseResource();
             mClipImageLayout = null;
         }
     }

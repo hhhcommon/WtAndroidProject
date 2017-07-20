@@ -9,6 +9,7 @@ package com.wotingfm.common.constant;
 public class BroadcastConstants {
     // 是否打开了个人中心界面
     public static final String MINE_ACTIVITY_CHANGE = "MINE_ACTIVITY_CHANGE";
+
     public static final String SEARCH_VOICE = "SEARCH_VOICE";
     // 全局按钮监听
     public static final String ACTIVITY_CHANGE = "ACTIVITY_CHANGE";
