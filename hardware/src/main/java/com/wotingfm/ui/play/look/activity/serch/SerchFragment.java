@@ -91,7 +91,7 @@ public class SerchFragment extends BaseFragment {
         Bundle bundle = getArguments();
         if (bundle != null) {
             q = bundle.getString("q");
-            int code = bundle.getInt("code",0);
+            int code = bundle.getInt("code", 0);
             etSearchlike.setText(q);
             if (!TextUtils.isEmpty(q))
                 etSearchlike.setSelection(q.length());
@@ -115,7 +115,8 @@ public class SerchFragment extends BaseFragment {
             tvCancel.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    closeFragment();
+                    hideSoftKeyboard();
+                    backResult();
                 }
             });
             etSearchlike.addTextChangedListener(new TextWatcher() {

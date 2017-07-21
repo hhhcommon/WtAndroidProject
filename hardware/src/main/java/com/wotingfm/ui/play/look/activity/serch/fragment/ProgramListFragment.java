@@ -12,6 +12,7 @@ import com.woting.commonplat.widget.LoadFrameLayout;
 import com.wotingfm.R;
 import com.wotingfm.common.adapter.albumsAdapter.AlbumsAdapter;
 import com.wotingfm.common.adapter.serch.ProgramSerchAdapter;
+import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.bean.AlbumsBean;
 import com.wotingfm.common.bean.SerchList;
 import com.wotingfm.common.bean.SinglesBase;
@@ -77,6 +78,8 @@ public class ProgramListFragment extends BaseFragment implements OnLoadMoreListe
         mAdapter = new ProgramSerchAdapter(getActivity(), albumsBeanList, new ProgramSerchAdapter.OnClick() {
             @Override
             public void click(SinglesBase s) {
+                hideSoftKeyboard();
+                BSApplication.IS_RESULT =true;
                 openFragment(PlayerFragment.newInstance(s, q));
             }
         });

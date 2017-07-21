@@ -94,7 +94,6 @@ public class LookListFragment extends BaseFragment implements View.OnClickListen
     private List<Fragment> mFragment = new ArrayList<>();
     private MyAdapter mAdapter;
 
-    private InputMethodManager imm;
 
     /**
      * EditText获取焦点并显示软键盘
@@ -103,12 +102,11 @@ public class LookListFragment extends BaseFragment implements View.OnClickListen
         etSearchlike.setFocusable(true);
         etSearchlike.setFocusableInTouchMode(true);
         etSearchlike.requestFocus();
-        imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
+        inputMethodManager.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
     }
 
     @Override
     public void initView() {
-        imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
         new KeyboardChangeListener(getActivity()).setKeyBoardListener(new KeyboardChangeListener.KeyBoardListener() {
             @Override
             public void onKeyboardChange(boolean isShow, int keyboardHeight) {

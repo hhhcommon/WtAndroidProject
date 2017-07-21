@@ -76,6 +76,7 @@ public class AnchorListFragment extends BaseFragment implements OnLoadMoreListen
         mAdapter = new UsersSerchAdapter(getActivity(), albumsBeanList, new UsersSerchAdapter.OnClick() {
             @Override
             public void click(UserBean s) {
+                hideSoftKeyboard();
                 openFragment(AnchorPersonalCenterFragment.newInstance(s.id));
             }
         });

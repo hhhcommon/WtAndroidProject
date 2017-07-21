@@ -16,6 +16,7 @@ import com.wotingfm.R;
 import com.wotingfm.common.adapter.albumsAdapter.AlbumsAdapter;
 import com.wotingfm.common.adapter.downloadAdapter.DownloadSelectAdapter;
 import com.wotingfm.common.adapter.findHome.ClassificationAdapter;
+import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.bean.AlbumInfo;
 import com.wotingfm.common.bean.AlbumsBean;
 import com.wotingfm.common.bean.Channels;
@@ -97,6 +98,7 @@ public class SubcategoryFragment extends BaseFragment implements OnLoadMoreListe
         mAdapter.setPlayerClick(new AlbumsAdapter.PlayerClick() {
             @Override
             public void clickAlbums(AlbumsBean singlesBean) {
+                BSApplication.IS_RESULT =true;
                 openFragment(PlayerFragment.newInstanceSerch(singlesBean.id,id, bundle.getString("title")));
             }
         });

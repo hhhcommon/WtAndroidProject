@@ -12,6 +12,7 @@ import com.woting.commonplat.widget.LoadFrameLayout;
 import com.wotingfm.R;
 import com.wotingfm.common.adapter.albumsAdapter.AlbumsAdapter;
 import com.wotingfm.common.adapter.findHome.RadioStationAdapter;
+import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.bean.AlbumsBean;
 import com.wotingfm.common.bean.ChannelsBean;
 import com.wotingfm.common.bean.SerchList;
@@ -77,6 +78,8 @@ public class RadioStationListFragment extends BaseFragment implements OnLoadMore
         mAdapter = new RadioStationAdapter(getActivity(), albumsBeanList, new RadioStationAdapter.RadioStationClick() {
             @Override
             public void click(ChannelsBean dataBean) {
+                hideSoftKeyboard();
+                BSApplication.IS_RESULT =true;
                 openFragment(PlayerFragment.newInstance(dataBean, q));
                 // RadioInfoActivity.start(getActivity(), dataBean.title, dataBean.id);
             }

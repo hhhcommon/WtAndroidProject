@@ -62,8 +62,20 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
         void call();
     }
 
+
     private BaseToolBarActivity.CallBack callBack;
     public int SerchCode = 0;
+
+    public void backResult() {
+        if (BSApplication.isIS_BACK == true) {
+            closeFragment();
+            BSApplication.isIS_BACK = false;
+            BSApplication.fragmentBase = null;
+            openFragmentNoAnim(LookListFragment.newInstance(0));
+        } else {
+            closeFragment();
+        }
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -73,28 +85,8 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
             if (callBack != null) {
                 callBack.call();
             } else {
-                if (BSApplication.isIS_BACK == true) {
-                    closeFragment();
-                    BSApplication.isIS_BACK = false;
-                    BSApplication.fragmentBase = null;
-                    openFragmentNoAnim(LookListFragment.newInstance(0));
-              /*      if (this instanceof SelectedMoreFragment) {
-                        openFragmentNoAnim(LookListFragment.newInstance(0));
-                    } else if (this instanceof ClassificationFragment) {
-                        openFragmentNoAnim(LookListFragment.newInstance(1));
-                    } else if (this instanceof RadioMoreFragment) {
-                        openFragmentNoAnim(LookListFragment.newInstance(2));
-                    } else if (this instanceof LiveFragment) {
-                        openFragmentNoAnim(LookListFragment.newInstance(3));
-                    } else if (this instanceof MinorClassificationFragment) {
-                        openFragmentNoAnim(LookListFragment.newInstance(1));
-                    } else {
-                        openFragmentNoAnim(LookListFragment.newInstance(0));
-                    }*/
-                    return true;
-                } else {
-                    closeFragment();
-                }
+                backResult();
+                return true;
             }
         }
         return super.onOptionsItemSelected(item);
@@ -131,6 +123,7 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
             }
         }
     }
+
 
     public void setTitle(CharSequence title, BaseToolBarActivity.CallBack callBackW) {
         if (playerActivity != null) {
@@ -172,8 +165,6 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
     }
 
     public void hideSoftKeyboard() {
-        if (inputMethodManager == null)
-            inputMethodManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
         if (getActivity().getWindow().getAttributes().softInputMode != WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN) {
             if (getActivity().getCurrentFocus() != null)
                 inputMethodManager.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(),
@@ -181,11 +172,13 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
         }
     }
 
-    private InputMethodManager inputMethodManager;
+    public InputMethodManager inputMethodManager;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        if (inputMethodManager == null)
+            inputMethodManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
         if (rootView == null)
             rootView = inflater.inflate(getLayoutResource(), container, false);
         if (getActivity() instanceof PlayerActivity)

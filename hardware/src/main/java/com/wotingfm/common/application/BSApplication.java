@@ -59,7 +59,8 @@ public class BSApplication extends MultiDexApplication {
     public static android.content.SharedPreferences SharedPreferences;   // 配置信息
     public static Context mContext;
     public static Fragment fragmentBase;
-    public static boolean isIS_BACK=false;
+    public static boolean isIS_BACK = false;
+    public static boolean IS_RESULT = false;
 
     public void onCreate() {
         super.onCreate();

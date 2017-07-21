@@ -87,6 +87,7 @@ public class SelectedMoreFragment extends BaseFragment implements OnLoadMoreList
             mAdapter = new ItemSelected1Adapter(getActivity(), datas, new ItemSelected1Adapter.SelectedClick() {
                 @Override
                 public void click(AlbumsBean dataBean) {
+                    BSApplication.IS_RESULT =true;
                     openFragment(PlayerFragment.newInstance(dataBean.id));
                 }
             });

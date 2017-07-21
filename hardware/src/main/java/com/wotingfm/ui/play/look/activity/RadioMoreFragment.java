@@ -15,6 +15,7 @@ import com.woting.commonplat.widget.LoadFrameLayout;
 import com.wotingfm.R;
 import com.wotingfm.common.adapter.findHome.ItemSelected1Adapter;
 import com.wotingfm.common.adapter.findHome.RadioStationAdapter;
+import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.bean.AlbumsBean;
 import com.wotingfm.common.bean.ChannelsBean;
 import com.wotingfm.common.bean.Radio;
@@ -73,6 +74,7 @@ public class RadioMoreFragment extends BaseFragment implements OnLoadMoreListene
         selectedAdapter = new RadioStationAdapter(getActivity(), datas, new RadioStationAdapter.RadioStationClick() {
             @Override
             public void click(ChannelsBean dataBean) {
+                BSApplication.isIS_BACK = true;
                 openFragment(PlayerFragment.newInstance(dataBean));
                 //RadioInfoActivity.start(RadioMoreActivity.this, dataBean.title, dataBean.id);
             }

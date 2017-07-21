@@ -122,7 +122,7 @@ public class PlayerFragment extends BaseFragment implements View.OnClickListener
         EventBus.getDefault().postSticky("pause");
         PlayerFragment fragment = new PlayerFragment();
         Bundle bundle = new Bundle();
-        bundle.putString("albumsId", id);
+        bundle.putString("albumsId", albumsId);
         bundle.putString("id", id);
         bundle.putString("title", title);
         fragment.setArguments(bundle);
@@ -460,7 +460,8 @@ public class PlayerFragment extends BaseFragment implements View.OnClickListener
             case R.id.ivPlayerFind:
                 if (getActivity() instanceof PlayerActivity) {
                     PlayerActivity playerActivity = (PlayerActivity) getActivity();
-                    if (BSApplication.fragmentBase==null) {
+                    BSApplication.IS_RESULT = false;
+                    if (BSApplication.fragmentBase == null) {
                         playerActivity.open(LookListFragment.newInstance(0));
                     } else {
                         BSApplication.isIS_BACK = true;

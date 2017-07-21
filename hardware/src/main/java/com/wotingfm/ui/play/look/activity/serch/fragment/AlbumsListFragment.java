@@ -95,6 +95,8 @@ public class AlbumsListFragment extends BaseFragment implements OnLoadMoreListen
         mAdapter.setPlayerClick(new AlbumsAdapter.PlayerClick() {
             @Override
             public void clickAlbums(AlbumsBean singlesBean) {
+                hideSoftKeyboard();
+                BSApplication.IS_RESULT =true;
                 openFragment(PlayerFragment.newInstance(singlesBean.id,q));
             }
         });
