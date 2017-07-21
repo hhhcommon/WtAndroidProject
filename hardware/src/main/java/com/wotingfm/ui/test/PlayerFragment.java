@@ -51,7 +51,17 @@ import com.wotingfm.ui.base.baseactivity.AppManager;
 import com.wotingfm.ui.base.baseactivity.NoTitleBarBaseActivity;
 import com.wotingfm.ui.base.basefragment.BaseFragment;
 import com.wotingfm.ui.play.look.activity.LookListFragment;
+import com.wotingfm.ui.play.look.activity.classification.fragment.MinorClassificationFragment;
 import com.wotingfm.ui.play.look.activity.classification.fragment.SubcategoryFragment;
+import com.wotingfm.ui.play.look.activity.serch.SerchFragment;
+import com.wotingfm.ui.play.look.activity.serch.fragment.AlbumsListFragment;
+import com.wotingfm.ui.play.look.activity.serch.fragment.AnchorListFragment;
+import com.wotingfm.ui.play.look.activity.serch.fragment.ProgramListFragment;
+import com.wotingfm.ui.play.look.activity.serch.fragment.RadioStationListFragment;
+import com.wotingfm.ui.play.look.fragment.ClassificationFragment;
+import com.wotingfm.ui.play.look.fragment.LiveFragment;
+import com.wotingfm.ui.play.look.fragment.RadioStationFragment;
+import com.wotingfm.ui.play.look.fragment.SelectedFragment;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -70,6 +80,8 @@ import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 
 import static android.app.Activity.RESULT_OK;
+import static com.wotingfm.R.mipmap.p;
+import static com.wotingfm.common.application.BSApplication.fragmentBase;
 
 /**
  * 作者：xinLong on 2017/6/2 12:15
@@ -101,7 +113,38 @@ public class PlayerFragment extends BaseFragment implements View.OnClickListener
         EventBus.getDefault().postSticky("pause");
         PlayerFragment fragment = new PlayerFragment();
         Bundle bundle = new Bundle();
+        bundle.putString("albumsId", albumsId);
+        fragment.setArguments(bundle);
+        return fragment;
+    }
+
+    public static PlayerFragment newInstanceSerch(String albumsId, String id, String title) {
+        EventBus.getDefault().postSticky("pause");
+        PlayerFragment fragment = new PlayerFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString("albumsId", albumsId);
+        bundle.putString("id", id);
+        bundle.putString("title", title);
+        fragment.setArguments(bundle);
+        return fragment;
+    }
+
+    public static PlayerFragment newInstance(String albumsId, String q) {
+        EventBus.getDefault().postSticky("pause");
+        PlayerFragment fragment = new PlayerFragment();
+        Bundle bundle = new Bundle();
         bundle.putSerializable("albumsId", albumsId);
+        bundle.putString("q", q);
+        fragment.setArguments(bundle);
+        return fragment;
+    }
+
+    public static PlayerFragment newInstance(ChannelsBean singlesBase, String q) {
+        EventBus.getDefault().postSticky("pause");
+        PlayerFragment fragment = new PlayerFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString("q", q);
+        bundle.putSerializable("channelsBean", singlesBase);
         fragment.setArguments(bundle);
         return fragment;
     }
@@ -119,6 +162,16 @@ public class PlayerFragment extends BaseFragment implements View.OnClickListener
         EventBus.getDefault().postSticky("pause");
         PlayerFragment fragment = new PlayerFragment();
         Bundle bundle = new Bundle();
+        bundle.putSerializable("singlesBase", singlesBase);
+        fragment.setArguments(bundle);
+        return fragment;
+    }
+
+    public static PlayerFragment newInstance(SinglesBase singlesBase, String q) {
+        EventBus.getDefault().postSticky("pause");
+        PlayerFragment fragment = new PlayerFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString("q", q);
         bundle.putSerializable("singlesBase", singlesBase);
         fragment.setArguments(bundle);
         return fragment;
@@ -154,6 +207,7 @@ public class PlayerFragment extends BaseFragment implements View.OnClickListener
     private AVOptions mAVOptions;
     private boolean mIsStopped = false;
     private boolean mIsActivityPaused = true;
+    private String q, title;
 
     @Override
     public void initView() {
@@ -186,6 +240,7 @@ public class PlayerFragment extends BaseFragment implements View.OnClickListener
         layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         mRecyclerView.setLayoutManager(layoutManager);
         PagerSnapHelper snapHelper = new PagerSnapHelper();
+        mRecyclerView.setOnFlingListener(null);
         snapHelper.attachToRecyclerView(mRecyclerView);
         mPlayerAdapter = new PlayerAdapter(BSApplication.getInstance(), singLesBeans);
         mRecyclerView.setAdapter(mPlayerAdapter);
@@ -196,6 +251,9 @@ public class PlayerFragment extends BaseFragment implements View.OnClickListener
         if (bundle != null) {
             List<SinglesDownload> singlesBeanList = (List<SinglesDownload>) bundle.getSerializable("singlesDownloads");
             albumsId = bundle.getString("albumsId");
+            q = bundle.getString("q");
+            id = bundle.getString("id");
+            title = bundle.getString("title");
             SinglesBase singlesBase = (SinglesBase) bundle.getSerializable("singlesBase");
             channelsBean = (ChannelsBean) bundle.getSerializable("channelsBean");
             relatiBottom.setVisibility(View.VISIBLE);
@@ -402,7 +460,35 @@ public class PlayerFragment extends BaseFragment implements View.OnClickListener
             case R.id.ivPlayerFind:
                 if (getActivity() instanceof PlayerActivity) {
                     PlayerActivity playerActivity = (PlayerActivity) getActivity();
-                    playerActivity.open(LookListFragment.newInstance());
+                    if (BSApplication.fragmentBase == null) {
+                        playerActivity.open(LookListFragment.newInstance(0));
+                    } else {
+                        BSApplication.isIS_BACK = true;
+                        if (BSApplication.fragmentBase instanceof SelectedFragment) {
+                            playerActivity.open(LookListFragment.newInstance(0));
+                        } else if (BSApplication.fragmentBase instanceof ClassificationFragment) {
+                            playerActivity.open(LookListFragment.newInstance(1));
+                        } else if (BSApplication.fragmentBase instanceof RadioStationFragment) {
+                            playerActivity.open(LookListFragment.newInstance(2));
+                        } else if (BSApplication.fragmentBase instanceof LiveFragment) {
+                            playerActivity.open(LookListFragment.newInstance(3));
+                        } else if (BSApplication.fragmentBase instanceof AlbumsListFragment) {
+                            playerActivity.open(SerchFragment.newInstance(q, 0));
+                        } else if (BSApplication.fragmentBase instanceof ProgramListFragment) {
+                            playerActivity.open(SerchFragment.newInstance(q, 1));
+                        } else if (BSApplication.fragmentBase instanceof AnchorListFragment) {
+                            playerActivity.open(SerchFragment.newInstance(q, 2));
+                        } else if (BSApplication.fragmentBase instanceof RadioStationListFragment) {
+                            playerActivity.open(SerchFragment.newInstance(q, 3));
+                        } else if (BSApplication.fragmentBase instanceof RadioStationListFragment) {
+                            playerActivity.open(SerchFragment.newInstance(q, 3));
+                        } else if (BSApplication.fragmentBase instanceof SubcategoryFragment) {
+                            playerActivity.open(MinorClassificationFragment.newInstance(id, title));
+                        } else {
+                            playerActivity.open(BSApplication.fragmentBase);
+                        }
+                        BSApplication.fragmentBase = null;
+                    }
                 }
                 //  LookListActivity.start(this);
                 break;
@@ -500,7 +586,7 @@ public class PlayerFragment extends BaseFragment implements View.OnClickListener
     //菜单dialohg
     private MenuDialog menuDialog;
     //搜索条件或者专辑
-    private String albumsId;
+    private String albumsId, id;
 
     private void getPlayerList(String albums) {
         loadLayout.showLoadingView();
@@ -816,7 +902,6 @@ public class PlayerFragment extends BaseFragment implements View.OnClickListener
     }
 
     private void sendReconnectMessage() {
-        showToastTips("缓存中...");
         mLoadingView.setVisibility(View.VISIBLE);
         mHandler.removeCallbacksAndMessages(null);
         mHandler.sendMessageDelayed(mHandler.obtainMessage(MESSAGE_ID_RECONNECTING), 500);

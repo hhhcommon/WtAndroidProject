@@ -16,6 +16,7 @@ import com.wotingfm.R;
 import com.wotingfm.common.adapter.albumsAdapter.AlbumsAdapter;
 import com.wotingfm.common.adapter.downloadAdapter.DownloadSelectAdapter;
 import com.wotingfm.common.adapter.findHome.ClassificationAdapter;
+import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.bean.AlbumInfo;
 import com.wotingfm.common.bean.AlbumsBean;
 import com.wotingfm.common.bean.Channels;
@@ -26,6 +27,7 @@ import com.wotingfm.common.bean.Subscrible;
 import com.wotingfm.common.net.RetrofitUtils;
 import com.wotingfm.common.utils.T;
 import com.wotingfm.ui.base.basefragment.BaseFragment;
+import com.wotingfm.ui.play.activity.AnchorPersonalCenterFragment;
 import com.wotingfm.ui.play.activity.albums.fragment.AlbumsInfoFragment;
 import com.wotingfm.ui.test.PlayerActivity;
 import com.wotingfm.ui.test.PlayerFragment;
@@ -62,10 +64,12 @@ public class SubcategoryFragment extends BaseFragment implements OnLoadMoreListe
         return R.layout.fragment_subcategory;
     }
 
-    public static SubcategoryFragment newInstance(ChannelsBean albumInfo) {
+    public static SubcategoryFragment newInstance(ChannelsBean albumInfo,String id, String title) {
         SubcategoryFragment fragment = new SubcategoryFragment();
         Bundle bundle = new Bundle();
         bundle.putSerializable("albumInfo", albumInfo);
+        bundle.putString("title", title);
+        bundle.putString("id", id);
         fragment.setArguments(bundle);
         return fragment;
     }
@@ -78,11 +82,12 @@ public class SubcategoryFragment extends BaseFragment implements OnLoadMoreListe
 
     @Override
     public void initView() {
-        Bundle bundle = getArguments();
+        final Bundle bundle = getArguments();
         if (bundle != null)
             albumInfo = (ChannelsBean) bundle.getSerializable("albumInfo");
         if (albumInfo == null)
             return;
+        final String id  = bundle.getString("id");
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         loadMoreFooterView = (LoadMoreFooterView) mRecyclerView.getLoadMoreFooterView();
@@ -93,7 +98,9 @@ public class SubcategoryFragment extends BaseFragment implements OnLoadMoreListe
         mAdapter.setPlayerClick(new AlbumsAdapter.PlayerClick() {
             @Override
             public void clickAlbums(AlbumsBean singlesBean) {
-                openFragment(PlayerFragment.newInstance(singlesBean.id));
+                BSApplication.IS_RESULT = true;
+                BSApplication.isIS_BACK = true;
+                openFragment(PlayerFragment.newInstanceSerch(singlesBean.id,id, bundle.getString("title")));
             }
         });
         mRecyclerView.setIAdapter(mAdapter);

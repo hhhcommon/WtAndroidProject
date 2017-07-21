@@ -37,13 +37,13 @@ public class MainActivity extends TabActivity {
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
         }
 */
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);        // 透明状态栏
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);    // 透明导航栏
+  /*      getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);        // 透明状态栏
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);    // 透明导航栏*/
         InitTextView();
         mainPresenter = new MainPresenter(this);
 
 //        applySelectedColor();
-        applyTextColor(false);
+      //  applyTextColor(false);
     }
 
     // 初始化视图,主页跳转的3个界面

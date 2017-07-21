@@ -310,7 +310,18 @@ public class RetrofitUtils {
                     }
                 });
     }
-
+    public Observable<List<ChannelsBean>> getChannelsRadioLocation(String type, String area_code, int page) {
+        return retrofitService.getChannelsRadioLocation(type, area_code, page)
+                .map(new Func1<Radio, List<ChannelsBean>>() {
+                    @Override
+                    public List<ChannelsBean> call(Radio player) {
+                        if (player.ret != 0) {
+                            throw new IllegalStateException(player.msg);
+                        }
+                        return player.data.channels;
+                    }
+                });
+    }
     public Observable<List<ChannelsBean>> getChannelsRadio(String type, int page) {
         return retrofitService.getChannelsRadio(type, page)
                 .map(new Func1<Radio, List<ChannelsBean>>() {
@@ -744,11 +755,11 @@ public class RetrofitUtils {
      * 提交偏好设置
      *
      * @param id 用户id
-     * @param s 提交的数据
+     * @param s  提交的数据
      * @return Object
      */
-    public Observable<Object> preference(String id,String s) throws Exception {
-        return retrofitService.preference(id,s)
+    public Observable<Object> preference(String id, String s) throws Exception {
+        return retrofitService.preference(id, s)
                 .map(new Func1<Object, Object>() {
                     @Override
                     public Object call(Object O) {
@@ -1380,8 +1391,8 @@ public class RetrofitUtils {
      *
      * @return Objects
      */
-    public Observable<Object> msgDel(String id,String type) throws Exception {
-        return retrofitService.msgDel(id,type)
+    public Observable<Object> msgDel(String id, String type) throws Exception {
+        return retrofitService.msgDel(id, type)
                 .map(new Func1<Object, Object>() {
                     @Override
                     public Object call(Object O) {

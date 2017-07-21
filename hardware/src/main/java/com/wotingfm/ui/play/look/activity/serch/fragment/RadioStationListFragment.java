@@ -12,11 +12,13 @@ import com.woting.commonplat.widget.LoadFrameLayout;
 import com.wotingfm.R;
 import com.wotingfm.common.adapter.albumsAdapter.AlbumsAdapter;
 import com.wotingfm.common.adapter.findHome.RadioStationAdapter;
+import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.bean.AlbumsBean;
 import com.wotingfm.common.bean.ChannelsBean;
 import com.wotingfm.common.bean.SerchList;
 import com.wotingfm.common.net.RetrofitUtils;
 import com.wotingfm.ui.base.basefragment.BaseFragment;
+import com.wotingfm.ui.play.activity.AnchorPersonalCenterFragment;
 import com.wotingfm.ui.test.PlayerActivity;
 import com.wotingfm.ui.test.PlayerFragment;
 
@@ -70,28 +72,33 @@ public class RadioStationListFragment extends BaseFragment implements OnLoadMore
             @Override
             public void onClick(View v) {
                 loadLayout.showLoadingView();
+                refresh(q);
             }
         });
         mAdapter = new RadioStationAdapter(getActivity(), albumsBeanList, new RadioStationAdapter.RadioStationClick() {
             @Override
             public void click(ChannelsBean dataBean) {
-                openFragment(PlayerFragment.newInstance(dataBean));
-               // RadioInfoActivity.start(getActivity(), dataBean.title, dataBean.id);
+                hideSoftKeyboard();
+                BSApplication.IS_RESULT = true;
+                BSApplication.isIS_BACK = true;
+                openFragment(PlayerFragment.newInstance(dataBean, q));
+                // RadioInfoActivity.start(getActivity(), dataBean.title, dataBean.id);
             }
         });
         mRecyclerView.setIAdapter(mAdapter);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         mRecyclerView.setLayoutManager(layoutManager);
-        refresh();
+        refresh(q);
     }
 
     private int mPage;
     private RadioStationAdapter mAdapter;
     private List<ChannelsBean> albumsBeanList = new ArrayList<>();
 
-    public void refresh() {
+    public void refresh(String q) {
         mPage = 1;
+        this.q = q;
         RetrofitUtils.getInstance().serchList("radios", q, mPage)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -155,6 +162,6 @@ public class RadioStationListFragment extends BaseFragment implements OnLoadMore
 
     @Override
     public void onRefresh() {
-        refresh();
+        refresh(q);
     }
 }

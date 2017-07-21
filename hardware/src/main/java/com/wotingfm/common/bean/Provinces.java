@@ -31,7 +31,7 @@ public class Provinces implements Serializable {
              * type : 2
              */
 
-            public int id;
+            public String id;
             public String title;
             public int type;
 

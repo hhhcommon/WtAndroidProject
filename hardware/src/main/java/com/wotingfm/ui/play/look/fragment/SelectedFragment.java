@@ -12,12 +12,14 @@ import android.widget.AbsListView;
 import com.woting.commonplat.widget.LoadFrameLayout;
 import com.wotingfm.R;
 import com.wotingfm.common.adapter.findHome.SelectedAdapter;
+import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.bean.HomeBanners;
 import com.wotingfm.common.bean.Player;
 import com.wotingfm.common.bean.Selected;
 import com.wotingfm.common.net.RetrofitUtils;
 import com.wotingfm.common.view.BannerView;
 import com.wotingfm.ui.base.basefragment.BaseFragment;
+import com.wotingfm.ui.play.activity.AnchorPersonalCenterFragment;
 import com.wotingfm.ui.play.look.activity.SelectedMoreFragment;
 import com.wotingfm.ui.test.PlayerActivity;
 import com.wotingfm.ui.test.PlayerFragment;
@@ -69,6 +71,8 @@ public class SelectedFragment extends BaseFragment implements SwipeRefreshLayout
         SelectedAdapter selectedAdapter = new SelectedAdapter(getActivity(), datas, new SelectedAdapter.SelectedClickBase() {
             @Override
             public void click(Selected.DataBeanX.DataBean dataBean) {
+                BSApplication.IS_RESULT = true;
+                BSApplication.isIS_BACK = true;
                 openFragment(PlayerFragment.newInstance(dataBean.id));
             }
 

@@ -12,11 +12,13 @@ import com.woting.commonplat.widget.LoadFrameLayout;
 import com.wotingfm.R;
 import com.wotingfm.common.adapter.albumsAdapter.AlbumsAdapter;
 import com.wotingfm.common.adapter.serch.ProgramSerchAdapter;
+import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.bean.AlbumsBean;
 import com.wotingfm.common.bean.SerchList;
 import com.wotingfm.common.bean.SinglesBase;
 import com.wotingfm.common.net.RetrofitUtils;
 import com.wotingfm.ui.base.basefragment.BaseFragment;
+import com.wotingfm.ui.play.activity.AnchorPersonalCenterFragment;
 import com.wotingfm.ui.test.PlayerActivity;
 import com.wotingfm.ui.test.PlayerFragment;
 
@@ -70,27 +72,32 @@ public class ProgramListFragment extends BaseFragment implements OnLoadMoreListe
             @Override
             public void onClick(View v) {
                 loadLayout.showLoadingView();
+                refresh(q);
             }
         });
         mAdapter = new ProgramSerchAdapter(getActivity(), albumsBeanList, new ProgramSerchAdapter.OnClick() {
             @Override
             public void click(SinglesBase s) {
-                openFragment(PlayerFragment.newInstance(s));
+                hideSoftKeyboard();
+                BSApplication.IS_RESULT = true;
+                BSApplication.isIS_BACK = true;
+                openFragment(PlayerFragment.newInstance(s, q));
             }
         });
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         mRecyclerView.setLayoutManager(layoutManager);
         mRecyclerView.setIAdapter(mAdapter);
-        refresh();
+        refresh(q);
     }
 
     private int mPage;
     private ProgramSerchAdapter mAdapter;
     private List<SinglesBase> albumsBeanList = new ArrayList<>();
 
-    public void refresh() {
+    public void refresh(String q) {
         mPage = 1;
+        this.q = q;
         RetrofitUtils.getInstance().serchList("singles", q, mPage)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -154,6 +161,6 @@ public class ProgramListFragment extends BaseFragment implements OnLoadMoreListe
 
     @Override
     public void onRefresh() {
-        refresh();
+        refresh(q);
     }
 }

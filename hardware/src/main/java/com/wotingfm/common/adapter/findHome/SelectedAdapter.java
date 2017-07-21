@@ -1,6 +1,7 @@
 package com.wotingfm.common.adapter.findHome;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -25,6 +26,7 @@ import com.zhy.adapter.recyclerview.base.ViewHolder;
 import java.util.List;
 
 import static com.wotingfm.R.id.ivClass;
+import static com.wotingfm.R.id.ivMore;
 import static com.wotingfm.ui.intercom.main.view.InterPhoneActivity.context;
 
 /**
@@ -52,14 +54,8 @@ public class SelectedAdapter extends CommonAdapter<Selected.DataBeanX> {
     @Override
     protected void convert(ViewHolder holder, final Selected.DataBeanX s, final int position) {
         TextView textView = (TextView) holder.itemView.findViewById(R.id.tvTitle);
+        ImageView ivMore = (ImageView) holder.itemView.findViewById(R.id.ivMore);
         textView.setText(s.title);
-        textView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (selectedClickBase != null)
-                    selectedClickBase.clickMore(s);
-            }
-        });
         RecyclerView recyclerView = (RecyclerView) holder.itemView.findViewById(R.id.mRecyclerView);
         if ("DAILY_LISTENINGS".equals(s.type) || "EDITOR_SELECTIONS".equals(s.type)) {
             GridLayoutManager layoutManager = new GridLayoutManager(context, 3);
@@ -72,6 +68,14 @@ public class SelectedAdapter extends CommonAdapter<Selected.DataBeanX> {
                 }
             });
             recyclerView.setAdapter(itemClassAdapter);
+            ivMore.setVisibility(View.VISIBLE);
+            ivMore.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (selectedClickBase != null)
+                        selectedClickBase.clickMore(s);
+                }
+            });
         } else if ("HOT_ALBUMS".equals(s.type)) {
             LinearLayoutManager layoutManager = new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, true);
             recyclerView.setLayoutManager(layoutManager);
@@ -82,6 +86,7 @@ public class SelectedAdapter extends CommonAdapter<Selected.DataBeanX> {
                         selectedClickBase.click(dataBean);
                 }
             });
+            ivMore.setVisibility(View.GONE);
             recyclerView.setAdapter(itemClassAdapter);
         }
 

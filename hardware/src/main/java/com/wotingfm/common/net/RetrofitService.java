@@ -194,9 +194,13 @@ public interface RetrofitService {
     @GET("api/listenings/albums/{id}/similars")
     Observable<Subscrible> albumsSimilars(@Path("id") String id);
 
-    //获取省／国家／地区电台
+    //本地
     @GET("api/listenings/radios/channels/")
     Observable<Radio> getChannelsRadio(@Query("channel_type") String channel_type, @Query("page") int page);
+
+    //获取省／国家／地区电台
+    @GET("api/listenings/radios/channels/")
+    Observable<Radio> getChannelsRadioLocation(@Query("channel_type") String channel_type, @Query("area_code") String area_code, @Query("page") int page);
 
     //电台列表 热门
     @GET("api/listenings/radios/channels/hots")

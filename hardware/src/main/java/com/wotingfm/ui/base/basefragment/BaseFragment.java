@@ -21,12 +21,22 @@ import android.view.inputmethod.InputMethodManager;
 import com.woting.commonplat.widget.LoadingDialog;
 import com.woting.commonplat.widget.WTToolbar;
 import com.wotingfm.R;
+import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.utils.ProgressDialogUtils;
 import com.wotingfm.ui.base.baseactivity.AppManager;
 import com.wotingfm.ui.base.baseactivity.BaseToolBarActivity;
+import com.wotingfm.ui.play.look.activity.LookListFragment;
+import com.wotingfm.ui.play.look.activity.RadioMoreFragment;
+import com.wotingfm.ui.play.look.activity.SelectedMoreFragment;
+import com.wotingfm.ui.play.look.activity.classification.fragment.MinorClassificationFragment;
+import com.wotingfm.ui.play.look.fragment.ClassificationFragment;
+import com.wotingfm.ui.play.look.fragment.LiveFragment;
+import com.wotingfm.ui.play.look.fragment.RadioStationFragment;
 import com.wotingfm.ui.test.PlayerActivity;
+import com.wotingfm.ui.test.PlayerFragment;
 
 import butterknife.ButterKnife;
+
 
 /**
  * Created by amine on 2017/6/14.
@@ -51,15 +61,32 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
         void call();
     }
 
+
     private BaseToolBarActivity.CallBack callBack;
+    public int SerchCode = 0;
+
+    public void backResult() {
+        if (BSApplication.isIS_BACK == true) {
+            BSApplication.isIS_BACK = false;
+            BSApplication.fragmentBase = null;
+            closeFragment();
+            openFragmentNoAnim(LookListFragment.newInstance(0));
+        } else {
+            closeFragment();
+        }
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+
         if (item.getItemId() == android.R.id.home && IS_BACK == false) {
-            if (callBack != null)
+            hideSoftKeyboard();
+            if (callBack != null) {
                 callBack.call();
-            else
-                closeFragment();
+            } else {
+                backResult();
+                return true;
+            }
         }
         return super.onOptionsItemSelected(item);
     }
@@ -95,6 +122,7 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
             }
         }
     }
+
 
     public void setTitle(CharSequence title, BaseToolBarActivity.CallBack callBackW) {
         if (playerActivity != null) {
@@ -136,8 +164,6 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
     }
 
     public void hideSoftKeyboard() {
-        if (inputMethodManager == null)
-            inputMethodManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
         if (getActivity().getWindow().getAttributes().softInputMode != WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN) {
             if (getActivity().getCurrentFocus() != null)
                 inputMethodManager.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(),
@@ -145,11 +171,13 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
         }
     }
 
-    private InputMethodManager inputMethodManager;
+    public InputMethodManager inputMethodManager;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        if (inputMethodManager == null)
+            inputMethodManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
         if (rootView == null)
             rootView = inflater.inflate(getLayoutResource(), container, false);
         if (getActivity() instanceof PlayerActivity)
@@ -221,10 +249,20 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
         startActivity(intent);
     }
 
+
     public void openFragment(Fragment fragment) {
+        if (!(this instanceof PlayerFragment))
+            BSApplication.fragmentBase = this;
         if (getActivity() instanceof PlayerActivity) {
             PlayerActivity playerActivity = (PlayerActivity) getActivity();
             playerActivity.open(fragment);
+        }
+    }
+
+    public void openFragmentNoAnim(Fragment fragment) {
+        if (getActivity() instanceof PlayerActivity) {
+            PlayerActivity playerActivity = (PlayerActivity) getActivity();
+            playerActivity.openNoAnim(fragment);
         }
     }
 

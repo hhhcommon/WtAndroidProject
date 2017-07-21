@@ -31,8 +31,6 @@ import rx.schedulers.Schedulers;
 
 import static android.R.attr.id;
 import static android.R.attr.type;
-import static com.loc.e.i;
-import static com.loc.e.l;
 
 /**
  * Created by amine on 2017/6/9.

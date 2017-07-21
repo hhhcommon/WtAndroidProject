@@ -37,11 +37,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
-import static android.app.Activity.RESULT_OK;
-import static android.media.CamcorderProfile.get;
-import static com.loc.e.e;
-import static com.loc.e.i;
-import static com.loc.e.l;
 
 /**
  * Created by amine on 2017/6/14.
