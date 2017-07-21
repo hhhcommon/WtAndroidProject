@@ -185,7 +185,7 @@ public class SettingFragment extends Fragment implements View.OnClickListener {
         TextView textTitle = (TextView) dialog1.findViewById(R.id.tv_title);
         textTitle.setText("是否删除本地存储缓存?");
 
-        clearCacheDialog = new Dialog(this.getActivity(), R.style.MyDialog);
+        clearCacheDialog = new Dialog(this.getActivity(), R.style.MyDialogs);
         clearCacheDialog.setContentView(dialog1);
         clearCacheDialog.setCanceledOnTouchOutside(false);
         clearCacheDialog.getWindow().setBackgroundDrawableResource(R.color.transparent_background);

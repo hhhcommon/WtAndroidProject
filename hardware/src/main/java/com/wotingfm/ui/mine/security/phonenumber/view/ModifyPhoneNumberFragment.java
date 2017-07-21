@@ -29,7 +29,7 @@ import com.wotingfm.ui.user.retrievepassword.presenter.RetrievePasswordPresenter
 public class ModifyPhoneNumberFragment extends Fragment implements View.OnClickListener {
     private View rootView;
     private TextView textSendVerificationCode;
-
+    private ResultListener Listener;
     private EditText editOldPhone;
     private EditText editVerificationCode;
     private EditText editNewPhone;
@@ -120,6 +120,28 @@ public class ModifyPhoneNumberFragment extends Fragment implements View.OnClickL
      */
     public void dialogCancel() {
         if (dialog != null) dialog.dismiss();
+    }
+
+    /**
+     * 返回值设置
+     *
+     * @param type
+     */
+    public void setResult(boolean type) {
+        Listener.resultListener(type);
+    }
+
+    /**
+     * 回调结果值
+     *
+     * @param l
+     */
+    public void setResultListener(ResultListener l) {
+        Listener = l;
+    }
+
+    public interface ResultListener {
+        void resultListener(boolean type);
     }
 
     @Override

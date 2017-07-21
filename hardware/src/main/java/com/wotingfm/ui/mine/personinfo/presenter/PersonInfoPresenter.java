@@ -39,6 +39,7 @@ import com.wotingfm.ui.intercom.group.groupintroduce.view.EditGroupIntroduceFrag
 import com.wotingfm.ui.intercom.group.groupname.view.EditGroupNameFragment;
 import com.wotingfm.ui.intercom.main.contacts.model.Contact;
 import com.wotingfm.ui.intercom.main.view.InterPhoneActivity;
+import com.wotingfm.ui.mine.editusermessage.model.EditUserModel;
 import com.wotingfm.ui.mine.editusermessage.view.EditUserFragment;
 import com.wotingfm.ui.mine.feedback.model.FeedbackModel;
 import com.wotingfm.ui.mine.fm.model.FMInfo;
@@ -63,16 +64,15 @@ public class PersonInfoPresenter {
 
     private final PersonalInfoFragment activity;
     private final PersonInfoModel model;
-    private String sex;
     private final int TO_GALLERY = 5;
     private final int TO_CAMERA = 6;
     private final int PHOTO_REQUEST_CUT = 7;    // 标识 跳转到图片裁剪界面
     private int Code;    // 标识
     private String outputFilePath;
-    private boolean headViewShow = false;// 图片选择界面是否展示
     private String url;
     private MessageReceiver Receiver;
     private String UUID;
+    private String age;
 
 
     public PersonInfoPresenter(PersonalInfoFragment activity) {
@@ -81,6 +81,11 @@ public class PersonInfoPresenter {
         setReceiver();
         getData();
         getAddress();
+        getTime();// 组装时间选择器
+    }
+
+    private void getTime() {
+        activity.agePickerDialog(model.getYearList(), model.getMonthList(), model.getDayList28(), model.getDayList29(), model.getDayList30(), model.getDayList31());
     }
 
     private void getAddress() {
@@ -108,12 +113,11 @@ public class PersonInfoPresenter {
             activity.setViewForGender(user.getGender());
             activity.setViewForAge(user.getAge());
             activity.setViewForAddress(user.getLocation());
-            sex = user.getGender();
         } else {
             String url = BSApplication.SharedPreferences.getString(StringConstant.PORTRAIT, "");
             String name = BSApplication.SharedPreferences.getString(StringConstant.NICK_NAME, "");
             String introduce = BSApplication.SharedPreferences.getString(StringConstant.USER_SIGN, "");
-            sex = BSApplication.SharedPreferences.getString(StringConstant.GENDER, "男");
+            String sex = BSApplication.SharedPreferences.getString(StringConstant.GENDER, "男");
             String age = BSApplication.SharedPreferences.getString(StringConstant.AGE, "0");
             String address = BSApplication.SharedPreferences.getString(StringConstant.REGION, "");
 
@@ -123,29 +127,14 @@ public class PersonInfoPresenter {
             activity.setViewForGender(sex);
             activity.setViewForAge(age);
             activity.setViewForAddress(address);
-
-        }
-
-    }
-
-    /**
-     * 判断界面展示
-     */
-    public void headViewShow() {
-        if (headViewShow) {
-            activity.imageShow(false);
-            headViewShow = false;
-        } else {
-            activity.imageShow(true);
-            headViewShow = true;
         }
     }
 
     /**
      * 设置性别
      */
-    public void setSex() {
-        if (sex.equals("女")) {
+    public void setSex(String sex) {
+        if (sex.equals("男")) {
             sendSex("男");
         } else {
             sendSex("女");
@@ -216,6 +205,51 @@ public class PersonInfoPresenter {
     }
 
     /**
+     * 发送申请
+     *
+     * @param date
+     */
+    public void sendAge(final String date) {
+        age = String.valueOf(model.getAgeFromBirthTime(date));
+        if (GlobalNetWorkConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
+            activity.dialogShow();
+            String id = BSApplication.SharedPreferences.getString(StringConstant.USER_ID, "");
+            model.loadNews(id, age, 3, new PersonInfoModel.OnLoadInterface() {
+                @Override
+                public void onSuccess(Object o) {
+                    activity.dialogCancel();
+                    dealAgeSuccess(o, age);
+                }
+
+                @Override
+                public void onFailure(String msg) {
+                    activity.dialogCancel();
+                }
+            });
+        } else {
+            ToastUtils.show_always(activity.getActivity(), "网络连接失败，请稍后再试！");
+        }
+    }
+
+    private void dealAgeSuccess(Object o, String age) {
+        try {
+            String s = new GsonBuilder().serializeNulls().create().toJson(o);
+            JSONObject js = new JSONObject(s);
+            int ret = js.getInt("ret");
+            Log.e("ret", String.valueOf(ret));
+            if (ret == 0) {
+                activity.setViewForAge(age);
+                model.saveAge(age);
+            } else {
+                ToastUtils.show_always(activity.getActivity(), "修改失败，请稍后再试！");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            ToastUtils.show_always(activity.getActivity(), "修改失败，请稍后再试！");
+        }
+    }
+
+    /**
      * 修改地理位置
      *
      * @param name
@@ -253,7 +287,6 @@ public class PersonInfoPresenter {
             if (ret == 0) {
                 activity.setViewForAddress(name);
                 model.saveAddress(name);
-                ToastUtils.show_always(activity.getActivity(), "地理位置修改成功");
             } else {
                 ToastUtils.show_always(activity.getActivity(), "修改失败，请稍后再试！");
             }
@@ -272,7 +305,6 @@ public class PersonInfoPresenter {
     public void sendSex(final String name) {
         if (GlobalStateConfig.test) {
             activity.setViewForGender(name);
-            sex = name;
             model.saveSex(name);
         } else {
             if (GlobalNetWorkConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
@@ -310,7 +342,6 @@ public class PersonInfoPresenter {
             Log.e("修改性别=ret", String.valueOf(ret));
             if (ret == 0) {
                 activity.setViewForGender(name);
-                sex = name;
                 model.saveSex(name);
             } else {
                 ToastUtils.show_always(activity.getActivity(), "修改失败，请稍后再试！");
@@ -329,22 +360,22 @@ public class PersonInfoPresenter {
      */
     public void sendImg(final String name) {
         if (name != null && !name.equals("")) {
-                if (GlobalNetWorkConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
-                    model.loadNewsForImg(name, new PersonInfoModel.OnLoadInterface() {
-                        @Override
-                        public void onSuccess(Object o) {
-                            activity.dialogCancel();
-                            dealImgSuccess(o, name);
-                        }
+            if (GlobalNetWorkConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
+                model.loadNewsForImg(name, new PersonInfoModel.OnLoadInterface() {
+                    @Override
+                    public void onSuccess(Object o) {
+                        activity.dialogCancel();
+                        dealImgSuccess(o, name);
+                    }
 
-                        @Override
-                        public void onFailure(String msg) {
-                            activity.dialogCancel();
-                            ToastUtils.show_always(activity.getActivity(), "头像修改失败，请稍后再试！");
-                        }
-                    });
-                } else {
-                    ToastUtils.show_always(activity.getActivity(), "网络连接失败，请稍后再试！");
+                    @Override
+                    public void onFailure(String msg) {
+                        activity.dialogCancel();
+                        ToastUtils.show_always(activity.getActivity(), "头像修改失败，请稍后再试！");
+                    }
+                });
+            } else {
+                ToastUtils.show_always(activity.getActivity(), "网络连接失败，请稍后再试！");
             }
         }
     }
@@ -359,7 +390,6 @@ public class PersonInfoPresenter {
                 activity.setViewForImage(name);
                 model.saveImg(name);
                 activity.getActivity().sendBroadcast(new Intent(BroadcastConstants.MINE_CHANGE));
-                ToastUtils.show_always(activity.getActivity(), "头像修改成功");
             } else {
                 ToastUtils.show_always(activity.getActivity(), "头像修改失败，请稍后再试！");
             }
@@ -486,10 +516,10 @@ public class PersonInfoPresenter {
             public void handleMessage(Message msg) {
                 super.handleMessage(msg);
                 if (msg.what == 1) {
-                    url = upLoadImage.URL+UUID;
+                    url = upLoadImage.URL + UUID;
                     sendImg(url);
 
-                } else  {
+                } else {
                     activity.dialogCancel();
                     ToastUtils.show_always(activity.getActivity(), "图片上传失败，请重新上传");
                 }

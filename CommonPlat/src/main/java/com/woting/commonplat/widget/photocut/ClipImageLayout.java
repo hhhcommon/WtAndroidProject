@@ -7,9 +7,7 @@ import android.net.Uri;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.widget.RelativeLayout;
-
 import com.woting.commonplat.manager.PhoneMsgManager;
-
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 
@@ -42,14 +40,48 @@ public class ClipImageLayout extends RelativeLayout {
         // 计算padding的dp
         mHorizontalPadding = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, mHorizontalPadding, getResources().getDisplayMetrics());
         mZoomImageView.setHorizontalPadding(mHorizontalPadding);
-//
+
         HorizontalPadding = (PhoneMsgManager.ScreenHeight - PhoneMsgManager.ScreenWidth) / 2;
         // HorizontalPadding = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, HorizontalPadding, getResources().getDisplayMetrics());
         mClipImageView.setHorizontalPadding(HorizontalPadding);
     }
 
+    //	/**
+    //	 * 图片压缩方法 避免oom
+    //	 * @throws Exception
+    //	 *
+    //	 */
+    //	public void setImage(Context context,Uri uri){
+    //		if(uri!=null&&!uri.equals("")){
+    //			//mZoomImageView.setImageBitmap(bp);
+    //			BitmapFactory.Options option = new BitmapFactory.Options();
+    //			option.inSampleSize=4;
+    //			option.inPreferredConfig=Bitmap.Config.RGB_565;
+    //			try {
+    //				input = new FileInputStream(uri.toString());
+    //				data = new byte[input.available()];
+    //				input.read(data);
+    //				bp=BitmapFactory.decodeStream(input,null, option);
+    //				input.close();
+    //
+    //			} catch (IOException e) {
+    //				e.printStackTrace();
+    //			}
+    //
+    //			if(bp!=null){
+    //				bp=compressImage(bp);
+    //				mZoomImageView.setImageBitmap(bp);
+    //			}else{
+    //				Log.e("bitmap新建异常","    ");
+    //			}
+    //
+    //		}
+    //	}
+
     /**
      * 图片压缩方法 避免oom
+     *
+     * @throws Exception
      */
     public void setImage(Context context, Uri uri) {
         if (uri != null && !uri.equals("")) {
@@ -65,6 +97,9 @@ public class ClipImageLayout extends RelativeLayout {
 
     /**
      * 质量压缩方法
+     *
+     * @param image
+     * @return
      */
     public static Bitmap compressImage(Bitmap image) {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -83,6 +118,8 @@ public class ClipImageLayout extends RelativeLayout {
 
     /**
      * 对外公布设置边距的方法,单位为dp
+     *
+     * @param mHorizontalPadding
      */
     public void setHorizontalPadding(int mHorizontalPadding) {
         this.mHorizontalPadding = mHorizontalPadding;
@@ -90,6 +127,8 @@ public class ClipImageLayout extends RelativeLayout {
 
     /**
      * 裁切图片
+     *
+     * @return
      */
     public Bitmap clip() {
         return mZoomImageView.clip();
@@ -98,8 +137,10 @@ public class ClipImageLayout extends RelativeLayout {
     /**
      * 裁切图片
      * 释放资源
+     *
+     * @return
      */
-    public void closeResource() {
+    public void CloseResource() {
         if (bp != null) {
             bp.recycle();
             bp = null;

@@ -20,6 +20,7 @@ import android.widget.ImageView;
 
 import com.woting.commonplat.manager.PhoneMsgManager;
 
+
 /**
  * 裁剪
  * 作者：xinlong on 2016/11/6 21:18
@@ -312,7 +313,7 @@ public class ClipZoomImageView extends ImageView implements OnScaleGestureListen
 
     /**
      * 剪切图片，返回剪切后的bitmap对象
-     * zzzz
+     *
      * @return
      */
     public Bitmap clip() {

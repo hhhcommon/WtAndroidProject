@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.wotingfm.R;
 import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.constant.StringConstant;
+import com.wotingfm.ui.intercom.person.personnote.view.EditPersonNoteFragment;
 import com.wotingfm.ui.mine.security.password.view.ModifyPasswordFragment;
 import com.wotingfm.ui.mine.security.phonenumber.view.ModifyPhoneNumberFragment;
 import com.wotingfm.ui.mine.main.MineActivity;
@@ -22,6 +23,7 @@ import com.wotingfm.ui.mine.main.MineActivity;
  */
 public class AccountSecurityFragment extends Fragment implements View.OnClickListener {
     private View rootView;
+    private TextView text_phone_number;
 
     @Nullable
     @Override
@@ -39,7 +41,7 @@ public class AccountSecurityFragment extends Fragment implements View.OnClickLis
     private void initView() {
         TextView textTitle = (TextView) rootView.findViewById(R.id.tv_center);// 标题
         textTitle.setText(getString(R.string.account_security));
-        TextView text_phone_number = (TextView) rootView.findViewById(R.id.text_phone_number);// 手机号
+        text_phone_number = (TextView) rootView.findViewById(R.id.text_phone_number);// 手机号
         TextView text_password = (TextView) rootView.findViewById(R.id.text_password);        // 密码
         String num = BSApplication.SharedPreferences.getString(StringConstant.USER_PHONE_NUMBER, "******");
         String bb =num.substring(3,7);
@@ -63,7 +65,21 @@ public class AccountSecurityFragment extends Fragment implements View.OnClickLis
                 MineActivity.close();
                 break;
             case R.id.view_phone_number:// 修改手机号
-                MineActivity.open(new ModifyPhoneNumberFragment());
+                ModifyPhoneNumberFragment fragment= new ModifyPhoneNumberFragment();
+                MineActivity.open(fragment);
+                fragment.setResultListener(new ModifyPhoneNumberFragment.ResultListener() {
+                    @Override
+                    public void resultListener(boolean type) {
+                        if (type) {
+                                // 修改本级界面数据
+                                String num = BSApplication.SharedPreferences.getString(StringConstant.USER_PHONE_NUMBER, "******");
+                                String bb =num.substring(3,7);
+                                //字符串替换
+                                String cc = num.replace(bb,"****");
+                                text_phone_number.setText(cc);
+                        }
+                    }
+                });
                 break;
             case R.id.view_password:// 修改密码
                 MineActivity.open(new ModifyPasswordFragment());

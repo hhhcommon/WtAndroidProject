@@ -20,6 +20,7 @@ import com.wotingfm.ui.intercom.group.groupnews.add.view.GroupNewsForAddFragment
 import com.wotingfm.ui.intercom.main.contacts.model.Contact;
 import com.wotingfm.ui.intercom.main.view.InterPhoneActivity;
 import com.wotingfm.ui.intercom.person.personmessage.view.PersonMessageFragment;
+import com.wotingfm.ui.intercom.person.personnote.view.EditPersonNoteFragment;
 import com.wotingfm.ui.mine.qrcodes.EWMShowFragment;
 
 import org.json.JSONObject;
@@ -66,7 +67,7 @@ public class GroupNewsForAddPresenter {
                 String introduce = "这是一个钓鱼交流群";
                 String channel1 = "CH100-100000";
                 String channel2 = "CH100-100000";
-                activity.setViewData("",name, number, address, introduce, channel1, channel2);
+                activity.setViewData("", name, number, address, introduce, channel1, channel2);
                 list = model.getPersonList();// 获取群成员数据
                 if (list != null && list.size() > 0) {
                     ArrayList<Contact.user> _list = model.assemblyDataForGroup(list, true);// 组装群成员展示数据
@@ -167,7 +168,7 @@ public class GroupNewsForAddPresenter {
         String address = "暂未填写";
         try {
             address = g_news.getLocation();
-            if(address.toString().equals("")){
+            if (address.toString().equals("")) {
                 address = "暂未填写";
             }
         } catch (Exception e) {
@@ -217,7 +218,7 @@ public class GroupNewsForAddPresenter {
         } else {
             activity.setViewForMy(false);
         }
-        activity.setViewData(url,name, number, address, introduce, channel1, channel2);
+        activity.setViewData(url, name, number, address, introduce, channel1, channel2);
     }
 
 
@@ -311,6 +312,15 @@ public class GroupNewsForAddPresenter {
                 bundle.putSerializable("list", (Serializable) list);
                 fragment.setArguments(bundle);
                 InterPhoneActivity.open(fragment);
+
+                fragment.setResultListener(new GroupManageFragment.ResultListener() {
+                    @Override
+                    public void resultListener(boolean type) {
+                        if (type) {
+                            getData();
+                        }
+                    }
+                });
             } else {
                 ToastUtils.show_always(activity.getActivity(), "数据出错了，请您稍后再试！");
             }
@@ -474,9 +484,9 @@ public class GroupNewsForAddPresenter {
     public void jumpEWM() {
         if (g_news != null) {
 
-            String image= "";
-            String news= "";
-            String name= "";
+            String image = "";
+            String news = "";
+            String name = "";
             try {
                 image = g_news.getLogo_url();
             } catch (Exception e) {
@@ -495,10 +505,10 @@ public class GroupNewsForAddPresenter {
 
             EWMShowFragment fragment = new EWMShowFragment();
             Bundle bundle = new Bundle();
-            bundle.putString("from","interPhone" );// 路径来源
-            bundle.putString("image",image);// 头像
-            bundle.putString("news",news);// 简介
-            bundle.putString("name",name);// 姓名
+            bundle.putString("from", "interPhone");// 路径来源
+            bundle.putString("image", image);// 头像
+            bundle.putString("news", news);// 简介
+            bundle.putString("name", name);// 姓名
             bundle.putString("uri", "测试群组数据");// 内容路径
             fragment.setArguments(bundle);
             InterPhoneActivity.open(fragment);

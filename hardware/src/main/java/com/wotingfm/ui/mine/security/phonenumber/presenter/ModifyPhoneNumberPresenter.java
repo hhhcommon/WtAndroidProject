@@ -134,12 +134,13 @@ public class ModifyPhoneNumberPresenter {
             if (ret == 0) {
                 // 保存修改后的手机号到本地，进行同步
                 model.savePhoneNumber(num);
+                // 修改上层界面数据
+                activity.setResult(true);
                 MineActivity.close();
                 ToastUtils.show_always(activity.getActivity(), "手机号修改成功");
             } else {
                 String msg = js.getString("msg");
                 ToastUtils.show_always(activity.getActivity(), msg);
-                ToastUtils.show_always(activity.getActivity(), "手机号修改失败，请稍后再试");
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -183,7 +184,6 @@ public class ModifyPhoneNumberPresenter {
             } else {
                 String msg = js.getString("msg");
                 ToastUtils.show_always(activity.getActivity(), msg);
-                ToastUtils.show_always(activity.getActivity(), "获取验证码失败，请稍后再试");
             }
         } catch (Exception e) {
             e.printStackTrace();

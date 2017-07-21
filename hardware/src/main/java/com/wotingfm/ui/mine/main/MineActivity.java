@@ -1,8 +1,10 @@
 package com.wotingfm.ui.mine.main;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
 import com.woting.commonplat.utils.SequenceUUID;
@@ -41,6 +43,7 @@ public class MineActivity extends BaseFragmentActivity {
                 .add(R.id.fragment_content, frg)
                 .addToBackStack(SequenceUUID.getUUID())
                 .commit();
+        hintKbTwo();
     }
 
     /**
@@ -50,6 +53,7 @@ public class MineActivity extends BaseFragmentActivity {
         if (context != null && context.getSupportFragmentManager() != null) {
             context.getSupportFragmentManager().popBackStackImmediate();
         }
+        hintKbTwo();
     }
 
     @Override
@@ -68,6 +72,27 @@ public class MineActivity extends BaseFragmentActivity {
             e.printStackTrace();
         }
         sendBroadcast(in);
+    }
+
+
+    //此方法只是关闭软键盘
+    private static void hintKbTwo() {
+        if (context != null) {
+            InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+            if (imm.isActive() && context.getCurrentFocus() != null) {
+                if (context.getCurrentFocus().getWindowToken() != null) {
+                    imm.hideSoftInputFromWindow(context.getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+                }
+            }
+        }
+    }
+
+    //此方法，如果显示则隐藏，如果隐藏则显示
+    private static void hintKbOne() {
+        InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE); //得到InputMethodManager的实例
+        if (imm.isActive()) {//如果开启
+            imm.toggleSoftInput(InputMethodManager.SHOW_IMPLICIT, InputMethodManager.HIDE_NOT_ALWAYS);//关闭软键盘，开启方法相同，这个方法是切换开启与关闭状态的
+        }
     }
 
     private long tempTime;

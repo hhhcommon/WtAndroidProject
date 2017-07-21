@@ -14,6 +14,8 @@ import android.widget.Toast;
 
 import com.woting.commonplat.utils.SequenceUUID;
 import com.wotingfm.R;
+import com.wotingfm.common.constant.BroadcastConstants;
+import com.wotingfm.common.utils.StatusBarUtil;
 import com.wotingfm.ui.base.baseactivity.AppManager;
 import com.wotingfm.ui.intercom.main.view.InterPhoneFragment;
 import com.wotingfm.ui.test.PlayerActivity;
@@ -39,6 +41,7 @@ public class LogoActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_main);
         context = this;
+        applyTextColor(false);
         open(new LogoFragment());
     }
 
@@ -110,6 +113,33 @@ public class LogoActivity extends FragmentActivity {
         res.updateConfiguration(config, res.getDisplayMetrics());
         return res;
     }
+
+    private void applyTextColor(boolean b) {
+        if (b) {
+            StatusBarUtil.StatusBarLightMode(context, false);
+        } else {
+            StatusBarUtil.StatusBarLightMode(context, true);
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Intent in = new Intent(BroadcastConstants.IMAGE_UPLOAD);
+        in.putExtra("resultCode", resultCode);
+        try {
+            in.putExtra("uri", data.getData().toString());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        try {
+            in.putExtra("path", data.getStringExtra("return"));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        sendBroadcast(in);
+    }
+
 
     private long tempTime;
 

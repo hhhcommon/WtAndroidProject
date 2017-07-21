@@ -12,6 +12,7 @@ import com.woting.commonplat.config.GlobalNetWorkConfig;
 import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.common.net.RetrofitUtils;
 import com.wotingfm.common.utils.ToastUtils;
+import com.wotingfm.ui.user.information.view.InformationFragment;
 import com.wotingfm.ui.user.logo.LogoActivity;
 import com.wotingfm.ui.user.preference.view.PreferenceFragment;
 import com.wotingfm.ui.user.register.model.RegisterModel;
@@ -167,7 +168,7 @@ public class RegisterPresenter {
                 JSONTokener jsonParser = new JSONTokener(msg);
                 JSONObject arg1 = (JSONObject) jsonParser.nextValue();
                 try {
-                    String  token = arg1.getString("token");
+                    String token = arg1.getString("token");
                     // 保存后台获取到的token
                     if (token != null && !token.trim().equals("")) {
                         model.saveToken(token);
@@ -181,11 +182,11 @@ public class RegisterPresenter {
                 if (ui != null) {
                     model.saveUserInfo(ui);
                 }
-                RetrofitUtils.INSTANCE=null;
+                RetrofitUtils.INSTANCE = null;
                 ToastUtils.show_always(activity.getActivity(), "注册成功");
                 // 发送登录广播通知所有界面
                 activity.getActivity().sendBroadcast(new Intent(BroadcastConstants.LOGIN));
-                jump();// 跳转到偏好设置界面
+                jump();// 跳转到信息完善界面
             } else {
                 String msg = js.getString("msg");
                 if (msg != null && !msg.trim().equals("")) {
@@ -198,13 +199,10 @@ public class RegisterPresenter {
         }
     }
 
-    // 跳转到偏好设置界面
+    // 跳转到信息完善界面
     private void jump() {
-        PreferenceFragment fragment = new PreferenceFragment();
-        Bundle bundle = new Bundle();
-        bundle.putString("fromType", "login");
-        fragment.setArguments(bundle);
-        LogoActivity.open(fragment);
+        LogoActivity.close();
+        LogoActivity.open(new InformationFragment());
     }
 
     // 获取验证码的网络请求
