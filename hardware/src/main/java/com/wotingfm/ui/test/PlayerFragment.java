@@ -902,7 +902,6 @@ public class PlayerFragment extends BaseFragment implements View.OnClickListener
     }
 
     private void sendReconnectMessage() {
-        showToastTips("缓存中...");
         mLoadingView.setVisibility(View.VISIBLE);
         mHandler.removeCallbacksAndMessages(null);
         mHandler.sendMessageDelayed(mHandler.obtainMessage(MESSAGE_ID_RECONNECTING), 500);
