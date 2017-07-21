@@ -9,6 +9,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Environment;
 import android.support.multidex.MultiDex;
 import android.support.multidex.MultiDexApplication;
+import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -57,7 +58,8 @@ import cn.finalteam.okhttpfinal.OkHttpFinalConfiguration;
 public class BSApplication extends MultiDexApplication {
     public static android.content.SharedPreferences SharedPreferences;   // 配置信息
     public static Context mContext;
-
+    public static Fragment fragmentBase;
+    public static boolean isIS_BACK=false;
 
     public void onCreate() {
         super.onCreate();

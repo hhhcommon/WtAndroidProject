@@ -41,6 +41,8 @@ public class PlayerSubscribleListAdapter extends CommonAdapter<AlbumsBean> {
         TextView btnDelete = (TextView) holder.itemView.findViewById(R.id.btnDelete);
         TextView tvTime = (TextView) holder.itemView.findViewById(R.id.tvTime);
         Glide.with(BSApplication.getInstance()).load(s.logo_url)// Glide
+                .error(R.mipmap.oval_defut_other)
+                .placeholder(R.mipmap.oval_defut_other)
                 .into(imageView);
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override

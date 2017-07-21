@@ -24,6 +24,7 @@ import com.wotingfm.common.bean.Subscrible;
 import com.wotingfm.common.net.RetrofitUtils;
 import com.wotingfm.ui.base.baseactivity.BaseToolBarActivity;
 import com.wotingfm.ui.base.basefragment.BaseFragment;
+import com.wotingfm.ui.play.activity.AnchorPersonalCenterFragment;
 import com.wotingfm.ui.play.radio.ProvincesAndCitiesListRadioFragment;
 import com.wotingfm.ui.test.PlayerActivity;
 import com.wotingfm.ui.test.PlayerFragment;
@@ -54,8 +55,8 @@ public class SelectedMoreFragment extends BaseFragment implements OnLoadMoreList
     public static SelectedMoreFragment newInstance(String type, String title) {
         SelectedMoreFragment fragment = new SelectedMoreFragment();
         Bundle bundle = new Bundle();
-        bundle.putSerializable("title", title);
-        bundle.putSerializable("type", type);
+        bundle.putString("title", title);
+        bundle.putString("type", type);
         fragment.setArguments(bundle);
         return fragment;
     }
@@ -73,7 +74,7 @@ public class SelectedMoreFragment extends BaseFragment implements OnLoadMoreList
     public void initView() {
         Bundle bundle = getArguments();
         if (bundle != null) {
-            final String title = bundle.getString("title");
+            title = bundle.getString("title");
             type = bundle.getString("type");
             setTitle(title + "台");
             setTitle(title);

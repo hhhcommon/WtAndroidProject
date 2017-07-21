@@ -22,6 +22,7 @@ import com.wotingfm.common.bean.Selected;
 import com.wotingfm.common.net.RetrofitUtils;
 import com.wotingfm.common.view.BannerView;
 import com.wotingfm.ui.base.basefragment.BaseFragment;
+import com.wotingfm.ui.play.activity.AnchorPersonalCenterFragment;
 import com.wotingfm.ui.play.look.activity.LookListFragment;
 import com.wotingfm.ui.play.look.activity.RadioMoreFragment;
 import com.wotingfm.ui.play.radio.CountryRadioFragment;

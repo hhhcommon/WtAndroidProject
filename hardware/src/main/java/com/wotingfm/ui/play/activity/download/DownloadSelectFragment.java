@@ -39,15 +39,6 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 
-import static android.R.attr.type;
-import static android.media.CamcorderProfile.get;
-import static com.loc.a.t;
-import static com.wotingfm.R.id.ivDownload;
-import static com.wotingfm.R.id.ivSequence;
-import static com.wotingfm.R.id.relativeLable;
-import static com.wotingfm.R.id.tvDownload;
-import static com.wotingfm.R.id.tvTotal;
-
 /**
  * Created by amine on 2017/6/20.
  * 节目下载选择页面

@@ -6,6 +6,7 @@ import android.widget.Toast;
 
 import com.woting.commonplat.utils.SequenceUUID;
 import com.wotingfm.R;
+import com.wotingfm.common.utils.StatusBarUtil;
 import com.wotingfm.ui.base.baseactivity.AppManager;
 import com.wotingfm.ui.base.baseactivity.NoTitleBarBaseActivity;
 
@@ -21,28 +22,39 @@ public class PlayerActivity extends NoTitleBarBaseActivity {
     @Override
     public void initView() {
         AppManager.getAppManager().addActivity(this);
-        open(PlayerFragment.newInstance());
+        openMain(PlayerFragment.newInstance());
     }
 
     public void open(Fragment frg) {
+        getSupportFragmentManager().beginTransaction().remove(frg).commit();
         getSupportFragmentManager().beginTransaction()
-//                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                 .setCustomAnimations(
-                        R.anim.slide_right_in, R.anim.slide_left_out,
-                        R.anim.slide_left_in, R.anim.slide_right_out)
+                        R.anim.slide_right_in, 0,
+                        R.anim.slide_left_in, 0)
+                .add(R.id.fragment, frg)
+                .addToBackStack(SequenceUUID.getUUID())
+                .commitAllowingStateLoss();
+    }
+
+    public void openMain(Fragment frg) {
+        getSupportFragmentManager().beginTransaction()
+                .add(R.id.fragment, frg)
+                .addToBackStack(SequenceUUID.getUUID())
+                .commitAllowingStateLoss();
+    }
+
+    public void openNoAnim(Fragment frg) {
+        getSupportFragmentManager().beginTransaction().remove(frg).commit();
+        getSupportFragmentManager().beginTransaction()
                 .add(R.id.fragment, frg)
                 .addToBackStack(SequenceUUID.getUUID())
                 .commitAllowingStateLoss();
     }
 
     public void close() {
-        getSupportFragmentManager().popBackStackImmediate();
+        getSupportFragmentManager().popBackStack();
     }
 
-    public void closeAll() {
-        getSupportFragmentManager().popBackStackImmediate();
-        AppManager.getAppManager().finishAllActivity();
-    }
 
     private long tempTime;
 
@@ -54,10 +66,11 @@ public class PlayerActivity extends NoTitleBarBaseActivity {
                 android.os.Process.killProcess(android.os.Process.myPid());
             } else {
                 tempTime = time;
+
                 Toast.makeText(this, "再按一次退出", Toast.LENGTH_LONG).show();
             }
         } else {
-            closeAll();
+            close();
         }
     }
 

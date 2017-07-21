@@ -20,6 +20,7 @@ import com.wotingfm.common.bean.RadioInfo;
 import com.wotingfm.common.net.RetrofitUtils;
 import com.wotingfm.ui.base.baseactivity.BaseToolBarActivity;
 import com.wotingfm.ui.base.basefragment.BaseFragment;
+import com.wotingfm.ui.play.activity.AnchorPersonalCenterFragment;
 import com.wotingfm.ui.play.radio.fragment.RadioInfoTodayFragment;
 import com.wotingfm.ui.test.PlayerActivity;
 import com.wotingfm.ui.test.PlayerFragment;
@@ -34,7 +35,6 @@ import rx.schedulers.Schedulers;
 
 /**
  * Created by amine on 2017/7/6.
- * 国家台
  */
 
 public class ProvincesAndCitiesListRadioFragment extends BaseFragment implements OnLoadMoreListener, OnRefreshListener {
@@ -44,10 +44,11 @@ public class ProvincesAndCitiesListRadioFragment extends BaseFragment implements
     LoadFrameLayout loadLayout;
 
 
-    public static ProvincesAndCitiesListRadioFragment newInstance(String title) {
+    public static ProvincesAndCitiesListRadioFragment newInstance(String title, String cityId) {
         ProvincesAndCitiesListRadioFragment fragment = new ProvincesAndCitiesListRadioFragment();
         Bundle bundle = new Bundle();
         bundle.putSerializable("title", title);
+        bundle.putSerializable("cityId", cityId);
         fragment.setArguments(bundle);
         return fragment;
     }
@@ -66,6 +67,7 @@ public class ProvincesAndCitiesListRadioFragment extends BaseFragment implements
         Bundle bundle = getArguments();
         if (bundle != null) {
             final String title = bundle.getString("title");
+            cityId = bundle.getString("cityId");
             setTitle(title + "台");
             LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
             layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
@@ -94,11 +96,12 @@ public class ProvincesAndCitiesListRadioFragment extends BaseFragment implements
     }
 
     private int mPage;
+    private String cityId;
 
 
     private void refresh() {
         mPage = 1;
-        RetrofitUtils.getInstance().getChannelsRadio("provinces", mPage)
+        RetrofitUtils.getInstance().getChannelsRadioLocation("provinces", cityId, mPage)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Action1<List<ChannelsBean>>() {
@@ -126,7 +129,7 @@ public class ProvincesAndCitiesListRadioFragment extends BaseFragment implements
     }
 
     private void loadMore() {
-        RetrofitUtils.getInstance().getChannelsRadio("provinces", mPage)
+        RetrofitUtils.getInstance().getChannelsRadioLocation("provinces", cityId, mPage)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Action1<List<ChannelsBean>>() {

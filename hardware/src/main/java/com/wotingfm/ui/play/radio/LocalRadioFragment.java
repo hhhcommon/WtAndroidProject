@@ -30,6 +30,7 @@ import com.wotingfm.common.net.RetrofitUtils;
 import com.wotingfm.common.utils.CommonUtils;
 import com.wotingfm.ui.base.baseactivity.BaseToolBarActivity;
 import com.wotingfm.ui.base.basefragment.BaseFragment;
+import com.wotingfm.ui.play.activity.AnchorPersonalCenterFragment;
 import com.wotingfm.ui.test.PlayerActivity;
 import com.wotingfm.ui.test.PlayerFragment;
 import com.zhy.adapter.recyclerview.wrapper.HeaderAndFooterWrapper;
@@ -107,7 +108,7 @@ public class LocalRadioFragment extends BaseFragment implements OnLoadMoreListen
             filter.addAction(BroadcastConstants.CITY_CHANGE);
             getActivity().registerReceiver(messageReceiver, filter);
         }
-        refresh();
+
     }
 
     private MessageReceiver messageReceiver;
@@ -129,8 +130,16 @@ public class LocalRadioFragment extends BaseFragment implements OnLoadMoreListen
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
             if (action.equals(BroadcastConstants.CITY_CHANGE)) {
-                if (GlobalAddressConfig.CityName != null)
+                if (GlobalAddressConfig.CityName != null) {
                     tvLocal.setText(GlobalAddressConfig.CityName);
+                    tvLocal.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            openFragment(ProvincesAndCitiesListRadioFragment.newInstance(GlobalAddressConfig.CityName, GlobalAddressConfig.AdCode));
+                        }
+                    });
+                    refresh();
+                }
             }
         }
 
@@ -138,7 +147,7 @@ public class LocalRadioFragment extends BaseFragment implements OnLoadMoreListen
 
     private void refresh() {
         mPage = 1;
-        RetrofitUtils.getInstance().getChannelsRadio("local_areas", mPage)
+        RetrofitUtils.getInstance().getChannelsRadioLocation("local_areas", GlobalAddressConfig.AdCode, mPage)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Action1<List<ChannelsBean>>() {
@@ -166,7 +175,7 @@ public class LocalRadioFragment extends BaseFragment implements OnLoadMoreListen
     }
 
     private void loadMore() {
-        RetrofitUtils.getInstance().getChannelsRadio("local_areas", mPage)
+        RetrofitUtils.getInstance().getChannelsRadioLocation("local_areas", GlobalAddressConfig.AdCode, mPage)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Action1<List<ChannelsBean>>() {

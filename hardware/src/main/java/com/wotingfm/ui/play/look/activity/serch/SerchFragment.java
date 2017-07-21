@@ -59,10 +59,11 @@ public class SerchFragment extends BaseFragment {
     ViewPager viewPager;
 
 
-    public static SerchFragment newInstance(String q) {
+    public static SerchFragment newInstance(String q, int code) {
         SerchFragment fragment = new SerchFragment();
         Bundle bundle = new Bundle();
-        bundle.putString("q", "q");
+        bundle.putString("q", q);
+        bundle.putInt("code", code);
         fragment.setArguments(bundle);
         return fragment;
     }
@@ -90,6 +91,7 @@ public class SerchFragment extends BaseFragment {
         Bundle bundle = getArguments();
         if (bundle != null) {
             q = bundle.getString("q");
+            int code = bundle.getInt("code",0);
             etSearchlike.setText(q);
             if (!TextUtils.isEmpty(q))
                 etSearchlike.setSelection(q.length());
@@ -101,6 +103,7 @@ public class SerchFragment extends BaseFragment {
             programListFragment = ProgramListFragment.newInstance(q);
             anchorListFragment = AnchorListFragment.newInstance(q);
             radioStationListFragment = RadioStationListFragment.newInstance(q);
+            mFragment.clear();
             mFragment.add(albumsListFragment);
             mFragment.add(programListFragment);
             mFragment.add(anchorListFragment);
@@ -143,19 +146,20 @@ public class SerchFragment extends BaseFragment {
                                                    }
 
             );
+            viewPager.setCurrentItem(code);
         }
     }
 
     private void serch(String content) {
         if (!TextUtils.isEmpty(content)) {
             if (albumsListFragment != null)
-                albumsListFragment.refresh();
+                albumsListFragment.refresh(content);
             if (programListFragment != null)
-                programListFragment.refresh();
+                programListFragment.refresh(content);
             if (anchorListFragment != null)
-                anchorListFragment.refresh();
+                anchorListFragment.refresh(content);
             if (radioStationListFragment != null)
-                radioStationListFragment.refresh();
+                radioStationListFragment.refresh(content);
         }
     }
 }

@@ -13,6 +13,8 @@ import com.woting.commonplat.location.gaode.GDLocation;
 import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.constant.StringConstant;
 
+import static com.woting.commonplat.constant.BroadcastConstants.CITY_CHANGE;
+
 
 /**
  * LocationInfo
@@ -93,7 +95,6 @@ public class LocationInfo implements GDLocation.Location {
 
         if (GlobalAddressConfig.AdCode == null || !GlobalAddressConfig.AdCode.equals(adCode)) {
             GlobalAddressConfig.AdCode = adCode;
-            sendBroadcast();// 发送广播
         }
 
         if (GlobalAddressConfig.CityName == null || !GlobalAddressConfig.CityName.equals(city)) {
@@ -104,13 +105,13 @@ public class LocationInfo implements GDLocation.Location {
         et.putString(StringConstant.CITYID, GlobalAddressConfig.AdCode);
         et.putString(StringConstant.LATITUDE, String.valueOf(latitude));
         et.putString(StringConstant.LONGITUDE, String.valueOf(longitude));
-
+        sendBroadcast();// 发送广播
     }
 
     // 发送广播
     private void sendBroadcast() {
         Intent intent = new Intent();
-        intent.setAction(BroadcastConstants.CITY_CHANGE);
+        intent.setAction(CITY_CHANGE);
         context.sendBroadcast(intent);
     }
 
@@ -120,6 +121,7 @@ public class LocationInfo implements GDLocation.Location {
     }
 
     public void stopLocation() {
-        mGDLocation.stopLocation();
+        if (mGDLocation != null)
+            mGDLocation.stopLocation();
     }
 }

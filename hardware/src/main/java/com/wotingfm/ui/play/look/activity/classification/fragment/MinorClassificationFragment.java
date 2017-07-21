@@ -10,6 +10,7 @@ import android.view.View;
 
 import com.woting.commonplat.widget.LoadFrameLayout;
 import com.wotingfm.R;
+import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.bean.ChannelsBean;
 import com.wotingfm.common.net.RetrofitUtils;
 import com.wotingfm.ui.base.basefragment.BaseFragment;
@@ -77,7 +78,7 @@ public class MinorClassificationFragment extends BaseFragment implements View.On
 
     private List<Fragment> mFragment = new ArrayList<>();
     private MyAdapter mAdapter;
-    private String albumId;
+    private String albumId,title;
 
     @Override
     protected int getLayoutResource() {
@@ -89,7 +90,8 @@ public class MinorClassificationFragment extends BaseFragment implements View.On
         Bundle bundle = getArguments();
         if (bundle != null) {
             albumId = bundle.getString("albumId");
-            setTitle(bundle.getString("title"));
+            title = bundle.getString("title");
+            setTitle(title);
             loadLayout.findViewById(R.id.btnTryAgain).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -110,8 +112,9 @@ public class MinorClassificationFragment extends BaseFragment implements View.On
                     @Override
                     public void call(List<ChannelsBean> albumsBeen) {
                         if (albumsBeen != null && !albumsBeen.isEmpty()) {
+                            mFragment.clear();
                             for (int i = 0; i < albumsBeen.size(); i++) {
-                                SubcategoryFragment fragment = SubcategoryFragment.newInstance(albumsBeen.get(i));
+                                SubcategoryFragment fragment = SubcategoryFragment.newInstance(albumsBeen.get(i),albumId,title);
                                 mFragment.add(fragment);
                             }
                             mAdapter = new MyAdapter(getChildFragmentManager(), albumsBeen, mFragment);

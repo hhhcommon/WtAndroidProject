@@ -74,10 +74,11 @@ public class ProvincesAndCitiesFragment extends BaseFragment {
         mAdapter = new ProvincesAdapter(getActivity(), albumsBeanList, new ProvincesAdapter.ProvincesClick() {
             @Override
             public void clickAlbums(Provinces.DataBean.ProvincesBean singlesBean) {
-                openFragment(ProvincesAndCitiesListRadioFragment.newInstance(singlesBean.title));
+                openFragment(ProvincesAndCitiesListRadioFragment.newInstance(singlesBean.title, singlesBean.id));
             }
         });
         headerAndFooterWrapper = new HeaderAndFooterWrapper(mAdapter);
+        headerAndFooterWrapper.addHeaderView(headview);
         mRecyclerView.setAdapter(headerAndFooterWrapper);
         loadLayout.findViewById(R.id.btnTryAgain).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -113,8 +114,15 @@ public class ProvincesAndCitiesFragment extends BaseFragment {
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
             if (action.equals(BroadcastConstants.CITY_CHANGE)) {
-                if (GlobalAddressConfig.CityName != null)
+                if (GlobalAddressConfig.CityName != null) {
                     tvLocal.setText(GlobalAddressConfig.CityName);
+                    tvLocal.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            openFragment(ProvincesAndCitiesListRadioFragment.newInstance(GlobalAddressConfig.CityName, GlobalAddressConfig.AdCode));
+                        }
+                    });
+                }
             }
         }
 

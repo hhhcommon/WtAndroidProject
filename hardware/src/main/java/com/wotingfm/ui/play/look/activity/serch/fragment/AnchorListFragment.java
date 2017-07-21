@@ -12,6 +12,7 @@ import com.woting.commonplat.widget.LoadFrameLayout;
 import com.wotingfm.R;
 import com.wotingfm.common.adapter.albumsAdapter.AlbumsAdapter;
 import com.wotingfm.common.adapter.serch.UsersSerchAdapter;
+import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.bean.AlbumsBean;
 import com.wotingfm.common.bean.SerchList;
 import com.wotingfm.common.bean.UserBean;
@@ -69,6 +70,7 @@ public class AnchorListFragment extends BaseFragment implements OnLoadMoreListen
             @Override
             public void onClick(View v) {
                 loadLayout.showLoadingView();
+                refresh(q);
             }
         });
         mAdapter = new UsersSerchAdapter(getActivity(), albumsBeanList, new UsersSerchAdapter.OnClick() {
@@ -81,15 +83,16 @@ public class AnchorListFragment extends BaseFragment implements OnLoadMoreListen
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         mRecyclerView.setLayoutManager(layoutManager);
         mRecyclerView.setIAdapter(mAdapter);
-        refresh();
+        refresh(q);
     }
 
     private int mPage;
     private UsersSerchAdapter mAdapter;
     private List<UserBean> albumsBeanList = new ArrayList<>();
 
-    public void refresh() {
+    public void refresh(String q) {
         mPage = 1;
+        this.q = q;
         RetrofitUtils.getInstance().serchList("users", q, mPage)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -153,6 +156,6 @@ public class AnchorListFragment extends BaseFragment implements OnLoadMoreListen
 
     @Override
     public void onRefresh() {
-        refresh();
+        refresh(q);
     }
 }

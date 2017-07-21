@@ -24,6 +24,7 @@ import com.wotingfm.common.net.RetrofitUtils;
 import com.wotingfm.common.utils.DownloadUtils;
 import com.wotingfm.common.utils.T;
 import com.wotingfm.ui.base.basefragment.BaseFragment;
+import com.wotingfm.ui.play.activity.AnchorPersonalCenterFragment;
 import com.wotingfm.ui.play.activity.download.DownloadSelectFragment;
 import com.wotingfm.ui.test.PlayerFragment;
 

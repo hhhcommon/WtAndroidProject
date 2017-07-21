@@ -27,6 +27,8 @@ import com.wotingfm.common.bean.Subscrible;
 import com.wotingfm.common.database.DownloadHelper;
 import com.wotingfm.common.net.RetrofitUtils;
 import com.wotingfm.ui.base.basefragment.BaseFragment;
+import com.wotingfm.ui.play.activity.AnchorPersonalCenterFragment;
+import com.wotingfm.ui.play.activity.albums.AlbumsListMeFragment;
 import com.wotingfm.ui.test.PlayerActivity;
 import com.wotingfm.ui.test.PlayerFragment;
 
@@ -86,29 +88,30 @@ public class AlbumsListFragment extends BaseFragment implements OnLoadMoreListen
             @Override
             public void onClick(View v) {
                 loadLayout.showLoadingView();
-                refresh();
+                refresh(q);
             }
         });
         mAdapter = new AlbumsAdapter(getActivity(), albumsBeanList);
         mAdapter.setPlayerClick(new AlbumsAdapter.PlayerClick() {
             @Override
             public void clickAlbums(AlbumsBean singlesBean) {
-                openFragment(PlayerFragment.newInstance(singlesBean.id));
+                openFragment(PlayerFragment.newInstance(singlesBean.id,q));
             }
         });
         mRecyclerView.setIAdapter(mAdapter);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         mRecyclerView.setLayoutManager(layoutManager);
-        refresh();
+        refresh(q);
     }
 
     private int mPage;
     private AlbumsAdapter mAdapter;
     private List<AlbumsBean> albumsBeanList = new ArrayList<>();
 
-    public void refresh() {
+    public void refresh(String q) {
         mPage = 1;
+        this.q=q;
         RetrofitUtils.getInstance().serchList("albums", q, mPage)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -172,6 +175,6 @@ public class AlbumsListFragment extends BaseFragment implements OnLoadMoreListen
 
     @Override
     public void onRefresh() {
-        refresh();
+        refresh(q);
     }
 }

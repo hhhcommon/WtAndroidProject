@@ -18,7 +18,6 @@ import com.zhy.adapter.recyclerview.base.ViewHolder;
 
 import java.util.List;
 
-import static com.loc.e.i;
 
 /**
  * Created by amine on 2017/6/7.

@@ -59,8 +59,6 @@ import rx.schedulers.Schedulers;
 import static android.R.attr.breadCrumbShortTitle;
 import static android.R.attr.data;
 import static android.icu.lang.UCharacter.GraphemeClusterBreak.T;
-import static com.loc.e.e;
-import static com.loc.e.m;
 import static com.woting.commonplat.gather.GatherData.url;
 import static com.wotingfm.R.id.mRecyclerViewList;
 

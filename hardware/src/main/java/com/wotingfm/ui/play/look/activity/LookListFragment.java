@@ -35,6 +35,7 @@ import com.wotingfm.common.adapter.MyAdapter;
 import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.bean.ChannelsBean;
 import com.wotingfm.common.bean.MessageEvent;
+import com.wotingfm.common.bean.RadioInfo;
 import com.wotingfm.common.bean.SinglesBase;
 import com.wotingfm.common.config.GlobalStateConfig;
 import com.wotingfm.common.constant.BroadcastConstants;
@@ -48,6 +49,7 @@ import com.wotingfm.ui.play.look.fragment.ClassificationFragment;
 import com.wotingfm.ui.play.look.fragment.LiveFragment;
 import com.wotingfm.ui.play.look.fragment.RadioStationFragment;
 import com.wotingfm.ui.play.look.fragment.SelectedFragment;
+import com.wotingfm.ui.play.radio.fragment.RadioInfoTodayFragment;
 import com.wotingfm.ui.test.PlayerActivity;
 import com.wotingfm.ui.test.PlayerFragment;
 
@@ -81,11 +83,13 @@ public class LookListFragment extends BaseFragment implements View.OnClickListen
     @BindView(R.id.tvSubmitSerch)
     TextView tvSubmitSerch;
 
-    public static LookListFragment newInstance() {
+    public static LookListFragment newInstance(int code) {
         LookListFragment fragment = new LookListFragment();
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("code", code);
+        fragment.setArguments(bundle);
         return fragment;
     }
-
 
     private List<Fragment> mFragment = new ArrayList<>();
     private MyAdapter mAdapter;
@@ -101,8 +105,6 @@ public class LookListFragment extends BaseFragment implements View.OnClickListen
         etSearchlike.requestFocus();
         imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
     }
-
-    private PlayerActivity playerActivity;
 
     @Override
     public void initView() {
@@ -122,6 +124,7 @@ public class LookListFragment extends BaseFragment implements View.OnClickListen
         type.add("分类");
         type.add("电台");
         type.add("直播");
+        mFragment.clear();
         mFragment.add(SelectedFragment.newInstance());
         mFragment.add(ClassificationFragment.newInstance());
         mFragment.add(RadioStationFragment.newInstance());
@@ -141,13 +144,18 @@ public class LookListFragment extends BaseFragment implements View.OnClickListen
                 if (arg1 == EditorInfo.IME_ACTION_SEARCH) {
                     String content = etSearchlike.getText().toString().trim();
                     if (!TextUtils.isEmpty(content)) {
-                        openFragment(SerchFragment.newInstance(content));
+                        openFragment(SerchFragment.newInstance(content,0));
+                        SerchCode = viewPager.getCurrentItem();
                         etSearchlike.setText("");
                     }
                 }
                 return false;
             }
         });
+        Bundle bundle = getArguments();
+        if (bundle != null) {
+            viewPager.setCurrentItem(bundle.getInt("code", 0));
+        }
     }
 
     // 广播接收器
@@ -162,7 +170,8 @@ public class LookListFragment extends BaseFragment implements View.OnClickListen
                     public void run() {
                         if (videoDialog != null) videoDialog.dismiss();
                         etSearchlike.setText("");
-                        openFragment(SerchFragment.newInstance(str.trim()));
+                        SerchCode = viewPager.getCurrentItem();
+                        openFragment(SerchFragment.newInstance(str.trim(),0));
                     }
                 }, 1000);
                 if (NetUtils.isNetworkAvailable(context)) {
@@ -187,7 +196,8 @@ public class LookListFragment extends BaseFragment implements View.OnClickListen
                     return;
                 }
                 hideSoftKeyboard();
-                openFragment(SerchFragment.newInstance(content));
+                openFragment(SerchFragment.newInstance(content,0));
+                SerchCode = viewPager.getCurrentItem();
                 etSearchlike.setText("");
                 break;
             case R.id.ivBack:
