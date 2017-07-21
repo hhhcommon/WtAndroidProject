@@ -34,6 +34,7 @@ public class TransferGroupFragment extends Fragment implements View.OnClickListe
     private Dialog dialog;
     private TipView tip_view;
     private int type;
+    private ResultListener Listener;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -148,5 +149,25 @@ public class TransferGroupFragment extends Fragment implements View.OnClickListe
         if (dialog != null) dialog.dismiss();
     }
 
+    /**
+     * 返回值设置
+     *
+     * @param type
+     */
+    public void setResult(boolean type) {
+        Listener.resultListener(type);
+    }
 
+    /**
+     * 回调结果值
+     *
+     * @param l
+     */
+    public void setResultListener(ResultListener l) {
+        Listener = l;
+    }
+
+    public interface ResultListener {
+        void resultListener(boolean type);
+    }
 }

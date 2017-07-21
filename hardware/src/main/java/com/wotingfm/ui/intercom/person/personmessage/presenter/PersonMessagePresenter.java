@@ -232,7 +232,7 @@ public class PersonMessagePresenter {
         }
         // 以上是以别名为主
 
-        String sign = "";
+        String sign = "这家伙很懒~";
         try {
             sign = user.getSignature();
         } catch (Exception e) {

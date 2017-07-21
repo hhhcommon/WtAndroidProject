@@ -1,17 +1,13 @@
 package com.wotingfm.ui.intercom.group.groupnews.noadd.model;
 
 import android.util.Log;
-
-import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.wotingfm.common.net.RetrofitUtils;
 import com.wotingfm.common.utils.GetTestData;
 import com.wotingfm.ui.base.model.UserInfo;
 import com.wotingfm.ui.intercom.main.contacts.model.Contact;
-import com.wotingfm.ui.user.login.model.Login;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.schedulers.Schedulers;
@@ -57,7 +53,7 @@ public class GroupNewsForNoAddModel extends UserInfo {
                         @Override
                         public void call(Object o) {
                             try {
-                                Log.e("获取群组信息返回数据", new Gson().toJson(o));
+                                Log.e("获取群组信息返回数据", new GsonBuilder().serializeNulls().create().toJson(o));
                                 //填充UI
                                 listener.onSuccess(o);
                             } catch (Exception e) {
@@ -90,7 +86,7 @@ public class GroupNewsForNoAddModel extends UserInfo {
                         @Override
                         public void call(Object o) {
                             try {
-                                Log.e("获取群组成员返回数据", new Gson().toJson(o));
+                                Log.e("获取群组成员返回数据", new GsonBuilder().serializeNulls().create().toJson(o));
                                 //填充UI
                                 listener.onSuccess(o);
                             } catch (Exception e) {

@@ -148,6 +148,8 @@ public class TransferManagerPresenter {
             int ret = js.getInt("ret");
             Log.e("移交群主==ret", String.valueOf(ret));
             if (ret == 0) {
+                // 设置返回参数
+                activity.setResult(true);
                 InterPhoneActivity.close();
                 ToastUtils.show_always(activity.getActivity(), "设置成功");
             } else {

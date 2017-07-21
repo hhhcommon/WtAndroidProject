@@ -3,6 +3,7 @@ package com.wotingfm.ui.intercom.group.standbychannel.model;
 import android.util.Log;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.wotingfm.common.net.RetrofitUtils;
 import com.wotingfm.common.utils.FrequencyUtil;
 
@@ -31,7 +32,8 @@ public class ChannelModel {
      * @return
      */
     public boolean checkData(String channel1, String channel2) {
-        if ((channel1 != null && !channel1.trim().equals("")) || (channel2 != null && !channel2.trim().equals(""))) {
+        if ((channel1 != null && !channel1.trim().equals("")&&!channel1.trim().equals("备用频道一"))
+                || (channel2 != null && !channel2.trim().equals("")&&!channel2.trim().equals("备用频道二"))) {
             return true;
         } else {
             return false;
@@ -54,7 +56,7 @@ public class ChannelModel {
                 return s;
             }
         } else {
-            if (channel2 != null && !channel2.trim().equals("")) {
+            if (channel2 != null && !channel2.trim().equals("")&&!channel2.trim().equals("备用频道二")) {
                 String s = channel2;
                 return s;
             } else {
@@ -79,7 +81,7 @@ public class ChannelModel {
                     .subscribe(new Action1<Object>() {
                         @Override
                         public void call(Object o) {
-                            Log.e("设置备用频道返回数据", new Gson().toJson(o));
+                            Log.e("设置备用频道返回数据", new GsonBuilder().serializeNulls().create().toJson(o));
                             //填充UI
                             listener.onSuccess(o);
                         }

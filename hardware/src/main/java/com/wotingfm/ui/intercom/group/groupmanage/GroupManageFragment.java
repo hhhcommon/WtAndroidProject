@@ -5,6 +5,8 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.wotingfm.R;
 import com.wotingfm.common.config.GlobalStateConfig;
@@ -16,8 +18,10 @@ import com.wotingfm.ui.intercom.group.standbychannel.view.StandbyChannelFragment
 import com.wotingfm.ui.intercom.group.transfergroup.view.TransferGroupFragment;
 import com.wotingfm.ui.intercom.main.contacts.model.Contact;
 import com.wotingfm.ui.intercom.main.view.InterPhoneActivity;
+import com.wotingfm.ui.intercom.person.personnote.view.EditPersonNoteFragment;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -30,6 +34,11 @@ public class GroupManageFragment extends Fragment implements View.OnClickListene
     private Contact.group group;
     private List<Contact.user> list;
     private ResultListener Listener;
+    private boolean ow = false;
+    private RelativeLayout re_groupManager, re_changeGroup;
+    private TextView tv_groupManager;
+    private boolean change = false;// 数据是否更改。根据这个参数返回时上层进行判断
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,26 +62,49 @@ public class GroupManageFragment extends Fragment implements View.OnClickListene
             e.printStackTrace();
         }
         try {
+            ow = this.getArguments().getBoolean("ow");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        try {
             list = (List<Contact.user>) this.getArguments().getSerializable("list");// 成员列表
         } catch (Exception e) {
             e.printStackTrace();
         }
+
     }
 
     private void inItView() {
         rootView.findViewById(R.id.head_left_btn).setOnClickListener(this);
         rootView.findViewById(R.id.re_groupNews).setOnClickListener(this);// 编辑资料
-        rootView.findViewById(R.id.re_groupManager).setOnClickListener(this);// 设置管理员
+        tv_groupManager = (TextView) rootView.findViewById(R.id.tv_groupManager);
+        re_groupManager = (RelativeLayout) rootView.findViewById(R.id.re_groupManager);
+        re_groupManager.setOnClickListener(this);// 设置管理员
         rootView.findViewById(R.id.re_channel).setOnClickListener(this);// 设置备用频道
-        rootView.findViewById(R.id.re_applyGroupType).setOnClickListener(this);// 设置管理员
-        rootView.findViewById(R.id.re_changeGroup).setOnClickListener(this);// 转让群
+        rootView.findViewById(R.id.re_applyGroupType).setOnClickListener(this);// 更改加群方式
+        re_changeGroup = (RelativeLayout) rootView.findViewById(R.id.re_changeGroup);
+        re_changeGroup.setOnClickListener(this);// 转让群
+        setView(ow);
+    }
+
+    // 是否是群主or管理员
+    private void setView(boolean ow) {
+        if (ow) {
+            tv_groupManager.setVisibility(View.VISIBLE);
+            re_groupManager.setVisibility(View.VISIBLE);
+            re_changeGroup.setVisibility(View.VISIBLE);
+        } else {
+            tv_groupManager.setVisibility(View.GONE);
+            re_groupManager.setVisibility(View.GONE);
+            re_changeGroup.setVisibility(View.GONE);
+        }
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.head_left_btn:
-                setResult(true);
+                setResult(change);
                 InterPhoneActivity.close();
                 break;
             case R.id.re_groupNews:// 编辑资料
@@ -82,6 +114,28 @@ public class GroupManageFragment extends Fragment implements View.OnClickListene
                     bundle.putSerializable("group", group);
                     fragment.setArguments(bundle);
                     InterPhoneActivity.open(fragment);
+                    fragment.setResultListener(new EditGroupMessageFragment.ResultListener() {
+                        @Override
+                        public void resultListener(int type, String s) {
+                            if (type == 1) {// 更改头像
+                                group.setLogo_url(s);
+                                // 更改上层界面数据
+                                change = true;
+                            } else if (type == 2) {// 更改昵称
+                                group.setTitle(s);
+                                // 更改上层界面数据
+                                change = true;
+                            } else if (type == 3) {// 更改地点
+                                group.setLocation(s);
+                                // 更改上层界面数据
+                                change = true;
+                            } else if (type == 4) {// 更改介绍
+                                group.setIntroduction(s);
+                                // 更改上层界面数据
+                                change = true;
+                            }
+                        }
+                    });
                 } else {
                     ToastUtils.show_always(this.getActivity(), "数据出错了，请您稍后再试！");
                 }
@@ -99,6 +153,17 @@ public class GroupManageFragment extends Fragment implements View.OnClickListene
                         bundle.putString("gid", group.getId());
                         fragment.setArguments(bundle);
                         InterPhoneActivity.open(fragment);
+                        fragment.setResultListener(new SetManagerFragment.ResultListener() {
+                            @Override
+                            public void resultListener(boolean type, String id) {
+                                if (type) {
+                                    changeList(id);
+                                    // 更改上层界面数据
+                                    change = true;
+                                }
+                            }
+                        });
+
                     } else {
                         ToastUtils.show_always(this.getActivity(), "数据出错了，请您稍后再试！");
                     }
@@ -143,6 +208,17 @@ public class GroupManageFragment extends Fragment implements View.OnClickListene
                         bundle.putString("channel2", channel2);
                         fragment.setArguments(bundle);
                         InterPhoneActivity.open(fragment);
+                        fragment.setResultListener(new StandbyChannelFragment.ResultListener() {
+                            @Override
+                            public void resultListener(boolean type, String channel) {
+                                if (type) {
+                                    group.setChannel(channel);
+                                    // 更改上层界面数据
+                                    change = true;
+                                }
+                            }
+                        });
+
                     } else {
                         ToastUtils.show_always(this.getActivity(), "数据出错了，请您稍后再试！");
                     }
@@ -152,12 +228,6 @@ public class GroupManageFragment extends Fragment implements View.OnClickListene
                 if (GlobalStateConfig.test) {
                     ApplyGroupTypeFragment fragment = new ApplyGroupTypeFragment();
                     InterPhoneActivity.open(fragment);
-                    fragment.setResultListener(new ApplyGroupTypeFragment.ResultListener() {
-                        @Override
-                        public void resultListener(int type, String password) {
-
-                        }
-                    });
                 } else {
                     if (group != null) {
                         ApplyGroupTypeFragment fragment = new ApplyGroupTypeFragment();
@@ -168,7 +238,10 @@ public class GroupManageFragment extends Fragment implements View.OnClickListene
                         fragment.setResultListener(new ApplyGroupTypeFragment.ResultListener() {
                             @Override
                             public void resultListener(int type, String password) {
-
+                                group.setPassword(password);
+                                group.setMember_access_mode(String.valueOf(type));
+                                // 更改上层界面数据
+                                change = true;
                             }
                         });
                     } else {
@@ -188,6 +261,17 @@ public class GroupManageFragment extends Fragment implements View.OnClickListene
                         bundle.putString("gid", group.getId());
                         fragment.setArguments(bundle);
                         InterPhoneActivity.open(fragment);
+                        fragment.setResultListener(new TransferGroupFragment.ResultListener() {
+                            @Override
+                            public void resultListener(boolean type) {
+                                if (type) {
+                                    // 已经不是群主,更改当前界面展示
+                                    setView(false);
+                                    // 更改上层界面数据
+                                    change = true;
+                                }
+                            }
+                        });
                     } else {
                         ToastUtils.show_always(this.getActivity(), "数据出错了，请您稍后再试！");
                     }
@@ -195,6 +279,42 @@ public class GroupManageFragment extends Fragment implements View.OnClickListene
                 break;
         }
     }
+
+    /**
+     * 更改成员数据
+     *
+     * @param id
+     */
+    private void changeList(String id) {
+        if (id != null && !id.equals("")) {
+            if (id.contains(",")) {
+                String[] strArray = id.split(","); //拆分字符为"," ,然后把结果交给数组strArray
+                for (int i = 0; i < strArray.length; i++) {
+                    String _id = strArray[i];
+                    for (int j = 0; j < list.size(); j++) {
+                        String pid = list.get(j).getId();
+                        if (pid != null && !pid.equals("")) {
+                            if (pid.equals(_id)) {
+                                list.get(j).setIs_admin(true);
+                                break;
+                            }
+                        }
+                    }
+                }
+            } else {
+                for (int i = 0; i < list.size(); i++) {
+                    String pid = list.get(i).getId();
+                    if (pid != null && !pid.equals("")) {
+                        if (pid.equals(id)) {
+                            list.get(i).setIs_admin(true);
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     /**
      * 返回值设置
      *

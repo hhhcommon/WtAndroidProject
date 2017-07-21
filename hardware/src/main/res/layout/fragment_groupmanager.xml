@@ -53,7 +53,8 @@
 
         </RelativeLayout>
 
-        <include layout="@layout/include_tv" />
+        <include layout="@layout/include_tv"
+            android:id="@+id/tv_groupManager"/>
 
         <RelativeLayout
             android:id="@+id/re_groupManager"

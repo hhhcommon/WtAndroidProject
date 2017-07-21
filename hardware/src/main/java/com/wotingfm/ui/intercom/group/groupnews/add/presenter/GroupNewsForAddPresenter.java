@@ -3,7 +3,6 @@ package com.wotingfm.ui.intercom.group.groupnews.add.presenter;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
@@ -22,10 +21,8 @@ import com.wotingfm.ui.intercom.main.view.InterPhoneActivity;
 import com.wotingfm.ui.intercom.person.personmessage.view.PersonMessageFragment;
 import com.wotingfm.ui.intercom.person.personnote.view.EditPersonNoteFragment;
 import com.wotingfm.ui.mine.qrcodes.EWMShowFragment;
-
 import org.json.JSONObject;
 import org.json.JSONTokener;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -42,6 +39,8 @@ public class GroupNewsForAddPresenter {
     private Contact.group g_news;
     private List<Contact.user> list;
     private boolean headViewShow = false;// 选择界面是否展示
+    private boolean isAdmin=false;// 是否是管理员
+    private boolean isOw=false;// 是否是群主
 
     public GroupNewsForAddPresenter(GroupNewsForAddFragment activity) {
         this.activity = activity;
@@ -202,25 +201,8 @@ public class GroupNewsForAddPresenter {
                 channel2 = "";
             }
         }
-
-        String cid = "";
-        try {
-            cid = g_news.getCreator_id();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        if (cid != null && !cid.equals("")) {
-            if (model.judgeMine(cid)) {
-                activity.setViewForMy(true);
-            } else {
-                activity.setViewForMy(false);
-            }
-        } else {
-            activity.setViewForMy(false);
-        }
         activity.setViewData(url, name, number, address, introduce, channel1, channel2);
     }
-
 
     /**
      * 获取群组成员
@@ -258,8 +240,10 @@ public class GroupNewsForAddPresenter {
                 }.getType());
                 if (list != null) {
                     // 处理数据
-                    boolean b = model.isAdmin(list);// 判断当前用户是否是管理员
-                    ArrayList<Contact.user> _list = model.assemblyDataForGroup(list, b);
+                    isAdmin= model.isAdmin(list);// 判断当前用户是否是管理员
+                    isOw=model.isOw(list);// 判断当前用户是否是群主
+                    setAdmin(isAdmin);
+                    ArrayList<Contact.user> _list = model.assemblyDataForGroup(list, isAdmin);
                     if (_list != null && _list.size() > 0) {
                         activity.setGridViewData(_list, list.size());
                     } else {
@@ -280,6 +264,14 @@ public class GroupNewsForAddPresenter {
         }
     }
 
+    // 设置管理员
+    private void setAdmin(boolean b) {
+        if (b) {
+            activity.setViewForMy(true);
+        } else {
+            activity.setViewForMy(false);
+        }
+    }
 
     /**
      * 跳转到群管理界面
@@ -309,6 +301,7 @@ public class GroupNewsForAddPresenter {
                 GroupManageFragment fragment = new GroupManageFragment();
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("group", g_news);
+                bundle.putBoolean("ow", isOw);
                 bundle.putSerializable("list", (Serializable) list);
                 fragment.setArguments(bundle);
                 InterPhoneActivity.open(fragment);
@@ -472,6 +465,14 @@ public class GroupNewsForAddPresenter {
                 bundle.putSerializable("list", (Serializable) list);// 成员列表
                 fragment.setArguments(bundle);
                 InterPhoneActivity.open(fragment);
+                fragment.setResultListener(new GroupNumberDelFragment.ResultListener() {
+                    @Override
+                    public void resultListener(boolean type) {
+                        if (type) {
+                         getData();
+                        }
+                    }
+                });
             }
         } else {
             ToastUtils.show_always(activity.getActivity(), "数据出错了，请稍后再试！");

@@ -36,6 +36,7 @@ public class SetManagerFragment extends Fragment implements View.OnClickListener
     private Dialog dialog;
     private TipView tip_view;
     private int type;
+    private ResultListener Listener;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -150,5 +151,26 @@ public class SetManagerFragment extends Fragment implements View.OnClickListener
         if (dialog != null) dialog.dismiss();
     }
 
+    /**
+     * 返回值设置
+     *
+     * @param type
+     * @param news
+     */
+    public void setResult(boolean type, String news) {
+        Listener.resultListener(type, news);
+    }
 
+    /**
+     * 回调结果值
+     *
+     * @param l
+     */
+    public void setResultListener(ResultListener l) {
+        Listener = l;
+    }
+
+    public interface ResultListener {
+        void resultListener(boolean type, String news);
+    }
 }

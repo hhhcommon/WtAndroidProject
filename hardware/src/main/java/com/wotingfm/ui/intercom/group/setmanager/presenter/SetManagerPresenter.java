@@ -22,6 +22,7 @@ public class SetManagerPresenter {
     private final SetManagerModel model;
     private List<Contact.user> list;
     private String gId;// 组Id
+    private String s;
 
     public SetManagerPresenter(SetManagerFragment activity) {
         this.activity = activity;
@@ -91,7 +92,6 @@ public class SetManagerPresenter {
      */
     public void send() {
         if (GlobalNetWorkConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
-            String s = null;
             if(list!=null&&list.size()>0){
                  s = model.getString(list);
             }
@@ -127,6 +127,7 @@ public class SetManagerPresenter {
             int ret = js.getInt("ret");
             Log.e("设置管理员==ret", String.valueOf(ret));
             if (ret == 0) {
+                activity.setResult(true,s);
                 InterPhoneActivity.close();
                 ToastUtils.show_always(activity.getActivity(), "设置成功");
             } else {

@@ -1,8 +1,6 @@
 package com.wotingfm.ui.intercom.group.groupnews.add.model;
 
 import android.util.Log;
-
-import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.config.GlobalStateConfig;
@@ -10,10 +8,8 @@ import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.common.net.RetrofitUtils;
 import com.wotingfm.common.utils.GetTestData;
 import com.wotingfm.ui.intercom.main.contacts.model.Contact;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.schedulers.Schedulers;
@@ -274,6 +270,34 @@ public class GroupNewsForAddModel {
                         boolean  b1 = list.get(i).is_admin();
                         boolean b2 = list.get(i).is_owner();
                         if(b1||b2){
+                            b = true;
+                            break;
+                        }else{
+                            b = false;
+                        }
+                    }
+                }
+            }
+        }
+        return b;
+    }
+
+    /**
+     * 判断当前用户是不是群主
+     *
+     * @param list
+     * @return
+     */
+    public boolean isOw(List<Contact.user> list) {
+        boolean b = false;
+        String _id = BSApplication.SharedPreferences.getString(StringConstant.USER_ID, "");
+        if (list != null && list.size() > 0) {
+            for (int i = 0; i < list.size(); i++) {
+                String id = list.get(i).getId();
+                if (id != null && !id.equals("")) {
+                    if (id.equals(_id)) {
+                        boolean  b1 = list.get(i).is_owner();
+                        if(b1){
                             b = true;
                             break;
                         }else{

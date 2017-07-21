@@ -41,6 +41,7 @@ public class EditGroupMessageFragment extends Fragment implements View.OnClickLi
     private TextView tv_groupName, tv_groupIntroduce, tv_groupAddress;
     private Dialog cityDialog,imgDialog,dialog;
     private int provinceIndex, cityIndex;
+    private ResultListener Listener;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -274,4 +275,26 @@ public class EditGroupMessageFragment extends Fragment implements View.OnClickLi
         if (dialog != null) dialog.dismiss();
     }
 
+    /**
+     * 返回值设置
+     *
+     * @param type
+     * @param news
+     */
+    public void setResult(int type, String news) {
+        Listener.resultListener(type, news);
+    }
+
+    /**
+     * 回调结果值
+     *
+     * @param l
+     */
+    public void setResultListener(ResultListener l) {
+        Listener = l;
+    }
+
+    public interface ResultListener {
+        void resultListener(int type, String news);
+    }
 }

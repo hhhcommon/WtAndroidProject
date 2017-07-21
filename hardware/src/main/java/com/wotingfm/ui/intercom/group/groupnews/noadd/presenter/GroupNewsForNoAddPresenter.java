@@ -2,22 +2,19 @@ package com.wotingfm.ui.intercom.group.groupnews.noadd.presenter;
 
 import android.os.Bundle;
 import android.util.Log;
-
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.woting.commonplat.config.GlobalNetWorkConfig;
 import com.wotingfm.common.config.GlobalStateConfig;
 import com.wotingfm.ui.intercom.group.groupapply.GroupApplyFragment;
-import com.wotingfm.ui.intercom.group.groupapply.view.GroupApplyForNewsFragment;
 import com.wotingfm.ui.intercom.group.groupmumbershow.view.GroupNumberShowFragment;
 import com.wotingfm.ui.intercom.group.groupnews.noadd.model.GroupNewsForNoAddModel;
 import com.wotingfm.ui.intercom.group.groupnews.noadd.view.GroupNewsForNoAddFragment;
 import com.wotingfm.ui.intercom.main.contacts.model.Contact;
 import com.wotingfm.ui.intercom.main.view.InterPhoneActivity;
-
 import org.json.JSONObject;
 import org.json.JSONTokener;
-
 import java.io.Serializable;
 import java.util.List;
 
@@ -91,7 +88,7 @@ public class GroupNewsForNoAddPresenter {
     // 处理返回的数据
     private void dealSuccess(Object o) {
         try {
-            String s = new Gson().toJson(o);
+            String s =new GsonBuilder().serializeNulls().create().toJson(o);
             JSONObject js = new JSONObject(s);
             int ret = js.getInt("ret");
             Log.e("获取群详情==ret", String.valueOf(ret));
@@ -193,7 +190,7 @@ public class GroupNewsForNoAddPresenter {
     // 处理群成员返回的数据
     private void dealGroupPersonSuccess(Object o) {
         try {
-            String s = new Gson().toJson(o);
+            String s = new GsonBuilder().serializeNulls().create().toJson(o);
             JSONObject js = new JSONObject(s);
             int ret = js.getInt("ret");
             Log.e("获取群成员==ret", String.valueOf(ret));

@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.woting.commonplat.config.GlobalNetWorkConfig;
 import com.wotingfm.common.config.GlobalStateConfig;
@@ -34,6 +35,7 @@ public class ChannelPresenter {
     private String fromType, groupId;
     private int type=1;
     private List<String> list;
+    private String s;
 
 
     public ChannelPresenter(StandbyChannelFragment activity) {
@@ -111,7 +113,7 @@ public class ChannelPresenter {
             if (GlobalNetWorkConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
                 if (model.checkData(channel1, channel2)) {
                     activity.dialogShow();
-                    String s = model.assemblyData(channel1, channel2);
+                    s = model.assemblyData(channel1, channel2);
                     model.loadNews(s, groupId, new ChannelModel.OnLoadInterface() {
                         @Override
                         public void onSuccess(Object o) {
@@ -137,7 +139,7 @@ public class ChannelPresenter {
     // 处理返回的数据
     private void dealSuccess(Object o) {
         try {
-            String s = new Gson().toJson(o);
+            String s =new GsonBuilder().serializeNulls().create().toJson(o);
             JSONObject js = new JSONObject(s);
             int ret = js.getInt("ret");
             Log.e("设置群备用频道==ret", String.valueOf(ret));
@@ -179,6 +181,7 @@ public class ChannelPresenter {
             fragment.setArguments(bundle);
             InterPhoneActivity.open(fragment);
         } else if (fromType != null && fromType.trim().equals("message")) {
+            activity.setResult(true,s);
             InterPhoneActivity.close();
         }
     }

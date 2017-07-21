@@ -31,6 +31,8 @@ public class GroupNumberDelFragment extends Fragment implements GroupNumberDelAd
     private GroupNumberDelAdapter mAdapter;
     private Dialog dialog;
     private TipView tip_view;
+    private ResultListener Listener;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,6 +67,7 @@ public class GroupNumberDelFragment extends Fragment implements GroupNumberDelAd
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.head_left_btn:
+                presenter.isChange();
                 InterPhoneActivity.close();
                 break;
         }
@@ -154,5 +157,27 @@ public class GroupNumberDelFragment extends Fragment implements GroupNumberDelAd
             tip_view.setVisibility(View.VISIBLE);
             tip_view.setTipView(TipView.TipStatus.IS_ERROR);
         }
+    }
+
+    /**
+     * 返回值设置
+     *
+     * @param type
+     */
+    public void setResult(boolean type) {
+        Listener.resultListener(type);
+    }
+
+    /**
+     * 回调结果值
+     *
+     * @param l
+     */
+    public void setResultListener(ResultListener l) {
+        Listener = l;
+    }
+
+    public interface ResultListener {
+        void resultListener(boolean type);
     }
 }

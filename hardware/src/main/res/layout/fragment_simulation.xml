@@ -32,12 +32,6 @@
     </RelativeLayout>
 
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="0.5dp"
-        android:background="@color/line_color" />
-
-
-    <TextView
         android:id="@+id/tv_green"
         android:layout_width="4dp"
         android:layout_height="4dp"

@@ -7,12 +7,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
-
 import com.woting.commonplat.utils.BitmapUtils;
 import com.wotingfm.R;
 import com.wotingfm.common.utils.GlideUtils;
 import com.wotingfm.ui.intercom.main.contacts.model.Contact;
-
 import java.util.List;
 
 /**

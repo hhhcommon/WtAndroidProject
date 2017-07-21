@@ -40,6 +40,7 @@ public class StandbyChannelFragment extends Fragment implements View.OnClickList
     private ChannelPresenter presenter;
     private TextView tv_channel1, tv_channel2;
     private Dialog dialog;
+    private ResultListener Listener;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -179,5 +180,25 @@ public class StandbyChannelFragment extends Fragment implements View.OnClickList
     public void dialogCancel() {
         if (dialog != null) dialog.dismiss();
     }
+    /**
+     * 返回值设置
+     *
+     * @param type
+     */
+    public void setResult(boolean type,String channel) {
+        Listener.resultListener(type,channel);
+    }
 
+    /**
+     * 回调结果值
+     *
+     * @param l
+     */
+    public void setResultListener(ResultListener l) {
+        Listener = l;
+    }
+
+    public interface ResultListener {
+        void resultListener(boolean type,String channel);
+    }
 }

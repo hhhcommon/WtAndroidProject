@@ -309,7 +309,7 @@ public interface RetrofitService {
                                        @Query("token") String token);
 
     // 设置管理员
-    @POST(Api.URL_GROUP_SET_MANAGER)
+    @PUT(Api.URL_GROUP_SET_MANAGER)
     Observable<Object> setManager(@Path("id") String id,
                                   @Query("new_admin_ids") String s);
 

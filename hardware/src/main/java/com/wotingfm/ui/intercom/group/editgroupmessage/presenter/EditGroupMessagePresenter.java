@@ -140,6 +140,8 @@ public class EditGroupMessagePresenter {
                 public void resultListener(boolean type, String name) {
                     if (type) {
                         if (name != null && !name.equals("")) {
+                            // 上层界面数据更改
+                            activity.setResult(2,name);
                             activity.setViewForGroupName(name);
                         }
                     }
@@ -165,6 +167,8 @@ public class EditGroupMessagePresenter {
                 public void resultListener(boolean type, String name) {
                     if (type) {
                         if (name != null && !name.equals("")) {
+                            // 上层界面数据更改
+                            activity.setResult(4,name);
                             activity.setViewForGroupIntroduce(name);
                         }
                     }
@@ -216,6 +220,7 @@ public class EditGroupMessagePresenter {
             int ret = js.getInt("ret");
             Log.e("修改群地址=ret", String.valueOf(ret));
             if (ret == 0) {
+                activity.setResult(3,name);
                 activity.setViewGroupAddress(name);
                 ToastUtils.show_always(activity.getActivity(), "修改成功");
             } else {
@@ -263,6 +268,8 @@ public class EditGroupMessagePresenter {
             int ret = js.getInt("ret");
             Log.e("修改群头像=ret", String.valueOf(ret));
             if (ret == 0) {
+                // 上层界面数据更改
+                activity.setResult(1,name);
                 activity.setViewForImage(name);
                 ToastUtils.show_always(activity.getActivity(), "图片上传成功");
             } else {

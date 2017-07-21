@@ -29,6 +29,7 @@ public class GroupNumberDelPresenter {
     private final GroupNumberDelModel model;
     private List<Contact.user> list;
     private String gid;// 群id
+    private boolean change=false;// 上层界面是否更改
 
     public GroupNumberDelPresenter(GroupNumberDelFragment activity) {
         this.activity = activity;
@@ -56,6 +57,13 @@ public class GroupNumberDelPresenter {
         } else {
             activity.isLoginView(2);
         }
+    }
+
+    /**
+     * 上层界面是否更改
+     */
+    public void isChange(){
+        activity.setResult(change);
     }
 
     /**
@@ -170,6 +178,7 @@ public class GroupNumberDelPresenter {
             int ret = js.getInt("ret");
             Log.e("ret", String.valueOf(ret));
             if (ret == 0) {
+                change=true;
                 list.remove(position);
                 activity.updateUI(list);
             } else {
