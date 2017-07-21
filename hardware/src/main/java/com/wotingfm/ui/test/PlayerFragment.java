@@ -460,7 +460,6 @@ public class PlayerFragment extends BaseFragment implements View.OnClickListener
             case R.id.ivPlayerFind:
                 if (getActivity() instanceof PlayerActivity) {
                     PlayerActivity playerActivity = (PlayerActivity) getActivity();
-                    BSApplication.IS_RESULT = false;
                     if (BSApplication.fragmentBase == null) {
                         playerActivity.open(LookListFragment.newInstance(0));
                     } else {

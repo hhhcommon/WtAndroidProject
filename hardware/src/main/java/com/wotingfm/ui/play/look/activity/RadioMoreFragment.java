@@ -74,6 +74,7 @@ public class RadioMoreFragment extends BaseFragment implements OnLoadMoreListene
         selectedAdapter = new RadioStationAdapter(getActivity(), datas, new RadioStationAdapter.RadioStationClick() {
             @Override
             public void click(ChannelsBean dataBean) {
+                BSApplication.IS_RESULT = true;
                 BSApplication.isIS_BACK = true;
                 openFragment(PlayerFragment.newInstance(dataBean));
                 //RadioInfoActivity.start(RadioMoreActivity.this, dataBean.title, dataBean.id);

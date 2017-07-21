@@ -14,6 +14,7 @@ import com.woting.commonplat.widget.LoadFrameLayout;
 import com.wotingfm.R;
 import com.wotingfm.common.adapter.findHome.RadioStationAdapter;
 import com.wotingfm.common.adapter.findHome.SelectedAdapter;
+import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.bean.ChannelsBean;
 import com.wotingfm.common.bean.HomeBanners;
 import com.wotingfm.common.bean.Radio;
@@ -80,6 +81,8 @@ public class RadioStationFragment extends BaseFragment implements SwipeRefreshLa
         RadioStationAdapter selectedAdapter = new RadioStationAdapter(getActivity(), datas, new RadioStationAdapter.RadioStationClick() {
             @Override
             public void click(ChannelsBean dataBean) {
+                BSApplication.IS_RESULT = true;
+                BSApplication.isIS_BACK = true;
                 openFragment(PlayerFragment.newInstance(dataBean));
                 // RadioInfoActivity.start(getActivity(), dataBean.title, dataBean.id);
             }

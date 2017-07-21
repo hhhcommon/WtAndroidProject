@@ -200,9 +200,7 @@ public class LookListFragment extends BaseFragment implements View.OnClickListen
                 break;
             case R.id.ivBack:
             case R.id.ivClose:
-                PlayerActivity playerActivity = (PlayerActivity) getActivity();
-                if (playerActivity != null)
-                    playerActivity.close();
+                closeFragment();
                 GlobalStateConfig.mineFromType = 0;
                 GlobalStateConfig.activityA = "A";
                 EventBus.getDefault().post(new MessageEvent("one"));

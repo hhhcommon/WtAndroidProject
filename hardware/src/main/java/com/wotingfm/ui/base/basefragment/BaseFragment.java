@@ -37,7 +37,6 @@ import com.wotingfm.ui.test.PlayerFragment;
 
 import butterknife.ButterKnife;
 
-import static com.wotingfm.common.application.BSApplication.isIS_BACK;
 
 /**
  * Created by amine on 2017/6/14.
@@ -68,9 +67,9 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
 
     public void backResult() {
         if (BSApplication.isIS_BACK == true) {
-            closeFragment();
             BSApplication.isIS_BACK = false;
             BSApplication.fragmentBase = null;
+            closeFragment();
             openFragmentNoAnim(LookListFragment.newInstance(0));
         } else {
             closeFragment();
@@ -264,15 +263,6 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
         if (getActivity() instanceof PlayerActivity) {
             PlayerActivity playerActivity = (PlayerActivity) getActivity();
             playerActivity.openNoAnim(fragment);
-        }
-    }
-
-    public void openFragmentMain(Fragment fragment) {
-        if (!(this instanceof PlayerFragment))
-            BSApplication.fragmentBase = this;
-        if (getActivity() instanceof PlayerActivity) {
-            PlayerActivity playerActivity = (PlayerActivity) getActivity();
-            playerActivity.openMain(fragment);
         }
     }
 
