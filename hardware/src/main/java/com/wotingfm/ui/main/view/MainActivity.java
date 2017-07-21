@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.WindowManager;
 import android.widget.TabHost;
 
+import com.woting.commonplat.statusUtils.StatusBarCompat;
 import com.wotingfm.R;
 import com.wotingfm.common.bean.MessageEvent;
 import com.wotingfm.common.utils.StatusBarUtil;
@@ -31,19 +32,12 @@ public class MainActivity extends TabActivity {
         setContentView(R.layout.activity_main);
         EventBus.getDefault().register(this);
         context = this;
- /*       if (Build.VERSION.SDK_INT == Build.VERSION_CODES.KITKAT) {
-            // 设置全屏，并且不会Activity的布局让出状态栏的空间
-            getWindow().addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN);
-            getWindow().addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
-        }
-*/
   /*      getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);        // 透明状态栏
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);    // 透明导航栏*/
         InitTextView();
         mainPresenter = new MainPresenter(this);
-
-//        applySelectedColor();
-      //  applyTextColor(false);
+        // applySelectedColor();
+     //   applyTextColor(false);
     }
 
     // 初始化视图,主页跳转的3个界面
