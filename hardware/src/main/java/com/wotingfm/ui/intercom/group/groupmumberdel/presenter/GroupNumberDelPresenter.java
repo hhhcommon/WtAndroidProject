@@ -5,7 +5,9 @@ import android.util.Log;
 
 import com.google.gson.Gson;
 import com.woting.commonplat.config.GlobalNetWorkConfig;
+import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.config.GlobalStateConfig;
+import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.common.utils.ToastUtils;
 import com.wotingfm.ui.intercom.group.groupmumberdel.model.GroupNumberDelModel;
 import com.wotingfm.ui.intercom.group.groupmumberdel.view.GroupNumberDelFragment;
@@ -29,7 +31,7 @@ public class GroupNumberDelPresenter {
     private final GroupNumberDelModel model;
     private List<Contact.user> list;
     private String gid;// 群id
-    private boolean change=false;// 上层界面是否更改
+    private boolean change = false;// 上层界面是否更改
 
     public GroupNumberDelPresenter(GroupNumberDelFragment activity) {
         this.activity = activity;
@@ -51,7 +53,7 @@ public class GroupNumberDelPresenter {
             if (list != null && list.size() > 0) {
                 activity.updateUI(list);
                 activity.isLoginView(0);
-            }else{
+            } else {
                 activity.isLoginView(1);
             }
         } else {
@@ -62,7 +64,7 @@ public class GroupNumberDelPresenter {
     /**
      * 上层界面是否更改
      */
-    public void isChange(){
+    public void isChange() {
         activity.setResult(change);
     }
 
@@ -110,22 +112,25 @@ public class GroupNumberDelPresenter {
             e.printStackTrace();
         }
         if (Id != null && !Id.equals("")) {
-            if (b) {
-                // 是自己好友
-                PersonMessageFragment fragment = new PersonMessageFragment();
-                Bundle bundle = new Bundle();
-                bundle.putString("type", "true");
-                bundle.putString("id", Id);
-                fragment.setArguments(bundle);
-                InterPhoneActivity.open(fragment);
-            } else {
-                // 不是自己好友
-                PersonMessageFragment fragment = new PersonMessageFragment();
-                Bundle bundle = new Bundle();
-                bundle.putString("type", "false");
-                bundle.putString("id", Id);
-                fragment.setArguments(bundle);
-                InterPhoneActivity.open(fragment);
+            String id = BSApplication.SharedPreferences.getString(StringConstant.USER_ID, "");
+            if (!id.equals(Id)) {
+                if (b) {
+                    // 是自己好友
+                    PersonMessageFragment fragment = new PersonMessageFragment();
+                    Bundle bundle = new Bundle();
+                    bundle.putString("type", "true");
+                    bundle.putString("id", Id);
+                    fragment.setArguments(bundle);
+                    InterPhoneActivity.open(fragment);
+                } else {
+                    // 不是自己好友
+                    PersonMessageFragment fragment = new PersonMessageFragment();
+                    Bundle bundle = new Bundle();
+                    bundle.putString("type", "false");
+                    bundle.putString("id", Id);
+                    fragment.setArguments(bundle);
+                    InterPhoneActivity.open(fragment);
+                }
             }
         } else {
             ToastUtils.show_always(activity.getActivity(), "数据出错了，请稍后再试！");
@@ -178,7 +183,7 @@ public class GroupNumberDelPresenter {
             int ret = js.getInt("ret");
             Log.e("ret", String.valueOf(ret));
             if (ret == 0) {
-                change=true;
+                change = true;
                 list.remove(position);
                 activity.updateUI(list);
             } else {

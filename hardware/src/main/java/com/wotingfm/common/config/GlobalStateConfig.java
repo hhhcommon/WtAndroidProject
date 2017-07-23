@@ -65,4 +65,9 @@ public class GlobalStateConfig {
     public static int PCDType;
     public static List<Contact.group> list_group;          // 通讯录中的对讲组
     public static List<Contact.user> list_person;          // 通讯录中的好友
+    // 图片缓存最大容量，1000M，根据自己的需求进行修改
+    public static final int GLIDE_CATCH_SIZE = 1000 * 1000 * 1000;
+
+    // 图片缓存子目录
+    public static final String GLIDE_CARCH_DIR = "image_catch";
 }

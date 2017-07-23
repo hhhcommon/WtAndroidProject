@@ -16,6 +16,7 @@ import android.view.Window;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.woting.commonplat.manager.PhoneMsgManager;
 import com.wotingfm.R;
 import com.wotingfm.common.config.GlobalStateConfig;
 import com.wotingfm.common.utils.DialogUtils;
@@ -103,7 +104,7 @@ public class StandbyChannelFragment extends Fragment implements View.OnClickList
      * @param tempList
      */
     public void setDialog(List<String> tempList) {
-        GlobalStateConfig.LoopViewW=800;
+        GlobalStateConfig.LoopViewW= new Double(PhoneMsgManager.ScreenWidth/2.2).intValue();;
         View dialog = LayoutInflater.from(context).inflate(R.layout.dialog_channel, null);
         LoopView pickChannel = (LoopView) dialog.findViewById(R.id.pick_channel);
         dialog.findViewById(R.id.tv_quxiao).setOnClickListener(this);

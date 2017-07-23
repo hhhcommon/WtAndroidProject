@@ -4,6 +4,8 @@ import android.app.TabActivity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Environment;
+import android.util.Log;
 import android.view.WindowManager;
 import android.widget.TabHost;
 
@@ -37,13 +39,26 @@ public class MainActivity extends TabActivity {
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
         }
 */
-  /*      getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);        // 透明状态栏
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);    // 透明导航栏*/
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);        // 透明状态栏
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);    // 透明导航栏
         InitTextView();
         mainPresenter = new MainPresenter(this);
 
 //        applySelectedColor();
-      //  applyTextColor(false);
+        applyTextColor(false);
+
+        try {
+            Log.e("1",Environment.getDataDirectory().getPath());
+            Log.e("2",Environment.getDownloadCacheDirectory().getPath());
+            Log.e("3",Environment.getExternalStorageDirectory().getPath());
+            Log.e("4",Environment.getRootDirectory().getPath());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+//        Environment.getDataDirectory().getPath();              //   获得根目录/data 内部存储路径
+//        Environment.getDownloadCacheDirectory().getPath();     //   获得缓存目录/cache
+//        Environment.getExternalStorageDirectory().getPath();   //   获得SD卡目录/mnt/sdcard（获取的是手机外置sd卡的路径）
+//        Environment.getRootDirectory().getPath();              //
     }
 
     // 初始化视图,主页跳转的3个界面

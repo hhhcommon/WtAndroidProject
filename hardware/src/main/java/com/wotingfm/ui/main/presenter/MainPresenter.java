@@ -12,6 +12,7 @@ import com.wotingfm.common.bean.MessageEvent;
 import com.wotingfm.common.config.GlobalStateConfig;
 import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.common.service.FloatingWindowService;
+import com.wotingfm.common.service.NotificationService;
 import com.wotingfm.ui.base.basepresenter.BasePresenter;
 import com.wotingfm.ui.main.model.MainModel;
 import com.wotingfm.ui.main.view.MainActivity;
@@ -26,6 +27,8 @@ public class MainPresenter extends BasePresenter {
     private final MainModel mainModel;
     private MainActivity mainActivity;
     private Intent FloatingWindow;
+    private Intent NS;
+
     private NetWorkChangeReceiver netWorkChangeReceiver;
 
     public MainPresenter(MainActivity mainActivity) {
@@ -38,6 +41,8 @@ public class MainPresenter extends BasePresenter {
     private void createService() {
         FloatingWindow = new Intent(mainActivity, FloatingWindowService.class);//启动全局弹出框服务
         mainActivity.startService(FloatingWindow);
+        NS = new Intent(mainActivity, NotificationService.class);//启动推送消息处理服务
+        mainActivity.startService(NS);
     }
 
 
@@ -83,6 +88,7 @@ public class MainPresenter extends BasePresenter {
      */
     public void stop() {
         mainActivity.stopService(FloatingWindow);
+        mainActivity.stopService(NS);
         mainActivity.unregisterReceiver(netWorkChangeReceiver);
         mainActivity.unregisterReceiver(endApplicationBroadcast);
         Log.e("app退出", "app退出");

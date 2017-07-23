@@ -59,8 +59,7 @@ public class SimulationService extends Service {
      */
     public static void setFrequence(String Frequ) {
         if (!TextUtils.isEmpty(Frequ)) {
-            String _deviceNeedFreq = Frequ.substring(5, Frequ.length()).trim();
-            String deviceNeedFreq = _deviceNeedFreq.replaceAll(" ", "");
+            String deviceNeedFreq = Frequ.replaceAll(" ", "");
             //Log.e("要设置的Freq","a"+deviceNeedFreq+"b");
             context.serialControl.sendTxt("AT+DMOSETGROUP=1," + deviceNeedFreq + "," + deviceNeedFreq + ",00,4,1\r\n");
         } else {

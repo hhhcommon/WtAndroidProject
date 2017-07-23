@@ -1,12 +1,17 @@
 package com.wotingfm.ui.intercom.group.groupnews.add.presenter;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.util.Log;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.woting.commonplat.config.GlobalNetWorkConfig;
+import com.woting.commonplat.utils.JsonEncloseUtils;
 import com.wotingfm.common.config.GlobalStateConfig;
 import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.common.utils.ToastUtils;
@@ -17,15 +22,20 @@ import com.wotingfm.ui.intercom.group.groupmumbershow.view.GroupNumberShowFragme
 import com.wotingfm.ui.intercom.group.groupnews.add.model.GroupNewsForAddModel;
 import com.wotingfm.ui.intercom.group.groupnews.add.view.GroupNewsForAddFragment;
 import com.wotingfm.ui.intercom.main.contacts.model.Contact;
+import com.wotingfm.ui.intercom.main.simulation.view.SimulationInterPhoneFragment;
 import com.wotingfm.ui.intercom.main.view.InterPhoneActivity;
 import com.wotingfm.ui.intercom.person.personmessage.view.PersonMessageFragment;
 import com.wotingfm.ui.intercom.person.personnote.view.EditPersonNoteFragment;
 import com.wotingfm.ui.mine.qrcodes.EWMShowFragment;
+
 import org.json.JSONObject;
 import org.json.JSONTokener;
+
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 作者：xinLong on 2017/6/5 13:55
@@ -39,12 +49,15 @@ public class GroupNewsForAddPresenter {
     private Contact.group g_news;
     private List<Contact.user> list;
     private boolean headViewShow = false;// 选择界面是否展示
-    private boolean isAdmin=false;// 是否是管理员
-    private boolean isOw=false;// 是否是群主
+    private boolean isAdmin = false;// 是否是管理员
+    private boolean isOw = false;// 是否是群主
+    private String channel1, channel2;
+    private MessageReceiver Receiver;
 
     public GroupNewsForAddPresenter(GroupNewsForAddFragment activity) {
         this.activity = activity;
         this.model = new GroupNewsForAddModel();
+        setReceiver();
         try {
             gid = activity.getArguments().getString("id");
         } catch (Exception e) {
@@ -184,8 +197,8 @@ public class GroupNewsForAddPresenter {
         }
 
         String channel = "";
-        String channel1 = "";
-        String channel2 = "";
+        channel1 = "";
+        channel2 = "";
         try {
             channel = g_news.getChannel();
         } catch (Exception e) {
@@ -240,8 +253,8 @@ public class GroupNewsForAddPresenter {
                 }.getType());
                 if (list != null) {
                     // 处理数据
-                    isAdmin= model.isAdmin(list);// 判断当前用户是否是管理员
-                    isOw=model.isOw(list);// 判断当前用户是否是群主
+                    isAdmin = model.isAdmin(list);// 判断当前用户是否是管理员
+                    isOw = model.isOw(list);// 判断当前用户是否是群主
                     setAdmin(isAdmin);
                     ArrayList<Contact.user> _list = model.assemblyDataForGroup(list, isAdmin);
                     if (_list != null && _list.size() > 0) {
@@ -340,6 +353,25 @@ public class GroupNewsForAddPresenter {
         } else {
             ToastUtils.show_always(activity.getActivity(), "数据出错了，请您稍后再试！");
         }
+    }
+
+    /**
+     * 跳转到模拟对讲界面
+     *
+     * @param type
+     */
+    public void jumpChannelSet(int type) {
+        String c;
+        if (type == 1) {
+            c = channel1;
+        } else {
+            c = channel2;
+        }
+        SimulationInterPhoneFragment fragment = new SimulationInterPhoneFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString("channel", c);
+        fragment.setArguments(bundle);
+        InterPhoneActivity.open(fragment);
     }
 
     /**
@@ -454,14 +486,14 @@ public class GroupNewsForAddPresenter {
             } else if (type == 3) {// 删除群成员
                 String cid = "1";
                 try {
-                    cid = g_news.getCreator_id();
+                    cid = g_news.getOwner_id();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
                 GroupNumberDelFragment fragment = new GroupNumberDelFragment();
                 Bundle bundle = new Bundle();
                 bundle.putString("gid", gid);// 群id
-                bundle.putString("id", cid);// 群创建者id
+                bundle.putString("id", cid);// 群所有者id
                 bundle.putSerializable("list", (Serializable) list);// 成员列表
                 fragment.setArguments(bundle);
                 InterPhoneActivity.open(fragment);
@@ -469,7 +501,7 @@ public class GroupNewsForAddPresenter {
                     @Override
                     public void resultListener(boolean type) {
                         if (type) {
-                         getData();
+                            getData();
                         }
                     }
                 });
@@ -510,9 +542,47 @@ public class GroupNewsForAddPresenter {
             bundle.putString("image", image);// 头像
             bundle.putString("news", news);// 简介
             bundle.putString("name", name);// 姓名
-            bundle.putString("uri", "测试群组数据");// 内容路径
+
+            Map<String, Object> map = new HashMap<>();
+            map.put("type", "group");
+            map.put("id", gid);
+            String url = JsonEncloseUtils.jsonEnclose(map).toString();
+
+            bundle.putString("uri", url);// 内容路径
             fragment.setArguments(bundle);
             InterPhoneActivity.open(fragment);
+        }
+    }
+
+    // 设置广播接收器(群组信息更改)
+    private void setReceiver() {
+        if (Receiver == null) {
+            Receiver = new MessageReceiver();
+            IntentFilter filter = new IntentFilter();
+            filter.addAction(BroadcastConstants.GROUP_GET);
+            activity.getActivity().registerReceiver(Receiver, filter);
+        }
+    }
+
+    class MessageReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            if (action.equals(BroadcastConstants.GROUP_GET)) {
+                if (gid != null && !gid.equals("")) {
+                    getNews();
+                }
+            }
+        }
+    }
+
+    /**
+     * 界面销毁,注销广播
+     */
+    public void destroy() {
+        if (Receiver != null) {
+            activity.getActivity().unregisterReceiver(Receiver);
+            Receiver = null;
         }
     }
 }

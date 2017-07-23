@@ -6,7 +6,9 @@ import android.util.Log;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.woting.commonplat.config.GlobalNetWorkConfig;
+import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.config.GlobalStateConfig;
+import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.common.utils.L;
 import com.wotingfm.common.utils.ToastUtils;
 import com.wotingfm.ui.intercom.group.groupmumbershow.model.GroupNumberShowModel;
@@ -88,7 +90,7 @@ public class GroupNumberShowPresenter {
     }
 
     /**
-     * 查看用户详情
+     * 查看用户详情(自己，好友，非好友)
      *
      * @param position
      */
@@ -101,23 +103,27 @@ public class GroupNumberShowPresenter {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
         if (Id != null && !Id.equals("")) {
-            if (b) {
-                // 是自己好友
-                PersonMessageFragment fragment = new PersonMessageFragment();
-                Bundle bundle = new Bundle();
-                bundle.putString("type", "true");
-                bundle.putString("id", Id);
-                fragment.setArguments(bundle);
-                InterPhoneActivity.open(fragment);
-            } else {
-                // 不是自己好友
-                PersonMessageFragment fragment = new PersonMessageFragment();
-                Bundle bundle = new Bundle();
-                bundle.putString("type", "false");
-                bundle.putString("id", Id);
-                fragment.setArguments(bundle);
-                InterPhoneActivity.open(fragment);
+            String id= BSApplication.SharedPreferences.getString(StringConstant.USER_ID,"");
+            if(!id.equals(Id)){
+                if (b) {
+                    // 是自己好友
+                    PersonMessageFragment fragment = new PersonMessageFragment();
+                    Bundle bundle = new Bundle();
+                    bundle.putString("type", "true");
+                    bundle.putString("id", Id);
+                    fragment.setArguments(bundle);
+                    InterPhoneActivity.open(fragment);
+                } else {
+                    // 不是自己好友
+                    PersonMessageFragment fragment = new PersonMessageFragment();
+                    Bundle bundle = new Bundle();
+                    bundle.putString("type", "false");
+                    bundle.putString("id", Id);
+                    fragment.setArguments(bundle);
+                    InterPhoneActivity.open(fragment);
+                }
             }
         } else {
             ToastUtils.show_always(activity.getActivity(), "数据出错了，请稍后再试！");

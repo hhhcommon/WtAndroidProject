@@ -53,6 +53,7 @@
             android:layout_marginTop="10dp"
             android:background="@color/white"
             android:gravity="top"
+            android:maxLength="90"
             android:hint="给群来一段美丽的描述吧"
             android:lineSpacingExtra="2sp"
             android:paddingLeft="12dp"

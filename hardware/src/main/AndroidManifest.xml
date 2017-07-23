@@ -77,7 +77,9 @@
         android:label="@string/app_name"
         android:supportsRtl="false"
         android:theme="@style/AppBlackTheme">
-
+        <meta-data
+            android:name="com.wotingfm.common.glide.GlideConfiguration"
+            android:value="GlideModule" />
         <!-- 启动页 -->
         <activity
             android:name=".ui.user.splash.SplashActivity"
@@ -199,6 +201,9 @@
             android:theme="@style/MyAppTheme" />
 
         <service android:name=".common.service.FloatingWindowService" />
+        <service android:name=".common.service.SimulationService" />
+        <service android:name=".common.service.NotificationService" />
+
     </application>
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
 

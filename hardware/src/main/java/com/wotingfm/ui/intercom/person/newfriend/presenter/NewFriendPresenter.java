@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.woting.commonplat.config.GlobalNetWorkConfig;
 import com.wotingfm.common.config.GlobalStateConfig;
@@ -84,7 +85,7 @@ public class NewFriendPresenter {
     // 处理返回数据
     private void dealSuccess(Object o) {
         try {
-            String s = new Gson().toJson(o);
+            String s = new GsonBuilder().serializeNulls().create().toJson(o);
             JSONObject js = new JSONObject(s);
             int ret = js.getInt("ret");
             Log.e("ret", String.valueOf(ret));
@@ -266,7 +267,7 @@ public class NewFriendPresenter {
     // 处理新的好友申请==同意=返回数据
     private void dealApplySuccess(Object o, int position) {
         try {
-            String s = new Gson().toJson(o);
+            String s = new GsonBuilder().serializeNulls().create().toJson(o);
             JSONObject js = new JSONObject(s);
             int ret = js.getInt("ret");
             Log.e("ret", String.valueOf(ret));
@@ -291,7 +292,7 @@ public class NewFriendPresenter {
     // 处理新的好友申请==删除=返回数据
     private void dealDelSuccess(Object o, int position) {
         try {
-            String s = new Gson().toJson(o);
+            String s = new GsonBuilder().serializeNulls().create().toJson(o);
             JSONObject js = new JSONObject(s);
             int ret = js.getInt("ret");
             Log.e("ret", String.valueOf(ret));

@@ -18,6 +18,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
 import com.woting.commonplat.manager.PhoneMsgManager;
 import com.woting.commonplat.utils.BitmapUtils;
 import com.woting.commonplat.widget.TipView;
@@ -30,7 +31,7 @@ import com.wotingfm.ui.base.baseinterface.ScrollViewListener;
 import com.wotingfm.ui.intercom.group.groupnews.add.adapter.GroupNewsPersonForAddAdapter;
 import com.wotingfm.ui.intercom.group.groupnews.add.presenter.GroupNewsForAddPresenter;
 import com.wotingfm.ui.intercom.main.contacts.model.Contact;
-import com.wotingfm.ui.intercom.main.simulation.SimulationInterPhoneFragment;
+import com.wotingfm.ui.intercom.main.simulation.view.SimulationInterPhoneFragment;
 import com.wotingfm.ui.intercom.main.view.InterPhoneActivity;
 
 import java.util.List;
@@ -53,7 +54,7 @@ public class GroupNewsForAddFragment extends Fragment implements View.OnClickLis
     private ObservableScrollView scrollView;
     private int height = 480;// 滑动开始变色的高
     private RelativeLayout mRelativeLayout;
-    private ImageView head_left_btn, img_other,img_url;
+    private ImageView head_left_btn, img_other, img_url;
     private LinearLayout lin_chose, lin_channel;
     private ResultListener Listener;
 
@@ -142,7 +143,7 @@ public class GroupNewsForAddFragment extends Fragment implements View.OnClickLis
                 presenter.headViewShow();
                 break;
             case R.id.re_groupEwm:
-               presenter.jumpEWM();
+                presenter.jumpEWM();
                 break;
             case R.id.re_groupManager:
                 presenter.jumpManager();
@@ -151,18 +152,10 @@ public class GroupNewsForAddFragment extends Fragment implements View.OnClickLis
                 ToastUtils.show_always(this.getActivity(), "开始对讲");
                 break;
             case R.id.re_channel1:
-                SimulationInterPhoneFragment fragment = new SimulationInterPhoneFragment();
-                Bundle bundle = new Bundle();
-                bundle.putString("channel", "00000");
-                fragment.setArguments(bundle);
-                InterPhoneActivity.open(fragment);
+                presenter.jumpChannelSet(1);
                 break;
             case R.id.re_channel2:
-                SimulationInterPhoneFragment fragment1 = new SimulationInterPhoneFragment();
-                Bundle bundle1 = new Bundle();
-                bundle1.putString("channel", "00000");
-                fragment1.setArguments(bundle1);
-                InterPhoneActivity.open(fragment1);
+                presenter.jumpChannelSet(2);
                 break;
             case R.id.re_groupNumber:
                 presenter.jumpGroupNumberShow();
@@ -242,8 +235,8 @@ public class GroupNewsForAddFragment extends Fragment implements View.OnClickLis
      * @param address
      * @param introduce
      */
-    public void setViewData(String url,String name, String number, String address, String introduce, String channel1, String channel2) {
-        if (url!= null && !url.equals("")&&url.startsWith("http")) {
+    public void setViewData(String url, String name, String number, String address, String introduce, String channel1, String channel2) {
+        if (url != null && !url.equals("") && url.startsWith("http")) {
             GlideUtils.loadImageViewBlur(this.getActivity(), url, img_url);
         } else {
             Bitmap bmp = BitmapUtils.readBitMap(this.getActivity(), R.mipmap.p);
@@ -379,4 +372,9 @@ public class GroupNewsForAddFragment extends Fragment implements View.OnClickLis
         void resultListener(boolean type);
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        presenter.destroy();
+    }
 }

@@ -1,9 +1,9 @@
 package com.wotingfm.ui.mine.qrcodes;
 
-import android.app.Activity;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -27,10 +27,11 @@ import com.wotingfm.ui.mine.main.MineActivity;
 public class EWMShowFragment extends Fragment implements OnClickListener {
     private ImageView imageEwm;
     private ImageView imageHead;
-    private TextView textName,tv_news;
+    private TextView textName, tv_news;
     private Bitmap bmp;
     private View rootView;
     private String from = "person";
+    private int h = 260;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -83,8 +84,24 @@ public class EWMShowFragment extends Fragment implements OnClickListener {
             imageHead.setImageBitmap(BitmapUtils.readBitMap(this.getActivity(), R.mipmap.icon_avatar_d));
         }
 
+
+        h = PhoneMsgManager.ScreenWidth-100;
+
+//        if (PhoneMsgManager.ScreenWidth <= 480) {
+//            h = 260;
+//        } else if (480 < PhoneMsgManager.ScreenWidth && PhoneMsgManager.ScreenWidth <= 720) {
+//            h = 300;
+//        } else {
+//            h = 300;
+//        }
+
+        ViewGroup.LayoutParams para = imageEwm.getLayoutParams();//获取按钮的布局
+//        para.height = ((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, h, getResources().getDisplayMetrics()));
+        para.height=h;
+        imageEwm.setLayoutParams(para); //设置修改后的布局。
+
         if (uri != null && !uri.equals("")) {
-            bmp = CreateQRImageHelper.getInstance().createQRImage(uri, PhoneMsgManager.ScreenWidth-80, PhoneMsgManager.ScreenWidth-80);
+            bmp = CreateQRImageHelper.getInstance().createQRImage(uri, h, h);
         }
 
         if (bmp == null) {

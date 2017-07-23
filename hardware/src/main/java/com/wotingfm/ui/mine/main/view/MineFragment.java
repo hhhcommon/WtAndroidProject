@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.woting.commonplat.utils.JsonEncloseUtils;
 import com.wotingfm.R;
 import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.bean.MessageEvent;
@@ -31,6 +32,9 @@ import com.wotingfm.ui.mine.main.presenter.MinePresenter;
 import com.wotingfm.ui.user.logo.LogoActivity;
 
 import org.greenrobot.eventbus.EventBus;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * 个人中心主界面
@@ -173,7 +177,13 @@ public class MineFragment extends Fragment implements View.OnClickListener {
                     bundle.putString("image", BSApplication.SharedPreferences.getString(StringConstant.PORTRAIT,""));// 头像
                     bundle.putString("news", BSApplication.SharedPreferences.getString(StringConstant.USER_SIGN,""));// 简介
                     bundle.putString("name", BSApplication.SharedPreferences.getString(StringConstant.NICK_NAME,""));// 姓名
-                    bundle.putString("uri", "测试数据");// 内容路径
+
+                    Map<String, Object> map = new HashMap<>();
+                    map.put("type", "person");
+                    map.put("id", BSApplication.SharedPreferences.getString(StringConstant.USER_ID,""));
+                    String url = JsonEncloseUtils.jsonEnclose(map).toString();
+
+                    bundle.putString("uri", url);// 内容路径
                     fragment.setArguments(bundle);
                     MineActivity.open(fragment);
                 }

@@ -7,10 +7,12 @@ import android.util.Log;
 
 import com.woting.commonplat.config.GlobalNetWorkConfig;
 import com.woting.commonplat.manager.CacheManager;
+import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.config.GlobalStateConfig;
 import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.common.utils.CommonUtils;
 import com.wotingfm.common.utils.DialogUtils;
+import com.wotingfm.common.utils.GlideCatchUtil;
 import com.wotingfm.common.utils.ToastUtils;
 import com.wotingfm.ui.mine.set.model.SettingModel;
 import com.wotingfm.ui.mine.set.view.SettingFragment;
@@ -27,10 +29,11 @@ public class SettingPresenter {
     private final SettingFragment activity;
     private final SettingModel model;
     private final String cachePath = Environment.getExternalStorageDirectory() + "/woting/image";// 缓存路径
-
+    private String cache;
     public SettingPresenter(SettingFragment activity) {
         this.activity = activity;
         this.model = new SettingModel();
+        initCache();
     }
 
     /**
@@ -91,9 +94,9 @@ public class SettingPresenter {
             @Override
             public void run() {
                 File file = new File(cachePath);
-                final String cache;
+                File file1 = new File(BSApplication.getInstance().getCacheDir() + "/" + GlobalStateConfig.GLIDE_CARCH_DIR);
                 try {
-                    cache = CacheManager.getCacheSize(file);
+                    cache = CacheManager.getCacheSize(file,file1);
                     activity.getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -125,6 +128,8 @@ public class SettingPresenter {
 
         @Override
         protected Void doInBackground(Void... params) {
+            GlideCatchUtil.getInstance().clearCacheMemory();
+            GlideCatchUtil.getInstance().clearCacheDiskSelf();
             clearResult = CacheManager.delAllFile(cachePath);
             return null;
         }
