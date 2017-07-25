@@ -110,6 +110,7 @@ public class PlayerFragment extends BaseFragment implements View.OnClickListener
 
 
     public static PlayerFragment newInstance(String albumsId) {
+        BSApplication.IS_RESULT =true;
         EventBus.getDefault().postSticky("stop");
         PlayerFragment fragment = new PlayerFragment();
         Bundle bundle = new Bundle();
@@ -119,6 +120,7 @@ public class PlayerFragment extends BaseFragment implements View.OnClickListener
     }
 
     public static PlayerFragment newInstanceSerch(String albumsId, String id, String title) {
+        BSApplication.IS_RESULT =true;
         EventBus.getDefault().postSticky("stop");
         PlayerFragment fragment = new PlayerFragment();
         Bundle bundle = new Bundle();
@@ -130,6 +132,7 @@ public class PlayerFragment extends BaseFragment implements View.OnClickListener
     }
 
     public static PlayerFragment newInstance(String albumsId, String q) {
+        BSApplication.IS_RESULT =true;
         EventBus.getDefault().postSticky("stop");
         PlayerFragment fragment = new PlayerFragment();
         Bundle bundle = new Bundle();
@@ -150,6 +153,7 @@ public class PlayerFragment extends BaseFragment implements View.OnClickListener
     }
 
     public static PlayerFragment newInstance(ChannelsBean singlesBase) {
+        BSApplication.IS_RESULT =true;
         EventBus.getDefault().postSticky("stop");
         PlayerFragment fragment = new PlayerFragment();
         Bundle bundle = new Bundle();
@@ -159,6 +163,7 @@ public class PlayerFragment extends BaseFragment implements View.OnClickListener
     }
 
     public static PlayerFragment newInstance(SinglesBase singlesBase) {
+        BSApplication.IS_RESULT =true;
         EventBus.getDefault().postSticky("stop");
         PlayerFragment fragment = new PlayerFragment();
         Bundle bundle = new Bundle();
@@ -168,6 +173,7 @@ public class PlayerFragment extends BaseFragment implements View.OnClickListener
     }
 
     public static PlayerFragment newInstance(SinglesBase singlesBase, String q) {
+        BSApplication.IS_RESULT =true;
         EventBus.getDefault().postSticky("pause");
         PlayerFragment fragment = new PlayerFragment();
         Bundle bundle = new Bundle();
@@ -187,6 +193,7 @@ public class PlayerFragment extends BaseFragment implements View.OnClickListener
     }
 
     public static PlayerFragment newInstance() {
+        BSApplication.IS_RESULT =true;
         PlayerFragment fragment = new PlayerFragment();
         return fragment;
     }
