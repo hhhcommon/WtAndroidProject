@@ -13,6 +13,8 @@ import android.widget.TextView;
 import com.wotingfm.R;
 import com.wotingfm.common.utils.DialogUtils;
 import com.wotingfm.ui.mine.about.AboutFragment;
+import com.wotingfm.ui.mine.myfavorite.view.MyFavoriteFragment;
+import com.wotingfm.ui.mine.myfocus.view.MyFocusFragment;
 import com.wotingfm.ui.mine.security.main.AccountSecurityFragment;
 import com.wotingfm.ui.mine.feedback.view.FeedbackFragment;
 import com.wotingfm.ui.mine.messageset.MessageSettingFragment;
@@ -90,9 +92,7 @@ public class SettingFragment extends Fragment implements View.OnClickListener {
                 MineActivity.open(new PersonalInfoFragment());
                 break;
             case R.id.view_my_concern:// 我关注的
-                /**
-                 * 此处跳转传递参数，根据参数关闭的时候执行MineActivity.close();
-                 */
+                MineActivity.open(new MyFocusFragment());
                 break;
             case R.id.view_my_sub:// 我订阅的
                 /**
@@ -100,9 +100,7 @@ public class SettingFragment extends Fragment implements View.OnClickListener {
                  */
                 break;
             case R.id.view_like:// 我喜欢的
-                /**
-                 * 此处跳转传递参数，根据参数关闭的时候执行MineActivity.close();
-                 */
+                MineActivity.open(new MyFavoriteFragment());
                 break;
             case R.id.view_preference_setting:// 偏好设置
                 PreferenceFragment fragment = new PreferenceFragment();

@@ -1,6 +1,10 @@
 package com.wotingfm.common.net;
 
 
+import retrofit2.http.POST;
+import retrofit2.http.Path;
+import rx.Observable;
+
 public class Api {
     //请求实例  banner
     public static final String URL_BANNER = "api/home/banners";
@@ -84,4 +88,11 @@ public class Api {
     public static final String URL_JG_BIND = "api/accounts/j_token";
     // 获取最新版本号
     public static final String URL_GET_VERSION = "api/accounts/versionNum";
+    // 获取我关注的人
+    public static final String URL_GET_MY_FOCUS = "api/users/{id}/idols";
+    // 取消关注
+    public static final String URL_DEL_FANS = "api/fans";
+    // 获取我喜欢的节目列表
+    public static final String URL_GET_MY_FAVORITE = "api/users/{id}/likes";
+
 }

@@ -1509,4 +1509,43 @@ public class RetrofitUtils {
                 });
     }
 
+    /**
+     * 取消关注
+     */
+    public Observable<Object> delFocus(String idol_id,String id) throws Exception {
+        return retrofitService.delFocus(idol_id,id)
+                .map(new Func1<Object, Object>() {
+                    @Override
+                    public Object call(Object O) {
+                        return O;
+                    }
+                });
+    }
+
+    /**
+     * 获取我关注的人
+     */
+    public Observable<Object> getMyFocus(String id) throws Exception {
+        return retrofitService.getMyFocus(id)
+                .map(new Func1<Object, Object>() {
+                    @Override
+                    public Object call(Object O) {
+                        return O;
+                    }
+                });
+    }
+
+    /**
+     * 获取我喜欢的列表
+     */
+    public Observable<Object> getMyFavorite(String id) throws Exception {
+        return retrofitService.getMyFavorite(id)
+                .map(new Func1<Object, Object>() {
+                    @Override
+                    public Object call(Object O) {
+                        return O;
+                    }
+                });
+    }
+
 }

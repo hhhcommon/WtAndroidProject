@@ -119,8 +119,7 @@ public class LoginPresenter {
     // 处理返回数据
     private void dealSuccess(Object o) {
         try {
-            Gson g = new GsonBuilder().serializeNulls().create();
-            String s = g.toJson(o);
+            String s = new GsonBuilder().serializeNulls().create().toJson(o);
             JSONObject js = new JSONObject(s);
             int ret = js.getInt("ret");
             Log.e("ret", String.valueOf(ret));

@@ -4,8 +4,11 @@ import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
 import android.util.Log;
+
 import com.wotingfm.common.constant.BroadcastConstants;
+
 import org.json.JSONObject;
+
 import java.util.concurrent.ArrayBlockingQueue;
 
 /**
@@ -14,7 +17,7 @@ import java.util.concurrent.ArrayBlockingQueue;
  * 邮箱：645700751@qq.com
  */
 public class NotificationService extends Service {
-    private static ArrayBlockingQueue<String> MsgQueue = new ArrayBlockingQueue<String>(128);                     // 需要处理的已经组装好的消息队列
+    private static ArrayBlockingQueue<String> MsgQueue = new ArrayBlockingQueue<String>(128);  // 需要处理的已经组装好的消息队列
     private static NotificationService context;
 
     @Override
@@ -40,7 +43,71 @@ public class NotificationService extends Service {
      * 10.下线提醒
      */
     public static void saveM(String s) {
-        MsgQueue.add("");
+        MsgQueue.add(s);
+    }
+
+    /**
+     * 采用存储转发机制
+     */
+    private class DealMessage extends Thread {
+        public void run() {
+            while (true) {
+                try {
+                    String msg = MsgQueue.take();
+                    if (msg != null && msg.trim().length() > 0) {
+                        int type = parsingM(msg);
+                        dealM(type);
+                    }
+                } catch (Exception e) {
+                    Log.e("DealReceive处理线程:::", e.toString());
+                }
+            }
+        }
+    }
+
+    /**
+     * 解析数据
+     *
+     * @param msg
+     * @return
+     */
+    private int parsingM(String msg) {
+        try {
+            JSONObject js = new JSONObject(msg);
+            String type = js.getString("");
+            if (type != null && !type.equals("")) {
+                if (type.equals("")) {// 0.通知消息（待定）
+                    return 0;
+                } else if (type.equals("")) {// 1.好友同意(重新获取好友)
+                    return 1;
+                } else if (type.equals("")) {// 2.好友拒绝
+                    return 2;
+                } else if (type.equals("")) {// 3.删除好友(重新获取好友)
+                    return 3;
+                } else if (type.equals("")) {// 4.好友信息修改（头像，昵称）(重新获取好友)
+                    return 4;
+                } else if (type.equals("")) {// 5.有人申请加群 （通知群主与管理员）
+                    return 5;
+                } else if (type.equals("")) {// 6.同意加入群组(重新获取群组)
+                    return 6;
+                } else if (type.equals("")) {// 7.拒绝加入群组
+                    return 7;
+                } else if (type.equals("")) {// 8.删除群成员（被删除）(重新获取群组)
+                    return 8;
+                } else if (type.equals("")) {// 9.群消息修改（头像，名称等）(重新获取群组)
+                    return 9;
+                } else if (type.equals("")) {// 10.下线提醒
+                    return 10;
+                } else {
+                    return 999;
+                }
+            } else {
+                return 999;
+            }
+        } catch (Exception e) {
+            Log.e("DealReceive处理线程:::", e.toString());
+            return 999;
+        }
     }
 
     /**
@@ -78,28 +145,6 @@ public class NotificationService extends Service {
                 break;
             case 10:// 10.下线提醒
                 break;
-
-        }
-
-    }
-
-    /**
-     * 采用存储转发机制
-     */
-    private class DealMessage extends Thread {
-        public void run() {
-            while (true) {
-                try {
-                    String msg = MsgQueue.take();
-                    if (msg != null && msg.trim().length() > 0) {
-                        JSONObject js = new JSONObject(msg);
-                        int type = js.getInt("type");
-                        dealM(type);
-                    }
-                } catch (Exception e) {
-                    Log.e("DealReceive处理线程:::", e.toString());
-                }
-            }
         }
     }
 
