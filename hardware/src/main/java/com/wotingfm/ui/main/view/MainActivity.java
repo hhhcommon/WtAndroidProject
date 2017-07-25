@@ -39,13 +39,13 @@ public class MainActivity extends TabActivity {
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
         }
 */
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);        // 透明状态栏
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);    // 透明导航栏
+ /*       getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);        // 透明状态栏
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);    // 透明导航栏*/
         InitTextView();
         mainPresenter = new MainPresenter(this);
 
 //        applySelectedColor();
-        applyTextColor(false);
+     //   applyTextColor(false);
 
         try {
             Log.e("1",Environment.getDataDirectory().getPath());

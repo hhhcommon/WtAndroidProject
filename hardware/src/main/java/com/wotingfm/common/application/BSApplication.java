@@ -41,6 +41,8 @@ import com.woting.commonplat.manager.PhoneMsgManager;
 import com.wotingfm.R;
 import com.netease.nim.live.DemoCache;
 import com.wotingfm.common.config.preference.Preferences;
+import com.wotingfm.common.net.RetrofitService;
+import com.wotingfm.common.net.RetrofitUtils;
 import com.wotingfm.common.utils.SystemUtil;
 import com.wotingfm.ui.main.view.MainActivity;
 
@@ -66,6 +68,7 @@ public class BSApplication extends MultiDexApplication {
     public void onCreate() {
         super.onCreate();
         mContext = this;
+        RetrofitUtils.INSTANCE = null;
         //SDK初始化(启动后台服务，若已经存在用户登录信息，SDK将自动登录)
         SpeechUtility.createUtility(this, "appid=56275014");// 初始化讯飞
         OkHttpFinalConfiguration.Builder builder = new OkHttpFinalConfiguration.Builder();
