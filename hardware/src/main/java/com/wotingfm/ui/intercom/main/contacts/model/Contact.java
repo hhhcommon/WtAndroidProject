@@ -27,6 +27,15 @@ public class Contact implements Serializable {
         private String nickName;                   // 昵称
         private String portraitMini;               // 头像
         private String alias_name;                 // 别名
+        private String user_number;                // 我听号
+
+        public String getUser_number() {
+            return user_number;
+        }
+
+        public void setUser_number(String user_number) {
+            this.user_number = user_number;
+        }
 
         public String getAlias_name() {
             return alias_name;

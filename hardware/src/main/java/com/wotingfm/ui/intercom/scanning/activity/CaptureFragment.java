@@ -22,19 +22,29 @@ import android.view.animation.TranslateAnimation;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+
 import com.google.zxing.Result;
 import com.woting.commonplat.manager.PhoneMsgManager;
 import com.wotingfm.R;
+import com.wotingfm.common.config.GlobalStateConfig;
 import com.wotingfm.common.utils.ToastUtils;
+import com.wotingfm.ui.intercom.group.groupnews.add.view.GroupNewsForAddFragment;
+import com.wotingfm.ui.intercom.group.groupnews.noadd.view.GroupNewsForNoAddFragment;
+import com.wotingfm.ui.intercom.main.contacts.model.Contact;
 import com.wotingfm.ui.intercom.main.view.InterPhoneActivity;
+import com.wotingfm.ui.intercom.person.personmessage.view.PersonMessageFragment;
 import com.wotingfm.ui.intercom.scanning.DecodeThread;
 import com.wotingfm.ui.intercom.scanning.InactivityTimer;
 import com.wotingfm.ui.intercom.scanning.handle.CaptureActivityHandler;
 import com.wotingfm.ui.intercom.scanning.manager.BeepManager;
 import com.wotingfm.ui.intercom.scanning.manager.CameraManager;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.util.List;
 
 /**
  * 这个活动打开相机和实际扫描一个背景线程。
@@ -188,15 +198,120 @@ public final class CaptureFragment extends Fragment implements SurfaceHolder.Cal
                 bundle.putString("result", news);
                 startActivity(new Intent(this.getActivity(), ResultActivity.class).putExtras(bundle));
             } else {
-
+                try {
+                    JSONObject js = new JSONObject(news);
+                    String type = js.getString("type");
+                    String id = js.getString("id");
+                    if (type != null && type.trim().equals("group")) {
+                        jumpGroup(id);
+                    } else if (type != null && type.trim().equals("person")) {
+                        jumpPerson(id);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
-            InterPhoneActivity.close();
-            ToastUtils.show_always(this.getActivity(), news + "");
+//            ToastUtils.show_always(this.getActivity(), news + "");
         }
     }
-    public void handleDecode(Result rawResult){
+
+    public void handleDecode(Result rawResult) {
 
     }
+
+    /**
+     * 跳转到好友信息界面
+     *
+     * @param id
+     */
+    private void jumpPerson(String id) {
+        InterPhoneActivity.close();
+        if (judgeFriends(id)) {
+            PersonMessageFragment fragment = new PersonMessageFragment();
+            Bundle bundle = new Bundle();
+            bundle.putString("type", "true");
+            bundle.putString("id", id);
+            fragment.setArguments(bundle);
+            InterPhoneActivity.open(fragment);
+        } else {
+            PersonMessageFragment fragment = new PersonMessageFragment();
+            Bundle bundle = new Bundle();
+            bundle.putString("type", "false");
+            bundle.putString("id", id);
+            fragment.setArguments(bundle);
+            InterPhoneActivity.open(fragment);
+        }
+    }
+
+    /**
+     * 跳转到群组界面
+     *
+     * @param id
+     */
+    private void jumpGroup(String id) {
+        InterPhoneActivity.close();
+        if (judgeGroups(id)) {
+            GroupNewsForAddFragment fragment = new GroupNewsForAddFragment();
+            Bundle bundle = new Bundle();
+            bundle.putString("id", id);
+            bundle.putString("type", "true");
+            fragment.setArguments(bundle);
+            InterPhoneActivity.open(fragment);
+        } else {
+            GroupNewsForNoAddFragment fragment = new GroupNewsForNoAddFragment();
+            Bundle bundle = new Bundle();
+            bundle.putString("id", id);
+            fragment.setArguments(bundle);
+            InterPhoneActivity.open(fragment);
+        }
+    }
+
+    /**
+     * 判断该群组是不是自己所在的群组
+     *
+     * @param id
+     * @return
+     */
+    private boolean judgeGroups(String id) {
+        boolean b = false;
+        List<Contact.group> list = GlobalStateConfig.list_group;
+        if (list != null && list.size() > 0) {
+            for (int i = 0; i < list.size(); i++) {
+                String _id = list.get(i).getId();
+                if (_id != null && !_id.equals("")) {
+                    if (id.equals(_id)) {
+                        b = true;
+                        break;
+                    }
+                }
+            }
+        }
+        return b;
+    }
+
+    /**
+     * 判断该用户是否是自己好友
+     *
+     * @param id
+     * @return
+     */
+    private boolean judgeFriends(String id) {
+        boolean b = false;
+        List<Contact.user> list = GlobalStateConfig.list_person;
+        if (list != null && list.size() > 0) {
+            for (int i = 0; i < list.size(); i++) {
+                String _id = list.get(i).getId();
+                if (_id != null && !_id.equals("")) {
+                    if (id.equals(_id)) {
+                        b = true;
+                        break;
+                    }
+                }
+            }
+        }
+        return b;
+    }
+
 
     private void initCamera(SurfaceHolder surfaceHolder) {
         if (surfaceHolder == null) {

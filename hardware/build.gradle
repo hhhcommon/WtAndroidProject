@@ -6,11 +6,11 @@ android {
 
     defaultConfig {
         applicationId "com.wotingfm"
-        minSdkVersion 15
+        minSdkVersion 14
         targetSdkVersion 21
         versionCode 1
         versionName "1.0"
-        multiDexEnabled true
+        multiDexEnabled true // 65535
     }
 
     signingConfigs {
@@ -27,12 +27,15 @@ android {
             storePassword "wt@201509"
         }
     }
+
     defaultConfig {
         ndk {
             //设置支持的SO库架构
-            abiFilters "armeabi-v7a"
+            abiFilters 'armeabi','armeabi-v7a','x86'
+            // 还可以添加'armeabi', 'armeabi-v7a', 'armeabi-v8a', 'x86', 'x86_64', 'mips', 'mips64'
         }
     }
+
     buildTypes {
         release {
             minifyEnabled false
@@ -40,6 +43,7 @@ android {
             signingConfig signingConfigs.release
         }
     }
+
     lintOptions {
         checkReleaseBuilds false
         abortOnError false
@@ -49,10 +53,11 @@ android {
         jumboMode true
         javaMaxHeapSize "4g"
     }
+
     allprojects {
         repositories {
             mavenCentral()
-            jcenter() // If not already there
+            jcenter()
             maven { url "https://jitpack.io" }
         }
     }
@@ -71,4 +76,5 @@ dependencies {
     compile 'com.readystatesoftware.systembartint:systembartint:1.0.3'
     // 顶栏样式
     compile project(':CommonPlat')
+
 }

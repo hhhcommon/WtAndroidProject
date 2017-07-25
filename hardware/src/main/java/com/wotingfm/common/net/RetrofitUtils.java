@@ -31,6 +31,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import okhttp3.HttpUrl;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -87,10 +88,21 @@ public class RetrofitUtils {
                     .addInterceptor(new Interceptor() {
                         @Override
                         public Response intercept(Chain chain) throws IOException {
-                            Request request = chain.request()
-                                    .newBuilder()
-                                    .addHeader("Authorization", "Bearer {" + _token + "}")
-                                    .build();
+
+//                            Request request = chain.request()
+//                                    .newBuilder()
+//                                    .addHeader("token",_token )
+//                                    .build();
+//                            return chain.proceed(request);
+//
+//                            Request request = chain.request()
+//                                    .newBuilder()
+//                                    .addHeader("Authorization", "Bearer {" + _token + "}")
+//                                    .build();
+//                            return chain.proceed(request);
+
+                            Request r = chain.request();
+                            Request request= addParam(r,_token);
                             return chain.proceed(request);
                         }
                     }).build();
@@ -101,6 +113,26 @@ public class RetrofitUtils {
             }
             return builder.build();
         }
+    }
+
+    /**
+     * 添加公共参数
+     *
+     * @param request
+     * @return
+     */
+    private Request addParam(Request request,String token) {
+
+        HttpUrl.Builder builder = request.url()
+                .newBuilder()
+                .setEncodedQueryParameter("token", token);
+
+        Request newRequest = request.newBuilder()
+                .method(request.method(), request.body())
+                .url(builder.build())
+                .build();
+
+        return newRequest;
     }
 
     //<以下为对外提供接口>////////////////////////////////////////////////////////////////////////////
@@ -804,11 +836,10 @@ public class RetrofitUtils {
      * 获取好友列表
      *
      * @param id    当前用户id
-     * @param token
      * @return Object
      */
-    public Observable<Object> getFriends(String id, String token) throws Exception {
-        return retrofitService.getFriends(id, token)
+    public Observable<Object> getFriends(String id) throws Exception {
+        return retrofitService.getFriends(id)
                 .map(new Func1<Object, Object>() {
                     @Override
                     public Object call(Object O) {
@@ -821,11 +852,10 @@ public class RetrofitUtils {
      * 获取组列表
      *
      * @param id    当前用户id
-     * @param token
      * @return Object
      */
-    public Observable<Object> getGroups(String id, String token) throws Exception {
-        return retrofitService.getGroups(id, token)
+    public Observable<Object> getGroups(String id) throws Exception {
+        return retrofitService.getGroups(id)
                 .map(new Func1<Object, Object>() {
                     @Override
                     public Object call(Object O) {
@@ -842,7 +872,7 @@ public class RetrofitUtils {
      * @return Object
      */
     public Observable<Object> getPersonNews(String id, String token) throws Exception {
-        return retrofitService.getPersonNews(id, token)
+        return retrofitService.getPersonNews(id)
                 .map(new Func1<Object, Object>() {
                     @Override
                     public Object call(Object O) {
@@ -859,7 +889,7 @@ public class RetrofitUtils {
      * @return Object
      */
     public Observable<Object> newFriend(String id, String token) throws Exception {
-        return retrofitService.newFriend(id, token)
+        return retrofitService.newFriend(id)
                 .map(new Func1<Object, Object>() {
                     @Override
                     public Object call(Object O) {
@@ -975,7 +1005,7 @@ public class RetrofitUtils {
      * @return Objects
      */
     public Observable<Object> newFriendDel(String id, String token) throws Exception {
-        return retrofitService.newFriendDel(id, token)
+        return retrofitService.newFriendDel(id)
                 .map(new Func1<Object, Object>() {
                     @Override
                     public Object call(Object O) {
@@ -992,7 +1022,7 @@ public class RetrofitUtils {
      * @return Objects
      */
     public Observable<Object> newFriendApply(String id, String token) throws Exception {
-        return retrofitService.newFriendApply(id, token)
+        return retrofitService.newFriendApply(id)
                 .map(new Func1<Object, Object>() {
                     @Override
                     public Object call(Object O) {
@@ -1009,7 +1039,7 @@ public class RetrofitUtils {
      * @return Objects
      */
     public Observable<Object> newFriendRefuse(String id, String token) throws Exception {
-        return retrofitService.newFriendRefuse(id, token)
+        return retrofitService.newFriendRefuse(id)
                 .map(new Func1<Object, Object>() {
                     @Override
                     public Object call(Object O) {
@@ -1449,4 +1479,34 @@ public class RetrofitUtils {
                         }
                     });
     }
+
+    /**
+     * 绑定极光
+     *
+     * @param id  极光id
+     * @return Object
+     */
+    public Observable<Object> bingJG(String id) throws Exception {
+        return retrofitService.bingJG(id)
+                .map(new Func1<Object, Object>() {
+                    @Override
+                    public Object call(Object O) {
+                        return O;
+                    }
+                });
+    }
+
+    /**
+     * 获取版本号
+     */
+    public Observable<Object> getVersion() throws Exception {
+        return retrofitService.getVersion()
+                .map(new Func1<Object, Object>() {
+                    @Override
+                    public Object call(Object O) {
+                        return O;
+                    }
+                });
+    }
+
 }

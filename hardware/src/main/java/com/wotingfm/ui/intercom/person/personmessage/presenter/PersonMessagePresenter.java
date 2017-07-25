@@ -1,6 +1,9 @@
 package com.wotingfm.ui.intercom.person.personmessage.presenter;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -44,11 +47,13 @@ public class PersonMessagePresenter {
     private String id;// 好友id
     private Contact.user user;
     private List<AlbumsBean> album;
+    private MessageReceiver Receiver;
 
     public PersonMessagePresenter(PersonMessageFragment activity) {
         this.activity = activity;
         this.model = new PersonMessageModel(activity);
         getArguments();
+        setReceiver();// 好友信息更改的广播
     }
 
     // 获取上级界面传递的数据 type用来判断是否是好友，id是该用户的id
@@ -240,7 +245,7 @@ public class PersonMessagePresenter {
         }
         String number = "";
         try {
-            number = user.getId();
+            number = user.getUser_number();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -468,6 +473,36 @@ public class PersonMessagePresenter {
     private void talkOverGroup() {
         if (ChatPresenter.data != null && ChatPresenter.data.getID() != null) {
             ChatPresenter.data.getID();// 退出组
+        }
+    }
+
+    // 设置广播接收器
+    private void setReceiver() {
+        if (Receiver == null) {
+            Receiver = new MessageReceiver();
+            IntentFilter filter = new IntentFilter();
+            filter.addAction(BroadcastConstants.PERSON_GET);
+            activity.getActivity().registerReceiver(Receiver, filter);
+        }
+    }
+
+    class MessageReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+             if (action.equals(BroadcastConstants.PERSON_GET)) {
+                getData();
+            }
+        }
+    }
+
+    /**
+     * 界面销毁,注销广播
+     */
+    public void destroy() {
+        if (Receiver != null) {
+            activity.getActivity().unregisterReceiver(Receiver);
+            Receiver = null;
         }
     }
 }

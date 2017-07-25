@@ -159,7 +159,7 @@ public class SettingFragment extends Fragment implements View.OnClickListener {
      * @param S
      */
     public void setCache(String S) {
-        textCache.setText("0MB");
+        textCache.setText(S);
     }
 
     /**

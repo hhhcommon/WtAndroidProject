@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 
@@ -15,6 +16,7 @@ import com.wotingfm.R;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 
 /**
  * 照片裁剪页
@@ -52,33 +54,28 @@ public class PhotoCutActivity extends Activity implements OnClickListener {
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.lin_save:
                 bitmap = mClipImageLayout.clip();
                 ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
                 if (bitmap.compress(Bitmap.CompressFormat.PNG, 10, outputStream)) {
-                    try {
-                        if (type == 1) {
-                            long a = System.currentTimeMillis();
-                            String s = String.valueOf(a);
-                            // 找不到文件夹会有问题  是不是要需要判断没有的话就创建文件夹？
-                            FileOutputStream out = new FileOutputStream(new File(Environment.getExternalStorageDirectory() + "/woting/image/" + s + ".png"));
-                            out.write(outputStream.toByteArray());
-                            out.flush();
-                            out.close();
-                            Intent intent = new Intent();
-                            intent.putExtra("return", Environment.getExternalStorageDirectory() + "/woting/image/" + s + ".png");
-                            setResult(1, intent);
-                        } else {
-                            FileOutputStream out = new FileOutputStream(new File(Environment.getExternalStorageDirectory() + "/woting/image/portaitUser.png"));
-                            out.write(outputStream.toByteArray());
-                            out.flush();
-                            out.close();
-                            setResult(1);
+                    String f1 = getSDPath() + "/woting";
+                    File file1 = new File(f1);
+
+                    if (!file1.exists()) {
+                        if (!file1.mkdirs()) {
+                            Log.e("photoCut1", "Directory not created");
                         }
-                    } catch (Exception e) {
-                        e.printStackTrace();
                     }
+                    String f2 = getSDPath() + "/woting/image/";
+                    File file2 = new File(f2);
+                    if (!file2.exists()) {
+                        if (!file2.mkdirs()) {
+                            Log.e("photoCut2", "Directory not created");
+                        }
+                    }
+                    String p = getSDPath() + "/woting/image/" + String.valueOf(System.currentTimeMillis()) + ".png";
+                    save(outputStream, p);
                 }
                 finish();
                 break;
@@ -86,7 +83,36 @@ public class PhotoCutActivity extends Activity implements OnClickListener {
                 finish();
                 break;
         }
+    }
 
+    private void save(ByteArrayOutputStream outputStream, String path) {
+        try {
+            // 找不到文件夹会有问题  是不是要需要判断没有的话就创建文件夹？
+            File file = new File(path);
+            if (!file.exists()) {
+                file.createNewFile();
+                Log.e("photoCut3", "Directory created");
+
+            }
+            FileOutputStream out = new FileOutputStream(file);
+            out.write(outputStream.toByteArray());
+            out.flush();
+            out.close();
+            Intent intent = new Intent();
+            intent.putExtra("return", path);
+            setResult(1, intent);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private String getSDPath() {
+        File sdDir = null;
+        boolean sdCardExist = Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED); //判断sd卡是否存在
+        if (sdCardExist) {
+            sdDir = Environment.getExternalStorageDirectory();//获取跟目录
+        }
+        return sdDir.toString();
     }
 
     @Override

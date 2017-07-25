@@ -80,5 +80,8 @@ public class Api {
     public static final String URL_MESSAGE = "api/chat-groups/{GroupId}/applies/{applierId}";
     // 消息删除
     public static final String URL_MESSAGE_DEL = "api/chat-groups/delMes/applies/{id}";
-
+    // 极光id绑定
+    public static final String URL_JG_BIND = "api/accounts/j_token";
+    // 获取最新版本号
+    public static final String URL_GET_VERSION = "api/accounts/versionNum";
 }

@@ -435,5 +435,9 @@ public class PersonMessageFragment extends Fragment implements View.OnClickListe
         void resultListener(boolean type, String name);
     }
 
-
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        presenter.destroy();
+    }
 }

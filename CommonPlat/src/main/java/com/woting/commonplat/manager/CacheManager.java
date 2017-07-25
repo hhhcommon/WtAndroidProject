@@ -172,8 +172,6 @@ public class CacheManager {
                 flag = true;
             }
         }
-
-
         return flag;
     }
 
@@ -216,10 +214,10 @@ public class CacheManager {
      * @param file
      * @return
      */
-    public static String getCacheSize(File file) {
+    public static String getCacheSize(File file,File file1) {
         try {
             cache = getFolderSize(file);// 缓存文件路径
-            cache += getFolderSize(new File(""));
+            cache += getFolderSize(file1);// glide缓存
         } catch (Exception e) {
             e.printStackTrace();
         }

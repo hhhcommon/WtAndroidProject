@@ -245,4 +245,10 @@ public class GroupNewsForNoAddFragment extends Fragment implements View.OnClickL
         if (dialog != null) dialog.dismiss();
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        presenter.destroy();
+    }
+
 }

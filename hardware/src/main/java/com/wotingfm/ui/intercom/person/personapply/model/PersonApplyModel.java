@@ -3,6 +3,7 @@ package com.wotingfm.ui.intercom.person.personapply.model;
 import android.util.Log;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.wotingfm.common.net.RetrofitUtils;
 import com.wotingfm.ui.base.model.UserInfo;
 
@@ -32,7 +33,7 @@ public class PersonApplyModel extends UserInfo {
                         @Override
                         public void call(Object o) {
                             try {
-                                Log.e("好友申请申请返回数据", new Gson().toJson(o));
+                                Log.e("好友申请申请返回数据", new GsonBuilder().serializeNulls().create().toJson(o));
                                 //填充UI
                                 listener.onSuccess(o);
                             } catch (Exception e) {

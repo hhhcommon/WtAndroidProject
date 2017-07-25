@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.woting.commonplat.config.GlobalNetWorkConfig;
 import com.wotingfm.common.utils.ToastUtils;
 import com.wotingfm.ui.intercom.main.view.InterPhoneActivity;
@@ -70,7 +71,7 @@ public class PersonApplyPresenter {
     // 处理返回数据
     private void dealSuccess(Object o) {
         try {
-            String s = new Gson().toJson(o);
+            String s = new GsonBuilder().serializeNulls().create().toJson(o);
             JSONObject js = new JSONObject(s);
             int ret = js.getInt("ret");
             Log.e("ret", String.valueOf(ret));
@@ -93,7 +94,7 @@ public class PersonApplyPresenter {
      * @param src
      */
     public void textChange(String src) {
-        if (src == null || src.trim().equals("")) {
+        if (src != null &&!src.trim().equals("")) {
             int l = src.length();
             activity.setTextViewChange(String.valueOf(90 - l));
         } else {

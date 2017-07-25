@@ -81,14 +81,19 @@ public class GroupNumberDelModel {
      */
     public List<Contact.user> assemblyData(List<Contact.user> list, String id) {
         List<Contact.user> _list = new ArrayList<>();
-        // 添加管理员
-        for (int i = 0; i < list.size(); i++) {
-            boolean b = list.get(i).is_admin();
-            if (b) {
-                list.get(i).setType(2);
-                _list.add(list.get(i));
+        String _id=BSApplication.SharedPreferences.getString(StringConstant.USER_ID,"");
+        // 是群主，有删除管理员的权限，不是群主只有删除成员的权限
+        if(id!=null&&!id.trim().equals("")&&id.trim().equals(_id)){
+            // 添加管理员，没有添加群主
+            for (int i = 0; i < list.size(); i++) {
+                boolean b = list.get(i).is_admin();
+                if (b) {
+                    list.get(i).setType(2);
+                    _list.add(list.get(i));
+                }
             }
         }
+
         // 添加成员
         for (int i = 0; i < list.size(); i++) {
             boolean b = list.get(i).is_admin();

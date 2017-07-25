@@ -1,8 +1,6 @@
 package com.wotingfm.ui.intercom.add.search.net.model;
 
 import android.util.Log;
-
-import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.config.GlobalStateConfig;
@@ -11,10 +9,8 @@ import com.wotingfm.common.net.RetrofitUtils;
 import com.wotingfm.common.utils.GetTestData;
 import com.wotingfm.ui.base.model.CommonModel;
 import com.wotingfm.ui.intercom.main.contacts.model.Contact;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.schedulers.Schedulers;
@@ -68,10 +64,21 @@ public class SearchContactsForNetModel extends CommonModel {
     }
 
     /**
-     * 去掉重复数据
+     * 去掉重复数据(已经是好友的以及自己)
      */
     public List<Contact.user> assemblyDataForPerson(List<Contact.user> list) {
         List<Contact.user> srcList_p = GlobalStateConfig.list_person;
+        String uid=BSApplication.SharedPreferences.getString(StringConstant.USER_ID,"");
+        if(uid!=null&&!uid.trim().equals("")){
+            for (int j = 0; j < list.size(); j++) {
+                String _id = list.get(j).getId().trim();
+                if (_id != null && !_id.equals("") && _id.equals(uid)) {
+                    list.remove(j);
+                    j--;
+                }
+            }
+        }
+
         if (srcList_p != null && srcList_p.size() > 0) {
             for (int i = 0; i < srcList_p.size(); i++) {
                 String id = srcList_p.get(i).getId().trim();

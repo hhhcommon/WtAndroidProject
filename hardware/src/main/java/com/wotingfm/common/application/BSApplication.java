@@ -49,6 +49,7 @@ import java.util.List;
 
 import cn.finalteam.okhttpfinal.OkHttpFinal;
 import cn.finalteam.okhttpfinal.OkHttpFinalConfiguration;
+import cn.jpush.android.api.JPushInterface;
 
 /**
  * BSApplication
@@ -66,13 +67,18 @@ public class BSApplication extends MultiDexApplication {
         super.onCreate();
         mContext = this;
         //SDK初始化(启动后台服务，若已经存在用户登录信息，SDK将自动登录)
-
         SpeechUtility.createUtility(this, "appid=56275014");// 初始化讯飞
         OkHttpFinalConfiguration.Builder builder = new OkHttpFinalConfiguration.Builder();
         OkHttpFinal.getInstance().init(builder.build());
         SharedPreferences = this.getSharedPreferences("wotingfm", Context.MODE_PRIVATE);
         NetWorkManager.checkNetworkStatus(this);  // 获取网络状态
         PhoneMsgManager.getPhoneInfo(this);
+
+        JPushInterface.setDebugMode(true);    // 设置开启日志,发布时请关闭日志
+        JPushInterface.init(this);            // 初始化 JPush
+        JPushInterface.getRegistrationID(this);
+        // JPushInterface.resumePush(this);
+        // JPushInterface.stopPush(this);
 
         // init tools
         DemoCache.setContext(this);

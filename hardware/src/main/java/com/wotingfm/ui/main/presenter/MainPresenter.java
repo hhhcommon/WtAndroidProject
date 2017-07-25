@@ -6,17 +6,30 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.util.Log;
 
+import com.google.gson.GsonBuilder;
 import com.iflytek.cloud.SpeechUtility;
 import com.woting.commonplat.receiver.NetWorkChangeReceiver;
 import com.wotingfm.common.bean.MessageEvent;
 import com.wotingfm.common.config.GlobalStateConfig;
 import com.wotingfm.common.constant.BroadcastConstants;
+import com.wotingfm.common.net.RetrofitUtils;
 import com.wotingfm.common.service.FloatingWindowService;
+import com.wotingfm.common.service.NotificationService;
+import com.wotingfm.common.utils.ToastUtils;
 import com.wotingfm.ui.base.basepresenter.BasePresenter;
 import com.wotingfm.ui.main.model.MainModel;
 import com.wotingfm.ui.main.view.MainActivity;
+import com.wotingfm.ui.user.register.model.RegisterModel;
 
 import org.greenrobot.eventbus.EventBus;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.json.JSONTokener;
+
+import cn.jpush.android.api.JPushInterface;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
+import rx.schedulers.Schedulers;
 
 /**
  * 作者：xinLong on 2017/5/16 14:28
@@ -26,11 +39,14 @@ public class MainPresenter extends BasePresenter {
     private final MainModel mainModel;
     private MainActivity mainActivity;
     private Intent FloatingWindow;
+    private Intent NS;
+
     private NetWorkChangeReceiver netWorkChangeReceiver;
 
     public MainPresenter(MainActivity mainActivity) {
         this.mainActivity = mainActivity;
-        this.mainModel = new MainModel();
+        this.mainModel = new MainModel(mainActivity);
+        getVersion();
         createService();
         registerReceiver();
     }
@@ -38,6 +54,8 @@ public class MainPresenter extends BasePresenter {
     private void createService() {
         FloatingWindow = new Intent(mainActivity, FloatingWindowService.class);//启动全局弹出框服务
         mainActivity.startService(FloatingWindow);
+        NS = new Intent(mainActivity, NotificationService.class);//启动推送消息处理服务
+        mainActivity.startService(NS);
     }
 
 
@@ -76,6 +94,35 @@ public class MainPresenter extends BasePresenter {
         }
     };
 
+    // 发送注册账号请求
+    private void getVersion() {
+        mainModel.getVersion( new MainModel.OnLoadInterface() {
+            @Override
+            public void onSuccess(Object o) {
+                dealVersionSuccess(o);
+            }
+
+            @Override
+            public void onFailure(String msg) {
+
+            }
+        });
+    }
+
+    // 处理注册返回数据
+    private void dealVersionSuccess(Object o) {
+        try {
+            String s = new GsonBuilder().serializeNulls().create().toJson(o);
+            JSONObject js = new JSONObject(s);
+            int ret = js.getInt("ret");
+            Log.e("ret", String.valueOf(ret));
+            if (ret == 0) {
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     /**********************对外接口************************/
 
     /**
@@ -83,6 +130,7 @@ public class MainPresenter extends BasePresenter {
      */
     public void stop() {
         mainActivity.stopService(FloatingWindow);
+        mainActivity.stopService(NS);
         mainActivity.unregisterReceiver(netWorkChangeReceiver);
         mainActivity.unregisterReceiver(endApplicationBroadcast);
         Log.e("app退出", "app退出");

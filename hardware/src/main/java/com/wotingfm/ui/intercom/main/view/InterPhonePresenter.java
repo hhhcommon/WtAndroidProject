@@ -152,6 +152,7 @@ public class InterPhonePresenter {
             String action = intent.getAction();
             if (action.equals(BroadcastConstants.LOGIN)) {
                 getData();// 接收到账户更改后重新获取数据
+                model.loadNews(activity.getActivity());// 重新登录后重新绑定极光id
             } else if (action.equals(BroadcastConstants.VIEW_INTER_PHONE)) {
                 activity.change(0);// 更改为对讲主页
             } else if (action.equals(BroadcastConstants.GROUP_GET)) {

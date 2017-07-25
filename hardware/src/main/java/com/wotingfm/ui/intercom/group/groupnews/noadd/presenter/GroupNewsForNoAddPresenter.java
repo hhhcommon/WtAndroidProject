@@ -1,20 +1,28 @@
 package com.wotingfm.ui.intercom.group.groupnews.noadd.presenter;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.util.Log;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.woting.commonplat.config.GlobalNetWorkConfig;
 import com.wotingfm.common.config.GlobalStateConfig;
+import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.ui.intercom.group.groupapply.GroupApplyFragment;
 import com.wotingfm.ui.intercom.group.groupmumbershow.view.GroupNumberShowFragment;
 import com.wotingfm.ui.intercom.group.groupnews.noadd.model.GroupNewsForNoAddModel;
 import com.wotingfm.ui.intercom.group.groupnews.noadd.view.GroupNewsForNoAddFragment;
 import com.wotingfm.ui.intercom.main.contacts.model.Contact;
 import com.wotingfm.ui.intercom.main.view.InterPhoneActivity;
+
 import org.json.JSONObject;
 import org.json.JSONTokener;
+
 import java.io.Serializable;
 import java.util.List;
 
@@ -29,10 +37,12 @@ public class GroupNewsForNoAddPresenter {
     private String id;
     private List<Contact.user> _list;
     private String access = "2";//  0密码群，1审核群，2密码审核群
+    private MessageReceiver Receiver;
 
     public GroupNewsForNoAddPresenter(GroupNewsForNoAddFragment activity) {
         this.activity = activity;
         this.model = new GroupNewsForNoAddModel();
+        setReceiver();
         try {
             id = activity.getArguments().getString("id");
         } catch (Exception e) {
@@ -61,8 +71,10 @@ public class GroupNewsForNoAddPresenter {
                 activity.isLoginView(0);
             } else {
                 // 实际数据
-                getNews();// 获取群详情
-                getGroupPerson();// 获取群成员
+                if (id != null && !id.trim().equals("")) {
+                    getNews();// 获取群详情
+                    getGroupPerson();// 获取群成员
+                }
             }
         } else {
             activity.isLoginView(2);
@@ -88,7 +100,7 @@ public class GroupNewsForNoAddPresenter {
     // 处理返回的数据
     private void dealSuccess(Object o) {
         try {
-            String s =new GsonBuilder().serializeNulls().create().toJson(o);
+            String s = new GsonBuilder().serializeNulls().create().toJson(o);
             JSONObject js = new JSONObject(s);
             int ret = js.getInt("ret");
             Log.e("获取群详情==ret", String.valueOf(ret));
@@ -261,6 +273,38 @@ public class GroupNewsForNoAddPresenter {
     public void tipClick(int type) {
         if (type == 4) {
             getData();
+        }
+    }
+
+    // 设置广播接收器(群组信息更改)
+    private void setReceiver() {
+        if (Receiver == null) {
+            Receiver = new MessageReceiver();
+            IntentFilter filter = new IntentFilter();
+            filter.addAction(BroadcastConstants.GROUP_GET);
+            activity.getActivity().registerReceiver(Receiver, filter);
+        }
+    }
+
+    class MessageReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            if (action.equals(BroadcastConstants.GROUP_GET)) {
+                if (id != null && !id.equals("")) {
+                    getNews();
+                }
+            }
+        }
+    }
+
+    /**
+     * 界面销毁,注销广播
+     */
+    public void destroy() {
+        if (Receiver != null) {
+            activity.getActivity().unregisterReceiver(Receiver);
+            Receiver = null;
         }
     }
 }

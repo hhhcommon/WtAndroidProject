@@ -16,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.woting.commonplat.manager.PhoneMsgManager;
 import com.woting.commonplat.utils.BitmapUtils;
 import com.wotingfm.R;
 import com.wotingfm.common.config.GlobalStateConfig;
@@ -171,7 +172,7 @@ public class EditGroupMessageFragment extends Fragment implements View.OnClickLi
 
     // 城市选择框
     public void cityPickerDialog(final Map<String, List<String>> positionMap, final List<String> provinceList) {
-        GlobalStateConfig.LoopViewW=500;
+        GlobalStateConfig.LoopViewW= PhoneMsgManager.ScreenWidth/2;
         if (positionMap != null && positionMap.size() > 0 && provinceList != null && provinceList.size() > 0) {
             final View dialog = LayoutInflater.from(this.getActivity()).inflate(R.layout.dialog_city, null);
             final LoopView pickProvince = (LoopView) dialog.findViewById(R.id.pick_province);
