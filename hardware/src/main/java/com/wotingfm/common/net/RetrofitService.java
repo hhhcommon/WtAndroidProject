@@ -251,23 +251,19 @@ public interface RetrofitService {
 
     // 好友列表
     @GET(Api.URL_GET_FRIENDS)
-    Observable<Object> getFriends(@Path("id") String id,
-                                  @Query("token") String token);
+    Observable<Object> getFriends(@Path("id") String id);
 
     // 群组列表
     @GET(Api.URL_GET_GROUPS)
-    Observable<Object> getGroups(@Path("id") String id,
-                                 @Query("token") String token);
+    Observable<Object> getGroups(@Path("id") String id);
 
     // 获取好友信息
     @GET(Api.URL_GET_PERSON_NEWS)
-    Observable<Object> getPersonNews(@Path("id") String id,
-                                     @Query("token") String token);
+    Observable<Object> getPersonNews(@Path("id") String id);
 
     // 新的好友申请请求
     @GET(Api.URL_GET_NEW_FRIEND)
-    Observable<Object> newFriend(@Path("id") String id,
-                                 @Query("token") String token);
+    Observable<Object> newFriend(@Path("id") String id);
 
     // 群组详情
     @GET(Api.URL_GET_GROUP_NEWS)
@@ -299,18 +295,15 @@ public interface RetrofitService {
 
     // 删除好友申请
     @DELETE(Api.URL_NEW_FRIEND_DEL)
-    Observable<Object> newFriendDel(@Path("id") String id,
-                                    @Query("token") String token);
+    Observable<Object> newFriendDel(@Path("id") String id);
 
     // 同意好友申请
     @POST(Api.URL_NEW_FRIEND_APPLY)
-    Observable<Object> newFriendApply(@Path("id") String id,
-                                      @Query("token") String token);
+    Observable<Object> newFriendApply(@Path("id") String id);
 
     // 拒绝好友申请
     @POST(Api.URL_NEW_FRIEND_REFUSE)
-    Observable<Object> newFriendRefuse(@Path("id") String id,
-                                       @Query("token") String token);
+    Observable<Object> newFriendRefuse(@Path("id") String id);
 
     // 设置管理员
     @PUT(Api.URL_GROUP_SET_MANAGER)
@@ -481,6 +474,15 @@ public interface RetrofitService {
     Observable<Object> msgRefuse(@Path("GroupId") String gid,
                                  @Path("applierId") String pid,
                                  @Query("status") String status);
+
+    // 极光id绑定
+    @POST(Api.URL_JG_BIND)
+    Observable<Object> bingJG(@Query("j_token") String id);
+
+    // 获取版本号
+    @GET(Api.URL_GET_VERSION)
+    Observable<Object> getVersion();
+
 }
 
 

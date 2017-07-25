@@ -4,19 +4,29 @@ android {
     compileSdkVersion 25
     buildToolsVersion = '25.0.3'
     useLibrary 'org.apache.http.legacy'
+
     defaultConfig {
-        minSdkVersion 15
+        minSdkVersion 14
         targetSdkVersion 21
         versionCode 1
         versionName "1.0"
         multiDexEnabled true
     }
+
     defaultConfig {
         ndk {
             // 设置支持的SO库架构
-            abiFilters 'armeabi' //, 'x86', 'armeabi-v7a', 'x86_64', 'arm64-v8a'
+            // abiFilters 'armeabi' //, 'x86', 'armeabi-v7a', 'x86_64', 'arm64-v8a'
+            abiFilters 'armeabi', 'armeabi-v7a', 'armeabi-v8a', 'x86', 'x86_64', 'mips'
         }
     }
+
+    buildscript {
+        repositories {
+            jcenter()
+        }
+    }
+
     buildTypes {
         release {
             minifyEnabled false
@@ -28,6 +38,7 @@ android {
         checkReleaseBuilds false
         abortOnError false
     }
+
     dexOptions {
         preDexLibraries false
         jumboMode true

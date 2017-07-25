@@ -1,5 +1,6 @@
 package com.wotingfm.ui.intercom.main.view;
 
+import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 
 import com.google.gson.Gson;
@@ -8,6 +9,7 @@ import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.common.net.RetrofitUtils;
 
+import cn.jpush.android.api.JPushInterface;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.schedulers.Schedulers;
@@ -24,9 +26,8 @@ public class InterPhoneModel {
      */
     public void loadNewsForUser(final OnLoadInterface listener) {
         String id = BSApplication.SharedPreferences.getString(StringConstant.USER_ID, "");
-        String token = BSApplication.SharedPreferences.getString(StringConstant.TOKEN, "");
         try {
-            RetrofitUtils.getInstance().getFriends(id, token)
+            RetrofitUtils.getInstance().getFriends(id)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(new Action1<Object>() {
@@ -59,9 +60,8 @@ public class InterPhoneModel {
      */
     public void loadNewsForGroup(final OnLoadInterface listener) {
         String id = BSApplication.SharedPreferences.getString(StringConstant.USER_ID, "");
-        String token = BSApplication.SharedPreferences.getString(StringConstant.TOKEN, "");
         try {
-            RetrofitUtils.getInstance().getGroups(id, token)
+            RetrofitUtils.getInstance().getGroups(id)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(new Action1<Object>() {
@@ -86,6 +86,37 @@ public class InterPhoneModel {
         } catch (Exception e) {
             e.printStackTrace();
             listener.onFailure("");
+        }
+    }
+
+    /**
+     * 极光id绑定
+     * @param activity
+     */
+    public void loadNews(FragmentActivity activity) {
+        try {
+            String id= JPushInterface.getRegistrationID(activity);
+            RetrofitUtils.getInstance().bingJG(id)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new Action1<Object>() {
+                        @Override
+                        public void call(Object o) {
+                            try {
+                                Log.e("极光ID绑定返回数据",new GsonBuilder().serializeNulls().create().toJson(o));
+                                //填充UI
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }, new Action1<Throwable>() {
+                        @Override
+                        public void call(Throwable throwable) {
+                            throwable.printStackTrace();
+                        }
+                    });
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 

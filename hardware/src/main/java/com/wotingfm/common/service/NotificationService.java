@@ -39,7 +39,7 @@ public class NotificationService extends Service {
      * 9.群消息修改（头像，名称等）
      * 10.下线提醒
      */
-    public void saveM() {
+    public static void saveM(String s) {
         MsgQueue.add("");
     }
 
