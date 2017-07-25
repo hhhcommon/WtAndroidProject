@@ -110,7 +110,7 @@ public class PlayerFragment extends BaseFragment implements View.OnClickListener
 
 
     public static PlayerFragment newInstance(String albumsId) {
-        EventBus.getDefault().postSticky("pause");
+        EventBus.getDefault().postSticky("stop");
         PlayerFragment fragment = new PlayerFragment();
         Bundle bundle = new Bundle();
         bundle.putString("albumsId", albumsId);
@@ -119,7 +119,7 @@ public class PlayerFragment extends BaseFragment implements View.OnClickListener
     }
 
     public static PlayerFragment newInstanceSerch(String albumsId, String id, String title) {
-        EventBus.getDefault().postSticky("pause");
+        EventBus.getDefault().postSticky("stop");
         PlayerFragment fragment = new PlayerFragment();
         Bundle bundle = new Bundle();
         bundle.putString("albumsId", albumsId);
@@ -130,7 +130,7 @@ public class PlayerFragment extends BaseFragment implements View.OnClickListener
     }
 
     public static PlayerFragment newInstance(String albumsId, String q) {
-        EventBus.getDefault().postSticky("pause");
+        EventBus.getDefault().postSticky("stop");
         PlayerFragment fragment = new PlayerFragment();
         Bundle bundle = new Bundle();
         bundle.putSerializable("albumsId", albumsId);
@@ -140,7 +140,7 @@ public class PlayerFragment extends BaseFragment implements View.OnClickListener
     }
 
     public static PlayerFragment newInstance(ChannelsBean singlesBase, String q) {
-        EventBus.getDefault().postSticky("pause");
+        EventBus.getDefault().postSticky("stop");
         PlayerFragment fragment = new PlayerFragment();
         Bundle bundle = new Bundle();
         bundle.putString("q", q);
@@ -150,7 +150,7 @@ public class PlayerFragment extends BaseFragment implements View.OnClickListener
     }
 
     public static PlayerFragment newInstance(ChannelsBean singlesBase) {
-        EventBus.getDefault().postSticky("pause");
+        EventBus.getDefault().postSticky("stop");
         PlayerFragment fragment = new PlayerFragment();
         Bundle bundle = new Bundle();
         bundle.putSerializable("channelsBean", singlesBase);
@@ -159,7 +159,7 @@ public class PlayerFragment extends BaseFragment implements View.OnClickListener
     }
 
     public static PlayerFragment newInstance(SinglesBase singlesBase) {
-        EventBus.getDefault().postSticky("pause");
+        EventBus.getDefault().postSticky("stop");
         PlayerFragment fragment = new PlayerFragment();
         Bundle bundle = new Bundle();
         bundle.putSerializable("singlesBase", singlesBase);
@@ -357,6 +357,7 @@ public class PlayerFragment extends BaseFragment implements View.OnClickListener
                     bdPlayer.stopPlayback();
                     bdPlayer.setVideoPath(singLesBeans.get(postionPlayer).single_file_url);
                     bdPlayer.start();
+                    ivPause.setImageResource(R.mipmap.music_play_icon_pause);
                     setBeforeOrNext(singLesBeans.get(postionPlayer));
                 }
             }
@@ -886,7 +887,7 @@ public class PlayerFragment extends BaseFragment implements View.OnClickListener
     };
 
     private void showToastTips(final String tips) {
-        if (mIsActivityPaused) {
+     /*   if (mIsActivityPaused) {
             return;
         }
         getActivity().runOnUiThread(new Runnable() {
@@ -898,7 +899,7 @@ public class PlayerFragment extends BaseFragment implements View.OnClickListener
                 mToast = Toast.makeText(getActivity(), tips, Toast.LENGTH_SHORT);
                 mToast.show();
             }
-        });
+        });*/
     }
 
     private void sendReconnectMessage() {

@@ -8,7 +8,17 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.netease.nim.live.DemoCache;
+import com.netease.nim.uikit.common.ui.dialog.DialogMaker;
+import com.netease.nimlib.sdk.AbortableFuture;
+import com.netease.nimlib.sdk.NIMClient;
+import com.netease.nimlib.sdk.RequestCallback;
+import com.netease.nimlib.sdk.auth.AuthService;
+import com.netease.nimlib.sdk.auth.LoginInfo;
 import com.woting.commonplat.config.GlobalNetWorkConfig;
+import com.wotingfm.common.application.BSApplication;
+import com.wotingfm.common.config.preference.Preferences;
+import com.wotingfm.common.config.preference.UserPreferences;
 import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.common.net.RetrofitUtils;
 import com.wotingfm.common.utils.ToastUtils;
@@ -181,12 +191,10 @@ public class RegisterPresenter {
                 // 保存用户数据
                 if (ui != null) {
                     model.saveUserInfo(ui);
+                    loginYx(ui.optString("acc_id"), ui.optString("net_ease_token"));
+                    ToastUtils.show_always(activity.getActivity(), "注册成功");
                 }
-                RetrofitUtils.INSTANCE = null;
-                ToastUtils.show_always(activity.getActivity(), "注册成功");
-                // 发送登录广播通知所有界面
-                activity.getActivity().sendBroadcast(new Intent(BroadcastConstants.LOGIN));
-                jump();// 跳转到信息完善界面
+
             } else {
                 String msg = js.getString("msg");
                 if (msg != null && !msg.trim().equals("")) {
@@ -197,6 +205,60 @@ public class RegisterPresenter {
             e.printStackTrace();
             ToastUtils.show_always(activity.getActivity(), "注册失败，请稍后再试");
         }
+    }
+
+    private AbortableFuture<LoginInfo> loginRequest;
+
+    private void onLoginDone() {
+        loginRequest = null;
+        DialogMaker.dismissProgressDialog();
+    }
+
+    private void saveLoginInfo(final String account, final String token) {
+        Preferences.saveUserAccount(account);
+        Preferences.saveUserToken(token);
+    }
+
+    private void loginYx(final String account, final String token) {
+        // 登录
+        loginRequest = NIMClient.getService(AuthService.class).login(new LoginInfo(account, token));
+        loginRequest.setCallback(new RequestCallback<LoginInfo>() {
+            @Override
+            public void onSuccess(LoginInfo param) {
+
+                onLoginDone();
+                DemoCache.setAccount(account);
+                saveLoginInfo(account, token);
+
+                // 初始化消息提醒
+                NIMClient.toggleNotification(UserPreferences.getNotificationToggle());
+
+                // 初始化免打扰
+                NIMClient.updateStatusBarNotificationConfig(UserPreferences.getStatusConfig());
+                // 发送登录广播通知所有界面
+                RetrofitUtils.INSTANCE = null;
+
+                // 发送登录广播通知所有界面
+                activity.getActivity().sendBroadcast(new Intent(BroadcastConstants.LOGIN));
+                jump();// 跳转到信息完善界面
+
+            }
+
+            @Override
+            public void onFailed(int code) {
+                onLoginDone();
+                if (code == 302 || code == 404) {
+                    Toast.makeText(BSApplication.getInstance(), "登录失败", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(BSApplication.getInstance(), "登录失败: " + code, Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onException(Throwable exception) {
+                onLoginDone();
+            }
+        });
     }
 
     // 跳转到信息完善界面

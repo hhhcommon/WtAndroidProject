@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -38,6 +39,7 @@ public class PlayerHistoryListAdapter extends CommonAdapter<Player.DataBean.Sing
     protected void convert(ViewHolder holder, final Player.DataBean.SinglesBean s, final int position) {
         holder.setText(R.id.tvContent, s.album_title);
         TextView textViewTitle = (TextView) holder.itemView.findViewById(R.id.tvTitle);
+        LinearLayout labelContent = (LinearLayout) holder.itemView.findViewById(R.id.labelContent);
         final SwipeMenuLayout swipeable_container = (SwipeMenuLayout) holder.itemView.findViewById(R.id.swipeable_container);
         textViewTitle.setText(s.single_title);
         ImageView imageView = (ImageView) holder.itemView.findViewById(R.id.ivPhoto);
@@ -47,7 +49,7 @@ public class PlayerHistoryListAdapter extends CommonAdapter<Player.DataBean.Sing
                 .error(R.mipmap.oval_defut_other)
                 .placeholder(R.mipmap.oval_defut_other)
                 .into(imageView);
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
+        labelContent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (playerHistoryClick != null)
