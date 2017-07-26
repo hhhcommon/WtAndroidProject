@@ -3,6 +3,7 @@ package com.wotingfm.common.adapter;
 import android.content.Context;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -38,13 +39,14 @@ public class PlayerSubscribleListAdapter extends CommonAdapter<AlbumsBean> {
         final SwipeMenuLayout swipeable_container = (SwipeMenuLayout) holder.itemView.findViewById(R.id.swipeable_container);
         textViewTitle.setText(s.title);
         ImageView imageView = (ImageView) holder.itemView.findViewById(R.id.ivPhoto);
+        LinearLayout largeLabel = (LinearLayout) holder.itemView.findViewById(R.id.largeLabel);
         TextView btnDelete = (TextView) holder.itemView.findViewById(R.id.btnDelete);
         TextView tvTime = (TextView) holder.itemView.findViewById(R.id.tvTime);
         Glide.with(BSApplication.getInstance()).load(s.logo_url)// Glide
                 .error(R.mipmap.oval_defut_other)
                 .placeholder(R.mipmap.oval_defut_other)
                 .into(imageView);
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
+        largeLabel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (playerHistoryClick != null)

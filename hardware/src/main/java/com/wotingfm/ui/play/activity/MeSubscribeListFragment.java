@@ -16,6 +16,7 @@ import com.wotingfm.common.adapter.PlayerSubscribleListAdapter;
 import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.bean.AlbumsBean;
 import com.wotingfm.common.bean.Player;
+import com.wotingfm.common.bean.SinglesBase;
 import com.wotingfm.common.bean.Subscrible;
 import com.wotingfm.common.database.HistoryHelper;
 import com.wotingfm.common.net.RetrofitUtils;
@@ -24,6 +25,7 @@ import com.wotingfm.common.utils.T;
 import com.wotingfm.ui.base.baseactivity.BaseToolBarActivity;
 import com.wotingfm.ui.base.basefragment.BaseFragment;
 import com.wotingfm.ui.play.live.TrailerInfoFragment;
+import com.wotingfm.ui.test.PlayerFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -74,7 +76,7 @@ public class MeSubscribeListFragment extends BaseFragment {
         playerHistoryListAdapter = new PlayerSubscribleListAdapter(getActivity(), albumsBeens, new PlayerSubscribleListAdapter.PlayerHistoryClick() {
             @Override
             public void click(AlbumsBean singlesBean) {
-                T.getInstance().showToast("点击订阅列表");
+                openFragment(PlayerFragment.newInstance(singlesBean.id));
             }
 
             @Override
@@ -85,7 +87,6 @@ public class MeSubscribeListFragment extends BaseFragment {
         });
         mRecyclerView.setAdapter(playerHistoryListAdapter);
         loadLayout.showLoadingView();
-        //请求数据，测试userid
         getPlayerList(CommonUtils.getUserId());
     }
 
