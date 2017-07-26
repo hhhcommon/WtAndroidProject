@@ -1,16 +1,21 @@
 package com.wotingfm.ui.intercom.add.search.local.presenter;
 
+import android.content.Intent;
 import android.os.Bundle;
 
+import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.common.utils.ToastUtils;
 import com.wotingfm.ui.intercom.add.search.local.model.SearchContactsForLocalModel;
 import com.wotingfm.ui.intercom.add.search.local.view.SearchContactsForLocalFragment;
 import com.wotingfm.ui.intercom.add.search.net.view.SearchContactsForNetFragment;
+import com.wotingfm.ui.intercom.alert.call.view.CallAlertActivity;
 import com.wotingfm.ui.intercom.group.groupnews.add.view.GroupNewsForAddFragment;
+import com.wotingfm.ui.intercom.main.chat.presenter.ChatPresenter;
 import com.wotingfm.ui.intercom.main.contacts.model.Contact;
 import com.wotingfm.ui.intercom.main.contacts.view.CharacterParser;
 import com.wotingfm.ui.intercom.main.contacts.view.PinyinComparator;
 import com.wotingfm.ui.intercom.main.view.InterPhoneActivity;
+import com.wotingfm.ui.intercom.main.view.InterPhoneFragment;
 import com.wotingfm.ui.intercom.person.personmessage.view.PersonMessageFragment;
 
 import java.util.ArrayList;
@@ -120,7 +125,6 @@ public class SearchContactsForLocalPresenter {
         }
     }
 
-
     /**
      * 跳转到好友详情
      *
@@ -156,8 +160,6 @@ public class SearchContactsForLocalPresenter {
         } else {
             ToastUtils.show_always(activity.getActivity(), "数据出错了，请稍后再试！");
         }
-
-
     }
 
     /**
@@ -165,12 +167,30 @@ public class SearchContactsForLocalPresenter {
      *
      * @param position
      */
-    public void call(int position) {
-
-    }
-
-    public void callOk(String id) {
-
+    public void call(List<Contact.user> person, int position) {
+        String id = person.get(position).getId();
+        if (id == null || id.trim().equals("")) {
+            return;
+        }
+        if (ChatPresenter.data != null) {
+            // 此时有对讲状态
+            String _t = ChatPresenter.data.getTyPe().trim();
+            if (_t != null && !_t.equals("") && _t.equals("person")) {// 此时的对讲状态是单对单
+                // 弹出选择界面
+                activity.dialogShow(id, 1);
+            } else if (_t != null && !_t.equals("") && _t.equals("group")) {// 此时的对讲状态是群组
+                // 退出组
+                takeOverGroup();
+                // 关闭对讲页面群组数据
+                activity.getActivity().sendBroadcast(new Intent(BroadcastConstants.VIEW_GROUP_CLOSE));
+                // 进行呼叫
+                talkOk(id);
+            }
+        } else {
+            // 此时没有对讲状态
+            // 进行呼叫
+            talkOk(id);
+        }
     }
 
     /**
@@ -178,9 +198,81 @@ public class SearchContactsForLocalPresenter {
      *
      * @param position
      */
-    public void interPhone(int position) {
-
+    public void interPhone(List<Contact.group> group, int position) {
+        String id = group.get(position).getId();
+        if (id == null || id.trim().equals("")) {
+            return;
+        }
+        if (ChatPresenter.data != null) {
+            // 此时有对讲状态
+            String _t = ChatPresenter.data.getTyPe().trim();
+            if (_t != null && !_t.equals("") && _t.equals("person")) {// 此时的对讲状态是单对单
+                // 弹出选择界面
+                activity.dialogShow(id, 2);
+            } else if (_t != null && !_t.equals("") && _t.equals("group")) {// 此时的对讲状态是群组
+                // 退出组
+                takeOverGroup();
+                // 关闭对讲页面群组数据
+                activity.getActivity().sendBroadcast(new Intent(BroadcastConstants.VIEW_GROUP_CLOSE));
+                // 进入组
+                enterGroup(id);
+            }
+        } else {
+            // 此时没有对讲状态,直接进入组
+            enterGroup(id);
+        }
     }
 
+    // 进入组
+    private void enterGroup(String groupId) {
+        InterPhoneActivity.closeAll();
+        activity.getActivity().sendBroadcast(new Intent(BroadcastConstants.VIEW_INTER_PHONE));
+    }
+
+    // 退出组
+    private void takeOverGroup() {
+        if (ChatPresenter.data != null && ChatPresenter.data.getID() != null) {
+            // 退出组
+            String id = ChatPresenter.data.getID();
+        }
+    }
+
+    // 退出个人对讲
+    private void talkOver() {
+        if (ChatPresenter.data != null && ChatPresenter.data.getID() != null) {
+            ChatPresenter.data.getID();// 挂断电话
+        }
+    }
+
+    // 开始个人对讲
+    private void talkOk(String id) {
+        Intent intent = new Intent(activity.getActivity(), CallAlertActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putString("id", id);
+        intent.putExtras(bundle);
+        activity.startActivityForResult(intent, 0);
+    }
+
+    /**
+     * 进行呼叫
+     *
+     * @param id
+     */
+    public void callOk(String id, int type) {
+        if (type == 1) {
+            // 挂断当前会话
+            talkOver();
+            // 关闭对讲页面好友数据
+            activity.getActivity().sendBroadcast(new Intent(BroadcastConstants.VIEW_PERSON_CLOSE));
+            // 进行呼叫
+            talkOk(id);
+        } else {
+            // 挂断当前会话
+            talkOver();
+            // 关闭对讲页面好友数据
+            activity.getActivity().sendBroadcast(new Intent(BroadcastConstants.VIEW_PERSON_CLOSE));
+            enterGroup(id);
+        }
+    }
 
 }

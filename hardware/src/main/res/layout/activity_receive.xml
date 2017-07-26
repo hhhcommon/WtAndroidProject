@@ -1,81 +1,107 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:clipToPadding="true"
-    android:fitsSystemWindows="true">
+    android:layout_height="match_parent">
+
     <ImageView
         android:id="@+id/img_bg"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scaleType="fitXY"
-        android:src="@mipmap/p" />
-    <ImageView
-        android:id="@+id/img_url"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="133.3dp"
-        android:src="@mipmap/test" />
+        android:scaleType="fitXY" />
 
-    <TextView
-        android:id="@+id/tv_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/img_url"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp"
-        android:text="名称"
-        android:textColor="#ffffff"
-        android:textSize="18.7sp" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/tv_name"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="10dp"
-        android:lineSpacingExtra="4sp"
-        android:text="等待对方接受邀请..."
-        android:textColor="#ffffff"
-        android:textSize="14.7sp" />
-    <ImageView
-        android:id="@+id/img_close"
-        android:layout_width="72dp"
-        android:layout_height="72dp"
-        android:layout_marginLeft="44dp"
-        android:layout_marginTop="410.7dp"
-        android:src="@mipmap/chat_icon_refuse_n" />
+        <ImageView
+            android:id="@+id/img_url"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_marginTop="133.3dp"
+            android:src="@mipmap/test" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/img_close"
-        android:layout_marginTop="12dp"
-        android:lineSpacingExtra="4sp"
-        android:text="取消"
-        android:layout_marginLeft="66dp"
-        android:textColor="#ffffff"
-        android:textSize="14.7sp" />
+        <TextView
+            android:id="@+id/tv_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/img_url"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp"
+            android:text="名称"
+            android:textColor="#ffffff"
+            android:textSize="18.7sp" />
 
-    <ImageView
-        android:id="@+id/img_ok"
-        android:layout_width="72dp"
-        android:layout_height="72dp"
-        android:layout_marginRight="44dp"
-        android:layout_alignParentRight="true"
-        android:layout_marginTop="410.7dp"
-        android:src="@mipmap/chat_icon_answer_n" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_name"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"
+            android:lineSpacingExtra="4sp"
+            android:text="正在邀请你对讲..."
+            android:textColor="#ffffff"
+            android:textSize="14.7sp" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/img_ok"
-        android:layout_marginTop="12dp"
-        android:lineSpacingExtra="4sp"
-        android:text="接听"
-        android:layout_marginRight="66dp"
-        android:layout_alignParentRight="true"
-        android:textColor="#ffffff"
-        android:textSize="14.7sp" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="bottom|center"
+            android:layout_marginBottom="24dp"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:id="@+id/img_close"
+                    android:layout_width="72dp"
+                    android:layout_height="72dp"
+                    android:layout_marginLeft="44dp"
+                    android:src="@mipmap/chat_icon_refuse_n" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="66dp"
+                    android:layout_marginTop="12dp"
+                    android:lineSpacingExtra="4sp"
+                    android:text="取消"
+                    android:textColor="#ffffff"
+                    android:textSize="14.7sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:gravity="right"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:id="@+id/img_ok"
+                    android:layout_width="72dp"
+                    android:layout_height="72dp"
+                    android:layout_marginRight="44dp"
+                    android:src="@mipmap/chat_icon_answer_n" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="66dp"
+                    android:layout_marginTop="12dp"
+                    android:lineSpacingExtra="4sp"
+                    android:text="接听"
+                    android:textColor="#ffffff"
+                    android:textSize="14.7sp" />
+            </LinearLayout>
+        </LinearLayout>
+
+
+    </LinearLayout>
 </RelativeLayout>

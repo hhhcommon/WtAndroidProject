@@ -21,6 +21,8 @@ import com.wotingfm.ui.intercom.group.groupmumberdel.view.GroupNumberDelFragment
 import com.wotingfm.ui.intercom.group.groupmumbershow.view.GroupNumberShowFragment;
 import com.wotingfm.ui.intercom.group.groupnews.add.model.GroupNewsForAddModel;
 import com.wotingfm.ui.intercom.group.groupnews.add.view.GroupNewsForAddFragment;
+import com.wotingfm.ui.intercom.main.chat.model.TalkHistory;
+import com.wotingfm.ui.intercom.main.chat.presenter.ChatPresenter;
 import com.wotingfm.ui.intercom.main.contacts.model.Contact;
 import com.wotingfm.ui.intercom.main.simulation.view.SimulationInterPhoneFragment;
 import com.wotingfm.ui.intercom.main.view.InterPhoneActivity;
@@ -553,6 +555,66 @@ public class GroupNewsForAddPresenter {
             InterPhoneActivity.open(fragment);
         }
     }
+
+    /**
+     * 开始对讲
+     */
+    public void interPhone() {
+        if (gid != null && !gid.equals("")) {
+            TalkHistory data = ChatPresenter.data;
+            if (data != null) {
+                // 此时有对讲状态
+                String _t = data.getTyPe().trim();
+                if (_t != null && !_t.equals("") && _t.equals("person")) {
+                    // 此时的对讲状态是单对单
+                    activity.confirmDialogShow();
+                } else if (_t != null && !_t.equals("") && _t.equals("group")) {
+                    // 此时的对讲状态是群组
+                    takeOverGroup();
+                    enterGroup(gid);
+                }
+            } else {
+                // 此时没有对讲状态
+                enterGroup(gid);
+            }
+        } else {
+            ToastUtils.show_always(activity.getActivity(), "数据出错了，请您稍后再试！");
+        }
+    }
+
+    /**
+     * 同意挂断当前对讲后的操作
+     */
+    public void callOk() {
+        // 挂断当前会话
+        talkOver();
+        // 关闭对讲页面好友数据
+        activity.getActivity().sendBroadcast(new Intent(BroadcastConstants.VIEW_PERSON_CLOSE));
+        enterGroup(gid);
+    }
+
+    // 进入组
+    private void enterGroup(String groupId) {
+        InterPhoneActivity.closeAll();
+        activity.getActivity().sendBroadcast(new Intent(BroadcastConstants.VIEW_INTER_PHONE));
+    }
+
+    // 退出组
+    private void takeOverGroup() {
+        if (ChatPresenter.data != null && ChatPresenter.data.getID() != null) {
+            // 退出组
+            String id = ChatPresenter.data.getID();
+        }
+    }
+
+    // 退出个人对讲
+    private void talkOver() {
+        if (ChatPresenter.data != null && ChatPresenter.data.getID() != null) {
+            String id = ChatPresenter.data.getID();
+        }
+    }
+
+
 
     // 设置广播接收器(群组信息更改)
     private void setReceiver() {

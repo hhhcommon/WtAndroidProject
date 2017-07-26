@@ -52,7 +52,12 @@ public class CallPresenter {
 
     // 获取展示数据
     private void getSource() {
-        String id = activity.getIntent().getStringExtra("id");
+        String id = null;
+        try {
+            id = activity.getIntent().getStringExtra("id").trim();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         if (id != null && !id.equals("")) {
             user = model.getUser(id);
             if (user != null) {
@@ -63,7 +68,7 @@ public class CallPresenter {
                     e.printStackTrace();
                 }
 
-                String name = "";
+                String name = "好友";
                 try {
                     name = user.getName();
                 } catch (Exception e) {
@@ -76,7 +81,6 @@ public class CallPresenter {
         } else {
             activity.finish();
         }
-
     }
 
     // 设置广播接收器

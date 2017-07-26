@@ -89,9 +89,7 @@ public class EditUserPresenter {
         } else {
             ToastUtils.show_always(activity.getActivity(), "提交数据不能为空");
         }
-
     }
-
 
     private void dealSuccess(Object o, String name, String introduce, String age) {
         try {

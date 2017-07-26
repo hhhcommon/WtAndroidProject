@@ -30,9 +30,9 @@ public class ReceiveAlertActivity extends Activity implements OnClickListener {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_receive);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);        //透明状态栏
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);    //透明导航栏
+        setContentView(R.layout.activity_receive);
         inItView();
         presenter = new ReceivePresenter(this);
     }
@@ -73,11 +73,11 @@ public class ReceiveAlertActivity extends Activity implements OnClickListener {
         // 其中radius的取值范围是1-25，radius越大，模糊度越高。
         // 设置高斯模糊背景
         if (url != null && !url.equals("")) {
-            Glide.with(this).load(url).bitmapTransform(new BlurTransformation(this, 15)).into(img_bg);
+            Glide.with(this).load(url).crossFade(1000).bitmapTransform(new BlurTransformation(this, 20, 10)).into(img_bg);
         } else {
-            Bitmap bmp = BitmapUtils.readBitMap(this, R.mipmap.p);
-            img_bg.setImageBitmap(bmp);
+            Glide.with(this).load(R.mipmap.p).crossFade(1000).bitmapTransform(new BlurTransformation(this, 20, 10)).into(img_bg);
         }
+
         // 设置好友头像
         if (url != null && !url.equals("")) {
             GlideUtils.loadImageViewSize(this, url, 60, 60, img_url, true);

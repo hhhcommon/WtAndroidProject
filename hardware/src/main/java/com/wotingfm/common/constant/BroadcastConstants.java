@@ -61,4 +61,8 @@ public class BroadcastConstants {
 
     // 个人中心界面数据更改
     public static final String MINE_CHANGE = "MINE_CHANGE";
+
+    // 关闭所有对讲模块界面
+    public static final String VIEW_INTER_PHONE_CLOSE_ALL = "VIEW_INTER_PHONE_CLOSE_ALL";
+
 }

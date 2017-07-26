@@ -14,6 +14,7 @@ import com.wotingfm.common.constant.IntegerConstant;
 import com.wotingfm.common.utils.CommonUtils;
 import com.wotingfm.common.utils.ToastUtils;
 import com.wotingfm.ui.intercom.alert.call.view.CallAlertActivity;
+import com.wotingfm.ui.intercom.alert.receive.view.ReceiveAlertActivity;
 import com.wotingfm.ui.intercom.main.chat.model.ChatModel;
 import com.wotingfm.ui.intercom.main.chat.model.DBTalkHistory;
 import com.wotingfm.ui.intercom.main.chat.model.TalkHistory;
@@ -159,6 +160,7 @@ public class ContactsPresenter {
                 Intent intent = new Intent(activity.getActivity(), CallAlertActivity.class);
                 Bundle bundle = new Bundle();
                 bundle.putString("id", id);
+                bundle.putString("fromType", "contacts");
                 intent.putExtras(bundle);
                 activity.startActivity(intent);
             }

@@ -108,12 +108,12 @@ public class ContactsFragment extends Fragment implements View.OnClickListener, 
      * @param list
      */
     public void setData(List<Contact.user> list) {
-        if (adapter != null) {
-            adapter.ChangeDate(list);
-        } else {
+//        if (adapter != null) {
+//            adapter.ChangeDate(list);
+//        } else {
             adapter = new ContactsAdapter(this.getActivity(), list);
             listView.setAdapter(adapter);
-        }
+//        }
         setTouchListener(); // 设置右侧触摸监听
         setClickListener(); // 设置item点击事件
     }
@@ -229,7 +229,7 @@ public class ContactsFragment extends Fragment implements View.OnClickListener, 
         final View dialog1 = LayoutInflater.from(this.getActivity()).inflate(R.layout.dialog_talk_person_del, null);
         TextView tv_cancel = (TextView) dialog1.findViewById(R.id.tv_cancle);
         TextView tv_confirm = (TextView) dialog1.findViewById(R.id.tv_confirm);
-        confirmDialog = new Dialog(this.getActivity(), R.style.MyDialog);
+        confirmDialog = new Dialog(this.getActivity(), R.style.MyDialogs);
         confirmDialog.setContentView(dialog1);
         confirmDialog.setCanceledOnTouchOutside(true);
         confirmDialog.getWindow().setBackgroundDrawableResource(R.color.transparent_background);

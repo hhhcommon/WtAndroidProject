@@ -15,9 +15,7 @@ import com.wotingfm.common.bean.AlbumsBean;
 import com.wotingfm.common.config.GlobalStateConfig;
 import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.common.utils.ToastUtils;
-import com.wotingfm.ui.intercom.add.search.net.view.SearchContactsForNetFragment;
 import com.wotingfm.ui.intercom.alert.call.view.CallAlertActivity;
-import com.wotingfm.ui.intercom.group.groupnews.noadd.view.GroupNewsForNoAddFragment;
 import com.wotingfm.ui.intercom.main.chat.model.DBTalkHistory;
 import com.wotingfm.ui.intercom.main.chat.presenter.ChatPresenter;
 import com.wotingfm.ui.intercom.main.contacts.model.Contact;
@@ -30,8 +28,8 @@ import com.wotingfm.ui.intercom.person.personnote.view.EditPersonNoteFragment;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
-
 import java.util.List;
+
 
 /**
  * 好友信息的处理器
@@ -322,7 +320,6 @@ public class PersonMessagePresenter {
         }
     }
 
-
     // 请求后台数据删除好友是否成功
     private void dealDelFriend(boolean b) {
         if (b) {
@@ -462,7 +459,7 @@ public class PersonMessagePresenter {
                 Bundle bundle = new Bundle();
                 bundle.putString("id", id);
                 intent.putExtras(bundle);
-                activity.startActivity(intent);
+                activity.startActivityForResult(intent,0);
             }
         } else {
             ToastUtils.show_always(activity.getActivity(), "数据出错了，请稍后再试！");

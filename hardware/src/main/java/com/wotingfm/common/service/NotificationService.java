@@ -74,17 +74,17 @@ public class NotificationService extends Service {
     private int parsingM(String msg) {
         try {
             JSONObject js = new JSONObject(msg);
-            String type = js.getString("");
+            String type = js.getString("type");
             if (type != null && !type.equals("")) {
-                if (type.equals("")) {// 0.通知消息（待定）
+                if (type.equals("friend_apply")) {// 0.好友申请
                     return 0;
-                } else if (type.equals("")) {// 1.好友同意(重新获取好友)
+                } else if (type.equals("APPROVE_APPLY")) {// 1.好友同意(重新获取好友)
                     return 1;
-                } else if (type.equals("")) {// 2.好友拒绝
+                } else if (type.equals("DENY_APPLY")) {// 2.好友拒绝
                     return 2;
-                } else if (type.equals("")) {// 3.删除好友(重新获取好友)
+                } else if (type.equals("DELETE_FRIEND")) {// 3.删除好友(重新获取好友)
                     return 3;
-                } else if (type.equals("")) {// 4.好友信息修改（头像，昵称）(重新获取好友)
+                } else if (type.equals("Friend_update")) {// 4.好友信息修改（头像，昵称）(重新获取好友)
                     return 4;
                 } else if (type.equals("")) {// 5.有人申请加群 （通知群主与管理员）
                     return 5;
@@ -98,7 +98,9 @@ public class NotificationService extends Service {
                     return 9;
                 } else if (type.equals("")) {// 10.下线提醒
                     return 10;
-                } else {
+                }  else if (type.equals("")) {// 11.通知消息（待定）
+                    return 11;
+                }else {
                     return 999;
                 }
             } else {
@@ -117,7 +119,7 @@ public class NotificationService extends Service {
      */
     private void dealM(int type) {
         switch (type) {
-            case 0:// 0.通知消息（待定）
+            case 0:// 0.好友申请
                 break;
             case 1:// 1.好友同意(重新获取好友)
                 context.sendBroadcast(new Intent(BroadcastConstants.PERSON_GET));
@@ -144,6 +146,8 @@ public class NotificationService extends Service {
                 context.sendBroadcast(new Intent(BroadcastConstants.GROUP_GET));
                 break;
             case 10:// 10.下线提醒
+                break;
+            case 11:// 11.通知消息（待定）
                 break;
         }
     }

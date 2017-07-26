@@ -147,10 +147,11 @@ public class GroupChatPresenter {
                     activity.dialogShow(groupId);
                 } else if (_t != null && !_t.equals("") && _t.equals("group")) {
                     // 此时的对讲状态是群组
-                    takeOverGroup(groupId);
+                    takeOverGroup();// 退出组
+                    enterGroup(groupId);// 进入组
                 }
             } else {
-                // 此时没有对讲状态
+                // 此时没有对讲状态,直接进入组
                 enterGroup(groupId);
             }
         } else {
@@ -158,35 +159,38 @@ public class GroupChatPresenter {
         }
     }
 
-    // 进入组
-    private void enterGroup(String groupId) {
-    }
-
-    // 退出组
-    private void  takeOverGroup(String groupId){
-        if(ChatPresenter.data!=null&&ChatPresenter.data.getID()!=null){
-            // 退出组
-            String id= ChatPresenter.data.getID();
-        }
-        enterGroup(groupId);// 进入组
-    }
-
-    // 退出个人对讲
-    private void  talkOver(String personId){
-
-    }
-
     /**
      * 同意挂断当前对讲后的操作
      */
     public void callOk(String groupId) {
-        // 挂断当前会话
-        if(ChatPresenter.data!=null&&ChatPresenter.data.getID()!=null){
-            talkOver(ChatPresenter.data.getID());
-        }
+        // 退出个人对讲
+        talkOver();
         // 关闭对讲页面好友数据
         activity.getActivity().sendBroadcast(new Intent(BroadcastConstants.VIEW_PERSON_CLOSE));
+        // 进入组
         enterGroup(groupId);
+    }
+
+    // 进入组
+    private void enterGroup(String groupId) {
+        InterPhoneActivity.closeAll();
+        activity.getActivity().sendBroadcast(new Intent(BroadcastConstants.VIEW_INTER_PHONE));
+    }
+
+    // 退出组
+    private void takeOverGroup() {
+        if (ChatPresenter.data != null && ChatPresenter.data.getID() != null) {
+            // 退出组
+            String id = ChatPresenter.data.getID();
+        }
+    }
+
+    // 退出个人对讲
+    private void talkOver() {
+        // 挂断当前会话
+        if (ChatPresenter.data != null && ChatPresenter.data.getID() != null) {
+            ChatPresenter.data.getID();
+        }
     }
 
     // 设置广播接收器

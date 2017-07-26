@@ -46,6 +46,7 @@ public class SearchContactsForLocalFragment extends Fragment implements View.OnC
     private TextView tv_ts;// 提示性界面，临时使用，需替换
     private Dialog confirmDialog;
     private String id;
+    private int type;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -60,6 +61,7 @@ public class SearchContactsForLocalFragment extends Fragment implements View.OnC
             initViews();// 设置界面
             setEditListener();
             setViewOne();
+            Dialog();
             presenter = new SearchContactsForLocalPresenter(this);
             presenter.getFriends();
         }
@@ -186,7 +188,7 @@ public class SearchContactsForLocalFragment extends Fragment implements View.OnC
         pAdapter.setOnListener(new ContactsAdapter.OnListener() {
             @Override
             public void add(int position) {
-                presenter.call(position);
+                presenter.call(person,position);
             }
         });
 
@@ -204,7 +206,7 @@ public class SearchContactsForLocalFragment extends Fragment implements View.OnC
         gAdapter.setOnListener(new GroupsAdapter.OnListener() {
             @Override
             public void add(int position) {
-                presenter.interPhone(position);
+                presenter.interPhone(group,position);
             }
         });
 
@@ -231,7 +233,7 @@ public class SearchContactsForLocalFragment extends Fragment implements View.OnC
         final View dialog1 = LayoutInflater.from(this.getActivity()).inflate(R.layout.dialog_talk_person_del, null);
         TextView tv_cancel = (TextView) dialog1.findViewById(R.id.tv_cancle);
         TextView tv_confirm = (TextView) dialog1.findViewById(R.id.tv_confirm);
-        confirmDialog = new Dialog(this.getActivity(), R.style.MyDialog);
+        confirmDialog = new Dialog(this.getActivity(), R.style.MyDialogs);
         confirmDialog.setContentView(dialog1);
         confirmDialog.setCanceledOnTouchOutside(true);
         confirmDialog.getWindow().setBackgroundDrawableResource(R.color.transparent_background);
@@ -245,7 +247,7 @@ public class SearchContactsForLocalFragment extends Fragment implements View.OnC
         tv_confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                presenter.callOk(id);
+                presenter.callOk(id,type);
                 confirmDialog.dismiss();
             }
         });
@@ -254,8 +256,9 @@ public class SearchContactsForLocalFragment extends Fragment implements View.OnC
     /**
      * 展示弹出框
      */
-    public void dialogShow(String id) {
+    public void dialogShow(String id,int type) {
         this.id=id;
+        this.type=type;
         confirmDialog.show();
     }
 

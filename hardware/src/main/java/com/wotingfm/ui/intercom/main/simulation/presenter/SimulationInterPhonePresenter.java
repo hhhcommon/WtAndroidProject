@@ -35,7 +35,8 @@ public class SimulationInterPhonePresenter {
             channel=model.getChannel(c);
             activity.setChannel(c);
         }else{
-            channel= model.getChannel("CH01-409.7500");
+            c="CH01-409.7500";
+            channel= model.getChannel(c);
             activity.setChannel(c);
         }
         activity.initEmp(channel);
