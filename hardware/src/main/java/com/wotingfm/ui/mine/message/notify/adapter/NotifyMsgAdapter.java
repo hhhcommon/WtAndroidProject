@@ -15,10 +15,9 @@ import android.widget.TextView;
 import com.woting.commonplat.utils.BitmapUtils;
 import com.wotingfm.R;
 import com.wotingfm.common.utils.GlideUtils;
-import com.wotingfm.common.utils.TimeUtils;
+import com.wotingfm.common.utils.TimeUtil;
 import com.wotingfm.common.view.slidingbutton.SlidingButtonView;
 import com.wotingfm.ui.mine.message.notify.model.Msg;
-import com.wotingfm.ui.mine.message.notify.model.SrcMsg;
 
 import java.util.List;
 
@@ -95,7 +94,7 @@ public class NotifyMsgAdapter extends RecyclerView.Adapter<NotifyMsgAdapter.Simp
             holder.img_url.setImageBitmap(bmp);
         }
         if (m.getTime() != null && !m.getTime().equals("")) {
-            holder.tv_time.setText(TimeUtils.stampToDateForH(m.getTime()));
+            holder.tv_time.setText(TimeUtil.stampToDateForH(m.getTime()));
         } else {
             holder.tv_time.setText("00:00");
         }

@@ -55,12 +55,12 @@ public class PersonMessageModel  {
      * @param s
      * @return
      */
-    public DBTalkHistory assemblyData(Contact.user s) {
+    public DBTalkHistory assemblyData(Contact.user s,String callType, String CallTypeM) {
         String id = s.getId();
         String type = "person";
         String addTime = Long.toString(System.currentTimeMillis());
         String bjUserId = CommonUtils.getUserId();
-        DBTalkHistory h = new DBTalkHistory(bjUserId, type, id, addTime);
+        DBTalkHistory h = new DBTalkHistory(bjUserId, type, id, addTime,callType,CallTypeM);
         return h;
     }
 
@@ -74,6 +74,19 @@ public class PersonMessageModel  {
             dbDao.deleteHistory(id);
         }else{
             dbDao.deleteHistory(id);
+        }
+    }
+
+    /**
+     * 在数据库中插入一条数据
+     * @param h
+     */
+    public void add(DBTalkHistory h){
+        if(dbDao==null){
+            initDao();
+            dbDao.addTalkHistory(h);
+        }else{
+            dbDao.addTalkHistory(h);
         }
     }
 

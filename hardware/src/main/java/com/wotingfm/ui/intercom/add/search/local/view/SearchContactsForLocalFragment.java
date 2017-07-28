@@ -15,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+
 import com.woting.commonplat.widget.HeightListView;
 import com.wotingfm.R;
 import com.wotingfm.ui.intercom.add.search.local.adapter.GroupsAdapter;
@@ -23,6 +24,7 @@ import com.wotingfm.ui.intercom.main.contacts.adapter.ContactsAdapter;
 import com.wotingfm.ui.intercom.main.contacts.adapter.NoAdapter;
 import com.wotingfm.ui.intercom.main.contacts.model.Contact;
 import com.wotingfm.ui.intercom.main.view.InterPhoneActivity;
+
 import java.util.List;
 
 
@@ -36,7 +38,7 @@ public class SearchContactsForLocalFragment extends Fragment implements View.OnC
     private FragmentActivity context;
     private ListView listViewG, listViewP;
     private View headView;
-    private TextView tv_clear, tv_newsP, tv_newsG,tv_group_bg;
+    private TextView tv_clear, tv_newsP, tv_newsG, tv_group_bg;
     private EditText et_search;
     private ImageView img_search;
     private SearchContactsForLocalPresenter presenter;
@@ -45,7 +47,9 @@ public class SearchContactsForLocalFragment extends Fragment implements View.OnC
     private LinearLayout lin_background;
     private TextView tv_ts;// 提示性界面，临时使用，需替换
     private Dialog confirmDialog;
-    private String id;
+    private int type;
+    private Contact.user user;
+    private Contact.group group;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -60,6 +64,7 @@ public class SearchContactsForLocalFragment extends Fragment implements View.OnC
             initViews();// 设置界面
             setEditListener();
             setViewOne();
+            Dialog();
             presenter = new SearchContactsForLocalPresenter(this);
             presenter.getFriends();
         }
@@ -186,7 +191,7 @@ public class SearchContactsForLocalFragment extends Fragment implements View.OnC
         pAdapter.setOnListener(new ContactsAdapter.OnListener() {
             @Override
             public void add(int position) {
-                presenter.call(position);
+                presenter.call(person, position);
             }
         });
 
@@ -194,7 +199,7 @@ public class SearchContactsForLocalFragment extends Fragment implements View.OnC
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 // 跳转到好友信息界面
-                presenter.jumpForPerson(person,position);
+                presenter.jumpForPerson(person, position);
             }
         });
     }
@@ -204,7 +209,7 @@ public class SearchContactsForLocalFragment extends Fragment implements View.OnC
         gAdapter.setOnListener(new GroupsAdapter.OnListener() {
             @Override
             public void add(int position) {
-                presenter.interPhone(position);
+                presenter.interPhone(group, position);
             }
         });
 
@@ -212,7 +217,7 @@ public class SearchContactsForLocalFragment extends Fragment implements View.OnC
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 // 跳转到群组详情页面,需要-1
-                presenter.jumpForGroup(group,position-1);
+                presenter.jumpForGroup(group, position - 1);
             }
         });
     }
@@ -231,22 +236,22 @@ public class SearchContactsForLocalFragment extends Fragment implements View.OnC
         final View dialog1 = LayoutInflater.from(this.getActivity()).inflate(R.layout.dialog_talk_person_del, null);
         TextView tv_cancel = (TextView) dialog1.findViewById(R.id.tv_cancle);
         TextView tv_confirm = (TextView) dialog1.findViewById(R.id.tv_confirm);
-        confirmDialog = new Dialog(this.getActivity(), R.style.MyDialog);
+        confirmDialog = new Dialog(this.getActivity(), R.style.MyDialogs);
         confirmDialog.setContentView(dialog1);
         confirmDialog.setCanceledOnTouchOutside(true);
         confirmDialog.getWindow().setBackgroundDrawableResource(R.color.transparent_background);
         tv_cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                confirmDialog.dismiss();
+                dialogCancel();
             }
         });
 
         tv_confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                presenter.callOk(id);
-                confirmDialog.dismiss();
+                presenter.callOk(user, group, type);
+                dialogCancel();
             }
         });
     }
@@ -254,8 +259,10 @@ public class SearchContactsForLocalFragment extends Fragment implements View.OnC
     /**
      * 展示弹出框
      */
-    public void dialogShow(String id) {
-        this.id=id;
+    public void dialogShow(Contact.user user, Contact.group group, int type) {
+        this.user = user;
+        this.group = group;
+        this.type = type;
         confirmDialog.show();
     }
 

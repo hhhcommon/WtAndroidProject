@@ -7,28 +7,12 @@ import android.content.IntentFilter;
 import android.media.MediaPlayer;
 import android.media.RingtoneManager;
 import android.net.Uri;
-import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
-
 import com.wotingfm.R;
 import com.wotingfm.common.config.GlobalStateConfig;
 import com.wotingfm.common.constant.BroadcastConstants;
-import com.wotingfm.common.utils.ToastUtils;
-import com.wotingfm.ui.intercom.add.search.local.model.SearchContactsForLocalModel;
-import com.wotingfm.ui.intercom.add.search.local.view.SearchContactsForLocalFragment;
 import com.wotingfm.ui.intercom.alert.call.model.CallModel;
 import com.wotingfm.ui.intercom.alert.call.view.CallAlertActivity;
-import com.wotingfm.ui.intercom.group.groupnews.add.view.GroupNewsForAddFragment;
-import com.wotingfm.ui.intercom.main.chat.dao.SearchTalkHistoryDao;
-import com.wotingfm.ui.intercom.main.chat.model.DBTalkHistory;
 import com.wotingfm.ui.intercom.main.contacts.model.Contact;
-import com.wotingfm.ui.intercom.main.view.InterPhoneActivity;
-import com.wotingfm.ui.intercom.person.personmessage.view.PersonMessageFragment;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 /**
  * 作者：xinLong on 2017/6/5 13:55
@@ -52,7 +36,12 @@ public class CallPresenter {
 
     // 获取展示数据
     private void getSource() {
-        String id = activity.getIntent().getStringExtra("id");
+        String id = null;
+        try {
+            id = activity.getIntent().getStringExtra("id").trim();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         if (id != null && !id.equals("")) {
             user = model.getUser(id);
             if (user != null) {
@@ -63,7 +52,7 @@ public class CallPresenter {
                     e.printStackTrace();
                 }
 
-                String name = "";
+                String name = "好友";
                 try {
                     name = user.getName();
                 } catch (Exception e) {
@@ -76,7 +65,6 @@ public class CallPresenter {
         } else {
             activity.finish();
         }
-
     }
 
     // 设置广播接收器
@@ -135,7 +123,6 @@ public class CallPresenter {
      */
     public void destroy() {
         musicClose();
-        model.destroy();
         if (GlobalStateConfig.test) {
             dealPushCall();
         }
@@ -159,13 +146,8 @@ public class CallPresenter {
     // 处理呼叫成功返回的数据
     private void dealPushCall() {
         if (user != null) {
-            DBTalkHistory l = model.assemblyData(user);
-            String id = l.getID().trim();
-            if (id != null && !id.equals("")) {
-                model.add(l);
-                activity.sendBroadcast(new Intent(BroadcastConstants.PUSH_CALL_SEND));
-                activity.finish();
-            }
+            activity.sendBroadcast(new Intent(BroadcastConstants.PUSH_CALL_SEND));
+            activity.finish();
         }
     }
 }

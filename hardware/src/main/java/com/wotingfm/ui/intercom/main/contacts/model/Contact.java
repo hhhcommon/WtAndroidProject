@@ -202,6 +202,15 @@ public class Contact implements Serializable {
         private String updated_at;//
         private String channel;//
         private String group_num;//
+        private String member_num;//               // 成员数
+
+        public String getMember_num() {
+            return member_num;
+        }
+
+        public void setMember_num(String member_num) {
+            this.member_num = member_num;
+        }
 
         public String getGroup_num() {
             return group_num;

@@ -11,9 +11,6 @@ import com.mcxtzhang.swipemenulib.SwipeMenuLayout;
 import com.wotingfm.R;
 import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.bean.AlbumsBean;
-import com.wotingfm.common.bean.Player;
-import com.wotingfm.common.bean.Subscrible;
-import com.wotingfm.common.utils.TimeUtils;
 import com.zhy.adapter.recyclerview.CommonAdapter;
 import com.zhy.adapter.recyclerview.base.ViewHolder;
 

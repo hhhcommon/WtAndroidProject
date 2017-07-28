@@ -71,7 +71,7 @@ public class ChatModel extends CommonModel {
             } else {
                 return list;
             }
-        }else{
+        } else {
             return null;
         }
     }
@@ -134,17 +134,18 @@ public class ChatModel extends CommonModel {
      * @param s
      * @return
      */
-    public DBTalkHistory assemblyData(TalkHistory s) {
+    public DBTalkHistory assemblyData(TalkHistory s, String CallType, String CallTypeM) {
         String id = s.getID();
-        String type = "person";
+        String type = s.getTyPe();
         String addTime = Long.toString(System.currentTimeMillis());
         String bjUserId = CommonUtils.getUserId();
-        DBTalkHistory h = new DBTalkHistory(bjUserId, type, id, addTime);
+        DBTalkHistory h = new DBTalkHistory(bjUserId, type, id, addTime, CallType, CallTypeM);
         return h;
     }
 
     /**
      * 获取展示数据
+     *
      * @return
      */
     public List<TalkHistory> getData() {
@@ -187,7 +188,7 @@ public class ChatModel extends CommonModel {
             return data;
         } else {
             List<DBTalkHistory> list = get();// 数据库存储数据
-            Log.e("222222","list大小"+list.size());
+            Log.e("222222", "list大小" + list.size());
             List<Contact.user> p_list = GlobalStateConfig.list_person;// 好友列表
             List<Contact.group> g_list = GlobalStateConfig.list_group;// 群组列表
             List<TalkHistory> data = new ArrayList<>();// 组装后的数据
@@ -199,7 +200,7 @@ public class ChatModel extends CommonModel {
                     String type = list.get(i).getTyPe();
                     if (type != null && !type.trim().equals("") && type.equals("person")) {
                         // 是否是好友
-                        if(p_list!=null&& p_list.size()>0){
+                        if (p_list != null && p_list.size() > 0) {
                             for (int j = 0; j < p_list.size(); j++) {
                                 String pid = p_list.get(j).getId();
                                 if (pid != null && !pid.trim().equals("")) {
@@ -213,7 +214,7 @@ public class ChatModel extends CommonModel {
 
                     } else if (type != null && !type.trim().equals("") && type.equals("group")) {
                         // 是否是群组
-                        if(g_list!=null&& g_list.size()>0){
+                        if (g_list != null && g_list.size() > 0) {
                             for (int j = 0; j < g_list.size(); j++) {
                                 String gid = g_list.get(j).getId();
                                 if (gid != null && !gid.trim().equals("")) {
@@ -225,11 +226,11 @@ public class ChatModel extends CommonModel {
                             }
                         }
 
-                    }else{
-                        Log.e("222222","type为空");
+                    } else {
+                        Log.e("222222", "type为空");
                     }
-                }else{
-                    Log.e("222222","id为空");
+                } else {
+                    Log.e("222222", "id为空");
                 }
             }
 
@@ -239,6 +240,7 @@ public class ChatModel extends CommonModel {
 
     /**
      * 组装好友数据
+     *
      * @param s
      * @param h
      * @return
@@ -254,6 +256,8 @@ public class ChatModel extends CommonModel {
                 data.setURL(s.getAvatar());
                 String addTime = Long.toString(System.currentTimeMillis());
                 data.setAddTime(addTime);
+                data.setCallType("ok");
+                data.setCallTypeM("已接受");
                 return data;
             } else {
                 // 实际数据
@@ -263,6 +267,8 @@ public class ChatModel extends CommonModel {
                 data.setTyPe("person");
                 data.setURL(s.getAvatar());
                 data.setAddTime(h.getAddTime());
+                data.setCallType(h.getCallType());
+                data.setCallTypeM(h.getCallTypeM());
                 return data;
             }
         } else {
@@ -279,9 +285,10 @@ public class ChatModel extends CommonModel {
                 data.setName(s.getTitle());
                 data.setID(s.getId());
                 data.setTyPe("group");
-                data.setURL(s.getQr_code_url());
+                data.setURL(s.getLogo_url());
                 String addTime = Long.toString(System.currentTimeMillis());
                 data.setAddTime(addTime);
+                data.setGroupNum(s.getMember_num());
                 return data;
             } else {
                 // 实际数据
@@ -289,8 +296,9 @@ public class ChatModel extends CommonModel {
                 data.setName(s.getTitle());
                 data.setID(s.getId());
                 data.setTyPe("group");
-                data.setURL(s.getQr_code_url());
+                data.setURL(s.getLogo_url());
                 data.setAddTime(h.getAddTime());
+                data.setGroupNum(s.getMember_num());
                 return data;
             }
         } else {
@@ -404,7 +412,7 @@ public class ChatModel extends CommonModel {
         }
 
         if (group != null) {
-            String cid = group.getCreator_id();
+            String cid = group.getOwner_id();
             if (cid != null && !cid.equals("")) {
                 if (cid.equals(pid)) {
                     b = true;

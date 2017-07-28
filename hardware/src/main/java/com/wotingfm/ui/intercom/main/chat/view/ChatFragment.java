@@ -50,6 +50,9 @@ public class ChatFragment extends Fragment implements ChatAdapter.IonSlidingView
     private TipView tip_view;
     private Dialog confirmDialog;
     private int type;
+    private String old_id;
+    private String new_id;
+    private int callType;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -273,14 +276,16 @@ public class ChatFragment extends Fragment implements ChatAdapter.IonSlidingView
         tv_cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                confirmDialog.dismiss();
+                dialogCancel();
             }
         });
 
         tv_confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                confirmDialog.dismiss();
+                dialogCancel();
+                presenter.callOk(old_id,new_id,callType);
+
             }
         });
     }
@@ -288,7 +293,10 @@ public class ChatFragment extends Fragment implements ChatAdapter.IonSlidingView
     /**
      * 展示弹出框
      */
-    public void dialogShow() {
+    public void dialogShow(String old_id,String new_id,int type) {
+        this.old_id=old_id;
+        this.new_id=new_id;
+        this.callType=type;
         confirmDialog.show();
     }
 

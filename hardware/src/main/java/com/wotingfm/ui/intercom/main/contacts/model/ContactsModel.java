@@ -77,12 +77,12 @@ public class ContactsModel {
      * @param s
      * @return
      */
-    public DBTalkHistory assemblyData(Contact.user s) {
+    public DBTalkHistory assemblyData(Contact.user s,String callType, String CallTypeM) {
         String id = s.getId();
         String type = "person";
         String addTime = Long.toString(System.currentTimeMillis());
         String bjUserId = CommonUtils.getUserId();
-        DBTalkHistory h = new DBTalkHistory(bjUserId, type, id, addTime);
+        DBTalkHistory h = new DBTalkHistory(bjUserId, type, id, addTime,callType,CallTypeM);
         return h;
     }
 

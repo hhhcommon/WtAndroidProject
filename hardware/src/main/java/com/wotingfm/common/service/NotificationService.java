@@ -4,8 +4,13 @@ import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
 import android.util.Log;
+
+import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.constant.BroadcastConstants;
+import com.wotingfm.common.utils.ToastUtils;
+
 import org.json.JSONObject;
+
 import java.util.concurrent.ArrayBlockingQueue;
 
 /**
@@ -14,7 +19,7 @@ import java.util.concurrent.ArrayBlockingQueue;
  * 邮箱：645700751@qq.com
  */
 public class NotificationService extends Service {
-    private static ArrayBlockingQueue<String> MsgQueue = new ArrayBlockingQueue<String>(128);                     // 需要处理的已经组装好的消息队列
+    private static ArrayBlockingQueue<String> MsgQueue = new ArrayBlockingQueue<String>(128);  // 需要处理的已经组装好的消息队列
     private static NotificationService context;
 
     @Override
@@ -40,47 +45,7 @@ public class NotificationService extends Service {
      * 10.下线提醒
      */
     public static void saveM(String s) {
-        MsgQueue.add("");
-    }
-
-    /**
-     * 最终处理消息
-     *
-     * @param type
-     */
-    private void dealM(int type) {
-        switch (type) {
-            case 0:// 0.通知消息（待定）
-                break;
-            case 1:// 1.好友同意(重新获取好友)
-                context.sendBroadcast(new Intent(BroadcastConstants.PERSON_GET));
-                break;
-            case 2:// 2.好友拒绝
-                break;
-            case 3:// 3.删除好友(重新获取好友)
-                context.sendBroadcast(new Intent(BroadcastConstants.PERSON_GET));
-                break;
-            case 4:// 4.好友信息修改（头像，昵称）(重新获取好友)
-                context.sendBroadcast(new Intent(BroadcastConstants.PERSON_GET));
-                break;
-            case 5:// 5.有人申请加群 （通知群主与管理员）
-                break;
-            case 6:// 6.同意加入群组(重新获取群组)
-                context.sendBroadcast(new Intent(BroadcastConstants.GROUP_GET));
-                break;
-            case 7:// 7.拒绝加入群组
-                break;
-            case 8:// 8.删除群成员（被删除）(重新获取群组)
-                context.sendBroadcast(new Intent(BroadcastConstants.GROUP_GET));
-                break;
-            case 9:// 9.群消息修改（头像，名称等）(重新获取群组)
-                context.sendBroadcast(new Intent(BroadcastConstants.GROUP_GET));
-                break;
-            case 10:// 10.下线提醒
-                break;
-
-        }
-
+        MsgQueue.add(s);
     }
 
     /**
@@ -92,14 +57,109 @@ public class NotificationService extends Service {
                 try {
                     String msg = MsgQueue.take();
                     if (msg != null && msg.trim().length() > 0) {
-                        JSONObject js = new JSONObject(msg);
-                        int type = js.getInt("type");
+                        int type = parsingM(msg);
                         dealM(type);
                     }
                 } catch (Exception e) {
                     Log.e("DealReceive处理线程:::", e.toString());
                 }
             }
+        }
+    }
+
+    /**
+     * 解析数据
+     *
+     * @param msg
+     * @return
+     */
+    private int parsingM(String msg) {
+        try {
+            JSONObject js = new JSONObject(msg);
+            String type = js.getString("type");
+            if (type != null && !type.equals("")) {
+                if (type.equals("FRIEND_APPLY")) {// 0.好友申请
+                    return 0;
+                } else if (type.equals("FRIEND_APPROVE")) {// 1.好友同意(重新获取好友)
+                    return 1;
+                } else if (type.equals("FRIEND_DENY")) {// 2.好友拒绝
+                    return 2;
+                } else if (type.equals("FRIEND_DELETE")) {// 3.删除好友(重新获取好友)
+                    return 3;
+                } else if (type.equals("FRIEND_UPDATE")) {// 4.好友信息修改（头像，昵称）(重新获取好友)
+                    return 4;
+                } else if (type.equals("")) {// 5.有人申请加群 （通知群主与管理员）
+                    return 5;
+                } else if (type.equals("CHAT_GROUP_APPROVE")) {// 6.同意加入群组(重新获取群组)
+                    return 6;
+                } else if (type.equals("CHAT_GROUP_DENY")) {// 7.拒绝加入群组
+                    return 7;
+                } else if (type.equals("GROUP_REMOVE")) {// 8.删除群成员（被删除）(重新获取群组)
+                    return 8;
+                } else if (type.equals("UPDATE_GROUP_DETAIL")) {// 9.群消息修改（头像，名称等）(重新获取群组)
+                    return 9;
+                } else if (type.equals("")) {// 10.下线提醒
+                    return 10;
+                }  else if (type.equals("")) {// 11.通知消息（待定）
+                    return 11;
+                } else if (type.equals("GROUP_ADD")) {// 12.有人邀请我入群
+                    return 12;
+                }else {
+                    return 999;
+                }
+            } else {
+                return 999;
+            }
+        } catch (Exception e) {
+            Log.e("DealReceive处理线程:::", e.toString());
+            return 999;
+        }
+    }
+
+    /**
+     * 最终处理消息
+     *
+     * @param type
+     */
+    private void dealM(int type) {
+        switch (type) {
+            case 0:// 0.好友申请
+                ToastUtils.show_always(BSApplication.mContext,"有人添加我为好友");
+                break;
+            case 1:// 1.好友同意(重新获取好友)
+                context.sendBroadcast(new Intent(BroadcastConstants.PERSON_GET));
+                break;
+            case 2:// 2.好友拒绝
+                ToastUtils.show_always(BSApplication.mContext,"拒绝添加好友");
+                break;
+            case 3:// 3.删除好友(重新获取好友)
+                context.sendBroadcast(new Intent(BroadcastConstants.PERSON_GET));
+                break;
+            case 4:// 4.好友信息修改（头像，昵称）(重新获取好友)
+                context.sendBroadcast(new Intent(BroadcastConstants.PERSON_GET));
+                break;
+            case 5:// 5.有人申请加群 （通知群主与管理员）
+                ToastUtils.show_always(BSApplication.mContext,"有人申请加入群");
+                break;
+            case 6:// 6.同意加入群组(重新获取群组)
+                context.sendBroadcast(new Intent(BroadcastConstants.GROUP_GET));
+                break;
+            case 7:// 7.拒绝加入群组
+                ToastUtils.show_always(BSApplication.mContext,"拒绝加入群组");
+                break;
+            case 8:// 8.删除群成员（被删除）(重新获取群组)
+                context.sendBroadcast(new Intent(BroadcastConstants.GROUP_GET));
+                break;
+            case 9:// 9.群消息修改（头像，名称等）(重新获取群组)
+                context.sendBroadcast(new Intent(BroadcastConstants.GROUP_GET));
+                break;
+            case 10:// 10.下线提醒
+                break;
+            case 11:// 11.通知消息（待定）
+                break;
+            case 12:// 12.有人邀请我入群
+                ToastUtils.show_always(BSApplication.mContext,"有人邀请我入群");
+                break;
         }
     }
 

@@ -1,6 +1,11 @@
 package com.wotingfm.ui.intercom.add.search.local.model;
 
 import com.wotingfm.common.config.GlobalStateConfig;
+import com.wotingfm.common.utils.CommonUtils;
+import com.wotingfm.ui.intercom.add.search.local.view.SearchContactsForLocalFragment;
+import com.wotingfm.ui.intercom.group.groupchat.view.GroupChatFragment;
+import com.wotingfm.ui.intercom.main.chat.dao.SearchTalkHistoryDao;
+import com.wotingfm.ui.intercom.main.chat.model.DBTalkHistory;
 import com.wotingfm.ui.intercom.main.contacts.model.Contact;
 import com.wotingfm.ui.intercom.main.contacts.view.CharacterParser;
 import com.wotingfm.ui.intercom.main.contacts.view.PinyinComparator;
@@ -16,10 +21,77 @@ import java.util.List;
 public class SearchContactsForLocalModel {
     private final CharacterParser characterParser;
     private final PinyinComparator pinyinComparator;
+    private final SearchContactsForLocalFragment activity;
+    private SearchTalkHistoryDao dbDao;
 
-    public SearchContactsForLocalModel() {
+    public SearchContactsForLocalModel(SearchContactsForLocalFragment activity) {
+        this.activity = activity;
         characterParser = CharacterParser.getInstance();
         pinyinComparator = new PinyinComparator();
+        initDao();      // 初始化数据库
+    }
+
+    // 初始化数据库
+    private void initDao() {
+        dbDao = new SearchTalkHistoryDao(activity.getActivity());
+    }
+
+    /**
+     * 从数据库中删除一条数据
+     *
+     * @param id
+     */
+    public void del(String id) {
+        if (dbDao == null) {
+            initDao();
+            dbDao.deleteHistory(id);
+        } else {
+            dbDao.deleteHistory(id);
+        }
+    }
+
+    /**
+     * 在数据库中插入一条数据
+     *
+     * @param h
+     */
+    public void add(DBTalkHistory h) {
+        if (dbDao == null) {
+            initDao();
+            dbDao.addTalkHistory(h);
+        } else {
+            dbDao.addTalkHistory(h);
+        }
+    }
+
+    /**
+     * 组装数据库数据
+     *
+     * @param s
+     * @return
+     */
+    public DBTalkHistory assemblyGroupData(Contact.group s, String callType, String CallTypeM) {
+        String id = s.getId();
+        String type = "group";
+        String addTime = Long.toString(System.currentTimeMillis());
+        String bjUserId = CommonUtils.getUserId();
+        DBTalkHistory h = new DBTalkHistory(bjUserId, type, id, addTime, callType, CallTypeM);
+        return h;
+    }
+
+    /**
+     * 组装数据库数据
+     *
+     * @param s
+     * @return
+     */
+    public DBTalkHistory assemblyPersonData(Contact.user s, String callType, String CallTypeM) {
+        String id = s.getId();
+        String type = "person";
+        String addTime = Long.toString(System.currentTimeMillis());
+        String bjUserId = CommonUtils.getUserId();
+        DBTalkHistory h = new DBTalkHistory(bjUserId, type, id, addTime, callType, CallTypeM);
+        return h;
     }
 
     /**

@@ -483,6 +483,17 @@ public interface RetrofitService {
     @GET(Api.URL_GET_VERSION)
     Observable<Object> getVersion();
 
+    // 获取我关注的人
+    @GET(Api.URL_GET_MY_FOCUS)
+    Observable<Object> getMyFocus(@Path("id") String id);
+
+    // 获取我喜欢的节目列表
+    @GET(Api.URL_GET_MY_FAVORITE)
+    Observable<Object> getMyFavorite(@Path("id") String id);
+
+    //取消关注
+    @DELETE(Api.URL_DEL_FANS)
+    Observable<Object> delFocus(@Query("idol_id") String idol_id, @Query("user_id") String user_id);
 }
 
 

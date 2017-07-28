@@ -33,8 +33,8 @@ public class SearchTalkHistoryDao {
 	public void addTalkHistory(DBTalkHistory history) {
 		//通过helper的实现对象获取可操作的数据库db
 		SQLiteDatabase db = helper.getWritableDatabase();
-		db.execSQL("insert into talkHistory(bjUserId,type,id,addTime) values(?,?,?,?)",
-				new Object[] {history.getBJUserId(),history.getTyPe(), history.getID(),history.getAddTime()});//sql语句
+		db.execSQL("insert into talkHistory(bjUserId,type,id,addTime,callType,callTypeM) values(?,?,?,?,?,?)",
+				new Object[] {history.getBJUserId(),history.getTyPe(), history.getID(),history.getAddTime(),history.getCallType(),history.getCallTypeM()});//sql语句
 		db.close();//关闭数据库对象
 	}
 
@@ -55,8 +55,10 @@ public class SearchTalkHistoryDao {
 				String type = cursor.getString(2);
 				String id = cursor.getString(3);
 				String addTime = cursor.getString(4);
+				String callType =  cursor.getString(5);
+				String callTypeM =  cursor.getString(6);
 				//把每个对象都放到history对象里
-				DBTalkHistory h = new DBTalkHistory(bjUserId,  type,  id, addTime);
+				DBTalkHistory h = new DBTalkHistory(bjUserId,  type,  id, addTime,callType,callTypeM);
 				myList.add(h);
 			}
 		} catch (Exception e) {

@@ -57,6 +57,8 @@ public class GroupNewsForAddFragment extends Fragment implements View.OnClickLis
     private ImageView head_left_btn, img_other, img_url;
     private LinearLayout lin_chose, lin_channel;
     private ResultListener Listener;
+    private Dialog confirmDialog;
+    private String id;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -69,6 +71,7 @@ public class GroupNewsForAddFragment extends Fragment implements View.OnClickLis
             rootView = inflater.inflate(R.layout.fragment_groupnewsadd, container, false);
             rootView.setOnClickListener(this);
             inItView();
+            Dialog();
             presenter = new GroupNewsForAddPresenter(this);
             presenter.getData();
             if (PhoneMsgManager.ScreenWidth == 480) {
@@ -149,7 +152,7 @@ public class GroupNewsForAddFragment extends Fragment implements View.OnClickLis
                 presenter.jumpManager();
                 break;
             case R.id.lin_send:
-                ToastUtils.show_always(this.getActivity(), "开始对讲");
+                presenter.interPhone();
                 break;
             case R.id.re_channel1:
                 presenter.jumpChannelSet(1);
@@ -357,6 +360,45 @@ public class GroupNewsForAddFragment extends Fragment implements View.OnClickLis
      */
     public void dialogCancel() {
         if (dialog != null) dialog.dismiss();
+    }
+
+    private void Dialog() {
+        final View dialog1 = LayoutInflater.from(this.getActivity()).inflate(R.layout.dialog_talk_person_del, null);
+        TextView tv_cancel = (TextView) dialog1.findViewById(R.id.tv_cancle);
+        TextView tv_confirm = (TextView) dialog1.findViewById(R.id.tv_confirm);
+        confirmDialog = new Dialog(this.getActivity(), R.style.MyDialogs);
+        confirmDialog.setContentView(dialog1);
+        confirmDialog.setCanceledOnTouchOutside(true);
+        confirmDialog.getWindow().setBackgroundDrawableResource(R.color.transparent_background);
+        tv_cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                confirmDialogCancel();
+            }
+        });
+
+        tv_confirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                presenter.callOk(id);
+                confirmDialogCancel();
+            }
+        });
+    }
+
+    /**
+     * 展示弹出框
+     */
+    public void confirmDialogShow(String id) {
+        this.id=id;
+        confirmDialog.show();
+    }
+
+    /**
+     * 取消弹出框
+     */
+    public void confirmDialogCancel() {
+        confirmDialog.dismiss();
     }
 
     /**

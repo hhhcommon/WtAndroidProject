@@ -42,10 +42,8 @@ public class SimulationInterPhoneFragment extends Fragment implements View.OnCli
         if (rootView == null) {
             rootView = inflater.inflate(R.layout.fragment_simulation, container, false);
             rootView.setOnClickListener(this);
-            presenter = new SimulationInterPhonePresenter(this);
-            setView();                                     // 设置界面
-            //  initEmp();                                 // 初始化模拟对讲
-        }
+            setView();   // 设置界面
+            presenter = new SimulationInterPhonePresenter(this);        }
         return rootView;
     }
 

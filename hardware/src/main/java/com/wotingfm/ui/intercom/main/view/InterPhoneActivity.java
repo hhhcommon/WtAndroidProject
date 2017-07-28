@@ -1,19 +1,16 @@
 package com.wotingfm.ui.intercom.main.view;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.AppCompatActivity;
-import android.view.Window;
-import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
-
 import com.woting.commonplat.utils.SequenceUUID;
 import com.wotingfm.R;
 import com.wotingfm.common.constant.BroadcastConstants;
@@ -28,6 +25,8 @@ import com.wotingfm.ui.base.baseactivity.BaseFragmentActivity;
 
 public class InterPhoneActivity extends BaseFragmentActivity {
     public static InterPhoneActivity context;
+    private long tempTime;
+    private MessageReceiver Receiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +35,7 @@ public class InterPhoneActivity extends BaseFragmentActivity {
         AppManager.getAppManager().addActivity(this);
         context = this;
         open(new InterPhoneFragment());
+        setReceiver();
     }
 
     /**
@@ -68,7 +68,7 @@ public class InterPhoneActivity extends BaseFragmentActivity {
     /**
      * 关闭当前activity的fragment，只保留一个
      */
-    public void closeAll() {
+    public static void closeAll() {
         // 获取当前回退栈中的Fragment个数
         FragmentManager fragmentManager = context.getSupportFragmentManager();
         int backStackEntryCount = fragmentManager.getBackStackEntryCount();
@@ -112,6 +112,28 @@ public class InterPhoneActivity extends BaseFragmentActivity {
         return res;
     }
 
+
+    // 设置广播接收器
+    private void setReceiver() {
+        if (Receiver == null) {
+            Receiver = new MessageReceiver();
+            IntentFilter filter = new IntentFilter();
+            filter.addAction(BroadcastConstants.VIEW_INTER_PHONE_CLOSE_ALL);
+            registerReceiver(Receiver, filter);
+        }
+    }
+
+    class MessageReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            if (action.equals(BroadcastConstants.VIEW_INTER_PHONE_CLOSE_ALL)) {
+                closeAll();
+                sendBroadcast(new Intent(BroadcastConstants.VIEW_INTER_PHONE));
+            }
+        }
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -130,8 +152,6 @@ public class InterPhoneActivity extends BaseFragmentActivity {
         sendBroadcast(in);
     }
 
-    private long tempTime;
-
     @Override
     public void onBackPressed() {
         if (getSupportFragmentManager().getBackStackEntryCount() == 1) {
@@ -147,4 +167,12 @@ public class InterPhoneActivity extends BaseFragmentActivity {
         }
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (Receiver != null) {
+            unregisterReceiver(Receiver);
+            Receiver = null;
+        }
+    }
 }

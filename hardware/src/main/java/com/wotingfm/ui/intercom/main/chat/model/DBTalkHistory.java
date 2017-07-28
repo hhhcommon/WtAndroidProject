@@ -3,16 +3,29 @@ package com.wotingfm.ui.intercom.main.chat.model;
 import java.io.Serializable;
 
 public class DBTalkHistory implements Serializable {
-	private String BJUserId;	//本机userid
-	private String TyPe;		//类别 person，group
+	private String BJUserId;	// 本机userid
+	private String TyPe;		// 类别 person，group
 	private String ID;			//
-	private String AddTime;		//添加时间
-	public DBTalkHistory(String bjUserId, String type, String id, String addTime) {
+	private String AddTime;		// 添加时间
+	private String CallType;    // 是否接听
+	private String CallTypeM;   //
+
+	public DBTalkHistory(String bjUserId, String type, String id, String addTime, String callType, String callTypeM) {
 		super();
 		BJUserId = bjUserId;
 		TyPe = type;
 		ID = id;
 		AddTime = addTime;
+		CallType = callType;
+		CallTypeM = callTypeM;
+	}
+
+	public String getCallTypeM() {
+		return CallTypeM;
+	}
+
+	public void setCallTypeM(String callTypeM) {
+		CallTypeM = callTypeM;
 	}
 	public String getBJUserId() {
 		return BJUserId;
@@ -38,7 +51,15 @@ public class DBTalkHistory implements Serializable {
 	public void setAddTime(String addTime) {
 		AddTime = addTime;
 	}
-	
+
+	public String getCallType() {
+		return CallType;
+	}
+
+	public void setCallType(String callType) {
+		CallType = callType;
+	}
+
 	@Override
 	public String toString(){
 		return "添加时间：" + getAddTime();
