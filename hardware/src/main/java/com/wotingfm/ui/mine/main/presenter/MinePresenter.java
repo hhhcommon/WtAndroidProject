@@ -78,7 +78,6 @@ public class MinePresenter {
             }else if(action.equals(BroadcastConstants.MINE_CHANGE)){
                 getData();// 个人中心界面数据更改
             }
-
         }
     }
 

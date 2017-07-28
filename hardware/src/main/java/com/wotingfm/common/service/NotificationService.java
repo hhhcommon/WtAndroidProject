@@ -5,12 +5,16 @@ import android.content.Intent;
 import android.os.IBinder;
 import android.util.Log;
 
+import com.woting.commonplat.utils.JsonEncloseUtils;
 import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.constant.BroadcastConstants;
+import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.common.utils.ToastUtils;
 
 import org.json.JSONObject;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.ArrayBlockingQueue;
 
 /**
@@ -19,7 +23,8 @@ import java.util.concurrent.ArrayBlockingQueue;
  * 邮箱：645700751@qq.com
  */
 public class NotificationService extends Service {
-    private static ArrayBlockingQueue<String> MsgQueue = new ArrayBlockingQueue<String>(128);  // 需要处理的已经组装好的消息队列
+    private static ArrayBlockingQueue<String> MsgQueue = new ArrayBlockingQueue<String>(128);      // 需要处理的已经组装好的消息队列
+    private static ArrayBlockingQueue<String> ShowMsgQueue = new ArrayBlockingQueue<String>(128);  // 需要展示的消息队列
     private static NotificationService context;
 
     @Override
@@ -28,6 +33,8 @@ public class NotificationService extends Service {
         context = this;
         DealMessage delM = new DealMessage();
         delM.start();
+        ShowMessage showM = new ShowMessage();
+        showM.start();
     }
 
     /**
@@ -100,11 +107,11 @@ public class NotificationService extends Service {
                     return 9;
                 } else if (type.equals("")) {// 10.下线提醒
                     return 10;
-                }  else if (type.equals("")) {// 11.通知消息（待定）
+                } else if (type.equals("")) {// 11.通知消息（待定）
                     return 11;
                 } else if (type.equals("GROUP_ADD")) {// 12.有人邀请我入群
                     return 12;
-                }else {
+                } else {
                     return 999;
                 }
             } else {
@@ -124,13 +131,14 @@ public class NotificationService extends Service {
     private void dealM(int type) {
         switch (type) {
             case 0:// 0.好友申请
-                ToastUtils.show_always(BSApplication.mContext,"有人添加我为好友");
+                ShowMsgQueue.add(assemblyData("1","****","申请添加您为好友"));
                 break;
             case 1:// 1.好友同意(重新获取好友)
                 context.sendBroadcast(new Intent(BroadcastConstants.PERSON_GET));
+                ShowMsgQueue.add(assemblyData("1","****","同意了您的好友申请"));
                 break;
             case 2:// 2.好友拒绝
-                ToastUtils.show_always(BSApplication.mContext,"拒绝添加好友");
+                ShowMsgQueue.add(assemblyData("2","****","拒绝了您的好友申请"));
                 break;
             case 3:// 3.删除好友(重新获取好友)
                 context.sendBroadcast(new Intent(BroadcastConstants.PERSON_GET));
@@ -139,13 +147,13 @@ public class NotificationService extends Service {
                 context.sendBroadcast(new Intent(BroadcastConstants.PERSON_GET));
                 break;
             case 5:// 5.有人申请加群 （通知群主与管理员）
-                ToastUtils.show_always(BSApplication.mContext,"有人申请加入群");
+                ShowMsgQueue.add(assemblyData("5","****","申请加入群***"));
                 break;
             case 6:// 6.同意加入群组(重新获取群组)
                 context.sendBroadcast(new Intent(BroadcastConstants.GROUP_GET));
                 break;
             case 7:// 7.拒绝加入群组
-                ToastUtils.show_always(BSApplication.mContext,"拒绝加入群组");
+                ToastUtils.show_always(BSApplication.mContext, "拒绝加入群组");
                 break;
             case 8:// 8.删除群成员（被删除）(重新获取群组)
                 context.sendBroadcast(new Intent(BroadcastConstants.GROUP_GET));
@@ -156,11 +164,52 @@ public class NotificationService extends Service {
             case 10:// 10.下线提醒
                 break;
             case 11:// 11.通知消息（待定）
+                ShowMsgQueue.add(assemblyData("11","通知消息","******"));
                 break;
             case 12:// 12.有人邀请我入群
-                ToastUtils.show_always(BSApplication.mContext,"有人邀请我入群");
+                ShowMsgQueue.add(assemblyData("12","***","邀请我加入群***"));
+                ToastUtils.show_always(BSApplication.mContext, "有人邀请我入群");
                 break;
         }
+    }
+
+    /**
+     * 消息展示
+     */
+    private class ShowMessage extends Thread {
+        public void run() {
+            while (true) {
+                try {
+                    String msg = ShowMsgQueue.take();
+                    if (msg != null && msg.trim().length() > 0) {
+                        Intent it = new Intent(BroadcastConstants.VIEW_NOTIFY_SHOW);
+                        it.putExtra("msg", msg);
+                        sendBroadcast(it);
+                        sleep(4000);
+                        sendBroadcast(new Intent(BroadcastConstants.VIEW_NOTIFY_CLOSE));
+                    }
+                } catch (Exception e) {
+                    Log.e("ShowMessage处理线程:::", e.toString());
+                }
+            }
+        }
+    }
+
+    /**
+     * 组装展示数据
+     *
+     * @param type
+     * @param title
+     * @param message
+     * @return
+     */
+    private String assemblyData(String type, String title, String message) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("type", type);
+        map.put("title", title);
+        map.put("message", message);
+        String s = JsonEncloseUtils.jsonEnclose(map).toString();
+        return s;
     }
 
     @Override

@@ -58,11 +58,12 @@ public class MainPresenter extends BasePresenter {
         mainActivity.startService(NS);
     }
 
-
     //注册广播
     private void registerReceiver() {
         IntentFilter m = new IntentFilter();
         m.addAction(BroadcastConstants.ACTIVITY_CHANGE);
+        m.addAction(BroadcastConstants.VIEW_NOTIFY_SHOW);
+        m.addAction(BroadcastConstants.VIEW_NOTIFY_CLOSE);
         mainActivity.registerReceiver(endApplicationBroadcast, m);
 
         netWorkChangeReceiver = new NetWorkChangeReceiver(mainActivity);
@@ -90,13 +91,42 @@ public class MainPresenter extends BasePresenter {
                     EventBus.getDefault().post(new MessageEvent("three"));
                     // mainActivity.changeThree();
                 }
+            } else if (action.equals(BroadcastConstants.VIEW_NOTIFY_SHOW)) {
+                String content = intent.getStringExtra("msg");  // 展示通知消息
+                assemblyMsg(true, content);
+            } else if (action.equals(BroadcastConstants.VIEW_NOTIFY_CLOSE)) {
+                assemblyMsg(false, "");// 关闭通知消息
             }
         }
     };
 
+    /**
+     * 解析通知消息并且展示
+     *
+     * @param b
+     * @param msg
+     */
+    private void assemblyMsg(boolean b, String msg) {
+        if (b) {
+            try {
+                String s = new GsonBuilder().serializeNulls().create().toJson(msg);
+                JSONObject js = new JSONObject(s);
+                String type = js.getString("type");
+                String title = js.getString("title");
+                String message = js.getString("message");
+                Log.e("ret", String.valueOf("message"));
+                mainActivity.notifyShow(true, type, title, message);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        } else {
+            mainActivity.notifyShow(false, "", "", "");
+        }
+    }
+
     // 发送注册账号请求
     private void getVersion() {
-        mainModel.getVersion( new MainModel.OnLoadInterface() {
+        mainModel.getVersion(new MainModel.OnLoadInterface() {
             @Override
             public void onSuccess(Object o) {
                 dealVersionSuccess(o);
@@ -107,6 +137,41 @@ public class MainPresenter extends BasePresenter {
 
             }
         });
+    }
+
+    /**
+     * 通知消息的点击事件处理
+     *
+     * @param type
+     */
+    public void jumpNotify(String type) {
+        switch (type) {
+            case "0":
+                break;
+            case "1":
+                break;
+            case "2":
+                break;
+            case "3":
+                break;
+            case "4":
+                break;
+            case "5":
+                break;
+            case "6":
+                break;
+            case "7":
+                break;
+            case "8":
+                break;
+            case "9":
+                break;
+            case "10":
+                break;
+            case "11":
+                break;
+        }
+
     }
 
     // 处理注册返回数据

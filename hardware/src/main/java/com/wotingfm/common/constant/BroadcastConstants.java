@@ -65,4 +65,9 @@ public class BroadcastConstants {
     // 关闭所有对讲模块界面
     public static final String VIEW_INTER_PHONE_CLOSE_ALL = "VIEW_INTER_PHONE_CLOSE_ALL";
 
+    // 通知消息展示
+    public static final String VIEW_NOTIFY_SHOW = "VIEW_NOTIFY_SHOW";
+
+    // 通知消息关闭
+    public static final String VIEW_NOTIFY_CLOSE = "VIEW_NOTIFY_CLOSE";
 }

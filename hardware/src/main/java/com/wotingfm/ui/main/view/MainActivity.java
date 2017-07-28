@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.LinearLayout;
 import android.widget.TabHost;
 import android.widget.TextView;
 
@@ -27,7 +28,9 @@ import org.greenrobot.eventbus.ThreadMode;
 public class MainActivity extends TabActivity implements View.OnClickListener {
     public static TabHost tabHost;
     private MainPresenter mainPresenter;
-    private TextView tv_4, tv_5;
+    private TextView tv_4, tv_5,tv_title,tv_msg;
+    private LinearLayout lin_notify;
+    private String type;// 通知消息类型，延续通知服务中的类型
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +47,10 @@ public class MainActivity extends TabActivity implements View.OnClickListener {
 
     // 初始化视图,主页跳转的3个界面
     private void InitTextView() {
+        lin_notify=(LinearLayout)findViewById(R.id.lin_notify);
+        tv_title=(TextView)findViewById(R.id.tv_title);
+        tv_msg=(TextView)findViewById(R.id.tv_msg);
+
         findViewById(R.id.tv_1).setOnClickListener(this);
         findViewById(R.id.tv_2).setOnClickListener(this);
         findViewById(R.id.tv_3).setOnClickListener(this);
@@ -127,6 +134,11 @@ public class MainActivity extends TabActivity implements View.OnClickListener {
                 // 下一首
                 WtDeviceControl.pushDownButton();
                 break;
+            case R.id.lin_notify:
+                // 通知消息的点击事件处理
+                mainPresenter.jumpNotify(type);
+                break;
+
         }
     }
 
@@ -178,6 +190,17 @@ public class MainActivity extends TabActivity implements View.OnClickListener {
         context.startActivity(intent);
     }
 */
+    public void notifyShow(boolean b,String type,String title,String msg){
+        if(b){
+            this.type=type;
+            lin_notify.setVisibility(View.VISIBLE);
+            tv_title.setText(title);
+            tv_msg.setText(msg);
+        }else{
+            lin_notify.setVisibility(View.GONE);
+        }
+    }
+
     // app退出时执行该操作
     private void stop() {
         mainPresenter.stop();
