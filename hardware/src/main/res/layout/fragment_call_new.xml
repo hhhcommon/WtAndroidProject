@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/contact_name_call"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/buttons_call_container"
+            android:layout_centerHorizontal="true"
+            android:layout_margin="8dp"
+            android:textSize="24sp" />
+
+        <LinearLayout
+            android:id="@+id/buttons_call_container"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/capture_format_text_call"
+            android:layout_alignWithParentIfMissing="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="32dp"
+            android:orientation="horizontal">
+
+            <ImageButton
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_marginEnd="16dp"
+                android:background="@mipmap/disconnect"
+                android:contentDescription="@string/disconnect_call" />
+
+            <ImageButton
+                android:id="@+id/button_call_switch_camera"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_marginEnd="8dp"
+                android:background="@android:drawable/ic_menu_camera"
+                android:contentDescription="@string/switch_camera" />
+
+            <ImageButton
+                android:id="@+id/button_call_scaling_mode"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:background="@mipmap/ic_action_return_from_full_screen"
+                android:contentDescription="@string/disconnect_call" />
+
+            <ImageButton
+                android:id="@+id/button_call_toggle_mic"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_marginEnd="8dp"
+                android:background="@android:drawable/ic_btn_speak_now"
+                android:contentDescription="@string/toggle_mic" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/capture_format_text_call"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/capture_format_slider_call"
+            android:layout_centerHorizontal="true"
+            android:text="@string/capture_format_change_text"
+            android:textSize="16sp" />
+
+        <SeekBar
+            android:id="@+id/capture_format_slider_call"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_margin="8dp"
+            android:progress="50" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+        <ImageView
+            android:id="@+id/img_bg"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="fitXY"
+            android:src="@mipmap/p" />
+
+        <ImageView
+            android:id="@+id/img_url"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="100dp"
+            android:src="@mipmap/test" />
+
+        <TextView
+            android:id="@+id/tv_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/img_url"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp"
+            android:text="名称"
+            android:textColor="#ffffff"
+            android:textSize="18.7sp" />
+
+        <TextView
+            android:id="@+id/content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_name"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"
+            android:lineSpacingExtra="4sp"
+            android:text="等待对方接受邀请..."
+            android:textColor="#ffffff"
+            android:textSize="14.7sp" />
+
+        <ImageView
+            android:id="@+id/button_call_disconnect"
+            android:layout_width="72dp"
+            android:layout_above="@+id/tvCancel"
+            android:layout_height="72dp"
+            android:layout_centerHorizontal="true"
+            android:src="@mipmap/chat_icon_refuse_n" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:paddingBottom="24dp"
+            android:lineSpacingExtra="4sp"
+            android:id="@+id/tvCancel"
+            android:layout_marginTop="12dp"
+            android:text="取消"
+            android:textColor="#ffffff"
+            android:textSize="14.7sp" />
+
+
+    </RelativeLayout>
+
+</FrameLayout>

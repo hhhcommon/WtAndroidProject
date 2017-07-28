@@ -14,6 +14,8 @@ import com.woting.commonplat.config.GlobalNetWorkConfig;
 import com.wotingfm.common.bean.AlbumsBean;
 import com.wotingfm.common.config.GlobalStateConfig;
 import com.wotingfm.common.constant.BroadcastConstants;
+import com.wotingfm.common.utils.CommonUtils;
+import com.wotingfm.common.utils.IMManger;
 import com.wotingfm.common.utils.ToastUtils;
 import com.wotingfm.ui.intercom.add.search.net.view.SearchContactsForNetFragment;
 import com.wotingfm.ui.intercom.alert.call.view.CallAlertActivity;
@@ -86,7 +88,7 @@ public class PersonMessagePresenter {
                 String number = "518518";
                 String address = "北京朝阳";
                 String focus = "0";
-                activity.setViewData("",name, sign, number, address, focus);
+                activity.setViewData("", name, sign, number, address, focus, null);
                 List<AlbumsBean> list = model.getTestData();
                 if (list != null && list.size() > 0) {
                     activity.setGridViewData(list);
@@ -220,17 +222,17 @@ public class PersonMessagePresenter {
     private void assemblyData(Contact.user user) {
         String nickName = "未知";
         try {
-            String  name = user.getName();
-            if(name!=null&&!name.equals("")){
-                nickName=name;
+            String name = user.getName();
+            if (name != null && !name.equals("")) {
+                nickName = name;
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
         try {
-            String  name = user.getAlias_name();
-            if(name!=null&&!name.equals("")){
-                nickName=name;
+            String name = user.getAlias_name();
+            if (name != null && !name.equals("")) {
+                nickName = name;
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -267,7 +269,13 @@ public class PersonMessagePresenter {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        activity.setViewData(url,nickName, sign, number, address, focus);
+        String acc_id = "";
+        try {
+            acc_id = user.getAcc_id();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        activity.setViewData(url, nickName, sign, number, address, focus, acc_id);
         activity.isLoginView(0);
     }
 
@@ -402,7 +410,7 @@ public class PersonMessagePresenter {
     /**
      * 呼叫
      */
-    public void call() {
+    public void call(String acc_id) {
         if (ChatPresenter.data != null) {
             // 此时有对讲状态
             String _t = ChatPresenter.data.getTyPe().trim();
@@ -415,25 +423,25 @@ public class PersonMessagePresenter {
                 // 关闭对讲页面群组数据
                 activity.getActivity().sendBroadcast(new Intent(BroadcastConstants.VIEW_GROUP_CLOSE));
                 // 进行呼叫
-                callPerson();
+                callPerson(acc_id);
             }
         } else {
             // 此时没有对讲状态
             // 进行呼叫
-            callPerson();
+            callPerson(acc_id);
         }
     }
 
     /**
      * 同意挂断当前对讲后的操作
      */
-    public void callOk() {
+    public void callOk(String acc_id) {
         // 挂断当前会话
         talkOver();
         // 关闭对讲页面好友数据
         activity.getActivity().sendBroadcast(new Intent(BroadcastConstants.VIEW_PERSON_CLOSE));
         // 进行呼叫
-        callPerson();
+        callPerson(acc_id);
     }
 
     /**
@@ -452,17 +460,25 @@ public class PersonMessagePresenter {
     }
 
     // 进行呼叫
-    private void callPerson() {
+    private void callPerson(String acc_id) {
         if (user != null) {
             DBTalkHistory l = model.assemblyData(user);
             String id = l.getID().trim();
             if (id != null && !id.equals("")) {
                 model.del(id);
+                IMManger.getInstance().sendMsg(acc_id,"LAUNCH", CommonUtils.getUserId());
                 Intent intent = new Intent(activity.getActivity(), CallAlertActivity.class);
                 Bundle bundle = new Bundle();
+                bundle.putString("roomId", acc_id);
                 bundle.putString("id", id);
                 intent.putExtras(bundle);
                 activity.startActivity(intent);
+               // IMManger.getInstance().connectToRoom(activity.getActivity(), acc_id, null, false, true, false, 0);
+              /*  Intent intent = new Intent(activity.getActivity(), CallAlertActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putString("id", id);
+                intent.putExtras(bundle);
+                activity.startActivity(intent);*/
             }
         } else {
             ToastUtils.show_always(activity.getActivity(), "数据出错了，请稍后再试！");
@@ -490,7 +506,7 @@ public class PersonMessagePresenter {
         @Override
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
-             if (action.equals(BroadcastConstants.PERSON_GET)) {
+            if (action.equals(BroadcastConstants.PERSON_GET)) {
                 getData();
             }
         }

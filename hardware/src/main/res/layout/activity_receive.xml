@@ -4,12 +4,14 @@
     android:layout_height="match_parent"
     android:clipToPadding="true"
     android:fitsSystemWindows="true">
+
     <ImageView
         android:id="@+id/img_bg"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="fitXY"
         android:src="@mipmap/p" />
+
     <ImageView
         android:id="@+id/img_url"
         android:layout_width="100dp"
@@ -36,9 +38,10 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="10dp"
         android:lineSpacingExtra="4sp"
-        android:text="等待对方接受邀请..."
+        android:text="正在邀请你对讲..."
         android:textColor="#ffffff"
         android:textSize="14.7sp" />
+
     <ImageView
         android:id="@+id/img_close"
         android:layout_width="72dp"
@@ -51,10 +54,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/img_close"
+        android:layout_marginLeft="66dp"
         android:layout_marginTop="12dp"
         android:lineSpacingExtra="4sp"
         android:text="取消"
-        android:layout_marginLeft="66dp"
         android:textColor="#ffffff"
         android:textSize="14.7sp" />
 
@@ -62,20 +65,20 @@
         android:id="@+id/img_ok"
         android:layout_width="72dp"
         android:layout_height="72dp"
-        android:layout_marginRight="44dp"
         android:layout_alignParentRight="true"
+        android:layout_marginRight="44dp"
         android:layout_marginTop="410.7dp"
         android:src="@mipmap/chat_icon_answer_n" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
         android:layout_below="@+id/img_ok"
+        android:layout_marginRight="66dp"
         android:layout_marginTop="12dp"
         android:lineSpacingExtra="4sp"
         android:text="接听"
-        android:layout_marginRight="66dp"
-        android:layout_alignParentRight="true"
         android:textColor="#ffffff"
         android:textSize="14.7sp" />
 </RelativeLayout>

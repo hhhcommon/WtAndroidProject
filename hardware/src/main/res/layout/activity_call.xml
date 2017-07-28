@@ -2,12 +2,15 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+
+
     <ImageView
         android:id="@+id/img_bg"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="fitXY"
         android:src="@mipmap/p" />
+
     <ImageView
         android:id="@+id/img_url"
         android:layout_width="100dp"
@@ -37,11 +40,12 @@
         android:text="等待对方接受邀请..."
         android:textColor="#ffffff"
         android:textSize="14.7sp" />
+
     <ImageView
         android:id="@+id/img_close"
         android:layout_width="72dp"
-        android:layout_centerHorizontal="true"
         android:layout_height="72dp"
+        android:layout_centerHorizontal="true"
         android:layout_marginTop="410.7dp"
         android:src="@mipmap/chat_icon_refuse_n" />
 
@@ -55,4 +59,6 @@
         android:text="取消"
         android:textColor="#ffffff"
         android:textSize="14.7sp" />
+
+
 </RelativeLayout>

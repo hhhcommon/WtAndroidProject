@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,8 +26,10 @@ import com.woting.commonplat.utils.BitmapUtils;
 import com.woting.commonplat.widget.TipView;
 import com.wotingfm.R;
 import com.wotingfm.common.bean.AlbumsBean;
+import com.wotingfm.common.bean.MessageEvent;
 import com.wotingfm.common.utils.DialogUtils;
 import com.wotingfm.common.utils.GlideUtils;
+import com.wotingfm.common.utils.IMManger;
 import com.wotingfm.common.utils.ToastUtils;
 import com.wotingfm.common.view.myscrollview.ObservableScrollView;
 import com.wotingfm.ui.base.baseinterface.ScrollViewListener;
@@ -39,7 +42,13 @@ import com.wotingfm.ui.intercom.person.personmessage.adapter.PersonMessageSubAda
 import com.wotingfm.ui.intercom.person.personmessage.presenter.PersonMessagePresenter;
 import com.wotingfm.ui.intercom.person.personnote.view.EditPersonNoteFragment;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import java.util.List;
+
+import static com.wotingfm.ui.main.view.MainActivity.tabHost;
 
 /**
  * 用户详情，区分好友与非好友
@@ -58,10 +67,13 @@ public class PersonMessageFragment extends Fragment implements View.OnClickListe
     private ObservableScrollView scrollView;
     private int height = 480;// 滑动开始变色的高
     private RelativeLayout mRelativeLayout, re_sunNumber;
-    private ImageView head_left_btn, img_other, img_call, img_url,img_bg;
+    private ImageView head_left_btn, img_other, img_call, img_url, img_bg;
     private GridView gridView;
     private PersonMessageSubAdapter adapter;
     private ResultListener Listener;
+
+
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -151,7 +163,9 @@ public class PersonMessageFragment extends Fragment implements View.OnClickListe
                 break;
             case R.id.lin_send:
                 if (b) {
-                    presenter.call();
+                    if (!TextUtils.isEmpty(acc_id)) {
+                        presenter.call(acc_id);
+                    }
                 } else {
                     presenter.apply();
                 }
@@ -270,9 +284,11 @@ public class PersonMessageFragment extends Fragment implements View.OnClickListe
      * @param introduce 介绍
      * @param number    听号
      * @param address   地址
+     * @param acc_id    地址
      */
-    public void setViewData(String url, String name, String introduce, String number, String address, String focus) {
-        if (url!= null && !url.equals("")&&url.startsWith("http")) {
+    public void setViewData(String url, String name, String introduce, String number, String address, String focus, String acc_id) {
+        this.acc_id = acc_id;
+        if (url != null && !url.equals("") && url.startsWith("http")) {
             GlideUtils.loadImageViewBlur(this.getActivity(), url, img_bg);
         } else {
             Bitmap bmp = BitmapUtils.readBitMap(this.getActivity(), R.mipmap.p);
@@ -292,6 +308,8 @@ public class PersonMessageFragment extends Fragment implements View.OnClickListe
         tv_address.setText(address);       // 地址
         tv_focus.setText("关注 " + focus);  // 关注
     }
+
+    private String acc_id;
 
     /**
      * 修改备注后设置界面数据
@@ -392,7 +410,7 @@ public class PersonMessageFragment extends Fragment implements View.OnClickListe
         tv_confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                presenter.callOk();
+                presenter.callOk(acc_id);
                 confirmDialogCancel();
             }
         });

@@ -12,6 +12,7 @@ import com.wotingfm.common.config.GlobalStateConfig;
 import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.common.constant.IntegerConstant;
 import com.wotingfm.common.utils.CommonUtils;
+import com.wotingfm.common.utils.IMManger;
 import com.wotingfm.common.utils.ToastUtils;
 import com.wotingfm.ui.intercom.alert.call.view.CallAlertActivity;
 import com.wotingfm.ui.intercom.main.chat.model.ChatModel;
@@ -156,9 +157,11 @@ public class ContactsPresenter {
             String id = l.getID().trim();
             if (id != null && !id.equals("")) {
                 model.del(id);
+                IMManger.getInstance().sendMsg(u.getAcc_id(),"LAUNCH", CommonUtils.getUserId());
                 Intent intent = new Intent(activity.getActivity(), CallAlertActivity.class);
                 Bundle bundle = new Bundle();
                 bundle.putString("id", id);
+                bundle.putString("roomId", u.getAcc_id());
                 intent.putExtras(bundle);
                 activity.startActivity(intent);
             }
