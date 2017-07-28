@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -14,9 +15,15 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.woting.commonplat.utils.BitmapUtils;
 import com.wotingfm.R;
-import com.wotingfm.common.constant.BroadcastConstants;
+import com.wotingfm.common.bean.MessageEvent;
 import com.wotingfm.common.utils.GlideUtils;
+import com.wotingfm.common.utils.IMManger;
 import com.wotingfm.ui.intercom.alert.call.presenter.CallPresenter;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import jp.wasabeef.glide.transformations.BlurTransformation;
 
 /**
@@ -30,15 +37,30 @@ public class CallAlertActivity extends Activity implements OnClickListener {
     private TextView tv_name;
     private CallPresenter presenter;
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMoonEvent(MessageEvent messageEvent) {
+        String msg = messageEvent.getMessage();
+        if ("refuse".equals(msg) || "accept".equals(msg) || "cancel".equals(msg)) {
+            finish();
+        }
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);        // 透明状态栏
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);    // 透明导航栏
+        EventBus.getDefault().register(this);
+        // 隐藏标题栏
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        // 隐藏状态栏
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_call);
         inItView();
         presenter = new CallPresenter(this);
+        roomId = getIntent().getStringExtra("roomId");
+        userId = getIntent().getStringExtra("id");
     }
+
+    private String roomId, userId;
 
     // 设置界面
     private void inItView() {
@@ -56,7 +78,8 @@ public class CallAlertActivity extends Activity implements OnClickListener {
                 /**
                  * 此处需要挂断电话等操作
                  */
-                close();
+                IMManger.getInstance().sendMsg(roomId, "CANCEL", userId);
+                finish();
                 break;
         }
     }
@@ -68,11 +91,11 @@ public class CallAlertActivity extends Activity implements OnClickListener {
         // 其中radius的取值范围是1-25，radius越大，模糊度越高。
         // 设置高斯模糊背景
         if (url != null && !url.equals("")) {
-            Glide.with(this).load(url).crossFade(1000).bitmapTransform(new BlurTransformation(this, 20, 10)).into(img_bg);
+            Glide.with(this).load(url).bitmapTransform(new BlurTransformation(this, 15)).into(img_bg);
         } else {
-            Glide.with(this).load(R.mipmap.p).crossFade(1000).bitmapTransform(new BlurTransformation(this, 20, 10)).into(img_bg);
+            Bitmap bmp = BitmapUtils.readBitMap(this, R.mipmap.p);
+            img_bg.setImageBitmap(bmp);
         }
-
         // 设置好友头像
         if (url != null && !url.equals("")) {
             GlideUtils.loadImageViewSize(this, url, 60, 60, img_url, true);
@@ -94,21 +117,17 @@ public class CallAlertActivity extends Activity implements OnClickListener {
             /**
              * 此处需要挂断电话等操作
              */
-            close();
+            presenter.musicClose();
+            finish();
             return true;
         }
         return super.onKeyDown(keyCode, event);
     }
 
-    private void close() {
-        finish();
-    }
-
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        presenter.musicClose();
         presenter.destroy();
-        sendBroadcast(new Intent(BroadcastConstants.VIEW_INTER_PHONE_CLOSE_ALL));
+        EventBus.getDefault().unregister(this);
     }
 }

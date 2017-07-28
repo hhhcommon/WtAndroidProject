@@ -14,6 +14,8 @@ import com.woting.commonplat.config.GlobalNetWorkConfig;
 import com.wotingfm.common.bean.AlbumsBean;
 import com.wotingfm.common.config.GlobalStateConfig;
 import com.wotingfm.common.constant.BroadcastConstants;
+import com.wotingfm.common.utils.CommonUtils;
+import com.wotingfm.common.utils.IMManger;
 import com.wotingfm.common.utils.ToastUtils;
 import com.wotingfm.ui.intercom.alert.call.view.CallAlertActivity;
 import com.wotingfm.ui.intercom.main.chat.model.DBTalkHistory;
@@ -84,7 +86,7 @@ public class PersonMessagePresenter {
                 String number = "518518";
                 String address = "北京朝阳";
                 String focus = "0";
-                activity.setViewData("",name, sign, number, address, focus);
+                activity.setViewData("",name, sign, number, address, focus,null);
                 List<AlbumsBean> list = model.getTestData();
                 if (list != null && list.size() > 0) {
                     activity.setGridViewData(list);
@@ -265,7 +267,13 @@ public class PersonMessagePresenter {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        activity.setViewData(url,nickName, sign, number, address, focus);
+        String accid = "";
+        try {
+            url = user.getAcc_id();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        activity.setViewData(url,nickName, sign, number, address, focus,accid);
         activity.isLoginView(0);
     }
 
@@ -394,10 +402,10 @@ public class PersonMessagePresenter {
         ToastUtils.show_always(activity.getActivity(), "您点击了内容");
     }
 
-     /**
+    /**
      * 呼叫
      */
-    public void call() {
+    public void call(String acc_id) {
         if (ChatPresenter.data != null) {
             // 此时有对讲状态
             String _t = ChatPresenter.data.getTyPe().trim();
@@ -412,7 +420,7 @@ public class PersonMessagePresenter {
                 }
                 // 关闭对讲页面群组数据
                 activity.getActivity().sendBroadcast(new Intent(BroadcastConstants.VIEW_GROUP_CLOSE));
-                boolean cp = callPerson();// 进行呼叫
+                boolean cp = callPerson(acc_id);// 进行呼叫
                 if (cp) {
                     Log.e("信令控制", "呼叫成功");
                     pushCallOk();
@@ -422,7 +430,7 @@ public class PersonMessagePresenter {
             }
         } else {
             // 此时没有对讲状态
-            boolean cp = callPerson();// 进行呼叫
+            boolean cp = callPerson(acc_id);// 进行呼叫
             if (cp) {
                 Log.e("信令控制", "呼叫成功");
                 pushCallOk();
@@ -441,10 +449,12 @@ public class PersonMessagePresenter {
     }
 
     // 进行呼叫
-    private boolean callPerson() {
+    private boolean callPerson(String acc_id) {
         if (id != null && !id.equals("")) {
+            IMManger.getInstance().sendMsg(acc_id,"LAUNCH", CommonUtils.getUserId());
             Intent intent = new Intent(activity.getActivity(), CallAlertActivity.class);
             Bundle bundle = new Bundle();
+            bundle.putString("roomId", acc_id);
             bundle.putString("id", id);
             intent.putExtras(bundle);
             activity.startActivity(intent);
@@ -457,7 +467,7 @@ public class PersonMessagePresenter {
     /**
      * 同意挂断当前对讲后的操作
      */
-    public void callOk() {
+    public void callOk(String acc_id) {
         // 挂断当前会话
         boolean to = talkOver();
         if (to) {
@@ -468,7 +478,7 @@ public class PersonMessagePresenter {
         }
         // 关闭对讲页面好友数据
         activity.getActivity().sendBroadcast(new Intent(BroadcastConstants.VIEW_PERSON_CLOSE));
-        boolean cp = callPerson();// 进行呼叫
+        boolean cp = callPerson(acc_id);// 进行呼叫
         if (cp) {
             Log.e("信令控制", "呼叫成功");
             pushCallOk();
@@ -507,7 +517,7 @@ public class PersonMessagePresenter {
         @Override
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
-             if (action.equals(BroadcastConstants.PERSON_GET)) {
+            if (action.equals(BroadcastConstants.PERSON_GET)) {
                 getData();
             }
         }

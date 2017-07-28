@@ -12,6 +12,7 @@ import com.wotingfm.common.config.GlobalStateConfig;
 import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.common.constant.IntegerConstant;
 import com.wotingfm.common.utils.CommonUtils;
+import com.wotingfm.common.utils.IMManger;
 import com.wotingfm.common.utils.ToastUtils;
 import com.wotingfm.ui.intercom.alert.call.view.CallAlertActivity;
 import com.wotingfm.ui.intercom.alert.receive.view.ReceiveAlertActivity;
@@ -32,6 +33,8 @@ import com.wotingfm.ui.user.logo.LogoActivity;
 
 import java.util.Collections;
 import java.util.List;
+
+import static android.media.CamcorderProfile.get;
 
 /**
  * 通讯录业务处理中心
@@ -100,7 +103,7 @@ public class ContactsPresenter {
      * @param position
      */
     public void call(int position) {
-        this.position=position;
+        this.position = position;
         if (ChatPresenter.data != null) {
             // 此时有对讲状态
             String _t = ChatPresenter.data.getTyPe().trim();
@@ -146,10 +149,13 @@ public class ContactsPresenter {
     // 进行呼叫
     private boolean callPerson(int position) {
         String id = list.get(position).getId();
+        Contact.user u = list.get(position);
         if (id != null && !id.equals("")) {
+            IMManger.getInstance().sendMsg(u.getAcc_id(), "LAUNCH", CommonUtils.getUserId());
             Intent intent = new Intent(activity.getActivity(), CallAlertActivity.class);
             Bundle bundle = new Bundle();
             bundle.putString("id", id);
+            bundle.putString("roomId", u.getAcc_id());
             intent.putExtras(bundle);
             activity.startActivity(intent);
         } else {
@@ -194,7 +200,7 @@ public class ContactsPresenter {
     // 呼叫成功后操作
     private void pushCallOk() {
         model.del(list.get(position).getId());// 删除跟本次id相关的数据
-        model.add(model.assemblyData(list.get(position),GlobalStateConfig.ok,""));// 把本次数据添加的数据库
+        model.add(model.assemblyData(list.get(position), GlobalStateConfig.ok, ""));// 把本次数据添加的数据库
         activity.getActivity().sendBroadcast(new Intent(BroadcastConstants.VIEW_INTER_PHONE));// 跳转到对讲主页
         activity.getActivity().sendBroadcast(new Intent(BroadcastConstants.VIEW_INTER_PHONE_CHAT_OK));// 对讲主页界面，数据更新
     }
