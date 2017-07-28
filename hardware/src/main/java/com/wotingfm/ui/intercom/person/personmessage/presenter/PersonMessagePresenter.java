@@ -17,9 +17,7 @@ import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.common.utils.CommonUtils;
 import com.wotingfm.common.utils.IMManger;
 import com.wotingfm.common.utils.ToastUtils;
-import com.wotingfm.ui.intercom.add.search.net.view.SearchContactsForNetFragment;
 import com.wotingfm.ui.intercom.alert.call.view.CallAlertActivity;
-import com.wotingfm.ui.intercom.group.groupnews.noadd.view.GroupNewsForNoAddFragment;
 import com.wotingfm.ui.intercom.main.chat.model.DBTalkHistory;
 import com.wotingfm.ui.intercom.main.chat.presenter.ChatPresenter;
 import com.wotingfm.ui.intercom.main.contacts.model.Contact;
@@ -32,8 +30,8 @@ import com.wotingfm.ui.intercom.person.personnote.view.EditPersonNoteFragment;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
-
 import java.util.List;
+
 
 /**
  * 好友信息的处理器
@@ -88,7 +86,7 @@ public class PersonMessagePresenter {
                 String number = "518518";
                 String address = "北京朝阳";
                 String focus = "0";
-                activity.setViewData("", name, sign, number, address, focus, null);
+                activity.setViewData("",name, sign, number, address, focus,null);
                 List<AlbumsBean> list = model.getTestData();
                 if (list != null && list.size() > 0) {
                     activity.setGridViewData(list);
@@ -222,17 +220,17 @@ public class PersonMessagePresenter {
     private void assemblyData(Contact.user user) {
         String nickName = "未知";
         try {
-            String name = user.getName();
-            if (name != null && !name.equals("")) {
-                nickName = name;
+            String  name = user.getName();
+            if(name!=null&&!name.equals("")){
+                nickName=name;
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
         try {
-            String name = user.getAlias_name();
-            if (name != null && !name.equals("")) {
-                nickName = name;
+            String  name = user.getAlias_name();
+            if(name!=null&&!name.equals("")){
+                nickName=name;
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -269,13 +267,13 @@ public class PersonMessagePresenter {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        String acc_id = "";
+        String accid = "";
         try {
-            acc_id = user.getAcc_id();
+            url = user.getAcc_id();
         } catch (Exception e) {
             e.printStackTrace();
         }
-        activity.setViewData(url, nickName, sign, number, address, focus, acc_id);
+        activity.setViewData(url,nickName, sign, number, address, focus,accid);
         activity.isLoginView(0);
     }
 
@@ -308,9 +306,7 @@ public class PersonMessagePresenter {
                 activity.dialogCancel();
             }
         });
-
     }
-
 
     // 处理返回数据
     private void dealDelSuccess(Object o) {
@@ -329,7 +325,6 @@ public class PersonMessagePresenter {
             dealDelFriend(false);
         }
     }
-
 
     // 请求后台数据删除好友是否成功
     private void dealDelFriend(boolean b) {
@@ -415,21 +410,58 @@ public class PersonMessagePresenter {
             // 此时有对讲状态
             String _t = ChatPresenter.data.getTyPe().trim();
             if (_t != null && !_t.equals("") && _t.equals("person")) {// 此时的对讲状态是单对单
-                // 弹出选择界面
-                activity.confirmDialogShow();
+                activity.confirmDialogShow();  // 弹出选择界面
             } else if (_t != null && !_t.equals("") && _t.equals("group")) {// 此时的对讲状态是群组
-                // 退出组
-                talkOverGroup();
+                boolean to = talkOverGroup();  // 退出组
+                if (to) {
+                    Log.e("信令控制", "退出组成功");
+                } else {
+                    Log.e("信令控制", "退出组失败");
+                }
                 // 关闭对讲页面群组数据
                 activity.getActivity().sendBroadcast(new Intent(BroadcastConstants.VIEW_GROUP_CLOSE));
-                // 进行呼叫
-                callPerson(acc_id);
+                boolean cp = callPerson(acc_id);// 进行呼叫
+                if (cp) {
+                    Log.e("信令控制", "呼叫成功");
+                    pushCallOk();
+                } else {
+                    Log.e("信令控制", "呼叫失败");
+                }
             }
         } else {
             // 此时没有对讲状态
-            // 进行呼叫
-            callPerson(acc_id);
+            boolean cp = callPerson(acc_id);// 进行呼叫
+            if (cp) {
+                Log.e("信令控制", "呼叫成功");
+                pushCallOk();
+            } else {
+                Log.e("信令控制", "呼叫失败");
+            }
         }
+    }
+
+    // 退出组对讲
+    private boolean talkOverGroup() {
+        if (ChatPresenter.data != null && ChatPresenter.data.getID() != null) {
+            ChatPresenter.data.getID();// 退出组
+        }
+        return true;
+    }
+
+    // 进行呼叫
+    private boolean callPerson(String acc_id) {
+        if (id != null && !id.equals("")) {
+            IMManger.getInstance().sendMsg(acc_id,"LAUNCH", CommonUtils.getUserId());
+            Intent intent = new Intent(activity.getActivity(), CallAlertActivity.class);
+            Bundle bundle = new Bundle();
+            bundle.putString("roomId", acc_id);
+            bundle.putString("id", id);
+            intent.putExtras(bundle);
+            activity.startActivity(intent);
+        } else {
+            ToastUtils.show_always(activity.getActivity(), "数据出错了，请稍后再试！");
+        }
+        return true;
     }
 
     /**
@@ -437,59 +469,38 @@ public class PersonMessagePresenter {
      */
     public void callOk(String acc_id) {
         // 挂断当前会话
-        talkOver();
+        boolean to = talkOver();
+        if (to) {
+            Log.e("信令控制", "挂断电话成功");
+            pushCallOk();
+        } else {
+            Log.e("信令控制", "挂断电话失败");
+        }
         // 关闭对讲页面好友数据
         activity.getActivity().sendBroadcast(new Intent(BroadcastConstants.VIEW_PERSON_CLOSE));
-        // 进行呼叫
-        callPerson(acc_id);
-    }
-
-    /**
-     * 呼叫/入组成功后操作
-     */
-    public void pushCallOk() {
-        activity.getActivity().sendBroadcast(new Intent(BroadcastConstants.VIEW_INTER_PHONE));// 跳转到对讲主页
-        activity.getActivity().sendBroadcast(new Intent(BroadcastConstants.VIEW_INTER_PHONE_CHAT_OK));// 对讲主页界面，数据更新
+        boolean cp = callPerson(acc_id);// 进行呼叫
+        if (cp) {
+            Log.e("信令控制", "呼叫成功");
+            pushCallOk();
+        } else {
+            Log.e("信令控制", "呼叫失败");
+        }
     }
 
     // 挂断当前个人对讲
-    private void talkOver() {
+    private boolean talkOver() {
         if (ChatPresenter.data != null && ChatPresenter.data.getID() != null) {
             ChatPresenter.data.getID();// 挂断电话
         }
+        return true;
     }
 
-    // 进行呼叫
-    private void callPerson(String acc_id) {
-        if (user != null) {
-            DBTalkHistory l = model.assemblyData(user);
-            String id = l.getID().trim();
-            if (id != null && !id.equals("")) {
-                model.del(id);
-                IMManger.getInstance().sendMsg(acc_id,"LAUNCH", CommonUtils.getUserId());
-                Intent intent = new Intent(activity.getActivity(), CallAlertActivity.class);
-                Bundle bundle = new Bundle();
-                bundle.putString("roomId", acc_id);
-                bundle.putString("id", id);
-                intent.putExtras(bundle);
-                activity.startActivity(intent);
-               // IMManger.getInstance().connectToRoom(activity.getActivity(), acc_id, null, false, true, false, 0);
-              /*  Intent intent = new Intent(activity.getActivity(), CallAlertActivity.class);
-                Bundle bundle = new Bundle();
-                bundle.putString("id", id);
-                intent.putExtras(bundle);
-                activity.startActivity(intent);*/
-            }
-        } else {
-            ToastUtils.show_always(activity.getActivity(), "数据出错了，请稍后再试！");
-        }
-    }
-
-    // 退出组对讲
-    private void talkOverGroup() {
-        if (ChatPresenter.data != null && ChatPresenter.data.getID() != null) {
-            ChatPresenter.data.getID();// 退出组
-        }
+    // 呼叫成功后操作
+    private void pushCallOk() {
+        model.del(id);// 删除跟本次id相关的数据
+        model.add(model.assemblyData(user,GlobalStateConfig.ok,""));// 把本次数据添加的数据库
+        activity.getActivity().sendBroadcast(new Intent(BroadcastConstants.VIEW_INTER_PHONE));// 跳转到对讲主页
+        activity.getActivity().sendBroadcast(new Intent(BroadcastConstants.VIEW_INTER_PHONE_CHAT_OK));// 对讲主页界面，数据更新
     }
 
     // 设置广播接收器
