@@ -1,6 +1,5 @@
 package com.wotingfm.ui.main.presenter;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -14,34 +13,21 @@ import android.util.Log;
 import android.webkit.URLUtil;
 
 import com.google.gson.GsonBuilder;
-import com.iflytek.cloud.SpeechUtility;
 import com.woting.commonplat.receiver.NetWorkChangeReceiver;
 import com.wotingfm.R;
 import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.bean.MessageEvent;
-import com.wotingfm.common.config.GlobalStateConfig;
 import com.wotingfm.common.constant.BroadcastConstants;
-import com.wotingfm.common.net.RetrofitUtils;
 import com.wotingfm.common.service.FloatingWindowService;
 import com.wotingfm.common.service.NotificationService;
-import com.wotingfm.common.utils.ToastUtils;
 import com.wotingfm.ui.base.basepresenter.BasePresenter;
 import com.wotingfm.ui.main.model.MainModel;
 import com.wotingfm.ui.main.view.MainActivity;
-import com.wotingfm.ui.user.register.model.RegisterModel;
-
 import org.appspot.apprtc.CallActivity;
 import org.greenrobot.eventbus.EventBus;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.json.JSONTokener;
-
 import java.util.Random;
-
-import cn.jpush.android.api.JPushInterface;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action1;
-import rx.schedulers.Schedulers;
 
 import static com.iflytek.cloud.resource.Resource.getText;
 
@@ -76,10 +62,9 @@ public class MainPresenter extends BasePresenter {
     private void registerReceiver() {
         IntentFilter m = new IntentFilter();
         m.addAction(BroadcastConstants.ACTIVITY_CHANGE);
-        activity.registerReceiver(endApplicationBroadcast, m);
         m.addAction(BroadcastConstants.VIEW_NOTIFY_SHOW);
         m.addAction(BroadcastConstants.VIEW_NOTIFY_CLOSE);
-        mainActivity.registerReceiver(endApplicationBroadcast, m);
+        activity.registerReceiver(endApplicationBroadcast, m);
 
         netWorkChangeReceiver = new NetWorkChangeReceiver(activity);
         IntentFilter n = new IntentFilter();
@@ -130,12 +115,12 @@ public class MainPresenter extends BasePresenter {
                 String title = js.getString("title");
                 String message = js.getString("message");
                 Log.e("ret", String.valueOf("message"));
-                mainActivity.notifyShow(true, type, title, message);
+                activity.notifyShow(true, type, title, message);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
         } else {
-            mainActivity.notifyShow(false, "", "", "");
+            activity.notifyShow(false, "", "", "");
         }
     }
 

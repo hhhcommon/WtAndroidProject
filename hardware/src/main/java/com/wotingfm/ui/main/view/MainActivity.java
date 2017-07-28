@@ -19,11 +19,13 @@ import android.os.Environment;
 import android.os.Handler;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.TabHost;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.netease.nimlib.sdk.NIMClient;
@@ -32,23 +34,17 @@ import com.netease.nimlib.sdk.msg.MsgServiceObserve;
 import com.netease.nimlib.sdk.msg.model.IMMessage;
 import com.wotingfm.R;
 import com.wotingfm.common.bean.MessageEvent;
-import com.wotingfm.common.utils.IMManger;
+import com.wotingfm.common.service.WtDeviceControl;
 import com.wotingfm.common.utils.StatusBarUtil;
-import com.wotingfm.ui.intercom.alert.call.view.CallAlertActivity;
 import com.wotingfm.ui.intercom.alert.receive.view.ReceiveAlertActivity;
 import com.wotingfm.ui.intercom.main.view.InterPhoneActivity;
 import com.wotingfm.ui.main.presenter.MainPresenter;
-import com.wotingfm.ui.play.live.LiveRoomActivity;
 import com.wotingfm.ui.test.PlayerActivity;
 import com.wotingfm.ui.mine.main.MineActivity;
-
 import org.appspot.apprtc.AppRTCAudioManager;
 import org.appspot.apprtc.AppRTCClient;
-import org.appspot.apprtc.CallActivity;
 import org.appspot.apprtc.CallFragment;
-import org.appspot.apprtc.CpuMonitor;
 import org.appspot.apprtc.DirectRTCClient;
-import org.appspot.apprtc.HudFragment;
 import org.appspot.apprtc.PeerConnectionClient;
 import org.appspot.apprtc.UnhandledExceptionHandler;
 import org.appspot.apprtc.WebSocketRTCClient;
@@ -77,13 +73,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import static android.R.attr.id;
-import static android.content.Intent.FLAG_ACTIVITY_REORDER_TO_FRONT;
 
 
 public class MainActivity extends TabActivity implements AppRTCClient.SignalingEvents,
         PeerConnectionClient.PeerConnectionEvents,
-        CallFragment.OnCallEvents {
+        CallFragment.OnCallEvents ,View.OnClickListener{
     public static TabHost tabHost;
     private MainPresenter mainPresenter;
     private MainActivity context;
@@ -94,41 +88,16 @@ public class MainActivity extends TabActivity implements AppRTCClient.SignalingE
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        context = this;
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);        // 透明状态栏
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);    // 透明导航
         //  applySelectedColor();
         applyTextColor(false);
         setContentView(R.layout.activity_main);
         EventBus.getDefault().register(this);
-        context = this;
-        NIMClient.getService(MsgServiceObserve.class)
-                .observeReceiveMessage(incomingMessageObserver, true);
- /*       if (Build.VERSION.SDK_INT == Build.VERSION_CODES.KITKAT) {
-            // 设置全屏，并且不会Activity的布局让出状态栏的空间
-            getWindow().addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN);
-            getWindow().addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
-        }
-*/
- /*       getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);        // 透明状态栏
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);    // 透明导航栏*/
-        InitTextView();
+        NIMClient.getService(MsgServiceObserve.class).observeReceiveMessage(incomingMessageObserver, true);
+         InitTextView();
         mainPresenter = new MainPresenter(this);
-
-//        applySelectedColor();
-        //   applyTextColor(false);
-
-        try {
-            Log.e("1", Environment.getDataDirectory().getPath());
-            Log.e("2", Environment.getDownloadCacheDirectory().getPath());
-            Log.e("3", Environment.getExternalStorageDirectory().getPath());
-            Log.e("4", Environment.getRootDirectory().getPath());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-//        Environment.getDataDirectory().getPath();              //   获得根目录/data 内部存储路径
-//        Environment.getDownloadCacheDirectory().getPath();     //   获得缓存目录/cache
-//        Environment.getExternalStorageDirectory().getPath();   //   获得SD卡目录/mnt/sdcard（获取的是手机外置sd卡的路径）
-//        Environment.getRootDirectory().getPath();              //
     }
 
     // 初始化视图,主页跳转的3个界面
