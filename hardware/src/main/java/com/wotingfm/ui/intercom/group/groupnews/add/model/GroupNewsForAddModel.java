@@ -6,7 +6,12 @@ import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.config.GlobalStateConfig;
 import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.common.net.RetrofitUtils;
+import com.wotingfm.common.utils.CommonUtils;
 import com.wotingfm.common.utils.GetTestData;
+import com.wotingfm.ui.intercom.group.groupchat.view.GroupChatFragment;
+import com.wotingfm.ui.intercom.group.groupnews.add.view.GroupNewsForAddFragment;
+import com.wotingfm.ui.intercom.main.chat.dao.SearchTalkHistoryDao;
+import com.wotingfm.ui.intercom.main.chat.model.DBTalkHistory;
 import com.wotingfm.ui.intercom.main.contacts.model.Contact;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +24,59 @@ import rx.schedulers.Schedulers;
  * 邮箱：645700751@qq.com
  */
 public class GroupNewsForAddModel {
+    private final GroupNewsForAddFragment activity;
+    private SearchTalkHistoryDao dbDao;
 
+    public GroupNewsForAddModel(GroupNewsForAddFragment activity) {
+        this.activity = activity;
+        initDao();      // 初始化数据库
+    }
+
+    // 初始化数据库
+    private void initDao() {
+        dbDao = new SearchTalkHistoryDao(activity.getActivity());
+    }
+
+    /**
+     * 从数据库中删除一条数据
+     * @param id
+     */
+    public void del(String id){
+        if(dbDao==null){
+            initDao();
+            dbDao.deleteHistory(id);
+        }else{
+            dbDao.deleteHistory(id);
+        }
+    }
+
+    /**
+     * 在数据库中插入一条数据
+     * @param h
+     */
+    public void add(DBTalkHistory h){
+        if(dbDao==null){
+            initDao();
+            dbDao.addTalkHistory(h);
+        }else{
+            dbDao.addTalkHistory(h);
+        }
+    }
+
+    /**
+     * 组装数据库数据
+     * @param s
+     * @return
+     */
+    public DBTalkHistory assemblyData(Contact.group s,String callType, String CallTypeM) {
+        String id = s.getId();
+        String type = "group";
+        String addTime = Long.toString(System.currentTimeMillis());
+        String bjUserId = CommonUtils.getUserId();
+        DBTalkHistory h = new DBTalkHistory(bjUserId, type, id, addTime,callType,CallTypeM);
+        return h;
+    }
+    
     public List<Contact.user> getPersonList() {
         List<Contact.user> list = GetTestData.getFriendList();
         return list;

@@ -9,7 +9,6 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.os.PowerManager;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PagerSnapHelper;
 import android.support.v7.widget.RecyclerView;
@@ -30,7 +29,6 @@ import com.pili.pldroid.player.AVOptions;
 import com.pili.pldroid.player.PLMediaPlayer;
 import com.woting.commonplat.player.baidu.BDPlayer;
 import com.woting.commonplat.utils.ResourceUtil;
-import com.woting.commonplat.utils.SequenceUUID;
 import com.woting.commonplat.widget.LoadFrameLayout;
 import com.wotingfm.R;
 import com.wotingfm.common.adapter.PlayerAdapter;
@@ -44,11 +42,9 @@ import com.wotingfm.common.config.GlobalStateConfig;
 import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.common.database.HistoryHelper;
 import com.wotingfm.common.net.RetrofitUtils;
-import com.wotingfm.common.utils.TimeUtils;
+import com.wotingfm.common.utils.TimeUtil;
 import com.wotingfm.common.view.MenuDialog;
 import com.wotingfm.common.view.PlayerDialog;
-import com.wotingfm.ui.base.baseactivity.AppManager;
-import com.wotingfm.ui.base.baseactivity.NoTitleBarBaseActivity;
 import com.wotingfm.ui.base.basefragment.BaseFragment;
 import com.wotingfm.ui.play.look.activity.LookListFragment;
 import com.wotingfm.ui.play.look.activity.classification.fragment.MinorClassificationFragment;
@@ -78,10 +74,6 @@ import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.schedulers.Schedulers;
-
-import static android.app.Activity.RESULT_OK;
-import static com.wotingfm.R.mipmap.p;
-import static com.wotingfm.common.application.BSApplication.fragmentBase;
 
 /**
  * 作者：xinLong on 2017/6/2 12:15
@@ -389,7 +381,7 @@ public class PlayerFragment extends BaseFragment implements View.OnClickListener
             @Override
             public void onPrepared(IMediaPlayer iMediaPlayer) {
                 seekbarVideo.setMax(bdPlayer.getDuration());
-                txtVideoTotaltime.setText(TimeUtils.formatterTime((bdPlayer.getDuration())) + "");
+                txtVideoTotaltime.setText(TimeUtil.formatterTime((bdPlayer.getDuration())) + "");
                 setBarProgrees();
             }
         });
@@ -642,7 +634,7 @@ public class PlayerFragment extends BaseFragment implements View.OnClickListener
                             return;
                         }
                         seekbarVideo.setProgress(bdPlayer.getCurrentPosition());
-                        txtVideoStarttime.setText(TimeUtils.formatterTime(bdPlayer.getCurrentPosition()) + "");
+                        txtVideoStarttime.setText(TimeUtil.formatterTime(bdPlayer.getCurrentPosition()) + "");
                     }
                 });//每隔一秒发送数据
     }

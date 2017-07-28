@@ -43,6 +43,7 @@ import com.netease.nim.live.DemoCache;
 import com.wotingfm.common.config.preference.Preferences;
 import com.wotingfm.common.net.RetrofitService;
 import com.wotingfm.common.net.RetrofitUtils;
+import com.wotingfm.common.service.WtDeviceControl;
 import com.wotingfm.common.utils.SystemUtil;
 import com.wotingfm.ui.main.view.MainActivity;
 
@@ -75,10 +76,10 @@ public class BSApplication extends MultiDexApplication {
         OkHttpFinal.getInstance().init(builder.build());
         SharedPreferences = this.getSharedPreferences("wotingfm", Context.MODE_PRIVATE);
         NetWorkManager.checkNetworkStatus(this);  // 获取网络状态
-        PhoneMsgManager.getPhoneInfo(this);
+        PhoneMsgManager.getPhoneInfo(this);       // 获取手机信息
 
-        JPushInterface.setDebugMode(true);    // 设置开启日志,发布时请关闭日志
-        JPushInterface.init(this);            // 初始化 JPush
+        JPushInterface.setDebugMode(true);        // 设置开启日志,发布时请关闭日志
+        JPushInterface.init(this);                // 初始化 JPush
         JPushInterface.getRegistrationID(this);
         // JPushInterface.resumePush(this);
         // JPushInterface.stopPush(this);

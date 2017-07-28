@@ -5,26 +5,19 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.util.Log;
 
-import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.config.GlobalStateConfig;
 import com.wotingfm.common.constant.BroadcastConstants;
-import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.common.utils.ToastUtils;
-import com.wotingfm.ui.intercom.alert.call.view.CallAlertActivity;
 import com.wotingfm.ui.intercom.group.groupchat.model.GroupChat;
 import com.wotingfm.ui.intercom.group.groupchat.model.GroupChatModel;
 import com.wotingfm.ui.intercom.group.groupchat.view.GroupChatFragment;
 import com.wotingfm.ui.intercom.group.groupnews.add.view.GroupNewsForAddFragment;
-import com.wotingfm.ui.intercom.group.groupnews.noadd.view.GroupNewsForNoAddFragment;
-import com.wotingfm.ui.intercom.main.chat.model.DBTalkHistory;
 import com.wotingfm.ui.intercom.main.chat.model.TalkHistory;
 import com.wotingfm.ui.intercom.main.chat.presenter.ChatPresenter;
-import com.wotingfm.ui.intercom.main.contacts.model.Contact;
 import com.wotingfm.ui.intercom.main.view.InterPhoneActivity;
-import com.wotingfm.ui.intercom.person.personnote.view.EditPersonNoteFragment;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -38,6 +31,8 @@ public class GroupChatPresenter {
     private final GroupChatModel model;
     private List<GroupChat> list;
     private MessageReceiver Receiver;
+    private int groupPosition;
+    private int childPosition;
 
     public GroupChatPresenter(GroupChatFragment activity) {
         this.activity = activity;
@@ -130,6 +125,8 @@ public class GroupChatPresenter {
      * @param childPosition
      */
     public void interPhone(int groupPosition, int childPosition) {
+        this.groupPosition = groupPosition;
+        this.childPosition = childPosition;
         String groupId = "";
         try {
             groupId = list.get(groupPosition).getPerson().get(childPosition).getId();// 点击按钮的群组id
@@ -147,12 +144,29 @@ public class GroupChatPresenter {
                     activity.dialogShow(groupId);
                 } else if (_t != null && !_t.equals("") && _t.equals("group")) {
                     // 此时的对讲状态是群组
-                    takeOverGroup();// 退出组
-                    enterGroup(groupId);// 进入组
+                    boolean to = takeOverGroup();// 退出组
+                    if (to) {
+                        Log.e("信令控制", "退出组成功");
+                    } else {
+                        Log.e("信令控制", "退出组失败");
+                    }
+                    boolean et = enterGroup(groupId);// 进入组
+                    if (et) {
+                        Log.e("信令控制", "进入组成功");
+                        enterGroupOkData();
+                    } else {
+                        Log.e("信令控制", "进入组失败");
+                    }
                 }
             } else {
                 // 此时没有对讲状态,直接进入组
-                enterGroup(groupId);
+                boolean et = enterGroup(groupId);
+                if (et) {
+                    Log.e("信令控制", "进入组成功");
+                    enterGroupOkData();
+                } else {
+                    Log.e("信令控制", "进入组失败");
+                }
             }
         } else {
             ToastUtils.show_always(activity.getActivity(), "数据出错了，请您稍后再试！");
@@ -163,34 +177,54 @@ public class GroupChatPresenter {
      * 同意挂断当前对讲后的操作
      */
     public void callOk(String groupId) {
-        // 退出个人对讲
-        talkOver();
+        boolean to = talkOver();// 退出个人对讲
+        if (to) {
+            Log.e("信令控制", "挂断好友成功");
+        } else {
+            Log.e("信令控制", "挂断好友失败");
+        }
         // 关闭对讲页面好友数据
         activity.getActivity().sendBroadcast(new Intent(BroadcastConstants.VIEW_PERSON_CLOSE));
-        // 进入组
-        enterGroup(groupId);
+        boolean et = enterGroup(groupId);// 进入组
+        if (et) {
+            Log.e("信令控制", "进入组成功");
+            enterGroupOkData();
+        } else {
+            Log.e("信令控制", "进入组失败");
+        }
     }
 
     // 进入组
-    private void enterGroup(String groupId) {
+    private boolean enterGroup(String groupId) {
+
+        return true;
+    }
+
+    // 进入组成功后数据处理
+    private void enterGroupOkData() {
+        model.del(list.get(groupPosition).getPerson().get(childPosition).getId());// 删除跟本次id相关的数据
+        model.add(model.assemblyData(list.get(groupPosition).getPerson().get(childPosition), GlobalStateConfig.ok,""));// 把本次数据添加的数据库
         InterPhoneActivity.closeAll();
-        activity.getActivity().sendBroadcast(new Intent(BroadcastConstants.VIEW_INTER_PHONE));
+        activity.getActivity().sendBroadcast(new Intent(BroadcastConstants.VIEW_INTER_PHONE));// 跳转到对讲主页
+        activity.getActivity().sendBroadcast(new Intent(BroadcastConstants.VIEW_INTER_PHONE_CHAT_OK));// 对讲主页界面，数据更新
     }
 
     // 退出组
-    private void takeOverGroup() {
+    private boolean takeOverGroup() {
         if (ChatPresenter.data != null && ChatPresenter.data.getID() != null) {
             // 退出组
             String id = ChatPresenter.data.getID();
         }
+        return true;
     }
 
     // 退出个人对讲
-    private void talkOver() {
+    private boolean talkOver() {
         // 挂断当前会话
         if (ChatPresenter.data != null && ChatPresenter.data.getID() != null) {
             ChatPresenter.data.getID();
         }
+        return true;
     }
 
     // 设置广播接收器

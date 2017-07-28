@@ -58,6 +58,7 @@ public class GroupNewsForAddFragment extends Fragment implements View.OnClickLis
     private LinearLayout lin_chose, lin_channel;
     private ResultListener Listener;
     private Dialog confirmDialog;
+    private String id;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -379,7 +380,7 @@ public class GroupNewsForAddFragment extends Fragment implements View.OnClickLis
         tv_confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                presenter.callOk();
+                presenter.callOk(id);
                 confirmDialogCancel();
             }
         });
@@ -388,7 +389,8 @@ public class GroupNewsForAddFragment extends Fragment implements View.OnClickLis
     /**
      * 展示弹出框
      */
-    public void confirmDialogShow() {
+    public void confirmDialogShow(String id) {
+        this.id=id;
         confirmDialog.show();
     }
 

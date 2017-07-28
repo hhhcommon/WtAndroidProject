@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -18,8 +17,6 @@ import com.wotingfm.R;
 import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.common.utils.GlideUtils;
 import com.wotingfm.ui.intercom.alert.call.presenter.CallPresenter;
-import com.wotingfm.ui.intercom.main.view.InterPhoneActivity;
-
 import jp.wasabeef.glide.transformations.BlurTransformation;
 
 /**

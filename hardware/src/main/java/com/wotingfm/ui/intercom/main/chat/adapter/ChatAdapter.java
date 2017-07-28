@@ -16,6 +16,7 @@ import android.widget.TextView;
 import com.woting.commonplat.utils.BitmapUtils;
 import com.wotingfm.R;
 import com.wotingfm.common.utils.GlideUtils;
+import com.wotingfm.common.utils.TimeUtils;
 import com.wotingfm.common.view.slidingbutton.SlidingButtonView;
 import com.wotingfm.ui.intercom.main.chat.model.TalkHistory;
 import com.wotingfm.ui.intercom.main.contacts.model.Contact;
@@ -59,14 +60,44 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.SimpleHolder> 
     @Override
     public void onBindViewHolder(final SimpleHolder holder, int position) {
         holder.layout_content.getLayoutParams().width = getScreenWidth(mContext);
+        TalkHistory data = t.get(position);
         String name="";
         try {
-            name=t.get(position).getName();
+            name=data.getName();
         } catch (Exception e) {
             e.printStackTrace();
         }
         holder.tv_name.setText(name);
-        if (t.get(position).getURL()!= null && !t.get(position).getURL().equals("")) {
+       String type= data.getTyPe();
+        if(type.equals("person")){
+            String CallType = "";
+            try {
+                CallType=data.getCallType();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            if(CallType.trim().equals("ok")){
+                holder.tv_news.setText("[语音通话] "+TimeUtils.converTime(Long.parseLong(data.getAddTime())));
+            }else{
+                String news="";
+                try {
+                    news=data.getCallTypeM();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                holder.tv_news.setText("[语音通话] "+news);
+            }
+        }else{
+            String num="";
+            try {
+                num=data.getGroupNum();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            holder.tv_news.setText("("+num+"人)");
+        }
+
+        if (t.get(position).getURL()!= null && !t.get(position).getURL().equals("")&&t.get(position).getURL().startsWith("http")) {
             GlideUtils.loadImageViewSize(mContext, t.get(position).getURL(), 60, 60, holder.img_url, true);
         } else {
             Bitmap bmp = BitmapUtils.readBitMap(mContext, R.mipmap.icon_avatar_d);

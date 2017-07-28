@@ -2,7 +2,9 @@ package com.wotingfm.ui.intercom.add.search.local.presenter;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 
+import com.wotingfm.common.config.GlobalStateConfig;
 import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.common.utils.ToastUtils;
 import com.wotingfm.ui.intercom.add.search.local.model.SearchContactsForLocalModel;
@@ -35,7 +37,7 @@ public class SearchContactsForLocalPresenter {
 
     public SearchContactsForLocalPresenter(SearchContactsForLocalFragment activity) {
         this.activity = activity;
-        this.model = new SearchContactsForLocalModel();
+        this.model = new SearchContactsForLocalModel(activity);
     }
 
     /**
@@ -163,7 +165,7 @@ public class SearchContactsForLocalPresenter {
     }
 
     /**
-     * 呼叫，待对接
+     * 呼叫
      *
      * @param position
      */
@@ -176,20 +178,33 @@ public class SearchContactsForLocalPresenter {
             // 此时有对讲状态
             String _t = ChatPresenter.data.getTyPe().trim();
             if (_t != null && !_t.equals("") && _t.equals("person")) {// 此时的对讲状态是单对单
-                // 弹出选择界面
-                activity.dialogShow(id, 1);
+                activity.dialogShow(person.get(position),null, 1);// 弹出选择界面
             } else if (_t != null && !_t.equals("") && _t.equals("group")) {// 此时的对讲状态是群组
-                // 退出组
-                takeOverGroup();
+                boolean to= takeOverGroup();// 退出组
+                if (to) {
+                    Log.e("信令控制", "退出组成功");
+                } else {
+                    Log.e("信令控制", "退出组失败");
+                }
                 // 关闭对讲页面群组数据
                 activity.getActivity().sendBroadcast(new Intent(BroadcastConstants.VIEW_GROUP_CLOSE));
-                // 进行呼叫
-                talkOk(id);
+                boolean tok= talkOk(id);// 进行呼叫
+                if (tok) {
+                    Log.e("信令控制", "呼叫成功");
+                    enterOkData(true,person.get(position),null);
+                } else {
+                    Log.e("信令控制", "呼叫失败");
+                }
             }
         } else {
             // 此时没有对讲状态
-            // 进行呼叫
-            talkOk(id);
+            boolean to=talkOk(id);// 进行呼叫
+            if (to) {
+                Log.e("信令控制", "呼叫成功");
+                enterOkData(true,person.get(position),null);
+            } else {
+                Log.e("信令控制", "呼叫失败");
+            }
         }
     }
 
@@ -207,72 +222,124 @@ public class SearchContactsForLocalPresenter {
             // 此时有对讲状态
             String _t = ChatPresenter.data.getTyPe().trim();
             if (_t != null && !_t.equals("") && _t.equals("person")) {// 此时的对讲状态是单对单
-                // 弹出选择界面
-                activity.dialogShow(id, 2);
+                activity.dialogShow(null,group.get(position), 2);// 弹出选择界面
             } else if (_t != null && !_t.equals("") && _t.equals("group")) {// 此时的对讲状态是群组
-                // 退出组
-                takeOverGroup();
+                boolean to=takeOverGroup();// 退出组
+                if (to) {
+                    Log.e("信令控制", "退出组成功");
+                } else {
+                    Log.e("信令控制", "退出组失败");
+                }
                 // 关闭对讲页面群组数据
                 activity.getActivity().sendBroadcast(new Intent(BroadcastConstants.VIEW_GROUP_CLOSE));
-                // 进入组
-                enterGroup(id);
+                boolean et= enterGroup(id);// 进入组
+                if (et) {
+                    Log.e("信令控制", "进入组成功");
+                    enterOkData(true,null,group.get(position));
+                } else {
+                    Log.e("信令控制", "进入组失败");
+                }
             }
         } else {
             // 此时没有对讲状态,直接进入组
-            enterGroup(id);
+            boolean et=enterGroup(id);// 进入组
+            if (et) {
+                Log.e("信令控制", "进入组成功");
+                enterOkData(true,null,group.get(position));
+            } else {
+                Log.e("信令控制", "进入组失败");
+            }
+        }
+    }
+
+    /**
+     * 进行呼叫
+     */
+    public void callOk(Contact.user user, Contact.group group, int type) {
+        if (type == 1) {
+            boolean to=talkOver();// 挂断当前会话
+            if (to) {
+                Log.e("信令控制", "挂断电话成功");
+            } else {
+                Log.e("信令控制", "挂断电话失败");
+            }
+            // 关闭对讲页面好友数据
+            activity.getActivity().sendBroadcast(new Intent(BroadcastConstants.VIEW_PERSON_CLOSE));
+            boolean tok=talkOk(user.getId());// 进行呼叫
+            if (tok) {
+                Log.e("信令控制", "呼叫成功");
+                enterOkData(true,user,null);
+            } else {
+                Log.e("信令控制", "呼叫失败");
+            }
+        } else {
+            boolean to= talkOver();// 挂断当前会话
+            if (to) {
+                Log.e("信令控制", "挂断电话成功");
+            } else {
+                Log.e("信令控制", "挂断电话失败");
+            }
+            // 关闭对讲页面好友数据
+            activity.getActivity().sendBroadcast(new Intent(BroadcastConstants.VIEW_PERSON_CLOSE));
+           boolean et= enterGroup(group.getId());// 进入组
+            if (et) {
+                Log.e("信令控制", "进入组成功");
+                enterOkData(true,null,group);
+            } else {
+                Log.e("信令控制", "进入组失败");
+            }
         }
     }
 
     // 进入组
-    private void enterGroup(String groupId) {
+    private boolean enterGroup(String groupId) {
         InterPhoneActivity.closeAll();
         activity.getActivity().sendBroadcast(new Intent(BroadcastConstants.VIEW_INTER_PHONE));
+        return true;
     }
 
     // 退出组
-    private void takeOverGroup() {
+    private boolean takeOverGroup() {
         if (ChatPresenter.data != null && ChatPresenter.data.getID() != null) {
             // 退出组
             String id = ChatPresenter.data.getID();
         }
+        return true;
     }
 
     // 退出个人对讲
-    private void talkOver() {
+    private boolean talkOver() {
         if (ChatPresenter.data != null && ChatPresenter.data.getID() != null) {
             ChatPresenter.data.getID();// 挂断电话
         }
+        return true;
     }
 
     // 开始个人对讲
-    private void talkOk(String id) {
+    private boolean talkOk(String id) {
         Intent intent = new Intent(activity.getActivity(), CallAlertActivity.class);
         Bundle bundle = new Bundle();
         bundle.putString("id", id);
         intent.putExtras(bundle);
         activity.startActivityForResult(intent, 0);
+        return true;
     }
 
-    /**
-     * 进行呼叫
-     *
-     * @param id
-     */
-    public void callOk(String id, int type) {
-        if (type == 1) {
-            // 挂断当前会话
-            talkOver();
-            // 关闭对讲页面好友数据
-            activity.getActivity().sendBroadcast(new Intent(BroadcastConstants.VIEW_PERSON_CLOSE));
-            // 进行呼叫
-            talkOk(id);
-        } else {
-            // 挂断当前会话
-            talkOver();
-            // 关闭对讲页面好友数据
-            activity.getActivity().sendBroadcast(new Intent(BroadcastConstants.VIEW_PERSON_CLOSE));
-            enterGroup(id);
+    // 进入组成功后数据处理
+    private void enterOkData(boolean b,Contact.user user,Contact.group group) {
+        if(b){
+            // 好友
+            model.del(user.getId());// 删除跟本次id相关的数据
+            model.add(model.assemblyPersonData(user, GlobalStateConfig.ok,""));// 把本次数据添加的数据库
+        }else{
+            // 群组
+            model.del(group.getId());// 删除跟本次id相关的数据
+            model.add(model.assemblyGroupData(group, GlobalStateConfig.ok,""));// 把本次数据添加的数据库
         }
+
+        InterPhoneActivity.closeAll();
+        activity.getActivity().sendBroadcast(new Intent(BroadcastConstants.VIEW_INTER_PHONE));// 跳转到对讲主页
+        activity.getActivity().sendBroadcast(new Intent(BroadcastConstants.VIEW_INTER_PHONE_CHAT_OK));// 对讲主页界面，数据更新
     }
 
 }

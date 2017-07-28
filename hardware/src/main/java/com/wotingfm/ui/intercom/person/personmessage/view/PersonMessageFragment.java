@@ -20,6 +20,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.woting.commonplat.manager.PhoneMsgManager;
 import com.woting.commonplat.utils.BitmapUtils;
 import com.woting.commonplat.widget.TipView;
@@ -40,6 +41,8 @@ import com.wotingfm.ui.intercom.person.personmessage.presenter.PersonMessagePres
 import com.wotingfm.ui.intercom.person.personnote.view.EditPersonNoteFragment;
 
 import java.util.List;
+
+import jp.wasabeef.glide.transformations.BlurTransformation;
 
 /**
  * 用户详情，区分好友与非好友
@@ -275,8 +278,7 @@ public class PersonMessageFragment extends Fragment implements View.OnClickListe
         if (url!= null && !url.equals("")&&url.startsWith("http")) {
             GlideUtils.loadImageViewBlur(this.getActivity(), url, img_bg);
         } else {
-            Bitmap bmp = BitmapUtils.readBitMap(this.getActivity(), R.mipmap.p);
-            img_bg.setImageBitmap(bmp);
+            Glide.with(this.getActivity()).load(R.mipmap.p).crossFade(1000).placeholder(R.mipmap.p).bitmapTransform(new BlurTransformation(this.getActivity(), 20, 15)).into(img_bg);
         }
 
         if (url != null && !url.equals("") && url.startsWith("http")) {
@@ -290,7 +292,7 @@ public class PersonMessageFragment extends Fragment implements View.OnClickListe
         tv_introduce.setText(introduce);   // 介绍
         tv_number.setText(number);         // 听号
         tv_address.setText(address);       // 地址
-        tv_focus.setText("关注 " + focus);  // 关注
+        tv_focus.setText("关注 " + focus); // 关注
     }
 
     /**

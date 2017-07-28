@@ -181,15 +181,15 @@ public class GroupChatFragment extends Fragment implements View.OnClickListener,
         tv_cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                confirmDialog.dismiss();
+                dialogCancel();
             }
         });
 
         tv_confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                dialogCancel();
                 presenter.callOk(id);
-                confirmDialog.dismiss();
             }
         });
     }

@@ -44,6 +44,7 @@ public class ContactsPresenter {
     private final ContactsModel model;
     private MessageReceiver Receiver;
     private List<Contact.user> list;
+    private int position;
 
     public ContactsPresenter(ContactsFragment activity) {
         this.activity = activity;
@@ -99,25 +100,62 @@ public class ContactsPresenter {
      * @param position
      */
     public void call(int position) {
+        this.position=position;
         if (ChatPresenter.data != null) {
             // 此时有对讲状态
             String _t = ChatPresenter.data.getTyPe().trim();
             if (_t != null && !_t.equals("") && _t.equals("person")) {// 此时的对讲状态是单对单
-                // 弹出选择界面
-                activity.dialogShow(position);
+                activity.dialogShow(position);  // 弹出选择界面
             } else if (_t != null && !_t.equals("") && _t.equals("group")) {// 此时的对讲状态是群组
-                // 退出组
-                talkOverGroup();
+                boolean to = talkOverGroup();  // 退出组
+                if (to) {
+                    Log.e("信令控制", "退出组成功");
+                } else {
+                    Log.e("信令控制", "退出组失败");
+                }
                 // 关闭对讲页面群组数据
                 activity.getActivity().sendBroadcast(new Intent(BroadcastConstants.VIEW_GROUP_CLOSE));
-                // 进行呼叫
-                callPerson(position);
+                boolean cp = callPerson(position);// 进行呼叫
+                if (cp) {
+                    Log.e("信令控制", "呼叫成功");
+                    pushCallOk();
+                } else {
+                    Log.e("信令控制", "呼叫失败");
+                }
             }
         } else {
             // 此时没有对讲状态
-            // 进行呼叫
-            callPerson(position);
+            boolean cp = callPerson(position);// 进行呼叫
+            if (cp) {
+                Log.e("信令控制", "呼叫成功");
+                pushCallOk();
+            } else {
+                Log.e("信令控制", "呼叫失败");
+            }
         }
+    }
+
+    // 退出组对讲
+    private boolean talkOverGroup() {
+        if (ChatPresenter.data != null && ChatPresenter.data.getID() != null) {
+            ChatPresenter.data.getID();// 退出组
+        }
+        return true;
+    }
+
+    // 进行呼叫
+    private boolean callPerson(int position) {
+        String id = list.get(position).getId();
+        if (id != null && !id.equals("")) {
+            Intent intent = new Intent(activity.getActivity(), CallAlertActivity.class);
+            Bundle bundle = new Bundle();
+            bundle.putString("id", id);
+            intent.putExtras(bundle);
+            activity.startActivity(intent);
+        } else {
+            ToastUtils.show_always(activity.getActivity(), "数据出错了，请稍后再试！");
+        }
+        return true;
     }
 
     /**
@@ -127,53 +165,38 @@ public class ContactsPresenter {
      */
     public void callOk(int position) {
         // 挂断当前会话
-        talkOver();
+        boolean to = talkOver();
+        if (to) {
+            Log.e("信令控制", "挂断电话成功");
+            pushCallOk();
+        } else {
+            Log.e("信令控制", "挂断电话失败");
+        }
         // 关闭对讲页面好友数据
         activity.getActivity().sendBroadcast(new Intent(BroadcastConstants.VIEW_PERSON_CLOSE));
-        // 进行呼叫
-        callPerson(position);
-    }
-
-    /**
-     * 呼叫/入组成功后操作
-     */
-    public void pushCallOk() {
-        activity.getActivity().sendBroadcast(new Intent(BroadcastConstants.VIEW_INTER_PHONE));// 跳转到对讲主页
-        activity.getActivity().sendBroadcast(new Intent(BroadcastConstants.VIEW_INTER_PHONE_CHAT_OK));// 对讲主页界面，数据更新
+        boolean cp = callPerson(position);// 进行呼叫
+        if (cp) {
+            Log.e("信令控制", "呼叫成功");
+            pushCallOk();
+        } else {
+            Log.e("信令控制", "呼叫失败");
+        }
     }
 
     // 挂断当前个人对讲
-    private void talkOver() {
+    private boolean talkOver() {
         if (ChatPresenter.data != null && ChatPresenter.data.getID() != null) {
             ChatPresenter.data.getID();// 挂断电话
         }
+        return true;
     }
 
-    // 进行呼叫
-    private void callPerson(int position) {
-        Contact.user u = list.get(position);
-        if (u != null) {
-            DBTalkHistory l = model.assemblyData(u);
-            String id = l.getID().trim();
-            if (id != null && !id.equals("")) {
-                model.del(id);
-                Intent intent = new Intent(activity.getActivity(), CallAlertActivity.class);
-                Bundle bundle = new Bundle();
-                bundle.putString("id", id);
-                bundle.putString("fromType", "contacts");
-                intent.putExtras(bundle);
-                activity.startActivity(intent);
-            }
-        } else {
-            ToastUtils.show_always(activity.getActivity(), "数据出错了，请稍后再试！");
-        }
-    }
-
-    // 退出组对讲
-    private void talkOverGroup() {
-        if (ChatPresenter.data != null && ChatPresenter.data.getID() != null) {
-            ChatPresenter.data.getID();// 退出组
-        }
+    // 呼叫成功后操作
+    private void pushCallOk() {
+        model.del(list.get(position).getId());// 删除跟本次id相关的数据
+        model.add(model.assemblyData(list.get(position),GlobalStateConfig.ok,""));// 把本次数据添加的数据库
+        activity.getActivity().sendBroadcast(new Intent(BroadcastConstants.VIEW_INTER_PHONE));// 跳转到对讲主页
+        activity.getActivity().sendBroadcast(new Intent(BroadcastConstants.VIEW_INTER_PHONE_CHAT_OK));// 对讲主页界面，数据更新
     }
 
     /**
@@ -205,7 +228,7 @@ public class ContactsPresenter {
                 public void resultListener(boolean type, String name) {
                     if (type) {
                         if (name != null & !name.equals("")) {
-                            changeData(position,name);
+                            changeData(position, name);
                         }
                     }
                 }
@@ -217,7 +240,7 @@ public class ContactsPresenter {
     }
 
     // 修改备注的返回监听
-    private void changeData(int pos,String name){
+    private void changeData(int pos, String name) {
         list.get(pos).setAlias_name(name);
         activity.setData(list);
     }
