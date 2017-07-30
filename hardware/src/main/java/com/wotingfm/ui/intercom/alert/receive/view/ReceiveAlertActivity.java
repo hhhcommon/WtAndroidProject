@@ -29,6 +29,8 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import jp.wasabeef.glide.transformations.BlurTransformation;
 
+import static android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP;
+import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 import static android.content.Intent.FLAG_ACTIVITY_REORDER_TO_FRONT;
 
 /**
@@ -44,6 +46,7 @@ public class ReceiveAlertActivity extends BaseActivity implements OnClickListene
 
     public static void start(Context context, String roomId, String userId) {
         Intent intent = new Intent(context, ReceiveAlertActivity.class);
+        intent.setFlags(FLAG_ACTIVITY_REORDER_TO_FRONT | FLAG_ACTIVITY_NEW_TASK | FLAG_ACTIVITY_CLEAR_TOP);
         intent.putExtra("roomId", roomId);
         intent.putExtra("id", userId);
         context.startActivity(intent);
@@ -53,6 +56,7 @@ public class ReceiveAlertActivity extends BaseActivity implements OnClickListene
     public void onMoonEvent(MessageEvent messageEvent) {
         String msg = messageEvent.getMessage();
         if ("refuse".equals(msg) || "accept".equals(msg) || "cancel".equals(msg)) {
+            EventBus.getDefault().post(new MessageEvent("over"));
             finish();
         }
 
@@ -92,6 +96,7 @@ public class ReceiveAlertActivity extends BaseActivity implements OnClickListene
                  * 此处需要挂断电话等操作
                  */
                 IMManger.getInstance().sendMsg(roomId, "REFUSE", userId);
+                EventBus.getDefault().post(new MessageEvent("over"));
                 finish();
                 break;
             case R.id.img_ok:
@@ -99,6 +104,7 @@ public class ReceiveAlertActivity extends BaseActivity implements OnClickListene
                  * 此处需要挂断电话等操作
                  */
                 IMManger.getInstance().sendMsg(roomId, "ACCEPT", userId);
+                EventBus.getDefault().post(new MessageEvent("acceptMain"));
                 finish();
                 break;
         }

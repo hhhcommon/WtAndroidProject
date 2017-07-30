@@ -9,8 +9,9 @@ public class DBTalkHistory implements Serializable {
 	private String AddTime;		// 添加时间
 	private String CallType;    // 是否接听
 	private String CallTypeM;   //
+	private String ACCID;
 
-	public DBTalkHistory(String bjUserId, String type, String id, String addTime, String callType, String callTypeM) {
+	public DBTalkHistory(String bjUserId, String type, String id, String addTime, String callType, String callTypeM,String acc_ID) {
 		super();
 		BJUserId = bjUserId;
 		TyPe = type;
@@ -18,6 +19,15 @@ public class DBTalkHistory implements Serializable {
 		AddTime = addTime;
 		CallType = callType;
 		CallTypeM = callTypeM;
+		ACCID = acc_ID;
+	}
+
+	public void setACC_ID(String ACC_ID) {
+		this.ACCID = ACC_ID;
+	}
+
+	public String getACC_ID() {
+		return ACCID;
 	}
 
 	public String getCallTypeM() {

@@ -20,6 +20,7 @@ import com.wotingfm.common.bean.Provinces;
 import com.wotingfm.common.bean.Radio;
 import com.wotingfm.common.bean.RadioInfo;
 import com.wotingfm.common.bean.Reports;
+import com.wotingfm.common.bean.Room;
 import com.wotingfm.common.bean.Selected;
 import com.wotingfm.common.bean.SelectedMore;
 import com.wotingfm.common.bean.SerchList;
@@ -102,7 +103,7 @@ public class RetrofitUtils {
 //                            return chain.proceed(request);
 
                             Request r = chain.request();
-                            Request request= addParam(r,_token);
+                            Request request = addParam(r, _token);
                             return chain.proceed(request);
                         }
                     }).build();
@@ -121,7 +122,7 @@ public class RetrofitUtils {
      * @param request
      * @return
      */
-    private Request addParam(Request request,String token) {
+    private Request addParam(Request request, String token) {
 
         HttpUrl.Builder builder = request.url()
                 .newBuilder()
@@ -342,6 +343,7 @@ public class RetrofitUtils {
                     }
                 });
     }
+
     public Observable<List<ChannelsBean>> getChannelsRadioLocation(String type, String area_code, int page) {
         return retrofitService.getChannelsRadioLocation(type, area_code, page)
                 .map(new Func1<Radio, List<ChannelsBean>>() {
@@ -354,6 +356,7 @@ public class RetrofitUtils {
                     }
                 });
     }
+
     public Observable<List<ChannelsBean>> getChannelsRadio(String type, int page) {
         return retrofitService.getChannelsRadio(type, page)
                 .map(new Func1<Radio, List<ChannelsBean>>() {
@@ -467,6 +470,16 @@ public class RetrofitUtils {
                             throw new IllegalStateException(player.msg);
                         }
                         return player.data.reasons;
+                    }
+                });
+    }
+
+    public Observable<Room> apprtcRoom() {
+        return retrofitService.apprtcRoom()
+                .map(new Func1<Room, Room>() {
+                    @Override
+                    public Room call(Room s) {
+                        return s;
                     }
                 });
     }
@@ -835,7 +848,7 @@ public class RetrofitUtils {
     /**
      * 获取好友列表
      *
-     * @param id    当前用户id
+     * @param id 当前用户id
      * @return Object
      */
     public Observable<Object> getFriends(String id) throws Exception {
@@ -851,7 +864,7 @@ public class RetrofitUtils {
     /**
      * 获取组列表
      *
-     * @param id    当前用户id
+     * @param id 当前用户id
      * @return Object
      */
     public Observable<Object> getGroups(String id) throws Exception {
@@ -1471,19 +1484,19 @@ public class RetrofitUtils {
      */
     public Observable<Object> editInformation(String id, String news, String url) throws Exception {
         // 设置返回监听参数
-            return retrofitService.editUserForInformation(id, news,url)
-                    .map(new Func1<Object, Object>() {
-                        @Override
-                        public Object call(Object O) {
-                            return O;
-                        }
-                    });
+        return retrofitService.editUserForInformation(id, news, url)
+                .map(new Func1<Object, Object>() {
+                    @Override
+                    public Object call(Object O) {
+                        return O;
+                    }
+                });
     }
 
     /**
      * 绑定极光
      *
-     * @param id  极光id
+     * @param id 极光id
      * @return Object
      */
     public Observable<Object> bingJG(String id) throws Exception {
@@ -1512,8 +1525,8 @@ public class RetrofitUtils {
     /**
      * 取消关注
      */
-    public Observable<Object> delFocus(String idol_id,String id) throws Exception {
-        return retrofitService.delFocus(idol_id,id)
+    public Observable<Object> delFocus(String idol_id, String id) throws Exception {
+        return retrofitService.delFocus(idol_id, id)
                 .map(new Func1<Object, Object>() {
                     @Override
                     public Object call(Object O) {

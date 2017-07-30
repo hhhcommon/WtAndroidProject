@@ -70,7 +70,7 @@ public class GroupChatModel extends UserInfo {
         String type = "group";
         String addTime = Long.toString(System.currentTimeMillis());
         String bjUserId = CommonUtils.getUserId();
-        DBTalkHistory h = new DBTalkHistory(bjUserId, type, id, addTime, callType, CallTypeM);
+        DBTalkHistory h = new DBTalkHistory(bjUserId, type, id, addTime, callType, CallTypeM,s.getRoomId());
         return h;
     }
 

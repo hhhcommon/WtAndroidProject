@@ -203,6 +203,15 @@ public class Contact implements Serializable {
         private String channel;//
         private String group_num;//
         private String member_num;//               // 成员数
+        private String roomId;
+
+        public String getRoomId() {
+            return roomId;
+        }
+
+        public void setRoomId(String roomId) {
+            this.roomId = roomId;
+        }
 
         public String getMember_num() {
             return member_num;

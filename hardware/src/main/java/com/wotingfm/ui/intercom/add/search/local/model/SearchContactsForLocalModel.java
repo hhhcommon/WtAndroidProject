@@ -75,7 +75,7 @@ public class SearchContactsForLocalModel {
         String type = "group";
         String addTime = Long.toString(System.currentTimeMillis());
         String bjUserId = CommonUtils.getUserId();
-        DBTalkHistory h = new DBTalkHistory(bjUserId, type, id, addTime, callType, CallTypeM);
+        DBTalkHistory h = new DBTalkHistory(bjUserId, type, id, addTime, callType, CallTypeM, s.getRoomId());
         return h;
     }
 
@@ -90,7 +90,7 @@ public class SearchContactsForLocalModel {
         String type = "person";
         String addTime = Long.toString(System.currentTimeMillis());
         String bjUserId = CommonUtils.getUserId();
-        DBTalkHistory h = new DBTalkHistory(bjUserId, type, id, addTime, callType, CallTypeM);
+        DBTalkHistory h = new DBTalkHistory(bjUserId, type, id, addTime, callType, CallTypeM, s.getAcc_id());
         return h;
     }
 

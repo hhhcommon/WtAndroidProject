@@ -41,6 +41,7 @@ public class CallAlertActivity extends Activity implements OnClickListener {
     public void onMoonEvent(MessageEvent messageEvent) {
         String msg = messageEvent.getMessage();
         if ("refuse".equals(msg) || "accept".equals(msg) || "cancel".equals(msg)) {
+            EventBus.getDefault().post(new MessageEvent("over"));
             finish();
         }
     }

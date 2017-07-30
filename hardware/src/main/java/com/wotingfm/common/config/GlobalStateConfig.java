@@ -38,7 +38,7 @@ public class GlobalStateConfig {
     /**
      * 数据库名称
      */
-    public static final String dbVersionName = "wt.db";
+    public static final String dbVersionName = "wt_fmfm.db";
 
     /**
      * 数据库版本号

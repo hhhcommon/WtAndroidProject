@@ -6,6 +6,8 @@ import android.util.Log;
 
 import com.wotingfm.common.config.GlobalStateConfig;
 import com.wotingfm.common.constant.BroadcastConstants;
+import com.wotingfm.common.utils.CommonUtils;
+import com.wotingfm.common.utils.IMManger;
 import com.wotingfm.common.utils.ToastUtils;
 import com.wotingfm.ui.intercom.add.search.local.model.SearchContactsForLocalModel;
 import com.wotingfm.ui.intercom.add.search.local.view.SearchContactsForLocalFragment;
@@ -188,7 +190,7 @@ public class SearchContactsForLocalPresenter {
                 }
                 // 关闭对讲页面群组数据
                 activity.getActivity().sendBroadcast(new Intent(BroadcastConstants.VIEW_GROUP_CLOSE));
-                boolean tok= talkOk(id);// 进行呼叫
+                boolean tok= talkOk(id,person.get(position).getAcc_id());// 进行呼叫
                 if (tok) {
                     Log.e("信令控制", "呼叫成功");
                     enterOkData(true,person.get(position),null);
@@ -198,7 +200,7 @@ public class SearchContactsForLocalPresenter {
             }
         } else {
             // 此时没有对讲状态
-            boolean to=talkOk(id);// 进行呼叫
+            boolean to=talkOk(id,person.get(position).getAcc_id());// 进行呼叫
             if (to) {
                 Log.e("信令控制", "呼叫成功");
                 enterOkData(true,person.get(position),null);
@@ -265,7 +267,7 @@ public class SearchContactsForLocalPresenter {
             }
             // 关闭对讲页面好友数据
             activity.getActivity().sendBroadcast(new Intent(BroadcastConstants.VIEW_PERSON_CLOSE));
-            boolean tok=talkOk(user.getId());// 进行呼叫
+            boolean tok=talkOk(user.getId(),user.getAcc_id());// 进行呼叫
             if (tok) {
                 Log.e("信令控制", "呼叫成功");
                 enterOkData(true,user,null);
@@ -316,10 +318,12 @@ public class SearchContactsForLocalPresenter {
     }
 
     // 开始个人对讲
-    private boolean talkOk(String id) {
+    private boolean talkOk(String id,String accId) {
+        IMManger.getInstance().sendMsg(accId, "LAUNCH", CommonUtils.getUserId());
         Intent intent = new Intent(activity.getActivity(), CallAlertActivity.class);
         Bundle bundle = new Bundle();
         bundle.putString("id", id);
+        bundle.putString("roomId", accId);
         intent.putExtras(bundle);
         activity.startActivityForResult(intent, 0);
         return true;

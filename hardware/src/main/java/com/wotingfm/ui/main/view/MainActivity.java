@@ -17,12 +17,15 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
+import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.TabHost;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.netease.nimlib.sdk.NIMClient;
@@ -30,9 +33,14 @@ import com.netease.nimlib.sdk.Observer;
 import com.netease.nimlib.sdk.msg.MsgServiceObserve;
 import com.netease.nimlib.sdk.msg.model.IMMessage;
 import com.wotingfm.R;
+import com.wotingfm.common.bean.AnchorInfo;
 import com.wotingfm.common.bean.MessageEvent;
+import com.wotingfm.common.bean.Room;
+import com.wotingfm.common.net.RetrofitUtils;
 import com.wotingfm.common.utils.IMManger;
+import com.wotingfm.common.utils.L;
 import com.wotingfm.common.utils.StatusBarUtil;
+import com.wotingfm.common.utils.T;
 import com.wotingfm.ui.intercom.alert.call.view.CallAlertActivity;
 import com.wotingfm.ui.intercom.alert.receive.view.ReceiveAlertActivity;
 import com.wotingfm.ui.intercom.main.view.InterPhoneActivity;
@@ -73,11 +81,19 @@ import org.webrtc.VideoRenderer;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Random;
 import java.util.Set;
+
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
+import rx.schedulers.Schedulers;
 
 import static android.R.attr.id;
 import static android.content.Intent.FLAG_ACTIVITY_REORDER_TO_FRONT;
+import static com.wotingfm.R.mipmap.disconnect;
 
 
 public class MainActivity extends TabActivity implements AppRTCClient.SignalingEvents,
@@ -86,12 +102,14 @@ public class MainActivity extends TabActivity implements AppRTCClient.SignalingE
     public static TabHost tabHost;
     private MainPresenter mainPresenter;
     private MainActivity context;
+    private TextView tvLongClick;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         EventBus.getDefault().register(this);
+        tvLongClick = (TextView) findViewById(R.id.tvLongClick);
         context = this;
         NIMClient.getService(MsgServiceObserve.class)
                 .observeReceiveMessage(incomingMessageObserver, true);
@@ -108,7 +126,17 @@ public class MainActivity extends TabActivity implements AppRTCClient.SignalingE
 
 //        applySelectedColor();
         //   applyTextColor(false);
-
+        tvLongClick.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                    onToggleMicBase(true);
+                } else if (event.getAction() == MotionEvent.ACTION_UP) {
+                    onToggleMicBase(false);
+                }
+                return true;
+            }
+        });
         try {
             Log.e("1", Environment.getDataDirectory().getPath());
             Log.e("2", Environment.getDownloadCacheDirectory().getPath());
@@ -172,7 +200,7 @@ public class MainActivity extends TabActivity implements AppRTCClient.SignalingE
         super.onDestroy();
         stop();
         Thread.setDefaultUncaughtExceptionHandler(null);
-        disconnect();
+        disconnectDismiss();
         if (logToast != null) {
             logToast.cancel();
         }
@@ -208,10 +236,26 @@ public class MainActivity extends TabActivity implements AppRTCClient.SignalingE
             tabHost.setCurrentTabByTag("two");
         } else if ("three".equals(messageEvent.getMessage())) {
             tabHost.setCurrentTabByTag("three");
+        } else if ("acceptMain".equals(messageEvent.getMessage())) {
+            disconnect();
+            initPlayer();
+            activityRunning = true;
+            // Video is not paused for screencapture. See onPause.
+            if (peerConnectionClient != null && !screencaptureEnabled) {
+                peerConnectionClient.startVideoSource();
+            }
+            mainPresenter.connectToRoom(roomId, false, false, false, 0);
+            tvLongClick.setVisibility(View.VISIBLE);
+            onToggleMicBase(false);
+        } else if (messageEvent.getMessage().contains("create&Rommid")) {
+            roomId = messageEvent.getMessage().split("create&Rommid")[1];
+        } else if ("over".equals(messageEvent.getMessage())) {
+            tvLongClick.setVisibility(View.GONE);
+            disconnect();
         }
-
     }
 
+    private String roomId;
     /**
      * 消息接收观察者
      */
@@ -221,30 +265,46 @@ public class MainActivity extends TabActivity implements AppRTCClient.SignalingE
             if (messages == null || messages.isEmpty()) {
                 return;
             }
-            IMMessage im = messages.get(messages.size() - 1);
+            final IMMessage im = messages.get(messages.size() - 1);
             if (im != null) {
-                String content = im.getContent();
-                String userId = im.getPushContent();
+                Map<String, Object> map = im.getPushPayload();
+                String type = map.get("type") + "";
+                String userId = map.get("userId") + "";
+                String roomid = map.get("roomid") + "";
                 //收到发起对讲
-                if ("LAUNCH".equals(content)) {
+                if ("LAUNCH".equals(type)) {
+                    disconnect();
+                    initPlayer();
+                    roomId = roomid;
+                    EventBus.getDefault().post(new MessageEvent("two"));
                     ReceiveAlertActivity.start(MainActivity.this, im.getFromAccount(), userId);
                     EventBus.getDefault().postSticky("pause");
                 }
                 //取消
-                if ("CANCEL".equals(content)) {
+                if ("CANCEL".equals(type)) {
                     EventBus.getDefault().post(new MessageEvent("cancel"));
                     EventBus.getDefault().postSticky("start");
                 }
                 //拒绝对讲
-                else if ("REFUSE".equals(content)) {
+                else if ("REFUSE".equals(type)) {
                     EventBus.getDefault().post(new MessageEvent("refuse"));
                     EventBus.getDefault().postSticky("start");
+                } else if ("OVER".equals(type)) {
+                    EventBus.getDefault().postSticky("start");
+                    tvLongClick.setVisibility(View.GONE);
                 }
                 //接受对讲
-                else if ("ACCEPT".equals(content)) {
+                else if ("ACCEPT".equals(type)) {
+                    mainPresenter.connectToRoom(roomId, false, false, false, 0);
                     EventBus.getDefault().post(new MessageEvent("accept"));
-                    mainPresenter.connectToRoom(null, false, true, false, 0);
                     EventBus.getDefault().postSticky("pause");
+                    activityRunning = true;
+                    // Video is not paused for screencapture. See onPause.
+                    if (peerConnectionClient != null && !screencaptureEnabled) {
+                        peerConnectionClient.startVideoSource();
+                    }
+                    tvLongClick.setVisibility(View.VISIBLE);
+                    onToggleMicBase(false);
                 }
             }
         }
@@ -355,8 +415,7 @@ public class MainActivity extends TabActivity implements AppRTCClient.SignalingE
     // True if local view is in the fullscreen renderer.
     private boolean isSwappedFeeds;
 
-
-    public void talkback(Intent intent) {
+    private void initPlayer() {
         Thread.setDefaultUncaughtExceptionHandler(new UnhandledExceptionHandler(this));
 
         // Set window styles for fullscreen-window size. Needs to be done before
@@ -368,7 +427,6 @@ public class MainActivity extends TabActivity implements AppRTCClient.SignalingE
         // Create UI controls.
         pipRenderer = (SurfaceViewRenderer) findViewById(R.id.pip_video_view);
         fullscreenRenderer = (SurfaceViewRenderer) findViewById(R.id.fullscreen_video_view);
-
         // Swap feeds on pip view click.
         pipRenderer.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -385,6 +443,17 @@ public class MainActivity extends TabActivity implements AppRTCClient.SignalingE
         rootEglBase = EglBase.create();
         pipRenderer.init(rootEglBase.getEglBaseContext(), null);
         pipRenderer.setScalingType(RendererCommon.ScalingType.SCALE_ASPECT_FIT);
+        fullscreenRenderer.init(rootEglBase.getEglBaseContext(), null);
+        fullscreenRenderer.setScalingType(RendererCommon.ScalingType.SCALE_ASPECT_FILL);
+
+        pipRenderer.setZOrderMediaOverlay(true);
+        pipRenderer.setEnableHardwareScaler(true /* enabled */);
+        fullscreenRenderer.setEnableHardwareScaler(true /* enabled */);
+        // Start with local feed in fullscreen and swap it to the pip when the call is connected.
+        setSwappedFeeds(true /* isSwappedFeeds */);
+    }
+
+    public void talkback(Intent intent) {
         String saveRemoteVideoToFile = intent.getStringExtra(EXTRA_SAVE_REMOTE_VIDEO_TO_FILE);
 
         // When saveRemoteVideoToFile is set we save the video from the remote to a file.
@@ -400,21 +469,13 @@ public class MainActivity extends TabActivity implements AppRTCClient.SignalingE
                         "Failed to open video file for output: " + saveRemoteVideoToFile, e);
             }
         }
-        fullscreenRenderer.init(rootEglBase.getEglBaseContext(), null);
-        fullscreenRenderer.setScalingType(RendererCommon.ScalingType.SCALE_ASPECT_FILL);
-
-        pipRenderer.setZOrderMediaOverlay(true);
-        pipRenderer.setEnableHardwareScaler(true /* enabled */);
-        fullscreenRenderer.setEnableHardwareScaler(true /* enabled */);
-        // Start with local feed in fullscreen and swap it to the pip when the call is connected.
-        setSwappedFeeds(true /* isSwappedFeeds */);
 
         // Check for mandatory permissions.
         for (String permission : MANDATORY_PERMISSIONS) {
             if (checkCallingOrSelfPermission(permission) != PackageManager.PERMISSION_GRANTED) {
                 Log.e(TAG, "Permission " + permission + " is not granted");
                 setResult(RESULT_CANCELED);
-                finish();
+                // finish();
                 return;
             }
         }
@@ -423,7 +484,7 @@ public class MainActivity extends TabActivity implements AppRTCClient.SignalingE
         if (roomUri == null) {
             Log.e(TAG, "Didn't get any URL in intent!");
             setResult(RESULT_CANCELED);
-            finish();
+            // finish();
             return;
         }
 
@@ -433,7 +494,7 @@ public class MainActivity extends TabActivity implements AppRTCClient.SignalingE
         if (roomId == null || roomId.length() == 0) {
             Log.e(TAG, "Incorrect room ID in intent!");
             setResult(RESULT_CANCELED);
-            finish();
+            //  finish();
             return;
         }
 
@@ -672,6 +733,13 @@ public class MainActivity extends TabActivity implements AppRTCClient.SignalingE
         return micEnabled;
     }
 
+    private boolean onToggleMicBase(boolean isEnavled) {
+        if (peerConnectionClient != null) {
+            micEnabled = isEnavled;
+            peerConnectionClient.setAudioEnabled(micEnabled);
+        }
+        return micEnabled;
+    }
 
     private void startCall() {
         if (appRtcClient == null) {
@@ -757,7 +825,47 @@ public class MainActivity extends TabActivity implements AppRTCClient.SignalingE
         } else {
             setResult(RESULT_CANCELED);
         }
-        finish();
+        if (tvLongClick != null)
+            tvLongClick.setVisibility(View.GONE);
+    }
+
+    // Disconnect from remote resources, dispose of local resources, and exit.
+    private void disconnectDismiss() {
+        activityRunning = false;
+        remoteProxyRenderer.setTarget(null);
+        localProxyRenderer.setTarget(null);
+        if (appRtcClient != null) {
+            appRtcClient.disconnectFromRoom();
+            appRtcClient = null;
+        }
+        if (peerConnectionClient != null) {
+            peerConnectionClient.close();
+            peerConnectionClient = null;
+        }
+        if (pipRenderer != null) {
+            pipRenderer.release();
+            pipRenderer = null;
+        }
+        if (videoFileRenderer != null) {
+            videoFileRenderer.release();
+            videoFileRenderer = null;
+        }
+        if (fullscreenRenderer != null) {
+            fullscreenRenderer.release();
+            fullscreenRenderer = null;
+        }
+        if (audioManager != null) {
+            audioManager.stop();
+            audioManager = null;
+        }
+        if (iceConnected && !isError) {
+            setResult(RESULT_OK);
+        } else {
+            setResult(RESULT_CANCELED);
+        }
+        if (tvLongClick != null)
+            tvLongClick.setVisibility(View.GONE);
+        // finish();
     }
 
     private void disconnectWithErrorMessage(final String errorMessage) {
@@ -1043,6 +1151,7 @@ public class MainActivity extends TabActivity implements AppRTCClient.SignalingE
     public void onPeerConnectionError(final String description) {
         reportError(description);
     }
+
 
     private static final String TAG = MainActivity.class.getSimpleName();
 }

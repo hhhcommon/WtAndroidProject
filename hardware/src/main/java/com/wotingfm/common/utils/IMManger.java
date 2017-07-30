@@ -26,17 +26,28 @@ import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
 import com.netease.nimlib.sdk.msg.model.IMMessage;
 import com.wotingfm.R;
 import com.wotingfm.common.application.BSApplication;
+import com.wotingfm.common.bean.MessageEvent;
+import com.wotingfm.common.bean.Room;
 import com.wotingfm.common.net.RetrofitUtils;
+import com.wotingfm.ui.intercom.alert.receive.view.ReceiveAlertActivity;
+import com.wotingfm.ui.main.view.MainActivity;
 import com.wotingfm.ui.test.PlayerActivity;
 
 import org.appspot.apprtc.CallActivity;
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
+import rx.schedulers.Schedulers;
+
 import static android.R.attr.type;
+import static cn.jpush.android.api.JPushInterface.a.e;
+import static cn.jpush.android.api.JPushInterface.a.r;
 import static com.iflytek.cloud.resource.Resource.getText;
 
 /**
@@ -58,18 +69,58 @@ public class IMManger {
         return INSTANCE;
     }
 
-    /*
-            type =1 是发送
-            type =2 是接受
-            type =1 是拒绝
-     */
-    public void sendMsg(String sessionId, String chatRoom,String userId) {
-        IMMessage msg = MessageBuilder.createCustomMessage(sessionId, SessionTypeEnum.P2P, null);
-        // Map<String, Object> data = new HashMap<>();
-        //// data.put("chatRoom", chatRoom);
-        msg.setContent(chatRoom);
-        msg.setPushContent(userId);
-        // msg.setRemoteExtension(data); // 设置服务器扩展字段
-        NIMClient.getService(MsgService.class).sendMessage(msg, false);
+    private String roomID;
+
+    public void sendMsg(final String sessionId, final String type, final String userId) {
+        final Map<String, Object> data = new HashMap<>();
+        data.put("sessionId", sessionId);
+        data.put("type", type);
+        data.put("userId", userId);
+        if ("LAUNCH".equals(type)) {
+            apprtcRoom(new RoomResult() {
+                @Override
+                public void room(String roomid) {
+                    IMMessage msg = MessageBuilder.createCustomMessage(sessionId, SessionTypeEnum.P2P, null);
+                    EventBus.getDefault().post(new MessageEvent("create&Rommid"+roomid));
+                    //// data.put("chatRoom", chatRoom);
+                    data.put("roomid", roomid);
+                    roomID = roomid;
+                    msg.setPushPayload(data);
+                    // msg.setRemoteExtension(data); // 设置服务器扩展字段
+                    NIMClient.getService(MsgService.class).sendMessage(msg, false);
+                }
+            });
+
+        } else {
+            IMMessage msg = MessageBuilder.createCustomMessage(sessionId, SessionTypeEnum.P2P, null);
+            data.put("roomid", roomID);
+            msg.setPushPayload(data); // 设置服务器扩展字段
+            NIMClient.getService(MsgService.class).sendMessage(msg, false);
+        }
     }
+
+    public void apprtcRoom(final RoomResult roomResult) {
+        RetrofitUtils.getInstance().apprtcRoom()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Action1<Room>() {
+                    @Override
+                    public void call(Room room) {
+                        if (room != null && room.ret == 0 && room.data != null) {
+                            if (roomResult != null)
+                                roomResult.room(room.data.room_number);
+                        }
+                    }
+                }, new Action1<Throwable>() {
+                    @Override
+                    public void call(Throwable throwable) {
+                        T.getInstance().showToast("失败");
+                    }
+                });
+    }
+
+    public interface RoomResult {
+        void room(String roomid);
+    }
+
 }

@@ -82,7 +82,7 @@ public class ContactsModel {
         String type = "person";
         String addTime = Long.toString(System.currentTimeMillis());
         String bjUserId = CommonUtils.getUserId();
-        DBTalkHistory h = new DBTalkHistory(bjUserId, type, id, addTime,callType,CallTypeM);
+        DBTalkHistory h = new DBTalkHistory(bjUserId, type, id, addTime,callType,CallTypeM,s.getAcc_id());
         return h;
     }
 

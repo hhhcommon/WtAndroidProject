@@ -30,6 +30,7 @@ import com.wotingfm.ui.intercom.person.personnote.view.EditPersonNoteFragment;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
+
 import java.util.List;
 
 
@@ -86,7 +87,7 @@ public class PersonMessagePresenter {
                 String number = "518518";
                 String address = "北京朝阳";
                 String focus = "0";
-                activity.setViewData("",name, sign, number, address, focus,null);
+                activity.setViewData("", name, sign, number, address, focus, null);
                 List<AlbumsBean> list = model.getTestData();
                 if (list != null && list.size() > 0) {
                     activity.setGridViewData(list);
@@ -220,17 +221,17 @@ public class PersonMessagePresenter {
     private void assemblyData(Contact.user user) {
         String nickName = "未知";
         try {
-            String  name = user.getName();
-            if(name!=null&&!name.equals("")){
-                nickName=name;
+            String name = user.getName();
+            if (name != null && !name.equals("")) {
+                nickName = name;
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
         try {
-            String  name = user.getAlias_name();
-            if(name!=null&&!name.equals("")){
-                nickName=name;
+            String name = user.getAlias_name();
+            if (name != null && !name.equals("")) {
+                nickName = name;
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -269,11 +270,11 @@ public class PersonMessagePresenter {
         }
         String accid = "";
         try {
-            url = user.getAcc_id();
+            accid = user.getAcc_id();
         } catch (Exception e) {
             e.printStackTrace();
         }
-        activity.setViewData(url,nickName, sign, number, address, focus,accid);
+        activity.setViewData(url, nickName, sign, number, address, focus, accid);
         activity.isLoginView(0);
     }
 
@@ -451,7 +452,7 @@ public class PersonMessagePresenter {
     // 进行呼叫
     private boolean callPerson(String acc_id) {
         if (id != null && !id.equals("")) {
-            IMManger.getInstance().sendMsg(acc_id,"LAUNCH", CommonUtils.getUserId());
+            IMManger.getInstance().sendMsg(acc_id, "LAUNCH", CommonUtils.getUserId());
             Intent intent = new Intent(activity.getActivity(), CallAlertActivity.class);
             Bundle bundle = new Bundle();
             bundle.putString("roomId", acc_id);
@@ -498,7 +499,7 @@ public class PersonMessagePresenter {
     // 呼叫成功后操作
     private void pushCallOk() {
         model.del(id);// 删除跟本次id相关的数据
-        model.add(model.assemblyData(user,GlobalStateConfig.ok,""));// 把本次数据添加的数据库
+        model.add(model.assemblyData(user, GlobalStateConfig.ok, ""));// 把本次数据添加的数据库
         activity.getActivity().sendBroadcast(new Intent(BroadcastConstants.VIEW_INTER_PHONE));// 跳转到对讲主页
         activity.getActivity().sendBroadcast(new Intent(BroadcastConstants.VIEW_INTER_PHONE_CHAT_OK));// 对讲主页界面，数据更新
     }

@@ -139,7 +139,7 @@ public class ChatModel extends CommonModel {
         String type = s.getTyPe();
         String addTime = Long.toString(System.currentTimeMillis());
         String bjUserId = CommonUtils.getUserId();
-        DBTalkHistory h = new DBTalkHistory(bjUserId, type, id, addTime, CallType, CallTypeM);
+        DBTalkHistory h = new DBTalkHistory(bjUserId, type, id, addTime, CallType, CallTypeM,s.getACC_ID());
         return h;
     }
 
@@ -258,6 +258,7 @@ public class ChatModel extends CommonModel {
                 data.setAddTime(addTime);
                 data.setCallType("ok");
                 data.setCallTypeM("已接受");
+                data.setACC_ID(h.getACC_ID());
                 return data;
             } else {
                 // 实际数据
@@ -269,6 +270,7 @@ public class ChatModel extends CommonModel {
                 data.setAddTime(h.getAddTime());
                 data.setCallType(h.getCallType());
                 data.setCallTypeM(h.getCallTypeM());
+                data.setACC_ID(h.getACC_ID());
                 return data;
             }
         } else {
@@ -289,6 +291,7 @@ public class ChatModel extends CommonModel {
                 String addTime = Long.toString(System.currentTimeMillis());
                 data.setAddTime(addTime);
                 data.setGroupNum(s.getMember_num());
+                data.setACC_ID(s.getRoomId());
                 return data;
             } else {
                 // 实际数据
@@ -299,6 +302,7 @@ public class ChatModel extends CommonModel {
                 data.setURL(s.getLogo_url());
                 data.setAddTime(h.getAddTime());
                 data.setGroupNum(s.getMember_num());
+                data.setACC_ID(s.getRoomId());
                 return data;
             }
         } else {

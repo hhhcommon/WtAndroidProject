@@ -11,6 +11,7 @@ import com.woting.commonplat.config.GlobalNetWorkConfig;
 import com.wotingfm.common.config.GlobalStateConfig;
 import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.common.utils.CommonUtils;
+import com.wotingfm.common.utils.IMManger;
 import com.wotingfm.common.utils.ToastUtils;
 import com.wotingfm.ui.intercom.alert.call.view.CallAlertActivity;
 import com.wotingfm.ui.intercom.group.groupnews.add.view.GroupNewsForAddFragment;
@@ -124,7 +125,7 @@ public class ChatPresenter {
                         } else {
                             Log.e("信令控制", "退出组失败");
                         }
-                        boolean cp = callPerson(n_id);// 呼叫好友
+                        boolean cp = callPerson(n_id,_data.getACC_ID());// 呼叫好友
                         if (cp) {
                             Log.e("信令控制", "呼叫好友成功");
                             callPersonOkData(1);
@@ -135,7 +136,7 @@ public class ChatPresenter {
                 } else {
                     // 此时没有对讲状态
                     String n_id = _data.getID();
-                    boolean cp = callPerson(n_id);// 呼叫好友
+                    boolean cp = callPerson(n_id,_data.getACC_ID());// 呼叫好友
                     if (cp) {
                         Log.e("信令控制", "呼叫好友成功");
                         callPersonOkData(3);
@@ -196,7 +197,7 @@ public class ChatPresenter {
      * @param new_id
      * @param type
      */
-    public void callOk(String old_id, String new_id, int type) {
+    public void callOk(String old_id, String new_id, int type,String accId) {
         if (type == 1) {
             // 挂断上次好友
             boolean bp = backPerson(old_id);
@@ -206,7 +207,7 @@ public class ChatPresenter {
                 Log.e("信令控制", "挂断好友失败");
             }
             // 呼叫好友
-            boolean cp = callPerson(new_id);
+            boolean cp = callPerson(new_id,accId);
             if (cp) {
                 Log.e("信令控制", "呼叫好友成功");
                 callPersonOkData(2);
@@ -245,10 +246,12 @@ public class ChatPresenter {
     }
 
     // 呼叫好友
-    private boolean callPerson(String id) {
+    private boolean callPerson(String id,String accId) {
+        IMManger.getInstance().sendMsg(accId, "LAUNCH", CommonUtils.getUserId());
         Intent intent = new Intent(activity.getActivity(), CallAlertActivity.class);
         Bundle bundle = new Bundle();
         bundle.putString("id", id);
+        bundle.putString("roomId", accId);
         intent.putExtras(bundle);
         activity.startActivity(intent);
         return true;

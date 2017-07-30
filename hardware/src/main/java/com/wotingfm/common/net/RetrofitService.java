@@ -14,6 +14,7 @@ import com.wotingfm.common.bean.Provinces;
 import com.wotingfm.common.bean.Radio;
 import com.wotingfm.common.bean.RadioInfo;
 import com.wotingfm.common.bean.Reports;
+import com.wotingfm.common.bean.Room;
 import com.wotingfm.common.bean.Selected;
 import com.wotingfm.common.bean.SelectedMore;
 import com.wotingfm.common.bean.SerchList;
@@ -48,6 +49,10 @@ public interface RetrofitService {
     //首页播放fm列表
     @GET("api/listenings/player")
     Observable<Player> getPlayerList(@Query("album_id") String album_id);
+
+    //fm
+    @POST("api/app-rtc/rooms")
+    Observable<Room> apprtcRoom();
 
     //预告详情
     @GET("api/voice-lives/{voiceLiveId}")
