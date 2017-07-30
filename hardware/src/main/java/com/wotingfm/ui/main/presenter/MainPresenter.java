@@ -1,6 +1,5 @@
 package com.wotingfm.ui.main.presenter;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -14,34 +13,21 @@ import android.util.Log;
 import android.webkit.URLUtil;
 
 import com.google.gson.GsonBuilder;
-import com.iflytek.cloud.SpeechUtility;
 import com.woting.commonplat.receiver.NetWorkChangeReceiver;
 import com.wotingfm.R;
 import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.bean.MessageEvent;
-import com.wotingfm.common.config.GlobalStateConfig;
 import com.wotingfm.common.constant.BroadcastConstants;
-import com.wotingfm.common.net.RetrofitUtils;
 import com.wotingfm.common.service.FloatingWindowService;
 import com.wotingfm.common.service.NotificationService;
-import com.wotingfm.common.utils.ToastUtils;
 import com.wotingfm.ui.base.basepresenter.BasePresenter;
 import com.wotingfm.ui.main.model.MainModel;
 import com.wotingfm.ui.main.view.MainActivity;
-import com.wotingfm.ui.user.register.model.RegisterModel;
-
 import org.appspot.apprtc.CallActivity;
 import org.greenrobot.eventbus.EventBus;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.json.JSONTokener;
-
 import java.util.Random;
-
-import cn.jpush.android.api.JPushInterface;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action1;
-import rx.schedulers.Schedulers;
 
 import static com.iflytek.cloud.resource.Resource.getText;
 
@@ -72,11 +58,12 @@ public class MainPresenter extends BasePresenter {
         activity.startService(NS);
     }
 
-
     //注册广播
     private void registerReceiver() {
         IntentFilter m = new IntentFilter();
         m.addAction(BroadcastConstants.ACTIVITY_CHANGE);
+        m.addAction(BroadcastConstants.VIEW_NOTIFY_SHOW);
+        m.addAction(BroadcastConstants.VIEW_NOTIFY_CLOSE);
         activity.registerReceiver(endApplicationBroadcast, m);
 
         netWorkChangeReceiver = new NetWorkChangeReceiver(activity);
@@ -104,9 +91,38 @@ public class MainPresenter extends BasePresenter {
                     EventBus.getDefault().post(new MessageEvent("three"));
                     // mainActivity.changeThree();
                 }
+            } else if (action.equals(BroadcastConstants.VIEW_NOTIFY_SHOW)) {
+                String content = intent.getStringExtra("msg");  // 展示通知消息
+                assemblyMsg(true, content);
+            } else if (action.equals(BroadcastConstants.VIEW_NOTIFY_CLOSE)) {
+                assemblyMsg(false, "");// 关闭通知消息
             }
         }
     };
+
+    /**
+     * 解析通知消息并且展示
+     *
+     * @param b
+     * @param msg
+     */
+    private void assemblyMsg(boolean b, String msg) {
+        if (b) {
+            try {
+                String s = new GsonBuilder().serializeNulls().create().toJson(msg);
+                JSONObject js = new JSONObject(s);
+                String type = js.getString("type");
+                String title = js.getString("title");
+                String message = js.getString("message");
+                Log.e("ret", String.valueOf("message"));
+                activity.notifyShow(true, type, title, message);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        } else {
+            activity.notifyShow(false, "", "", "");
+        }
+    }
 
     // 发送注册账号请求
     private void getVersion() {
@@ -121,6 +137,41 @@ public class MainPresenter extends BasePresenter {
 
             }
         });
+    }
+
+    /**
+     * 通知消息的点击事件处理
+     *
+     * @param type
+     */
+    public void jumpNotify(String type) {
+        switch (type) {
+            case "0":
+                break;
+            case "1":
+                break;
+            case "2":
+                break;
+            case "3":
+                break;
+            case "4":
+                break;
+            case "5":
+                break;
+            case "6":
+                break;
+            case "7":
+                break;
+            case "8":
+                break;
+            case "9":
+                break;
+            case "10":
+                break;
+            case "11":
+                break;
+        }
+
     }
 
     // 处理注册返回数据
