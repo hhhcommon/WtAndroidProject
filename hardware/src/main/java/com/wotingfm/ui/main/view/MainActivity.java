@@ -111,6 +111,7 @@ public class MainActivity extends TabActivity implements AppRTCClient.SignalingE
         EventBus.getDefault().register(this);
         tvLongClick = (TextView) findViewById(R.id.tvLongClick);
         context = this;
+
         NIMClient.getService(MsgServiceObserve.class)
                 .observeReceiveMessage(incomingMessageObserver, true);
  /*       if (Build.VERSION.SDK_INT == Build.VERSION_CODES.KITKAT) {
