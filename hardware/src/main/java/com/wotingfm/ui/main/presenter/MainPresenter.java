@@ -115,7 +115,7 @@ public class MainPresenter extends BasePresenter {
                 String title = js.getString("title");
                 String message = js.getString("message");
                 Log.e("ret", String.valueOf("message"));
-                activity.notifyShow(true, type, title, message);
+             //   activity.notifyShow(true, type, title, message);
             } catch (JSONException e) {
                 e.printStackTrace();
             }

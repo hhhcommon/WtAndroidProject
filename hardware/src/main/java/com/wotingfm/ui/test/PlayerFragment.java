@@ -663,6 +663,41 @@ public class PlayerFragment extends BaseFragment implements View.OnClickListener
             if (mMediaPlayer != null) {
                 mMediaPlayer.start();
             }
+        } else if (!TextUtils.isEmpty(event) && "step".equals(event)) {
+            if (singLesBeans.size() > postionPlayer && postionPlayer > 0) {
+                postionPlayer = postionPlayer - 1;
+                mRecyclerView.smoothScrollToPosition(postionPlayer);
+                bdPlayer.stopPlayback();
+                bdPlayer.setVideoPath(singLesBeans.get(postionPlayer).single_file_url);
+                bdPlayer.start();
+                seekbarVideo.setProgress(0);
+                ivPause.setImageResource(R.mipmap.music_play_icon_pause);
+                setBeforeOrNext(singLesBeans.get(postionPlayer));
+            }
+        } else if (!TextUtils.isEmpty(event) && "next".equals(event)) {
+            if (postionPlayer < singLesBeans.size() - 1) {
+                postionPlayer = postionPlayer + 1;
+                mRecyclerView.smoothScrollToPosition(postionPlayer);
+                bdPlayer.stopPlayback();
+                bdPlayer.setVideoPath(singLesBeans.get(postionPlayer).single_file_url);
+                bdPlayer.start();
+                ivPause.setImageResource(R.mipmap.music_play_icon_pause);
+                seekbarVideo.setProgress(0);
+                setBeforeOrNext(singLesBeans.get(postionPlayer));
+            }
+        } else if (!TextUtils.isEmpty(event) && "stop_or_star".equals(event)) {
+            BDPlayer.PlayerState isPause = bdPlayer.getCurrentPlayerState();
+            if (channelsBean != null) {
+                PlayerResult();
+            } else {
+                if (bdPlayer.getCurrentPlayerState() == isPause.STATE_PLAYING) {
+                    bdPlayer.pause();
+                    ivPause.setImageResource(R.mipmap.music_play_icon_play);
+                } else if (bdPlayer.getCurrentPlayerState() == isPause.STATE_PAUSED) {
+                    bdPlayer.start();
+                    ivPause.setImageResource(R.mipmap.music_play_icon_pause);
+                }
+            }
         }
     }
 

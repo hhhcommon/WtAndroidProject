@@ -24,6 +24,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.LinearLayout;
 import android.widget.TabHost;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -37,6 +38,7 @@ import com.wotingfm.common.bean.AnchorInfo;
 import com.wotingfm.common.bean.MessageEvent;
 import com.wotingfm.common.bean.Room;
 import com.wotingfm.common.net.RetrofitUtils;
+import com.wotingfm.common.service.WtDeviceControl;
 import com.wotingfm.common.utils.IMManger;
 import com.wotingfm.common.utils.L;
 import com.wotingfm.common.utils.StatusBarUtil;
@@ -96,20 +98,18 @@ import static android.content.Intent.FLAG_ACTIVITY_REORDER_TO_FRONT;
 import static com.wotingfm.R.mipmap.disconnect;
 
 
-public class MainActivity extends TabActivity implements AppRTCClient.SignalingEvents,
+public class MainActivity extends TabActivity implements View.OnClickListener, AppRTCClient.SignalingEvents,
         PeerConnectionClient.PeerConnectionEvents,
         CallFragment.OnCallEvents {
     public static TabHost tabHost;
     private MainPresenter mainPresenter;
     private MainActivity context;
-    private TextView tvLongClick;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         EventBus.getDefault().register(this);
-        tvLongClick = (TextView) findViewById(R.id.tvLongClick);
         context = this;
 
         NIMClient.getService(MsgServiceObserve.class)
@@ -127,17 +127,6 @@ public class MainActivity extends TabActivity implements AppRTCClient.SignalingE
 
 //        applySelectedColor();
         //   applyTextColor(false);
-        tvLongClick.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    onToggleMicBase(true);
-                } else if (event.getAction() == MotionEvent.ACTION_UP) {
-                    onToggleMicBase(false);
-                }
-                return true;
-            }
-        });
         try {
             Log.e("1", Environment.getDataDirectory().getPath());
             Log.e("2", Environment.getDownloadCacheDirectory().getPath());
@@ -153,7 +142,67 @@ public class MainActivity extends TabActivity implements AppRTCClient.SignalingE
     }
 
     // 初始化视图,主页跳转的3个界面
+
+    // 初始化视图,主页跳转的3个界面
     private void InitTextView() {
+        lin_notify = (LinearLayout) findViewById(R.id.lin_notify);
+        tv_title = (TextView) findViewById(R.id.tv_title);
+        tv_msg = (TextView) findViewById(R.id.tv_msg);
+
+        findViewById(R.id.tv_1).setOnClickListener(this);
+        findViewById(R.id.tv_2).setOnClickListener(this);
+        findViewById(R.id.tv_3).setOnClickListener(this);
+        tv_4 = (TextView) findViewById(R.id.tv_4);
+        tv_4.setClickable(true);
+        tv_5 = (TextView) findViewById(R.id.tv_5);
+        tv_5.setClickable(true);
+        tv_4.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        Log.e("按钮操作", "按下");
+                        //按下状态
+                        press();
+                        break;
+                    case MotionEvent.ACTION_UP:
+                        Log.e("按钮操作", "松手");
+                        //抬起手后的操作
+                        jack();
+                        break;
+                    case MotionEvent.ACTION_CANCEL:
+                        Log.e("按钮操作", "取消");
+                        //抬起手后的操作
+                        jack();
+                        break;
+                }
+                return false;
+            }
+        });
+
+        tv_5.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        Log.e("按钮操作", "按下");
+                        //按下状态
+                        press_ptt();
+                        break;
+                    case MotionEvent.ACTION_UP:
+                        Log.e("按钮操作", "松手");
+                        //抬起手后的操作
+                        jack_ptt();
+                        break;
+                    case MotionEvent.ACTION_CANCEL:
+                        Log.e("按钮操作", "取消");
+                        //抬起手后的操作
+                        jack_ptt();
+                        break;
+                }
+                return false;
+            }
+        });
         tabHost = extracted();
         tabHost.addTab(tabHost.newTabSpec("one").setIndicator("one")
                 .setContent(new Intent(this, PlayerActivity.class)));
@@ -167,30 +216,73 @@ public class MainActivity extends TabActivity implements AppRTCClient.SignalingE
         return getTabHost();
     }
 
-    /**
-     * 对外提供的方法
-     */
-   /* public void changeOne() {
-        tabHost.setCurrentTabByTag("one");
-        Intent intent = new Intent(context,  PlayerActivity.class);
-        intent.setFlags(FLAG_ACTIVITY_REORDER_TO_FRONT);
-        context.startActivity(intent);
+    // 对讲请求
+    private void press_ptt() {
+        WtDeviceControl.pushPTT();
+        onToggleMicBase(true);
+        tv_5.setBackgroundResource(R.color.app_basic);
     }
 
-    public void changeTwo() {
-        tabHost.setCurrentTabByTag("two");
-        Intent intent = new Intent(context, InterPhoneActivity.class);
-        intent.setFlags(FLAG_ACTIVITY_REORDER_TO_FRONT);
-        context.startActivity(intent);
+    // 松手，释放说话权
+    private void jack_ptt() {
+        WtDeviceControl.releasePTT();
+        onToggleMicBase(false);
+        tv_5.setBackgroundResource(R.color.white);
     }
 
-    public void changeThree() {
-        tabHost.setCurrentTabByTag("three");
-        Intent intent = new Intent(context, MineActivity.class);
-        intent.setFlags(FLAG_ACTIVITY_REORDER_TO_FRONT);
-        context.startActivity(intent);
+    // 开始语音识别
+    private void press() {
+        WtDeviceControl.pushVoiceStart();
+        tv_4.setBackgroundResource(R.color.app_basic);
     }
-*/
+
+    // 松手，结束语音识别
+    private void jack() {
+        WtDeviceControl.releaseVoiceStop();
+        tv_4.setBackgroundResource(R.color.white);
+    }
+
+    private TextView tv_4, tv_5, tv_title, tv_msg;
+    private LinearLayout lin_notify;
+    private String type;
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.tv_1:
+                // 上一首
+                EventBus.getDefault().postSticky("step");
+                WtDeviceControl.pushUpButton();
+                break;
+            case R.id.tv_2:
+                // 暂停，继续
+                EventBus.getDefault().postSticky("stop_or_star");
+                WtDeviceControl.pushCenter();
+                break;
+            case R.id.tv_3:
+                // 下一首
+                EventBus.getDefault().postSticky("next");
+                WtDeviceControl.pushDownButton();
+                break;
+            case R.id.lin_notify:
+                // 通知消息的点击事件处理
+                mainPresenter.jumpNotify(type);
+                break;
+
+        }
+    }
+
+    public void notifyShow(boolean b, String type, String title, String msg) {
+        if (b) {
+            this.type = type;
+            lin_notify.setVisibility(View.VISIBLE);
+            tv_title.setText(title);
+            tv_msg.setText(msg);
+        } else {
+            lin_notify.setVisibility(View.GONE);
+        }
+    }
+
     // app退出时执行该操作
     private void stop() {
         mainPresenter.stop();
@@ -201,7 +293,7 @@ public class MainActivity extends TabActivity implements AppRTCClient.SignalingE
         super.onDestroy();
         stop();
         Thread.setDefaultUncaughtExceptionHandler(null);
-        disconnectDismiss();
+        disconnect();
         if (logToast != null) {
             logToast.cancel();
         }
@@ -246,12 +338,12 @@ public class MainActivity extends TabActivity implements AppRTCClient.SignalingE
                 peerConnectionClient.startVideoSource();
             }
             mainPresenter.connectToRoom(roomId, false, false, false, 0);
-            tvLongClick.setVisibility(View.VISIBLE);
+            tv_5.setVisibility(View.VISIBLE);
             onToggleMicBase(false);
         } else if (messageEvent.getMessage().contains("create&Rommid")) {
             roomId = messageEvent.getMessage().split("create&Rommid")[1];
         } else if ("over".equals(messageEvent.getMessage())) {
-            tvLongClick.setVisibility(View.GONE);
+            tv_5.setVisibility(View.GONE);
             disconnect();
         }
     }
@@ -292,7 +384,7 @@ public class MainActivity extends TabActivity implements AppRTCClient.SignalingE
                     EventBus.getDefault().postSticky("start");
                 } else if ("OVER".equals(type)) {
                     EventBus.getDefault().postSticky("start");
-                    tvLongClick.setVisibility(View.GONE);
+                    tv_5.setVisibility(View.GONE);
                 }
                 //接受对讲
                 else if ("ACCEPT".equals(type)) {
@@ -304,7 +396,7 @@ public class MainActivity extends TabActivity implements AppRTCClient.SignalingE
                     if (peerConnectionClient != null && !screencaptureEnabled) {
                         peerConnectionClient.startVideoSource();
                     }
-                    tvLongClick.setVisibility(View.VISIBLE);
+                    tv_5.setVisibility(View.VISIBLE);
                     onToggleMicBase(false);
                 }
             }
@@ -826,48 +918,10 @@ public class MainActivity extends TabActivity implements AppRTCClient.SignalingE
         } else {
             setResult(RESULT_CANCELED);
         }
-        if (tvLongClick != null)
-            tvLongClick.setVisibility(View.GONE);
+        if (tv_5 != null)
+            tv_5.setVisibility(View.GONE);
     }
 
-    // Disconnect from remote resources, dispose of local resources, and exit.
-    private void disconnectDismiss() {
-        activityRunning = false;
-        remoteProxyRenderer.setTarget(null);
-        localProxyRenderer.setTarget(null);
-        if (appRtcClient != null) {
-            appRtcClient.disconnectFromRoom();
-            appRtcClient = null;
-        }
-        if (peerConnectionClient != null) {
-            peerConnectionClient.close();
-            peerConnectionClient = null;
-        }
-        if (pipRenderer != null) {
-            pipRenderer.release();
-            pipRenderer = null;
-        }
-        if (videoFileRenderer != null) {
-            videoFileRenderer.release();
-            videoFileRenderer = null;
-        }
-        if (fullscreenRenderer != null) {
-            fullscreenRenderer.release();
-            fullscreenRenderer = null;
-        }
-        if (audioManager != null) {
-            audioManager.stop();
-            audioManager = null;
-        }
-        if (iceConnected && !isError) {
-            setResult(RESULT_OK);
-        } else {
-            setResult(RESULT_CANCELED);
-        }
-        if (tvLongClick != null)
-            tvLongClick.setVisibility(View.GONE);
-        // finish();
-    }
 
     private void disconnectWithErrorMessage(final String errorMessage) {
         if (commandLineRun || !activityRunning) {

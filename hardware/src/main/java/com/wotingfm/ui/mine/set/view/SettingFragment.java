@@ -21,6 +21,7 @@ import com.wotingfm.ui.mine.messageset.MessageSettingFragment;
 import com.wotingfm.ui.mine.personinfo.view.PersonalInfoFragment;
 import com.wotingfm.ui.mine.main.MineActivity;
 import com.wotingfm.ui.mine.set.presenter.SettingPresenter;
+import com.wotingfm.ui.play.activity.MeSubscribeListFragment;
 import com.wotingfm.ui.user.preference.view.PreferenceFragment;
 
 /**
@@ -98,6 +99,7 @@ public class SettingFragment extends Fragment implements View.OnClickListener {
                 /**
                  * 此处跳转传递参数，根据参数关闭的时候执行MineActivity.close();
                  */
+                MineActivity.open(MeSubscribeListFragment.newInstance());
                 break;
             case R.id.view_like:// 我喜欢的
                 MineActivity.open(new MyFavoriteFragment());
