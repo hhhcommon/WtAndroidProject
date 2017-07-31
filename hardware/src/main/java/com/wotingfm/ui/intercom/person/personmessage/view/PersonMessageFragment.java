@@ -73,8 +73,6 @@ public class PersonMessageFragment extends Fragment implements View.OnClickListe
     private ResultListener Listener;
 
 
-
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         if (rootView == null) {
@@ -131,6 +129,7 @@ public class PersonMessageFragment extends Fragment implements View.OnClickListe
         lin_chose.setOnClickListener(this);
         tv_del = (TextView) rootView.findViewById(R.id.tv_del);               // 删除好友
         tv_del.setOnClickListener(this);
+        tv_subNum.setOnClickListener(this);
         rootView.findViewById(R.id.tv_quxiao).setOnClickListener(this);       // 取消
 
     }
@@ -143,6 +142,9 @@ public class PersonMessageFragment extends Fragment implements View.OnClickListe
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.tv_subNum:
+
+                break;
             case R.id.head_left_btn:
                 close();
                 break;

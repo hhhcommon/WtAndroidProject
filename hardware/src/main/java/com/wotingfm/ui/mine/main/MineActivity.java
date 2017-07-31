@@ -24,7 +24,7 @@ public class MineActivity extends BaseFragmentActivity {
     private static MineActivity context;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mine);
         AppManager.getAppManager().addActivity(this);

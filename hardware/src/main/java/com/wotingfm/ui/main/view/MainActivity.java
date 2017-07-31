@@ -220,6 +220,7 @@ public class MainActivity extends TabActivity implements View.OnClickListener, A
     private void press_ptt() {
         WtDeviceControl.pushPTT();
         onToggleMicBase(true);
+        EventBus.getDefault().postSticky("pause");
         tv_5.setBackgroundResource(R.color.app_basic);
     }
 
@@ -330,14 +331,15 @@ public class MainActivity extends TabActivity implements View.OnClickListener, A
         } else if ("three".equals(messageEvent.getMessage())) {
             tabHost.setCurrentTabByTag("three");
         } else if ("acceptMain".equals(messageEvent.getMessage())) {
+            EventBus.getDefault().postSticky("pause");
             disconnect();
             initPlayer();
+            mainPresenter.connectToRoom(roomId, false, false, false, 0);
             activityRunning = true;
             // Video is not paused for screencapture. See onPause.
             if (peerConnectionClient != null && !screencaptureEnabled) {
                 peerConnectionClient.startVideoSource();
             }
-            mainPresenter.connectToRoom(roomId, false, false, false, 0);
             tv_5.setVisibility(View.VISIBLE);
             onToggleMicBase(false);
         } else if (messageEvent.getMessage().contains("create&Rommid")) {
@@ -388,10 +390,12 @@ public class MainActivity extends TabActivity implements View.OnClickListener, A
                 }
                 //接受对讲
                 else if ("ACCEPT".equals(type)) {
-                    mainPresenter.connectToRoom(roomId, false, false, false, 0);
                     EventBus.getDefault().post(new MessageEvent("accept"));
                     EventBus.getDefault().postSticky("pause");
                     activityRunning = true;
+                    disconnect();
+                    initPlayer();
+                    mainPresenter.connectToRoom(roomId, false, false, false, 0);
                     // Video is not paused for screencapture. See onPause.
                     if (peerConnectionClient != null && !screencaptureEnabled) {
                         peerConnectionClient.startVideoSource();

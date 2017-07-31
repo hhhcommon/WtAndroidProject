@@ -14,6 +14,9 @@ import com.wotingfm.R;
 import com.wotingfm.common.bean.AlbumsBean;
 import com.wotingfm.common.utils.GlideUtils;
 import com.wotingfm.ui.intercom.main.contacts.model.Contact;
+import com.wotingfm.ui.intercom.main.view.InterPhoneActivity;
+import com.wotingfm.ui.play.activity.albums.AlbumsInfoFragmentMain;
+import com.wotingfm.ui.play.activity.albums.fragment.AlbumsInfoFragment;
 
 import java.util.List;
 
@@ -23,11 +26,13 @@ import java.util.List;
 public class PersonMessageSubAdapter extends BaseAdapter {
     private List<AlbumsBean> list;
     private Context context;
-
+    private InterPhoneActivity activity;
 
     public PersonMessageSubAdapter(Context context, List<AlbumsBean> list) {
         super();
         this.list = list;
+        if (context instanceof InterPhoneActivity)
+            activity = (InterPhoneActivity) context;
         this.context = context;
     }
 
@@ -64,7 +69,7 @@ public class PersonMessageSubAdapter extends BaseAdapter {
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-        AlbumsBean sub = list.get(position);
+        final AlbumsBean sub = list.get(position);
         String name = "";
         try {
             name = sub.title;
@@ -79,7 +84,13 @@ public class PersonMessageSubAdapter extends BaseAdapter {
             Bitmap bmp = BitmapUtils.readBitMap(context, R.mipmap.p);
             holder.img_view.setImageBitmap(bmp);
         }
-
+        convertView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (activity != null)
+                    activity.open(AlbumsInfoFragmentMain.newInstance(sub.id));
+            }
+        });
         return convertView;
     }
 

@@ -25,6 +25,9 @@ import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.utils.ProgressDialogUtils;
 import com.wotingfm.ui.base.baseactivity.AppManager;
 import com.wotingfm.ui.base.baseactivity.BaseToolBarActivity;
+import com.wotingfm.ui.intercom.main.view.InterPhoneActivity;
+import com.wotingfm.ui.main.view.MainActivity;
+import com.wotingfm.ui.mine.main.MineActivity;
 import com.wotingfm.ui.play.look.activity.LookListFragment;
 import com.wotingfm.ui.play.look.activity.RadioMoreFragment;
 import com.wotingfm.ui.play.look.activity.SelectedMoreFragment;
@@ -46,6 +49,8 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
     protected View rootView;
     public Toolbar toolbar;
     private PlayerActivity playerActivity;
+    private MineActivity playerActivityMain;
+    private InterPhoneActivity interPhoneActivity;
 
     @Override
     public void onClick(View view) {
@@ -103,6 +108,28 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
                 actionBar.setHomeAsUpIndicator(R.mipmap.nav_icon_back_black);
                 actionBar.setTitle("");
             }
+        } else if (toolbar != null && playerActivityMain != null) {
+            toolbar.setDividerColor(getResources().getColor(R.color.line_color));
+            toolbar.setShowDivider(true);
+            playerActivityMain.setSupportActionBar(toolbar);
+            ActionBar actionBar = playerActivityMain.getSupportActionBar();
+            if (actionBar != null) {
+                actionBar.setDisplayHomeAsUpEnabled(true);
+                setHasOptionsMenu(true);
+                actionBar.setHomeAsUpIndicator(R.mipmap.nav_icon_back_black);
+                actionBar.setTitle("");
+            }
+        } else if (toolbar != null && interPhoneActivity != null) {
+            toolbar.setDividerColor(getResources().getColor(R.color.line_color));
+            toolbar.setShowDivider(true);
+            interPhoneActivity.setSupportActionBar(toolbar);
+            ActionBar actionBar = interPhoneActivity.getSupportActionBar();
+            if (actionBar != null) {
+                actionBar.setDisplayHomeAsUpEnabled(true);
+                setHasOptionsMenu(true);
+                actionBar.setHomeAsUpIndicator(R.mipmap.nav_icon_back_black);
+                actionBar.setTitle("");
+            }
         }
     }
 
@@ -120,6 +147,16 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
             if (actionBar != null) {
                 actionBar.setTitle(title);
             }
+        } else if (playerActivityMain != null) {
+            ActionBar actionBar = playerActivityMain.getSupportActionBar();
+            if (actionBar != null) {
+                actionBar.setTitle(title);
+            }
+        } else if (interPhoneActivity != null) {
+            ActionBar actionBar = interPhoneActivity.getSupportActionBar();
+            if (actionBar != null) {
+                actionBar.setTitle(title);
+            }
         }
     }
 
@@ -131,6 +168,18 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
             if (actionBar != null) {
                 actionBar.setTitle(title);
             }
+        } else if (playerActivityMain != null) {
+            ActionBar actionBar = playerActivityMain.getSupportActionBar();
+            this.callBack = callBackW;
+            if (actionBar != null) {
+                actionBar.setTitle(title);
+            }
+        } else if (interPhoneActivity != null) {
+            ActionBar actionBar = interPhoneActivity.getSupportActionBar();
+            this.callBack = callBackW;
+            if (actionBar != null) {
+                actionBar.setTitle(title);
+            }
         }
     }
 
@@ -138,6 +187,18 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
         callBack = null;
         if (playerActivity != null) {
             ActionBar actionBar = playerActivity.getSupportActionBar();
+            if (actionBar != null) {
+                actionBar.setTitle(title);
+            }
+            o2Toolbar.setShowDivider(false);
+        } else if (playerActivityMain != null) {
+            ActionBar actionBar = playerActivityMain.getSupportActionBar();
+            if (actionBar != null) {
+                actionBar.setTitle(title);
+            }
+            o2Toolbar.setShowDivider(false);
+        } else if (interPhoneActivity != null) {
+            ActionBar actionBar = interPhoneActivity.getSupportActionBar();
             if (actionBar != null) {
                 actionBar.setTitle(title);
             }
@@ -180,8 +241,12 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
             inputMethodManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
         if (rootView == null)
             rootView = inflater.inflate(getLayoutResource(), container, false);
-        if (getActivity() instanceof PlayerActivity)
+        if (getActivity() instanceof PlayerActivity) {
             playerActivity = (PlayerActivity) getActivity();
+        } else if (getActivity() instanceof MineActivity) {
+            playerActivityMain = (MineActivity) getActivity();
+        } else if (getActivity() instanceof InterPhoneActivity)
+            interPhoneActivity = (InterPhoneActivity) getActivity();
         toolbar = (WTToolbar) rootView.findViewById(R.id.toolbar);
         callBack = null;
         o2Toolbar = (WTToolbar) toolbar;
@@ -256,13 +321,26 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
         if (getActivity() instanceof PlayerActivity) {
             PlayerActivity playerActivity = (PlayerActivity) getActivity();
             playerActivity.open(fragment);
+        } else if (getActivity() instanceof MineActivity) {
+            MineActivity playerActivity = (MineActivity) getActivity();
+            playerActivity.open(fragment);
+        } else if (getActivity() instanceof InterPhoneActivity) {
+            InterPhoneActivity interPhoneActivity = (InterPhoneActivity) getActivity();
+            interPhoneActivity.open(fragment);
         }
+
     }
 
     public void openFragmentNoAnim(Fragment fragment) {
         if (getActivity() instanceof PlayerActivity) {
             PlayerActivity playerActivity = (PlayerActivity) getActivity();
             playerActivity.openNoAnim(fragment);
+        } else if (getActivity() instanceof MineActivity) {
+            MineActivity playerActivity = (MineActivity) getActivity();
+            playerActivity.open(fragment);
+        } else if (getActivity() instanceof InterPhoneActivity) {
+            InterPhoneActivity interPhoneActivity = (InterPhoneActivity) getActivity();
+            interPhoneActivity.open(fragment);
         }
     }
 
@@ -270,6 +348,12 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
         if (getActivity() instanceof PlayerActivity) {
             PlayerActivity playerActivity = (PlayerActivity) getActivity();
             playerActivity.close();
+        } else if (getActivity() instanceof MineActivity) {
+            MineActivity mineActivity = (MineActivity) getActivity();
+            mineActivity.close();
+        } else if (getActivity() instanceof InterPhoneActivity) {
+            InterPhoneActivity mineActivity = (InterPhoneActivity) getActivity();
+            mineActivity.close();
         }
     }
 
