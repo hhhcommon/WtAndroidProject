@@ -345,6 +345,7 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
     }
 
     public void closeFragment() {
+        hideSoftKeyboard();
         if (getActivity() instanceof PlayerActivity) {
             PlayerActivity playerActivity = (PlayerActivity) getActivity();
             playerActivity.close();

@@ -8,11 +8,14 @@ import android.widget.Toast;
 import com.woting.commonplat.utils.SequenceUUID;
 import com.wotingfm.R;
 import com.wotingfm.common.application.BSApplication;
+import com.wotingfm.common.bean.MessageEvent;
 import com.wotingfm.common.utils.StatusBarUtil;
 import com.wotingfm.ui.base.baseactivity.AppManager;
 import com.wotingfm.ui.base.baseactivity.NoTitleBarBaseActivity;
 import com.wotingfm.ui.main.view.MainActivity;
 import com.wotingfm.ui.play.look.activity.LookListFragment;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.List;
 
@@ -44,6 +47,7 @@ public class PlayerActivity extends NoTitleBarBaseActivity {
                 .addToBackStack(SequenceUUID.getUUID())
                 .commitAllowingStateLoss();
     }
+
 
     public void openMain(Fragment frg) {
         getSupportFragmentManager().beginTransaction()

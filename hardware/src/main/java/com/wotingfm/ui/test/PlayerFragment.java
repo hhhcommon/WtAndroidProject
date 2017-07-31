@@ -538,10 +538,14 @@ public class PlayerFragment extends BaseFragment implements View.OnClickListener
                     playerDialog.showPlayDialo(singLesBeans, singLesBeans.get(postionPlayer).id, new PlayerDialog.PopPlayCallBack() {
                         @Override
                         public void play(SinglesBase singlesBean, int postion) {
+                            postionPlayer=postion;
+                            mRecyclerView.smoothScrollToPosition(postion);
                             bdPlayer.stopPlayback();
-                            bdPlayer.setVideoPath(singlesBean.single_file_url);
-                            postionPlayer = postion;
+                            bdPlayer.setVideoPath(singLesBeans.get(postionPlayer).single_file_url);
                             bdPlayer.start();
+                            ivPause.setImageResource(R.mipmap.music_play_icon_pause);
+                            seekbarVideo.setProgress(0);
+                            setBeforeOrNext(singLesBeans.get(postionPlayer));
                         }
 
                         @Override

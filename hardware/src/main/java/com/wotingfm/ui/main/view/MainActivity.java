@@ -33,6 +33,7 @@ import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.Observer;
 import com.netease.nimlib.sdk.msg.MsgServiceObserve;
 import com.netease.nimlib.sdk.msg.model.IMMessage;
+import com.woting.commonplat.utils.KeyboardChangeListener;
 import com.wotingfm.R;
 import com.wotingfm.common.bean.AnchorInfo;
 import com.wotingfm.common.bean.MessageEvent;
@@ -95,6 +96,7 @@ import rx.schedulers.Schedulers;
 
 import static android.R.attr.id;
 import static android.content.Intent.FLAG_ACTIVITY_REORDER_TO_FRONT;
+import static com.wotingfm.R.id.relatLable;
 import static com.wotingfm.R.mipmap.disconnect;
 
 
@@ -104,14 +106,21 @@ public class MainActivity extends TabActivity implements View.OnClickListener, A
     public static TabHost tabHost;
     private MainPresenter mainPresenter;
     private MainActivity context;
+    private LinearLayout largeLabel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         EventBus.getDefault().register(this);
+        largeLabel = (LinearLayout) findViewById(R.id.largeLabel);
         context = this;
-
+        new KeyboardChangeListener(this).setKeyBoardListener(new KeyboardChangeListener.KeyBoardListener() {
+            @Override
+            public void onKeyboardChange(boolean isShow, int keyboardHeight) {
+                largeLabel.setVisibility(isShow == true ? View.GONE : View.VISIBLE);
+            }
+        });
         NIMClient.getService(MsgServiceObserve.class)
                 .observeReceiveMessage(incomingMessageObserver, true);
  /*       if (Build.VERSION.SDK_INT == Build.VERSION_CODES.KITKAT) {
@@ -120,11 +129,10 @@ public class MainActivity extends TabActivity implements View.OnClickListener, A
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
         }
 */
- /*       getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);        // 透明状态栏
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);    // 透明导航栏*/
+        //  getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);        // 透明状态栏
+        //  getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);    // 透明导航栏
         InitTextView();
         mainPresenter = new MainPresenter(this);
-
 //        applySelectedColor();
         //   applyTextColor(false);
         try {
@@ -215,6 +223,7 @@ public class MainActivity extends TabActivity implements View.OnClickListener, A
     private TabHost extracted() {
         return getTabHost();
     }
+
 
     // 对讲请求
     private void press_ptt() {
