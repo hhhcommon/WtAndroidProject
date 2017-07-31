@@ -653,43 +653,18 @@ public class PlayerFragment extends BaseFragment implements View.OnClickListener
             if (bdPlayer != null) {
                 bdPlayer.pause();
             }
-            if (mMediaPlayer != null) {
+            if (mMediaPlayer != null && channelsBean != null) {
                 mMediaPlayer.pause();
             }
-            BDPlayer.PlayerState isPause = bdPlayer.getCurrentPlayerState();
-            if (channelsBean != null) {
-                if (mMediaPlayer != null && mMediaPlayer.isPlaying() == true) {
-                    if (mMediaPlayer != null) {
-                        mMediaPlayer.pause();
-                    }
-                    ivPause.setImageResource(R.mipmap.music_play_icon_play);
-                }
-            } else {
-                if (bdPlayer.getCurrentPlayerState() == isPause.STATE_PLAYING) {
-                    bdPlayer.pause();
-                    ivPause.setImageResource(R.mipmap.music_play_icon_play);
-                }
-            }
+            ivPause.setImageResource(R.mipmap.music_play_icon_play);
         } else if (!TextUtils.isEmpty(event) && "start".equals(event)) {
             if (bdPlayer != null) {
                 bdPlayer.start();
             }
-            if (mMediaPlayer != null) {
+            if (mMediaPlayer != null && channelsBean != null) {
                 mMediaPlayer.start();
             }
-            if (channelsBean != null) {
-                if (mIsStopped) {
-                    prepare();
-                } else {
-                    if (mMediaPlayer != null) {
-                        mMediaPlayer.start();
-                    }
-                }
-                ivPause.setImageResource(R.mipmap.music_play_icon_pause);
-            } else {
-                bdPlayer.start();
-                ivPause.setImageResource(R.mipmap.music_play_icon_pause);
-            }
+            ivPause.setImageResource(R.mipmap.music_play_icon_pause);
         } else if (!TextUtils.isEmpty(event) && "step".equals(event)) {
             if (singLesBeans.size() > postionPlayer && postionPlayer > 0) {
                 postionPlayer = postionPlayer - 1;
@@ -729,11 +704,11 @@ public class PlayerFragment extends BaseFragment implements View.OnClickListener
     }
 
 
-
     TelephonyManager mTelephonyManager;
     PhoneStateListener mPhoneStateListener;
 
     // Listen to the telephone
+
     private void startTelephonyListener() {
         mTelephonyManager = (TelephonyManager) getActivity().getSystemService(Context.TELEPHONY_SERVICE);
         if (mTelephonyManager == null) {
