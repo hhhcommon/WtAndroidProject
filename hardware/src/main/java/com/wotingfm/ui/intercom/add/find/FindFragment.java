@@ -43,7 +43,7 @@ public class FindFragment extends Fragment implements View.OnClickListener {
 
     // 初始化视图
     private void initViews() {
-        rootView.findViewById(R.id.tv_search).setOnClickListener(this);
+        rootView.findViewById(R.id.lin_search).setOnClickListener(this);
         rootView.findViewById(R.id.re_sao).setOnClickListener(this);
         rootView.findViewById(R.id.head_left_btn).setOnClickListener(this);
         TextView tv_center = (TextView) rootView.findViewById(R.id.tv_center);
@@ -64,7 +64,7 @@ public class FindFragment extends Fragment implements View.OnClickListener {
             case R.id.re_sao:
                 InterPhoneActivity.open(new CaptureFragment());
                 break;
-            case R.id.tv_search:
+            case R.id.lin_search:
                 // 根据界面来源设置界面展示
                 if (fromType != null && !fromType.trim().equals("") && fromType.equals("friend")) {
                     SearchContactsForNetFragment fragment = new SearchContactsForNetFragment();

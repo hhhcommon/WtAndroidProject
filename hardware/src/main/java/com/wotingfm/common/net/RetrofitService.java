@@ -384,6 +384,11 @@ public interface RetrofitService {
     Observable<Object> preference(@Path("id") String id,
                                   @Query("interest_id") String s);
 
+    // 获取用户自己偏好设置
+    @GET(Api.URL_GET_PREFERENCE)
+    Observable<Object> getPreference(@Path("id") String id);
+
+
     // 注销登录(X)
     @POST(Api.URL_CANCEL)
     Observable<Object> cancel(@Query("s") String s);
@@ -495,6 +500,12 @@ public interface RetrofitService {
     // 获取我喜欢的节目列表
     @GET(Api.URL_GET_MY_FAVORITE)
     Observable<Object> getMyFavorite(@Path("id") String id);
+
+
+    // 解散群
+    @DELETE(Api.URL_GROUP_DISSOLVE)
+    Observable<Object> groupDissolve(@Path("id") String id);
+
 
     //取消关注
     @DELETE(Api.URL_DEL_FANS)

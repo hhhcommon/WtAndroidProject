@@ -103,9 +103,9 @@ public class EditGroupIntroducePresenter {
     public void textChange(String src) {
         if (src != null &&! src.trim().equals("")) {
             int l = src.length();
-            activity.setTextViewChange(String.valueOf(90 - l));
+            activity.setTextViewChange(String.valueOf(30 - l));
         } else {
-            activity.setTextViewChange("90");
+            activity.setTextViewChange("30");
         }
     }
 }

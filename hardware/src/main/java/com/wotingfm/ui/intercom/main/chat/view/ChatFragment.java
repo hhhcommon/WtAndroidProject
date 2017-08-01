@@ -279,7 +279,7 @@ public class ChatFragment extends Fragment implements ChatAdapter.IonSlidingView
         final View dialog1 = LayoutInflater.from(this.getActivity()).inflate(R.layout.dialog_talk_person_del, null);
         TextView tv_cancel = (TextView) dialog1.findViewById(R.id.tv_cancle);
         TextView tv_confirm = (TextView) dialog1.findViewById(R.id.tv_confirm);
-        confirmDialog = new Dialog(this.getActivity(), R.style.MyDialog);
+        confirmDialog = new Dialog(this.getActivity(), R.style.MyDialogs);
         confirmDialog.setContentView(dialog1);
         confirmDialog.setCanceledOnTouchOutside(true);
         confirmDialog.getWindow().setBackgroundDrawableResource(R.color.transparent_background);

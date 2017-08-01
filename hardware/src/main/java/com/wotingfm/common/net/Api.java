@@ -64,6 +64,8 @@ public class Api {
     public static final String URL_GROUP_APPLY = "api/chat-groups/{id}/applies";
     // 偏好设置
     public static final String URL_PREFERENCE = "api/users/{id}/interests";
+    //获取用户自己的偏好设置
+    public static final String URL_GET_PREFERENCE = "api/users/{id}/getUserInterests";
     // 注销登录(X)
     public static final String URL_CANCEL = "test";
     // 修改好友备注
@@ -94,5 +96,8 @@ public class Api {
     public static final String URL_DEL_FANS = "api/fans";
     // 获取我喜欢的节目列表
     public static final String URL_GET_MY_FAVORITE = "api/users/{id}/likes";
+    // 解散群
+    public static final String URL_GROUP_DISSOLVE = "api/chat-groups/{id}";
+
 
 }

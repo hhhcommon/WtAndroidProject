@@ -3,10 +3,13 @@ package com.wotingfm.ui.mine.editusermessage.view;
 import android.app.Dialog;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.wotingfm.R;
@@ -24,8 +27,9 @@ public class EditUserFragment extends Fragment implements View.OnClickListener {
     private EditUserPresenter presenter;
     private Dialog dialog;
     private ResultListener Listener;
-    private TextView tv_center;
-    private EditText et_name, et_introduce, et_age;
+    private TextView tv_center, tv_number;
+    private EditText et_name, et_introduce;
+    private RelativeLayout re_introduce;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -49,8 +53,25 @@ public class EditUserFragment extends Fragment implements View.OnClickListener {
         rootView.findViewById(R.id.tv_send).setOnClickListener(this);
         tv_center = (TextView) rootView.findViewById(R.id.tv_center);// 信息
         et_name = (EditText) rootView.findViewById(R.id.et_name);// 名称
+        re_introduce = (RelativeLayout) rootView.findViewById(R.id.re_introduce);// 介绍
         et_introduce = (EditText) rootView.findViewById(R.id.et_introduce);// 介绍
-        et_age = (EditText) rootView.findViewById(R.id.et_age);// 年龄
+        tv_number = (TextView) rootView.findViewById(R.id.tv_number);// 计数
+        et_introduce.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                String src = et_introduce.getText().toString().trim();
+                presenter.textChange(src);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
     }
 
     @Override
@@ -62,8 +83,7 @@ public class EditUserFragment extends Fragment implements View.OnClickListener {
             case R.id.tv_send:
                 String s1 = et_name.getText().toString().trim();// 名称
                 String s2 = et_introduce.getText().toString().trim();// 介绍
-                String s3 = et_age.getText().toString().trim();// 年龄
-                presenter.send(s1,s2,s3);
+                presenter.send(s1, s2);
                 break;
         }
     }
@@ -75,21 +95,23 @@ public class EditUserFragment extends Fragment implements View.OnClickListener {
      */
     public void setView(int type) {
         if (type == 1) {
-            tv_center.setText("修改昵称");
+            tv_center.setText("昵称");
             et_name.setVisibility(View.VISIBLE);
-            et_introduce.setVisibility(View.GONE);
-            et_age.setVisibility(View.GONE);
+            re_introduce.setVisibility(View.GONE);
         } else if (type == 2) {
-            tv_center.setText("修改介绍");
+            tv_center.setText("简介");
             et_name.setVisibility(View.GONE);
-            et_introduce.setVisibility(View.VISIBLE);
-            et_age.setVisibility(View.GONE);
-        } else if (type == 3) {
-            tv_center.setText("修改年龄");
-            et_name.setVisibility(View.GONE);
-            et_introduce.setVisibility(View.GONE);
-            et_age.setVisibility(View.VISIBLE);
+            re_introduce.setVisibility(View.VISIBLE);
         }
+    }
+
+    /**
+     * 字数计数的数据展示
+     *
+     * @param s
+     */
+    public void setTextViewChange(String s) {
+        tv_number.setText(s);
     }
 
     /**

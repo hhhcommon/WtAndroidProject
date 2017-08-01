@@ -133,8 +133,10 @@ public class GroupChatAdapter extends BaseExpandableListAdapter {
             holder = new ViewHolder();
             convertView = LayoutInflater.from(context).inflate(R.layout.adapter_groups, null);
             holder.tv_name = (TextView) convertView.findViewById(R.id.tv_name);//名
+            holder.tv_lin = (TextView) convertView.findViewById(R.id.tv_lin);//名
             holder.img_touXiang = (ImageView) convertView.findViewById(R.id.img_view);
             holder.img_chat = (ImageView) convertView.findViewById(R.id.img_chat);
+            holder.tv_lin.setVisibility(View.VISIBLE);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
@@ -148,7 +150,7 @@ public class GroupChatAdapter extends BaseExpandableListAdapter {
         }
 
         if (lists.getLogo_url() != null && !lists.getLogo_url().equals("") && lists.getLogo_url().startsWith("http")) {
-            GlideUtils.loadImageViewSize(context, lists.getLogo_url(), 60, 60, holder.img_touXiang, true);
+            GlideUtils.loadImageViewSize(context, lists.getLogo_url(), 60, 60, holder.img_touXiang, false);
         } else {
             Bitmap bmp = BitmapUtils.readBitMap(context, R.mipmap.icon_avatar_d);
             holder.img_touXiang.setImageBitmap(bmp);
@@ -170,7 +172,7 @@ public class GroupChatAdapter extends BaseExpandableListAdapter {
 
     class ViewHolder {
         public ImageView img_chat, img_group_type, img_touXiang, image;
-        public TextView tv_number, tv_name, tv_line;
+        public TextView tv_number, tv_name, tv_line,tv_lin;
     }
 
     @Override

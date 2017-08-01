@@ -2,12 +2,14 @@ package com.wotingfm.common.service;
 
 import android.app.Service;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.IBinder;
 import android.util.Log;
 
 import com.woting.commonplat.utils.JsonEncloseUtils;
 import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.constant.BroadcastConstants;
+import com.wotingfm.common.constant.IntegerConstant;
 import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.common.utils.ToastUtils;
 
@@ -65,7 +67,9 @@ public class NotificationService extends Service {
                     String msg = MsgQueue.take();
                     if (msg != null && msg.trim().length() > 0) {
                         int type = parsingM(msg);
-                        dealM(type);
+                        JSONObject js = new JSONObject(msg);
+                        String message = js.getString("message");
+                        dealM(type, message);
                     }
                 } catch (Exception e) {
                     Log.e("DealReceive处理线程:::", e.toString());
@@ -95,7 +99,7 @@ public class NotificationService extends Service {
                     return 3;
                 } else if (type.equals("FRIEND_UPDATE")) {// 4.好友信息修改（头像，昵称）(重新获取好友)
                     return 4;
-                } else if (type.equals("")) {// 5.有人申请加群 （通知群主与管理员）
+                } else if (type.equals("GROUP_APPLY")) {// 5.有人申请加群 （通知群主与管理员）
                     return 5;
                 } else if (type.equals("CHAT_GROUP_APPROVE")) {// 6.同意加入群组(重新获取群组)
                     return 6;
@@ -128,17 +132,18 @@ public class NotificationService extends Service {
      *
      * @param type
      */
-    private void dealM(int type) {
+    private void dealM(int type, String msg) {
         switch (type) {
             case 0:// 0.好友申请
-                ShowMsgQueue.add(assemblyData("1","****","申请添加您为好友"));
+                assemblyData();
+                ShowMsgQueue.add(assemblyData("1", "好友消息", msg));
                 break;
             case 1:// 1.好友同意(重新获取好友)
                 context.sendBroadcast(new Intent(BroadcastConstants.PERSON_GET));
-                ShowMsgQueue.add(assemblyData("1","****","同意了您的好友申请"));
+                ShowMsgQueue.add(assemblyData("1", "好友消息", msg));
                 break;
             case 2:// 2.好友拒绝
-                ShowMsgQueue.add(assemblyData("2","****","拒绝了您的好友申请"));
+                ShowMsgQueue.add(assemblyData("2", "好友消息", msg));
                 break;
             case 3:// 3.删除好友(重新获取好友)
                 context.sendBroadcast(new Intent(BroadcastConstants.PERSON_GET));
@@ -147,7 +152,7 @@ public class NotificationService extends Service {
                 context.sendBroadcast(new Intent(BroadcastConstants.PERSON_GET));
                 break;
             case 5:// 5.有人申请加群 （通知群主与管理员）
-                ShowMsgQueue.add(assemblyData("5","****","申请加入群***"));
+                ShowMsgQueue.add(assemblyData("5", "群组消息", msg));
                 break;
             case 6:// 6.同意加入群组(重新获取群组)
                 context.sendBroadcast(new Intent(BroadcastConstants.GROUP_GET));
@@ -164,13 +169,25 @@ public class NotificationService extends Service {
             case 10:// 10.下线提醒
                 break;
             case 11:// 11.通知消息（待定）
-                ShowMsgQueue.add(assemblyData("11","通知消息","******"));
+                ShowMsgQueue.add(assemblyData("11", "通知消息", msg));
                 break;
             case 12:// 12.有人邀请我入群
-                ShowMsgQueue.add(assemblyData("12","***","邀请我加入群***"));
-                ToastUtils.show_always(BSApplication.mContext, "有人邀请我入群");
+                ShowMsgQueue.add(assemblyData("12", "群组消息", msg));
                 break;
         }
+    }
+
+    /**
+     * 组装好友消息小红点数据
+     */
+    private void assemblyData() {
+        int num = BSApplication.SharedPreferences.getInt(IntegerConstant.RED_POINT_PERSON, 0);
+        SharedPreferences.Editor et = BSApplication.SharedPreferences.edit();
+        et.putInt(IntegerConstant.RED_POINT_PERSON, num + 1);
+        if (!et.commit()) {
+            Log.e("commit", "数据 commit 失败!");
+        }
+        sendBroadcast(new Intent(BroadcastConstants.VIEW_INTER_PHONE_POINT_CHANGE));
     }
 
     /**

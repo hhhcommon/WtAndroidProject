@@ -189,7 +189,7 @@ public class Contact implements Serializable {
     public static class group implements Serializable {
 
         private String created_at;                 // string	@mock=2017-06-06 11:16:31
-        private String creator_id;                 // string	@mock=00163e00693b
+//        private String creator_id;                 // string	@mock=00163e00693b
         private String id;                         // number	@mock=7
         private String introduction;               // string	@mock=
         private String location;                   // string	@mock=
@@ -245,13 +245,13 @@ public class Contact implements Serializable {
             this.created_at = created_at;
         }
 
-        public String getCreator_id() {
-            return creator_id;
-        }
-
-        public void setCreator_id(String creator_id) {
-            this.creator_id = creator_id;
-        }
+//        public String getCreator_id() {
+//            return creator_id;
+//        }
+//
+//        public void setCreator_id(String creator_id) {
+//            this.creator_id = creator_id;
+//        }
 
         public String getId() {
             return id;

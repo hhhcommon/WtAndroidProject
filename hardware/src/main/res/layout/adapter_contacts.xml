@@ -8,6 +8,7 @@
         android:id="@+id/index"
         android:layout_width="fill_parent"
         android:layout_height="20dp"
+        android:gravity="center_vertical"
         android:background="@color/background_color"
         android:orientation="vertical"
         android:visibility="visible">
@@ -17,7 +18,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"
-            android:padding="2dip"
             android:text="S"
             android:textColor="#959698"
             android:textSize="14.7sp" />
@@ -50,11 +50,11 @@
 
         <ImageView
             android:id="@+id/img_chat"
-            android:layout_width="48dp"
-            android:layout_height="match_parent"
+            android:layout_width="42.7dp"
+            android:layout_height="42.7dp"
             android:layout_alignParentRight="true"
+            android:layout_marginRight="12dp"
             android:layout_centerVertical="true"
-            android:padding="12dp"
             android:src="@mipmap/chat_icon_call" />
 
     </RelativeLayout>

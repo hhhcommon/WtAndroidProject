@@ -87,6 +87,12 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.SimpleHolder> 
                 }
                 holder.tv_news.setText("[语音通话] "+news);
             }
+            if (t.get(position).getURL()!= null && !t.get(position).getURL().equals("")&&t.get(position).getURL().startsWith("http")) {
+                GlideUtils.loadImageViewSize(mContext, t.get(position).getURL(), 60, 60, holder.img_url, true);
+            } else {
+                Bitmap bmp = BitmapUtils.readBitMap(mContext, R.mipmap.icon_avatar_d);
+                holder.img_url.setImageBitmap(bmp);
+            }
         }else{
             String num="";
             try {
@@ -95,14 +101,15 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.SimpleHolder> 
                 e.printStackTrace();
             }
             holder.tv_news.setText("("+num+"人)");
+            if (t.get(position).getURL()!= null && !t.get(position).getURL().equals("")&&t.get(position).getURL().startsWith("http")) {
+                GlideUtils.loadImageViewSize(mContext, t.get(position).getURL(), 60, 60, holder.img_url, false);
+            } else {
+                Bitmap bmp = BitmapUtils.readBitMap(mContext, R.mipmap.icon_avatar_d);
+                holder.img_url.setImageBitmap(bmp);
+            }
         }
 
-        if (t.get(position).getURL()!= null && !t.get(position).getURL().equals("")&&t.get(position).getURL().startsWith("http")) {
-            GlideUtils.loadImageViewSize(mContext, t.get(position).getURL(), 60, 60, holder.img_url, true);
-        } else {
-            Bitmap bmp = BitmapUtils.readBitMap(mContext, R.mipmap.icon_avatar_d);
-            holder.img_url.setImageBitmap(bmp);
-        }
+
         holder.img_voice.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

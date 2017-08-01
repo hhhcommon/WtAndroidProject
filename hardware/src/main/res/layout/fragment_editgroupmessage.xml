@@ -54,8 +54,9 @@
                     android:layout_width="60dp"
                     android:layout_height="60dp"
                     android:layout_centerVertical="true"
+                    android:scaleType="centerCrop"
                     android:layout_toLeftOf="@+id/image_headView_enter"
-                    android:src="@mipmap/create_group_icon_upload_avatar_n" />
+                    android:src="@mipmap/craate_group_icon_upload_avatar_n" />
 
                 <ImageView
                     android:id="@+id/image_headView_enter"

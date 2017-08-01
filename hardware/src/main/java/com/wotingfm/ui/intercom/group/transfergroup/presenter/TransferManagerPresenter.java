@@ -59,26 +59,18 @@ public class TransferManagerPresenter {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        String id = null;// 群创建者id
         try {
-            id = activity.getArguments().getString("id");
+            List<Contact.user>  list = (List<Contact.user>) activity.getArguments().getSerializable("list");// 群成员列表
+            if (list != null && list.size() > 0) {
+                List<Contact.user> _list = model.assemblyData(list);
+                return _list;
+            } else {
+                return null;
+            }
         } catch (Exception e) {
             e.printStackTrace();
-        }
-        List<Contact.user> list = null;// 群成员列表
-        try {
-            list = (List<Contact.user>) activity.getArguments().getSerializable("list");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        if (list != null && list.size() > 0) {
-            List<Contact.user> _list = model.assemblyData(list, id);
-            return _list;
-        } else {
             return null;
         }
-
     }
 
     /**

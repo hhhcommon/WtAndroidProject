@@ -2,6 +2,7 @@ package com.wotingfm.ui.intercom.group.editgroupmessage.view;
 
 import android.app.Dialog;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.DisplayMetrics;
@@ -124,9 +125,9 @@ public class EditGroupMessageFragment extends Fragment implements View.OnClickLi
      */
     public void setViewForImage(String url) {
         if (url != null && !url.equals("")) {
-            GlideUtils.loadImageViewSize(this.getActivity(), url, 60, 60, image_headView, true);
+            GlideUtils.loadImageViewSize(this.getActivity(), url, 60, 60, image_headView, false);
         } else {
-            Bitmap bmp = BitmapUtils.readBitMap(this.getActivity(), R.mipmap.icon_avatar_d);
+            Bitmap bmp = BitmapUtils.readBitMap(this.getActivity(), R.mipmap.craate_group_icon_upload_avatar_n);
             image_headView.setImageBitmap(bmp);
         }
     }
@@ -165,8 +166,10 @@ public class EditGroupMessageFragment extends Fragment implements View.OnClickLi
     public void setViewForGroupIntroduce(String s) {
         if (s != null && !s.trim().equals("")) {
             tv_groupIntroduce.setText(s);
+            tv_groupIntroduce.setTextColor(Color.parseColor("#16181a"));
         } else {
             tv_groupIntroduce.setText("");
+            tv_groupIntroduce.setTextColor(Color.parseColor("#cccccd"));
         }
     }
 
@@ -226,7 +229,17 @@ public class EditGroupMessageFragment extends Fragment implements View.OnClickLi
                 public void onClick(View v) {
                     try {
                         String name = positionMap.get(provinceList.get(provinceIndex)).get(cityIndex);
-                        presenter.sendAddress(name);
+                        String p = provinceList.get(provinceIndex);
+                        if (p != null && !p.equals("")) {
+                            if (p.equals("澳门特别行政区") || p.equals("香港特别行政区") || p.equals("台湾省")) {
+                                presenter.sendAddress(name);
+                            } else {
+                                String news = p + "-" + name;
+                                presenter.sendAddress(news);
+                            }
+                        } else {
+                            presenter.sendAddress(name);
+                        }
                         cityDialog.dismiss();
                     } catch (Exception e) {
                         e.printStackTrace();

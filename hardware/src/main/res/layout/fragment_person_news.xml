@@ -201,7 +201,7 @@
                         android:layout_toRightOf="@+id/tv_subName"
                         android:text="(8)"
                         android:textColor="@color/black_head_word"
-                        android:textSize="14.7sp" />
+                        android:textSize="13.7sp" />
 
                     <ImageView
                         android:layout_width="24dp"

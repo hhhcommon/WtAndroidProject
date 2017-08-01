@@ -122,7 +122,7 @@ public class StandbyChannelFragment extends Fragment implements View.OnClickList
             }
         });
 
-        CDialog = new Dialog(context, R.style.MyDialog);
+        CDialog = new Dialog(context, R.style.MyDialogs);
         CDialog.setContentView(dialog);
         CDialog.setCanceledOnTouchOutside(true);
 
@@ -163,9 +163,12 @@ public class StandbyChannelFragment extends Fragment implements View.OnClickList
     public void setChannel(int type, String s) {
         if (type == 1) {
             tv_channel1.setText(s);
+            tv_channel1.setTextColor(getResources().getColor(R.color.black_head_word));
         } else {
             tv_channel2.setText(s);
+            tv_channel2.setTextColor(getResources().getColor(R.color.black_head_word));
         }
+
     }
 
     /**
@@ -202,4 +205,13 @@ public class StandbyChannelFragment extends Fragment implements View.OnClickList
     public interface ResultListener {
         void resultListener(boolean type,String channel);
     }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        if (null != rootView) {
+            ((ViewGroup) rootView.getParent()).removeView(rootView);
+        }
+    }
+
 }

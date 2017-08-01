@@ -81,7 +81,7 @@ public class GroupsAdapter extends BaseAdapter {
         }
 
         if (lists.getLogo_url() != null && !lists.getLogo_url().equals("")&&lists.getLogo_url().startsWith("http")) {
-            GlideUtils.loadImageViewSize(context, lists.getLogo_url(), 60, 60, holder.img_touXiang, true);
+            GlideUtils.loadImageViewSize(context, lists.getLogo_url(), 60, 60, holder.img_touXiang, false);
         } else {
             Bitmap bmp = BitmapUtils.readBitMap(context, R.mipmap.icon_avatar_d);
             holder.img_touXiang.setImageBitmap(bmp);

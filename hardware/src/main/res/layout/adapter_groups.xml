@@ -15,7 +15,7 @@
             android:layout_height="40dp"
             android:layout_centerVertical="true"
             android:layout_marginLeft="16dp"
-            android:src="@mipmap/test" />
+            android:scaleType="centerCrop" />
 
         <TextView
             android:id="@+id/tv_name"
@@ -30,13 +30,19 @@
 
         <ImageView
             android:id="@+id/img_chat"
-            android:layout_width="48dp"
-            android:layout_height="60dp"
+            android:layout_width="42.7dp"
+            android:layout_height="42.7dp"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:padding="12dp"
+            android:layout_marginRight="12dp"
             android:src="@mipmap/chat_icon_call" />
 
     </RelativeLayout>
 
+    <TextView
+        android:id="@+id/tv_lin"
+        android:layout_width="match_parent"
+        android:layout_height="0.7dp"
+        android:background="@color/line_color"
+        android:visibility="gone" />
 </LinearLayout>

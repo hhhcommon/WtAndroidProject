@@ -154,7 +154,6 @@ public class UserInfo {
             et.putString(StringConstant.GENDER, "男");
         }
 
-
         if (!et.commit()) {
             Log.e("commit", "数据 commit 失败!");
         }

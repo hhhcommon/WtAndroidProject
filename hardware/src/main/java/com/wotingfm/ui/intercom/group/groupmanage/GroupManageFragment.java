@@ -18,10 +18,7 @@ import com.wotingfm.ui.intercom.group.standbychannel.view.StandbyChannelFragment
 import com.wotingfm.ui.intercom.group.transfergroup.view.TransferGroupFragment;
 import com.wotingfm.ui.intercom.main.contacts.model.Contact;
 import com.wotingfm.ui.intercom.main.view.InterPhoneActivity;
-import com.wotingfm.ui.intercom.person.personnote.view.EditPersonNoteFragment;
-
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -71,7 +68,6 @@ public class GroupManageFragment extends Fragment implements View.OnClickListene
         } catch (Exception e) {
             e.printStackTrace();
         }
-
     }
 
     private void inItView() {
@@ -146,7 +142,7 @@ public class GroupManageFragment extends Fragment implements View.OnClickListene
                     InterPhoneActivity.open(new SetManagerFragment());
                 } else {
                     // 实际数据
-                    if (group != null && list != null && list.size() > 0 && group.getCreator_id() != null && group.getId() != null) {
+                    if (group != null && list != null && list.size() > 0  && group.getId() != null) {
                         SetManagerFragment fragment = new SetManagerFragment();
                         Bundle bundle = new Bundle();
                         bundle.putSerializable("list", (Serializable) list);
@@ -253,11 +249,10 @@ public class GroupManageFragment extends Fragment implements View.OnClickListene
                 if (GlobalStateConfig.test) {
                     InterPhoneActivity.open(new TransferGroupFragment());
                 } else {
-                    if (group != null && list != null && list.size() > 0 && group.getCreator_id() != null && group.getId() != null) {
+                    if (group != null && list != null && list.size() > 0  && group.getId() != null) {
                         TransferGroupFragment fragment = new TransferGroupFragment();
                         Bundle bundle = new Bundle();
                         bundle.putSerializable("list", (Serializable) list);
-                        bundle.putString("id", group.getCreator_id());
                         bundle.putString("gid", group.getId());
                         fragment.setArguments(bundle);
                         InterPhoneActivity.open(fragment);
@@ -265,10 +260,10 @@ public class GroupManageFragment extends Fragment implements View.OnClickListene
                             @Override
                             public void resultListener(boolean type) {
                                 if (type) {
-                                    // 已经不是群主,更改当前界面展示
-                                    setView(false);
                                     // 更改上层界面数据
-                                    change = true;
+                                    setResult(true);
+                                    // 已经不是群主,更改当前界面展示
+                                    InterPhoneActivity.close();
                                 }
                             }
                         });

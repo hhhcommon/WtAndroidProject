@@ -213,15 +213,29 @@ public class GroupNewsForAddModel {
     }
 
     /**
-     * 判断该群是否是自己创建的群
+     * 判断该群是否是群主
      *
-     * @param id
+     * @param group
      */
-    public boolean judgeMine(String id) {
-        String _id = BSApplication.SharedPreferences.getString(StringConstant.USER_ID, "");
-        if (id.equals(_id)) {
-            return true;
-        } else {
+    public boolean judgeMine(Contact.group group) {
+        if(group!=null){
+            String id= null;
+            try {
+                id = group.getOwner_id();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            if(id!=null&&!id.trim().equals("")){
+                String _id = BSApplication.SharedPreferences.getString(StringConstant.USER_ID, "");
+                if (id.equals(_id)) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }else{
+                return false;
+            }
+        }else{
             return false;
         }
     }

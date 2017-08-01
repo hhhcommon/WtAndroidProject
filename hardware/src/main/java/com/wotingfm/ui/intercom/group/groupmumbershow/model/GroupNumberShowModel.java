@@ -12,7 +12,7 @@ import java.util.List;
  * 作者：xinLong on 2017/5/16 14:28
  * 邮箱：645700751@qq.com
  */
-public class GroupNumberShowModel  {
+public class GroupNumberShowModel {
 
     /**
      * 测试数据
@@ -66,65 +66,34 @@ public class GroupNumberShowModel  {
      * 组装数据
      *
      * @param list
-     * @param id
      */
-    public List<Contact.user> assemblyData(List<Contact.user> list, String id) {
+    public List<Contact.user> assemblyData(List<Contact.user> list) {
         List<Contact.user> _list = new ArrayList<>();
-        // 有群主
-        if (id != null && !id.trim().equals("")) {
-            // 添加群主
-            for (int i = 0; i < list.size(); i++) {
-                boolean b = list.get(i).is_owner();
-                if (b) {
-                    String _id = list.get(i).getId();
-                    if (_id != null && !_id.trim().equals("")) {
-                        if (id.equals(_id)) {
-                            _list.add(list.get(i));
-                        }
-                    }
-                }
-            }
-
-            // 添加管理员
-            for (int i = 0; i < list.size(); i++) {
-                boolean b = list.get(i).is_admin();
-                if (b) {
-                    String _id = list.get(i).getId();
-                    if (_id != null && !_id.trim().equals("")) {
-                        if (!id.equals(_id)) {
-                            _list.add(list.get(i));
-                        }
-                    }
-                }
-            }
-
-            // 添加成员
-            for (int i = 0; i < list.size(); i++) {
-                boolean b = list.get(i).is_admin();
-                boolean b1 = list.get(i).is_owner();
-                if (!b&&!b1) {
-                    _list.add(list.get(i));
-                }
-            }
-        } else {
-            // 添加管理员
-            for (int i = 0; i < list.size(); i++) {
-                boolean b = list.get(i).is_admin();
-                if (b) {
-                    _list.add(list.get(i));
-                }
-            }
-            // 添加成员
-            for (int i = 0; i < list.size(); i++) {
-                boolean b = list.get(i).is_admin();
-                boolean b1 = list.get(i).is_owner();
-                if (!b&&!b1) {
-                    _list.add(list.get(i));
-                }
-
+        // 添加群主
+        for (int i = 0; i < list.size(); i++) {
+            boolean b = list.get(i).is_owner();
+            if (b) {
+                _list.add(list.get(i));
+                break;
             }
         }
 
+        // 添加管理员
+        for (int i = 0; i < list.size(); i++) {
+            boolean b = list.get(i).is_admin();
+            if (b) {
+                _list.add(list.get(i));
+            }
+        }
+
+        // 添加成员
+        for (int i = 0; i < list.size(); i++) {
+            boolean b = list.get(i).is_admin();
+            boolean b1 = list.get(i).is_owner();
+            if (!b && !b1) {
+                _list.add(list.get(i));
+            }
+        }
         return _list;
     }
 

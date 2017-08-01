@@ -89,7 +89,7 @@ public class GroupNumberShowAdapter extends BaseAdapter {
                 // 管理员
                 holder.tv_type.setVisibility(View.VISIBLE);
                 holder.tv_type.setText("管理员");
-                holder.tv_type.setBackgroundResource(R.drawable.background_circle_blue);
+                holder.tv_type.setBackgroundResource(R.drawable.background_circle_light_orange);
             } else {
                 // 成员
                 holder.tv_type.setVisibility(View.GONE);

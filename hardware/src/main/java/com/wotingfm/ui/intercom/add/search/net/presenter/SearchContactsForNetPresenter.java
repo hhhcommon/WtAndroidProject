@@ -55,27 +55,28 @@ public class SearchContactsForNetPresenter {
      */
     public void getRecommendedData() {
         if (GlobalNetWorkConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
-            if (true) {
-                // 测试数据
-                if (fromType.trim().equals("group")) {
-                    List<Contact.group> srcList_G = model.getDataForGroup();
-                    activity.setViewForPosGroup(srcList_G);
-                } else {
-                    List<Contact.user> srcList_p = model.getDataForPerson();
-                    activity.setViewForPosPerson(srcList_p);
-                }
-                activity.isLoginView(-1);
-            } else {
-                // 实际数据
-                if (fromType.trim().equals("group")) {
-                    // 获取推荐的群组
-                    getRecommendedDataForGroup();
-                } else {
-                    // 获取推荐的好友
-                        getRecommendedDataForPerson();
-
-                }
-            }
+//            if (true) {
+//                // 测试数据
+//                if (fromType.trim().equals("group")) {
+//                    List<Contact.group> srcList_G = model.getDataForGroup();
+//                    activity.setViewForPosGroup(srcList_G);
+//                } else {
+//                    List<Contact.user> srcList_p = model.getDataForPerson();
+//                    activity.setViewForPosPerson(srcList_p);
+//                }
+//                activity.isLoginView(-1);
+//            } else {
+//                // 实际数据
+//                if (fromType.trim().equals("group")) {
+//                    // 获取推荐的群组
+//                    getRecommendedDataForGroup();
+//                } else {
+//                    // 获取推荐的好友
+//                        getRecommendedDataForPerson();
+//
+//                }
+//            }
+            activity.isLoginView(-1);
         } else {
             activity.isLoginView(2);
         }
@@ -84,105 +85,105 @@ public class SearchContactsForNetPresenter {
     /**
      * 获取推荐的好友
      */
-    public void getRecommendedDataForPerson() {
-        activity.dialogShow();
-        String type = "";
-        model.loadNewsForRecommendPerson(type, new SearchContactsForNetModel.OnLoadInterface() {
-            @Override
-            public void onSuccess(Object o) {
-                activity.dialogCancel();
-                dealUserSuccess(o);
-            }
-
-            @Override
-            public void onFailure(String msg) {
-                activity.dialogCancel();
-                activity.isLoginView(4);
-            }
-        });
-
-    }
+//    public void getRecommendedDataForPerson() {
+//        activity.dialogShow();
+//        String type = "";
+//        model.loadNewsForRecommendPerson(type, new SearchContactsForNetModel.OnLoadInterface() {
+//            @Override
+//            public void onSuccess(Object o) {
+//                activity.dialogCancel();
+//                dealUserSuccess(o);
+//            }
+//
+//            @Override
+//            public void onFailure(String msg) {
+//                activity.dialogCancel();
+//                activity.isLoginView(4);
+//            }
+//        });
+//
+//    }
 
     /**
      * 获取推荐的群组
      */
-    public void getRecommendedDataForGroup() {
-        activity.dialogShow();
-        String type = "";
-        model.loadNewsForRecommendGroup(type, new SearchContactsForNetModel.OnLoadInterface() {
-            @Override
-            public void onSuccess(Object o) {
-                activity.dialogCancel();
-                dealGroupSuccess(o);
-            }
-
-            @Override
-            public void onFailure(String msg) {
-                activity.dialogCancel();
-                activity.isLoginView(4);
-            }
-        });
-    }
+//    public void getRecommendedDataForGroup() {
+//        activity.dialogShow();
+//        String type = "";
+//        model.loadNewsForRecommendGroup(type, new SearchContactsForNetModel.OnLoadInterface() {
+//            @Override
+//            public void onSuccess(Object o) {
+//                activity.dialogCancel();
+//                dealGroupSuccess(o);
+//            }
+//
+//            @Override
+//            public void onFailure(String msg) {
+//                activity.dialogCancel();
+//                activity.isLoginView(4);
+//            }
+//        });
+//    }
 
     // 处理返回好友的数据
-    private void dealUserSuccess(Object o) {
-        try {
-            String s = new GsonBuilder().serializeNulls().create().toJson(o);
-            JSONObject js = new JSONObject(s);
-            int ret = js.getInt("ret");
-            Log.e("获取推荐好友列表==ret", String.valueOf(ret));
-            if (ret == 0) {
-                String msg = js.getString("data");
-                JSONTokener jsonParser = new JSONTokener(msg);
-                JSONObject arg1 = (JSONObject) jsonParser.nextValue();
-                String friends = arg1.getString("friends");
-                // 好友列表
-                List<Contact.user> list = new Gson().fromJson(friends, new TypeToken<List<Contact.user>>() {
-                }.getType());
-                if (list != null && list.size() > 0) {
-                    activity.setViewForPosPerson(list);
-                    activity.isLoginView(-1);
-                } else {
-                    activity.isLoginView(1);
-                }
-            } else {
-                activity.isLoginView(4);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            activity.isLoginView(4);
-        }
-    }
+//    private void dealUserSuccess(Object o) {
+//        try {
+//            String s = new GsonBuilder().serializeNulls().create().toJson(o);
+//            JSONObject js = new JSONObject(s);
+//            int ret = js.getInt("ret");
+//            Log.e("获取推荐好友列表==ret", String.valueOf(ret));
+//            if (ret == 0) {
+//                String msg = js.getString("data");
+//                JSONTokener jsonParser = new JSONTokener(msg);
+//                JSONObject arg1 = (JSONObject) jsonParser.nextValue();
+//                String friends = arg1.getString("friends");
+//                // 好友列表
+//                List<Contact.user> list = new Gson().fromJson(friends, new TypeToken<List<Contact.user>>() {
+//                }.getType());
+//                if (list != null && list.size() > 0) {
+//                    activity.setViewForPosPerson(list);
+//                    activity.isLoginView(-1);
+//                } else {
+//                    activity.isLoginView(1);
+//                }
+//            } else {
+//                activity.isLoginView(4);
+//            }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            activity.isLoginView(4);
+//        }
+//    }
 
     // 处理返回组的数据
-    private void dealGroupSuccess(Object o) {
-        try {
-            String s = new GsonBuilder().serializeNulls().create().toJson(o);
-            JSONObject js = new JSONObject(s);
-            int ret = js.getInt("ret");
-            Log.e("获取推荐群组列表==ret", String.valueOf(ret));
-            if (ret == 0) {
-                String msg = js.getString("data");
-                JSONTokener jsonParser = new JSONTokener(msg);
-                JSONObject arg1 = (JSONObject) jsonParser.nextValue();
-                String groups = arg1.getString("chat_groups");
-                // 好友列表
-                List<Contact.group> list = new Gson().fromJson(groups, new TypeToken<List<Contact.group>>() {
-                }.getType());
-                if (list != null && list.size() > 0) {
-                    activity.setViewForPosGroup(list);
-                    activity.isLoginView(-1);
-                } else {
-                    activity.isLoginView(1);
-                }
-            } else {
-                activity.isLoginView(4);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            activity.isLoginView(4);
-        }
-    }
+//    private void dealGroupSuccess(Object o) {
+//        try {
+//            String s = new GsonBuilder().serializeNulls().create().toJson(o);
+//            JSONObject js = new JSONObject(s);
+//            int ret = js.getInt("ret");
+//            Log.e("获取推荐群组列表==ret", String.valueOf(ret));
+//            if (ret == 0) {
+//                String msg = js.getString("data");
+//                JSONTokener jsonParser = new JSONTokener(msg);
+//                JSONObject arg1 = (JSONObject) jsonParser.nextValue();
+//                String groups = arg1.getString("chat_groups");
+//                // 好友列表
+//                List<Contact.group> list = new Gson().fromJson(groups, new TypeToken<List<Contact.group>>() {
+//                }.getType());
+//                if (list != null && list.size() > 0) {
+//                    activity.setViewForPosGroup(list);
+//                    activity.isLoginView(-1);
+//                } else {
+//                    activity.isLoginView(1);
+//                }
+//            } else {
+//                activity.isLoginView(4);
+//            }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            activity.isLoginView(4);
+//        }
+//    }
 
     /**
      * 根据关键词调整展示数据

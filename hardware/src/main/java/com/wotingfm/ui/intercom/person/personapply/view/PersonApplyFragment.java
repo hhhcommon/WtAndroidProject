@@ -51,7 +51,7 @@ public class PersonApplyFragment extends Fragment implements View.OnClickListene
         tv_center.setText("添加好友");
         tv_number = (TextView) rootView.findViewById(R.id.tv_number);// 计数
         et_news = (EditText) rootView.findViewById(R.id.et_news);// 申请信息
-        et_news.setHint("我是...");
+        et_news.setHint("大家好,我是...");
         et_news.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {

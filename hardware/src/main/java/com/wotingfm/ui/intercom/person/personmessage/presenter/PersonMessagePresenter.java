@@ -240,31 +240,31 @@ public class PersonMessagePresenter {
 
         String sign = "这家伙很懒~";
         try {
-            sign = user.getSignature();
+            sign = user.getSignature().trim();
         } catch (Exception e) {
             e.printStackTrace();
         }
         String number = "";
         try {
-            number = user.getUser_number();
+            number = user.getUser_number().trim();
         } catch (Exception e) {
             e.printStackTrace();
         }
-        String address = "";
+        String address = "暂未填写";
         try {
-            address = user.getArea();
+            address = user.getArea().trim();
         } catch (Exception e) {
             e.printStackTrace();
         }
         String focus = "0";
         try {
-            focus = user.getFans_count();
+            focus = user.getFans_count().trim();
         } catch (Exception e) {
             e.printStackTrace();
         }
         String url = "";
         try {
-            url = user.getAvatar();
+            url = user.getAvatar().trim();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -361,7 +361,6 @@ public class PersonMessagePresenter {
         } else {
             ToastUtils.show_always(activity.getActivity(), "数据出错了，请稍后再试！");
         }
-
     }
 
     /**

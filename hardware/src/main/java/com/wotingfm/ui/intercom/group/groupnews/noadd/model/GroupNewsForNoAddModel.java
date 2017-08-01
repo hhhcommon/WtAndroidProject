@@ -35,7 +35,7 @@ public class GroupNewsForNoAddModel extends UserInfo {
         List<Contact.user> g_list = new ArrayList<>();
         for (int i = 0; i < list.size(); i++) {
             if (list.get(i).is_owner()||list.get(i).is_admin()) {
-                g_list.add(g_list.get(i));
+                g_list.add(list.get(i));
             }
         }
         return g_list;

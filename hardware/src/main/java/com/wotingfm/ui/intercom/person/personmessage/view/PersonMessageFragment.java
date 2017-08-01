@@ -218,7 +218,7 @@ public class PersonMessageFragment extends Fragment implements View.OnClickListe
             adapter.changeData(list);
         }
         setGridListener(list);
-        tv_subNum.setText("（" + String.valueOf(list.size()) + "）");// 订阅数
+        tv_subNum.setText("(" + String.valueOf(list.size()) + ")");// 订阅数
     }
 
     private void setGridListener(final List<AlbumsBean> list) {

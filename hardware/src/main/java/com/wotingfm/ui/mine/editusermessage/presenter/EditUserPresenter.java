@@ -49,12 +49,11 @@ public class EditUserPresenter {
      *
      * @param name
      * @param introduce
-     * @param age
      */
-    public void send(final String name, final String introduce, final String age) {
-        if (checkData(name, introduce, age)) {
+    public void send(final String name, final String introduce) {
+        if (checkData(name, introduce)) {
             if (GlobalStateConfig.test) {
-                setResult(name, introduce, age);
+                setResult(name, introduce);
                 MineActivity.close();
             } else {
                 if (GlobalNetWorkConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
@@ -62,19 +61,17 @@ public class EditUserPresenter {
                     String id = BSApplication.SharedPreferences.getString(StringConstant.USER_ID, "");
 
                     // 设置提交数据
-                    String news;
+                    String news="";
                     if (type == 1) {
                         news = name;
                     } else if (type == 2) {
                         news = introduce;
-                    } else {
-                        news = age;
                     }
                     model.loadNews(id, news, type, new EditUserModel.OnLoadInterface() {
                         @Override
                         public void onSuccess(Object o) {
                             activity.dialogCancel();
-                            dealSuccess(o, name, introduce, age);
+                            dealSuccess(o, name, introduce);
                         }
 
                         @Override
@@ -91,14 +88,14 @@ public class EditUserPresenter {
         }
     }
 
-    private void dealSuccess(Object o, String name, String introduce, String age) {
+    private void dealSuccess(Object o, String name, String introduce) {
         try {
             String s = new GsonBuilder().serializeNulls().create().toJson(o);
             JSONObject js = new JSONObject(s);
             int ret = js.getInt("ret");
             Log.e("ret", String.valueOf(ret));
             if (ret == 0) {
-                setResult(name, introduce, age);
+                setResult(name, introduce);
                 MineActivity.close();
             } else {
                 ToastUtils.show_always(activity.getActivity(), "修改失败，请稍后再试！");
@@ -110,7 +107,7 @@ public class EditUserPresenter {
     }
 
     // 数据验证
-    private boolean checkData(String name, String introduce, String age) {
+    private boolean checkData(String name, String introduce) {
         if (type == 1) {
             if (name != null && !name.trim().equals("")) {
                 return true;
@@ -123,17 +120,27 @@ public class EditUserPresenter {
             } else {
                 return false;
             }
+        } else{
+            return false;
+        }
+    }
+
+    /**
+     * 字数更改之后变化
+     *
+     * @param src
+     */
+    public void textChange(String src) {
+        if (src != null &&! src.trim().equals("")) {
+            int l = src.length();
+            activity.setTextViewChange(String.valueOf(90 - l));
         } else {
-            if (age != null && !age.trim().equals("")) {
-                return true;
-            } else {
-                return false;
-            }
+            activity.setTextViewChange("90");
         }
     }
 
     // 设置返回监听参数
-    private void setResult(String name, String introduce, String age) {
+    private void setResult(String name, String introduce) {
         if (type == 1) {
             activity.setResult(true, name);
             model.saveName(name);
@@ -141,9 +148,6 @@ public class EditUserPresenter {
         } else if (type == 2) {
             activity.setResult(true, introduce);
             model.saveSign(introduce);
-        } else {
-            activity.setResult(true, age);
-            model.saveAge(age);
         }
     }
 

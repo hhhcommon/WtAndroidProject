@@ -3,6 +3,7 @@ package com.wotingfm.ui.intercom.group.groupnews.noadd.view;
 import android.app.Dialog;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -93,6 +94,7 @@ public class GroupNewsForNoAddFragment extends Fragment implements View.OnClickL
         re_groupNumber = (RelativeLayout) rootView.findViewById(R.id.re_groupNumber);// 成员数按钮
         re_groupNumber.setOnClickListener(this);
         gridView = (GridView) rootView.findViewById(R.id.gridView);// 成员展示
+        gridView.setSelector(new ColorDrawable(Color.TRANSPARENT));
         tv_send = (TextView) rootView.findViewById(R.id.tv_send);// 加入群
         tv_send.setOnClickListener(this);
     }

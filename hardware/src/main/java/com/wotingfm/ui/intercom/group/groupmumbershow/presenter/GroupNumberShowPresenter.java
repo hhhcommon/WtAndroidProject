@@ -1,28 +1,16 @@
 package com.wotingfm.ui.intercom.group.groupmumbershow.presenter;
 
 import android.os.Bundle;
-import android.util.Log;
-
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.woting.commonplat.config.GlobalNetWorkConfig;
 import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.config.GlobalStateConfig;
 import com.wotingfm.common.constant.StringConstant;
-import com.wotingfm.common.utils.L;
 import com.wotingfm.common.utils.ToastUtils;
 import com.wotingfm.ui.intercom.group.groupmumbershow.model.GroupNumberShowModel;
 import com.wotingfm.ui.intercom.group.groupmumbershow.view.GroupNumberShowFragment;
-import com.wotingfm.ui.intercom.group.groupnews.add.model.GroupNewsForAddModel;
-import com.wotingfm.ui.intercom.group.groupnews.add.view.GroupNewsForAddFragment;
 import com.wotingfm.ui.intercom.main.contacts.model.Contact;
 import com.wotingfm.ui.intercom.main.view.InterPhoneActivity;
 import com.wotingfm.ui.intercom.person.personmessage.view.PersonMessageFragment;
-
-import org.json.JSONObject;
-import org.json.JSONTokener;
-
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -68,13 +56,6 @@ public class GroupNumberShowPresenter {
      * 获取组装数据
      */
     public List<Contact.user> getNews() {
-        String id = null;// 群创建者id
-        try {
-            id = activity.getArguments().getString("id");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
         List<Contact.user> list = null;// 成员列表
         try {
             list = (List<Contact.user>) activity.getArguments().getSerializable("list");
@@ -82,7 +63,7 @@ public class GroupNumberShowPresenter {
             e.printStackTrace();
         }
         if (list != null && list.size() > 0) {
-            List<Contact.user> _list = model.assemblyData(list, id);
+            List<Contact.user> _list = model.assemblyData(list);
             return _list;
         } else {
             return null;

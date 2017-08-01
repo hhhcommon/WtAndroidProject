@@ -15,14 +15,9 @@
             android:id="@+id/tv_center"
             style="@style/HeadWordStyle"
             android:layout_centerInParent="true"
-            android:text="名称" />
+            android:text="完善信息" />
 
     </RelativeLayout>
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="0.7dp"
-        android:background="@color/line_color" />
 
     <ImageView
         android:id="@+id/img_url"
@@ -53,6 +48,7 @@
         android:background="@drawable/background_login_edit_gray_white"
         android:hint="请输入昵称"
         android:paddingLeft="16dp"
+        android:singleLine="true"
         android:paddingRight="16dp"
         android:textColor="@color/black_head_word"
         android:textColorHint="@color/gray_edit_hint_word"

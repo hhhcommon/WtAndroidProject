@@ -814,6 +814,23 @@ public class RetrofitUtils {
     }
 
     /**
+     * 获取自己的偏好设置
+     *
+     * @param id 用户id
+     * @return Object
+     */
+    public Observable<Object> getPreference(String id) throws Exception {
+        return retrofitService.getPreference(id)
+                .map(new Func1<Object, Object>() {
+                    @Override
+                    public Object call(Object O) {
+                        return O;
+                    }
+                });
+    }
+
+
+    /**
      * 注销登录
      *
      * @param s 提交的数据
@@ -1295,7 +1312,7 @@ public class RetrofitUtils {
 
 
     /**
-     * 移交群主
+     * 意见反馈
      *
      * @param information
      * @param feedback
@@ -1561,4 +1578,16 @@ public class RetrofitUtils {
                 });
     }
 
+    /**
+     * 解散群
+     */
+    public Observable<Object> groupDissolve(String id) throws Exception {
+        return retrofitService.groupDissolve(id)
+                .map(new Func1<Object, Object>() {
+                    @Override
+                    public Object call(Object O) {
+                        return O;
+                    }
+                });
+    }
 }

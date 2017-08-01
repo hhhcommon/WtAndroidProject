@@ -1,12 +1,16 @@
 package com.wotingfm.ui.intercom.group.groupnews.noadd.adapter;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+
+import com.woting.commonplat.utils.BitmapUtils;
 import com.wotingfm.R;
+import com.wotingfm.common.utils.GlideUtils;
 import com.wotingfm.ui.intercom.main.contacts.model.Contact;
 import java.util.List;
 
@@ -55,7 +59,12 @@ public class GroupNewsPersonForNoAddAdapter extends BaseAdapter {
             holder = (ViewHolder) convertView.getTag();
         }
         Contact.user lists = list.get(position);
-
+        if (lists.getAvatar() != null && !lists.getAvatar().equals("") && lists.getAvatar().startsWith("http:")) {
+            GlideUtils.loadImageViewSize(context, lists.getAvatar(), 60, 60, holder.img_view, true);
+        } else {
+            Bitmap bmp = BitmapUtils.readBitMap(context, R.mipmap.icon_avatar_d);
+            holder.img_view.setImageBitmap(bmp);
+        }
         return convertView;
     }
 

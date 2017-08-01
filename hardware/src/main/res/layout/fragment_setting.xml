@@ -215,8 +215,9 @@
                 android:layout_height="44dp"
                 android:background="@color/white"
                 android:gravity="center"
+                android:textSize="16dp"
                 android:text="退出登录"
-                android:textColor="@color/app_basic" />
+                android:textColor="#f25e5e" />
         </LinearLayout>
     </ScrollView>
 

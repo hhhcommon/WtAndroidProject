@@ -179,7 +179,7 @@ public class SettingFragment extends Fragment implements View.OnClickListener {
     // 初始化对话框
     private void initDialog() {
         // 清除缓存对话框
-        View dialog1 = LayoutInflater.from(this.getActivity()).inflate(R.layout.dialog_exit_confirm, null);
+        View dialog1 = LayoutInflater.from(this.getActivity()).inflate(R.layout.dialog_talk_person_del, null);
         dialog1.findViewById(R.id.tv_confirm).setOnClickListener(this); // 清空
         dialog1.findViewById(R.id.tv_cancle).setOnClickListener(this);  // 取消
         TextView textTitle = (TextView) dialog1.findViewById(R.id.tv_title);

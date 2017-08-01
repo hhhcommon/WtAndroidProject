@@ -54,6 +54,42 @@ public class PreferenceModel  {
         }
     }
 
+    /**
+     * 获取用户偏好设置
+     *
+     * @param listener 监听
+     */
+    public void getNews( final OnLoadInterface listener) {
+        try {
+            String id= BSApplication.SharedPreferences.getString(StringConstant.USER_ID,"");
+            RetrofitUtils.getInstance().getPreference(id)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new Action1<Object>() {
+                        @Override
+                        public void call(Object o) {
+                            try {
+                                Log.e("获取自己偏好设置返回数据", new GsonBuilder().serializeNulls().create().toJson(o));
+                                //填充UI
+                                listener.onSuccess(o);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                                listener.onFailure("");
+                            }
+                        }
+                    }, new Action1<Throwable>() {
+                        @Override
+                        public void call(Throwable throwable) {
+                            throwable.printStackTrace();
+                            listener.onFailure("");
+                        }
+                    });
+        } catch (Exception e) {
+            e.printStackTrace();
+            listener.onFailure("");
+        }
+    }
+
     public interface OnLoadInterface {
         void onSuccess(Object o);
 

@@ -195,6 +195,7 @@ public class GroupNewsForNoAddPresenter {
             @Override
             public void onFailure(String msg) {
                 activity.dialogCancel();
+                activity.setViewForNoGroupPerson();
             }
         });
     }
