@@ -78,7 +78,7 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
             BSApplication.isIS_BACK = false;
             BSApplication.fragmentBase = null;
             closeFragment();
-            openFragmentNoAnim(LookListFragment.newInstance(0));
+            openFragment(LookListFragment.newInstance(0));
         } else {
             closeFragment();
         }
@@ -106,10 +106,11 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
                 toolBar.setPadding(toolBar.getPaddingLeft(), statusBarHeight, toolBar.getPaddingRight(),
                         toolBar.getPaddingBottom());
                 toolBar.getLayoutParams().height = statusBarHeight +
-                        (int)TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 45, getResources().getDisplayMetrics());
+                        (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 45, getResources().getDisplayMetrics());
             }
         }
     }
+
     protected void initToolBar(WTToolbar toolbar) {
         if (toolbar != null && playerActivity != null) {
             toolbar.setDividerColor(getResources().getColor(R.color.line_color));
@@ -264,6 +265,7 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
         toolbar = (WTToolbar) rootView.findViewById(R.id.toolbar);
         callBack = null;
         o2Toolbar = (WTToolbar) toolbar;
+        setStatusBarPaddingAndHeight(o2Toolbar);
         initToolBar(o2Toolbar);
         ButterKnife.bind(this, rootView);
         initView();

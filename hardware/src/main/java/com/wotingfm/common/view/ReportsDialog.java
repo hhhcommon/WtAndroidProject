@@ -14,6 +14,8 @@ import com.wotingfm.R;
 import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.bean.Player;
 import com.wotingfm.common.net.RetrofitUtils;
+import com.wotingfm.ui.intercom.main.view.InterPhoneActivity;
+import com.wotingfm.ui.mine.main.MineActivity;
 import com.wotingfm.ui.play.activity.ReportsPlayerFragment;
 import com.wotingfm.ui.test.PlayerActivity;
 
@@ -34,11 +36,17 @@ public class ReportsDialog extends Dialog implements View.OnClickListener {
 
     private TextView tvClose, tvReport;
     private PlayerActivity activity;
+    private InterPhoneActivity interPhoneActivity;
+    private MineActivity activityMain;
 
     public ReportsDialog(@NonNull Activity context) {
         super(context, R.style.BottomDialog);
         if (context instanceof PlayerActivity)
             activity = (PlayerActivity) context;
+        else if (context instanceof MineActivity)
+            this.activityMain = (MineActivity) context;
+        else if (context instanceof InterPhoneActivity)
+            this.interPhoneActivity = (InterPhoneActivity) context;
         setContentView(R.layout.reports_dialog);
         getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         getWindow().setGravity(Gravity.BOTTOM);
@@ -67,7 +75,11 @@ public class ReportsDialog extends Dialog implements View.OnClickListener {
             case R.id.tvReport:
                 dismiss();
                 if (activity != null)
-                    ReportsPlayerFragment.newInstance(userId, "REPORT_USER");
+                    activity.open(ReportsPlayerFragment.newInstance(userId, "REPORT_USER"));
+                else if (activityMain != null)
+                    activityMain.open(ReportsPlayerFragment.newInstance(userId, "REPORT_USER"));
+                else if (interPhoneActivity != null)
+                    interPhoneActivity.open(ReportsPlayerFragment.newInstance(userId, "REPORT_USER"));
                 break;
         }
     }

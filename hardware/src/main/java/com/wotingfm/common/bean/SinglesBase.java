@@ -32,6 +32,8 @@ public class SinglesBase implements Serializable {
     @DatabaseField
     public String album_title;
     @DatabaseField
+    public boolean is_radio;
+    @DatabaseField
     public String album_lastest_news;
     @DatabaseField
     public String album_logo_url;

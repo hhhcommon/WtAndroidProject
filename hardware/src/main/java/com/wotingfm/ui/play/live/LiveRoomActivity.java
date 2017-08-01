@@ -28,6 +28,7 @@ import com.netease.nim.live.util.VcloudFileUtils;
 import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.bean.BaseResult;
 import com.wotingfm.common.bean.LiveBean;
+import com.wotingfm.common.bean.MessageEvent;
 import com.wotingfm.common.net.RetrofitUtils;
 import com.wotingfm.common.utils.CommonUtils;
 import com.wotingfm.common.utils.L;
@@ -142,7 +143,7 @@ public class LiveRoomActivity extends BaseActivity implements NimContract.Ui {
 
     @Override
     protected int getContentView() {
-        EventBus.getDefault().postSticky("pause");
+        EventBus.getDefault().post(new MessageEvent("pause"));
         return R.layout.activity_live_room;
     }
 
@@ -412,7 +413,7 @@ public class LiveRoomActivity extends BaseActivity implements NimContract.Ui {
                 }
             });*/
         }
-        EventBus.getDefault().postSticky("start");
+        EventBus.getDefault().post(new MessageEvent("start"));
         finish();
     }
 

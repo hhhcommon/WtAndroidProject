@@ -3,9 +3,12 @@ package com.wotingfm.ui.test;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.WindowManager;
 import android.widget.Toast;
 
+import com.woting.commonplat.player.baidu.BDPlayer;
 import com.woting.commonplat.utils.SequenceUUID;
 import com.wotingfm.R;
 import com.wotingfm.common.application.BSApplication;
@@ -18,8 +21,14 @@ import com.wotingfm.ui.main.view.MainActivity;
 import com.wotingfm.ui.play.look.activity.LookListFragment;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.List;
+
+import static com.j256.ormlite.android.apptools.OpenHelperManager.release;
+import static com.wotingfm.R.id.ivPause;
+import static com.wotingfm.R.id.mRecyclerView;
 
 
 public class PlayerActivity extends NoTitleBarBaseActivity {
@@ -27,7 +36,7 @@ public class PlayerActivity extends NoTitleBarBaseActivity {
 
     @Override
     public int getLayoutId() {
-      //  AndroidBug5497Workaround.assistActivity(findViewById(android.R.id.content));
+        //  AndroidBug5497Workaround.assistActivity(findViewById(android.R.id.content));
         return R.layout.activity_player;
     }
 
@@ -100,5 +109,6 @@ public class PlayerActivity extends NoTitleBarBaseActivity {
             //   backResult();
         }
     }
+
 
 }

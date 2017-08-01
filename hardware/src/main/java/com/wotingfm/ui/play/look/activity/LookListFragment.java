@@ -307,7 +307,7 @@ public class LookListFragment extends BaseFragment implements View.OnClickListen
                             audioMgr.setStreamVolume(AudioManager.STREAM_MUSIC, stepVolume, AudioManager.FLAG_PLAY_SOUND);
                             mVoiceRecognizer.startListen();
                             tvTitle.setText("识别中...");
-                            EventBus.getDefault().postSticky("pause");
+                            EventBus.getDefault().post(new MessageEvent("pause"));
                             tvTitle.setTextColor(Color.parseColor("#cccccd"));
                             break;
                         case MotionEvent.ACTION_UP:
@@ -315,7 +315,7 @@ public class LookListFragment extends BaseFragment implements View.OnClickListen
                             mVoiceRecognizer.stopListen();
                             tvTitle.setTextColor(Color.parseColor("#16181a"));
                             tvTitle.setText("点击切换文字搜索");
-                            EventBus.getDefault().postSticky("start");
+                            EventBus.getDefault().post(new MessageEvent("start"));
                             break;
                     }
                     return true;

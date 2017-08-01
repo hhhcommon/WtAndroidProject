@@ -4,6 +4,7 @@ import android.content.ContentValues;
 
 import com.woting.commonplat.utils.FileSizeUtil;
 import com.wotingfm.common.application.BSApplication;
+import com.wotingfm.common.bean.MessageEvent;
 import com.wotingfm.common.bean.SinglesBase;
 import com.wotingfm.common.bean.SinglesDownload;
 import com.wotingfm.common.config.DbConfig;
@@ -96,7 +97,7 @@ public class DownloadUtils {
                         contentValues.put("albumSize", FileSizeUtil.getFileOrFilesSize(saveFile.getAbsolutePath(), FileSizeUtil.SIZETYPE_MB));
                         downloadHelper.insertTotable(pdsBase.id, contentValues);
                         //下载完成发送消息
-                        EventBus.getDefault().postSticky(pdsBase.id);
+                        EventBus.getDefault().post(new MessageEvent(pdsBase.id));
                     }
                 }
             });

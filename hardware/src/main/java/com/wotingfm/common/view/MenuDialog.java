@@ -21,6 +21,7 @@ import com.wotingfm.R;
 import com.wotingfm.common.adapter.PlayerListAdapter;
 import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.bean.ChannelsBean;
+import com.wotingfm.common.bean.MessageEvent;
 import com.wotingfm.common.bean.Player;
 import com.wotingfm.common.bean.Radio;
 import com.wotingfm.common.bean.SinglesBase;
@@ -123,7 +124,7 @@ public class MenuDialog extends Dialog implements View.OnClickListener {
         if (pds != null) {
             pdsBase = pds;
             setLikeImg(pds.had_liked);
-            if (channelsBean != null) {
+            if (channelsBean != null || pds.is_radio == true) {
                 largeLabel.setVisibility(View.GONE);
                 largeLabel2.setVisibility(View.VISIBLE);
             } else {
@@ -149,6 +150,7 @@ public class MenuDialog extends Dialog implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
+        BSApplication.IS_RESULT = false;
         switch (v.getId()) {
             case R.id.tvDownload:
                 if (pdsBase != null) {
@@ -225,7 +227,7 @@ public class MenuDialog extends Dialog implements View.OnClickListener {
                                     contentValues.put("albumSize", FileSizeUtil.getFileOrFilesSize(saveFile.getAbsolutePath(), FileSizeUtil.SIZETYPE_MB));
                                     downloadHelper.insertTotable(pdsBase.id, contentValues);
                                     //下载完成发送消息
-                                    EventBus.getDefault().postSticky(pdsBase.id);
+                                    EventBus.getDefault().post(new MessageEvent(pdsBase.id));
                                 }
                             }
                         });
@@ -349,6 +351,11 @@ public class MenuDialog extends Dialog implements View.OnClickListener {
                 break;
             case R.id.tvRadio:
                 dismiss();
+                if (pdsBase != null && pdsBase.is_radio == true) {
+                    channelsBean = new ChannelsBean();
+                    channelsBean.id = pdsBase.id;
+                    channelsBean.title = pdsBase.album_title;
+                }
                 if (activity != null && channelsBean != null)
                     activity.open(RadioInfoFragment.newInstance(channelsBean.id, channelsBean.title));
                 else if (activityMain != null && channelsBean != null)

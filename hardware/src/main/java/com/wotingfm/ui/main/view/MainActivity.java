@@ -107,12 +107,11 @@ public class MainActivity extends TabActivity implements View.OnClickListener, A
     public static TabHost tabHost;
     private MainPresenter mainPresenter;
     private MainActivity context;
-    private LinearLayout largeLabel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-       // AndroidBug5497Workaround.assistActivity(findViewById(android.R.id.content));
+        // AndroidBug5497Workaround.assistActivity(findViewById(android.R.id.content));
         setContentView(R.layout.activity_main);
         EventBus.getDefault().register(this);
         context = this;
@@ -124,21 +123,14 @@ public class MainActivity extends TabActivity implements View.OnClickListener, A
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
         }
 */
-        largeLabel = (LinearLayout) findViewById(R.id.largeLabel);
     /*    new KeyboardChangeListener(this).setKeyBoardListener(new KeyboardChangeListener.KeyBoardListener() {
             @Override
             public void onKeyboardChange(boolean isShow, int keyboardHeight) {
                 largeLabel.setVisibility(isShow == true ? View.GONE : View.VISIBLE);
             }
         });*/
-      /*  if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            Window window = getWindow();
-            // Translucent status bar
-            window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);    // 透明导航栏
-        }*/
-        //    getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);        // 透明状态栏
-        //   getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);    // 透明导航栏
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);        // 透明状态栏
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);    // 透明导航栏
         InitTextView();
         mainPresenter = new MainPresenter(this);
 //        applySelectedColor();
@@ -237,7 +229,7 @@ public class MainActivity extends TabActivity implements View.OnClickListener, A
     private void press_ptt() {
         WtDeviceControl.pushPTT();
         onToggleMicBase(true);
-        EventBus.getDefault().postSticky("pause");
+        EventBus.getDefault().post(new MessageEvent("pause"));
         tv_5.setBackgroundResource(R.color.app_basic);
     }
 
@@ -269,17 +261,17 @@ public class MainActivity extends TabActivity implements View.OnClickListener, A
         switch (v.getId()) {
             case R.id.tv_1:
                 // 上一首
-                EventBus.getDefault().postSticky("step");
+                EventBus.getDefault().post(new MessageEvent("step"));
                 WtDeviceControl.pushUpButton();
                 break;
             case R.id.tv_2:
                 // 暂停，继续
-                EventBus.getDefault().postSticky("stop_or_star");
+                EventBus.getDefault().post(new MessageEvent("stop_or_star"));
                 WtDeviceControl.pushCenter();
                 break;
             case R.id.tv_3:
                 // 下一首
-                EventBus.getDefault().postSticky("next");
+                EventBus.getDefault().post(new MessageEvent("next"));
                 WtDeviceControl.pushDownButton();
                 break;
             case R.id.lin_notify:
@@ -348,7 +340,7 @@ public class MainActivity extends TabActivity implements View.OnClickListener, A
         } else if ("three".equals(messageEvent.getMessage())) {
             tabHost.setCurrentTabByTag("three");
         } else if ("acceptMain".equals(messageEvent.getMessage())) {
-            EventBus.getDefault().postSticky("pause");
+            EventBus.getDefault().post(new MessageEvent("pause"));
             disconnect();
             initPlayer();
             mainPresenter.connectToRoom(roomId, false, false, false, 0);
@@ -390,25 +382,25 @@ public class MainActivity extends TabActivity implements View.OnClickListener, A
                     roomId = roomid;
                     EventBus.getDefault().post(new MessageEvent("two"));
                     ReceiveAlertActivity.start(MainActivity.this, im.getFromAccount(), userId);
-                    EventBus.getDefault().postSticky("pause");
+                    EventBus.getDefault().post(new MessageEvent("pause"));
                 }
                 //取消
                 if ("CANCEL".equals(type)) {
                     EventBus.getDefault().post(new MessageEvent("cancel"));
-                    EventBus.getDefault().postSticky("start");
+                    EventBus.getDefault().post(new MessageEvent("start"));
                 }
                 //拒绝对讲
                 else if ("REFUSE".equals(type)) {
                     EventBus.getDefault().post(new MessageEvent("refuse"));
-                    EventBus.getDefault().postSticky("start");
+                    EventBus.getDefault().post(new MessageEvent("start"));
                 } else if ("OVER".equals(type)) {
-                    EventBus.getDefault().postSticky("start");
+                    EventBus.getDefault().post(new MessageEvent("start"));
                     tv_5.setVisibility(View.GONE);
                 }
                 //接受对讲
                 else if ("ACCEPT".equals(type)) {
                     EventBus.getDefault().post(new MessageEvent("accept"));
-                    EventBus.getDefault().postSticky("pause");
+                    EventBus.getDefault().post(new MessageEvent("pause"));
                     activityRunning = true;
                     disconnect();
                     initPlayer();
