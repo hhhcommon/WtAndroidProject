@@ -23,7 +23,7 @@
             android:paddingTop="10dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:scrollbars="horizontal" />
+            android:scrollbars="none" />
 
 
         <LinearLayout

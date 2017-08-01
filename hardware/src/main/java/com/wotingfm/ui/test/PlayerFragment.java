@@ -186,6 +186,7 @@ public class PlayerFragment extends BaseFragment implements View.OnClickListener
 
     public static PlayerFragment newInstance() {
         BSApplication.IS_RESULT = true;
+        EventBus.getDefault().postSticky("stop");
         PlayerFragment fragment = new PlayerFragment();
         return fragment;
     }

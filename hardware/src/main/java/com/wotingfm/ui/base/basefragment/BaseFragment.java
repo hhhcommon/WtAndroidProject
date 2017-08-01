@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.ColorInt;
 import android.support.annotation.LayoutRes;
@@ -11,6 +12,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -23,6 +25,7 @@ import com.woting.commonplat.widget.WTToolbar;
 import com.wotingfm.R;
 import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.utils.ProgressDialogUtils;
+import com.wotingfm.common.utils.StatusBarUtil;
 import com.wotingfm.ui.base.baseactivity.AppManager;
 import com.wotingfm.ui.base.baseactivity.BaseToolBarActivity;
 import com.wotingfm.ui.intercom.main.view.InterPhoneActivity;
@@ -96,6 +99,17 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
         return super.onOptionsItemSelected(item);
     }
 
+    protected void setStatusBarPaddingAndHeight(View toolBar) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            if (toolBar != null) {
+                int statusBarHeight = StatusBarUtil.getStatusBarHeight(getActivity());
+                toolBar.setPadding(toolBar.getPaddingLeft(), statusBarHeight, toolBar.getPaddingRight(),
+                        toolBar.getPaddingBottom());
+                toolBar.getLayoutParams().height = statusBarHeight +
+                        (int)TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 45, getResources().getDisplayMetrics());
+            }
+        }
+    }
     protected void initToolBar(WTToolbar toolbar) {
         if (toolbar != null && playerActivity != null) {
             toolbar.setDividerColor(getResources().getColor(R.color.line_color));

@@ -40,6 +40,7 @@ import com.wotingfm.common.bean.MessageEvent;
 import com.wotingfm.common.bean.Room;
 import com.wotingfm.common.net.RetrofitUtils;
 import com.wotingfm.common.service.WtDeviceControl;
+import com.wotingfm.common.utils.AndroidBug5497Workaround;
 import com.wotingfm.common.utils.IMManger;
 import com.wotingfm.common.utils.L;
 import com.wotingfm.common.utils.StatusBarUtil;
@@ -111,16 +112,10 @@ public class MainActivity extends TabActivity implements View.OnClickListener, A
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+       // AndroidBug5497Workaround.assistActivity(findViewById(android.R.id.content));
         setContentView(R.layout.activity_main);
         EventBus.getDefault().register(this);
-        largeLabel = (LinearLayout) findViewById(R.id.largeLabel);
         context = this;
-        new KeyboardChangeListener(this).setKeyBoardListener(new KeyboardChangeListener.KeyBoardListener() {
-            @Override
-            public void onKeyboardChange(boolean isShow, int keyboardHeight) {
-                largeLabel.setVisibility(isShow == true ? View.GONE : View.VISIBLE);
-            }
-        });
         NIMClient.getService(MsgServiceObserve.class)
                 .observeReceiveMessage(incomingMessageObserver, true);
  /*       if (Build.VERSION.SDK_INT == Build.VERSION_CODES.KITKAT) {
@@ -129,8 +124,21 @@ public class MainActivity extends TabActivity implements View.OnClickListener, A
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
         }
 */
-        //  getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);        // 透明状态栏
-        //  getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);    // 透明导航栏
+        largeLabel = (LinearLayout) findViewById(R.id.largeLabel);
+    /*    new KeyboardChangeListener(this).setKeyBoardListener(new KeyboardChangeListener.KeyBoardListener() {
+            @Override
+            public void onKeyboardChange(boolean isShow, int keyboardHeight) {
+                largeLabel.setVisibility(isShow == true ? View.GONE : View.VISIBLE);
+            }
+        });*/
+      /*  if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            Window window = getWindow();
+            // Translucent status bar
+            window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);    // 透明导航栏
+        }*/
+        //    getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);        // 透明状态栏
+        //   getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);    // 透明导航栏
         InitTextView();
         mainPresenter = new MainPresenter(this);
 //        applySelectedColor();

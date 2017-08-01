@@ -294,7 +294,7 @@ public class StatusBarUtil {
      * @param context context
      * @return 状态栏高度
      */
-    private static int getStatusBarHeight(Context context) {
+    public static int getStatusBarHeight(Activity context) {
         if (Build.VERSION.SDK_INT < BUILD_VERSION_KITKAT) {
             return 0;
         }
