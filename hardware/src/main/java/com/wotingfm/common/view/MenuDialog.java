@@ -150,7 +150,7 @@ public class MenuDialog extends Dialog implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
-        BSApplication.IS_RESULT = false;
+        BSApplication.isIS_BACK = false;
         switch (v.getId()) {
             case R.id.tvDownload:
                 if (pdsBase != null) {
