@@ -51,18 +51,17 @@ public class GroupNumberAddPresenter {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        if (_list != null && _list.size() > 0&&src_list != null && src_list.size() > 0) {
+        if (_list != null && _list.size() > 0 && src_list != null && src_list.size() > 0) {
             list = model.assemblyData(src_list, _list);
             if (list != null && list.size() > 0) {
                 activity.setView(list);
                 activity.isLoginView(0);
-            }else{
+            } else {
                 activity.isLoginView(1);
             }
         } else {
             activity.isLoginView(1);
         }
-
     }
 
     /**
@@ -89,18 +88,17 @@ public class GroupNumberAddPresenter {
 
     /**
      * 添加群成员
-     *
-     * @param position
      */
-    public void apply(int position) {
+    public void apply() {
         if (GlobalNetWorkConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
             if (GlobalStateConfig.test) {
                 // 测试数据
-                list.remove(position);
+                String s = model.getString(list);
+                list.remove(s);
                 activity.setView(list);
             } else {
                 // 获取网络数据
-                sendApply(position);
+                sendApply();
             }
         } else {
             ToastUtils.show_always(activity.getActivity(), "网络连接失败，请稍后再试！");
@@ -108,16 +106,16 @@ public class GroupNumberAddPresenter {
     }
 
     // 发送申请请求
-    private void sendApply(final int position) {
+    private void sendApply() {
         if (list != null && list.size() > 0) {
-            String id = list.get(position).getId();
-            if (id != null && !id.equals("")) {
+            String s = model.getString(list);
+            if (s != null && !s.equals("")) {
                 activity.dialogShow();
-                model.loadNewsForAdd(gid, id, new GroupNumberAddModel.OnLoadInterface() {
+                model.loadNewsForAdd(gid, s, new GroupNumberAddModel.OnLoadInterface() {
                     @Override
                     public void onSuccess(Object o) {
                         activity.dialogCancel();
-                        dealSuccess(o, position);
+                        dealSuccess(o);
                     }
 
                     @Override
@@ -131,15 +129,14 @@ public class GroupNumberAddPresenter {
     }
 
     // 添加群成员=返回数据
-    private void dealSuccess(Object o, int position) {
+    private void dealSuccess(Object o) {
         try {
             String s = new Gson().toJson(o);
             JSONObject js = new JSONObject(s);
             int ret = js.getInt("ret");
             Log.e("ret", String.valueOf(ret));
             if (ret == 0) {
-                list.remove(position);
-                activity.setView(list);
+                remove();
             } else {
                 String msg = js.getString("msg");
                 if (msg != null && !msg.trim().equals("")) {
@@ -152,5 +149,31 @@ public class GroupNumberAddPresenter {
             e.printStackTrace();
             ToastUtils.show_always(activity.getActivity(), "出错了，请您稍后再试！");
         }
+    }
+
+    /**
+     * 点击按钮的数据更改
+     *
+     * @param position
+     */
+    public void changeData(int position) {
+        boolean type = list.get(position).is_admin();
+        if (type) {
+            list.get(position).setIs_admin(false);
+        } else {
+            list.get(position).setIs_admin(true);
+        }
+        activity.setView(list);
+    }
+
+    // 移除邀请后的数据
+    private void remove() {
+        for (int i = 0; i < list.size(); i++) {
+            if (list.get(i).is_admin()) {
+                list.remove(i);
+                i--;
+            }
+        }
+        activity.setView(list);
     }
 }

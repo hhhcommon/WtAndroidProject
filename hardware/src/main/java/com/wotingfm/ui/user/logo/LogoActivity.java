@@ -143,19 +143,9 @@ public class LogoActivity extends FragmentActivity {
         sendBroadcast(in);
     }
 
-
-    private long tempTime;
-
-    @Override
     public void onBackPressed() {
         if (getSupportFragmentManager().getBackStackEntryCount() == 1) {
-            long time = System.currentTimeMillis();
-            if (time - tempTime <= 2000) {
-                android.os.Process.killProcess(android.os.Process.myPid());
-            } else {
-                tempTime = time;
-                Toast.makeText(this, "再按一次退出", Toast.LENGTH_LONG).show();
-            }
+            finish();
         } else {
             close();
         }

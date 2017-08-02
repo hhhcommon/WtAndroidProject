@@ -83,7 +83,7 @@
         android:name="com.wotingfm.common.application.BSApplication"
         android:allowBackup="false"
         android:hardwareAccelerated="true"
-        android:icon="@mipmap/app_logo"
+        android:icon="@mipmap/logo"
         android:label="@string/app_name"
         android:supportsRtl="false"
         android:theme="@style/AppBlackTheme">

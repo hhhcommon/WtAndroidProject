@@ -76,7 +76,6 @@
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:layout_toLeftOf="@+id/image_right_2"
-                android:src="@mipmap/app_logo"
                 android:text="莉莉"
                 android:textColor="@color/exhibition_world_color"
                 android:textSize="14sp" />
@@ -109,7 +108,6 @@
                 android:maxLines="1"
                 android:paddingLeft="20dp"
                 android:ellipsize="end"
-                android:src="@mipmap/app_logo"
                 android:text="未填"
                 android:textColor="@color/exhibition_world_color"
                 android:textSize="14sp" />
@@ -140,7 +138,6 @@
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:layout_toLeftOf="@+id/image_right_4"
-                android:src="@mipmap/app_logo"
                 android:text="@string/man"
                 android:textColor="@color/exhibition_world_color"
                 android:textSize="14sp" />
@@ -171,7 +168,6 @@
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:layout_toLeftOf="@+id/image_right_6"
-                android:src="@mipmap/app_logo"
                 android:text="23"
                 android:textColor="@color/exhibition_world_color"
                 android:textSize="14sp" />
@@ -203,7 +199,6 @@
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:layout_toLeftOf="@+id/image_right_5"
-                android:src="@mipmap/app_logo"
                 android:text="@string/beijing"
                 android:textColor="@color/exhibition_world_color"
                 android:textSize="14sp" />

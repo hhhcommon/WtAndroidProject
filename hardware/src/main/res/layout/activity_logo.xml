@@ -22,23 +22,19 @@
             android:layout_centerVertical="true"
             android:layout_marginRight="12dp"
             android:gravity="end"
-            android:lineSpacingExtra="0sp"
+            android:lineSpacingExtra="5.3sp"
             android:text="稍后登录"
             android:textColor="#959698"
             android:textSize="16sp" />
     </RelativeLayout>
 
-    <TextView
+    <ImageView
         android:id="@+id/tv_logo"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
+        android:layout_width="67.3dp"
+        android:layout_height="67.3dp"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="114dp"
-        android:background="@drawable/background_login_logo"
-        android:gravity="center"
-        android:text="LOGO"
-        android:textColor="@color/white"
-        android:textSize="14sp" />
+        android:src="@mipmap/logo"
+        android:layout_marginTop="114dp"/>
 
 
     <TextView
@@ -61,7 +57,7 @@
         android:layout_below="@+id/tv_register"
         android:layout_marginLeft="30dp"
         android:layout_marginRight="30dp"
-        android:layout_marginTop="10.7dp"
+        android:layout_marginTop="16dp"
         android:background="@drawable/shape_register"
         android:padding="0.7dp">
 
