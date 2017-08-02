@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -55,39 +56,56 @@ public class SelectedAdapter extends CommonAdapter<Selected.DataBeanX> {
     protected void convert(ViewHolder holder, final Selected.DataBeanX s, final int position) {
         TextView textView = (TextView) holder.itemView.findViewById(R.id.tvTitle);
         ImageView ivMore = (ImageView) holder.itemView.findViewById(R.id.ivMore);
+        View view = holder.itemView.findViewById(R.id.view);
+        RelativeLayout labelContent = (RelativeLayout) holder.itemView.findViewById(R.id.labelContentMore);
         textView.setText(s.title);
         RecyclerView recyclerView = (RecyclerView) holder.itemView.findViewById(R.id.mRecyclerView);
         if ("DAILY_LISTENINGS".equals(s.type) || "EDITOR_SELECTIONS".equals(s.type)) {
-            GridLayoutManager layoutManager = new GridLayoutManager(context, 3);
-            recyclerView.setLayoutManager(layoutManager);
-            ItemSelected1Adapter itemClassAdapter = new ItemSelected1Adapter(context, s.data, new SelectedClick() {
-                @Override
-                public void click(Selected.DataBeanX.DataBean dataBean) {
-                    if (selectedClickBase != null)
-                        selectedClickBase.click(dataBean);
-                }
-            });
-            recyclerView.setAdapter(itemClassAdapter);
-            ivMore.setVisibility(View.VISIBLE);
-            ivMore.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (selectedClickBase != null)
-                        selectedClickBase.clickMore(s);
-                }
-            });
+            if (s.data.isEmpty()) {
+                labelContent.setVisibility(View.GONE);
+                view.setVisibility(View.GONE);
+            } else {
+                labelContent.setVisibility(View.VISIBLE);
+                view.setVisibility(View.VISIBLE);
+                GridLayoutManager layoutManager = new GridLayoutManager(context, 3);
+                recyclerView.setLayoutManager(layoutManager);
+                ItemSelected1Adapter itemClassAdapter = new ItemSelected1Adapter(context, s.data, new SelectedClick() {
+                    @Override
+                    public void click(Selected.DataBeanX.DataBean dataBean) {
+                        if (selectedClickBase != null)
+                            selectedClickBase.click(dataBean);
+                    }
+                });
+                recyclerView.setAdapter(itemClassAdapter);
+                ivMore.setVisibility(View.VISIBLE);
+                ivMore.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (selectedClickBase != null)
+                            selectedClickBase.clickMore(s);
+                    }
+                });
+            }
+
         } else if ("HOT_ALBUMS".equals(s.type)) {
-            LinearLayoutManager layoutManager = new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, true);
-            recyclerView.setLayoutManager(layoutManager);
-            ItemSelected2Adapter itemClassAdapter = new ItemSelected2Adapter(context, s.data, new SelectedClick() {
-                @Override
-                public void click(Selected.DataBeanX.DataBean dataBean) {
-                    if (selectedClickBase != null)
-                        selectedClickBase.click(dataBean);
-                }
-            });
-            ivMore.setVisibility(View.GONE);
-            recyclerView.setAdapter(itemClassAdapter);
+            if (s.data.isEmpty()) {
+                labelContent.setVisibility(View.GONE);
+                view.setVisibility(View.GONE);
+            } else {
+                labelContent.setVisibility(View.VISIBLE);
+                view.setVisibility(View.VISIBLE);
+                LinearLayoutManager layoutManager = new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, true);
+                recyclerView.setLayoutManager(layoutManager);
+                ItemSelected2Adapter itemClassAdapter = new ItemSelected2Adapter(context, s.data, new SelectedClick() {
+                    @Override
+                    public void click(Selected.DataBeanX.DataBean dataBean) {
+                        if (selectedClickBase != null)
+                            selectedClickBase.click(dataBean);
+                    }
+                });
+                ivMore.setVisibility(View.GONE);
+                recyclerView.setAdapter(itemClassAdapter);
+            }
         }
 
 

@@ -78,7 +78,7 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
             BSApplication.isIS_BACK = false;
             BSApplication.fragmentBase = null;
             closeFragment();
-            openFragment(LookListFragment.newInstance(0));
+            openFragmentNoAnim(LookListFragment.newInstance(0));
         } else {
             closeFragment();
         }
