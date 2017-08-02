@@ -73,10 +73,9 @@ public class GroupNumberShowAdapter extends BaseAdapter {
         }
 
         if (lists.getAvatar() != null && !lists.getAvatar().equals("") && lists.getAvatar().startsWith("http")) {
-            GlideUtils.loadImageViewSize(context, lists.getAvatar(), 60, 60, holder.img_view, true);
+            GlideUtils.loadImageViewRound(lists.getAvatar(), holder.img_view, 60, 60);
         } else {
-            Bitmap bmp = BitmapUtils.readBitMap(context, R.mipmap.icon_avatar_d);
-            holder.img_view.setImageBitmap(bmp);
+            GlideUtils.loadImageViewRound(R.mipmap.icon_avatar_d, holder.img_view, 60, 60);
         }
 
         if (lists.is_owner()) {

@@ -28,14 +28,22 @@
             android:layout_width="match_parent"
             android:layout_height="60dp">
 
-            <ImageView
-                android:id="@+id/img_url"
+            <LinearLayout
+                android:id="@+id/lin_img"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_centerVertical="true"
                 android:layout_gravity="center_vertical"
                 android:layout_marginLeft="12dp"
-                android:src="@mipmap/test" />
+                android:background="@mipmap/avatar_p"
+                android:padding="1dp">
+
+                <ImageView
+                    android:id="@+id/img_url"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop" />
+            </LinearLayout>
 
             <include
                 android:id="@+id/view_head"
@@ -43,7 +51,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
                 android:layout_marginLeft="12dp"
-                android:layout_toRightOf="@id/img_url" />
+                android:layout_toRightOf="@id/lin_img" />
 
             <TextView
                 android:id="@+id/tv_oks"
@@ -52,13 +60,13 @@
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:layout_marginRight="12dp"
-                android:visibility="gone"
                 android:background="@drawable/background_new_friend_bg"
                 android:gravity="center"
                 android:lineSpacingExtra="0sp"
                 android:text="已通过"
                 android:textColor="#959698"
-                android:textSize="13.3sp" />
+                android:textSize="13.3sp"
+                android:visibility="gone" />
 
             <TextView
                 android:id="@+id/tv_ok"

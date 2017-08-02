@@ -80,10 +80,9 @@ public class MyFocusAdapter extends BaseAdapter {
         Focus lists = list.get(position);
 
         if (lists.getAvatar() != null && !lists.getAvatar().equals("")&&lists.getAvatar().startsWith("http")) {
-            GlideUtils.loadImageViewSize(context, lists.getAvatar(), 60, 60, holder.img_touXiang, false);
+            GlideUtils.loadImageViewRound(lists.getAvatar(), holder.img_touXiang, 60, 60);
         } else {
-            Bitmap bmp = BitmapUtils.readBitMap(context, R.mipmap.p);
-            holder.img_touXiang.setImageBitmap(bmp);
+            GlideUtils.loadImageViewRound(R.mipmap.icon_avatar_d, holder.img_touXiang, 60, 60);
         }
 
         if (lists.getName() == null || lists.getName().equals("")) {

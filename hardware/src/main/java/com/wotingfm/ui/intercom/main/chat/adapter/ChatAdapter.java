@@ -10,9 +10,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.woting.commonplat.utils.BitmapUtils;
 import com.wotingfm.R;
 import com.wotingfm.common.utils.GlideUtils;
@@ -22,6 +24,8 @@ import com.wotingfm.ui.intercom.main.chat.model.TalkHistory;
 import com.wotingfm.ui.intercom.main.contacts.model.Contact;
 
 import java.util.List;
+
+import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 
 /**
  * 作者：xinLong on 2017/6/12 13:42
@@ -40,7 +44,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.SimpleHolder> 
         this.t = friendList;
     }
 
-    public void ChangeData( List<TalkHistory> friendList) {
+    public void ChangeData(List<TalkHistory> friendList) {
         this.t = friendList;
         notifyDataSetChanged();
     }
@@ -61,52 +65,53 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.SimpleHolder> 
     public void onBindViewHolder(final SimpleHolder holder, int position) {
         holder.layout_content.getLayoutParams().width = getScreenWidth(mContext);
         TalkHistory data = t.get(position);
-        String name="";
+        String name = "";
         try {
-            name=data.getName();
+            name = data.getName();
         } catch (Exception e) {
             e.printStackTrace();
         }
         holder.tv_name.setText(name);
-       String type= data.getTyPe();
-        if(type.equals("person")){
+        String type = data.getTyPe();
+        if (type.equals("person")) {
             String CallType = "";
             try {
-                CallType=data.getCallType();
+                CallType = data.getCallType();
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            if(CallType.trim().equals("ok")){
-                holder.tv_news.setText("[语音通话] "+TimeUtils.converTime(Long.parseLong(data.getAddTime())));
-            }else{
-                String news="";
+            if (CallType.trim().equals("ok")) {
+                holder.tv_news.setText("[语音通话] " + TimeUtils.converTime(Long.parseLong(data.getAddTime())));
+            } else {
+                String news = "";
                 try {
-                    news=data.getCallTypeM();
+                    news = data.getCallTypeM();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-                holder.tv_news.setText("[语音通话] "+news);
+                holder.tv_news.setText("[语音通话] " + news);
             }
-            if (t.get(position).getURL()!= null && !t.get(position).getURL().equals("")&&t.get(position).getURL().startsWith("http")) {
-                GlideUtils.loadImageViewSize(mContext, t.get(position).getURL(), 60, 60, holder.img_url, true);
+            if (t.get(position).getURL() != null && !t.get(position).getURL().equals("") && t.get(position).getURL().startsWith("http")) {
+                GlideUtils.loadImageViewRound(t.get(position).getURL(), holder.img_url, 60, 60);
             } else {
-                Bitmap bmp = BitmapUtils.readBitMap(mContext, R.mipmap.icon_avatar_d);
-                holder.img_url.setImageBitmap(bmp);
+                GlideUtils.loadImageViewRound(R.mipmap.icon_avatar_d, holder.img_url, 60, 60);
             }
-        }else{
-            String num="";
+
+            holder.lin_img.setBackgroundResource(R.mipmap.avatar_p);
+        } else {
+            String num = "";
             try {
-                num=data.getGroupNum();
+                num = data.getGroupNum();
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            holder.tv_news.setText("("+num+"人)");
-            if (t.get(position).getURL()!= null && !t.get(position).getURL().equals("")&&t.get(position).getURL().startsWith("http")) {
-                GlideUtils.loadImageViewSize(mContext, t.get(position).getURL(), 60, 60, holder.img_url, false);
+            holder.tv_news.setText("(" + num + "人)");
+            if (t.get(position).getURL() != null && !t.get(position).getURL().equals("") && t.get(position).getURL().startsWith("http")) {
+                GlideUtils.loadImageViewRoundCorners(t.get(position).getURL(), holder.img_url, 60, 60);
             } else {
-                Bitmap bmp = BitmapUtils.readBitMap(mContext, R.mipmap.icon_avatar_d);
-                holder.img_url.setImageBitmap(bmp);
+                GlideUtils.loadImageViewRoundCorners(R.mipmap.icon_avatar_d, holder.img_url, 60, 60);
             }
+            holder.lin_img.setBackgroundResource(R.mipmap.avatar_g);
         }
 
 
@@ -144,9 +149,9 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.SimpleHolder> 
     }
 
     class SimpleHolder extends RecyclerView.ViewHolder {
-        public ImageView img_url,img_voice;
-        public TextView tv_Delete;
-        public TextView tv_name, tv_news;
+        public LinearLayout lin_img;
+        public ImageView img_url, img_voice;
+        public TextView tv_name, tv_news, tv_Delete;
         public RelativeLayout layout_content;
 
         public SimpleHolder(View itemView) {
@@ -156,6 +161,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.SimpleHolder> 
             tv_name = (TextView) itemView.findViewById(R.id.tv_name);
             tv_news = (TextView) itemView.findViewById(R.id.tv_news);
             img_voice = (ImageView) itemView.findViewById(R.id.img_voice);
+            lin_img = (LinearLayout) itemView.findViewById(R.id.lin_img);
             layout_content = (RelativeLayout) itemView.findViewById(R.id.layout_content);
             ((SlidingButtonView) itemView).setSlidingButtonListener(ChatAdapter.this);
         }
@@ -199,7 +205,9 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.SimpleHolder> 
 
     public interface IonSlidingViewClickListener {
         void onItemClick(View view, int position);
+
         void onClick(View view, int position);
+
         void onDeleteBtnClick(View view, int position);
     }
 

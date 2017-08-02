@@ -150,10 +150,9 @@ public class GroupChatAdapter extends BaseExpandableListAdapter {
         }
 
         if (lists.getLogo_url() != null && !lists.getLogo_url().equals("") && lists.getLogo_url().startsWith("http")) {
-            GlideUtils.loadImageViewSize(context, lists.getLogo_url(), 60, 60, holder.img_touXiang, false);
+            GlideUtils.loadImageViewRoundCorners(lists.getLogo_url(), holder.img_touXiang, 60, 60);
         } else {
-            Bitmap bmp = BitmapUtils.readBitMap(context, R.mipmap.icon_avatar_d);
-            holder.img_touXiang.setImageBitmap(bmp);
+            GlideUtils.loadImageViewRoundCorners(R.mipmap.icon_avatar_d, holder.img_touXiang, 60, 60);
         }
 
         holder.img_chat.setOnClickListener(new View.OnClickListener() {
@@ -172,7 +171,7 @@ public class GroupChatAdapter extends BaseExpandableListAdapter {
 
     class ViewHolder {
         public ImageView img_chat, img_group_type, img_touXiang, image;
-        public TextView tv_number, tv_name, tv_line,tv_lin;
+        public TextView tv_number, tv_name, tv_line, tv_lin;
     }
 
     @Override

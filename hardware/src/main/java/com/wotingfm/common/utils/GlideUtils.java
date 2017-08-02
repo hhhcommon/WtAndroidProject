@@ -11,8 +11,10 @@ import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.woting.commonplat.widget.GlideCircleTransform;
 import com.wotingfm.R;
+import com.wotingfm.common.application.BSApplication;
 
 import jp.wasabeef.glide.transformations.BlurTransformation;
+import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 
 /**
  * 作者：xinLong on 2017/6/15 17:54
@@ -34,48 +36,83 @@ public class GlideUtils {
      */
 
     /**
-     * 默认加载
+     * 原图
+     * 指定是否高斯模糊
      *
-     * @param mContext
-     * @param path       路径
-     * @param mImageView 图片
-     * @param b          是否是圆形图
+     * @param path
+     * @param mImageView
+     * @param b
+     * @param radius
      */
-    public static void loadImageView(Context mContext, String path, ImageView mImageView, boolean b) {
+    public static void loadImageViewSrc(Object path, ImageView mImageView, boolean b, int radius) {
         if (b) {
-            Glide.with(mContext).load(path).transform(new GlideCircleTransform(mContext)).into(mImageView);
+            Glide.with(BSApplication.mContext).load(path).crossFade(1000).bitmapTransform(new BlurTransformation(BSApplication.mContext, radius)).into(mImageView);
         } else {
-            Glide.with(mContext).load(path).into(mImageView);
+            Glide.with(BSApplication.mContext).load(path).crossFade(1000).into(mImageView);
         }
     }
 
     /**
-     * 默认加载
+     * 原图--指定大小
+     * 指定是否高斯模糊
      *
-     * @param mContext
-     * @param path       路径
-     * @param mImageView 图片
+     * @param path
+     * @param mImageView
+     * @param width
+     * @param height
+     * @param b
+     * @param radius
      */
-    public static void loadImageViewBlur(Context mContext, String path, ImageView mImageView) {
-        Glide.with(mContext).load(path).crossFade(1000).placeholder(R.mipmap.p).bitmapTransform(new BlurTransformation(mContext, 10, 5)).into(mImageView);
-    }
-    /**
-     * 加载指定大小
-     *
-     * @param mContext
-     * @param path       路径
-     * @param width      宽度
-     * @param height     高度
-     * @param mImageView 图片
-     * @param b          是否是圆形图
-     */
-    public static void loadImageViewSize(Context mContext, String path, int width, int height, ImageView mImageView, boolean b) {
+    public static void loadImageViewSrc(Object path, ImageView mImageView, int width, int height, boolean b, int radius) {
         if (b) {
-            Glide.with(mContext).load(path).transform(new GlideCircleTransform(mContext)).override(width, height).into(mImageView);
+            Glide.with(BSApplication.mContext).load(path).crossFade(1000).bitmapTransform(new BlurTransformation(BSApplication.mContext, radius)).override(width, height).into(mImageView);
         } else {
-            Glide.with(mContext).load(path).override(width, height).into(mImageView);
+            Glide.with(BSApplication.mContext).load(path).crossFade(1000).override(width, height).into(mImageView);
         }
+    }
 
+    /**
+     * 原图--圆图
+     *
+     * @param path
+     * @param mImageView
+     */
+    public static void loadImageViewRound(Object path, ImageView mImageView) {
+        Glide.with(BSApplication.mContext).load(path).crossFade(1000).transform(new GlideCircleTransform(BSApplication.mContext)).into(mImageView);
+    }
+
+    /**
+     * 原图--圆图--指定大小
+     *
+     * @param path
+     * @param mImageView
+     * @param width
+     * @param height
+     */
+    public static void loadImageViewRound(Object path, ImageView mImageView, int width, int height) {
+        Glide.with(BSApplication.mContext).load(path).crossFade(1000).transform(new GlideCircleTransform(BSApplication.mContext)).override(width, height).into(mImageView);
+    }
+
+    /**
+     * 原图--圆角图
+     *
+     * @param path
+     * @param mImageView
+     */
+    public static void loadImageViewRoundCorners(Object path, ImageView mImageView) {
+        Glide.with(BSApplication.mContext).load(path).crossFade(1000).bitmapTransform(new RoundedCornersTransformation(BSApplication.mContext, 4, 0, RoundedCornersTransformation.CornerType.ALL)).into(mImageView);
+    }
+
+    /**
+     * 原图--圆角图--指定大小
+     *
+     * @param path
+     * @param mImageView
+     * @param width
+     * @param height
+     */
+    public static void loadImageViewRoundCorners(Object path, ImageView mImageView, int width, int height) {
+        Glide.with(BSApplication.mContext).load(path).crossFade(1000).bitmapTransform(new RoundedCornersTransformation(BSApplication.mContext, 4, 0, RoundedCornersTransformation.CornerType.ALL)).override(width, height).into(mImageView);
     }
 
     /**

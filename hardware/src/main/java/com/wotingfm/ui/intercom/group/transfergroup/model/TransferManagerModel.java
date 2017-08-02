@@ -42,14 +42,13 @@ public class TransferManagerModel {
      */
     public List<Contact.user> assemblyData(List<Contact.user> _list) {
         if (_list != null && _list.size() > 0) {
-            List<Contact.user> list = BeanCloneUtil.cloneTo(_list);
-            for (int i = 0; i < list.size(); i++) {
-                list.get(i).setIs_admin(false);
-                if (list.get(i).is_owner()) {
-                    list.remove(i);
+            for (int i = 0; i < _list.size(); i++) {
+                _list.get(i).setIs_admin(false);
+                if (_list.get(i).is_owner()) {
+                    _list.remove(i);
                 }
             }
-            return list;
+            return _list;
         } else {
             return null;
         }

@@ -20,7 +20,7 @@ import java.util.List;
  * 作者：xinLong on 2017/6/8 14:36
  * 邮箱：645700751@qq.com
  */
-public class SearchContactsForGroupAdapter extends BaseAdapter  {
+public class SearchContactsForGroupAdapter extends BaseAdapter {
     private List<Contact.group> list;
     private Context context;
 
@@ -66,17 +66,16 @@ public class SearchContactsForGroupAdapter extends BaseAdapter  {
         }
         Contact.group lists = list.get(position);
 
-        if (lists.getTitle()== null || lists.getTitle().equals("")) {
+        if (lists.getTitle() == null || lists.getTitle().equals("")) {
             holder.tv_name.setText("名称");//名
         } else {
             holder.tv_name.setText(lists.getTitle());//名
         }
 
-        if (lists.getLogo_url() != null &&!lists.getLogo_url() .equals("")&& lists.getLogo_url().startsWith("http:") ) {
-            GlideUtils.loadImageViewSize(context, lists.getLogo_url(), 60, 60, holder.img_touXiang, true);
+        if (lists.getLogo_url() != null && !lists.getLogo_url().equals("") && lists.getLogo_url().startsWith("http:")) {
+            GlideUtils.loadImageViewRoundCorners(lists.getLogo_url(), holder.img_touXiang, 60, 60);
         } else {
-            Bitmap bmp = BitmapUtils.readBitMap(context, R.mipmap.icon_avatar_d);
-            holder.img_touXiang.setImageBitmap(bmp);
+            GlideUtils.loadImageViewRoundCorners(R.mipmap.icon_avatar_d, holder.img_touXiang, 60, 60);
         }
 
         return convertView;

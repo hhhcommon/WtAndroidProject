@@ -15,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.woting.commonplat.manager.PhoneMsgManager;
 import com.woting.commonplat.utils.BitmapUtils;
 import com.woting.commonplat.widget.TipView;
@@ -29,6 +30,8 @@ import com.wotingfm.ui.intercom.main.contacts.model.Contact;
 import com.wotingfm.ui.intercom.main.view.InterPhoneActivity;
 
 import java.util.List;
+
+import jp.wasabeef.glide.transformations.BlurTransformation;
 
 /**
  * 未加入的组详情界面
@@ -130,12 +133,12 @@ public class GroupNewsForNoAddFragment extends Fragment implements View.OnClickL
      * @param introduce
      */
     public void setViewData(String url,String name, String number, String address, String introduce) {
-        if (url!= null && !url.equals("")&&url.startsWith("http")) {
-            GlideUtils.loadImageViewBlur(this.getActivity(), url, img_url);
+        if (url != null && !url.trim().equals("") && url.startsWith("http")) {
+            GlideUtils.loadImageViewSrc(url, img_url, true, 8);
         } else {
-            Bitmap bmp = BitmapUtils.readBitMap(this.getActivity(), R.mipmap.p);
-            img_url.setImageBitmap(bmp);
+            GlideUtils.loadImageViewSrc(R.mipmap.p, img_url, true, 8);
         }
+
         tv_groupName.setText(name);// 群名称
         tv_groupNumber.setText(number);// 群号
         tv_address.setText(address);// 地址

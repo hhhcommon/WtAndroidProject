@@ -80,11 +80,10 @@ public class GroupsAdapter extends BaseAdapter {
             holder.tv_name.setText(lists.getTitle());//名
         }
 
-        if (lists.getLogo_url() != null && !lists.getLogo_url().equals("")&&lists.getLogo_url().startsWith("http")) {
-            GlideUtils.loadImageViewSize(context, lists.getLogo_url(), 60, 60, holder.img_touXiang, false);
+        if (lists.getLogo_url() != null && !lists.getLogo_url().equals("") && lists.getLogo_url().startsWith("http")) {
+            GlideUtils.loadImageViewRoundCorners(lists.getLogo_url(), holder.img_touXiang, 60, 60);
         } else {
-            Bitmap bmp = BitmapUtils.readBitMap(context, R.mipmap.icon_avatar_d);
-            holder.img_touXiang.setImageBitmap(bmp);
+            GlideUtils.loadImageViewRoundCorners(R.mipmap.icon_avatar_d, holder.img_touXiang, 60, 60);
         }
         holder.img_chat.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {

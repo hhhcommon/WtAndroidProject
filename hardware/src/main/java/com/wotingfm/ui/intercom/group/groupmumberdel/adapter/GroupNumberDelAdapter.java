@@ -64,11 +64,10 @@ public class GroupNumberDelAdapter extends RecyclerView.Adapter<GroupNumberDelAd
             holder.tv_name.setText("未知");
         }
 
-        if (lists.getAvatar() != null && !lists.getAvatar().equals("")&&lists.getAvatar().startsWith("http")) {
-            GlideUtils.loadImageViewSize(mContext, lists.getAvatar(), 60, 60, holder.img_url, true);
+        if (lists.getAvatar() != null && !lists.getAvatar().equals("") && lists.getAvatar().startsWith("http")) {
+            GlideUtils.loadImageViewRound(lists.getAvatar(), holder.img_url, 60, 60);
         } else {
-            Bitmap bmp = BitmapUtils.readBitMap(mContext, R.mipmap.icon_avatar_d);
-            holder.img_url.setImageBitmap(bmp);
+            GlideUtils.loadImageViewRound(R.mipmap.icon_avatar_d, holder.img_url, 60, 60);
         }
 
         holder.tv_Delete.setOnClickListener(new View.OnClickListener() {

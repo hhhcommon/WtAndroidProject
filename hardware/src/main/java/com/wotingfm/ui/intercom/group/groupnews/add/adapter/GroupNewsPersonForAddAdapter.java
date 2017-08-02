@@ -7,10 +7,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+
 import com.woting.commonplat.utils.BitmapUtils;
 import com.wotingfm.R;
 import com.wotingfm.common.utils.GlideUtils;
 import com.wotingfm.ui.intercom.main.contacts.model.Contact;
+
 import java.util.List;
 
 /**
@@ -20,7 +23,6 @@ public class GroupNewsPersonForAddAdapter extends BaseAdapter {
     private List<Contact.user> list;
     private Context context;
     private Contact.user lists;
-    private String url;
 
     public GroupNewsPersonForAddAdapter(Context context, List<Contact.user> list) {
         super();
@@ -55,6 +57,8 @@ public class GroupNewsPersonForAddAdapter extends BaseAdapter {
             holder = new ViewHolder();
             convertView = LayoutInflater.from(context).inflate(R.layout.adapter_groupnewspersonforadd, null);
             holder.img_view = (ImageView) convertView.findViewById(R.id.img_view);
+            holder.lin_img = (LinearLayout) convertView.findViewById(R.id.lin_img);
+
             holder.img_add = (ImageView) convertView.findViewById(R.id.img_add);
             holder.img_del = (ImageView) convertView.findViewById(R.id.img_del);
             convertView.setTag(holder);
@@ -64,23 +68,22 @@ public class GroupNewsPersonForAddAdapter extends BaseAdapter {
         lists = list.get(position);
         if (lists.getType() == 1) {
             // 正常
-            holder.img_view.setVisibility(View.VISIBLE);
+            holder.lin_img.setVisibility(View.VISIBLE);
             if (lists.getAvatar() != null && !lists.getAvatar().equals("") && lists.getAvatar().startsWith("http:")) {
-                GlideUtils.loadImageViewSize(context, lists.getAvatar(), 60, 60, holder.img_view, true);
+                GlideUtils.loadImageViewRound(lists.getAvatar(), holder.img_view, 60, 60);
             } else {
-                Bitmap bmp = BitmapUtils.readBitMap(context, R.mipmap.icon_avatar_d);
-                holder.img_view.setImageBitmap(bmp);
+                GlideUtils.loadImageViewRound(R.mipmap.icon_avatar_d, holder.img_view, 60, 60);
             }
             holder.img_add.setVisibility(View.GONE);
             holder.img_del.setVisibility(View.GONE);
         } else if (lists.getType() == 2) {
             // 添加
-            holder.img_view.setVisibility(View.GONE);
+            holder.lin_img.setVisibility(View.GONE);
             holder.img_add.setVisibility(View.VISIBLE);
             holder.img_del.setVisibility(View.GONE);
         } else {
             // 删除
-            holder.img_view.setVisibility(View.GONE);
+            holder.lin_img.setVisibility(View.GONE);
             holder.img_add.setVisibility(View.GONE);
             holder.img_del.setVisibility(View.VISIBLE);
         }
@@ -89,5 +92,6 @@ public class GroupNewsPersonForAddAdapter extends BaseAdapter {
 
     class ViewHolder {
         public ImageView img_view, img_add, img_del;
+        public LinearLayout lin_img;
     }
 }

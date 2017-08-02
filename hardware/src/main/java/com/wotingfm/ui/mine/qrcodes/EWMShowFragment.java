@@ -79,13 +79,12 @@ public class EWMShowFragment extends Fragment implements OnClickListener {
         }
 
         if (imageUrl != null && !imageUrl.equals("") && imageUrl.startsWith("http:")) {
-            GlideUtils.loadImageViewSize(this.getActivity(), imageUrl, 80, 80, imageHead, true);
+            GlideUtils.loadImageViewRound(imageUrl, imageHead, 80, 80);
         } else {
-            imageHead.setImageBitmap(BitmapUtils.readBitMap(this.getActivity(), R.mipmap.icon_avatar_d));
+            GlideUtils.loadImageViewRound(R.mipmap.icon_avatar_d, imageHead, 80, 80);
         }
 
-
-        h = PhoneMsgManager.ScreenWidth-100;
+        h = PhoneMsgManager.ScreenWidth - 100;
 
 //        if (PhoneMsgManager.ScreenWidth <= 480) {
 //            h = 260;
@@ -97,7 +96,7 @@ public class EWMShowFragment extends Fragment implements OnClickListener {
 
         ViewGroup.LayoutParams para = imageEwm.getLayoutParams();//获取按钮的布局
 //        para.height = ((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, h, getResources().getDisplayMetrics()));
-        para.height=h;
+        para.height = h;
         imageEwm.setLayoutParams(para); //设置修改后的布局。
 
         if (uri != null && !uri.equals("")) {

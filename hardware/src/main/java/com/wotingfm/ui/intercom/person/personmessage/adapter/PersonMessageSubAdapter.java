@@ -74,10 +74,9 @@ public class PersonMessageSubAdapter extends BaseAdapter {
         holder.tv_name.setText(name);
 
         if (sub.logo_url != null && !sub.logo_url.equals("")) {
-            GlideUtils.loadImageView(context, sub.logo_url, holder.img_view, false);
+            GlideUtils.loadImageViewSrc(sub.logo_url, holder.img_view, false, 0);
         } else {
-            Bitmap bmp = BitmapUtils.readBitMap(context, R.mipmap.p);
-            holder.img_view.setImageBitmap(bmp);
+            GlideUtils.loadImageViewSrc(R.mipmap.p, holder.img_view, false, 0);
         }
 
         return convertView;

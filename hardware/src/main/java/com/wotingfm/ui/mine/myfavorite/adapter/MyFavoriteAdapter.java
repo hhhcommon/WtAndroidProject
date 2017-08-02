@@ -8,10 +8,12 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import com.woting.commonplat.utils.BitmapUtils;
 import com.wotingfm.R;
 import com.wotingfm.common.utils.GlideUtils;
 import com.wotingfm.ui.mine.myfavorite.model.Favorite;
+
 import java.util.List;
 
 /**
@@ -66,11 +68,10 @@ public class MyFavoriteAdapter extends BaseAdapter {
         }
         Favorite lists = list.get(position);
 
-        if (lists.getLogo_url() != null && !lists.getLogo_url().equals("")&&lists.getLogo_url().startsWith("http")) {
-            GlideUtils.loadImageViewSize(context, lists.getLogo_url(), 60, 60, holder.img_touXiang, false);
+        if (lists.getLogo_url() != null && !lists.getLogo_url().equals("") && lists.getLogo_url().startsWith("http")) {
+            GlideUtils.loadImageViewRoundCorners(lists.getLogo_url(), holder.img_touXiang, 60, 60);
         } else {
-            Bitmap bmp = BitmapUtils.readBitMap(context, R.mipmap.p);
-            holder.img_touXiang.setImageBitmap(bmp);
+            GlideUtils.loadImageViewRoundCorners(R.mipmap.p, holder.img_touXiang, 60, 60);
         }
 
         if (lists.getTitle() == null || lists.getTitle().equals("")) {
@@ -79,23 +80,23 @@ public class MyFavoriteAdapter extends BaseAdapter {
             holder.tv_name.setText(lists.getTitle());//名
         }
 
-        if (lists.getAlbum_id()== null || lists.getAlbum_id().equals("")) {
+        if (lists.getAlbum_id() == null || lists.getAlbum_id().equals("")) {
             holder.tv_introduce.setText("暂无专辑");//专辑
         } else {
             holder.tv_introduce.setText(lists.getAlbum_id());//专辑
         }
 
-        if (lists.getPlay_count()== null || lists.getPlay_count().equals("")) {
+        if (lists.getPlay_count() == null || lists.getPlay_count().equals("")) {
             holder.tv_num.setText("0次播放");//播放次数
         } else {
-            holder.tv_num.setText(lists.getPlay_count()+"次播放");//播放次数
+            holder.tv_num.setText(lists.getPlay_count() + "次播放");//播放次数
         }
 
         return convertView;
     }
 
     class ViewHolder {
-        public TextView tv_name,tv_introduce,tv_num;
+        public TextView tv_name, tv_introduce, tv_num;
         public ImageView img_touXiang;
     }
 

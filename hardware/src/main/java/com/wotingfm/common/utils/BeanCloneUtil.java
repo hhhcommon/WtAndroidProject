@@ -7,6 +7,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
 /**
+ * 数据深度复制
  * 作者：xinLong on 2017/8/1 18:45
  * 邮箱：645700751@qq.com
  */

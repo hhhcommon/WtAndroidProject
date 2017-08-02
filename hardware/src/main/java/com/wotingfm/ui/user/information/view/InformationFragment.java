@@ -100,11 +100,10 @@ public class InformationFragment extends Fragment implements View.OnClickListene
      */
     public void setImageUrl(String url) {
         if (url != null && !url.equals("")) {
-            GlideUtils.loadImageViewSize(this.getActivity(), url, 72, 72, img_url, true);
+            GlideUtils.loadImageViewRound(url, img_url, 72, 72);
             tv_news.setVisibility(View.INVISIBLE);
         } else {
-            Bitmap bmp = BitmapUtils.readBitMap(this.getActivity(), R.mipmap.icon_avatar_d);
-            img_url.setImageBitmap(bmp);
+            GlideUtils.loadImageViewRound(R.mipmap.icon_avatar_d, img_url, 72, 72);
             tv_news.setVisibility(View.VISIBLE);
         }
     }

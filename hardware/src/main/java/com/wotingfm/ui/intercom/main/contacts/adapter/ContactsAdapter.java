@@ -108,10 +108,9 @@ public class ContactsAdapter extends BaseAdapter implements SectionIndexer {
 
 
         if (lists.getAvatar() != null && !lists.getAvatar().equals("") && lists.getAvatar().startsWith("http")) {
-            GlideUtils.loadImageViewSize(context, lists.getAvatar(), 60, 60, holder.img_touXiang, true);
+            GlideUtils.loadImageViewRound(lists.getAvatar(), holder.img_touXiang, 60, 60);
         } else {
-            Bitmap bmp = BitmapUtils.readBitMap(context, R.mipmap.icon_avatar_d);
-            holder.img_touXiang.setImageBitmap(bmp);
+            GlideUtils.loadImageViewRound(R.mipmap.icon_avatar_d, holder.img_touXiang, 60, 60);
         }
 
         holder.img_chat.setOnClickListener(new View.OnClickListener() {

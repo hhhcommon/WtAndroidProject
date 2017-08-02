@@ -14,6 +14,7 @@ import com.woting.commonplat.config.GlobalNetWorkConfig;
 import com.woting.commonplat.utils.JsonEncloseUtils;
 import com.wotingfm.common.config.GlobalStateConfig;
 import com.wotingfm.common.constant.BroadcastConstants;
+import com.wotingfm.common.utils.BeanCloneUtil;
 import com.wotingfm.common.utils.ToastUtils;
 import com.wotingfm.ui.intercom.group.exitgroup.view.GroupExitFragment;
 import com.wotingfm.ui.intercom.group.groupmanage.GroupManageFragment;
@@ -304,20 +305,21 @@ public class GroupNewsForAddPresenter {
             group.setId(number);
             group.setLocation(address);
             group.setIntroduction(introduce);
-
+            List<Contact.user> _list= BeanCloneUtil.cloneTo(list);
             GroupManageFragment fragment = new GroupManageFragment();
             Bundle bundle = new Bundle();
             bundle.putSerializable("group", group);
-            bundle.putSerializable("list", (Serializable) list);
+            bundle.putSerializable("list", (Serializable) _list);
             fragment.setArguments(bundle);
             InterPhoneActivity.open(fragment);
         } else {
             if (g_news != null) {
+                List<Contact.user> _list= BeanCloneUtil.cloneTo(list);
                 GroupManageFragment fragment = new GroupManageFragment();
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("group", g_news);
                 bundle.putBoolean("ow", isOw);
-                bundle.putSerializable("list", (Serializable) list);
+                bundle.putSerializable("list", (Serializable) _list);
                 fragment.setArguments(bundle);
                 InterPhoneActivity.open(fragment);
 
@@ -340,9 +342,10 @@ public class GroupNewsForAddPresenter {
      */
     public void jumpGroupNumberShow() {
         if (list != null && list.size() > 0) {
+            List<Contact.user> _list= BeanCloneUtil.cloneTo(list);
             GroupNumberShowFragment fragment = new GroupNumberShowFragment();
             Bundle bundle = new Bundle();
-            bundle.putSerializable("list", (Serializable) list);
+            bundle.putSerializable("list", (Serializable) _list);
             fragment.setArguments(bundle);
             InterPhoneActivity.open(fragment);
         } else {
@@ -394,10 +397,11 @@ public class GroupNewsForAddPresenter {
                 // 判断是否是群主
                 if (model.judgeMine(g_news)) {
                     //群主跳转到退出群组的界面
+                    List<Contact.user> _list= BeanCloneUtil.cloneTo(list);
                     GroupExitFragment fragment = new GroupExitFragment();
                     Bundle bundle = new Bundle();
                     bundle.putSerializable("group", g_news);
-                    bundle.putSerializable("list", (Serializable) list);
+                    bundle.putSerializable("list", (Serializable) _list);
                     fragment.setArguments(bundle);
                     InterPhoneActivity.open(fragment);
                     fragment.setResultListener(new GroupExitFragment.ResultListener() {
@@ -501,10 +505,11 @@ public class GroupNewsForAddPresenter {
                     ToastUtils.show_always(activity.getActivity(), "数据出错了，请稍后再试！");
                 }
             } else if (type == 2) {// 添加群成员
+                List<Contact.user> list2= BeanCloneUtil.cloneTo(list);
                 GroupNumberAddFragment fragment = new GroupNumberAddFragment();
                 Bundle bundle = new Bundle();
                 bundle.putString("gid", gid);
-                bundle.putSerializable("list", (Serializable) list);// 成员列表
+                bundle.putSerializable("list", (Serializable) list2);// 成员列表
                 fragment.setArguments(bundle);
                 InterPhoneActivity.open(fragment);
             } else if (type == 3) {// 删除群成员
@@ -514,11 +519,13 @@ public class GroupNewsForAddPresenter {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
+                List<Contact.user> list3= BeanCloneUtil.cloneTo(list);
                 GroupNumberDelFragment fragment = new GroupNumberDelFragment();
                 Bundle bundle = new Bundle();
                 bundle.putString("gid", gid);// 群id
                 bundle.putString("id", cid);// 群所有者id
-                bundle.putSerializable("list", (Serializable) list);// 成员列表
+
+                bundle.putSerializable("list", (Serializable) list3);// 成员列表
                 fragment.setArguments(bundle);
                 InterPhoneActivity.open(fragment);
                 fragment.setResultListener(new GroupNumberDelFragment.ResultListener() {

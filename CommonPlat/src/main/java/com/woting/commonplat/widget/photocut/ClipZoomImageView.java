@@ -325,7 +325,7 @@ public class ClipZoomImageView extends ImageView implements OnScaleGestureListen
         Canvas canvas = new Canvas(bitmap);
         draw(canvas);
 
-        return Bitmap.createBitmap(bitmap,0, HorizontalPadding, PhoneMsgManager.ScreenWidth, PhoneMsgManager.ScreenHeight-HorizontalPadding);
+        return Bitmap.createBitmap(bitmap,0, HorizontalPadding, PhoneMsgManager.ScreenWidth, PhoneMsgManager.ScreenWidth);
     }
 
     /*

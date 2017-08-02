@@ -161,10 +161,9 @@ public class PersonalInfoFragment extends Fragment implements View.OnClickListen
      */
     public void setViewForImage(String url) {
         if (url != null && !url.equals("")) {
-            GlideUtils.loadImageViewSize(this.getActivity(), url, 60, 60, image_head, true);
+            GlideUtils.loadImageViewRound(url, image_head, 60, 60);
         } else {
-            Bitmap bmp = BitmapUtils.readBitMap(this.getActivity(), R.mipmap.icon_avatar_d);
-            image_head.setImageBitmap(bmp);
+            GlideUtils.loadImageViewRound(R.mipmap.icon_avatar_d, image_head, 60, 60);
         }
     }
 

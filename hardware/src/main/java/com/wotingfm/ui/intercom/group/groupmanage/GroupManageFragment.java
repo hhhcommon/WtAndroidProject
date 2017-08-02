@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.wotingfm.R;
 import com.wotingfm.common.config.GlobalStateConfig;
+import com.wotingfm.common.utils.BeanCloneUtil;
 import com.wotingfm.common.utils.ToastUtils;
 import com.wotingfm.ui.intercom.group.applygrouptype.view.ApplyGroupTypeFragment;
 import com.wotingfm.ui.intercom.group.editgroupmessage.view.EditGroupMessageFragment;
@@ -143,9 +144,10 @@ public class GroupManageFragment extends Fragment implements View.OnClickListene
                 } else {
                     // 实际数据
                     if (group != null && list != null && list.size() > 0  && group.getId() != null) {
+                        List<Contact.user> _list= BeanCloneUtil.cloneTo(list);
                         SetManagerFragment fragment = new SetManagerFragment();
                         Bundle bundle = new Bundle();
-                        bundle.putSerializable("list", (Serializable) list);
+                        bundle.putSerializable("list", (Serializable) _list);
                         bundle.putString("gid", group.getId());
                         fragment.setArguments(bundle);
                         InterPhoneActivity.open(fragment);
@@ -250,9 +252,10 @@ public class GroupManageFragment extends Fragment implements View.OnClickListene
                     InterPhoneActivity.open(new TransferGroupFragment());
                 } else {
                     if (group != null && list != null && list.size() > 0  && group.getId() != null) {
+                        List<Contact.user> _list= BeanCloneUtil.cloneTo(list);
                         TransferGroupFragment fragment = new TransferGroupFragment();
                         Bundle bundle = new Bundle();
-                        bundle.putSerializable("list", (Serializable) list);
+                        bundle.putSerializable("list", (Serializable) _list);
                         bundle.putString("gid", group.getId());
                         fragment.setArguments(bundle);
                         InterPhoneActivity.open(fragment);
