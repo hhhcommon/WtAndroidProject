@@ -105,22 +105,22 @@ public class PreferenceFragment extends Fragment implements View.OnClickListener
             case R.id.tv_RAWY:
                 presenter.setBackground(1);
                 break;
-            case R.id.tv_FYKSJ:
+            case R.id.tv_XSSH:
                 presenter.setBackground(2);
                 break;
-            case R.id.tv_ZZS:
+            case R.id.tv_XJ:
                 presenter.setBackground(3);
                 break;
-            case R.id.tv_XSSH:
+            case R.id.tv_FYKSJ:
                 presenter.setBackground(4);
                 break;
             case R.id.tv_TGSTXS:
                 presenter.setBackground(5);
                 break;
-            case R.id.tv_YQQ:
+            case R.id.tv_ZZS:
                 presenter.setBackground(6);
                 break;
-            case R.id.tv_XJ:
+            case R.id.tv_YQQ:
                 presenter.setBackground(7);
                 break;
         }
@@ -129,10 +129,10 @@ public class PreferenceFragment extends Fragment implements View.OnClickListener
     /**
      * 界面关闭
      */
-    public void close(){
+    public void close() {
         if (fromType.equals("person")) {
             MineActivity.close();
-        }else if (fromType.equals("login")) {
+        } else if (fromType.equals("login")) {
             LogoActivity.close();
             LogoActivity.closeActivity();
         }
@@ -142,7 +142,7 @@ public class PreferenceFragment extends Fragment implements View.OnClickListener
      * 设置热爱文艺样式
      */
     public void setViewForRAWY(boolean b) {
-        if (b) {
+        if (!b) {
             tv_RAWY.setBackgroundResource(R.drawable.background_preference_white);
             tv_RAWY.setTextColor(this.getResources().getColor(R.color.color_preference_word));
         } else {
@@ -155,7 +155,7 @@ public class PreferenceFragment extends Fragment implements View.OnClickListener
      * 设置放眼看世界样式
      */
     public void setViewForFYKSJ(boolean b) {
-        if (b) {
+        if (!b) {
             tv_FYKSJ.setBackgroundResource(R.drawable.background_preference_white);
             tv_FYKSJ.setTextColor(this.getResources().getColor(R.color.color_preference_word));
         } else {
@@ -168,7 +168,7 @@ public class PreferenceFragment extends Fragment implements View.OnClickListener
      * 设置涨知识样式
      */
     public void setViewForZZS(boolean b) {
-        if (b) {
+        if (!b) {
             tv_ZZS.setBackgroundResource(R.drawable.background_preference_white);
             tv_ZZS.setTextColor(this.getResources().getColor(R.color.color_preference_word));
         } else {
@@ -181,7 +181,7 @@ public class PreferenceFragment extends Fragment implements View.OnClickListener
      * 设置享受生活样式
      */
     public void setViewForXSSH(boolean b) {
-        if (b) {
+        if (!b) {
             tv_XSSH.setBackgroundResource(R.drawable.background_preference_white);
             tv_XSSH.setTextColor(this.getResources().getColor(R.color.color_preference_word));
         } else {
@@ -194,7 +194,7 @@ public class PreferenceFragment extends Fragment implements View.OnClickListener
      * 设置听故事听小说样式
      */
     public void setViewForTGSTXS(boolean b) {
-        if (b) {
+        if (!b) {
             tv_TGSTXS.setBackgroundResource(R.drawable.background_preference_white);
             tv_TGSTXS.setTextColor(this.getResources().getColor(R.color.color_preference_word));
         } else {
@@ -207,7 +207,7 @@ public class PreferenceFragment extends Fragment implements View.OnClickListener
      * 设置有情趣样式
      */
     public void setViewForYQQ(boolean b) {
-        if (b) {
+        if (!b) {
             tv_YQQ.setBackgroundResource(R.drawable.background_preference_white);
             tv_YQQ.setTextColor(this.getResources().getColor(R.color.color_preference_word));
         } else {
@@ -220,7 +220,7 @@ public class PreferenceFragment extends Fragment implements View.OnClickListener
      * 设置喜剧样式
      */
     public void setViewForXJ(boolean b) {
-        if (b) {
+        if (!b) {
             tv_XJ.setBackgroundResource(R.drawable.background_preference_white);
             tv_XJ.setTextColor(this.getResources().getColor(R.color.color_preference_word));
         } else {

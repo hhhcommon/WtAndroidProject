@@ -3,6 +3,7 @@ package com.wotingfm.ui.intercom.group.transfergroup.model;
 import android.util.Log;
 
 import com.wotingfm.common.net.RetrofitUtils;
+import com.wotingfm.common.utils.BeanCloneUtil;
 import com.wotingfm.common.utils.GetTestData;
 import com.wotingfm.ui.intercom.main.contacts.model.Contact;
 
@@ -37,23 +38,20 @@ public class TransferManagerModel {
     /**
      * 组装数据
      *
-     * @param list
-     * @param id
+     * @param _list
      */
-    public List<Contact.user> assemblyData(List<Contact.user> list, String id) {
-        // 有群主
-        if (id != null && !id.trim().equals("")) {
-            for (int i = 0; i < list.size(); i++) {
-                String _id = list.get(i).getId();
-                if (_id != null && !_id.trim().equals("")) {
-                    list.get(i).setIs_admin(false);
-                    if (id.equals(_id)) {
-                        list.remove(i);
-                    }
+    public List<Contact.user> assemblyData(List<Contact.user> _list) {
+        if (_list != null && _list.size() > 0) {
+            for (int i = 0; i < _list.size(); i++) {
+                _list.get(i).setIs_admin(false);
+                if (_list.get(i).is_owner()) {
+                    _list.remove(i);
                 }
             }
+            return _list;
+        } else {
+            return null;
         }
-        return list;
     }
 
     /**

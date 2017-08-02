@@ -3,6 +3,7 @@ package com.wotingfm.common.service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -71,9 +72,9 @@ public class JPushReceiver extends BroadcastReceiver {
         Map<String, Object> map = new HashMap<>();
         for (String key : bundle.keySet()) {
             if (key.equals(JPushInterface.EXTRA_NOTIFICATION_ID)) {
-                Log.e(TAG,"key:" + key + ", value:" + bundle.getInt(key));
+                Log.e(TAG, "key:" + key + ", value:" + bundle.getInt(key));
             } else if (key.equals(JPushInterface.EXTRA_CONNECTION_CHANGE)) {
-                Log.e(TAG,"key:" + key + ", value:" + bundle.getBoolean(key));
+                Log.e(TAG, "key:" + key + ", value:" + bundle.getBoolean(key));
             } else if (key.equals(JPushInterface.EXTRA_EXTRA)) {
                 if (TextUtils.isEmpty(bundle.getString(JPushInterface.EXTRA_EXTRA))) {
                     Log.e(TAG, "This message has no Extra data");
@@ -84,13 +85,13 @@ public class JPushReceiver extends BroadcastReceiver {
                     Iterator<String> it = json.keys();
                     while (it.hasNext()) {
                         String myKey = it.next().toString();
-                        Log.e(TAG,"///////////////////////////////");
-                        Log.e(TAG,"////                           ");
-                        Log.e(TAG,"////  key:" + key);
-                        Log.e(TAG,"////  myKey:" + myKey);
-                        Log.e(TAG,"////  value:" + json.optString(myKey));
-                        Log.e(TAG,"////                           ");
-                        Log.e(TAG,"///////////////////////////////");
+                        Log.e(TAG, "///////////////////////////////");
+                        Log.e(TAG, "////                           ");
+                        Log.e(TAG, "////  key:" + key);
+                        Log.e(TAG, "////  myKey:" + myKey);
+                        Log.e(TAG, "////  value:" + json.optString(myKey));
+                        Log.e(TAG, "////                           ");
+                        Log.e(TAG, "///////////////////////////////");
                         map.put(myKey, json.optString(myKey));
                     }
                 } catch (JSONException e) {
@@ -98,11 +99,26 @@ public class JPushReceiver extends BroadcastReceiver {
                 }
 
             } else {
-                Log.e(TAG,"key:" + key + ", value:" + bundle.getString(key));
+                if (key.equals("cn.jpush.android.MESSAGE")) {
+                    Log.e(TAG, "///////////////////////////////");
+                    Log.e(TAG, "////                           ");
+                    Log.e(TAG, "////  key:" + key);
+                    Log.e(TAG, "////  myKey:" + "message");
+                    Log.e(TAG, "////  value:" + bundle.getString(key));
+                    Log.e(TAG, "////                           ");
+                    Log.e(TAG, "///////////////////////////////");
+                    map.put("message", bundle.getString(key));
+                }
+                Log.e(TAG, "key:" + key + ", value:" + bundle.getString(key));
             }
         }
+        // 组装展示消息
         String message = JsonEncloseUtils.jsonEnclose(map).toString();
-        NotificationService.saveM(message);
+        // 判断消息设置是否接收推送消息
+        String type = BSApplication.SharedPreferences.getString(StringConstant.PUSH_MSG_SET, "true");
+        if (type != null && !type.trim().equals("") && type.equals("true")) {
+            NotificationService.saveM(message);
+        }
     }
 
 //    // 极光id绑定

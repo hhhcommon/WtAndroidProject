@@ -76,10 +76,9 @@ public class CallFragment extends Fragment implements View.OnClickListener{
         }
         // 设置好友头像
         if (url != null && !url.equals("")) {
-            GlideUtils.loadImageViewSize(getActivity(), url, 60, 60, img_url, true);
+            GlideUtils.loadImageViewRound( url, img_url, 60, 60);
         } else {
-            Bitmap bmp = BitmapUtils.readBitMap(getActivity(), R.mipmap.test);
-            img_url.setImageBitmap(bmp);
+            GlideUtils.loadImageViewRound( R.mipmap.icon_avatar_d, img_url, 60, 60);
         }
         // 设置好友名称
         if (name != null && !name.equals("")) {

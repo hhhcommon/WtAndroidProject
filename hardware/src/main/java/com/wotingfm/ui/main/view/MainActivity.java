@@ -112,44 +112,20 @@ public class MainActivity extends TabActivity implements View.OnClickListener, A
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // AndroidBug5497Workaround.assistActivity(findViewById(android.R.id.content));
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);        // 透明状态栏
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);    // 透明导航栏
         setContentView(R.layout.activity_main);
         EventBus.getDefault().register(this);
         context = this;
         NIMClient.getService(MsgServiceObserve.class)
                 .observeReceiveMessage(incomingMessageObserver, true);
- /*       if (Build.VERSION.SDK_INT == Build.VERSION_CODES.KITKAT) {
-            // 设置全屏，并且不会Activity的布局让出状态栏的空间
-            getWindow().addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN);
-            getWindow().addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
-        }
-*/
-    /*    new KeyboardChangeListener(this).setKeyBoardListener(new KeyboardChangeListener.KeyBoardListener() {
-            @Override
-            public void onKeyboardChange(boolean isShow, int keyboardHeight) {
-                largeLabel.setVisibility(isShow == true ? View.GONE : View.VISIBLE);
-            }
-        });*/
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);        // 透明状态栏
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);    // 透明导航栏
+
+        // applySelectedColor();
+        applyTextColor(false);
+        NIMClient.getService(MsgServiceObserve.class).observeReceiveMessage(incomingMessageObserver, true);
         InitTextView();
         mainPresenter = new MainPresenter(this);
-//        applySelectedColor();
-        //   applyTextColor(false);
-        try {
-            Log.e("1", Environment.getDataDirectory().getPath());
-            Log.e("2", Environment.getDownloadCacheDirectory().getPath());
-            Log.e("3", Environment.getExternalStorageDirectory().getPath());
-            Log.e("4", Environment.getRootDirectory().getPath());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-//        Environment.getDataDirectory().getPath();              //   获得根目录/data 内部存储路径
-//        Environment.getDownloadCacheDirectory().getPath();     //   获得缓存目录/cache
-//        Environment.getExternalStorageDirectory().getPath();   //   获得SD卡目录/mnt/sdcard（获取的是手机外置sd卡的路径）
-//        Environment.getRootDirectory().getPath();              //
     }
-
-    // 初始化视图,主页跳转的3个界面
 
     // 初始化视图,主页跳转的3个界面
     private void InitTextView() {

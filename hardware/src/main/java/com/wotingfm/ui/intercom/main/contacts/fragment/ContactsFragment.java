@@ -2,19 +2,24 @@ package com.wotingfm.ui.intercom.main.contacts.fragment;
 
 import android.app.Dialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.woting.commonplat.widget.TipView;
 import com.wotingfm.R;
+import com.wotingfm.common.application.BSApplication;
+import com.wotingfm.common.constant.IntegerConstant;
 import com.wotingfm.common.utils.DialogUtils;
 import com.wotingfm.ui.intercom.add.search.local.view.SearchContactsForLocalFragment;
 import com.wotingfm.ui.intercom.group.groupchat.view.GroupChatFragment;
@@ -38,7 +43,7 @@ import java.util.List;
 public class ContactsFragment extends Fragment implements View.OnClickListener, TipView.TipViewClick {
     private ListView listView;
     private View headView, rootView;
-    private TextView tv_search, tv_newGroupNum, tv_newFriendNum, tvDialog;
+    private TextView tv_newGroupNum, tv_newFriendNum, tvDialog;
     private RelativeLayout re_newFriend, re_newGroup, re_view;
     private ContactsPresenter presenter;
     private ContactsAdapter adapter;
@@ -46,6 +51,7 @@ public class ContactsFragment extends Fragment implements View.OnClickListener, 
     private TipView tip_view;
     private Dialog confirmDialog;
     private int position, type;
+    private LinearLayout lin_search;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -71,8 +77,8 @@ public class ContactsFragment extends Fragment implements View.OnClickListener, 
         sideBar.setTextView(tvDialog);
 
         headView = LayoutInflater.from(this.getActivity()).inflate(R.layout.headview_contacts, null);// 头部 view
-        tv_search = (TextView) headView.findViewById(R.id.tv_search);            // 搜索按钮
-        tv_search.setOnClickListener(this);
+        lin_search = (LinearLayout) headView.findViewById(R.id.lin_search);      // 搜索按钮
+        lin_search.setOnClickListener(this);
         re_newFriend = (RelativeLayout) headView.findViewById(R.id.re_newFriend);// 新的朋友
         re_newFriend.setOnClickListener(this);
         tv_newFriendNum = (TextView) headView.findViewById(R.id.tv_newFriendNum);// 新的朋友消息
@@ -90,10 +96,13 @@ public class ContactsFragment extends Fragment implements View.OnClickListener, 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.tv_search:   // 跳转到本地搜索界面
+            case R.id.lin_search:   // 跳转到本地搜索界面
                 InterPhoneActivity.open(new SearchContactsForLocalFragment());
                 break;
-            case R.id.re_newFriend:// 跳转到新的朋友界面
+            case R.id.re_newFriend:// 跳转到新的朋友界面,小红点数据设置为零
+                BSApplication.SharedPreferences.edit().putInt(IntegerConstant.RED_POINT_PERSON, 0);
+                BSApplication.SharedPreferences.edit().commit();
+                tv_newFriendNum.setVisibility(View.GONE);
                 InterPhoneActivity.open(new NewFriendFragment());
                 break;
             case R.id.re_newGroup: // 跳转到群聊界面

@@ -14,7 +14,9 @@ import com.woting.commonplat.config.GlobalNetWorkConfig;
 import com.woting.commonplat.utils.JsonEncloseUtils;
 import com.wotingfm.common.config.GlobalStateConfig;
 import com.wotingfm.common.constant.BroadcastConstants;
+import com.wotingfm.common.utils.BeanCloneUtil;
 import com.wotingfm.common.utils.ToastUtils;
+import com.wotingfm.ui.intercom.group.exitgroup.view.GroupExitFragment;
 import com.wotingfm.ui.intercom.group.groupmanage.GroupManageFragment;
 import com.wotingfm.ui.intercom.group.groupmumberadd.view.GroupNumberAddFragment;
 import com.wotingfm.ui.intercom.group.groupmumberdel.view.GroupNumberDelFragment;
@@ -28,8 +30,10 @@ import com.wotingfm.ui.intercom.main.simulation.view.SimulationInterPhoneFragmen
 import com.wotingfm.ui.intercom.main.view.InterPhoneActivity;
 import com.wotingfm.ui.intercom.person.personmessage.view.PersonMessageFragment;
 import com.wotingfm.ui.mine.qrcodes.EWMShowFragment;
+
 import org.json.JSONObject;
 import org.json.JSONTokener;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -301,20 +305,21 @@ public class GroupNewsForAddPresenter {
             group.setId(number);
             group.setLocation(address);
             group.setIntroduction(introduce);
-
+            List<Contact.user> _list= BeanCloneUtil.cloneTo(list);
             GroupManageFragment fragment = new GroupManageFragment();
             Bundle bundle = new Bundle();
             bundle.putSerializable("group", group);
-            bundle.putSerializable("list", (Serializable) list);
+            bundle.putSerializable("list", (Serializable) _list);
             fragment.setArguments(bundle);
             InterPhoneActivity.open(fragment);
         } else {
             if (g_news != null) {
+                List<Contact.user> _list= BeanCloneUtil.cloneTo(list);
                 GroupManageFragment fragment = new GroupManageFragment();
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("group", g_news);
                 bundle.putBoolean("ow", isOw);
-                bundle.putSerializable("list", (Serializable) list);
+                bundle.putSerializable("list", (Serializable) _list);
                 fragment.setArguments(bundle);
                 InterPhoneActivity.open(fragment);
 
@@ -336,17 +341,11 @@ public class GroupNewsForAddPresenter {
      * 跳转到群成员展示页
      */
     public void jumpGroupNumberShow() {
-        String cid = "1";
-        try {
-            cid = g_news.getCreator_id();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
         if (list != null && list.size() > 0) {
+            List<Contact.user> _list= BeanCloneUtil.cloneTo(list);
             GroupNumberShowFragment fragment = new GroupNumberShowFragment();
             Bundle bundle = new Bundle();
-            bundle.putSerializable("list", (Serializable) list);
-            bundle.putString("id", cid);// 群创建者id
+            bundle.putSerializable("list", (Serializable) _list);
             fragment.setArguments(bundle);
             InterPhoneActivity.open(fragment);
         } else {
@@ -394,22 +393,52 @@ public class GroupNewsForAddPresenter {
             activity.exitResult();// 设置返回监听
             InterPhoneActivity.close();
         } else {
-            if (GlobalNetWorkConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
-                activity.dialogShow();
-                model.exitGroup(gid, new GroupNewsForAddModel.OnLoadInterface() {
-                    @Override
-                    public void onSuccess(Object o) {
-                        activity.dialogCancel();
-                        dealExitGroupSuccess(o);
-                    }
+            if (g_news != null) {
+                // 判断是否是群主
+                if (model.judgeMine(g_news)) {
+                    //群主跳转到退出群组的界面
+                    List<Contact.user> _list= BeanCloneUtil.cloneTo(list);
+                    GroupExitFragment fragment = new GroupExitFragment();
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable("group", g_news);
+                    bundle.putSerializable("list", (Serializable) _list);
+                    fragment.setArguments(bundle);
+                    InterPhoneActivity.open(fragment);
+                    fragment.setResultListener(new GroupExitFragment.ResultListener() {
+                        @Override
+                        public void resultListener(boolean type,int changeType) {
+                            if (type) {
+                                if(changeType==0){
+                                    // 群已经解散
+                                    InterPhoneActivity.close();
+                                }else{
+                                    // 群主已转让
+                                    getData();
+                                }
+                            }
+                        }
+                    });
+                } else {
+                    if (GlobalNetWorkConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
+                        activity.dialogShow();
+                        model.exitGroup(gid, new GroupNewsForAddModel.OnLoadInterface() {
+                            @Override
+                            public void onSuccess(Object o) {
+                                activity.dialogCancel();
+                                dealExitGroupSuccess(o);
+                            }
 
-                    @Override
-                    public void onFailure(String msg) {
-                        activity.dialogCancel();
+                            @Override
+                            public void onFailure(String msg) {
+                                activity.dialogCancel();
+                            }
+                        });
+                    } else {
+                        ToastUtils.show_always(activity.getActivity(), "网络连接失败，请稍后再试！");
                     }
-                });
+                }
             } else {
-                ToastUtils.show_always(activity.getActivity(), "网络连接失败，请稍后再试！");
+                ToastUtils.show_always(activity.getActivity(), "数据出错了，请您稍后再试！");
             }
         }
     }
@@ -476,10 +505,11 @@ public class GroupNewsForAddPresenter {
                     ToastUtils.show_always(activity.getActivity(), "数据出错了，请稍后再试！");
                 }
             } else if (type == 2) {// 添加群成员
+                List<Contact.user> list2= BeanCloneUtil.cloneTo(list);
                 GroupNumberAddFragment fragment = new GroupNumberAddFragment();
                 Bundle bundle = new Bundle();
                 bundle.putString("gid", gid);
-                bundle.putSerializable("list", (Serializable) list);// 成员列表
+                bundle.putSerializable("list", (Serializable) list2);// 成员列表
                 fragment.setArguments(bundle);
                 InterPhoneActivity.open(fragment);
             } else if (type == 3) {// 删除群成员
@@ -489,11 +519,13 @@ public class GroupNewsForAddPresenter {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
+                List<Contact.user> list3= BeanCloneUtil.cloneTo(list);
                 GroupNumberDelFragment fragment = new GroupNumberDelFragment();
                 Bundle bundle = new Bundle();
                 bundle.putString("gid", gid);// 群id
                 bundle.putString("id", cid);// 群所有者id
-                bundle.putSerializable("list", (Serializable) list);// 成员列表
+
+                bundle.putSerializable("list", (Serializable) list3);// 成员列表
                 fragment.setArguments(bundle);
                 InterPhoneActivity.open(fragment);
                 fragment.setResultListener(new GroupNumberDelFragment.ResultListener() {
@@ -626,7 +658,7 @@ public class GroupNewsForAddPresenter {
     // 进入组成功后数据处理
     private void enterGroupOkData(String groupId) {
         model.del(groupId);// 删除跟本次id相关的数据
-        model.add(model.assemblyData(g_news, GlobalStateConfig.ok,""));// 把本次数据添加的数据库
+        model.add(model.assemblyData(g_news, GlobalStateConfig.ok, ""));// 把本次数据添加的数据库
         InterPhoneActivity.closeAll();
         activity.getActivity().sendBroadcast(new Intent(BroadcastConstants.VIEW_INTER_PHONE));// 跳转到对讲主页
         activity.getActivity().sendBroadcast(new Intent(BroadcastConstants.VIEW_INTER_PHONE_CHAT_OK));// 对讲主页界面，数据更新

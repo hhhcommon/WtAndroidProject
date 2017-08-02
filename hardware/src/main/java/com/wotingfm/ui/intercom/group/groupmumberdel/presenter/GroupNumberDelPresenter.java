@@ -72,7 +72,7 @@ public class GroupNumberDelPresenter {
      * 获取组装数据
      */
     public List<Contact.user> getNews() {
-        String id = null;// 群创建者id
+        String id = null;// 群主id
         try {
             id = activity.getArguments().getString("id");
         } catch (Exception e) {

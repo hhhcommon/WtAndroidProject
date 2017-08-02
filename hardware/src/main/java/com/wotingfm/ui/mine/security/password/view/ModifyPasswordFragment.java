@@ -120,12 +120,4 @@ public class ModifyPasswordFragment extends Fragment implements View.OnClickList
         super.onDestroy();
         presenter.cancel();
     }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        if (rootView != null) {
-            ((ViewGroup) rootView.getParent()).removeView(rootView);
-        }
-    }
 }

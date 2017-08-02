@@ -28,14 +28,22 @@
             android:layout_width="match_parent"
             android:layout_height="84dp">
 
-            <ImageView
-                android:id="@+id/img_url"
+            <LinearLayout
+                android:id="@+id/lin_img"
                 android:layout_width="32dp"
                 android:layout_height="32dp"
                 android:layout_gravity="center_vertical"
                 android:layout_marginLeft="12dp"
                 android:layout_marginTop="12dp"
-                android:src="@mipmap/test" />
+                android:padding="1dp">
+
+                <ImageView
+                    android:id="@+id/img_url"
+                    android:scaleType="centerCrop"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+            </LinearLayout>
+
 
             <include
                 android:id="@+id/view_head"
@@ -43,7 +51,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="84dp"
                 android:layout_marginLeft="8dp"
-                android:layout_toRightOf="@id/img_url" />
+                android:layout_toRightOf="@id/lin_img" />
 
             <TextView
                 android:id="@+id/tv_oks"
@@ -64,8 +72,8 @@
                 android:layout_width="60dp"
                 android:layout_height="24dp"
                 android:layout_alignParentRight="true"
-                android:layout_marginTop="41.3dp"
                 android:layout_marginRight="12dp"
+                android:layout_marginTop="41.3dp"
                 android:background="@drawable/background_circle_newfriend_orange"
                 android:gravity="center"
                 android:text="同意"

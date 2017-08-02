@@ -13,6 +13,7 @@ import com.google.gson.reflect.TypeToken;
 import com.woting.commonplat.config.GlobalNetWorkConfig;
 import com.wotingfm.common.config.GlobalStateConfig;
 import com.wotingfm.common.constant.BroadcastConstants;
+import com.wotingfm.common.utils.BeanCloneUtil;
 import com.wotingfm.ui.intercom.group.groupapply.GroupApplyFragment;
 import com.wotingfm.ui.intercom.group.groupmumbershow.view.GroupNumberShowFragment;
 import com.wotingfm.ui.intercom.group.groupnews.noadd.model.GroupNewsForNoAddModel;
@@ -195,6 +196,7 @@ public class GroupNewsForNoAddPresenter {
             @Override
             public void onFailure(String msg) {
                 activity.dialogCancel();
+                activity.setViewForNoGroupPerson();
             }
         });
     }
@@ -243,9 +245,10 @@ public class GroupNewsForNoAddPresenter {
      */
     public void jump() {
         if (_list != null && _list.size() > 0) {
+            List<Contact.user> list= BeanCloneUtil.cloneTo(_list);
             GroupNumberShowFragment fragment = new GroupNumberShowFragment();
             Bundle bundle = new Bundle();
-            bundle.putSerializable("list", (Serializable) _list);
+            bundle.putSerializable("list", (Serializable) list);
             fragment.setArguments(bundle);
             InterPhoneActivity.open(fragment);
         }

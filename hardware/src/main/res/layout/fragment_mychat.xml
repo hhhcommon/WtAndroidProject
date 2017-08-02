@@ -36,8 +36,7 @@
         android:id="@+id/expandableListView"
         android:layout_width="match_parent"
         android:scrollbars="none"
-        android:dividerHeight="0.7dp"
-        android:layout_height="match_parent"
-        android:divider="@color/line_color" />
+        android:divider="@color/white"
+        android:layout_height="match_parent"/>
 
 </LinearLayout>

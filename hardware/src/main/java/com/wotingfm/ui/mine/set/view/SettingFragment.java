@@ -34,7 +34,7 @@ public class SettingFragment extends Fragment implements View.OnClickListener {
     private SettingPresenter presenter;
     private Dialog dialog;
     private TextView tv_close;
-    private Dialog clearCacheDialog;
+    private Dialog clearCacheDialog,LDialog;
     private TextView textCache;
     private LinearLayout lin_login;
 
@@ -47,6 +47,7 @@ public class SettingFragment extends Fragment implements View.OnClickListener {
             initView();
             initEvent();
             initDialog();
+            initDialogL();
             presenter = new SettingPresenter(this);
             presenter.getData();
         }
@@ -127,7 +128,7 @@ public class SettingFragment extends Fragment implements View.OnClickListener {
                 MineActivity.open(new AboutFragment());
                 break;
             case R.id.tv_close:// 注销登录
-                presenter.cancel();
+                LDialog.show();
                 break;
             case R.id.tv_confirm:           // 确定清除
                 presenter.clear();
@@ -179,7 +180,7 @@ public class SettingFragment extends Fragment implements View.OnClickListener {
     // 初始化对话框
     private void initDialog() {
         // 清除缓存对话框
-        View dialog1 = LayoutInflater.from(this.getActivity()).inflate(R.layout.dialog_exit_confirm, null);
+        View dialog1 = LayoutInflater.from(this.getActivity()).inflate(R.layout.dialog_talk_person_del, null);
         dialog1.findViewById(R.id.tv_confirm).setOnClickListener(this); // 清空
         dialog1.findViewById(R.id.tv_cancle).setOnClickListener(this);  // 取消
         TextView textTitle = (TextView) dialog1.findViewById(R.id.tv_title);
@@ -189,6 +190,32 @@ public class SettingFragment extends Fragment implements View.OnClickListener {
         clearCacheDialog.setContentView(dialog1);
         clearCacheDialog.setCanceledOnTouchOutside(false);
         clearCacheDialog.getWindow().setBackgroundDrawableResource(R.color.transparent_background);
+    }
+
+    // 初始化对话框
+    private void initDialogL() {
+        // 退出登录对话框
+        View dialog1 = LayoutInflater.from(this.getActivity()).inflate(R.layout.dialog_talk_person_del, null);
+        dialog1.findViewById(R.id.tv_confirm).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                presenter.cancel();
+                LDialog.dismiss();
+            }
+        }); // 确定
+        dialog1.findViewById(R.id.tv_cancle).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                LDialog.dismiss();
+            }
+        });  // 取消
+        TextView textTitle = (TextView) dialog1.findViewById(R.id.tv_title);
+        textTitle.setText("是否退出当前用户?");
+
+        LDialog = new Dialog(this.getActivity(), R.style.MyDialogs);
+        LDialog.setContentView(dialog1);
+        LDialog.setCanceledOnTouchOutside(false);
+        LDialog.getWindow().setBackgroundDrawableResource(R.color.transparent_background);
     }
 
     /**
@@ -204,14 +231,5 @@ public class SettingFragment extends Fragment implements View.OnClickListener {
     public void clearDialogCancel() {
         if (clearCacheDialog != null) clearCacheDialog.dismiss();
     }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        if (rootView != null) {
-            ((ViewGroup) rootView.getParent()).removeView(rootView);
-        }
-    }
-
 
 }

@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -69,7 +70,7 @@ public class NotifyMsgAdapter extends RecyclerView.Adapter<NotifyMsgAdapter.Simp
             holder.tv_oks.setVisibility(View.GONE);
         } else if (m.getMsg_type() != null && m.getMsg_type().equals("4")) {
             holder.tv_introduce.setVisibility(View.VISIBLE);
-            if (m.getIntroduce()!= null && !m.getIntroduce().equals("")) {
+            if (m.getIntroduce() != null && !m.getIntroduce().equals("")) {
                 holder.tv_introduce.setText(m.getIntroduce());
             } else {
                 holder.tv_introduce.setText("验证消息");
@@ -88,10 +89,9 @@ public class NotifyMsgAdapter extends RecyclerView.Adapter<NotifyMsgAdapter.Simp
 
         }
         if (m.getAvatar() != null && !m.getAvatar().equals("") && m.getAvatar().startsWith("http")) {
-            GlideUtils.loadImageViewSize(mContext, m.getAvatar(), 60, 60, holder.img_url, true);
+            GlideUtils.loadImageViewRound(m.getAvatar(), holder.img_url, 60, 60);
         } else {
-            Bitmap bmp = BitmapUtils.readBitMap(mContext, R.mipmap.icon_avatar_d);
-            holder.img_url.setImageBitmap(bmp);
+            GlideUtils.loadImageViewRound(R.mipmap.icon_avatar_d, holder.img_url, 60, 60);
         }
         if (m.getTime() != null && !m.getTime().equals("")) {
             holder.tv_time.setText(TimeUtil.stampToDateForH(m.getTime()));
@@ -149,6 +149,7 @@ public class NotifyMsgAdapter extends RecyclerView.Adapter<NotifyMsgAdapter.Simp
 
     class SimpleHolder extends RecyclerView.ViewHolder {
         public ImageView img_url;
+        public LinearLayout lin_img;
         public TextView tv_title, tv_news, tv_ok, tv_Delete, tv_oks, tv_introduce, tv_time;
         public RelativeLayout layout_content, re_adapter;
 
@@ -156,6 +157,7 @@ public class NotifyMsgAdapter extends RecyclerView.Adapter<NotifyMsgAdapter.Simp
             super(itemView);
             tv_Delete = (TextView) itemView.findViewById(R.id.tv_delete);// 删除按钮
             img_url = (ImageView) itemView.findViewById(R.id.img_url);// 头像
+            lin_img = (LinearLayout) itemView.findViewById(R.id.lin_img);// 头像背景图
 
             tv_title = (TextView) itemView.findViewById(R.id.tv_title);
             tv_news = (TextView) itemView.findViewById(R.id.tv_news);

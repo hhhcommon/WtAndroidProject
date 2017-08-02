@@ -13,6 +13,7 @@ import android.view.Window;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import com.woting.commonplat.utils.BitmapUtils;
 import com.wotingfm.R;
 import com.wotingfm.common.utils.DialogUtils;
@@ -29,9 +30,9 @@ public class CreateGroupMainFragment extends Fragment implements View.OnClickLis
     private View rootView;
     private ImageView img_url, img_password, img_shen;
     private EditText et_phoneNumber, et_password;
-    private TextView tv_send,tv_show;
+    private TextView tv_send, tv_show;
     private CreateGroupMainPresenter presenter;
-    private Dialog dialog,imgDialog;
+    private Dialog dialog, imgDialog;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -116,11 +117,10 @@ public class CreateGroupMainFragment extends Fragment implements View.OnClickLis
      */
     public void setImageUrl(String url) {
         if (url != null && !url.equals("")) {
-            GlideUtils.loadImageViewSize(this.getActivity(),url, 72, 72, img_url, true);
+            GlideUtils.loadImageViewRoundCorners(url, img_url, 72, 72);
             tv_show.setVisibility(View.INVISIBLE);
         } else {
-            Bitmap bmp = BitmapUtils.readBitMap(this.getActivity(), R.mipmap.icon_avatar_d);
-            img_url.setImageBitmap(bmp);
+            GlideUtils.loadImageViewRoundCorners(R.mipmap.icon_avatar_d, img_url, 72, 72);
             tv_show.setVisibility(View.VISIBLE);
         }
     }
@@ -129,9 +129,9 @@ public class CreateGroupMainFragment extends Fragment implements View.OnClickLis
      * 设置密码群样式
      */
     public void setViewM(boolean b) {
-        if(b){
+        if (b) {
             img_password.setImageResource(R.mipmap.create_group_icon_selected_s);
-        }else{
+        } else {
             img_password.setImageResource(R.mipmap.create_group_icon_selected_n);
         }
     }
@@ -140,9 +140,9 @@ public class CreateGroupMainFragment extends Fragment implements View.OnClickLis
      * 设置审核群样式
      */
     public void setViewS(boolean b) {
-        if(b){
+        if (b) {
             img_shen.setImageResource(R.mipmap.create_group_icon_selected_s);
-        }else{
+        } else {
             img_shen.setImageResource(R.mipmap.create_group_icon_selected_n);
         }
     }

@@ -57,7 +57,7 @@ public class SearchContactsForUserAdapter extends BaseAdapter {
         ViewHolder holder;
         if (convertView == null) {
             holder = new ViewHolder();
-            convertView = LayoutInflater.from(context).inflate(R.layout.adapter_groups, null);
+            convertView = LayoutInflater.from(context).inflate(R.layout.adapter_users, null);
             holder.tv_name = (TextView) convertView.findViewById(R.id.tv_name);//名
             holder.img_touXiang = (ImageView) convertView.findViewById(R.id.img_view);
             holder.img_chat = (ImageView) convertView.findViewById(R.id.img_chat);
@@ -75,10 +75,9 @@ public class SearchContactsForUserAdapter extends BaseAdapter {
         }
 
         if (lists.getPortraitMini()!= null && !lists.getPortraitMini().equals("") && lists.getPortraitMini().startsWith("http:")) {
-            GlideUtils.loadImageViewSize(context, lists.getPortraitMini(), 60, 60, holder.img_touXiang, true);
+            GlideUtils.loadImageViewRound(lists.getPortraitMini(), holder.img_touXiang, 60, 60);
         } else {
-            Bitmap bmp = BitmapUtils.readBitMap(context, R.mipmap.icon_avatar_d);
-            holder.img_touXiang.setImageBitmap(bmp);
+            GlideUtils.loadImageViewRound( R.mipmap.icon_avatar_d, holder.img_touXiang, 60, 60);
         }
 
         return convertView;

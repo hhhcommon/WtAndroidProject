@@ -76,11 +76,10 @@ public class GroupNumberAddAdapter extends BaseAdapter {
             holder.tv_name.setText("未知");
         }
 
-        if (lists.getAvatar() != null && !lists.getAvatar().equals("")&&lists.getAvatar().startsWith("http")) {
-            GlideUtils.loadImageViewSize(context, lists.getAvatar(), 60, 60, holder.img_view, true);
+        if (lists.getAvatar() != null && !lists.getAvatar().equals("") && lists.getAvatar().startsWith("http")) {
+            GlideUtils.loadImageViewRound(lists.getAvatar(), holder.img_view, 60, 60);
         } else {
-            Bitmap bmp = BitmapUtils.readBitMap(context, R.mipmap.icon_avatar_d);
-            holder.img_view.setImageBitmap(bmp);
+            GlideUtils.loadImageViewRound(R.mipmap.icon_avatar_d, holder.img_view, 60, 60);
         }
         holder.tv_type.setOnClickListener(new View.OnClickListener() {
             @Override

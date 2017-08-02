@@ -161,10 +161,9 @@ public class PersonalInfoFragment extends Fragment implements View.OnClickListen
      */
     public void setViewForImage(String url) {
         if (url != null && !url.equals("")) {
-            GlideUtils.loadImageViewSize(this.getActivity(), url, 60, 60, image_head, true);
+            GlideUtils.loadImageViewRound(url, image_head, 60, 60);
         } else {
-            Bitmap bmp = BitmapUtils.readBitMap(this.getActivity(), R.mipmap.icon_avatar_d);
-            image_head.setImageBitmap(bmp);
+            GlideUtils.loadImageViewRound(R.mipmap.icon_avatar_d, image_head, 60, 60);
         }
     }
 
@@ -236,7 +235,7 @@ public class PersonalInfoFragment extends Fragment implements View.OnClickListen
     // 城市选择框
     public void cityPickerDialog(final Map<String, List<String>> positionMap, final List<String> provinceList) {
         if (positionMap != null && positionMap.size() > 0 && provinceList != null && provinceList.size() > 0) {
-            GlobalStateConfig.LoopViewW = PhoneMsgManager.ScreenWidth/2;
+            GlobalStateConfig.LoopViewW = PhoneMsgManager.ScreenWidth / 2;
             final View dialog = LayoutInflater.from(this.getActivity()).inflate(R.layout.dialog_city, null);
             final LoopView pickProvince = (LoopView) dialog.findViewById(R.id.pick_province);
             final LoopView pickCity = (LoopView) dialog.findViewById(R.id.pick_city);
@@ -289,12 +288,21 @@ public class PersonalInfoFragment extends Fragment implements View.OnClickListen
                 public void onClick(View v) {
                     try {
                         String name = positionMap.get(provinceList.get(provinceIndex)).get(cityIndex);
-                        presenter.sendAddress(name);
+                        String p = provinceList.get(provinceIndex).trim();
+                        if (p != null && !p.equals("")) {
+                            if (p.equals("澳门特别行政区") || p.equals("香港特别行政区") || p.equals("台湾省")) {
+                                presenter.sendAddress(name);
+                            } else {
+                                String news = p + "-" + name;
+                                presenter.sendAddress(news);
+                            }
+                        } else {
+                            presenter.sendAddress(name);
+                        }
                         cityDialog.dismiss();
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
-
                 }
             });
         }
@@ -350,7 +358,7 @@ public class PersonalInfoFragment extends Fragment implements View.OnClickListen
 
     // 年龄选择框
     public void agePickerDialog(final List<String> year, final List<String> month, final List<String> day28, final List<String> day29, final List<String> day30, final List<String> day31) {
-        GlobalStateConfig.LoopViewW = PhoneMsgManager.ScreenWidth/6;
+        GlobalStateConfig.LoopViewW = PhoneMsgManager.ScreenWidth / 6;
         dayList = day31;
         final View dialog = LayoutInflater.from(this.getActivity()).inflate(R.layout.dialog_updata_age, null);
         LoopView pickYear = (LoopView) dialog.findViewById(R.id.pick_year);
@@ -468,14 +476,6 @@ public class PersonalInfoFragment extends Fragment implements View.OnClickListen
      */
     public void dialogCancel() {
         if (dialog != null) dialog.dismiss();
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        if (rootView != null) {
-            ((ViewGroup) rootView.getParent()).removeView(rootView);
-        }
     }
 
 }

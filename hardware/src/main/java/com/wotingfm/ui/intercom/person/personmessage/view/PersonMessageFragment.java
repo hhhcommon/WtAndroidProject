@@ -21,8 +21,10 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.woting.commonplat.manager.PhoneMsgManager;
 import com.woting.commonplat.utils.BitmapUtils;
+import com.woting.commonplat.widget.GlideCircleTransform;
 import com.woting.commonplat.widget.TipView;
 import com.wotingfm.R;
 import com.wotingfm.common.bean.AlbumsBean;
@@ -47,6 +49,8 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.List;
+
+import jp.wasabeef.glide.transformations.BlurTransformation;
 
 import static com.wotingfm.ui.main.view.MainActivity.tabHost;
 
@@ -220,7 +224,7 @@ public class PersonMessageFragment extends Fragment implements View.OnClickListe
             adapter.changeData(list);
         }
         setGridListener(list);
-        tv_subNum.setText("（" + String.valueOf(list.size()) + "）");// 订阅数
+        tv_subNum.setText("(" + String.valueOf(list.size()) + ")");// 订阅数
     }
 
     private void setGridListener(final List<AlbumsBean> list) {
@@ -290,18 +294,16 @@ public class PersonMessageFragment extends Fragment implements View.OnClickListe
      */
     public void setViewData(String url, String name, String introduce, String number, String address, String focus, String acc_id) {
         this.acc_id = acc_id;
-        if (url != null && !url.equals("") && url.startsWith("http")) {
-            GlideUtils.loadImageViewBlur(this.getActivity(), url, img_bg);
+        if (url != null && !url.trim().equals("") && url.startsWith("http")) {
+            GlideUtils.loadImageViewSrc(url, img_bg, true, 8);
         } else {
-            Bitmap bmp = BitmapUtils.readBitMap(this.getActivity(), R.mipmap.p);
-            img_bg.setImageBitmap(bmp);
+            GlideUtils.loadImageViewSrc(R.mipmap.p, img_bg, true, 8);
         }
 
         if (url != null && !url.equals("") && url.startsWith("http")) {
-            GlideUtils.loadImageViewSize(this.getActivity(), url, 60, 60, img_url, true);
+            GlideUtils.loadImageViewRound( url,img_url, 60, 60 );
         } else {
-            Bitmap bmp = BitmapUtils.readBitMap(this.getActivity(), R.mipmap.icon_avatar_d);
-            img_url.setImageBitmap(bmp);
+            GlideUtils.loadImageViewRound( R.mipmap.icon_avatar_d,img_url, 60, 60 );
         }
         tv_name.setText(name);             // 姓名
         tvTitle.setText(name);             // 姓名

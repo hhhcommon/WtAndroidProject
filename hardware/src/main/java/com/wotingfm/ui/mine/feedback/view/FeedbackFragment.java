@@ -72,13 +72,4 @@ public class FeedbackFragment extends Fragment implements View.OnClickListener {
         if (dialog != null) dialog.dismiss();
     }
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        if (rootView != null) {
-            ((ViewGroup) rootView.getParent()).removeView(rootView);
-        }
-    }
-
-
 }

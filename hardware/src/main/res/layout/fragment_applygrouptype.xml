@@ -3,8 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
-    android:paddingTop="20dp"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:paddingTop="20dp">
 
 
     <RelativeLayout
@@ -55,11 +55,11 @@
             <ImageView
                 android:id="@+id/img_password"
                 android:layout_width="40dp"
-                android:paddingRight="8dp"
-                android:paddingLeft="8dp"
-                android:paddingBottom="10dp"
-                android:paddingTop="10dp"
                 android:layout_height="44dp"
+                android:paddingBottom="10dp"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp"
+                android:paddingTop="10dp"
                 android:src="@mipmap/bluetooth_icon_connected_n" />
 
 
@@ -69,7 +69,10 @@
                 android:layout_height="match_parent"
                 android:layout_marginLeft="5dp"
                 android:background="@color/white"
-                android:hint="请输入加群密码"
+                android:hint="请输入加群密码(4位数字)"
+                android:maxLength="4"
+                android:maxLines="1"
+                android:singleLine="true"
                 android:textColor="@color/black_head_word"
                 android:textSize="15sp" />
         </LinearLayout>
@@ -77,7 +80,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="44dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="0.7dp"
             android:background="@color/white"
             android:gravity="center"
             android:orientation="horizontal">
@@ -85,11 +88,11 @@
             <ImageView
                 android:id="@+id/img_shen"
                 android:layout_width="40dp"
-                android:paddingRight="8dp"
-                android:paddingLeft="8dp"
-                android:paddingBottom="10dp"
-                android:paddingTop="10dp"
                 android:layout_height="44dp"
+                android:paddingBottom="10dp"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp"
+                android:paddingTop="10dp"
                 android:src="@mipmap/bluetooth_icon_connected_n" />
 
             <TextView
@@ -100,5 +103,16 @@
                 android:textColor="@color/black_head_word"
                 android:textSize="15sp" />
         </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:lineSpacingExtra="5.3sp"
+            android:layout_marginRight="12dp"
+            android:layout_marginLeft="12dp"
+            android:layout_marginTop="9.3dp"
+            android:text="加群方式可单选可多选，多选只需要一种方式通过即可成功加群。"
+            android:textColor="#84858a"
+            android:textSize="13.3sp" />
     </LinearLayout>
 </LinearLayout>

@@ -37,7 +37,6 @@ public class ChannelPresenter {
     private List<String> list;
     private String s;
 
-
     public ChannelPresenter(StandbyChannelFragment activity) {
         this.activity = activity;
         this.model = new ChannelModel();
@@ -181,7 +180,7 @@ public class ChannelPresenter {
             fragment.setArguments(bundle);
             InterPhoneActivity.open(fragment);
         } else if (fromType != null && fromType.trim().equals("message")) {
-            activity.setResult(true,s);
+            if(s!=null&&!s.trim().equals(""))activity.setResult(true,s);
             InterPhoneActivity.close();
         }
     }

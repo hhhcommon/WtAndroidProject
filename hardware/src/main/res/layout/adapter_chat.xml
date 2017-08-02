@@ -2,7 +2,7 @@
 <com.wotingfm.common.view.slidingbutton.SlidingButtonView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="1dp"
+    android:layout_marginBottom="0.7dp"
     android:background="@color/white">
 
     <RelativeLayout
@@ -26,13 +26,22 @@
             android:layout_width="match_parent"
             android:layout_height="73dp">
 
-            <ImageView
-                android:id="@+id/img_url"
+            <LinearLayout
+                android:id="@+id/lin_img"
                 android:layout_width="52dp"
                 android:layout_height="52dp"
                 android:layout_centerVertical="true"
+                android:padding="1dp"
                 android:layout_gravity="center_vertical"
-                android:layout_marginLeft="12dp" />
+                android:layout_marginLeft="12dp">
+
+                <ImageView
+                    android:id="@+id/img_url"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop" />
+            </LinearLayout>
+
 
             <include
                 android:id="@+id/view_head"
@@ -40,16 +49,16 @@
                 android:layout_width="match_parent"
                 android:layout_height="73dp"
                 android:layout_marginLeft="12dp"
-                android:layout_toRightOf="@id/img_url" />
+                android:layout_toRightOf="@id/lin_img" />
 
 
             <ImageView
                 android:id="@+id/img_voice"
-                android:layout_width="48dp"
-                android:layout_height="60dp"
+                android:layout_width="42.7dp"
+                android:layout_height="42.7dp"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
-                android:padding="12dp"
+                android:layout_marginRight="12dp"
                 android:src="@mipmap/chat_icon_call" />
         </RelativeLayout>
 

@@ -28,8 +28,13 @@
                 <ImageView
                     android:id="@+id/img_bg"
                     android:layout_width="match_parent"
-                    android:scaleType="centerCrop"
-                    android:layout_height="match_parent" />
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="220dp"
+                    android:background="@color/transparent_40_black" />
 
                 <LinearLayout
                     android:id="@+id/img_background"
@@ -37,13 +42,21 @@
                     android:layout_height="match_parent"
                     android:orientation="vertical">
 
-                    <ImageView
-                        android:id="@+id/img_url"
+                    <RelativeLayout
                         android:layout_width="70dp"
                         android:layout_height="70dp"
                         android:layout_gravity="center_horizontal"
                         android:layout_marginTop="50.7dp"
-                        android:src="@mipmap/test" />
+                        android:background="@mipmap/person_bg">
+
+                        <ImageView
+                            android:id="@+id/img_url"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_margin="1.5dp"
+                            android:src="@mipmap/test" />
+                    </RelativeLayout>
+
 
                     <TextView
                         android:id="@+id/tv_name"
@@ -201,7 +214,7 @@
                         android:layout_toRightOf="@+id/tv_subName"
                         android:text="(8)"
                         android:textColor="@color/black_head_word"
-                        android:textSize="14.7sp" />
+                        android:textSize="13.7sp" />
 
                     <ImageView
                         android:layout_width="24dp"
@@ -265,31 +278,31 @@
             android:id="@+id/head_left_btn"
             android:layout_width="44dp"
             android:layout_height="44dp"
-            android:layout_marginTop="20dp"
-
             android:layout_marginLeft="2dp"
+
+            android:layout_marginTop="20dp"
             android:src="@mipmap/nav_icon_back_white" />
 
         <TextView
             android:id="@+id/tvTitle"
             android:layout_width="wrap_content"
             android:layout_height="44dp"
-            android:gravity="center"
-            android:text="姓名"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="20dp"
+            android:gravity="center"
+            android:text="姓名"
             android:textColor="@color/black"
             android:textSize="17.3sp"
             android:visibility="invisible" />
 
         <ImageView
             android:id="@+id/img_other"
-            android:layout_marginTop="20dp"
-
             android:layout_width="44dp"
+
             android:layout_height="44dp"
             android:layout_alignParentRight="true"
             android:layout_marginRight="2dp"
+            android:layout_marginTop="20dp"
             android:src="@mipmap/nav_icon_more_white" />
     </RelativeLayout>
 

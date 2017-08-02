@@ -93,6 +93,7 @@ public class MainPresenter extends BasePresenter {
                 }
             } else if (action.equals(BroadcastConstants.VIEW_NOTIFY_SHOW)) {
                 String content = intent.getStringExtra("msg");  // 展示通知消息
+                Log.e("推送消息","msg"+content);
                 assemblyMsg(true, content);
             } else if (action.equals(BroadcastConstants.VIEW_NOTIFY_CLOSE)) {
                 assemblyMsg(false, "");// 关闭通知消息
@@ -109,14 +110,13 @@ public class MainPresenter extends BasePresenter {
     private void assemblyMsg(boolean b, String msg) {
         if (b) {
             try {
-                String s = new GsonBuilder().serializeNulls().create().toJson(msg);
-                JSONObject js = new JSONObject(s);
+                JSONObject js = new JSONObject(msg);
                 String type = js.getString("type");
                 String title = js.getString("title");
                 String message = js.getString("message");
-                Log.e("ret", String.valueOf("message"));
-             //   activity.notifyShow(true, type, title, message);
-            } catch (JSONException e) {
+                Log.e("ret", type);
+                activity.notifyShow(true, type, title, message);
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         } else {

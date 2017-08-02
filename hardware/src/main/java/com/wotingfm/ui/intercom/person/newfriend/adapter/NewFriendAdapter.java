@@ -55,15 +55,15 @@ public class NewFriendAdapter extends RecyclerView.Adapter<NewFriendAdapter.Simp
     @Override
     public void onBindViewHolder(final SimpleHolder holder, int position) {
         NewFriend m = mData.get(position);
-        String name="未知";
+        String name = "未知";
         try {
-           name=  m.getApply_user().getName();
+            name = m.getApply_user().getName();
         } catch (Exception e) {
             e.printStackTrace();
         }
-        String news="未知";
+        String news = "未知";
         try {
-            news=  m.getApply_message();
+            news = m.getApply_message();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -81,11 +81,10 @@ public class NewFriendAdapter extends RecyclerView.Adapter<NewFriendAdapter.Simp
             holder.tv_ok.setVisibility(View.GONE);
         }
 
-        if(m.getApply_user()!= null && m.getApply_user().getAvatar() != null && !m.getApply_user().getAvatar().equals("")&& m.getApply_user().getAvatar().startsWith("http")) {
-            GlideUtils.loadImageViewSize(mContext, m.getApply_user().getAvatar(), 60, 60, holder.img_url, true);
+        if (m.getApply_user() != null && m.getApply_user().getAvatar() != null && !m.getApply_user().getAvatar().equals("") && m.getApply_user().getAvatar().startsWith("http")) {
+            GlideUtils.loadImageViewRound(m.getApply_user().getAvatar(), holder.img_url, 60, 60);
         } else {
-            Bitmap bmp = BitmapUtils.readBitMap(mContext, R.mipmap.icon_avatar_d);
-            holder.img_url.setImageBitmap(bmp);
+            GlideUtils.loadImageViewRound(R.mipmap.icon_avatar_d, holder.img_url, 60, 60);
         }
 
         holder.tv_ok.setOnClickListener(new View.OnClickListener() {

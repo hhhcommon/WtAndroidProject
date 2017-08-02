@@ -1,6 +1,7 @@
 package com.wotingfm.ui.intercom.add.search.net.view;
 
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -10,6 +11,7 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -36,7 +38,7 @@ public class SearchContactsForNetFragment extends Fragment implements View.OnCli
     private View rootView;
     private FragmentActivity context;
     private LinearLayout lin_pos, lin_search;
-    private ListView lv_pos, listView;
+    private ListView listView;
     private TextView tv_clear;
     private EditText et_search;
     private ImageView img_search;
@@ -73,12 +75,15 @@ public class SearchContactsForNetFragment extends Fragment implements View.OnCli
         tip_view = (TipView) rootView.findViewById(R.id.tip_view);// 提示界面
         tip_view.setTipClick(this);
         lin_pos = (LinearLayout) rootView.findViewById(R.id.lin_pos);
-        lv_pos = (ListView) rootView.findViewById(R.id.lv_pos);
+         // lv_pos = (ListView) rootView.findViewById(R.id.lv_pos);
         lin_search = (LinearLayout) rootView.findViewById(R.id.lin_search);
         listView = (ListView) rootView.findViewById(R.id.lv_search);
         tv_clear = (TextView) rootView.findViewById(R.id.tv_clear);
         tv_clear.setOnClickListener(this);
         et_search = (EditText) rootView.findViewById(R.id.et_search);
+        et_search.requestFocus();
+        InputMethodManager imm = (InputMethodManager) et_search.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.toggleSoftInput(0, InputMethodManager.SHOW_FORCED);
         img_search = (ImageView) rootView.findViewById(R.id.img_search);
     }
 
@@ -123,28 +128,28 @@ public class SearchContactsForNetFragment extends Fragment implements View.OnCli
      * 设置可能认识的人有数据的界面（个人）
      * @param list
      */
-    public void setViewForPosPerson(List<Contact.user> list) {
+    private void setViewForPosPerson(List<Contact.user> list) {
         if (searchContactsForUserAdapter == null) {
             searchContactsForUserAdapter = new SearchContactsForUserAdapter(context, list);
-            lv_pos.setAdapter(searchContactsForUserAdapter);
+           //  lv_pos.setAdapter(searchContactsForUserAdapter);
         } else {
             searchContactsForUserAdapter.ChangeDate(list);
         }
-        setPosPersonListViewListener(list);
+//        setPosPersonListViewListener(list);
     }
 
     /**
      * 设置可能认识的人有数据的界面（群组）
      * @param list
      */
-    public void setViewForPosGroup(List<Contact.group> list) {
+    private void setViewForPosGroup(List<Contact.group> list) {
         if (searchContactsForGroupAdapter == null) {
             searchContactsForGroupAdapter = new SearchContactsForGroupAdapter(context, list);
-            lv_pos.setAdapter(searchContactsForGroupAdapter);
+            // lv_pos.setAdapter(searchContactsForGroupAdapter);
         } else {
             searchContactsForGroupAdapter.ChangeDate(list);
         }
-        setPosGroupListViewListener(list);
+//        setPosGroupListViewListener(list);
     }
 
     /**
@@ -177,36 +182,36 @@ public class SearchContactsForNetFragment extends Fragment implements View.OnCli
     }
 
     // listView 的监听==推荐的好友
-    private void setPosPersonListViewListener(final List<Contact.user> person) {
-        lv_pos.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                // 跳转到好友信息界面
-                String _id = person.get(position).getId();
-                if (_id != null && !_id.equals("")) {
-                    presenter.jumpPerson(_id);
-                } else {
-                    ToastUtils.show_always(context, "数据出错了，请稍后再试！");
-                }
-            }
-        });
-    }
+//    private void setPosPersonListViewListener(final List<Contact.user> person) {
+//        lv_pos.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                // 跳转到好友信息界面
+//                String _id = person.get(position).getId();
+//                if (_id != null && !_id.equals("")) {
+//                    presenter.jumpPerson(_id);
+//                } else {
+//                    ToastUtils.show_always(context, "数据出错了，请稍后再试！");
+//                }
+//            }
+//        });
+//    }
 
     // 组 listView 监听==推荐的群组
-    private void setPosGroupListViewListener(final List<Contact.group> group) {
-        lv_pos.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                // 跳转到群组详情页面
-                String _id = group.get(position).getId();
-                if (_id != null && !_id.equals("")) {
-                    presenter.jumpGroup(_id);
-                } else {
-                    ToastUtils.show_always(context, "数据出错了，请稍后再试！");
-                }
-            }
-        });
-    }
+//    private void setPosGroupListViewListener(final List<Contact.group> group) {
+//        lv_pos.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                // 跳转到群组详情页面
+//                String _id = group.get(position).getId();
+//                if (_id != null && !_id.equals("")) {
+//                    presenter.jumpGroup(_id);
+//                } else {
+//                    ToastUtils.show_always(context, "数据出错了，请稍后再试！");
+//                }
+//            }
+//        });
+//    }
 
     // listView 的监听==搜索到的好友
     private void setListViewListener(final List<Contact.user> person) {

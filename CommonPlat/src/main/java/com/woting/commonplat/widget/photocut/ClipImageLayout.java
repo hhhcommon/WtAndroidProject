@@ -131,7 +131,9 @@ public class ClipImageLayout extends RelativeLayout {
      * @return
      */
     public Bitmap clip() {
-        return mZoomImageView.clip();
+//        return compressImage(mZoomImageView.clip()) ;
+        return  Bitmap.createScaledBitmap(mZoomImageView.clip(), 150, 150, true);
+//        return mZoomImageView.clip() ;
     }
 
     /**

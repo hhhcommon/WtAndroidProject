@@ -1,6 +1,7 @@
 package com.wotingfm.ui.intercom.add.search.local.view;
 
 import android.app.Dialog;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -9,6 +10,8 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -80,6 +83,9 @@ public class SearchContactsForLocalFragment extends Fragment implements View.OnC
         tv_clear = (TextView) rootView.findViewById(R.id.tv_clear);
         tv_clear.setOnClickListener(this);
         et_search = (EditText) rootView.findViewById(R.id.et_search);
+        et_search.requestFocus();
+        InputMethodManager imm = (InputMethodManager) et_search.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.toggleSoftInput(0, InputMethodManager.SHOW_FORCED);
         img_search = (ImageView) rootView.findViewById(R.id.img_search);
 
         headView = LayoutInflater.from(context).inflate(R.layout.headview_search_local, null);// 头部 view
@@ -112,6 +118,7 @@ public class SearchContactsForLocalFragment extends Fragment implements View.OnC
             public void afterTextChanged(Editable s) {
             }
         });
+
     }
 
     // 第一次进入时候的界面展示
@@ -271,14 +278,6 @@ public class SearchContactsForLocalFragment extends Fragment implements View.OnC
      */
     public void dialogCancel() {
         confirmDialog.dismiss();
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        if (rootView != null) {
-            ((ViewGroup) rootView.getParent()).removeView(rootView);
-        }
     }
 
 }

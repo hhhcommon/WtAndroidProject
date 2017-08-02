@@ -8,7 +8,7 @@
         android:id="@+id/tv_line"
         android:layout_width="match_parent"
         android:layout_height="8dp"
-        android:background="@color/line_color"
+        android:background="@color/background_color"
         android:visibility="gone" />
 
     <LinearLayout
@@ -42,7 +42,7 @@
             android:lineSpacingExtra="0sp"
             android:text="(1)"
             android:textColor="#16181a"
-            android:textSize="14.7sp" />
+            android:textSize="13.7sp" />
     </LinearLayout>
 
 </LinearLayout>

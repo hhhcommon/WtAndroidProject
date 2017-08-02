@@ -87,7 +87,6 @@ public class GroupNumberAddPresenter {
         }
     }
 
-
     /**
      * 添加群成员
      *

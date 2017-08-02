@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.woting.commonplat.utils.JsonEncloseUtils;
 import com.wotingfm.R;
 import com.wotingfm.common.application.BSApplication;
@@ -36,6 +37,8 @@ import org.greenrobot.eventbus.EventBus;
 import java.util.HashMap;
 import java.util.Map;
 
+import jp.wasabeef.glide.transformations.BlurTransformation;
+
 /**
  * 个人中心主界面
  * 作者：xinLong on 2017/5/16 14:28
@@ -46,8 +49,8 @@ public class MineFragment extends Fragment implements View.OnClickListener {
     private View rootView;
     private FragmentActivity context;
     private MinePresenter presenter;
-    private ImageView image_head;
-    private TextView text_user_name, text_user_number,text_wifi_name;
+    private ImageView image_head, img_bg;
+    private TextView text_user_name, text_user_number, text_wifi_name;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -71,6 +74,7 @@ public class MineFragment extends Fragment implements View.OnClickListener {
 
     // 初始化视图
     private void initView() {
+        img_bg = (ImageView) rootView.findViewById(R.id.img_bg);//
         image_head = (ImageView) rootView.findViewById(R.id.image_head);// 头像
         image_head.setOnClickListener(this);
         text_user_name = (TextView) rootView.findViewById(R.id.text_user_name);// 昵称
@@ -98,10 +102,16 @@ public class MineFragment extends Fragment implements View.OnClickListener {
      * @param num
      */
     public void setViewForLogin(String url, String name, String num) {
-        if (url != null && !url.trim().equals("")) {
-            GlideUtils.loadImageViewSize(this.getActivity(), url, 70, 70, image_head, true);
+        if (url != null && !url.trim().equals("") && url.startsWith("http")) {
+            Glide.with(this.getActivity()).load(url).crossFade(1000).placeholder(R.mipmap.p).bitmapTransform(new BlurTransformation(this.getActivity(), 8)).into(img_bg);
         } else {
-            image_head.setImageResource(R.mipmap.icon_avatar_d);
+            Glide.with(this.getActivity()).load(R.mipmap.p).crossFade(1000).placeholder(R.mipmap.p).bitmapTransform(new BlurTransformation(this.getActivity(), 8)).into(img_bg);
+        }
+
+        if (url != null && !url.trim().equals("") && url.startsWith("http")) {
+            GlideUtils.loadImageViewRound(url,image_head,70, 70);
+        } else {
+            GlideUtils.loadImageViewRound(R.mipmap.icon_avatar_d,image_head,70, 70);
         }
         text_user_name.setText(name);
         text_user_number.setText("我听号：" + num);
@@ -152,13 +162,13 @@ public class MineFragment extends Fragment implements View.OnClickListener {
                 MineActivity.open(new BluetoothFragment());
                 break;
             case R.id.wifi_set:// 无线局域网
-                WIFIFragment f= new WIFIFragment();
+                WIFIFragment f = new WIFIFragment();
                 MineActivity.open(f);
                 f.setResultListener(new WIFIFragment.ResultListener() {
                     @Override
                     public void resultListener(boolean type) {
                         if (type) {
-                         presenter.wifiSet();
+                            presenter.wifiSet();
                         }
                     }
                 });
@@ -170,17 +180,17 @@ public class MineFragment extends Fragment implements View.OnClickListener {
                 if (CommonUtils.isLogin()) MineActivity.open(new MsgNotifyFragment());
                 break;
             case R.id.image_qr_code:// 二维码
-                if (CommonUtils.isLogin()){
+                if (CommonUtils.isLogin()) {
                     EWMShowFragment fragment = new EWMShowFragment();
                     Bundle bundle = new Bundle();
-                    bundle.putString("from","person" );// 路径来源
-                    bundle.putString("image", BSApplication.SharedPreferences.getString(StringConstant.PORTRAIT,""));// 头像
-                    bundle.putString("news", BSApplication.SharedPreferences.getString(StringConstant.USER_SIGN,""));// 简介
-                    bundle.putString("name", BSApplication.SharedPreferences.getString(StringConstant.NICK_NAME,""));// 姓名
+                    bundle.putString("from", "person");// 路径来源
+                    bundle.putString("image", BSApplication.SharedPreferences.getString(StringConstant.PORTRAIT, ""));// 头像
+                    bundle.putString("news", BSApplication.SharedPreferences.getString(StringConstant.USER_SIGN, ""));// 简介
+                    bundle.putString("name", BSApplication.SharedPreferences.getString(StringConstant.NICK_NAME, ""));// 姓名
 
                     Map<String, Object> map = new HashMap<>();
                     map.put("type", "person");
-                    map.put("id", BSApplication.SharedPreferences.getString(StringConstant.USER_ID,""));
+                    map.put("id", BSApplication.SharedPreferences.getString(StringConstant.USER_ID, ""));
                     String url = JsonEncloseUtils.jsonEnclose(map).toString();
 
                     bundle.putString("uri", url);// 内容路径
@@ -189,15 +199,16 @@ public class MineFragment extends Fragment implements View.OnClickListener {
                 }
                 break;
             case R.id.image_head:// 登录
-                if (!CommonUtils.isLogin()) startActivity(new Intent(this.getActivity(), LogoActivity.class));
+                if (!CommonUtils.isLogin())
+                    startActivity(new Intent(this.getActivity(), LogoActivity.class));
                 break;
         }
     }
 
-    public void wifiSet(boolean b){
-        if(b){
+    public void wifiSet(boolean b) {
+        if (b) {
             text_wifi_name.setVisibility(View.VISIBLE);
-        }else{
+        } else {
             text_wifi_name.setVisibility(View.INVISIBLE);
         }
     }

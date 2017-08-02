@@ -65,7 +65,7 @@ public class ApplyGroupTypePresenter {
                 if (GlobalStateConfig.test) {
                     // 测试数据
                     ToastUtils.show_always(activity.getActivity(), "修改成功");
-                    activity.setResult(2, "123456");
+                    activity.setResult(2, "1234");
                     InterPhoneActivity.close();
                 } else {
                     // 实际数据

@@ -3,8 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
-    android:paddingTop="20dp"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:paddingTop="20dp">
 
 
     <LinearLayout
@@ -37,14 +37,15 @@
             android:layout_height="72dp"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="30dp"
-            android:src="@mipmap/create_group_icon_upload_avatar_n" />
+            android:scaleType="centerCrop"
+            android:src="@mipmap/craate_group_icon_upload_avatar_n" />
 
         <TextView
             android:id="@+id/tv_show"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="8dp"
             android:lineSpacingExtra="0sp"
             android:text="点击上传群头像"
             android:textColor="#cccccd"
@@ -60,7 +61,10 @@
             android:layout_marginTop="26dp"
             android:background="@drawable/background_creatgroup_gray"
             android:hint="请输入群名称"
+            android:maxLines="1"
+            android:maxLength="20"
             android:paddingLeft="18dp"
+            android:singleLine="true"
             android:textColor="@color/black_head_word"
             android:textColorHint="@color/gray_edit_hint_word"
             android:textSize="14.7sp" />
@@ -89,8 +93,10 @@
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
                 android:background="@color/transparent_background"
-                android:hint="设置进群密码(4位数字)"
-                android:maxLength="8"
+                android:hint="设置加群密码(4位数字)"
+                android:maxLength="4"
+                android:inputType="number"
+                android:singleLine="true"
                 android:textColor="@color/black_head_word"
                 android:textColorHint="@color/gray_edit_hint_word"
                 android:textSize="14.7sp" />
@@ -121,6 +127,24 @@
                 android:textColor="#959698"
                 android:textSize="14.7sp" />
         </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="40dp"
+            android:layout_marginRight="40dp"
+            android:layout_marginTop="8dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="47dp"
+                android:text="加群方式可单选也可多选"
+                android:textColor="#959698"
+                android:textSize="12sp" />
+        </LinearLayout>
+
 
         <TextView
             android:id="@+id/tv_send"
