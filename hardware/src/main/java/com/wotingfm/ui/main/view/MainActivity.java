@@ -33,12 +33,14 @@ import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.Observer;
 import com.netease.nimlib.sdk.msg.MsgServiceObserve;
 import com.netease.nimlib.sdk.msg.model.IMMessage;
+import com.woting.commonplat.utils.KeyboardChangeListener;
 import com.wotingfm.R;
 import com.wotingfm.common.bean.AnchorInfo;
 import com.wotingfm.common.bean.MessageEvent;
 import com.wotingfm.common.bean.Room;
 import com.wotingfm.common.net.RetrofitUtils;
 import com.wotingfm.common.service.WtDeviceControl;
+import com.wotingfm.common.utils.AndroidBug5497Workaround;
 import com.wotingfm.common.utils.IMManger;
 import com.wotingfm.common.utils.L;
 import com.wotingfm.common.utils.StatusBarUtil;
@@ -95,6 +97,7 @@ import rx.schedulers.Schedulers;
 
 import static android.R.attr.id;
 import static android.content.Intent.FLAG_ACTIVITY_REORDER_TO_FRONT;
+import static com.wotingfm.R.id.relatLable;
 import static com.wotingfm.R.mipmap.disconnect;
 
 
@@ -108,11 +111,15 @@ public class MainActivity extends TabActivity implements View.OnClickListener, A
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // AndroidBug5497Workaround.assistActivity(findViewById(android.R.id.content));
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);        // 透明状态栏
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);    // 透明导航栏
         setContentView(R.layout.activity_main);
         EventBus.getDefault().register(this);
         context = this;
+        NIMClient.getService(MsgServiceObserve.class)
+                .observeReceiveMessage(incomingMessageObserver, true);
+
         // applySelectedColor();
         applyTextColor(false);
         NIMClient.getService(MsgServiceObserve.class).observeReceiveMessage(incomingMessageObserver, true);
@@ -193,10 +200,12 @@ public class MainActivity extends TabActivity implements View.OnClickListener, A
         return getTabHost();
     }
 
+
     // 对讲请求
     private void press_ptt() {
         WtDeviceControl.pushPTT();
         onToggleMicBase(true);
+        EventBus.getDefault().post(new MessageEvent("pause"));
         tv_5.setBackgroundResource(R.color.app_basic);
     }
 
@@ -228,17 +237,17 @@ public class MainActivity extends TabActivity implements View.OnClickListener, A
         switch (v.getId()) {
             case R.id.tv_1:
                 // 上一首
-                EventBus.getDefault().postSticky("step");
+                EventBus.getDefault().post(new MessageEvent("step"));
                 WtDeviceControl.pushUpButton();
                 break;
             case R.id.tv_2:
                 // 暂停，继续
-                EventBus.getDefault().postSticky("stop_or_star");
+                EventBus.getDefault().post(new MessageEvent("stop_or_star"));
                 WtDeviceControl.pushCenter();
                 break;
             case R.id.tv_3:
                 // 下一首
-                EventBus.getDefault().postSticky("next");
+                EventBus.getDefault().post(new MessageEvent("next"));
                 WtDeviceControl.pushDownButton();
                 break;
             case R.id.lin_notify:
@@ -307,14 +316,15 @@ public class MainActivity extends TabActivity implements View.OnClickListener, A
         } else if ("three".equals(messageEvent.getMessage())) {
             tabHost.setCurrentTabByTag("three");
         } else if ("acceptMain".equals(messageEvent.getMessage())) {
+            EventBus.getDefault().post(new MessageEvent("pause"));
             disconnect();
             initPlayer();
+            mainPresenter.connectToRoom(roomId, false, false, false, 0);
             activityRunning = true;
             // Video is not paused for screencapture. See onPause.
             if (peerConnectionClient != null && !screencaptureEnabled) {
                 peerConnectionClient.startVideoSource();
             }
-            mainPresenter.connectToRoom(roomId, false, false, false, 0);
             tv_5.setVisibility(View.VISIBLE);
             onToggleMicBase(false);
         } else if (messageEvent.getMessage().contains("create&Rommid")) {
@@ -348,27 +358,29 @@ public class MainActivity extends TabActivity implements View.OnClickListener, A
                     roomId = roomid;
                     EventBus.getDefault().post(new MessageEvent("two"));
                     ReceiveAlertActivity.start(MainActivity.this, im.getFromAccount(), userId);
-                    EventBus.getDefault().postSticky("pause");
+                    EventBus.getDefault().post(new MessageEvent("pause"));
                 }
                 //取消
                 if ("CANCEL".equals(type)) {
                     EventBus.getDefault().post(new MessageEvent("cancel"));
-                    EventBus.getDefault().postSticky("start");
+                    EventBus.getDefault().post(new MessageEvent("start"));
                 }
                 //拒绝对讲
                 else if ("REFUSE".equals(type)) {
                     EventBus.getDefault().post(new MessageEvent("refuse"));
-                    EventBus.getDefault().postSticky("start");
+                    EventBus.getDefault().post(new MessageEvent("start"));
                 } else if ("OVER".equals(type)) {
-                    EventBus.getDefault().postSticky("start");
+                    EventBus.getDefault().post(new MessageEvent("start"));
                     tv_5.setVisibility(View.GONE);
                 }
                 //接受对讲
                 else if ("ACCEPT".equals(type)) {
-                    mainPresenter.connectToRoom(roomId, false, false, false, 0);
                     EventBus.getDefault().post(new MessageEvent("accept"));
-                    EventBus.getDefault().postSticky("pause");
+                    EventBus.getDefault().post(new MessageEvent("pause"));
                     activityRunning = true;
+                    disconnect();
+                    initPlayer();
+                    mainPresenter.connectToRoom(roomId, false, false, false, 0);
                     // Video is not paused for screencapture. See onPause.
                     if (peerConnectionClient != null && !screencaptureEnabled) {
                         peerConnectionClient.startVideoSource();

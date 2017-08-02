@@ -21,6 +21,7 @@ import com.wotingfm.R;
 import com.wotingfm.common.adapter.PlayerListAdapter;
 import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.bean.ChannelsBean;
+import com.wotingfm.common.bean.MessageEvent;
 import com.wotingfm.common.bean.Player;
 import com.wotingfm.common.bean.Radio;
 import com.wotingfm.common.bean.SinglesBase;
@@ -32,6 +33,8 @@ import com.wotingfm.common.utils.CommonUtils;
 import com.wotingfm.common.utils.L;
 import com.wotingfm.common.utils.SDCardUtils;
 import com.wotingfm.common.utils.T;
+import com.wotingfm.ui.intercom.main.view.InterPhoneActivity;
+import com.wotingfm.ui.mine.main.MineActivity;
 import com.wotingfm.ui.play.activity.AnchorPersonalCenterFragment;
 import com.wotingfm.ui.play.activity.MeSubscribeListFragment;
 import com.wotingfm.ui.play.activity.PlayerHistoryFragment;
@@ -59,6 +62,8 @@ import rx.schedulers.Schedulers;
 import static android.R.attr.breadCrumbShortTitle;
 import static android.R.attr.data;
 import static android.icu.lang.UCharacter.GraphemeClusterBreak.T;
+import static cn.jpush.android.api.JPushInterface.a.r;
+import static cn.jpush.android.api.JPushInterface.a.t;
 import static com.woting.commonplat.gather.GatherData.url;
 import static com.wotingfm.R.id.mRecyclerViewList;
 
@@ -67,11 +72,18 @@ public class MenuDialog extends Dialog implements View.OnClickListener {
 
     private TextView tvClose, tvLike, tvAlbums, tvAnchor, tvReport, tvDownload, tvAgo, tvSubscription, tvLocal, tvRadio;
     private PlayerActivity activity;
+    private MineActivity activityMain;
+    private InterPhoneActivity interPhoneActivity;
     private LinearLayout largeLabel, largeLabel2;
 
     public MenuDialog(@NonNull Activity context) {
         super(context, R.style.BottomDialog);
-        this.activity = (PlayerActivity) context;
+        if (context instanceof PlayerActivity)
+            this.activity = (PlayerActivity) context;
+        else if (context instanceof MineActivity)
+            this.activityMain = (MineActivity) context;
+        else if (context instanceof InterPhoneActivity)
+            this.interPhoneActivity = (InterPhoneActivity) context;
         setContentView(R.layout.player_menu_dialog);
         getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         getWindow().setGravity(Gravity.BOTTOM);
@@ -112,7 +124,7 @@ public class MenuDialog extends Dialog implements View.OnClickListener {
         if (pds != null) {
             pdsBase = pds;
             setLikeImg(pds.had_liked);
-            if (channelsBean != null) {
+            if (channelsBean != null || pds.is_radio == true) {
                 largeLabel.setVisibility(View.GONE);
                 largeLabel2.setVisibility(View.VISIBLE);
             } else {
@@ -138,6 +150,7 @@ public class MenuDialog extends Dialog implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
+        BSApplication.isIS_BACK = false;
         switch (v.getId()) {
             case R.id.tvDownload:
                 if (pdsBase != null) {
@@ -214,7 +227,7 @@ public class MenuDialog extends Dialog implements View.OnClickListener {
                                     contentValues.put("albumSize", FileSizeUtil.getFileOrFilesSize(saveFile.getAbsolutePath(), FileSizeUtil.SIZETYPE_MB));
                                     downloadHelper.insertTotable(pdsBase.id, contentValues);
                                     //下载完成发送消息
-                                    EventBus.getDefault().postSticky(pdsBase.id);
+                                    EventBus.getDefault().post(new MessageEvent(pdsBase.id));
                                 }
                             }
                         });
@@ -225,23 +238,45 @@ public class MenuDialog extends Dialog implements View.OnClickListener {
                 if (pdsBase != null && activity != null) {
                     dismiss();
                     activity.open(AnchorPersonalCenterFragment.newInstance(pdsBase.creator_id));
+                } else if (pdsBase != null && activityMain != null) {
+                    dismiss();
+                    activityMain.open(AnchorPersonalCenterFragment.newInstance(pdsBase.creator_id));
+                } else if (pdsBase != null && interPhoneActivity != null) {
+                    dismiss();
+                    interPhoneActivity.open(AnchorPersonalCenterFragment.newInstance(pdsBase.creator_id));
                 }
                 break;
             case R.id.tvAlbums:
                 if (pdsBase != null && activity != null) {
                     dismiss();
                     activity.open(AlbumsInfoFragmentMain.newInstance(pdsBase.album_id));
+                } else if (pdsBase != null && activityMain != null) {
+                    dismiss();
+                    activityMain.open(AlbumsInfoFragmentMain.newInstance(pdsBase.album_id));
+                } else if (pdsBase != null && interPhoneActivity != null) {
+                    dismiss();
+                    interPhoneActivity.open(AlbumsInfoFragmentMain.newInstance(pdsBase.album_id));
                 }
                 break;
             case R.id.tvSubscription:
                 dismiss();
                 boolean isLogin = CommonUtils.isLogin();
-                if (isLogin == false) {
+                if (isLogin == false && activity != null) {
                     LogoActivity.start(activity);
+                    return;
+                } else if (isLogin == false && activityMain != null) {
+                    LogoActivity.start(activityMain);
+                    return;
+                } else if (isLogin == false && interPhoneActivity != null) {
+                    LogoActivity.start(interPhoneActivity);
                     return;
                 }
                 if (activity != null)
                     activity.open(MeSubscribeListFragment.newInstance());
+                else if (activityMain != null)
+                    activityMain.open(MeSubscribeListFragment.newInstance());
+                else if (interPhoneActivity != null)
+                    interPhoneActivity.open(MeSubscribeListFragment.newInstance());
                 break;
             case R.id.tvReport:
                 if (pdsBase != null && activity != null) {
@@ -252,12 +287,32 @@ public class MenuDialog extends Dialog implements View.OnClickListener {
                         return;
                     }
                     activity.open(ReportsPlayerFragment.newInstance(pdsBase.id, "REPORT_SINGLE"));
+                } else if (pdsBase != null && activityMain != null) {
+                    dismiss();
+                    boolean isLogin1 = CommonUtils.isLogin();
+                    if (isLogin1 == false) {
+                        LogoActivity.start(activityMain);
+                        return;
+                    }
+                    activityMain.open(ReportsPlayerFragment.newInstance(pdsBase.id, "REPORT_SINGLE"));
+                } else if (pdsBase != null && interPhoneActivity != null) {
+                    dismiss();
+                    boolean isLogin1 = CommonUtils.isLogin();
+                    if (isLogin1 == false) {
+                        LogoActivity.start(interPhoneActivity);
+                        return;
+                    }
+                    interPhoneActivity.open(ReportsPlayerFragment.newInstance(pdsBase.id, "REPORT_SINGLE"));
                 }
                 break;
             case R.id.tvAgo:
                 dismiss();
                 if (activity != null)
                     activity.open(PlayerHistoryFragment.newInstance());
+                else if (activityMain != null)
+                    activityMain.open(PlayerHistoryFragment.newInstance());
+                else if (interPhoneActivity != null)
+                    interPhoneActivity.open(PlayerHistoryFragment.newInstance());
                 break;
             case R.id.tvClose:
                 dismiss();
@@ -265,9 +320,17 @@ public class MenuDialog extends Dialog implements View.OnClickListener {
             case R.id.tvLike:
                 if (pdsBase != null) {
                     boolean isLogin2 = CommonUtils.isLogin();
-                    if (isLogin2 == false) {
+                    if (isLogin2 == false && activity != null) {
                         dismiss();
                         LogoActivity.start(activity);
+                        return;
+                    } else if (isLogin2 == false && activityMain != null) {
+                        dismiss();
+                        LogoActivity.start(activityMain);
+                        return;
+                    } else if (isLogin2 == false && interPhoneActivity != null) {
+                        dismiss();
+                        LogoActivity.start(interPhoneActivity);
                         return;
                     }
                     if (pdsBase.had_liked == true) {
@@ -281,11 +344,24 @@ public class MenuDialog extends Dialog implements View.OnClickListener {
                 dismiss();
                 if (activity != null)
                     activity.open(DownloadProgramFragment.newInstance());
+                else if (activityMain != null)
+                    activityMain.open(DownloadProgramFragment.newInstance());
+                else if (interPhoneActivity != null)
+                    interPhoneActivity.open(DownloadProgramFragment.newInstance());
                 break;
             case R.id.tvRadio:
                 dismiss();
+                if (pdsBase != null && pdsBase.is_radio == true) {
+                    channelsBean = new ChannelsBean();
+                    channelsBean.id = pdsBase.id;
+                    channelsBean.title = pdsBase.album_title;
+                }
                 if (activity != null && channelsBean != null)
                     activity.open(RadioInfoFragment.newInstance(channelsBean.id, channelsBean.title));
+                else if (activityMain != null && channelsBean != null)
+                    activityMain.open(RadioInfoFragment.newInstance(channelsBean.id, channelsBean.title));
+                else if (interPhoneActivity != null && channelsBean != null)
+                    interPhoneActivity.open(RadioInfoFragment.newInstance(channelsBean.id, channelsBean.title));
                 break;
         }
     }

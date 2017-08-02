@@ -103,7 +103,8 @@ public class PlayerFragment extends BaseFragment implements View.OnClickListener
 
     public static PlayerFragment newInstance(String albumsId) {
         BSApplication.IS_RESULT = true;
-        EventBus.getDefault().postSticky("stop");
+        BSApplication.IS_ONE = false;
+        EventBus.getDefault().post(new MessageEvent("stop"));
         PlayerFragment fragment = new PlayerFragment();
         Bundle bundle = new Bundle();
         bundle.putString("albumsId", albumsId);
@@ -113,7 +114,8 @@ public class PlayerFragment extends BaseFragment implements View.OnClickListener
 
     public static PlayerFragment newInstanceSerch(String albumsId, String id, String title) {
         BSApplication.IS_RESULT = true;
-        EventBus.getDefault().postSticky("stop");
+        BSApplication.IS_ONE = false;
+        EventBus.getDefault().post(new MessageEvent("stop"));
         PlayerFragment fragment = new PlayerFragment();
         Bundle bundle = new Bundle();
         bundle.putString("albumsId", albumsId);
@@ -125,7 +127,8 @@ public class PlayerFragment extends BaseFragment implements View.OnClickListener
 
     public static PlayerFragment newInstance(String albumsId, String q) {
         BSApplication.IS_RESULT = true;
-        EventBus.getDefault().postSticky("stop");
+        BSApplication.IS_ONE = false;
+        EventBus.getDefault().post(new MessageEvent("stop"));
         PlayerFragment fragment = new PlayerFragment();
         Bundle bundle = new Bundle();
         bundle.putSerializable("albumsId", albumsId);
@@ -135,7 +138,8 @@ public class PlayerFragment extends BaseFragment implements View.OnClickListener
     }
 
     public static PlayerFragment newInstance(ChannelsBean singlesBase, String q) {
-        EventBus.getDefault().postSticky("stop");
+        BSApplication.IS_ONE = true;
+        EventBus.getDefault().post(new MessageEvent("stop"));
         PlayerFragment fragment = new PlayerFragment();
         Bundle bundle = new Bundle();
         bundle.putString("q", q);
@@ -146,7 +150,8 @@ public class PlayerFragment extends BaseFragment implements View.OnClickListener
 
     public static PlayerFragment newInstance(ChannelsBean singlesBase) {
         BSApplication.IS_RESULT = true;
-        EventBus.getDefault().postSticky("stop");
+        BSApplication.IS_ONE = true;
+        EventBus.getDefault().post(new MessageEvent("stop"));
         PlayerFragment fragment = new PlayerFragment();
         Bundle bundle = new Bundle();
         bundle.putSerializable("channelsBean", singlesBase);
@@ -155,8 +160,9 @@ public class PlayerFragment extends BaseFragment implements View.OnClickListener
     }
 
     public static PlayerFragment newInstance(SinglesBase singlesBase) {
+        BSApplication.IS_ONE = true;
         BSApplication.IS_RESULT = true;
-        EventBus.getDefault().postSticky("stop");
+        EventBus.getDefault().post(new MessageEvent("stop"));
         PlayerFragment fragment = new PlayerFragment();
         Bundle bundle = new Bundle();
         bundle.putSerializable("singlesBase", singlesBase);
@@ -165,8 +171,9 @@ public class PlayerFragment extends BaseFragment implements View.OnClickListener
     }
 
     public static PlayerFragment newInstance(SinglesBase singlesBase, String q) {
+        BSApplication.IS_ONE = true;
         BSApplication.IS_RESULT = true;
-        EventBus.getDefault().postSticky("stop");
+        EventBus.getDefault().post(new MessageEvent("stop"));
         PlayerFragment fragment = new PlayerFragment();
         Bundle bundle = new Bundle();
         bundle.putString("q", q);
@@ -176,7 +183,8 @@ public class PlayerFragment extends BaseFragment implements View.OnClickListener
     }
 
     public static PlayerFragment newInstance(List<SinglesDownload> singlesDownloads) {
-        EventBus.getDefault().postSticky("stop");
+        BSApplication.IS_ONE = false;
+        EventBus.getDefault().post(new MessageEvent("stop"));
         PlayerFragment fragment = new PlayerFragment();
         Bundle bundle = new Bundle();
         bundle.putSerializable("singlesDownloads", (Serializable) singlesDownloads);
@@ -186,6 +194,7 @@ public class PlayerFragment extends BaseFragment implements View.OnClickListener
 
     public static PlayerFragment newInstance() {
         BSApplication.IS_RESULT = true;
+        BSApplication.IS_ONE = false;
         PlayerFragment fragment = new PlayerFragment();
         return fragment;
     }
@@ -195,6 +204,7 @@ public class PlayerFragment extends BaseFragment implements View.OnClickListener
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EventBus.getDefault().register(this);
+        singLesBeans.clear();
     }
 
 
@@ -207,9 +217,11 @@ public class PlayerFragment extends BaseFragment implements View.OnClickListener
     private boolean mIsStopped = false;
     private boolean mIsActivityPaused = true;
     private String q, title;
+    private SinglesBase singlesBase;
 
     @Override
     public void initView() {
+        BSApplication.IS_CREATE = true;
         mAVOptions = new AVOptions();
         // the unit of timeout is ms
         mAVOptions.setInteger(AVOptions.KEY_PREPARE_TIMEOUT, 10 * 1000);
@@ -232,7 +244,7 @@ public class PlayerFragment extends BaseFragment implements View.OnClickListener
             @Override
             public void onClick(View v) {
                 loadLayout.showLoadingView();
-                getPlayerList("");
+                getPlayerList(TextUtils.isEmpty(albumsId) ? "" : albumsId);
             }
         });
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
@@ -253,20 +265,34 @@ public class PlayerFragment extends BaseFragment implements View.OnClickListener
             q = bundle.getString("q");
             id = bundle.getString("id");
             title = bundle.getString("title");
-            SinglesBase singlesBase = (SinglesBase) bundle.getSerializable("singlesBase");
+            singlesBase = (SinglesBase) bundle.getSerializable("singlesBase");
             channelsBean = (ChannelsBean) bundle.getSerializable("channelsBean");
             relatiBottom.setVisibility(View.VISIBLE);
             if (singlesBase != null) {
-                loadLayout.showContentView();
-                singLesBeans.clear();
-                singLesBeans.add(singlesBase);
-                postionPlayer = 0;
-                bdPlayer.setVideoPath(singlesBase.single_file_url);
-                bdPlayer.start();
-                largeLabelSeekbar.setVisibility(View.VISIBLE);
-                ivPlayList.setVisibility(View.VISIBLE);
-                setBeforeOrNext(singlesBase);
-                mPlayerAdapter.notifyDataSetChanged();
+                if (singlesBase.is_radio == false) {
+                    loadLayout.showContentView();
+                    singLesBeans.clear();
+                    singLesBeans.add(singlesBase);
+                    postionPlayer = 0;
+                    bdPlayer.setVideoPath(singlesBase.single_file_url);
+                    bdPlayer.start();
+                    largeLabelSeekbar.setVisibility(View.VISIBLE);
+                    ivPlayList.setVisibility(View.VISIBLE);
+                    setBeforeOrNext(singlesBase);
+                    mPlayerAdapter.notifyDataSetChanged();
+                } else {
+                    largeLabelSeekbar.setVisibility(View.GONE);
+                    loadLayout.showContentView();
+                    singLesBeans.clear();
+                    mAudioPath = singlesBase.single_file_url;
+                    singLesBeans.add(singlesBase);
+                    postionPlayer = 0;
+                    largeLabelSeekbar.setVisibility(View.INVISIBLE);
+                    ivPlayList.setVisibility(View.INVISIBLE);
+                    prepare();
+                    setBeforeOrNext(singlesBase);
+                    mPlayerAdapter.notifyDataSetChanged();
+                }
             } else {
                 if (singlesBeanList != null) {
                     if (bdPlayer != null)
@@ -292,10 +318,12 @@ public class PlayerFragment extends BaseFragment implements View.OnClickListener
                         singLesBeans.clear();
                         SinglesBase s = new SinglesBase();
                         s.album_title = channelsBean.title;
+                        s.id =channelsBean.id;
                         mAudioPath = channelsBean.radio_url;
                         s.single_logo_url = channelsBean.image_url;
                         s.single_file_url = channelsBean.radio_url;
                         s.album_title = channelsBean.desc;
+                        s.is_radio = true;
                         singLesBeans.add(s);
                         postionPlayer = 0;
                         largeLabelSeekbar.setVisibility(View.INVISIBLE);
@@ -334,6 +362,7 @@ public class PlayerFragment extends BaseFragment implements View.OnClickListener
             ContentValues contentValues = new ContentValues();
             contentValues.put("id", sb.id);
             contentValues.put("isPlay", sb.isPlay);
+            contentValues.put("is_radio", sb.is_radio);
             contentValues.put("single_title", sb.single_title);
             contentValues.put("play_time", System.currentTimeMillis());
             contentValues.put("single_logo_url", sb.single_logo_url);
@@ -538,10 +567,14 @@ public class PlayerFragment extends BaseFragment implements View.OnClickListener
                     playerDialog.showPlayDialo(singLesBeans, singLesBeans.get(postionPlayer).id, new PlayerDialog.PopPlayCallBack() {
                         @Override
                         public void play(SinglesBase singlesBean, int postion) {
-                            bdPlayer.stopPlayback();
-                            bdPlayer.setVideoPath(singlesBean.single_file_url);
                             postionPlayer = postion;
+                            mRecyclerView.smoothScrollToPosition(postion);
+                            bdPlayer.stopPlayback();
+                            bdPlayer.setVideoPath(singLesBeans.get(postionPlayer).single_file_url);
                             bdPlayer.start();
+                            ivPause.setImageResource(R.mipmap.music_play_icon_pause);
+                            seekbarVideo.setProgress(0);
+                            setBeforeOrNext(singLesBeans.get(postionPlayer));
                         }
 
                         @Override
@@ -641,9 +674,11 @@ public class PlayerFragment extends BaseFragment implements View.OnClickListener
 
 
     //接受到下载完成的通知
-    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
-    public void onMessageEventMainThread(String event) {
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMoonEvent(MessageEvent messageEvent) {
+        String event = messageEvent.getMessage();
         Log.i("mingku", "event=" + event);
+        Log.i("mingku", "singLesBeans=" + singLesBeans.size());
         if (!TextUtils.isEmpty(event) && "stop".equals(event)) {
             if (bdPlayer != null) {
                 bdPlayer.stopPlayback();
@@ -653,18 +688,20 @@ public class PlayerFragment extends BaseFragment implements View.OnClickListener
             if (bdPlayer != null) {
                 bdPlayer.pause();
             }
-            if (mMediaPlayer != null) {
+            if (mMediaPlayer != null && channelsBean != null) {
                 mMediaPlayer.pause();
             }
+            ivPause.setImageResource(R.mipmap.music_play_icon_play);
         } else if (!TextUtils.isEmpty(event) && "start".equals(event)) {
             if (bdPlayer != null) {
                 bdPlayer.start();
             }
-            if (mMediaPlayer != null) {
+            if (mMediaPlayer != null && channelsBean != null) {
                 mMediaPlayer.start();
             }
-        } else if (!TextUtils.isEmpty(event) && "step".equals(event)) {
-            if (singLesBeans.size() > postionPlayer && postionPlayer > 0) {
+            ivPause.setImageResource(R.mipmap.music_play_icon_pause);
+        } else if (!TextUtils.isEmpty(event) && BSApplication.IS_ONE == false && "step".equals(event)) {
+            if (!singLesBeans.isEmpty() && singLesBeans.size() > 1 && singLesBeans.size() > postionPlayer && postionPlayer > 0) {
                 postionPlayer = postionPlayer - 1;
                 mRecyclerView.smoothScrollToPosition(postionPlayer);
                 bdPlayer.stopPlayback();
@@ -674,7 +711,7 @@ public class PlayerFragment extends BaseFragment implements View.OnClickListener
                 ivPause.setImageResource(R.mipmap.music_play_icon_pause);
                 setBeforeOrNext(singLesBeans.get(postionPlayer));
             }
-        } else if (!TextUtils.isEmpty(event) && "next".equals(event)) {
+        } else if (!singLesBeans.isEmpty() && BSApplication.IS_ONE == false && singLesBeans.size() > 1 && !TextUtils.isEmpty(event) && "next".equals(event)) {
             if (postionPlayer < singLesBeans.size() - 1) {
                 postionPlayer = postionPlayer + 1;
                 mRecyclerView.smoothScrollToPosition(postionPlayer);
@@ -702,12 +739,11 @@ public class PlayerFragment extends BaseFragment implements View.OnClickListener
     }
 
 
-    private Toast mToast = null;
-
     TelephonyManager mTelephonyManager;
     PhoneStateListener mPhoneStateListener;
 
     // Listen to the telephone
+
     private void startTelephonyListener() {
         mTelephonyManager = (TelephonyManager) getActivity().getSystemService(Context.TELEPHONY_SERVICE);
         if (mTelephonyManager == null) {
@@ -760,6 +796,7 @@ public class PlayerFragment extends BaseFragment implements View.OnClickListener
     @Override
     public void onDestroy() {
         super.onDestroy();
+        BSApplication.IS_CREATE = false;
         EventBus.getDefault().unregister(this);
         stopTelephonyListener();
         release();

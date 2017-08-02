@@ -157,6 +157,7 @@ public class ReportsPlayerFragment extends BaseFragment {
                     @Override
                     public void call(Object s) {
                         dissmisDialog();
+                        hideSoftKeyboard();
                         T.getInstance().showToast("举报成功");
                         closeFragment();
                     }
@@ -187,6 +188,7 @@ public class ReportsPlayerFragment extends BaseFragment {
                     @Override
                     public void call(Object s) {
                         dissmisDialog();
+                        hideSoftKeyboard();
                         T.getInstance().showToast("举报成功");
                         closeFragment();
                     }

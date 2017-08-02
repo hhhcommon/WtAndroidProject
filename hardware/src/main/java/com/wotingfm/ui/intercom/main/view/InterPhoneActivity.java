@@ -29,7 +29,7 @@ public class InterPhoneActivity extends BaseFragmentActivity {
     private MessageReceiver Receiver;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_main);
         AppManager.getAppManager().addActivity(this);

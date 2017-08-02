@@ -7,7 +7,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Color;
+import android.graphics.Rect;
 import android.media.AudioManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -20,6 +22,7 @@ import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
@@ -29,32 +32,23 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.woting.commonplat.manager.VoiceRecognizer;
-import com.woting.commonplat.utils.KeyboardChangeListener;
 import com.wotingfm.R;
 import com.wotingfm.common.adapter.MyAdapter;
 import com.wotingfm.common.application.BSApplication;
-import com.wotingfm.common.bean.ChannelsBean;
 import com.wotingfm.common.bean.MessageEvent;
-import com.wotingfm.common.bean.RadioInfo;
-import com.wotingfm.common.bean.SinglesBase;
 import com.wotingfm.common.config.GlobalStateConfig;
-import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.common.utils.NetUtils;
 import com.wotingfm.common.utils.T;
-import com.wotingfm.ui.base.baseactivity.AppManager;
-import com.wotingfm.ui.base.baseactivity.NoTitleBarBaseActivity;
 import com.wotingfm.ui.base.basefragment.BaseFragment;
 import com.wotingfm.ui.play.look.activity.serch.SerchFragment;
 import com.wotingfm.ui.play.look.fragment.ClassificationFragment;
 import com.wotingfm.ui.play.look.fragment.LiveFragment;
 import com.wotingfm.ui.play.look.fragment.RadioStationFragment;
 import com.wotingfm.ui.play.look.fragment.SelectedFragment;
-import com.wotingfm.ui.play.radio.fragment.RadioInfoTodayFragment;
-import com.wotingfm.ui.test.PlayerActivity;
-import com.wotingfm.ui.test.PlayerFragment;
 
 import org.greenrobot.eventbus.EventBus;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -80,6 +74,8 @@ public class LookListFragment extends BaseFragment implements View.OnClickListen
     EditText etSearchlike;
     @BindView(R.id.relatLable)
     RelativeLayout relatLable;
+    @BindView(R.id.layout_main)
+    RelativeLayout layout_main;
     @BindView(R.id.tvSubmitSerch)
     TextView tvSubmitSerch;
 
@@ -102,17 +98,63 @@ public class LookListFragment extends BaseFragment implements View.OnClickListen
         etSearchlike.setFocusable(true);
         etSearchlike.setFocusableInTouchMode(true);
         etSearchlike.requestFocus();
-        inputMethodManager.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
+        //   InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        inputMethodManager.toggleSoftInput(-30, InputMethodManager.HIDE_NOT_ALWAYS);
+        relatLable.setVisibility(View.VISIBLE);
     }
+
+    // 状态栏的高度
+    private int statusBarHeight;
+    // 软键盘的高度
+    private int keyboardHeight;
+    // 软键盘的显示状态
+    private boolean isShowKeyboard;
+    private ViewTreeObserver.OnGlobalLayoutListener globalLayoutListener = new ViewTreeObserver.OnGlobalLayoutListener() {
+
+        @Override
+        public void onGlobalLayout() {
+            // 应用可以显示的区域。此处包括应用占用的区域，
+            // 以及ActionBar和状态栏，但不含设备底部的虚拟按键。
+            Rect r = new Rect();
+            layout_main.getWindowVisibleDisplayFrame(r);
+
+            // 屏幕高度。这个高度不含虚拟按键的高度
+            int screenHeight = layout_main.getRootView().getHeight();
+
+            int heightDiff = screenHeight - (r.bottom - r.top);
+
+            // 在不显示软键盘时，heightDiff等于状态栏的高度
+            // 在显示软键盘时，heightDiff会变大，等于软键盘加状态栏的高度。
+            // 所以heightDiff大于状态栏高度时表示软键盘出现了，
+            // 这时可算出软键盘的高度，即heightDiff减去状态栏的高度
+            if (keyboardHeight == 0 && heightDiff > statusBarHeight) {
+                keyboardHeight = heightDiff - statusBarHeight;
+            }
+
+            if (isShowKeyboard) {
+                // 如果软键盘是弹出的状态，并且heightDiff小于等于状态栏高度，
+                // 说明这时软键盘已经收起
+                if (heightDiff <= statusBarHeight) {
+                    isShowKeyboard = false;
+                    relatLable.setVisibility(View.GONE);
+                }
+            } else {
+                // 如果软键盘是收起的状态，并且heightDiff大于状态栏高度，
+                // 说明这时软键盘已经弹出
+                if (heightDiff > statusBarHeight) {
+                    isShowKeyboard = true;
+                    relatLable.setVisibility(View.VISIBLE);
+                }
+            }
+        }
+    };
 
     @Override
     public void initView() {
-        new KeyboardChangeListener(getActivity()).setKeyBoardListener(new KeyboardChangeListener.KeyBoardListener() {
-            @Override
-            public void onKeyboardChange(boolean isShow, int keyboardHeight) {
-                relatLable.setVisibility(isShow == true ? View.VISIBLE : View.GONE);
-            }
-        });
+
+        statusBarHeight = getStatusBarHeight(BSApplication.getInstance());
+
+        layout_main.getViewTreeObserver().addOnGlobalLayoutListener(globalLayoutListener);
         ivClose.setOnClickListener(this);
         tvSubmitSerch.setOnClickListener(this);
         ivVoice.setOnClickListener(this);
@@ -129,7 +171,7 @@ public class LookListFragment extends BaseFragment implements View.OnClickListen
         mFragment.add(LiveFragment.newInstance());
         mAdapter = new MyAdapter(getChildFragmentManager(), type, mFragment);
         viewPager.setAdapter(mAdapter);
-        viewPager.setOffscreenPageLimit(3);
+        //   viewPager.setOffscreenPageLimit(3);
         tabLayout.setupWithViewPager(viewPager);
 
         mVoiceRecognizer = VoiceRecognizer.getInstance(getActivity(), com.woting.commonplat.constant.BroadcastConstants.SEARCHVOICE);// 初始化语音搜索
@@ -142,7 +184,7 @@ public class LookListFragment extends BaseFragment implements View.OnClickListen
                 if (arg1 == EditorInfo.IME_ACTION_SEARCH) {
                     String content = etSearchlike.getText().toString().trim();
                     if (!TextUtils.isEmpty(content)) {
-                        openFragment(SerchFragment.newInstance(content,0));
+                        openFragment(SerchFragment.newInstance(content, 0));
                         SerchCode = viewPager.getCurrentItem();
                         etSearchlike.setText("");
                     }
@@ -169,7 +211,7 @@ public class LookListFragment extends BaseFragment implements View.OnClickListen
                         if (videoDialog != null) videoDialog.dismiss();
                         etSearchlike.setText("");
                         SerchCode = viewPager.getCurrentItem();
-                        openFragment(SerchFragment.newInstance(str.trim(),0));
+                        openFragment(SerchFragment.newInstance(str.trim(), 0));
                     }
                 }, 1000);
                 if (NetUtils.isNetworkAvailable(context)) {
@@ -184,6 +226,7 @@ public class LookListFragment extends BaseFragment implements View.OnClickListen
     };
     private VideoDialog videoDialog;
 
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -194,12 +237,13 @@ public class LookListFragment extends BaseFragment implements View.OnClickListen
                     return;
                 }
                 hideSoftKeyboard();
-                openFragment(SerchFragment.newInstance(content,0));
+                openFragment(SerchFragment.newInstance(content, 0));
                 SerchCode = viewPager.getCurrentItem();
                 etSearchlike.setText("");
                 break;
             case R.id.ivBack:
             case R.id.ivClose:
+                hideSoftKeyboard();
                 closeFragment();
                 GlobalStateConfig.mineFromType = 0;
                 GlobalStateConfig.activityA = "A";
@@ -263,7 +307,7 @@ public class LookListFragment extends BaseFragment implements View.OnClickListen
                             audioMgr.setStreamVolume(AudioManager.STREAM_MUSIC, stepVolume, AudioManager.FLAG_PLAY_SOUND);
                             mVoiceRecognizer.startListen();
                             tvTitle.setText("识别中...");
-                            EventBus.getDefault().postSticky("pause");
+                            EventBus.getDefault().post(new MessageEvent("pause"));
                             tvTitle.setTextColor(Color.parseColor("#cccccd"));
                             break;
                         case MotionEvent.ACTION_UP:
@@ -271,7 +315,7 @@ public class LookListFragment extends BaseFragment implements View.OnClickListen
                             mVoiceRecognizer.stopListen();
                             tvTitle.setTextColor(Color.parseColor("#16181a"));
                             tvTitle.setText("点击切换文字搜索");
-                            EventBus.getDefault().postSticky("start");
+                            EventBus.getDefault().post(new MessageEvent("start"));
                             break;
                     }
                     return true;
@@ -282,18 +326,37 @@ public class LookListFragment extends BaseFragment implements View.OnClickListen
 
     }
 
-/*    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        GlobalStateConfig.mineFromType = 0;
-        GlobalStateConfig.activityA = "A";
-        AppManager.getAppManager().finishActivity(this);
-        EventBus.getDefault().post(new MessageEvent("one"));
-    }*/
+    /*    @Override
+        public void onBackPressed() {
+            super.onBackPressed();
+            GlobalStateConfig.mineFromType = 0;
+            GlobalStateConfig.activityA = "A";
+            AppManager.getAppManager().finishActivity(this);
+            EventBus.getDefault().post(new MessageEvent("one"));
+        }*/
+// 获取状态栏高度
+    public static int getStatusBarHeight(Context context) {
+        try {
+            Class<?> c = Class.forName("com.android.internal.R$dimen");
+            Object obj = c.newInstance();
+            Field field = c.getField("status_bar_height");
+            int x = Integer.parseInt(field.get(obj).toString());
+            return context.getResources().getDimensionPixelSize(x);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
+        if (layout_main != null)
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
+                layout_main.getViewTreeObserver().removeGlobalOnLayoutListener(globalLayoutListener);
+            } else {
+                layout_main.getViewTreeObserver().removeOnGlobalLayoutListener(globalLayoutListener);
+            }
         if (mBroadcastReceiver != null && getActivity() != null)
             getActivity().unregisterReceiver(mBroadcastReceiver
             );

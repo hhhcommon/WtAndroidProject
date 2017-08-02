@@ -2,9 +2,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/loadLayout"
     android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:layout_above="@+id/view"
     android:layout_below="@+id/relatTop"
-    android:layout_height="match_parent"
+    android:background="#16181a"
     app:emptyView="@layout/layout_empty_black_view"
     app:errorView="@layout/layout_error_black_view"
     app:loadingView="@layout/layout_loading_black_view">
@@ -19,9 +20,9 @@
         <android.support.v7.widget.RecyclerView
             android:id="@+id/mRecyclerView"
             android:layout_width="match_parent"
+            android:paddingTop="10dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginTop="10dp"
             android:scrollbars="none" />
 
 

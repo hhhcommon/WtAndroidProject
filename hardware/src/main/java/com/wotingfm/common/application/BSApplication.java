@@ -65,6 +65,8 @@ public class BSApplication extends MultiDexApplication {
     public static Fragment fragmentBase;
     public static boolean isIS_BACK = false;
     public static boolean IS_RESULT = false;
+    public static boolean IS_CREATE= false;
+    public static boolean IS_ONE= false;
 
     public void onCreate() {
         super.onCreate();
