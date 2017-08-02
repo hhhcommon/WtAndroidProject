@@ -60,7 +60,7 @@ public class EditGroupMessageModel extends UserInfo {
                     List<AddressModel> list = new Gson().fromJson(d, new TypeToken<List<AddressModel>>() {
                     }.getType());
                     if (list != null && list.size() > 0) {
-                        ToastUtils.show_always(activity.getActivity(),"address数据解析成功，开始处理");
+//                        ToastUtils.show_always(activity.getActivity(),"address数据解析成功，开始处理");
                         Object[]  m= handleCityList(list);
                         return m;
                     } else {

@@ -206,12 +206,4 @@ public class StandbyChannelFragment extends Fragment implements View.OnClickList
         void resultListener(boolean type,String channel);
     }
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        if (null != rootView) {
-            ((ViewGroup) rootView.getParent()).removeView(rootView);
-        }
-    }
-
 }

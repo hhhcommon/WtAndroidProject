@@ -1,13 +1,11 @@
 package com.wotingfm.common.application;
 
-import android.app.Application;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Environment;
-import android.support.multidex.MultiDex;
 import android.support.multidex.MultiDexApplication;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
@@ -41,9 +39,7 @@ import com.woting.commonplat.manager.PhoneMsgManager;
 import com.wotingfm.R;
 import com.netease.nim.live.DemoCache;
 import com.wotingfm.common.config.preference.Preferences;
-import com.wotingfm.common.net.RetrofitService;
 import com.wotingfm.common.net.RetrofitUtils;
-import com.wotingfm.common.service.WtDeviceControl;
 import com.wotingfm.common.utils.SystemUtil;
 import com.wotingfm.ui.main.view.MainActivity;
 
@@ -65,8 +61,8 @@ public class BSApplication extends MultiDexApplication {
     public static Fragment fragmentBase;
     public static boolean isIS_BACK = false;
     public static boolean IS_RESULT = false;
-    public static boolean IS_CREATE= false;
-    public static boolean IS_ONE= false;
+    public static boolean IS_CREATE = false;
+    public static boolean IS_ONE = false;
 
     public void onCreate() {
         super.onCreate();
@@ -284,5 +280,3 @@ public class BSApplication extends MultiDexApplication {
         return mContext;
     }
 }
-
-

@@ -118,13 +118,4 @@ public class MessageSettingFragment extends Fragment implements View.OnClickList
         }
     }
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        if (rootView != null) {
-            ((ViewGroup) rootView.getParent()).removeView(rootView);
-        }
-    }
-
-
 }

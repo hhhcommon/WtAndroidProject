@@ -87,13 +87,4 @@ public class AccountSecurityFragment extends Fragment implements View.OnClickLis
         }
     }
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        if (rootView != null) {
-            ((ViewGroup) rootView.getParent()).removeView(rootView);
-        }
-    }
-
-
 }

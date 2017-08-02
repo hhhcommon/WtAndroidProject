@@ -478,12 +478,4 @@ public class PersonalInfoFragment extends Fragment implements View.OnClickListen
         if (dialog != null) dialog.dismiss();
     }
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        if (rootView != null) {
-            ((ViewGroup) rootView.getParent()).removeView(rootView);
-        }
-    }
-
 }

@@ -280,12 +280,4 @@ public class SearchContactsForLocalFragment extends Fragment implements View.OnC
         confirmDialog.dismiss();
     }
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        if (rootView != null) {
-            ((ViewGroup) rootView.getParent()).removeView(rootView);
-        }
-    }
-
 }

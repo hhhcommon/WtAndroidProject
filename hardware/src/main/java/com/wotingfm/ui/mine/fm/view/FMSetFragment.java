@@ -73,13 +73,4 @@ public class FMSetFragment extends Fragment implements View.OnClickListener {
         }
     }
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        if (rootView != null) {
-            ((ViewGroup) rootView.getParent()).removeView(rootView);
-        }
-    }
-
-
 }
