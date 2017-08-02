@@ -522,7 +522,7 @@ public class PlayerFragment extends BaseFragment implements View.OnClickListener
                 //  LookListActivity.start(this);
                 break;
             case R.id.ivBefore:
-                if (singLesBeans.size() > postionPlayer && postionPlayer > 0) {
+                if (singLesBeans.size() > postionPlayer && postionPlayer > 0&&BSApplication.IS_ONE == false ) {
                     postionPlayer = postionPlayer - 1;
                     mRecyclerView.smoothScrollToPosition(postionPlayer);
                     bdPlayer.stopPlayback();
@@ -548,7 +548,7 @@ public class PlayerFragment extends BaseFragment implements View.OnClickListener
                 }
                 break;
             case R.id.ivNext:
-                if (postionPlayer < singLesBeans.size() - 1) {
+                if (postionPlayer < singLesBeans.size() - 1&&BSApplication.IS_ONE == false ) {
                     postionPlayer = postionPlayer + 1;
                     mRecyclerView.smoothScrollToPosition(postionPlayer);
                     bdPlayer.stopPlayback();
