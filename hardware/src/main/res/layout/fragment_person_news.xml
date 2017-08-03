@@ -306,42 +306,5 @@
             android:src="@mipmap/nav_icon_more_white" />
     </RelativeLayout>
 
-    <LinearLayout
-        android:id="@+id/lin_chose"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/transparent_40_black"
-        android:gravity="bottom"
-        android:orientation="vertical"
-        android:visibility="gone">
-
-        <TextView
-            android:id="@+id/tv_del"
-            android:layout_width="match_parent"
-            android:layout_height="44dp"
-            android:background="@color/white"
-            android:gravity="center"
-            android:lineSpacingExtra="0sp"
-            android:text="删除好友"
-            android:textColor="#f25e5e"
-            android:textSize="16sp" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="8dip"
-            android:background="@color/line_color" />
-
-        <TextView
-            android:id="@+id/tv_quxiao"
-            android:layout_width="match_parent"
-            android:layout_height="44dp"
-            android:background="@color/white"
-            android:gravity="center"
-            android:lineSpacingExtra="0sp"
-            android:text="取消"
-            android:textColor="#16181a"
-            android:textSize="16sp" />
-
-    </LinearLayout>
 
 </RelativeLayout>

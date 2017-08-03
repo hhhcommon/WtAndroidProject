@@ -9,9 +9,9 @@
     <LinearLayout
         android:layout_width="60dp"
         android:layout_height="60dp"
-        android:layout_marginBottom="12dp"
         android:layout_marginLeft="12dp"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="13.3dp"
+        android:layout_marginBottom="13.3dp"
         android:background="@mipmap/avatar_g"
         android:padding="1dp">
 
@@ -23,14 +23,13 @@
     </LinearLayout>
 
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="0dp"
-        android:layout_height="match_parent"
+        android:layout_height="60dp"
         android:layout_marginLeft="10.7dp"
-        android:layout_marginRight="12dp"
-        android:layout_weight="1"
         android:gravity="center_vertical"
-        android:orientation="vertical">
+        android:layout_marginRight="12dp"
+        android:layout_weight="1">
 
         <TextView
             android:id="@+id/tv_name"
@@ -46,10 +45,12 @@
             android:id="@+id/tv_introduce"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="6.7dp"
             android:ellipsize="end"
             android:maxLines="1"
-            android:text="群名称"
+            android:layout_marginBottom="3dp"
+            android:layout_marginTop="3dp"
+            android:text="专辑名称"
+            android:layout_below="@+id/tv_name"
             android:textColor="#959698"
             android:textSize="12sp" />
 
@@ -57,13 +58,13 @@
             android:id="@+id/tv_num"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="9.3dp"
             android:ellipsize="end"
             android:maxLines="1"
+            android:layout_below="@+id/tv_introduce"
             android:text="2000次播放"
             android:textColor="#959698"
             android:textSize="12sp" />
-    </LinearLayout>
+    </RelativeLayout>
 
 
 </LinearLayout>

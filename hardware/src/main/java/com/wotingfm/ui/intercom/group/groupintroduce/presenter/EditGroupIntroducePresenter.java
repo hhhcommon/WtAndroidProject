@@ -19,10 +19,9 @@ import org.json.JSONObject;
  */
 public class EditGroupIntroducePresenter {
 
-    private final EditGroupIntroduceFragment activity;
-    private final EditGroupIntroduceModel model;
+    private EditGroupIntroduceFragment activity;
+    private EditGroupIntroduceModel model;
     private Contact.group group;
-
 
     public EditGroupIntroducePresenter(EditGroupIntroduceFragment activity) {
         this.activity = activity;
@@ -101,11 +100,18 @@ public class EditGroupIntroducePresenter {
      * @param src
      */
     public void textChange(String src) {
-        if (src != null &&! src.trim().equals("")) {
+        if (src != null && !src.trim().equals("")) {
             int l = src.length();
             activity.setTextViewChange(String.valueOf(30 - l));
         } else {
             activity.setTextViewChange("30");
         }
+    }
+
+    /**
+     * 数据销毁
+     */
+    public void destroy() {
+        model = null;
     }
 }

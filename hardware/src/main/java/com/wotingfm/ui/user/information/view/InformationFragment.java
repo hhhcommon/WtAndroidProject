@@ -158,5 +158,6 @@ public class InformationFragment extends Fragment implements View.OnClickListene
     public void onDestroy() {
         super.onDestroy();
         Presenter.destroy();
+        Presenter=null;
     }
 }

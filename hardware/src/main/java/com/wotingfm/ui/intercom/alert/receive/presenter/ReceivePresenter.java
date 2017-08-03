@@ -10,8 +10,6 @@ import android.net.Uri;
 
 import com.wotingfm.R;
 import com.wotingfm.common.utils.VibratorUtils;
-import com.wotingfm.ui.intercom.alert.call.model.CallModel;
-import com.wotingfm.ui.intercom.alert.call.view.CallAlertActivity;
 import com.wotingfm.ui.intercom.alert.receive.model.ReceiveModel;
 import com.wotingfm.ui.intercom.alert.receive.view.ReceiveAlertActivity;
 import com.wotingfm.ui.intercom.main.chat.dao.SearchTalkHistoryDao;
@@ -23,8 +21,8 @@ import com.wotingfm.ui.intercom.main.contacts.model.Contact;
  */
 public class ReceivePresenter {
 
-    private final ReceiveAlertActivity activity;
-    private final ReceiveModel model;
+    private ReceiveAlertActivity activity;
+    private ReceiveModel model;
     private SearchTalkHistoryDao dao;
     private MessageReceiver Receiver;
     private MediaPlayer musicPlayer;
@@ -144,6 +142,7 @@ public class ReceivePresenter {
         if (dao != null) {
             dao = null;
         }
+        model = null;
     }
 
     /*
@@ -162,4 +161,5 @@ public class ReceivePresenter {
 //            }
         }
     }
+
 }

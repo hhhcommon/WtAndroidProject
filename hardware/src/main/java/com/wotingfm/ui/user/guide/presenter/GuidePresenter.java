@@ -115,5 +115,10 @@ public class GuidePresenter extends BasePresenter {
         }
     }
 
-
+    /**
+     * 数据销毁
+     */
+    public void destroy(){
+        model=null;
+    }
 }

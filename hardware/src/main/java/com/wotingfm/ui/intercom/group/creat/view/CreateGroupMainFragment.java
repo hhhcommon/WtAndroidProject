@@ -189,5 +189,6 @@ public class CreateGroupMainFragment extends Fragment implements View.OnClickLis
     public void onDestroy() {
         super.onDestroy();
         presenter.destroy();
+        presenter=null;
     }
 }

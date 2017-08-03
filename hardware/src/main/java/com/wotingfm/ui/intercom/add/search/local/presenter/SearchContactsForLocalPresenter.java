@@ -32,8 +32,8 @@ import java.util.List;
  */
 public class SearchContactsForLocalPresenter {
 
-    private final SearchContactsForLocalFragment activity;
-    private final SearchContactsForLocalModel model;
+    private  SearchContactsForLocalFragment activity;
+    private  SearchContactsForLocalModel model;
     private List<Contact.group> srcList_G;// 原始群组数据
     private List<Contact.user> srcList_p;// 原始好友数据
 
@@ -346,4 +346,10 @@ public class SearchContactsForLocalPresenter {
         activity.getActivity().sendBroadcast(new Intent(BroadcastConstants.VIEW_INTER_PHONE_CHAT_OK));// 对讲主页界面，数据更新
     }
 
+    /**
+     * 数据销毁
+     */
+    public void destroy(){
+        model=null;
+    }
 }

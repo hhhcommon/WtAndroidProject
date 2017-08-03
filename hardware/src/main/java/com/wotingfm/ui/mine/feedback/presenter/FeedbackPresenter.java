@@ -26,9 +26,8 @@ import java.util.List;
  */
 public class FeedbackPresenter {
 
-    private final FeedbackFragment activity;
-    private final FeedbackModel model;
-
+    private FeedbackFragment activity;
+    private FeedbackModel model;
 
     public FeedbackPresenter(FeedbackFragment activity) {
         this.activity = activity;
@@ -104,4 +103,10 @@ public class FeedbackPresenter {
         }
     }
 
+    /**
+     * 数据销毁
+     */
+    public void destroy() {
+        model = null;
+    }
 }

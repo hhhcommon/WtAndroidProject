@@ -8,6 +8,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -204,6 +205,14 @@ public class StandbyChannelFragment extends Fragment implements View.OnClickList
 
     public interface ResultListener {
         void resultListener(boolean type,String channel);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Log.e("界面","执行销毁");
+        presenter.destroy();
+        presenter=null;
     }
 
 }

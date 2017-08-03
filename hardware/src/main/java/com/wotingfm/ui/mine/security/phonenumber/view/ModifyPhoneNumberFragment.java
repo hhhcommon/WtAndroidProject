@@ -148,6 +148,8 @@ public class ModifyPhoneNumberFragment extends Fragment implements View.OnClickL
     public void onDestroy() {
         super.onDestroy();
         presenter.cancel();
+        presenter.destroy();
+        presenter=null;
     }
 
 }

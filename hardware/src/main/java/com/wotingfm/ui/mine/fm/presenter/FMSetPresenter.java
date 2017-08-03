@@ -12,9 +12,8 @@ import java.util.List;
  */
 public class FMSetPresenter {
 
-    private final FMSetFragment activity;
-    private final FMSetModel model;
-
+    private FMSetFragment activity;
+    private FMSetModel model;
 
     public FMSetPresenter(FMSetFragment activity) {
         this.activity = activity;
@@ -31,5 +30,11 @@ public class FMSetPresenter {
         }
     }
 
+    /**
+     * 数据销毁
+     */
+    public void destroy() {
+        model = null;
+    }
 
 }

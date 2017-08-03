@@ -8,6 +8,7 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -172,4 +173,11 @@ public class NewFriendFragment extends Fragment implements NewFriendAdapter.IonS
         if (dialog != null) dialog.dismiss();
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Log.e("界面","执行销毁");
+        presenter.destroy();
+        presenter=null;
+    }
 }

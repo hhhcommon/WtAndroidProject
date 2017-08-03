@@ -28,9 +28,9 @@ import java.util.UUID;
  */
 public class BlueToothPresenter {
 
-    private final BluetoothFragment activity;
-    private final BlueToothModel model;
-    private final BluetoothAdapter blue;
+    private BluetoothFragment activity;
+    private BlueToothModel model;
+    private BluetoothAdapter blue;
     private DeviceReceiver Receiver;
     private boolean isScan = true;             // 是否正在扫描蓝牙
     private int index;                         // 配对的蓝牙在列表中的位置
@@ -67,6 +67,7 @@ public class BlueToothPresenter {
 
     /**
      * 蓝牙连接
+     *
      * @param pairList
      * @param position
      */
@@ -214,11 +215,12 @@ public class BlueToothPresenter {
     /**
      * 数据销毁
      */
-    public void onDestroy() {
+    public void destroy() {
         blue.cancelDiscovery();// 停止蓝牙搜索
         if (Receiver != null) {
             activity.getActivity().unregisterReceiver(Receiver);
             Receiver = null;
         }
+        model = null;
     }
 }

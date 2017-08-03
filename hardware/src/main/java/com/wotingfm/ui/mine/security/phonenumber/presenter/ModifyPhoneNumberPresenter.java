@@ -24,10 +24,9 @@ import org.json.JSONTokener;
  */
 public class ModifyPhoneNumberPresenter {
 
-    private final ModifyPhoneNumberFragment activity;
-    private final ModifyPhoneNumberModel model;
+    private ModifyPhoneNumberFragment activity;
+    private ModifyPhoneNumberModel model;
     private CountDownTimer mCountDownTimer;
-
 
     public ModifyPhoneNumberPresenter(ModifyPhoneNumberFragment activity) {
         this.activity = activity;
@@ -93,7 +92,7 @@ public class ModifyPhoneNumberPresenter {
      * 获取验证码
      */
     public void getYzm(String userName) {
-        if(userName!=null&&!userName.equals("")){
+        if (userName != null && !userName.equals("")) {
             if (GlobalNetWorkConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
                 if (mCountDownTimer == null) {
                     timerDown();
@@ -102,8 +101,8 @@ public class ModifyPhoneNumberPresenter {
             } else {
                 ToastUtils.show_always(activity.getActivity(), "网络连接失败，请稍后再试！");
             }
-        }else{
-            ToastUtils.show_always(activity.getActivity(),"手机号不能为空");
+        } else {
+            ToastUtils.show_always(activity.getActivity(), "手机号不能为空");
         }
     }
 
@@ -113,7 +112,7 @@ public class ModifyPhoneNumberPresenter {
             @Override
             public void onSuccess(Object result) {
                 activity.dialogCancel();
-                dealSuccess(result,news2);
+                dealSuccess(result, news2);
             }
 
             @Override
@@ -125,7 +124,7 @@ public class ModifyPhoneNumberPresenter {
     }
 
     // 处理修改手机号返回数据
-    private void dealSuccess(Object o,String num) {
+    private void dealSuccess(Object o, String num) {
         try {
             String s = new GsonBuilder().serializeNulls().create().toJson(o);
             JSONObject js = new JSONObject(s);
@@ -196,5 +195,12 @@ public class ModifyPhoneNumberPresenter {
             mCountDownTimer.cancel();
             mCountDownTimer = null;
         }
+    }
+
+    /**
+     * 数据销毁
+     */
+    public void destroy() {
+        model = null;
     }
 }

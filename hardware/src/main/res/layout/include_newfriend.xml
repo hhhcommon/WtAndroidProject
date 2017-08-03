@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="60dp"
+    android:layout_height="wrap_content"
     android:background="@color/white"
     android:orientation="vertical">
 
@@ -9,8 +9,7 @@
         android:id="@+id/tv_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        android:lineSpacingExtra="0sp"
+        android:layout_marginTop="10dp"
         android:text="爱你的"
         android:textColor="#16181a"
         android:textSize="16sp" />
@@ -20,8 +19,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="2dp"
-        android:lineSpacingExtra="0sp"
         android:text="申请备注消息"
         android:textColor="#959698"
+        android:layout_marginBottom="10dp"
         android:textSize="13.3sp" />
 </LinearLayout>

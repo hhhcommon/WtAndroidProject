@@ -216,5 +216,7 @@ public class RetrievePassWordFragment extends Fragment implements View.OnClickLi
     public void onDestroy() {
         super.onDestroy();
         presenter.cancel();
+        presenter.destroy();
+        presenter=null;
     }
 }

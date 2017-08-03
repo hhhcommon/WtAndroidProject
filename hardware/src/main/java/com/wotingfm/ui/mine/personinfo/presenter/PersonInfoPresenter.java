@@ -62,8 +62,8 @@ import java.util.Map;
  */
 public class PersonInfoPresenter {
 
-    private final PersonalInfoFragment activity;
-    private final PersonInfoModel model;
+    private  PersonalInfoFragment activity;
+    private  PersonInfoModel model;
     private final int TO_GALLERY = 5;
     private final int TO_CAMERA = 6;
     private final int PHOTO_REQUEST_CUT = 7;    // 标识 跳转到图片裁剪界面
@@ -607,5 +607,6 @@ public class PersonInfoPresenter {
             activity.getActivity().unregisterReceiver(Receiver);
             Receiver = null;
         }
+        model=null;
     }
 }

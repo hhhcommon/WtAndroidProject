@@ -20,8 +20,8 @@ import org.json.JSONObject;
  */
 public class GroupApplyForPasswordPresenter {
 
-    private final GroupApplyForPasswordFragment activity;
-    private final GroupApplyForPasswordModel model;
+    private GroupApplyForPasswordFragment activity;
+    private GroupApplyForPasswordModel model;
     private String gid;// 组id
 
 
@@ -87,4 +87,10 @@ public class GroupApplyForPasswordPresenter {
         }
     }
 
+    /**
+     * 数据销毁
+     */
+    public void destroy() {
+        model = null;
+    }
 }

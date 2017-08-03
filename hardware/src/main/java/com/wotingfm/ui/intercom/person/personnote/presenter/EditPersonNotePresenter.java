@@ -19,8 +19,8 @@ import org.json.JSONObject;
  */
 public class EditPersonNotePresenter {
 
-    private final EditPersonNoteFragment activity;
-    private final EditPersonNoteModel model;
+    private EditPersonNoteFragment activity;
+    private EditPersonNoteModel model;
     private String id;
 
     public EditPersonNotePresenter(EditPersonNoteFragment activity) {
@@ -89,5 +89,10 @@ public class EditPersonNotePresenter {
         }
     }
 
-
+    /**
+     * 数据销毁
+     */
+    public void destroy() {
+        model = null;
+    }
 }

@@ -215,5 +215,7 @@ public class RegisterFragment extends Fragment implements View.OnClickListener {
     public void onDestroy() {
         super.onDestroy();
         registerPresenter.cancel();
+        registerPresenter.destroy();
+        registerPresenter=null;
     }
 }

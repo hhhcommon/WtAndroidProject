@@ -27,8 +27,8 @@ import java.util.List;
  */
 public class GroupNumberDelPresenter {
 
-    private final GroupNumberDelFragment activity;
-    private final GroupNumberDelModel model;
+    private GroupNumberDelFragment activity;
+    private GroupNumberDelModel model;
     private List<Contact.user> list;
     private String gid;// 群id
     private boolean change = false;// 上层界面是否更改
@@ -200,4 +200,10 @@ public class GroupNumberDelPresenter {
         }
     }
 
+    /**
+     * 数据销毁
+     */
+    public void destroy() {
+        model = null;
+    }
 }

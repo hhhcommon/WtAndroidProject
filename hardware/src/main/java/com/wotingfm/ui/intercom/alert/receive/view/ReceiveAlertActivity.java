@@ -153,6 +153,7 @@ public class ReceiveAlertActivity extends BaseActivity implements OnClickListene
     protected void onDestroy() {
         super.onDestroy();
         presenter.destroy();
+        presenter=null;
         EventBus.getDefault().unregister(this);
     }
 }

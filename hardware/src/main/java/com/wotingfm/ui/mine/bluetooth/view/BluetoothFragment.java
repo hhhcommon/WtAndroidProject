@@ -143,8 +143,9 @@ public class BluetoothFragment extends Fragment implements View.OnClickListener 
 
     @Override
     public void onDestroy() {
-        presenter.onDestroy();
         super.onDestroy();
+        presenter.destroy();
+        presenter = null;
     }
 
 }

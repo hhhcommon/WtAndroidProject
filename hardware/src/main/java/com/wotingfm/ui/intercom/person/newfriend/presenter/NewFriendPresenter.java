@@ -33,8 +33,8 @@ import java.util.List;
  */
 public class NewFriendPresenter {
 
-    private final NewFriendFragment activity;
-    private final NewFriendModel model;
+    private NewFriendFragment activity;
+    private NewFriendModel model;
     private List<NewFriend> list;
 
     public NewFriendPresenter(NewFriendFragment activity) {
@@ -240,6 +240,7 @@ public class NewFriendPresenter {
                     activity.dialogCancel();
                     dealDelSuccess(o, position);
                 }
+
                 @Override
                 public void onFailure(String msg) {
                     activity.dialogCancel();
@@ -337,4 +338,10 @@ public class NewFriendPresenter {
         }
     }
 
+    /**
+     * 数据销毁
+     */
+    public void destroy() {
+        model = null;
+    }
 }

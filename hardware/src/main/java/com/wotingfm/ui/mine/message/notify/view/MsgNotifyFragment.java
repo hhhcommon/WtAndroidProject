@@ -27,7 +27,7 @@ import java.util.List;
  * 作者：xinLong on 2017/6/5 01:30
  * 邮箱：645700751@qq.com
  */
-public class MsgNotifyFragment extends Fragment implements NotifyMsgAdapter.IonSlidingViewClickListener, View.OnClickListener{
+public class MsgNotifyFragment extends Fragment implements NotifyMsgAdapter.IonSlidingViewClickListener, View.OnClickListener {
     private View rootView;
     private MsgNotifyPresenter presenter;
     private RecyclerView mRecyclerView;
@@ -169,4 +169,10 @@ public class MsgNotifyFragment extends Fragment implements NotifyMsgAdapter.IonS
         if (dialog != null) dialog.dismiss();
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        presenter.destroy();
+        presenter = null;
+    }
 }

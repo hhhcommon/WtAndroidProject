@@ -1,6 +1,5 @@
 package com.wotingfm.ui.mine.message.notify.presenter;
 
-import android.animation.TypeEvaluator;
 import android.util.Log;
 
 import com.google.gson.Gson;
@@ -22,8 +21,8 @@ import java.util.List;
  */
 public class MsgNotifyPresenter {
 
-    private final MsgNotifyFragment activity;
-    private final MsgNotifyModel model;
+    private MsgNotifyFragment activity;
+    private MsgNotifyModel model;
     private List<Msg> msg;
 
     public MsgNotifyPresenter(MsgNotifyFragment activity) {
@@ -229,6 +228,13 @@ public class MsgNotifyPresenter {
 
     public void onClick(int position) {
 
+    }
+
+    /**
+     * 数据销毁
+     */
+    public void destroy() {
+        model = null;
     }
 
 }

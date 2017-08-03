@@ -3,6 +3,7 @@ package com.wotingfm.ui.mine.security.password.presenter;
 import android.os.CountDownTimer;
 import android.util.Log;
 import android.widget.Toast;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.woting.commonplat.config.GlobalNetWorkConfig;
@@ -10,6 +11,7 @@ import com.wotingfm.common.utils.ToastUtils;
 import com.wotingfm.ui.mine.main.MineActivity;
 import com.wotingfm.ui.mine.security.password.model.ModifyPasswordModel;
 import com.wotingfm.ui.mine.security.password.view.ModifyPasswordFragment;
+
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
@@ -19,8 +21,8 @@ import org.json.JSONTokener;
  */
 public class ModifyPasswordPresenter {
 
-    private final ModifyPasswordFragment activity;
-    private final ModifyPasswordModel model;
+    private ModifyPasswordFragment activity;
+    private ModifyPasswordModel model;
     private CountDownTimer mCountDownTimer;
 
 
@@ -89,7 +91,7 @@ public class ModifyPasswordPresenter {
      * 获取验证码
      */
     public void getYzm(String userName) {
-        if(userName!=null&&!userName.equals("")){
+        if (userName != null && !userName.equals("")) {
             if (GlobalNetWorkConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
                 if (mCountDownTimer == null) {
                     timerDown();
@@ -98,8 +100,8 @@ public class ModifyPasswordPresenter {
             } else {
                 ToastUtils.show_always(activity.getActivity(), "网络连接失败，请稍后再试！");
             }
-        }else{
-            ToastUtils.show_always(activity.getActivity(),"手机号不能为空");
+        } else {
+            ToastUtils.show_always(activity.getActivity(), "手机号不能为空");
         }
     }
 
@@ -190,5 +192,12 @@ public class ModifyPasswordPresenter {
             mCountDownTimer.cancel();
             mCountDownTimer = null;
         }
+    }
+
+    /**
+     * 数据销毁
+     */
+    public void destroy() {
+        model = null;
     }
 }

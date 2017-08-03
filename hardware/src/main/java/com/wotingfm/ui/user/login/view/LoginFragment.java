@@ -179,4 +179,11 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
     public void dialogCancel() {
         if (dialog != null) dialog.dismiss();
     }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        loginPresenter.destroy();
+        loginPresenter=null;
+    }
 }

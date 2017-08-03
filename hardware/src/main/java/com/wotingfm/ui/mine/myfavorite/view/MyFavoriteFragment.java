@@ -33,7 +33,7 @@ import java.util.List;
  * 作者：xinLong on 2017/6/5 01:30
  * 邮箱：645700751@qq.com
  */
-public class MyFavoriteFragment extends Fragment implements  View.OnClickListener {
+public class MyFavoriteFragment extends Fragment implements View.OnClickListener {
     private View rootView;
     private ListView lv_favorite;
     private MyFavoritePresenter presenter;
@@ -86,7 +86,7 @@ public class MyFavoriteFragment extends Fragment implements  View.OnClickListene
         lv_favorite.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                presenter.onItemClick(list,position);
+                presenter.onItemClick(list, position);
             }
         });
     }
@@ -141,5 +141,12 @@ public class MyFavoriteFragment extends Fragment implements  View.OnClickListene
             tip_view.setVisibility(View.VISIBLE);
             tip_view.setTipView(TipView.TipStatus.IS_ERROR);
         }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        presenter.destroy();
+        presenter = null;
     }
 }

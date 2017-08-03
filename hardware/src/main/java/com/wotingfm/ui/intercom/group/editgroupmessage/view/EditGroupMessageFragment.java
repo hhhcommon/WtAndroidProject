@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -309,5 +310,13 @@ public class EditGroupMessageFragment extends Fragment implements View.OnClickLi
 
     public interface ResultListener {
         void resultListener(int type, String news);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Log.e("界面","执行销毁");
+        presenter.destroy();
+        presenter=null;
     }
 }

@@ -47,6 +47,9 @@ public class MinePresenter {
         wifiSet();
     }
 
+    /**
+     * 设置WiFi界面
+     */
     public void wifiSet(){
         if (wifiManager.isWifiEnabled()) {
             activity.wifiSet(true);// WiFi 打开

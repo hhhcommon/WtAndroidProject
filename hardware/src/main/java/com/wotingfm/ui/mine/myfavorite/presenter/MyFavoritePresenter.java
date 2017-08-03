@@ -24,8 +24,8 @@ import java.util.List;
  */
 public class MyFavoritePresenter {
 
-    private final MyFavoriteFragment activity;
-    private final MyFavoriteModel model;
+    private MyFavoriteFragment activity;
+    private MyFavoriteModel model;
 
     public MyFavoritePresenter(MyFavoriteFragment activity) {
         this.activity = activity;
@@ -96,4 +96,11 @@ public class MyFavoritePresenter {
 
     }
 
+
+    /**
+     * 数据销毁
+     */
+    public void destroy() {
+        model = null;
+    }
 }

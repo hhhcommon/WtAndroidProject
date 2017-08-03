@@ -11,8 +11,8 @@ import java.util.List;
  * 邮箱：645700751@qq.com
  */
 public class SimulationInterPhonePresenter {
-    private final SimulationInterPhoneFragment activity;
-    private final SimulationInterPhoneModel model;
+    private  SimulationInterPhoneFragment activity;
+    private  SimulationInterPhoneModel model;
     private List<String> list;
 
 
@@ -56,4 +56,10 @@ public class SimulationInterPhonePresenter {
         }
     }
 
+    /**
+     * 数据销毁
+     */
+    public void destroy(){
+        model=null;
+    }
 }

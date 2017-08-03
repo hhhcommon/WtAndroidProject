@@ -26,10 +26,11 @@ import java.io.File;
  */
 public class SettingPresenter {
 
-    private final SettingFragment activity;
-    private final SettingModel model;
+    private SettingFragment activity;
+    private SettingModel model;
     private final String cachePath = Environment.getExternalStorageDirectory() + "/woting/image";// 缓存路径
     private String cache;
+
     public SettingPresenter(SettingFragment activity) {
         this.activity = activity;
         this.model = new SettingModel();
@@ -96,7 +97,7 @@ public class SettingPresenter {
                 File file = new File(cachePath);
                 File file1 = new File(BSApplication.getInstance().getCacheDir() + "/" + GlobalStateConfig.GLIDE_CARCH_DIR);
                 try {
-                    cache = CacheManager.getCacheSize(file,file1);
+                    cache = CacheManager.getCacheSize(file, file1);
                     activity.getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -147,4 +148,10 @@ public class SettingPresenter {
         }
     }
 
+    /**
+     * 数据销毁
+     */
+    public void destroy(){
+        model=null;
+    }
 }

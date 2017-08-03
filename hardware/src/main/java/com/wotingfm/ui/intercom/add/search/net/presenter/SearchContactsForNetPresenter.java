@@ -8,7 +8,6 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.woting.commonplat.config.GlobalNetWorkConfig;
 import com.wotingfm.common.config.GlobalStateConfig;
-import com.wotingfm.common.utils.ToastUtils;
 import com.wotingfm.ui.intercom.add.search.net.model.SearchContactsForNetModel;
 import com.wotingfm.ui.intercom.add.search.net.view.SearchContactsForNetFragment;
 import com.wotingfm.ui.intercom.group.groupnews.add.view.GroupNewsForAddFragment;
@@ -16,11 +15,7 @@ import com.wotingfm.ui.intercom.group.groupnews.noadd.view.GroupNewsForNoAddFrag
 import com.wotingfm.ui.intercom.main.contacts.model.Contact;
 import com.wotingfm.ui.intercom.main.view.InterPhoneActivity;
 import com.wotingfm.ui.intercom.person.personmessage.view.PersonMessageFragment;
-
 import org.json.JSONObject;
-import org.json.JSONTokener;
-
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -30,8 +25,8 @@ import java.util.List;
  */
 public class SearchContactsForNetPresenter {
 
-    private final SearchContactsForNetFragment activity;
-    private final SearchContactsForNetModel model;
+    private  SearchContactsForNetFragment activity;
+    private  SearchContactsForNetModel model;
     private String fromType = "group";// 界面跳转来源 添加群组=group，添加好友=friend
 
 
@@ -296,13 +291,11 @@ public class SearchContactsForNetPresenter {
         model.loadNewsForSearchPerson(s, new SearchContactsForNetModel.OnLoadInterface() {
             @Override
             public void onSuccess(Object o) {
-//                activity.dialogCancel();
                 dealSearchUserSuccess(o, s);
             }
 
             @Override
             public void onFailure(String msg) {
-//                activity.dialogCancel();
                 activity.isLoginView(4);
             }
         });
@@ -312,17 +305,14 @@ public class SearchContactsForNetPresenter {
      * 获取搜索的群组
      */
     public void getSearchDataForGroup(final String s) {
-//        activity.dialogShow();
         model.loadNewsForSearchGroup(s, new SearchContactsForNetModel.OnLoadInterface() {
             @Override
             public void onSuccess(Object o) {
-//                activity.dialogCancel();
                 dealSearchGroupSuccess(o, s);
             }
 
             @Override
             public void onFailure(String msg) {
-//                activity.dialogCancel();
                 activity.isLoginView(4);
             }
         });
@@ -337,9 +327,6 @@ public class SearchContactsForNetPresenter {
             Log.e("获取搜索好友列表==ret", String.valueOf(ret));
             if (ret == 0) {
                 String msg = js.getString("data");
-//                JSONTokener jsonParser = new JSONTokener(msg);
-//                JSONObject arg1 = (JSONObject) jsonParser.nextValue();
-//                String friends = arg1.getString("users");
                 // 好友列表
                 List<Contact.user> list = new Gson().fromJson(msg, new TypeToken<List<Contact.user>>() {
                 }.getType());
@@ -372,9 +359,6 @@ public class SearchContactsForNetPresenter {
             Log.e("获取搜索群组列表==ret", String.valueOf(ret));
             if (ret == 0) {
                 String msg = js.getString("data");
-//                JSONTokener jsonParser = new JSONTokener(msg);
-//                JSONObject arg1 = (JSONObject) jsonParser.nextValue();
-//                String groups = arg1.getString("chat_groups");
                 // 好友列表
                 List<Contact.group> list = new Gson().fromJson(msg, new TypeToken<List<Contact.group>>() {
                 }.getType());
@@ -398,7 +382,6 @@ public class SearchContactsForNetPresenter {
         }
     }
 
-
     /**
      * 异常按钮的点击事件
      *
@@ -406,5 +389,12 @@ public class SearchContactsForNetPresenter {
      */
     public void tipClick(int type) {
         // 此处不需要处理
+    }
+
+    /**
+     * 数据销毁
+     */
+    public void destroy(){
+        model=null;
     }
 }

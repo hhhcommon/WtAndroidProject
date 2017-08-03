@@ -8,10 +8,13 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
@@ -61,10 +64,10 @@ import static com.wotingfm.ui.main.view.MainActivity.tabHost;
  */
 public class PersonMessageFragment extends Fragment implements View.OnClickListener, TipView.TipViewClick, ScrollViewListener {
     private View rootView;
-    private TextView tv_send, tv_name, tv_introduce, tv_number, tv_address, tv_del, tvTitle, tv_subNum, tv_focus;
-    private LinearLayout lin_note, lin_chose;
+    private TextView tv_send, tv_name, tv_introduce, tv_number, tv_address, tvTitle, tv_subNum, tv_focus;
+    private LinearLayout lin_note;
     private PersonMessagePresenter presenter;
-    private Dialog dialog, confirmDialog;
+    private Dialog dialog, confirmDialog, delDialog,LDialog;
     private int type;
     private TipView tip_view;
     private boolean b;
@@ -76,7 +79,6 @@ public class PersonMessageFragment extends Fragment implements View.OnClickListe
     private PersonMessageSubAdapter adapter;
     private ResultListener Listener;
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         if (rootView == null) {
@@ -84,6 +86,8 @@ public class PersonMessageFragment extends Fragment implements View.OnClickListe
             rootView.setOnClickListener(this);
             initViews();// 设置界面
             Dialog();
+            DDialog();
+            initDialogL();
             isLoginView(-1);
             presenter = new PersonMessagePresenter(this);
             presenter.getData();
@@ -126,16 +130,9 @@ public class PersonMessageFragment extends Fragment implements View.OnClickListe
         re_sunNumber = (RelativeLayout) rootView.findViewById(R.id.re_sunNumber);// 订阅按钮
         re_sunNumber.setOnClickListener(this);
         tv_subNum = (TextView) rootView.findViewById(R.id.tv_subNum);            // 订阅数
+        tv_subNum.setOnClickListener(this);
         gridView = (GridView) rootView.findViewById(R.id.gridView);              // 订阅展示
         gridView.setSelector(new ColorDrawable(Color.TRANSPARENT));
-
-        lin_chose = (LinearLayout) rootView.findViewById(R.id.lin_chose);     // 图片选择
-        lin_chose.setOnClickListener(this);
-        tv_del = (TextView) rootView.findViewById(R.id.tv_del);               // 删除好友
-        tv_del.setOnClickListener(this);
-        tv_subNum.setOnClickListener(this);
-        rootView.findViewById(R.id.tv_quxiao).setOnClickListener(this);       // 取消
-
     }
 
     @Override
@@ -153,19 +150,17 @@ public class PersonMessageFragment extends Fragment implements View.OnClickListe
                 close();
                 break;
             case R.id.img_other:
-                presenter.headViewShow();
+                delDialog.show();
                 break;
             case R.id.lin_note: // 设置备注
                 presenter.jumpNote();
                 break;
             case R.id.tv_quxiao:
-                presenter.headViewShow();
+                delDialog.dismiss();
                 break;
-            case R.id.tv_del:
-                // 此处需要弹出提示框进行选择
-                // 然后进行相应处理
-                presenter.delFriend();
-                presenter.headViewShow();
+            case R.id.tv_name:
+                LDialog.show();
+                delDialog.dismiss();
                 break;
             case R.id.lin_send:
                 if (b) {
@@ -179,7 +174,6 @@ public class PersonMessageFragment extends Fragment implements View.OnClickListe
             case R.id.re_sunNumber:
                 ToastUtils.show_always(this.getActivity(), "跳转到订阅列表");
                 break;
-
         }
     }
 
@@ -243,22 +237,22 @@ public class PersonMessageFragment extends Fragment implements View.OnClickListe
         re_sunNumber.setVisibility(View.GONE);
     }
 
-    /**
-     * 删除好友界面的展示
-     *
-     * @param type true 展示/false 不展示
-     */
-    public void imageShow(boolean type) {
-        if (type) {
-            Animation mAnimation = AnimationUtils.loadAnimation(getActivity(), R.anim.wt_slide_in_from_bottom);
-            lin_chose.setAnimation(mAnimation);
-            lin_chose.setVisibility(View.VISIBLE);
-        } else {
-            Animation mAnimation = AnimationUtils.loadAnimation(getActivity(), R.anim.wt_slide_out_from_bottom);
-            lin_chose.setAnimation(mAnimation);
-            lin_chose.setVisibility(View.GONE);
-        }
-    }
+//    /**
+//     * 删除好友界面的展示
+//     *
+//     * @param type true 展示/false 不展示
+//     */
+//    public void imageShow(boolean type) {
+//        if (type) {
+//            Animation mAnimation = AnimationUtils.loadAnimation(getActivity(), R.anim.wt_slide_in_from_bottom);
+//            lin_chose.setAnimation(mAnimation);
+//            lin_chose.setVisibility(View.VISIBLE);
+//        } else {
+//            Animation mAnimation = AnimationUtils.loadAnimation(getActivity(), R.anim.wt_slide_out_from_bottom);
+//            lin_chose.setAnimation(mAnimation);
+//            lin_chose.setVisibility(View.GONE);
+//        }
+//    }
 
     /**
      * 根据好友状态设置界面展示
@@ -301,9 +295,9 @@ public class PersonMessageFragment extends Fragment implements View.OnClickListe
         }
 
         if (url != null && !url.equals("") && url.startsWith("http")) {
-            GlideUtils.loadImageViewRound( url,img_url, 60, 60 );
+            GlideUtils.loadImageViewRound(url, img_url, 60, 60);
         } else {
-            GlideUtils.loadImageViewRound( R.mipmap.icon_avatar_d,img_url, 60, 60 );
+            GlideUtils.loadImageViewRound(R.mipmap.icon_avatar_d, img_url, 60, 60);
         }
         tv_name.setText(name);             // 姓名
         tvTitle.setText(name);             // 姓名
@@ -400,7 +394,7 @@ public class PersonMessageFragment extends Fragment implements View.OnClickListe
         final View dialog1 = LayoutInflater.from(this.getActivity()).inflate(R.layout.dialog_talk_person_del, null);
         TextView tv_cancel = (TextView) dialog1.findViewById(R.id.tv_cancle);
         TextView tv_confirm = (TextView) dialog1.findViewById(R.id.tv_confirm);
-        confirmDialog = new Dialog(this.getActivity(), R.style.MyDialog);
+        confirmDialog = new Dialog(this.getActivity(), R.style.MyDialogs);
         confirmDialog.setContentView(dialog1);
         confirmDialog.setCanceledOnTouchOutside(true);
         confirmDialog.getWindow().setBackgroundDrawableResource(R.color.transparent_background);
@@ -418,6 +412,56 @@ public class PersonMessageFragment extends Fragment implements View.OnClickListe
                 confirmDialogCancel();
             }
         });
+    }
+
+    // 删除好友选择框
+    private void DDialog() {
+        final View dialog = LayoutInflater.from(this.getActivity()).inflate(R.layout.dialog_group_person_del, null);
+        TextView name = (TextView) dialog.findViewById(R.id.tv_name);
+        name.setText("删除好友");
+        name.setOnClickListener(this);  // 拍照
+        dialog.findViewById(R.id.tv_quxiao).setOnClickListener(this);   // 取消
+
+        delDialog = new Dialog(this.getActivity(), R.style.MyDialogs);
+        delDialog.setContentView(dialog);
+        delDialog.setCanceledOnTouchOutside(true);
+
+        DisplayMetrics dm = new DisplayMetrics();
+        this.getActivity().getWindowManager().getDefaultDisplay().getMetrics(dm);
+        int screenWidth = dm.widthPixels;
+        ViewGroup.LayoutParams params = dialog.getLayoutParams();
+        params.width = screenWidth;
+        dialog.setLayoutParams(params);
+
+        Window window = delDialog.getWindow();
+        window.setGravity(Gravity.BOTTOM);
+        window.setWindowAnimations(R.style.inOutStyle);
+        window.setBackgroundDrawableResource(R.color.transparent_40_black);
+    }
+
+    // 删除好友对话框
+    private void initDialogL() {
+        View dialog1 = LayoutInflater.from(this.getActivity()).inflate(R.layout.dialog_talk_person_del, null);
+        dialog1.findViewById(R.id.tv_confirm).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                presenter.delFriend();
+                LDialog.dismiss();
+            }
+        }); // 确定
+        dialog1.findViewById(R.id.tv_cancle).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                LDialog.dismiss();
+            }
+        });  // 取消
+        TextView textTitle = (TextView) dialog1.findViewById(R.id.tv_title);
+        textTitle.setText("确定删除该好友?");
+
+        LDialog = new Dialog(this.getActivity(), R.style.MyDialogs);
+        LDialog.setContentView(dialog1);
+        LDialog.setCanceledOnTouchOutside(false);
+        LDialog.getWindow().setBackgroundDrawableResource(R.color.transparent_background);
     }
 
     /**
@@ -461,5 +505,6 @@ public class PersonMessageFragment extends Fragment implements View.OnClickListe
     public void onDestroy() {
         super.onDestroy();
         presenter.destroy();
+        presenter = null;
     }
 }

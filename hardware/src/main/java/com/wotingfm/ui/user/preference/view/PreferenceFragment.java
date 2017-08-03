@@ -242,4 +242,11 @@ public class PreferenceFragment extends Fragment implements View.OnClickListener
     public void dialogCancel() {
         if (dialog != null) dialog.dismiss();
     }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        presenter.destroy();
+        presenter=null;
+    }
 }

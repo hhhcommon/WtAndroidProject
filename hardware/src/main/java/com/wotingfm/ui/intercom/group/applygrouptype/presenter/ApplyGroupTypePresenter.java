@@ -24,11 +24,11 @@ import org.json.JSONObject;
  */
 public class ApplyGroupTypePresenter {
 
-    private final ApplyGroupTypeFragment activity;
-    private final ApplyGroupTypeModel model;
+    private ApplyGroupTypeFragment activity;
+    private ApplyGroupTypeModel model;
     private boolean b1 = false;// 密码群 选择状态
     private boolean b2 = false;// 审核群 选择状态
-    private String password, type,groupId;
+    private String password, type, groupId;
     private Contact.group group;
 
     public ApplyGroupTypePresenter(ApplyGroupTypeFragment activity) {
@@ -39,16 +39,16 @@ public class ApplyGroupTypePresenter {
 
     // 获取上级界面传递数据
     private void getData() {
-        if(GlobalStateConfig.test){
-            groupId="000";
-            password="123456";
-            type="2";
-        }else{
+        if (GlobalStateConfig.test) {
+            groupId = "000";
+            password = "123456";
+            type = "2";
+        } else {
             try {
-                group = (Contact.group)activity.getArguments().getSerializable("group");
-                groupId=group.getId();
-                password=group.getPassword();
-                type=group.getMember_access_mode();
+                group = (Contact.group) activity.getArguments().getSerializable("group");
+                groupId = group.getId();
+                password = group.getPassword();
+                type = group.getMember_access_mode();
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -174,7 +174,7 @@ public class ApplyGroupTypePresenter {
         }
         final int FType = type;
         activity.dialogShow();
-        model.loadNews(groupId,mm, type, new ApplyGroupTypeModel.OnLoadInterface() {
+        model.loadNews(groupId, mm, type, new ApplyGroupTypeModel.OnLoadInterface() {
             @Override
             public void onSuccess(Object o) {
                 activity.dialogCancel();
@@ -215,7 +215,13 @@ public class ApplyGroupTypePresenter {
             // 设置数据出错界面
             ToastUtils.show_always(activity.getActivity(), "修改失败，请稍后再试！");
         }
+    }
 
+    /**
+     * 数据销毁
+     */
+    public void destroy() {
+        model = null;
     }
 
 }

@@ -45,7 +45,6 @@ public class WIFIFragment extends Fragment implements View.OnClickListener {
             rootView.setOnClickListener(this);
             init();
             presenter = new WIFIPresenter(this);
-
         }
         return rootView;
     }
@@ -54,34 +53,55 @@ public class WIFIFragment extends Fragment implements View.OnClickListener {
         rootView.findViewById(R.id.head_left_btn).setOnClickListener(this);
         TextView textTitle = (TextView) rootView.findViewById(R.id.tv_center);// 标题
         textTitle.setText(getString(R.string.wlan));
-
         wifiListView = (ListView) rootView.findViewById(R.id.wifi_list_view);
+
         View headView = LayoutInflater.from(this.getActivity()).inflate(R.layout.head_view_wifi, null);
         wifiListView.addHeaderView(headView);
         wifiListView.setSelector(new ColorDrawable(Color.TRANSPARENT));
-
-        viewConnSuccess = headView.findViewById(R.id.view_conn_success);// 显示连接的网络
-        textWifiName = (TextView) headView.findViewById(R.id.text_wifi_name);// 连接的网络SSID
-        textUserWiFi = (TextView) headView.findViewById(R.id.user_wifi_list);   // 提示文字  可用 WiFi
-        headView.findViewById(R.id.wifi_set).setOnClickListener(this);          // WiFi设置
+        viewConnSuccess = headView.findViewById(R.id.view_conn_success);         // 显示连接的网络
+        textWifiName = (TextView) headView.findViewById(R.id.text_wifi_name);    // 连接的网络SSID
+        textUserWiFi = (TextView) headView.findViewById(R.id.user_wifi_list);    // 提示文字  可用 WiFi
+        headView.findViewById(R.id.wifi_set).setOnClickListener(this);           // WiFi设置
         imageWiFiSet = (ImageView) headView.findViewById(R.id.image_wifi_set);
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.head_left_btn:// 返回
+                MineActivity.close();
+                break;
+            case R.id.wifi_set:     // WiFi 开关
+                presenter.WIFISet();
+                break;
+        }
     }
 
     /**
      * WiFi 打开
      */
     public void setViewOpen() {
-        textUserWiFi.setVisibility(View.VISIBLE);
         imageWiFiSet.setImageResource(R.mipmap.on_switch);
+        textUserWiFi.setVisibility(View.VISIBLE);
+    }
+
+    /**
+     * WiFi 打开中
+     */
+    public void setViewOpenIng() {
+        imageWiFiSet.setImageResource(R.mipmap.on_switch);
+        textUserWiFi.setVisibility(View.VISIBLE);
+
     }
 
     /**
      * WiFi 关闭
      */
     public void setViewClose() {
-        textUserWiFi.setVisibility(View.GONE);
         imageWiFiSet.setImageResource(R.mipmap.close_switch);
         viewConnSuccess.setVisibility(View.GONE);
+        textUserWiFi.setVisibility(View.GONE);
+        setNoData();
     }
 
     /**
@@ -109,16 +129,11 @@ public class WIFIFragment extends Fragment implements View.OnClickListener {
         setItemListener(scanResultList);
     }
 
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.head_left_btn:// 返回
-                MineActivity.close();
-                break;
-            case R.id.wifi_set:     // WiFi 开关
-                presenter.WIFISet();
-                break;
-        }
+    /**
+     * 设置空数据
+     */
+    private void setNoData(){
+        wifiListView.setAdapter(new NoAdapter(this.getActivity()));
     }
 
     // ListView 子条目点击事件  连接 WiFi
@@ -166,5 +181,6 @@ public class WIFIFragment extends Fragment implements View.OnClickListener {
         super.onDestroy();
         setResult(true);
         presenter.destroy();
+        presenter=null;
     }
 }

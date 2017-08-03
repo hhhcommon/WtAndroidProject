@@ -39,8 +39,8 @@ import org.json.JSONTokener;
  */
 public class RegisterPresenter {
 
-    private final RegisterFragment activity;
-    private final RegisterModel model;
+    private RegisterFragment activity;
+    private RegisterModel model;
     private boolean eyeShow = false;
     private CountDownTimer mCountDownTimer;
 
@@ -321,4 +321,10 @@ public class RegisterPresenter {
         }
     }
 
+    /**
+     * 数据销毁
+     */
+    public void destroy() {
+        model = null;
+    }
 }

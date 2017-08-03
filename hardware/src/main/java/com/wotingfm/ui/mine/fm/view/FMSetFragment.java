@@ -49,7 +49,6 @@ public class FMSetFragment extends Fragment implements View.OnClickListener {
         View headView = LayoutInflater.from(getActivity()).inflate(R.layout.head_view_fm, null);
         fmList = (ListView) rootView.findViewById(R.id.fm_list_view);// 推荐的 FM 列表
         fmList.addHeaderView(headView);
-
     }
 
     @Override
@@ -60,8 +59,10 @@ public class FMSetFragment extends Fragment implements View.OnClickListener {
                 break;
         }
     }
+
     /**
      * 数据适配
+     *
      * @param list
      */
     public void setViewData(List<FMInfo> list) {
@@ -73,4 +74,10 @@ public class FMSetFragment extends Fragment implements View.OnClickListener {
         }
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        presenter.destroy();
+        presenter = null;
+    }
 }

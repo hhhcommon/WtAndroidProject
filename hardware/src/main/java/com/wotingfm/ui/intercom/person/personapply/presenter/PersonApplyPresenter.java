@@ -1,9 +1,7 @@
 package com.wotingfm.ui.intercom.person.personapply.presenter;
 
-import android.os.Bundle;
 import android.util.Log;
 
-import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.woting.commonplat.config.GlobalNetWorkConfig;
 import com.wotingfm.common.utils.ToastUtils;
@@ -20,8 +18,8 @@ import org.json.JSONObject;
  */
 public class PersonApplyPresenter {
 
-    private final PersonApplyFragment activity;
-    private final PersonApplyModel model;
+    private PersonApplyFragment activity;
+    private PersonApplyModel model;
     private String id;
 
     public PersonApplyPresenter(PersonApplyFragment activity) {
@@ -94,11 +92,18 @@ public class PersonApplyPresenter {
      * @param src
      */
     public void textChange(String src) {
-        if (src != null &&!src.trim().equals("")) {
+        if (src != null && !src.trim().equals("")) {
             int l = src.length();
             activity.setTextViewChange(String.valueOf(30 - l));
         } else {
             activity.setTextViewChange("30");
         }
+    }
+
+    /**
+     * 数据销毁
+     */
+    public void destroy() {
+        model = null;
     }
 }

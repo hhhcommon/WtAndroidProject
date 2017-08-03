@@ -26,8 +26,8 @@ import java.util.List;
  */
 public class GroupExitPresenter {
 
-    private final GroupExitFragment activity;
-    private final GroupExitModel model;
+    private GroupExitFragment activity;
+    private GroupExitModel model;
     private Contact.group group;
     private List<Contact.user> list;
 
@@ -128,4 +128,10 @@ public class GroupExitPresenter {
         }
     }
 
+    /**
+     * 数据销毁
+     */
+    public void destroy() {
+        model = null;
+    }
 }

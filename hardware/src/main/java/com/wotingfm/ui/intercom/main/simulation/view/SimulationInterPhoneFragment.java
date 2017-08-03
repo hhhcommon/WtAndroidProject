@@ -172,6 +172,8 @@ public class SimulationInterPhoneFragment extends Fragment implements View.OnCli
     public void onDestroy() {
         super.onDestroy();
 //        SimulationService.onOpenDevice(false);
+        presenter.destroy();
+        presenter=null;
     }
 
     /**

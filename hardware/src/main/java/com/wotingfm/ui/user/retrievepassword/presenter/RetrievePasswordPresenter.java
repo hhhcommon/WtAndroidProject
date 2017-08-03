@@ -21,8 +21,8 @@ import org.json.JSONTokener;
  */
 public class RetrievePasswordPresenter {
 
-    private final RetrievePassWordFragment activity;
-    private final RetrievePasswordModel model;
+    private RetrievePassWordFragment activity;
+    private RetrievePasswordModel model;
     private boolean eyeShow = false;
     private CountDownTimer mCountDownTimer;
 
@@ -223,5 +223,12 @@ public class RetrievePasswordPresenter {
             mCountDownTimer.cancel();
             mCountDownTimer = null;
         }
+    }
+
+    /**
+     * 数据销毁
+     */
+    public void destroy() {
+        model = null;
     }
 }

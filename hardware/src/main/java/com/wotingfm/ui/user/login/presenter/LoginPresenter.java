@@ -35,8 +35,8 @@ import org.json.JSONTokener;
  */
 public class LoginPresenter {
 
-    private final LoginFragment activity;
-    private final LoginModel model;
+    private LoginFragment activity;
+    private LoginModel model;
     private boolean eyeShow = false;
 
     private AbortableFuture<LoginInfo> loginRequest;
@@ -175,7 +175,7 @@ public class LoginPresenter {
                 NIMClient.updateStatusBarNotificationConfig(UserPreferences.getStatusConfig());
                 ToastUtils.show_always(activity.getActivity(), "登录成功");
                 // 发送登录广播通知所有界面
-                RetrofitUtils.INSTANCE=null;
+                RetrofitUtils.INSTANCE = null;
                 activity.getActivity().sendBroadcast(new Intent(BroadcastConstants.LOGIN));
                 LogoActivity.closeActivity();
             }
@@ -227,4 +227,10 @@ public class LoginPresenter {
         Preferences.saveUserToken(token);
     }
 
+    /**
+     * 数据销毁
+     */
+    public void destroy() {
+        model = null;
+    }
 }

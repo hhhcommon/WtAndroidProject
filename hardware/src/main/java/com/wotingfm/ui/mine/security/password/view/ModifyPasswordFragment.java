@@ -119,5 +119,7 @@ public class ModifyPasswordFragment extends Fragment implements View.OnClickList
     public void onDestroy() {
         super.onDestroy();
         presenter.cancel();
+        presenter.destroy();
+        presenter=null;
     }
 }
