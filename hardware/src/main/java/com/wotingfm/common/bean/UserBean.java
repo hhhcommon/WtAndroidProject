@@ -29,6 +29,7 @@ public class UserBean implements Serializable {
     public String id;
     public int idols_count;
     public String name;
+    public String nick_name;
     public String signature;
     public int singles_total_count;
     public List<AlbumsBean> albums;

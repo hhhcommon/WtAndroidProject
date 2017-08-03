@@ -51,8 +51,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center|left"
+                    android:gravity="center|left"
                     android:ellipsize="end"
-                    android:gravity="center"
                     android:singleLine="true"
                     android:text="AmineTitle"
                     android:textColor="#16181a"
@@ -64,7 +64,9 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center|left"
                     android:layout_marginTop="4dp"
-                    android:gravity="center"
+                    android:singleLine="true"
+                    android:ellipsize="end"
+                    android:gravity="center|left"
                     android:text="发现更多节目"
                     android:textColor="#959698"
                     android:textSize="12sp" />
@@ -75,9 +77,11 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center|left"
                     android:layout_marginTop="6dp"
-                    android:gravity="center"
                     android:text="发现更多节目"
                     android:textColor="#959698"
+                    android:singleLine="true"
+                    android:ellipsize="end"
+                    android:gravity="center|left"
                     android:textSize="12sp" />
             </LinearLayout>
         </LinearLayout>
