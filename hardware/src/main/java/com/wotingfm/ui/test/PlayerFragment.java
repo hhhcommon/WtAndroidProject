@@ -318,7 +318,7 @@ public class PlayerFragment extends BaseFragment implements View.OnClickListener
                         singLesBeans.clear();
                         SinglesBase s = new SinglesBase();
                         s.album_title = channelsBean.title;
-                        s.id =channelsBean.id;
+                        s.id = channelsBean.id;
                         mAudioPath = channelsBean.radio_url;
                         s.single_logo_url = channelsBean.image_url;
                         s.single_file_url = channelsBean.radio_url;
@@ -522,7 +522,7 @@ public class PlayerFragment extends BaseFragment implements View.OnClickListener
                 //  LookListActivity.start(this);
                 break;
             case R.id.ivBefore:
-                if (singLesBeans.size() > postionPlayer && postionPlayer > 0&&BSApplication.IS_ONE == false ) {
+                if (singLesBeans.size() > postionPlayer && postionPlayer > 0 && BSApplication.IS_ONE == false && channelsBean == null) {
                     postionPlayer = postionPlayer - 1;
                     mRecyclerView.smoothScrollToPosition(postionPlayer);
                     bdPlayer.stopPlayback();
@@ -548,7 +548,7 @@ public class PlayerFragment extends BaseFragment implements View.OnClickListener
                 }
                 break;
             case R.id.ivNext:
-                if (postionPlayer < singLesBeans.size() - 1&&BSApplication.IS_ONE == false ) {
+                if (postionPlayer < singLesBeans.size() - 1 && BSApplication.IS_ONE == false && channelsBean == null) {
                     postionPlayer = postionPlayer + 1;
                     mRecyclerView.smoothScrollToPosition(postionPlayer);
                     bdPlayer.stopPlayback();
@@ -677,8 +677,6 @@ public class PlayerFragment extends BaseFragment implements View.OnClickListener
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMoonEvent(MessageEvent messageEvent) {
         String event = messageEvent.getMessage();
-        Log.i("mingku", "event=" + event);
-        Log.i("mingku", "singLesBeans=" + singLesBeans.size());
         if (!TextUtils.isEmpty(event) && "stop".equals(event)) {
             if (bdPlayer != null) {
                 bdPlayer.stopPlayback();
@@ -700,7 +698,7 @@ public class PlayerFragment extends BaseFragment implements View.OnClickListener
                 mMediaPlayer.start();
             }
             ivPause.setImageResource(R.mipmap.music_play_icon_pause);
-        } else if (!TextUtils.isEmpty(event) && BSApplication.IS_ONE == false && "step".equals(event)) {
+        } else if (!TextUtils.isEmpty(event) && BSApplication.IS_ONE == false && "step".equals(event) && channelsBean == null) {
             if (!singLesBeans.isEmpty() && singLesBeans.size() > 1 && singLesBeans.size() > postionPlayer && postionPlayer > 0) {
                 postionPlayer = postionPlayer - 1;
                 mRecyclerView.smoothScrollToPosition(postionPlayer);
@@ -711,7 +709,7 @@ public class PlayerFragment extends BaseFragment implements View.OnClickListener
                 ivPause.setImageResource(R.mipmap.music_play_icon_pause);
                 setBeforeOrNext(singLesBeans.get(postionPlayer));
             }
-        } else if (!singLesBeans.isEmpty() && BSApplication.IS_ONE == false && singLesBeans.size() > 1 && !TextUtils.isEmpty(event) && "next".equals(event)) {
+        } else if (!singLesBeans.isEmpty() && BSApplication.IS_ONE == false && singLesBeans.size() > 1 && "next".equals(event) && channelsBean == null) {
             if (postionPlayer < singLesBeans.size() - 1) {
                 postionPlayer = postionPlayer + 1;
                 mRecyclerView.smoothScrollToPosition(postionPlayer);

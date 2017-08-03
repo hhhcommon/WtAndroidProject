@@ -243,7 +243,7 @@ public class LookListFragment extends BaseFragment implements View.OnClickListen
                 break;
             case R.id.ivBack:
             case R.id.ivClose:
-                hideSoftKeyboard();
+                closeKeyboard(etSearchlike);
                 closeFragment();
                 GlobalStateConfig.mineFromType = 0;
                 GlobalStateConfig.activityA = "A";
@@ -256,6 +256,11 @@ public class LookListFragment extends BaseFragment implements View.OnClickListen
                 videoDialog.show();
                 break;
         }
+    }
+
+    public void closeKeyboard(View view) {
+        InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
     @Override

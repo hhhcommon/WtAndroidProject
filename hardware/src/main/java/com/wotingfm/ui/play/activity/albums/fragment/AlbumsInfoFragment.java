@@ -96,7 +96,7 @@ public class AlbumsInfoFragment extends BaseFragment {
                 .error(R.mipmap.oval_defut_photo)
                 .placeholder(R.mipmap.oval_defut_photo)
                 .into(ivPhoto);
-        tvName.setText(albumInfo.data.album.owner.name);
+        tvName.setText(albumInfo.data.album.owner.nick_name);
         tvFens.setText("粉丝 " + albumInfo.data.album.owner.fans_count);
         if (TextUtils.isEmpty(albumInfo.data.album.introduction)) {
             labelContent.setVisibility(View.GONE);

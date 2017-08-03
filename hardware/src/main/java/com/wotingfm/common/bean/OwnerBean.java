@@ -22,7 +22,7 @@ public class OwnerBean implements Serializable {
     public String gender;
     public boolean had_followed;
     public String id;
-    public String name;
+    public String nick_name;
     public String signature;
 
 }

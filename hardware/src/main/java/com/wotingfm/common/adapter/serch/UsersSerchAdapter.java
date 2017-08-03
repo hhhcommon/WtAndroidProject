@@ -34,7 +34,7 @@ public class UsersSerchAdapter extends CommonAdapter<UserBean> {
     @Override
     protected void convert(ViewHolder holder, final UserBean s, final int position) {
         ImageView ivPhoto = (ImageView) holder.itemView.findViewById(R.id.ivPhoto);
-        holder.setText(R.id.tvTitle, s.name);
+        holder.setText(R.id.tvTitle, s.nick_name);
         holder.setText(R.id.tvContent, "专辑  " + s.albums_total_count + "    " + "粉丝  " + s.fans_count);
         Glide.with(BSApplication.getInstance()).load(s.avatar)// Glide
                 .error(R.mipmap.oval_defut_photo)

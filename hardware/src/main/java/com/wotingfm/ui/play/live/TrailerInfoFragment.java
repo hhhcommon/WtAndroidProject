@@ -170,7 +170,7 @@ public class TrailerInfoFragment extends BaseFragment {
                                 openFragment(AnchorPersonalCenterFragment.newInstance(voiceLiveBean.owner.id));
                             }
                         });
-                        tvName.setText(voiceLiveBean.owner.name);
+                        tvName.setText(voiceLiveBean.owner.nick_name);
                         tvFens.setText("粉丝  " + voiceLiveBean.owner.fans_count);
                     } else {
                         relativeLable.setVisibility(View.GONE);
