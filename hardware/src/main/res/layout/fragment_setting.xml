@@ -112,20 +112,18 @@
                     <ImageView style="@style/MineRightImageStyle" />
 
                 </RelativeLayout>
+                <RelativeLayout
+                    android:id="@+id/view_preference_setting"
+                    style="@style/MineRelativeStyle">
 
+                    <TextView
+                        style="@style/MineTextStyle"
+                        android:text="@string/preference_setting" />
+
+                    <ImageView style="@style/MineRightImageStyle" />
+
+                </RelativeLayout>
             </LinearLayout>
-
-            <RelativeLayout
-                android:id="@+id/view_preference_setting"
-                style="@style/MineRelativeStyle">
-
-                <TextView
-                    style="@style/MineTextStyle"
-                    android:text="@string/preference_setting" />
-
-                <ImageView style="@style/MineRightImageStyle" />
-
-            </RelativeLayout>
 
             <TextView
                 android:layout_width="match_parent"

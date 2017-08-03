@@ -56,7 +56,34 @@ public class GroupNumberAddModel {
                 if (!b) _list.add(list.get(i));
             }
         }
+
+        for(int j=0;j<_list.size();j++){
+            _list.get(j).setIs_admin(false);
+        }
         return _list;
+    }
+
+    /**
+     * 获取提交数据
+     *
+     * @return
+     */
+    public String getString(List<Contact.user> list) {
+        StringBuffer s = new StringBuffer();
+        String S = "";
+        if (list != null && list.size() > 0) {
+            for (int i = 0; i < list.size(); i++) {
+                if (list.get(i).is_admin()) {
+                    String id = list.get(i).getId();
+                    s.append(id + ",");
+                }
+            }
+        }
+        // 去掉最后一个逗号
+        if (s.length() > 0) {
+            S = s.substring(0, s.length() - 1);
+        }
+        return S;
     }
 
     /**

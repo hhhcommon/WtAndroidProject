@@ -5,6 +5,7 @@ import android.util.Log;
 
 import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.constant.StringConstant;
+import com.wotingfm.common.net.RetrofitUtils;
 
 import org.json.JSONObject;
 
@@ -163,9 +164,11 @@ public class UserInfo {
      * 更改一下登录状态
      */
     public void unRegisterLogin() {
+        RetrofitUtils.INSTANCE=null;
         SharedPreferences.Editor et = BSApplication.SharedPreferences.edit();
         et.putString(StringConstant.IS_LOGIN, "false");
         et.putString(StringConstant.USER_ID, "");
+        et.putString(StringConstant.TOKEN, "");
         et.putString(StringConstant.USER_NUM, "");
         et.putString(StringConstant.NICK_NAME, "");
         et.putString(StringConstant.PORTRAIT, "");

@@ -22,16 +22,11 @@ import java.util.List;
 public class GroupNumberAddAdapter extends BaseAdapter {
     private List<Contact.user> list;
     private Context context;
-    private OnListener onListener;
 
     public GroupNumberAddAdapter(Context context, List<Contact.user> list) {
         super();
         this.list = list;
         this.context = context;
-    }
-
-    public void setOnListener(OnListener onListener) {
-        this.onListener = onListener;
     }
 
     public void ChangeDate(List<Contact.user> list) {
@@ -62,7 +57,7 @@ public class GroupNumberAddAdapter extends BaseAdapter {
             convertView = LayoutInflater.from(context).inflate(R.layout.adapter_groupnumberadd, null);
             holder.img_view = (ImageView) convertView.findViewById(R.id.img_view);
             holder.tv_name = (TextView) convertView.findViewById(R.id.tv_name);
-            holder.tv_type = (TextView) convertView.findViewById(R.id.tv_type);
+            holder.img_choose = (ImageView) convertView.findViewById(R.id.img_choose);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
@@ -81,22 +76,16 @@ public class GroupNumberAddAdapter extends BaseAdapter {
         } else {
             GlideUtils.loadImageViewRound(R.mipmap.icon_avatar_d, holder.img_view, 60, 60);
         }
-        holder.tv_type.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onListener.apply(position);
-            }
-        });
-
+        if (!lists.is_admin()) {
+            holder.img_choose.setImageResource(R.mipmap.icon_select_n);
+        } else {
+            holder.img_choose.setImageResource(R.mipmap.icon_select_s);
+        }
         return convertView;
     }
 
-    public interface OnListener {
-        void apply(int position);
-    }
-
     class ViewHolder {
-        public ImageView img_view;
-        public TextView tv_name, tv_type;
+        public ImageView img_view,img_choose;
+        public TextView tv_name;
     }
 }

@@ -53,8 +53,11 @@ public class GroupNumberAddFragment extends Fragment implements View.OnClickList
         tip_view = (TipView) rootView.findViewById(R.id.tip_view);// 提示界面
 
         rootView.findViewById(R.id.head_left_btn).setOnClickListener(this);
+        TextView tv_send = (TextView) rootView.findViewById(R.id.tv_send);
+        tv_send.setVisibility(View.VISIBLE);
+        tv_send.setOnClickListener(this);
         TextView tv_center = (TextView) rootView.findViewById(R.id.tv_center);
-        tv_center.setText("添加群成员");
+        tv_center.setText("邀请新成员");
         listView = (ListView) rootView.findViewById(R.id.lv);
     }
 
@@ -64,6 +67,10 @@ public class GroupNumberAddFragment extends Fragment implements View.OnClickList
             case R.id.head_left_btn:
                 InterPhoneActivity.close();
                 break;
+            case R.id.tv_send:
+                presenter.apply();
+                break;
+
         }
     }
 
@@ -86,14 +93,7 @@ public class GroupNumberAddFragment extends Fragment implements View.OnClickList
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                presenter.showPersonNews(position);
-            }
-        });
-
-        adapter.setOnListener(new GroupNumberAddAdapter.OnListener() {
-            @Override
-            public void apply(int position) {
-                presenter.apply(position);
+                presenter.changeData(position);
             }
         });
     }

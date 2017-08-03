@@ -95,7 +95,7 @@ public class SetManagerPresenter {
             if(list!=null&&list.size()>0){
                  s = model.getString(list);
             }
-            if (s != null && !s.equals("")) {
+            if (s != null ) {
                 activity.dialogShow();
                 model.loadNews(gId, s, new SetManagerModel.OnLoadInterface() {
                     @Override
@@ -116,7 +116,6 @@ public class SetManagerPresenter {
         } else {
             ToastUtils.show_always(activity.getActivity(), "网络连接失败，请稍后再试！");
         }
-
     }
 
     // 处理返回的数据

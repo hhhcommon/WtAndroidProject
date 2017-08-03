@@ -103,9 +103,9 @@ public class MineFragment extends Fragment implements View.OnClickListener {
      */
     public void setViewForLogin(String url, String name, String num) {
         if (url != null && !url.trim().equals("") && url.startsWith("http")) {
-            Glide.with(this.getActivity()).load(url).crossFade(1000).placeholder(R.mipmap.p).bitmapTransform(new BlurTransformation(this.getActivity(), 8)).into(img_bg);
+            GlideUtils.loadImageViewSrc(url,img_bg,true,8);
         } else {
-            Glide.with(this.getActivity()).load(R.mipmap.p).crossFade(1000).placeholder(R.mipmap.p).bitmapTransform(new BlurTransformation(this.getActivity(), 8)).into(img_bg);
+            GlideUtils.loadImageViewSrc(R.mipmap.p,img_bg,true,8);
         }
 
         if (url != null && !url.trim().equals("") && url.startsWith("http")) {
@@ -122,6 +122,7 @@ public class MineFragment extends Fragment implements View.OnClickListener {
      */
     public void setView() {
         image_head.setImageResource(R.mipmap.icon_avatar_d);
+        GlideUtils.loadImageViewSrc(R.mipmap.p,img_bg,true,8);
         text_user_name.setText("点击登录");
         text_user_number.setText("登录后可享受更多服务");
     }
