@@ -49,7 +49,8 @@ public class PlayerActivity extends NoTitleBarBaseActivity {
     }
 
     public void open(Fragment frg) {
-        getSupportFragmentManager().beginTransaction().remove(frg).commit();
+        if (BSApplication.IS_RESULT == true)
+            getSupportFragmentManager().beginTransaction().remove(frg).commit();
         getSupportFragmentManager().beginTransaction()
                 .setCustomAnimations(
                         R.anim.slide_right_in, 0,
@@ -68,7 +69,8 @@ public class PlayerActivity extends NoTitleBarBaseActivity {
     }
 
     public void openNoAnim(Fragment frg) {
-        getSupportFragmentManager().beginTransaction().remove(frg).commit();
+        if (BSApplication.IS_RESULT == true)
+            getSupportFragmentManager().beginTransaction().remove(frg).commit();
         getSupportFragmentManager().beginTransaction()
                 .add(R.id.fragment, frg)
                 .addToBackStack(SequenceUUID.getUUID())

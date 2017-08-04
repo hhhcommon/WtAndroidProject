@@ -150,7 +150,6 @@ public class MenuDialog extends Dialog implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
-        BSApplication.isIS_BACK = false;
         switch (v.getId()) {
             case R.id.tvDownload:
                 if (pdsBase != null) {
@@ -245,8 +244,10 @@ public class MenuDialog extends Dialog implements View.OnClickListener {
                     dismiss();
                     interPhoneActivity.open(AnchorPersonalCenterFragment.newInstance(pdsBase.creator_id));
                 }
+                BSApplication.IS_LOOK = true;
                 break;
             case R.id.tvAlbums:
+                BSApplication.IS_LOOK = true;
                 if (pdsBase != null && activity != null) {
                     dismiss();
                     activity.open(AlbumsInfoFragmentMain.newInstance(pdsBase.album_id));
@@ -350,6 +351,7 @@ public class MenuDialog extends Dialog implements View.OnClickListener {
                     interPhoneActivity.open(DownloadProgramFragment.newInstance());
                 break;
             case R.id.tvRadio:
+                BSApplication.IS_LOOK = true;
                 dismiss();
                 if (pdsBase != null && pdsBase.is_radio == true) {
                     channelsBean = new ChannelsBean();

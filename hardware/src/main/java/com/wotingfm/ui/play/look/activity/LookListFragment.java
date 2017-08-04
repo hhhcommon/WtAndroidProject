@@ -171,7 +171,7 @@ public class LookListFragment extends BaseFragment implements View.OnClickListen
         mFragment.add(LiveFragment.newInstance());
         mAdapter = new MyAdapter(getChildFragmentManager(), type, mFragment);
         viewPager.setAdapter(mAdapter);
-        //   viewPager.setOffscreenPageLimit(3);
+        // viewPager.setOffscreenPageLimit(1);
         tabLayout.setupWithViewPager(viewPager);
 
         mVoiceRecognizer = VoiceRecognizer.getInstance(getActivity(), com.woting.commonplat.constant.BroadcastConstants.SEARCHVOICE);// 初始化语音搜索
@@ -184,6 +184,7 @@ public class LookListFragment extends BaseFragment implements View.OnClickListen
                 if (arg1 == EditorInfo.IME_ACTION_SEARCH) {
                     String content = etSearchlike.getText().toString().trim();
                     if (!TextUtils.isEmpty(content)) {
+                        closeKeyboard(etSearchlike);
                         openFragment(SerchFragment.newInstance(content, 0));
                         SerchCode = viewPager.getCurrentItem();
                         etSearchlike.setText("");
@@ -211,6 +212,7 @@ public class LookListFragment extends BaseFragment implements View.OnClickListen
                         if (videoDialog != null) videoDialog.dismiss();
                         etSearchlike.setText("");
                         SerchCode = viewPager.getCurrentItem();
+                        closeKeyboard(etSearchlike);
                         openFragment(SerchFragment.newInstance(str.trim(), 0));
                     }
                 }, 1000);
@@ -236,7 +238,7 @@ public class LookListFragment extends BaseFragment implements View.OnClickListen
                     T.getInstance().showToast("请输入搜索内容");
                     return;
                 }
-                hideSoftKeyboard();
+                closeKeyboard(etSearchlike);
                 openFragment(SerchFragment.newInstance(content, 0));
                 SerchCode = viewPager.getCurrentItem();
                 etSearchlike.setText("");

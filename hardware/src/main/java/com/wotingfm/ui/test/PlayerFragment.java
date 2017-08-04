@@ -46,6 +46,9 @@ import com.wotingfm.common.utils.TimeUtil;
 import com.wotingfm.common.view.MenuDialog;
 import com.wotingfm.common.view.PlayerDialog;
 import com.wotingfm.ui.base.basefragment.BaseFragment;
+import com.wotingfm.ui.play.activity.AnchorPersonalCenterFragment;
+import com.wotingfm.ui.play.activity.albums.AlbumsInfoFragmentMain;
+import com.wotingfm.ui.play.activity.albums.AlbumsListMeFragment;
 import com.wotingfm.ui.play.look.activity.LookListFragment;
 import com.wotingfm.ui.play.look.activity.classification.fragment.MinorClassificationFragment;
 import com.wotingfm.ui.play.look.activity.classification.fragment.SubcategoryFragment;
@@ -58,6 +61,7 @@ import com.wotingfm.ui.play.look.fragment.ClassificationFragment;
 import com.wotingfm.ui.play.look.fragment.LiveFragment;
 import com.wotingfm.ui.play.look.fragment.RadioStationFragment;
 import com.wotingfm.ui.play.look.fragment.SelectedFragment;
+import com.wotingfm.ui.play.radio.RadioInfoFragment;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -184,6 +188,7 @@ public class PlayerFragment extends BaseFragment implements View.OnClickListener
 
     public static PlayerFragment newInstance(List<SinglesDownload> singlesDownloads) {
         BSApplication.IS_ONE = false;
+        BSApplication.IS_RESULT = true;
         EventBus.getDefault().post(new MessageEvent("stop"));
         PlayerFragment fragment = new PlayerFragment();
         Bundle bundle = new Bundle();
@@ -491,6 +496,7 @@ public class PlayerFragment extends BaseFragment implements View.OnClickListener
                     PlayerActivity playerActivity = (PlayerActivity) getActivity();
                     if (BSApplication.fragmentBase == null) {
                         playerActivity.open(LookListFragment.newInstance(0));
+                        BSApplication.IS_LOOK = false;
                     } else {
                         BSApplication.isIS_BACK = true;
                         if (BSApplication.fragmentBase instanceof SelectedFragment) {
@@ -513,10 +519,17 @@ public class PlayerFragment extends BaseFragment implements View.OnClickListener
                             playerActivity.open(SerchFragment.newInstance(q, 3));
                         } else if (BSApplication.fragmentBase instanceof SubcategoryFragment) {
                             playerActivity.open(MinorClassificationFragment.newInstance(id, title));
+                        } else if (BSApplication.fragmentBase instanceof AnchorPersonalCenterFragment && BSApplication.IS_LOOK == true) {
+                            playerActivity.open(LookListFragment.newInstance(0));
+                        } else if (BSApplication.fragmentBase instanceof AlbumsInfoFragmentMain && BSApplication.IS_LOOK == true) {
+                            playerActivity.open(LookListFragment.newInstance(0));
+                        } else if (BSApplication.fragmentBase instanceof RadioInfoFragment && BSApplication.IS_LOOK == true) {
+                            playerActivity.open(LookListFragment.newInstance(0));
                         } else {
                             playerActivity.open(BSApplication.fragmentBase);
                         }
                         BSApplication.fragmentBase = null;
+                        BSApplication.IS_LOOK = false;
                     }
                 }
                 //  LookListActivity.start(this);

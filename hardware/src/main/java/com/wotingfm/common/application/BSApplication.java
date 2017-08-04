@@ -62,6 +62,7 @@ public class BSApplication extends MultiDexApplication {
     public static boolean isIS_BACK = false;
     public static boolean IS_RESULT = false;
     public static boolean IS_CREATE = false;
+    public static boolean IS_LOOK = false;
     public static boolean IS_ONE = false;
 
     public void onCreate() {
