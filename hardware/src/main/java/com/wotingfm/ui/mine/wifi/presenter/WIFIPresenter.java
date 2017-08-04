@@ -29,8 +29,8 @@ import java.util.List;
  */
 public class WIFIPresenter {
 
-    private final WIFIFragment activity;
-    private final WIFIModel model;
+    private WIFIFragment activity;
+    private WIFIModel model;
     private WifiManager wifiManager;
 
     private ScanResult wiFiName;
@@ -45,6 +45,20 @@ public class WIFIPresenter {
 
     // 设置界面
     private void setView() {
+//      int t=  model.checkState(wifiManager);
+//        if(t==0){
+//
+//        }else if(t==1){
+//
+//        }else if(t==2){
+//
+//        }else if(t==3){
+//
+//        }else if(t==-1){
+//
+//        }
+
+
         if (wifiManager.isWifiEnabled()) {
             activity.setViewOpen();// WiFi 打开
             getData();// 设置数据
@@ -58,7 +72,7 @@ public class WIFIPresenter {
         WifiInfo mWifiInfo = wifiManager.getConnectionInfo();
         L.i("TAG", mWifiInfo.toString());
         // 获取扫描列表
-         List<ScanResult> scanResultList = model.getScanResultList(wifiManager);
+        List<ScanResult> scanResultList = model.getScanResultList(wifiManager);
         // 获取当前连接数据
         String id = model.getSSID(mWifiInfo);
         // 设置当前的连接信息
@@ -74,7 +88,7 @@ public class WIFIPresenter {
         if (scanResultList != null && scanResultList.size() > 0) {
             activity.setData(scanResultList);
         } else {
-            List<ScanResult> list=new ArrayList<>();
+            List<ScanResult> list = new ArrayList<>();
             activity.setData(list);
         }
     }
@@ -178,7 +192,7 @@ public class WIFIPresenter {
                 switch (wifiState) {
                     case WifiManager.WIFI_STATE_DISABLED:// WiFi 关闭
                         activity.setViewClose();
-                        List<ScanResult> list=new ArrayList<>();
+                        List<ScanResult> list = new ArrayList<>();
                         activity.setData(list);
                         break;
                     case WifiManager.WIFI_STATE_ENABLED:// WiFi 打开
@@ -199,5 +213,6 @@ public class WIFIPresenter {
             activity.getActivity().unregisterReceiver(mBroadcastReceiver);
             mBroadcastReceiver = null;
         }
+        model = null;
     }
 }

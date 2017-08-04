@@ -25,8 +25,8 @@ import org.json.JSONObject;
  */
 public class EditUserPresenter {
 
-    private final EditUserFragment activity;
-    private final EditUserModel model;
+    private EditUserFragment activity;
+    private EditUserModel model;
     private int type = 1;
 
     public EditUserPresenter(EditUserFragment activity) {
@@ -61,7 +61,7 @@ public class EditUserPresenter {
                     String id = BSApplication.SharedPreferences.getString(StringConstant.USER_ID, "");
 
                     // 设置提交数据
-                    String news="";
+                    String news = "";
                     if (type == 1) {
                         news = name;
                     } else if (type == 2) {
@@ -120,7 +120,7 @@ public class EditUserPresenter {
             } else {
                 return false;
             }
-        } else{
+        } else {
             return false;
         }
     }
@@ -131,7 +131,7 @@ public class EditUserPresenter {
      * @param src
      */
     public void textChange(String src) {
-        if (src != null &&! src.trim().equals("")) {
+        if (src != null && !src.trim().equals("")) {
             int l = src.length();
             activity.setTextViewChange(String.valueOf(90 - l));
         } else {
@@ -151,4 +151,10 @@ public class EditUserPresenter {
         }
     }
 
+    /**
+     * 数据销毁
+     */
+    public void destroy() {
+        model = null;
+    }
 }

@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -232,4 +233,11 @@ public class SettingFragment extends Fragment implements View.OnClickListener {
         if (clearCacheDialog != null) clearCacheDialog.dismiss();
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Log.e("界面","执行销毁");
+        presenter.destroy();
+        presenter=null;
+    }
 }

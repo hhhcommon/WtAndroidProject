@@ -1,6 +1,7 @@
 package com.wotingfm.ui.intercom.group.groupmumbershow.presenter;
 
 import android.os.Bundle;
+
 import com.woting.commonplat.config.GlobalNetWorkConfig;
 import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.config.GlobalStateConfig;
@@ -11,6 +12,7 @@ import com.wotingfm.ui.intercom.group.groupmumbershow.view.GroupNumberShowFragme
 import com.wotingfm.ui.intercom.main.contacts.model.Contact;
 import com.wotingfm.ui.intercom.main.view.InterPhoneActivity;
 import com.wotingfm.ui.intercom.person.personmessage.view.PersonMessageFragment;
+
 import java.util.List;
 
 /**
@@ -19,10 +21,9 @@ import java.util.List;
  */
 public class GroupNumberShowPresenter {
 
-    private final GroupNumberShowFragment activity;
-    private final GroupNumberShowModel model;
+    private GroupNumberShowFragment activity;
+    private GroupNumberShowModel model;
     private List<Contact.user> list;
-
 
     public GroupNumberShowPresenter(GroupNumberShowFragment activity) {
         this.activity = activity;
@@ -44,7 +45,7 @@ public class GroupNumberShowPresenter {
             if (list != null && list.size() > 0) {
                 activity.setView(list);
                 activity.isLoginView(0);
-            }else{
+            } else {
                 activity.isLoginView(1);
             }
         } else {
@@ -86,8 +87,8 @@ public class GroupNumberShowPresenter {
         }
 
         if (Id != null && !Id.equals("")) {
-            String id= BSApplication.SharedPreferences.getString(StringConstant.USER_ID,"");
-            if(!id.equals(Id)){
+            String id = BSApplication.SharedPreferences.getString(StringConstant.USER_ID, "");
+            if (!id.equals(Id)) {
                 if (b) {
                     // 是自己好友
                     PersonMessageFragment fragment = new PersonMessageFragment();
@@ -109,5 +110,12 @@ public class GroupNumberShowPresenter {
         } else {
             ToastUtils.show_always(activity.getActivity(), "数据出错了，请稍后再试！");
         }
+    }
+
+    /**
+     * 数据销毁
+     */
+    public void destroy() {
+        model = null;
     }
 }

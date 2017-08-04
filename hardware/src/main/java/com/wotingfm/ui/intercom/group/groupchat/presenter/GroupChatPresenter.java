@@ -27,8 +27,8 @@ import java.util.List;
  */
 public class GroupChatPresenter {
 
-    private final GroupChatFragment activity;
-    private final GroupChatModel model;
+    private  GroupChatFragment activity;
+    private  GroupChatModel model;
     private List<GroupChat> list;
     private MessageReceiver Receiver;
     private int groupPosition;
@@ -255,5 +255,6 @@ public class GroupChatPresenter {
             activity.getActivity().unregisterReceiver(Receiver);
             Receiver = null;
         }
+        model=null;
     }
 }

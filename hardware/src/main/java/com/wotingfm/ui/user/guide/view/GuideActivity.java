@@ -22,7 +22,7 @@ public class GuideActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         guidePresenter =new GuidePresenter(this);
-        mHandler.sendEmptyMessageDelayed(0, 3000); // 延时启动
+        mHandler.sendEmptyMessageDelayed(0, 1000); // 延时启动
     }
 
     // 防止内存泄漏
@@ -60,5 +60,7 @@ public class GuideActivity extends Activity {
     protected void onDestroy() {
         super.onDestroy();
         mHandler.removeCallbacksAndMessages(null);
+        guidePresenter.destroy();
+        guidePresenter=null;
     }
 }

@@ -41,10 +41,9 @@ import java.util.List;
  */
 public class PersonMessagePresenter {
 
-    private final PersonMessageFragment activity;
-    private final PersonMessageModel model;
+    private  PersonMessageFragment activity;
+    private  PersonMessageModel model;
     private String type = "true";// 界面类型 未添加好友=false，已添加好友=true
-    private boolean headViewShow = false;// 界面是否展示
     private String id;// 好友id
     private Contact.user user;
     private List<AlbumsBean> album;
@@ -276,19 +275,6 @@ public class PersonMessagePresenter {
         }
         activity.setViewData(url, nickName, sign, number, address, focus, accid);
         activity.isLoginView(0);
-    }
-
-    /**
-     * 判断界面展示
-     */
-    public void headViewShow() {
-        if (headViewShow) {
-            activity.imageShow(false);
-            headViewShow = false;
-        } else {
-            activity.imageShow(true);
-            headViewShow = true;
-        }
     }
 
     /**
@@ -531,5 +517,6 @@ public class PersonMessagePresenter {
             activity.getActivity().unregisterReceiver(Receiver);
             Receiver = null;
         }
+        model=null;
     }
 }

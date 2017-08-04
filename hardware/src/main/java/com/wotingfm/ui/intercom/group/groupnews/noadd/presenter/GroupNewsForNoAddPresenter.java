@@ -33,8 +33,8 @@ import java.util.List;
  */
 public class GroupNewsForNoAddPresenter {
 
-    private final GroupNewsForNoAddFragment activity;
-    private final GroupNewsForNoAddModel model;
+    private  GroupNewsForNoAddFragment activity;
+    private  GroupNewsForNoAddModel model;
     private String id;
     private List<Contact.user> _list;
     private String access = "2";//  0密码群，1审核群，2密码审核群
@@ -309,5 +309,6 @@ public class GroupNewsForNoAddPresenter {
             activity.getActivity().unregisterReceiver(Receiver);
             Receiver = null;
         }
+        model=null;
     }
 }

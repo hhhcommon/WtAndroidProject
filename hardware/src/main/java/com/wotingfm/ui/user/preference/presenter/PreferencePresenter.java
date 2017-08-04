@@ -20,8 +20,8 @@ import org.json.JSONTokener;
  */
 public class PreferencePresenter {
 
-    private final PreferenceFragment activity;
-    private final PreferenceModel model;
+    private PreferenceFragment activity;
+    private PreferenceModel model;
     private String fromType;// 来源，个人中心=person,登录=login
 
     // 偏好显示参数，false为未选中
@@ -215,7 +215,7 @@ public class PreferencePresenter {
             // 实际代码
             if (GlobalNetWorkConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
                 String s = getS();
-                if (!s.equals("")) {
+                if (s!=null&&!s.equals("")) {
                     activity.dialogShow();
                     model.loadNews(s, new PreferenceModel.OnLoadInterface() {
                         @Override
@@ -267,7 +267,14 @@ public class PreferencePresenter {
         if (s.length() > 0) {
             s = s.substring(0, s.length() - 1);
         }
-        ToastUtils.show_always(activity.getActivity(),s);
+//        ToastUtils.show_always(activity.getActivity(), s);
         return s;
+    }
+
+    /**
+     * 数据销毁
+     */
+    public void destroy() {
+        model = null;
     }
 }

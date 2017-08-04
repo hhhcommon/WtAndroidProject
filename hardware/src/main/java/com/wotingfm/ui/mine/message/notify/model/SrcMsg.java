@@ -12,7 +12,11 @@ public class SrcMsg implements Serializable {
 
     private List<applyMes> group_apply_mes;        //
     private List<approveMes> group_approve_mes;    //
-    private List<MesPerson> friend_apply_mes;    //
+    private List<MesPerson> friend_apply_mes;      //
+
+    private List<MesPerson> group_admin_mes;       //
+    private List<MesPerson> invitee_mes;           //
+
 
     public List<applyMes> getGroup_apply_mes() {
         return group_apply_mes;

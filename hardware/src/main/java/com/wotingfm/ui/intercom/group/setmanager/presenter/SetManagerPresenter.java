@@ -1,6 +1,7 @@
 package com.wotingfm.ui.intercom.group.setmanager.presenter;
 
 import android.util.Log;
+
 import com.google.gson.Gson;
 import com.woting.commonplat.config.GlobalNetWorkConfig;
 import com.wotingfm.common.config.GlobalStateConfig;
@@ -9,7 +10,9 @@ import com.wotingfm.ui.intercom.group.setmanager.view.SetManagerFragment;
 import com.wotingfm.ui.intercom.group.setmanager.model.SetManagerModel;
 import com.wotingfm.ui.intercom.main.contacts.model.Contact;
 import com.wotingfm.ui.intercom.main.view.InterPhoneActivity;
+
 import org.json.JSONObject;
+
 import java.util.List;
 
 /**
@@ -18,8 +21,8 @@ import java.util.List;
  */
 public class SetManagerPresenter {
 
-    private final SetManagerFragment activity;
-    private final SetManagerModel model;
+    private SetManagerFragment activity;
+    private SetManagerModel model;
     private List<Contact.user> list;
     private String gId;// 组Id
     private String s;
@@ -40,10 +43,10 @@ public class SetManagerPresenter {
             // 实际数据
             list = getList();
         }
-        if(list!=null&&list.size()>0){
+        if (list != null && list.size() > 0) {
             activity.setView(list);
             activity.isLoginView(0);
-        }else{
+        } else {
             activity.isLoginView(1);
         }
     }
@@ -62,10 +65,10 @@ public class SetManagerPresenter {
             e.printStackTrace();
         }
 
-        if(list!=null&&list.size()>0){
+        if (list != null && list.size() > 0) {
             List<Contact.user> _list = model.assemblyData(list);
             return _list;
-        }else{
+        } else {
             return null;
         }
 
@@ -92,10 +95,10 @@ public class SetManagerPresenter {
      */
     public void send() {
         if (GlobalNetWorkConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
-            if(list!=null&&list.size()>0){
-                 s = model.getString(list);
+            if (list != null && list.size() > 0) {
+                s = model.getString(list);
             }
-            if (s != null ) {
+            if (s != null) {
                 activity.dialogShow();
                 model.loadNews(gId, s, new SetManagerModel.OnLoadInterface() {
                     @Override
@@ -126,7 +129,7 @@ public class SetManagerPresenter {
             int ret = js.getInt("ret");
             Log.e("设置管理员==ret", String.valueOf(ret));
             if (ret == 0) {
-                activity.setResult(true,s);
+                activity.setResult(true, s);
                 InterPhoneActivity.close();
                 ToastUtils.show_always(activity.getActivity(), "设置成功");
             } else {
@@ -139,5 +142,11 @@ public class SetManagerPresenter {
         }
     }
 
+    /**
+     * 数据销毁
+     */
+    public void destroy() {
+        model = null;
+    }
 
 }

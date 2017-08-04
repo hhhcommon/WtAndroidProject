@@ -30,10 +30,10 @@ import rx.internal.operators.OperatorReplay;
  */
 public class ChannelPresenter {
 
-    private final StandbyChannelFragment activity;
-    private final ChannelModel model;
+    private StandbyChannelFragment activity;
+    private ChannelModel model;
     private String fromType, groupId;
-    private int type=1;
+    private int type = 1;
     private List<String> list;
     private String s;
 
@@ -138,7 +138,7 @@ public class ChannelPresenter {
     // 处理返回的数据
     private void dealSuccess(Object o) {
         try {
-            String s =new GsonBuilder().serializeNulls().create().toJson(o);
+            String s = new GsonBuilder().serializeNulls().create().toJson(o);
             JSONObject js = new JSONObject(s);
             int ret = js.getInt("ret");
             Log.e("设置群备用频道==ret", String.valueOf(ret));
@@ -180,8 +180,15 @@ public class ChannelPresenter {
             fragment.setArguments(bundle);
             InterPhoneActivity.open(fragment);
         } else if (fromType != null && fromType.trim().equals("message")) {
-            if(s!=null&&!s.trim().equals(""))activity.setResult(true,s);
+            if (s != null && !s.trim().equals("")) activity.setResult(true, s);
             InterPhoneActivity.close();
         }
+    }
+
+    /**
+     * 数据销毁
+     */
+    public void destroy() {
+        model = null;
     }
 }

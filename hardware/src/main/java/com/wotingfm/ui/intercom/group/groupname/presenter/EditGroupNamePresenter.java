@@ -19,8 +19,8 @@ import org.json.JSONObject;
  */
 public class EditGroupNamePresenter {
 
-    private final EditGroupNameFragment activity;
-    private final EditGroupNameModel model;
+    private EditGroupNameFragment activity;
+    private EditGroupNameModel model;
     private Contact.group group;
 
     public EditGroupNamePresenter(EditGroupNameFragment activity) {
@@ -94,5 +94,10 @@ public class EditGroupNamePresenter {
         }
     }
 
-
+    /**
+     * 数据销毁
+     */
+    public void destroy() {
+        model = null;
+    }
 }

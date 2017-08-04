@@ -44,7 +44,7 @@ public class PreferenceFragment extends Fragment implements View.OnClickListener
 
     // 设置界面
     private void inItView() {
-        left = (ImageView) rootView.findViewById(R.id.head_left_btn);                // 返回
+        left = (ImageView) rootView.findViewById(R.id.head_left_btn);                 // 返回
         tv_pass = (TextView) rootView.findViewById(R.id.tv_pass);                     // 跳过
         tv_enter = (TextView) rootView.findViewById(R.id.tv_enter);                   // 进入应用
 
@@ -241,5 +241,12 @@ public class PreferenceFragment extends Fragment implements View.OnClickListener
      */
     public void dialogCancel() {
         if (dialog != null) dialog.dismiss();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        presenter.destroy();
+        presenter=null;
     }
 }

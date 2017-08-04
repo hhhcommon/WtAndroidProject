@@ -254,6 +254,7 @@ public class GroupNewsForNoAddFragment extends Fragment implements View.OnClickL
     public void onDestroy() {
         super.onDestroy();
         presenter.destroy();
+        presenter=null;
     }
 
 }

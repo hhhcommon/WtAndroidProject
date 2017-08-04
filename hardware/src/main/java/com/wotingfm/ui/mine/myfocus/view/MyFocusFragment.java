@@ -34,7 +34,7 @@ public class MyFocusFragment extends Fragment implements View.OnClickListener {
     private TipView tip_view;
     private Dialog dfDialog;
     private List<Focus> list;
-    private int index=1;
+    private int index = 1;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -79,8 +79,8 @@ public class MyFocusFragment extends Fragment implements View.OnClickListener {
     }
 
     // 适配数据
-    public void updateUI( List<Focus> list) {
-        this.list=list;
+    public void updateUI(List<Focus> list) {
+        this.list = list;
         if (mAdapter == null) {
             mAdapter = new MyFocusAdapter(this.getActivity(), list);
             lv_focus.setAdapter(mAdapter);
@@ -90,7 +90,7 @@ public class MyFocusFragment extends Fragment implements View.OnClickListener {
         mAdapter.setOnListener(new MyFocusAdapter.OnListener() {
             @Override
             public void del(int position) {
-                index=position;
+                index = position;
                 dfDialogShow();
             }
         });
@@ -175,5 +175,12 @@ public class MyFocusFragment extends Fragment implements View.OnClickListener {
      */
     public void dfDialogCancel() {
         if (dfDialog != null) dfDialog.dismiss();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        presenter.destroy();
+        presenter = null;
     }
 }

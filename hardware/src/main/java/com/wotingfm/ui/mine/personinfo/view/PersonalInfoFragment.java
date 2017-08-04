@@ -478,4 +478,10 @@ public class PersonalInfoFragment extends Fragment implements View.OnClickListen
         if (dialog != null) dialog.dismiss();
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        presenter.destroy();
+        presenter=null;
+    }
 }

@@ -7,6 +7,7 @@ import android.content.IntentFilter;
 import android.media.MediaPlayer;
 import android.media.RingtoneManager;
 import android.net.Uri;
+
 import com.wotingfm.R;
 import com.wotingfm.common.config.GlobalStateConfig;
 import com.wotingfm.common.constant.BroadcastConstants;
@@ -20,8 +21,8 @@ import com.wotingfm.ui.intercom.main.contacts.model.Contact;
  */
 public class CallPresenter {
 
-    private final CallAlertActivity activity;
-    private final CallModel model;
+    private CallAlertActivity activity;
+    private CallModel model;
     private MessageReceiver Receiver;
     private MediaPlayer musicPlayer;
     private Contact.user user;
@@ -118,20 +119,6 @@ public class CallPresenter {
         return RingtoneManager.getActualDefaultRingtoneUri(activity, RingtoneManager.TYPE_RINGTONE);
     }
 
-    /**
-     * 注销的操作
-     */
-    public void destroy() {
-        musicClose();
-        if (GlobalStateConfig.test) {
-            dealPushCall();
-        }
-        if (Receiver != null) {
-            activity.unregisterReceiver(Receiver);
-            Receiver = null;
-        }
-    }
-
     // 接收推送的数据进行处理
     class MessageReceiver extends BroadcastReceiver {
         @Override
@@ -149,5 +136,20 @@ public class CallPresenter {
             activity.sendBroadcast(new Intent(BroadcastConstants.PUSH_CALL_SEND));
             activity.finish();
         }
+    }
+
+    /**
+     * 注销的操作
+     */
+    public void destroy() {
+        musicClose();
+        if (GlobalStateConfig.test) {
+            dealPushCall();
+        }
+        if (Receiver != null) {
+            activity.unregisterReceiver(Receiver);
+            Receiver = null;
+        }
+        model = null;
     }
 }

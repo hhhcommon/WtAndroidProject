@@ -4,7 +4,7 @@ import android.net.wifi.ScanResult;
 import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
-
+import android.util.Log;
 import com.wotingfm.common.utils.L;
 
 import java.util.List;
@@ -14,6 +14,28 @@ import java.util.List;
  * 邮箱：645700751@qq.com
  */
 public class WIFIModel {
+
+    /**
+     * 检查当前WIFI状态
+     */
+    public int checkState(WifiManager mWifiManager) {
+        if (mWifiManager.getWifiState() == 0) {
+            Log.e("当前WIFI状态== ","Wifi正在关闭");
+            return 0;
+        } else if (mWifiManager.getWifiState() == 1) {
+            Log.e("当前WIFI状态== ","Wifi已经关闭");
+            return 1;
+        } else if (mWifiManager.getWifiState() == 2) {
+            Log.e("当前WIFI状态== ","Wifi正在开启");
+            return 2;
+        } else if (mWifiManager.getWifiState() == 3) {
+            Log.e("当前WIFI状态== ","Wifi已经开启");
+            return 3;
+        } else {
+            Log.e("当前WIFI状态== ","没有获取到WiFi状态");
+            return -1;
+        }
+    }
 
     /**
      * 得到配置好的Wifi信息

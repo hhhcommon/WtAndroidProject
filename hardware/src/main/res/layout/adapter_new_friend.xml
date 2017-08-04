@@ -60,7 +60,6 @@
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:layout_marginRight="12dp"
-                android:background="@drawable/background_new_friend_bg"
                 android:gravity="center"
                 android:lineSpacingExtra="0sp"
                 android:text="已通过"

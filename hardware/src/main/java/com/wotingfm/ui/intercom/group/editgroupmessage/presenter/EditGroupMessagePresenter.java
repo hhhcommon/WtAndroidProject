@@ -51,8 +51,8 @@ import java.util.Map;
  */
 public class EditGroupMessagePresenter {
 
-    private final EditGroupMessageFragment activity;
-    private final EditGroupMessageModel model;
+    private EditGroupMessageFragment activity;
+    private EditGroupMessageModel model;
     private final int TO_GALLERY = 5;
     private final int TO_CAMERA = 6;
     private final int PHOTO_REQUEST_CUT = 7;    // 标识 跳转到图片裁剪界面
@@ -141,7 +141,7 @@ public class EditGroupMessagePresenter {
                     if (type) {
                         if (name != null && !name.equals("")) {
                             // 上层界面数据更改
-                            activity.setResult(2,name);
+                            activity.setResult(2, name);
                             activity.setViewForGroupName(name);
                         }
                     }
@@ -168,7 +168,7 @@ public class EditGroupMessagePresenter {
                     if (type) {
                         if (name != null && !name.equals("")) {
                             // 上层界面数据更改
-                            activity.setResult(4,name);
+                            activity.setResult(4, name);
                             activity.setViewForGroupIntroduce(name);
                         }
                     }
@@ -220,7 +220,7 @@ public class EditGroupMessagePresenter {
             int ret = js.getInt("ret");
             Log.e("修改群地址=ret", String.valueOf(ret));
             if (ret == 0) {
-                activity.setResult(3,name);
+                activity.setResult(3, name);
                 activity.setViewGroupAddress(name);
                 ToastUtils.show_always(activity.getActivity(), "修改成功");
             } else {
@@ -269,7 +269,7 @@ public class EditGroupMessagePresenter {
             Log.e("修改群头像=ret", String.valueOf(ret));
             if (ret == 0) {
                 // 上层界面数据更改
-                activity.setResult(1,name);
+                activity.setResult(1, name);
                 activity.setViewForImage(name);
                 ToastUtils.show_always(activity.getActivity(), "图片上传成功");
             } else {
@@ -489,5 +489,6 @@ public class EditGroupMessagePresenter {
             activity.getActivity().unregisterReceiver(Receiver);
             Receiver = null;
         }
+        model = null;
     }
 }

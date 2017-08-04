@@ -25,6 +25,7 @@ import com.wotingfm.common.utils.GlideUtils;
 import com.wotingfm.ui.mine.bluetooth.view.BluetoothFragment;
 import com.wotingfm.ui.mine.fm.view.FMSetFragment;
 import com.wotingfm.ui.mine.message.notify.view.MsgNotifyFragment;
+import com.wotingfm.ui.mine.personinfo.view.PersonalInfoFragment;
 import com.wotingfm.ui.mine.qrcodes.EWMShowFragment;
 import com.wotingfm.ui.mine.set.view.SettingFragment;
 import com.wotingfm.ui.mine.wifi.view.WIFIFragment;
@@ -103,15 +104,15 @@ public class MineFragment extends Fragment implements View.OnClickListener {
      */
     public void setViewForLogin(String url, String name, String num) {
         if (url != null && !url.trim().equals("") && url.startsWith("http")) {
-            GlideUtils.loadImageViewSrc(url,img_bg,true,8);
+            GlideUtils.loadImageViewSrc(url, img_bg, true, 8);
         } else {
-            GlideUtils.loadImageViewSrc(R.mipmap.p,img_bg,true,8);
+            GlideUtils.loadImageViewSrc(R.mipmap.p, img_bg, true, 8);
         }
 
         if (url != null && !url.trim().equals("") && url.startsWith("http")) {
-            GlideUtils.loadImageViewRound(url,image_head,70, 70);
+            GlideUtils.loadImageViewRound(url, image_head, 70, 70);
         } else {
-            GlideUtils.loadImageViewRound(R.mipmap.icon_avatar_d,image_head,70, 70);
+            GlideUtils.loadImageViewRound(R.mipmap.icon_avatar_d, image_head, 70, 70);
         }
         text_user_name.setText(name);
         text_user_number.setText("我听号：" + num);
@@ -122,7 +123,7 @@ public class MineFragment extends Fragment implements View.OnClickListener {
      */
     public void setView() {
         image_head.setImageResource(R.mipmap.icon_avatar_d);
-        GlideUtils.loadImageViewSrc(R.mipmap.p,img_bg,true,8);
+        GlideUtils.loadImageViewSrc(R.mipmap.p, img_bg, true, 8);
         text_user_name.setText("点击登录");
         text_user_number.setText("登录后可享受更多服务");
     }
@@ -200,17 +201,30 @@ public class MineFragment extends Fragment implements View.OnClickListener {
                 }
                 break;
             case R.id.image_head:// 登录
-                if (!CommonUtils.isLogin())
+                if (!CommonUtils.isLogin()) {
                     startActivity(new Intent(this.getActivity(), LogoActivity.class));
+                } else {
+                    MineActivity.open(new PersonalInfoFragment());
+                }
                 break;
         }
     }
 
+    /**
+     * 设置WiFi是否连接
+     * @param b
+     */
     public void wifiSet(boolean b) {
         if (b) {
             text_wifi_name.setVisibility(View.VISIBLE);
         } else {
             text_wifi_name.setVisibility(View.INVISIBLE);
         }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        presenter = null;
     }
 }

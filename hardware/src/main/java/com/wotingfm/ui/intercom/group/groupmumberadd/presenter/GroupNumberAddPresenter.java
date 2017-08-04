@@ -9,14 +9,12 @@ import com.wotingfm.common.config.GlobalStateConfig;
 import com.wotingfm.common.utils.ToastUtils;
 import com.wotingfm.ui.intercom.group.groupmumberadd.model.GroupNumberAddModel;
 import com.wotingfm.ui.intercom.group.groupmumberadd.view.GroupNumberAddFragment;
-import com.wotingfm.ui.intercom.group.groupmumberdel.model.GroupNumberDelModel;
 import com.wotingfm.ui.intercom.main.contacts.model.Contact;
 import com.wotingfm.ui.intercom.main.view.InterPhoneActivity;
 import com.wotingfm.ui.intercom.person.personmessage.view.PersonMessageFragment;
 
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -25,8 +23,8 @@ import java.util.List;
  */
 public class GroupNumberAddPresenter {
 
-    private final GroupNumberAddFragment activity;
-    private final GroupNumberAddModel model;
+    private GroupNumberAddFragment activity;
+    private GroupNumberAddModel model;
     private List<Contact.user> list;
     private String gid;// 群id
 
@@ -175,5 +173,12 @@ public class GroupNumberAddPresenter {
             }
         }
         activity.setView(list);
+    }
+
+    /**
+     * 数据销毁
+     */
+    public void destroy() {
+        model = null;
     }
 }

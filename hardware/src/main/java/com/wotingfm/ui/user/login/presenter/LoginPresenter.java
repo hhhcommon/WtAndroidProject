@@ -35,8 +35,8 @@ import org.json.JSONTokener;
  */
 public class LoginPresenter {
 
-    private final LoginFragment activity;
-    private final LoginModel model;
+    private LoginFragment activity;
+    private LoginModel model;
     private boolean eyeShow = false;
 
     private AbortableFuture<LoginInfo> loginRequest;
@@ -175,7 +175,7 @@ public class LoginPresenter {
                 NIMClient.updateStatusBarNotificationConfig(UserPreferences.getStatusConfig());
                 ToastUtils.show_always(activity.getActivity(), "登录成功");
                 // 发送登录广播通知所有界面
-                RetrofitUtils.INSTANCE=null;
+                RetrofitUtils.INSTANCE = null;
                 activity.getActivity().sendBroadcast(new Intent(BroadcastConstants.LOGIN));
                 LogoActivity.closeActivity();
             }
@@ -205,8 +205,10 @@ public class LoginPresenter {
      * @return true:可以登录 / false：不能登录
      */
     private boolean checkData(String userName, String password) {
-        if (userName == null || userName.trim().equals("")) {
-            Toast.makeText(activity.getActivity(), "登录账号不能为空", Toast.LENGTH_LONG).show();
+        if (userName != null &&! userName.trim().equals("")&&userName.trim().length()==11) {
+
+        }else{
+            Toast.makeText(activity.getActivity(), "手机号格式不正确", Toast.LENGTH_LONG).show();
             return false;
         }
         if (password == null || password.trim().equals("")) {
@@ -227,4 +229,10 @@ public class LoginPresenter {
         Preferences.saveUserToken(token);
     }
 
+    /**
+     * 数据销毁
+     */
+    public void destroy() {
+        model = null;
+    }
 }

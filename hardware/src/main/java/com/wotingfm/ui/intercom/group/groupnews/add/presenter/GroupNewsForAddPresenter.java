@@ -46,12 +46,11 @@ import java.util.Map;
  */
 public class GroupNewsForAddPresenter {
 
-    private final GroupNewsForAddFragment activity;
-    private final GroupNewsForAddModel model;
+    private  GroupNewsForAddFragment activity;
+    private  GroupNewsForAddModel model;
     private String gid;
     private Contact.group g_news;
     private List<Contact.user> list;
-    private boolean headViewShow = false;// 选择界面是否展示
     private boolean isAdmin = false;// 是否是管理员
     private boolean isOw = false;// 是否是群主
     private String channel1, channel2;
@@ -373,19 +372,6 @@ public class GroupNewsForAddPresenter {
     }
 
     /**
-     * 判断界面展示
-     */
-    public void headViewShow() {
-        if (headViewShow) {
-            activity.imageShow(false);
-            headViewShow = false;
-        } else {
-            activity.imageShow(true);
-            headViewShow = true;
-        }
-    }
-
-    /**
      * 退出该群
      */
     public void exit() {
@@ -419,27 +405,34 @@ public class GroupNewsForAddPresenter {
                         }
                     });
                 } else {
-                    if (GlobalNetWorkConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
-                        activity.dialogShow();
-                        model.exitGroup(gid, new GroupNewsForAddModel.OnLoadInterface() {
-                            @Override
-                            public void onSuccess(Object o) {
-                                activity.dialogCancel();
-                                dealExitGroupSuccess(o);
-                            }
-
-                            @Override
-                            public void onFailure(String msg) {
-                                activity.dialogCancel();
-                            }
-                        });
-                    } else {
-                        ToastUtils.show_always(activity.getActivity(), "网络连接失败，请稍后再试！");
-                    }
+                    activity.delDialogShow();
                 }
             } else {
                 ToastUtils.show_always(activity.getActivity(), "数据出错了，请您稍后再试！");
             }
+        }
+    }
+
+    /**
+     * 发送退出群组的请求
+     */
+    public void del(){
+        if (GlobalNetWorkConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
+            activity.dialogShow();
+            model.exitGroup(gid, new GroupNewsForAddModel.OnLoadInterface() {
+                @Override
+                public void onSuccess(Object o) {
+                    activity.dialogCancel();
+                    dealExitGroupSuccess(o);
+                }
+
+                @Override
+                public void onFailure(String msg) {
+                    activity.dialogCancel();
+                }
+            });
+        } else {
+            ToastUtils.show_always(activity.getActivity(), "网络连接失败，请稍后再试！");
         }
     }
 
@@ -712,5 +705,6 @@ public class GroupNewsForAddPresenter {
             activity.getActivity().unregisterReceiver(Receiver);
             Receiver = null;
         }
+        model=null;
     }
 }

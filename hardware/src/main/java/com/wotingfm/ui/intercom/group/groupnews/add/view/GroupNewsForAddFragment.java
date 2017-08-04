@@ -6,10 +6,13 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
@@ -58,9 +61,9 @@ public class GroupNewsForAddFragment extends Fragment implements View.OnClickLis
     private int height = 480;// 滑动开始变色的高
     private RelativeLayout mRelativeLayout;
     private ImageView head_left_btn, img_other, img_url;
-    private LinearLayout lin_chose, lin_channel;
+    private LinearLayout lin_channel;
     private ResultListener Listener;
-    private Dialog confirmDialog;
+    private Dialog confirmDialog,delDialog,LDialog;
     private String id;
 
     @Override
@@ -75,6 +78,8 @@ public class GroupNewsForAddFragment extends Fragment implements View.OnClickLis
             rootView.setOnClickListener(this);
             inItView();
             Dialog();
+            DDialog();
+            initDialogL();
             presenter = new GroupNewsForAddPresenter(this);
             presenter.getData();
             if (PhoneMsgManager.ScreenWidth == 480) {
@@ -127,11 +132,6 @@ public class GroupNewsForAddFragment extends Fragment implements View.OnClickLis
         re_channel2.setOnClickListener(this);
 
         rootView.findViewById(R.id.lin_send).setOnClickListener(this);// 开始对讲
-
-        lin_chose = (LinearLayout) rootView.findViewById(R.id.lin_chose); // 图片选择
-        lin_chose.setOnClickListener(this);
-        rootView.findViewById(R.id.tv_exit).setOnClickListener(this);  // 退出该群
-        rootView.findViewById(R.id.tv_quxiao).setOnClickListener(this);   // 取消
     }
 
     @Override
@@ -146,7 +146,7 @@ public class GroupNewsForAddFragment extends Fragment implements View.OnClickLis
                 InterPhoneActivity.close();
                 break;
             case R.id.img_other:
-                presenter.headViewShow();
+                delDialog.show();
                 break;
             case R.id.re_groupEwm:
                 presenter.jumpEWM();
@@ -166,32 +166,16 @@ public class GroupNewsForAddFragment extends Fragment implements View.OnClickLis
             case R.id.re_groupNumber:
                 presenter.jumpGroupNumberShow();
                 break;
-            case R.id.tv_exit:
+            case R.id.tv_name:
                 presenter.exit();
-                presenter.headViewShow();
+                delDialog.dismiss();
                 break;
             case R.id.tv_quxiao:
-                presenter.headViewShow();
+                delDialog.dismiss();
                 break;
         }
     }
 
-    /**
-     * 图片上传界面的展示
-     *
-     * @param type
-     */
-    public void imageShow(boolean type) {
-        if (type) {
-            Animation mAnimation = AnimationUtils.loadAnimation(this.getActivity(), R.anim.wt_slide_in_from_bottom);
-            lin_chose.setAnimation(mAnimation);
-            lin_chose.setVisibility(View.VISIBLE);
-        } else {
-            Animation mAnimation = AnimationUtils.loadAnimation(this.getActivity(), R.anim.wt_slide_out_from_bottom);
-            lin_chose.setAnimation(mAnimation);
-            lin_chose.setVisibility(View.GONE);
-        }
-    }
 
     /**
      * 设置群管理功能是否展示
@@ -388,6 +372,60 @@ public class GroupNewsForAddFragment extends Fragment implements View.OnClickLis
         });
     }
 
+    // 退出群组选择框
+    private void DDialog() {
+        final View dialog = LayoutInflater.from(this.getActivity()).inflate(R.layout.dialog_group_person_del, null);
+        TextView name = (TextView) dialog.findViewById(R.id.tv_name);
+        name.setText("退出群组");
+        name.setOnClickListener(this);
+        dialog.findViewById(R.id.tv_quxiao).setOnClickListener(this);   // 取消
+
+        delDialog = new Dialog(this.getActivity(), R.style.MyDialogs);
+        delDialog.setContentView(dialog);
+        delDialog.setCanceledOnTouchOutside(true);
+
+        DisplayMetrics dm = new DisplayMetrics();
+        this.getActivity().getWindowManager().getDefaultDisplay().getMetrics(dm);
+        int screenWidth = dm.widthPixels;
+        ViewGroup.LayoutParams params = dialog.getLayoutParams();
+        params.width = screenWidth;
+        dialog.setLayoutParams(params);
+
+        Window window = delDialog.getWindow();
+        window.setGravity(Gravity.BOTTOM);
+        window.setWindowAnimations(R.style.inOutStyle);
+        window.setBackgroundDrawableResource(R.color.transparent_40_black);
+    }
+
+    // 删除好友对话框
+    private void initDialogL() {
+        View dialog1 = LayoutInflater.from(this.getActivity()).inflate(R.layout.dialog_talk_person_del, null);
+        dialog1.findViewById(R.id.tv_confirm).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                presenter.del();
+                LDialog.dismiss();
+            }
+        }); // 确定
+        dialog1.findViewById(R.id.tv_cancle).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                LDialog.dismiss();
+            }
+        });  // 取消
+        TextView textTitle = (TextView) dialog1.findViewById(R.id.tv_title);
+        textTitle.setText("确定退出群组?");
+
+        LDialog = new Dialog(this.getActivity(), R.style.MyDialogs);
+        LDialog.setContentView(dialog1);
+        LDialog.setCanceledOnTouchOutside(false);
+        LDialog.getWindow().setBackgroundDrawableResource(R.color.transparent_background);
+    }
+
+    public void delDialogShow(){
+        LDialog.show();
+    }
+
     /**
      * 展示弹出框
      */
@@ -420,5 +458,6 @@ public class GroupNewsForAddFragment extends Fragment implements View.OnClickLis
     public void onDestroy() {
         super.onDestroy();
         presenter.destroy();
+        presenter = null;
     }
 }

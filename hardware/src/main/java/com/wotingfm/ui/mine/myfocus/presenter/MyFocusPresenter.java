@@ -25,8 +25,8 @@ import java.util.List;
  */
 public class MyFocusPresenter {
 
-    private final MyFocusFragment activity;
-    private final MyFocusModel model;
+    private MyFocusFragment activity;
+    private MyFocusModel model;
 
     public MyFocusPresenter(MyFocusFragment activity) {
         this.activity = activity;
@@ -101,7 +101,7 @@ public class MyFocusPresenter {
                 return;
             }
             activity.dialogShow();
-            model.loadNewsDel(idol_id,id, new MyFocusModel.OnLoadInterface() {
+            model.loadNewsDel(idol_id, id, new MyFocusModel.OnLoadInterface() {
                 @Override
                 public void onSuccess(Object o) {
                     activity.dialogCancel();
@@ -140,5 +140,12 @@ public class MyFocusPresenter {
             e.printStackTrace();
             ToastUtils.show_always(activity.getActivity(), "取消关注失败，请稍后再试！");
         }
+    }
+
+    /**
+     * 数据销毁
+     */
+    public void destroy() {
+        model = null;
     }
 }

@@ -128,6 +128,7 @@ public class CallAlertActivity extends Activity implements OnClickListener {
     protected void onDestroy() {
         super.onDestroy();
         presenter.destroy();
+        presenter=null;
         EventBus.getDefault().unregister(this);
     }
 }

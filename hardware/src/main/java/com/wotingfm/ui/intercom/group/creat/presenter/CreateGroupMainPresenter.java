@@ -47,8 +47,8 @@ import java.io.File;
  */
 public class CreateGroupMainPresenter {
 
-    private final CreateGroupMainFragment activity;
-    private final CreateGroupMainModel model;
+    private  CreateGroupMainFragment activity;
+    private  CreateGroupMainModel model;
     private boolean b1 = false;// 密码群 选择状态
     private boolean b2 = false;// 审核群 选择状态
     private final int TO_GALLERY = 5;
@@ -421,6 +421,7 @@ public class CreateGroupMainPresenter {
             activity.getActivity().unregisterReceiver(Receiver);
             Receiver = null;
         }
+        model=null;
     }
 
 }

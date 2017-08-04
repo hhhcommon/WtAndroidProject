@@ -47,8 +47,8 @@ import java.io.File;
  */
 public class InformationPresenter {
 
-    private final InformationFragment activity;
-    private final InformationModel model;
+    private InformationFragment activity;
+    private InformationModel model;
     private final int TO_GALLERY = 5;
     private final int TO_CAMERA = 6;
     private final int PHOTO_REQUEST_CUT = 7;    // 标识 跳转到图片裁剪界面
@@ -339,5 +339,6 @@ public class InformationPresenter {
             activity.getActivity().unregisterReceiver(Receiver);
             Receiver = null;
         }
+        model = null;
     }
 }

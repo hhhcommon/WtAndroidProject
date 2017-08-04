@@ -8,6 +8,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -312,5 +313,11 @@ public class SearchContactsForNetFragment extends Fragment implements View.OnCli
         if (dialog != null) dialog.dismiss();
     }
 
-
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Log.e("界面","执行销毁");
+        presenter.destroy();
+        presenter=null;
+    }
 }

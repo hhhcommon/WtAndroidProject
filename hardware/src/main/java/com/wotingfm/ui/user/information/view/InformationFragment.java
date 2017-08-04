@@ -43,6 +43,7 @@ public class InformationFragment extends Fragment implements View.OnClickListene
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         if (rootView == null) {
             rootView = inflater.inflate(R.layout.fragment_information, container, false);
+            rootView.setOnClickListener(this);
             inItView();
             imgDialog();
             Presenter = new InformationPresenter(this);
@@ -158,5 +159,6 @@ public class InformationFragment extends Fragment implements View.OnClickListene
     public void onDestroy() {
         super.onDestroy();
         Presenter.destroy();
+        Presenter=null;
     }
 }

@@ -1,11 +1,13 @@
 package com.wotingfm.ui.mine.security.password.view;
 
 import android.app.Dialog;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
 import com.wotingfm.R;
@@ -47,6 +49,9 @@ public class ModifyPasswordFragment extends Fragment implements View.OnClickList
         textTitle.setText(getString(R.string.password));
 
         editPhoneNumber = (EditText) rootView.findViewById(R.id.edit_phone_number);// 手机号
+        editPhoneNumber.requestFocus();
+        InputMethodManager imm = (InputMethodManager) editPhoneNumber.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.toggleSoftInput(0, InputMethodManager.SHOW_FORCED);
         editVerificationCode = (EditText) rootView.findViewById(R.id.edit_verification_code);// 验证码
         editNewPassword = (EditText) rootView.findViewById(R.id.edit_new_password);// 新密码
         textSendVerificationCode = (TextView) rootView.findViewById(R.id.text_send_verification_code);// 发送验证码
@@ -119,5 +124,7 @@ public class ModifyPasswordFragment extends Fragment implements View.OnClickList
     public void onDestroy() {
         super.onDestroy();
         presenter.cancel();
+        presenter.destroy();
+        presenter=null;
     }
 }

@@ -3,6 +3,7 @@ package com.wotingfm.ui.intercom.group.groupmumberadd.view;
 import android.app.Dialog;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -148,5 +149,13 @@ public class GroupNumberAddFragment extends Fragment implements View.OnClickList
             tip_view.setVisibility(View.VISIBLE);
             tip_view.setTipView(TipView.TipStatus.IS_ERROR);
         }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Log.e("界面","执行销毁");
+        presenter.destroy();
+        presenter=null;
     }
 }

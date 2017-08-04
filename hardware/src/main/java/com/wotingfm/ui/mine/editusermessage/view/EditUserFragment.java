@@ -151,4 +151,10 @@ public class EditUserFragment extends Fragment implements View.OnClickListener {
         void resultListener(boolean b, String name);
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        presenter.destroy();
+        presenter = null;
+    }
 }

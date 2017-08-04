@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+
 import com.wotingfm.R;
 import com.wotingfm.common.utils.DialogUtils;
 import com.wotingfm.ui.mine.feedback.presenter.FeedbackPresenter;
@@ -53,7 +54,7 @@ public class FeedbackFragment extends Fragment implements View.OnClickListener {
             case R.id.tv_commit:    // 提交
                 String information = edit_information.getText().toString(); // 联系方式
                 String feedback = edit_feedback.getText().toString();       // 意见
-                presenter.send(information,feedback);
+                presenter.send(information, feedback);
                 break;
         }
     }
@@ -70,6 +71,13 @@ public class FeedbackFragment extends Fragment implements View.OnClickListener {
      */
     public void dialogCancel() {
         if (dialog != null) dialog.dismiss();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        presenter.destroy();
+        presenter = null;
     }
 
 }

@@ -213,5 +213,6 @@ public class GroupChatFragment extends Fragment implements View.OnClickListener,
     public void onDestroy() {
         super.onDestroy();
         presenter.destroy();
+        presenter=null;
     }
 }

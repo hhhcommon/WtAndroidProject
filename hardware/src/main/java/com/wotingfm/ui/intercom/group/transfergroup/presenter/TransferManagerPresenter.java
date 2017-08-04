@@ -23,8 +23,8 @@ import java.util.List;
  */
 public class TransferManagerPresenter {
 
-    private final TransferGroupFragment activity;
-    private final TransferManagerModel model;
+    private  TransferGroupFragment activity;
+    private  TransferManagerModel model;
     private List<Contact.user> list;
     private String gId;// 组Id
 
@@ -154,5 +154,11 @@ public class TransferManagerPresenter {
         }
     }
 
+    /**
+     * 数据销毁
+     */
+    public void destroy() {
+        model = null;
+    }
 
 }
