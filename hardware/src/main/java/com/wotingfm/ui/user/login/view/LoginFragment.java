@@ -1,6 +1,7 @@
 package com.wotingfm.ui.user.login.view;
 
 import android.app.Dialog;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
@@ -9,6 +10,7 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -35,6 +37,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         if (rootView == null) {
             rootView = inflater.inflate(R.layout.fragment_login, container, false);
+            rootView.setOnClickListener(this);
             inItView();
             inItListener();
             setEditListener();
@@ -51,6 +54,9 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
         tv_center.setText("登录");
 
         et_phoneNumber = (EditText)rootView. findViewById(R.id.et_phoneNumber);            // 手机号输入框
+        et_phoneNumber.requestFocus();
+        InputMethodManager imm = (InputMethodManager) et_phoneNumber.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.toggleSoftInput(0, InputMethodManager.SHOW_FORCED);
         et_passWord = (EditText) rootView.findViewById(R.id.et_passWord);                  // 密码输入框
 
         tv_login = (TextView)rootView. findViewById(R.id.tv_login);                        // 登录

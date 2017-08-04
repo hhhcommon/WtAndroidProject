@@ -14,6 +14,8 @@ import com.wotingfm.common.utils.CommonUtils;
 import com.wotingfm.common.utils.DialogUtils;
 import com.wotingfm.common.utils.GlideCatchUtil;
 import com.wotingfm.common.utils.ToastUtils;
+import com.wotingfm.ui.intercom.main.view.InterPhoneActivity;
+import com.wotingfm.ui.mine.main.MineActivity;
 import com.wotingfm.ui.mine.set.model.SettingModel;
 import com.wotingfm.ui.mine.set.view.SettingFragment;
 
@@ -87,6 +89,7 @@ public class SettingPresenter {
         activity.setCloseView(false);
         // 发送注销登录广播通知所有界面
         activity.getActivity().sendBroadcast(new Intent(BroadcastConstants.CANCEL));
+        MineActivity.close();
     }
 
     // 启动统计缓存的线程

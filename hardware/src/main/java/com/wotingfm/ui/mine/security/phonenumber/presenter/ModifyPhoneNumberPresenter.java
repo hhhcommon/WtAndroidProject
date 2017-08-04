@@ -72,16 +72,16 @@ public class ModifyPhoneNumberPresenter {
 
     // 检查数据的正确性  检查通过则进行登录
     private boolean checkData(String news1, String news2, String yzm) {
-        if (news1 == null || news1.trim().equals("")) {
-            Toast.makeText(activity.getActivity(), "旧手机号码不能为空", Toast.LENGTH_LONG).show();
+        if (news1 == null || news1.trim().equals("")||news1.trim().length()!=11) {
+            Toast.makeText(activity.getActivity(), "旧手机号码格式不正确", Toast.LENGTH_LONG).show();
             return false;
         }
         if (yzm == null || yzm.trim().equals("")) {
             Toast.makeText(activity.getActivity(), "验证码不能为空", Toast.LENGTH_LONG).show();
             return false;
         }
-        if (news2 == null || news2.trim().equals("")) {
-            Toast.makeText(activity.getActivity(), "新手机号码不能为空", Toast.LENGTH_LONG).show();
+        if (news2 == null || news2.trim().equals("")||news2.trim().length()!=11) {
+            Toast.makeText(activity.getActivity(), "新手机号码格式不正确", Toast.LENGTH_LONG).show();
             return false;
         }
         return true;
@@ -92,7 +92,7 @@ public class ModifyPhoneNumberPresenter {
      * 获取验证码
      */
     public void getYzm(String userName) {
-        if (userName != null && !userName.equals("")) {
+        if (userName != null && !userName.equals("")&&userName.trim().length()==11) {
             if (GlobalNetWorkConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
                 if (mCountDownTimer == null) {
                     timerDown();
@@ -102,7 +102,7 @@ public class ModifyPhoneNumberPresenter {
                 ToastUtils.show_always(activity.getActivity(), "网络连接失败，请稍后再试！");
             }
         } else {
-            ToastUtils.show_always(activity.getActivity(), "手机号不能为空");
+            ToastUtils.show_always(activity.getActivity(), "手机号格式不正确");
         }
     }
 

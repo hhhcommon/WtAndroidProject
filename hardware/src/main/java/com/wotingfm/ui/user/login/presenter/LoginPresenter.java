@@ -205,8 +205,10 @@ public class LoginPresenter {
      * @return true:可以登录 / false：不能登录
      */
     private boolean checkData(String userName, String password) {
-        if (userName == null || userName.trim().equals("")) {
-            Toast.makeText(activity.getActivity(), "登录账号不能为空", Toast.LENGTH_LONG).show();
+        if (userName != null &&! userName.trim().equals("")&&userName.trim().length()==11) {
+
+        }else{
+            Toast.makeText(activity.getActivity(), "手机号格式不正确", Toast.LENGTH_LONG).show();
             return false;
         }
         if (password == null || password.trim().equals("")) {

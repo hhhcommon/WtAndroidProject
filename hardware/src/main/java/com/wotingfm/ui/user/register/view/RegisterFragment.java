@@ -1,6 +1,7 @@
 package com.wotingfm.ui.user.register.view;
 
 import android.app.Dialog;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
@@ -9,6 +10,7 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -35,6 +37,7 @@ public class RegisterFragment extends Fragment implements View.OnClickListener {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         if (rootView == null) {
             rootView = inflater.inflate(R.layout.fragment_register, container, false);
+            rootView.setOnClickListener(this);
             inItView();
             setEditListener();
             registerPresenter = new RegisterPresenter(this);
@@ -55,6 +58,9 @@ public class RegisterFragment extends Fragment implements View.OnClickListener {
         img_eye.setOnClickListener(this);
 
         et_phoneNumber = (EditText) rootView.findViewById(R.id.et_phoneNumber);    // 手机号输入框
+        et_phoneNumber.requestFocus();
+        InputMethodManager imm = (InputMethodManager) et_phoneNumber.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.toggleSoftInput(0, InputMethodManager.SHOW_FORCED);
         et_yzm = (EditText) rootView.findViewById(R.id.et_yzm);                    // 验证码输入框
         et_passWord = (EditText) rootView.findViewById(R.id.et_passWord);          // 密码输入框
 

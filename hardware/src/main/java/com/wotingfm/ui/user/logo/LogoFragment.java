@@ -26,6 +26,7 @@ public class LogoFragment extends Fragment implements View.OnClickListener {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         if (rootView == null) {
             rootView = inflater.inflate(R.layout.activity_logo, container, false);
+            rootView.setOnClickListener(this);
             inItView();
             inItListener();
         }

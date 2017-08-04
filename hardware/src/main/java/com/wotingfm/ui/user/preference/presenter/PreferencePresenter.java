@@ -215,7 +215,7 @@ public class PreferencePresenter {
             // 实际代码
             if (GlobalNetWorkConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
                 String s = getS();
-                if (!s.equals("")) {
+                if (s!=null&&!s.equals("")) {
                     activity.dialogShow();
                     model.loadNews(s, new PreferenceModel.OnLoadInterface() {
                         @Override
@@ -267,7 +267,7 @@ public class PreferencePresenter {
         if (s.length() > 0) {
             s = s.substring(0, s.length() - 1);
         }
-        ToastUtils.show_always(activity.getActivity(), s);
+//        ToastUtils.show_always(activity.getActivity(), s);
         return s;
     }
 

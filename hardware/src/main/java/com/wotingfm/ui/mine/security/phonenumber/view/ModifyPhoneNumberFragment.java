@@ -1,6 +1,7 @@
 package com.wotingfm.ui.mine.security.phonenumber.view;
 
 import android.app.Dialog;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -11,6 +12,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -53,6 +55,9 @@ public class ModifyPhoneNumberFragment extends Fragment implements View.OnClickL
         TextView textTitle = (TextView) rootView.findViewById(R.id.tv_center);// 标题
         textTitle.setText(getString(R.string.phone_number));
         editOldPhone = (EditText) rootView.findViewById(R.id.edit_old_phone);// 旧手机号
+        editOldPhone.requestFocus();
+        InputMethodManager imm = (InputMethodManager) editOldPhone.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.toggleSoftInput(0, InputMethodManager.SHOW_FORCED);
         editVerificationCode = (EditText) rootView.findViewById(R.id.edit_verification_code);// 验证码
         editNewPhone = (EditText) rootView.findViewById(R.id.edit_new_phone);// 新手机号
         textSendVerificationCode = (TextView) rootView.findViewById(R.id.text_send_verification_code);// 发送验证码

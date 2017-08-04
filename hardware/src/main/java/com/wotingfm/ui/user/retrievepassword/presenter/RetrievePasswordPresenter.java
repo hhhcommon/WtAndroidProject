@@ -53,8 +53,10 @@ public class RetrievePasswordPresenter {
 
     // 检查数据的正确性  检查通过则进行登录
     private boolean checkData(String userName, String password, String yzm) {
-        if (userName == null || userName.trim().equals("")) {
-            Toast.makeText(activity.getActivity(), "登录账号不能为空", Toast.LENGTH_LONG).show();
+        if (userName != null &&! userName.trim().equals("")&&userName.trim().length()==11) {
+
+        }else{
+            Toast.makeText(activity.getActivity(), "手机号格式不正确", Toast.LENGTH_LONG).show();
             return false;
         }
         if (yzm == null || yzm.trim().equals("")) {
@@ -116,7 +118,7 @@ public class RetrievePasswordPresenter {
      * 获取验证码
      */
     public void getYzm(String userName) {
-        if (userName != null && !userName.equals("")) {
+        if (userName != null && !userName.equals("")&&userName.trim().length()==11) {
             if (GlobalNetWorkConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
                 if (mCountDownTimer == null) {
                     timerDown();
@@ -126,7 +128,7 @@ public class RetrievePasswordPresenter {
                 ToastUtils.show_always(activity.getActivity(), "网络连接失败，请稍后再试！");
             }
         } else {
-            ToastUtils.show_always(activity.getActivity(), "手机号不能为空");
+            ToastUtils.show_always(activity.getActivity(), "手机号格式不正确");
         }
     }
 
