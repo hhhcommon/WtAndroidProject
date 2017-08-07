@@ -10,10 +10,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.wotingfm.R;
+import com.wotingfm.common.utils.ToastUtils;
 import com.wotingfm.ui.intercom.main.contacts.adapter.NoAdapter;
 import com.wotingfm.ui.mine.main.MineActivity;
 import com.wotingfm.ui.mine.wifi.adapter.WiFiListAdapter;
@@ -30,13 +33,15 @@ public class WIFIFragment extends Fragment implements View.OnClickListener {
     private WiFiListAdapter adapter;
 
     private ListView wifiListView;
-    private ImageView imageWiFiSet;
-    private TextView textUserWiFi;
+    private ImageView imageWiFiSet, image_wifi, image_wifi_conn;
+    private TextView text_wifi_set, text_wifi_news, tv_news;
     private View rootView;
     private View viewConnSuccess;
     private TextView textWifiName;
     private WIFIPresenter presenter;
     private ResultListener Listener;
+    private ProgressBar progressBar, progressBar_scan;
+    private LinearLayout user_wifi_list;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -58,11 +63,27 @@ public class WIFIFragment extends Fragment implements View.OnClickListener {
         View headView = LayoutInflater.from(this.getActivity()).inflate(R.layout.head_view_wifi, null);
         wifiListView.addHeaderView(headView);
         wifiListView.setSelector(new ColorDrawable(Color.TRANSPARENT));
-        viewConnSuccess = headView.findViewById(R.id.view_conn_success);         // 显示连接的网络
-        textWifiName = (TextView) headView.findViewById(R.id.text_wifi_name);    // 连接的网络SSID
-        textUserWiFi = (TextView) headView.findViewById(R.id.user_wifi_list);    // 提示文字  可用 WiFi
+
         headView.findViewById(R.id.wifi_set).setOnClickListener(this);           // WiFi设置
         imageWiFiSet = (ImageView) headView.findViewById(R.id.image_wifi_set);
+        text_wifi_set = (TextView) headView.findViewById(R.id.text_wifi_set);    // 提示文字
+        text_wifi_news = (TextView) headView.findViewById(R.id.text_wifi_news);  // 提示文字
+
+        viewConnSuccess = headView.findViewById(R.id.view_conn_success);         // 显示连接的网络
+        image_wifi = (ImageView) headView.findViewById(R.id.image_wifi);         // 已经连接的热点的信号强度
+        textWifiName = (TextView) headView.findViewById(R.id.text_wifi_name);    // 连接的网络SSID
+        tv_news = (TextView) headView.findViewById(R.id.tv_news);                // 提示文字：连接中，连接成功
+        image_wifi_conn = (ImageView) headView.findViewById(R.id.image_wifi_conn);
+        progressBar = (ProgressBar) headView.findViewById(R.id.progressBar);     // 连接等待提示
+
+        user_wifi_list = (LinearLayout) headView.findViewById(R.id.user_wifi_list);       // 提示文字：选取网络
+        progressBar_scan = (ProgressBar) headView.findViewById(R.id.progressBar_scan);    // 扫描等待提示
+
+//        View footView = LayoutInflater.from(this.getActivity()).inflate(R.layout.foot_view_wifi, null);
+//        other = (LinearLayout) footView.findViewById(R.id.lin_other);       // 其它隐藏网络
+//        other.setOnClickListener(this);
+//        tv_line= (TextView) footView.findViewById(R.id.tv_line);            // 背景线
+//        wifiListView.addFooterView(footView);
     }
 
     @Override
@@ -74,6 +95,10 @@ public class WIFIFragment extends Fragment implements View.OnClickListener {
             case R.id.wifi_set:     // WiFi 开关
                 presenter.WIFISet();
                 break;
+//            case R.id.lin_other:     // 其它隐藏网络
+//                ToastUtils.show_always(this.getActivity(),"其它隐藏网络");
+//                break;
+
         }
     }
 
@@ -81,27 +106,47 @@ public class WIFIFragment extends Fragment implements View.OnClickListener {
      * WiFi 打开
      */
     public void setViewOpen() {
+        text_wifi_set.setText("开启WLAN");
+        text_wifi_news.setVisibility(View.GONE);
         imageWiFiSet.setImageResource(R.mipmap.on_switch);
-        textUserWiFi.setVisibility(View.VISIBLE);
+        viewConnSuccess.setVisibility(View.GONE);
+        user_wifi_list.setVisibility(View.VISIBLE);
     }
 
     /**
      * WiFi 打开中
      */
     public void setViewOpenIng() {
+        text_wifi_set.setText("开启WLAN");
+        text_wifi_news.setText("正在打开 WLAN...");
+        text_wifi_news.setVisibility(View.VISIBLE);
         imageWiFiSet.setImageResource(R.mipmap.on_switch);
-        textUserWiFi.setVisibility(View.VISIBLE);
-
+        viewConnSuccess.setVisibility(View.GONE);
+        user_wifi_list.setVisibility(View.VISIBLE);
     }
 
     /**
      * WiFi 关闭
      */
     public void setViewClose() {
-        imageWiFiSet.setImageResource(R.mipmap.close_switch);
+        text_wifi_set.setText("开启WLAN");
+        text_wifi_news.setText("要查看可用网络,请打开WLAN.");
+        text_wifi_news.setVisibility(View.VISIBLE);
+        imageWiFiSet.setImageResource(R.mipmap.off_switch);
         viewConnSuccess.setVisibility(View.GONE);
-        textUserWiFi.setVisibility(View.GONE);
-        setNoData();
+        user_wifi_list.setVisibility(View.GONE);
+    }
+
+    /**
+     * WiFi 关闭中
+     */
+    public void setViewCloseIng() {
+        text_wifi_set.setText("开启WLAN");
+        text_wifi_news.setText("正在关闭 WLAN...");
+        text_wifi_news.setVisibility(View.VISIBLE);
+        imageWiFiSet.setImageResource(R.mipmap.off_switch);
+        viewConnSuccess.setVisibility(View.GONE);
+        user_wifi_list.setVisibility(View.GONE);
     }
 
     /**
@@ -109,9 +154,53 @@ public class WIFIFragment extends Fragment implements View.OnClickListener {
      *
      * @param ssid
      */
-    public void setViewID(String ssid) {
+    public void setViewID(String ssid, int id) {
         viewConnSuccess.setVisibility(View.VISIBLE);
+        tv_news.setText("连接成功");
+        image_wifi_conn.setVisibility(View.VISIBLE);
+        progressBar.setVisibility(View.INVISIBLE);
+        image_wifi.setImageResource(id);
         textWifiName.setText(ssid);
+    }
+
+    /**
+     * 设置连接中状态界面
+     */
+    public void setLinking(String ssid, int id) {
+        viewConnSuccess.setVisibility(View.VISIBLE);
+        tv_news.setText("连接中...");
+        image_wifi_conn.setVisibility(View.INVISIBLE);
+        progressBar.setVisibility(View.VISIBLE);
+        image_wifi.setImageResource(id);
+        if (ssid != null && !ssid.trim().equals("")) {
+            textWifiName.setText(ssid);
+        }
+    }
+
+    /**
+     * 设置连接中状态界面
+     */
+    public void setLinkClose(int id) {
+        viewConnSuccess.setVisibility(View.VISIBLE);
+        tv_news.setText("已断开...");
+        image_wifi_conn.setVisibility(View.INVISIBLE);
+        progressBar.setVisibility(View.VISIBLE);
+        image_wifi.setImageResource(id);
+        textWifiName.setText("未连接");
+
+    }
+
+    /**
+     * 设置扫描等待提示是否展示
+     *
+     * @param b
+     */
+    public void setScanView(boolean b) {
+        if (b) {
+            progressBar_scan.setVisibility(View.VISIBLE);
+        } else {
+            progressBar_scan.setVisibility(View.INVISIBLE);
+        }
     }
 
     /**
@@ -120,6 +209,13 @@ public class WIFIFragment extends Fragment implements View.OnClickListener {
      * @param scanResultList
      */
     public void setData(List<ScanResult> scanResultList) {
+//        if(scanResultList!=null&&scanResultList.size()>0){
+//            other.setVisibility(View.VISIBLE);
+//            tv_line.setVisibility(View.VISIBLE);
+//        }else{
+//            other.setVisibility(View.GONE);
+//            tv_line.setVisibility(View.GONE);
+//        }
         if (adapter == null) {
             adapter = new WiFiListAdapter(this.getActivity(), scanResultList);
             wifiListView.setAdapter(adapter);
@@ -129,12 +225,6 @@ public class WIFIFragment extends Fragment implements View.OnClickListener {
         setItemListener(scanResultList);
     }
 
-    /**
-     * 设置空数据
-     */
-    private void setNoData(){
-        wifiListView.setAdapter(new NoAdapter(this.getActivity()));
-    }
 
     // ListView 子条目点击事件  连接 WiFi
     private void setItemListener(final List<ScanResult> scanResultList) {
@@ -147,12 +237,6 @@ public class WIFIFragment extends Fragment implements View.OnClickListener {
             }
         });
     }
-
-    // 处理接收结果的逻辑
-    protected void setAddCardResult(String result) {
-        presenter.setAddCardResult(result);
-    }
-
 
     /**
      * 返回值设置
@@ -181,6 +265,6 @@ public class WIFIFragment extends Fragment implements View.OnClickListener {
         super.onDestroy();
         setResult(true);
         presenter.destroy();
-        presenter=null;
+        presenter = null;
     }
 }

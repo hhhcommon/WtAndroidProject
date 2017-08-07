@@ -7,6 +7,9 @@
         android:name="com.wotingfm.permission.JPUSH_MESSAGE"
         android:protectionLevel="signature" />
 
+    <!-- 以下是使用wifi访问网络所需的权限 -->
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+
     <!-- Required  一些系统要求的权限，如访问网络等-->
     <uses-permission android:name="com.wotingfm.permission.JPUSH_MESSAGE" />
     <uses-permission android:name="android.permission.RECEIVE_USER_PRESENT" />
@@ -158,6 +161,11 @@
             android:theme="@style/AppTheme"
             />
 
+        <!-- WIFI测试 -->
+        <activity
+            android:name="com.wotingfm.ui.mine.test.WifiTestActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" />
         <!--  -->
         <activity
             android:name=".ui.mine.main.MineActivity"
@@ -172,7 +180,7 @@
         <!-- 声明云信后台服务，如需保持后台推送，使用独立进程效果会更好。 -->
         <service
             android:name="com.netease.nimlib.service.NimService"
-            android:process=":core" />
+            android:process=":core" />l
 
         <service
             android:name="com.netease.nimlib.service.NimService$Aux"

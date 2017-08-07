@@ -2,7 +2,6 @@
     <string name="app_name">Hardware</string>
     <string name="app_local_path">/woTingFM/</string>
 
-
     <!--个人中心-->
     <string name="connect_car_audio_system">连接汽车音响系统</string>
     <string name="fm_settings">FM设置</string>

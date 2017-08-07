@@ -38,7 +38,6 @@ import org.greenrobot.eventbus.EventBus;
 import java.util.HashMap;
 import java.util.Map;
 
-import jp.wasabeef.glide.transformations.BlurTransformation;
 
 /**
  * 个人中心主界面
