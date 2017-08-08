@@ -54,31 +54,20 @@ public class UserBluetoothAdapter extends BaseAdapter {
             holder = new ViewHolder();
             convertView = LayoutInflater.from(context).inflate(R.layout.adapter_user_bluetooth, parent, false);
             holder.textBluetoothName = (TextView) convertView.findViewById(R.id.text_bluetooth_name);// 设备名称
-            holder.textPairDevice = (TextView) convertView.findViewById(R.id.text_pair_device);// "选取可用设备"
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
         BluetoothInfo bName = list.get(position);
-        if (position > 0) {
-            if (list.get(position).getBluetoothType() == (list.get(position - 1).getBluetoothType())) {
-                holder.textPairDevice.setVisibility(View.GONE);
-            }else{
-                holder.textPairDevice.setVisibility(View.VISIBLE);
-            }
-        }
         if (bName.getBluetoothName() == null) {
             holder.textBluetoothName.setText(bName.getBluetoothAddress());
         } else {
             holder.textBluetoothName.setText(bName.getBluetoothName());
         }
-        Log.w("TAG", "bName" + bName.getBluetoothName() + "\t" + bName.getBluetoothAddress());
-
         return convertView;
     }
 
     class ViewHolder {
         TextView textBluetoothName;// 设备名称
-        TextView textPairDevice;// "选取可用设备"
     }
 }

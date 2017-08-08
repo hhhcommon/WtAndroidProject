@@ -78,18 +78,18 @@ public class WIFIPresenter {
         // 设置当前的连接信息
         if (id != null && !id.equals("") && !id.equals("<unknown ssid>")) {
             activity.setViewID(id, model.getImg(mWifiInfo.getRssi()));
-            // 去掉自己的数据后进行适配
-            if (scanResultList != null && scanResultList.size() > 0) {
-                scanResultList = model.dealList(id, scanResultList);
-            }
-            if (scanResultList != null && scanResultList.size() > 0) {
-                activity.setData(scanResultList);
-            } else {
-                List<ScanResult> list = new ArrayList<>();
-                activity.setData(list);
-            }
         } else {
             mHandler.sendEmptyMessage(REFRESH_CONN);
+        }
+        // 去掉自己的数据后进行适配
+        if (scanResultList != null && scanResultList.size() > 0) {
+            scanResultList = model.dealList(id, scanResultList);
+        }
+        if (scanResultList != null && scanResultList.size() > 0) {
+            activity.setData(scanResultList);
+        } else {
+            List<ScanResult> list = new ArrayList<>();
+            activity.setData(list);
         }
     }
 
