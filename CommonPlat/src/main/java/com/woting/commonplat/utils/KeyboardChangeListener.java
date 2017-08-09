@@ -52,7 +52,7 @@ public class KeyboardChangeListener implements ViewTreeObserver.OnGlobalLayoutLi
 
     @Override
     public void onGlobalLayout() {
-        int currHeight = mContentView.getHeight();
+        int currHeight = mContentView.getHeight()+30;
         if (currHeight == 0) {
             Log.i(TAG, "currHeight is 0");
             return;

@@ -17,7 +17,7 @@ android {
         ndk {
             // 设置支持的SO库架构
             // abiFilters 'armeabi' //, 'x86', 'armeabi-v7a', 'x86_64', 'arm64-v8a'
-            abiFilters 'armeabi', 'armeabi-v7a', 'armeabi-v8a', 'x86', 'x86_64', 'mips'
+            abiFilters 'armeabi'/*, 'armeabi-v7a', 'armeabi-v8a', 'x86', 'x86_64', 'mips'*/
         }
     }
 
@@ -39,18 +39,14 @@ android {
         abortOnError false
     }
 
-    dexOptions {
-        preDexLibraries false
-        jumboMode true
-        javaMaxHeapSize "4g"
-    }
 }
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     testCompile 'junit:junit:4.12'
-    compile 'com.android.support:appcompat-v7:25+'
-    compile 'com.github.bumptech.glide:glide:3.7.0'
+    compile 'com.android.support:multidex:1.0.1'
+
+    compile 'com.android.support:appcompat-v7:25.3.1'
     compile 'jp.wasabeef:glide-transformations:2.0.2'
     compile 'com.squareup.retrofit2:retrofit:2.1.0'
     compile 'com.google.code.gson:gson:2.7'
@@ -63,6 +59,6 @@ dependencies {
     }
     compile 'com.zhy:base-rvadapter:3.0.3'
     compile 'org.greenrobot:eventbus:3.0.0'
-    compile 'com.android.support:design:25+'
+    compile 'com.android.support:design:25.3.1'
     compile project(':uikit')
 }
