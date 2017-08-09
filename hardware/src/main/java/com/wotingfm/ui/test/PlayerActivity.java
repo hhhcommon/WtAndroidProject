@@ -103,6 +103,7 @@ public class PlayerActivity extends NoTitleBarBaseActivity {
             if (BSApplication.IS_RESULT == true) {
                 long time = System.currentTimeMillis();
                 if (time - tempTime <= 2000) {
+                    EventBus.getDefault().post(new MessageEvent("onDestroy"));
                     android.os.Process.killProcess(android.os.Process.myPid());
                 } else {
                     tempTime = time;
@@ -117,10 +118,5 @@ public class PlayerActivity extends NoTitleBarBaseActivity {
         }
     }
 
-
-    public void onMoonEvent(MessageEvent messageEvent) {
-        if (playerFragment != null)
-            playerFragment.onMoonEventBase(messageEvent);
-    }
 
 }

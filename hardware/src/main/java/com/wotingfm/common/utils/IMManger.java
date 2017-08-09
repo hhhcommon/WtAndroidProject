@@ -33,7 +33,6 @@ import com.wotingfm.ui.intercom.alert.receive.view.ReceiveAlertActivity;
 import com.wotingfm.ui.main.view.MainActivity;
 import com.wotingfm.ui.test.PlayerActivity;
 
-import org.appspot.apprtc.CallActivity;
 import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;

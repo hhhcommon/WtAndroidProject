@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.wotingfm.common.bean.MessageEvent;
 import com.wotingfm.common.config.GlobalStateConfig;
 import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.common.utils.CommonUtils;
@@ -22,6 +23,8 @@ import com.wotingfm.ui.intercom.main.view.InterPhoneActivity;
 import com.wotingfm.ui.intercom.main.view.InterPhoneFragment;
 import com.wotingfm.ui.intercom.person.personmessage.view.PersonMessageFragment;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -32,8 +35,8 @@ import java.util.List;
  */
 public class SearchContactsForLocalPresenter {
 
-    private  SearchContactsForLocalFragment activity;
-    private  SearchContactsForLocalModel model;
+    private SearchContactsForLocalFragment activity;
+    private SearchContactsForLocalModel model;
     private List<Contact.group> srcList_G;// 原始群组数据
     private List<Contact.user> srcList_p;// 原始好友数据
 
@@ -180,9 +183,9 @@ public class SearchContactsForLocalPresenter {
             // 此时有对讲状态
             String _t = ChatPresenter.data.getTyPe().trim();
             if (_t != null && !_t.equals("") && _t.equals("person")) {// 此时的对讲状态是单对单
-                activity.dialogShow(person.get(position),null, 1);// 弹出选择界面
+                activity.dialogShow(person.get(position), null, 1);// 弹出选择界面
             } else if (_t != null && !_t.equals("") && _t.equals("group")) {// 此时的对讲状态是群组
-                boolean to= takeOverGroup();// 退出组
+                boolean to = takeOverGroup();// 退出组
                 if (to) {
                     Log.e("信令控制", "退出组成功");
                 } else {
@@ -190,20 +193,20 @@ public class SearchContactsForLocalPresenter {
                 }
                 // 关闭对讲页面群组数据
                 activity.getActivity().sendBroadcast(new Intent(BroadcastConstants.VIEW_GROUP_CLOSE));
-                boolean tok= talkOk(id,person.get(position).getAcc_id());// 进行呼叫
+                boolean tok = talkOk(id, person.get(position).getAcc_id());// 进行呼叫
                 if (tok) {
                     Log.e("信令控制", "呼叫成功");
-                    enterOkData(true,person.get(position),null);
+                    enterOkData(true, person.get(position), null);
                 } else {
                     Log.e("信令控制", "呼叫失败");
                 }
             }
         } else {
             // 此时没有对讲状态
-            boolean to=talkOk(id,person.get(position).getAcc_id());// 进行呼叫
+            boolean to = talkOk(id, person.get(position).getAcc_id());// 进行呼叫
             if (to) {
                 Log.e("信令控制", "呼叫成功");
-                enterOkData(true,person.get(position),null);
+                enterOkData(true, person.get(position), null);
             } else {
                 Log.e("信令控制", "呼叫失败");
             }
@@ -224,9 +227,9 @@ public class SearchContactsForLocalPresenter {
             // 此时有对讲状态
             String _t = ChatPresenter.data.getTyPe().trim();
             if (_t != null && !_t.equals("") && _t.equals("person")) {// 此时的对讲状态是单对单
-                activity.dialogShow(null,group.get(position), 2);// 弹出选择界面
+                activity.dialogShow(null, group.get(position), 2);// 弹出选择界面
             } else if (_t != null && !_t.equals("") && _t.equals("group")) {// 此时的对讲状态是群组
-                boolean to=takeOverGroup();// 退出组
+                boolean to = takeOverGroup();// 退出组
                 if (to) {
                     Log.e("信令控制", "退出组成功");
                 } else {
@@ -234,20 +237,20 @@ public class SearchContactsForLocalPresenter {
                 }
                 // 关闭对讲页面群组数据
                 activity.getActivity().sendBroadcast(new Intent(BroadcastConstants.VIEW_GROUP_CLOSE));
-                boolean et= enterGroup(id);// 进入组
+                boolean et = enterGroup(id);// 进入组
                 if (et) {
                     Log.e("信令控制", "进入组成功");
-                    enterOkData(true,null,group.get(position));
+                    enterOkData(true, null, group.get(position));
                 } else {
                     Log.e("信令控制", "进入组失败");
                 }
             }
         } else {
             // 此时没有对讲状态,直接进入组
-            boolean et=enterGroup(id);// 进入组
+            boolean et = enterGroup(id);// 进入组
             if (et) {
                 Log.e("信令控制", "进入组成功");
-                enterOkData(true,null,group.get(position));
+                enterOkData(true, null, group.get(position));
             } else {
                 Log.e("信令控制", "进入组失败");
             }
@@ -259,7 +262,7 @@ public class SearchContactsForLocalPresenter {
      */
     public void callOk(Contact.user user, Contact.group group, int type) {
         if (type == 1) {
-            boolean to=talkOver();// 挂断当前会话
+            boolean to = talkOver();// 挂断当前会话
             if (to) {
                 Log.e("信令控制", "挂断电话成功");
             } else {
@@ -267,15 +270,15 @@ public class SearchContactsForLocalPresenter {
             }
             // 关闭对讲页面好友数据
             activity.getActivity().sendBroadcast(new Intent(BroadcastConstants.VIEW_PERSON_CLOSE));
-            boolean tok=talkOk(user.getId(),user.getAcc_id());// 进行呼叫
+            boolean tok = talkOk(user.getId(), user.getAcc_id());// 进行呼叫
             if (tok) {
                 Log.e("信令控制", "呼叫成功");
-                enterOkData(true,user,null);
+                enterOkData(true, user, null);
             } else {
                 Log.e("信令控制", "呼叫失败");
             }
         } else {
-            boolean to= talkOver();// 挂断当前会话
+            boolean to = talkOver();// 挂断当前会话
             if (to) {
                 Log.e("信令控制", "挂断电话成功");
             } else {
@@ -283,10 +286,10 @@ public class SearchContactsForLocalPresenter {
             }
             // 关闭对讲页面好友数据
             activity.getActivity().sendBroadcast(new Intent(BroadcastConstants.VIEW_PERSON_CLOSE));
-           boolean et= enterGroup(group.getId());// 进入组
+            boolean et = enterGroup(group.getId());// 进入组
             if (et) {
                 Log.e("信令控制", "进入组成功");
-                enterOkData(true,null,group);
+                enterOkData(true, null, group);
             } else {
                 Log.e("信令控制", "进入组失败");
             }
@@ -296,6 +299,7 @@ public class SearchContactsForLocalPresenter {
     // 进入组
     private boolean enterGroup(String groupId) {
         InterPhoneActivity.closeAll();
+        EventBus.getDefault().post(new MessageEvent("enterGroup&" + groupId));
         activity.getActivity().sendBroadcast(new Intent(BroadcastConstants.VIEW_INTER_PHONE));
         return true;
     }
@@ -305,6 +309,7 @@ public class SearchContactsForLocalPresenter {
         if (ChatPresenter.data != null && ChatPresenter.data.getID() != null) {
             // 退出组
             String id = ChatPresenter.data.getID();
+            EventBus.getDefault().post(new MessageEvent("exitGroup&" + id));
         }
         return true;
     }
@@ -318,7 +323,7 @@ public class SearchContactsForLocalPresenter {
     }
 
     // 开始个人对讲
-    private boolean talkOk(String id,String accId) {
+    private boolean talkOk(String id, String accId) {
         IMManger.getInstance().sendMsg(accId, "LAUNCH", CommonUtils.getUserId());
         Intent intent = new Intent(activity.getActivity(), CallAlertActivity.class);
         Bundle bundle = new Bundle();
@@ -330,15 +335,15 @@ public class SearchContactsForLocalPresenter {
     }
 
     // 进入组成功后数据处理
-    private void enterOkData(boolean b,Contact.user user,Contact.group group) {
-        if(b){
+    private void enterOkData(boolean b, Contact.user user, Contact.group group) {
+        if (b) {
             // 好友
             model.del(user.getId());// 删除跟本次id相关的数据
-            model.add(model.assemblyPersonData(user, GlobalStateConfig.ok,""));// 把本次数据添加的数据库
-        }else{
+            model.add(model.assemblyPersonData(user, GlobalStateConfig.ok, ""));// 把本次数据添加的数据库
+        } else {
             // 群组
             model.del(group.getId());// 删除跟本次id相关的数据
-            model.add(model.assemblyGroupData(group, GlobalStateConfig.ok,""));// 把本次数据添加的数据库
+            model.add(model.assemblyGroupData(group, GlobalStateConfig.ok, ""));// 把本次数据添加的数据库
         }
 
         InterPhoneActivity.closeAll();
@@ -349,7 +354,7 @@ public class SearchContactsForLocalPresenter {
     /**
      * 数据销毁
      */
-    public void destroy(){
-        model=null;
+    public void destroy() {
+        model = null;
     }
 }

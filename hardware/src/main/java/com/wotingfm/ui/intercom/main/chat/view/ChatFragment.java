@@ -113,7 +113,7 @@ public class ChatFragment extends Fragment implements ChatAdapter.IonSlidingView
                 break;
             case R.id.img_close_group:
                 setGroupViewClose();
-                EventBus.getDefault().post(new MessageEvent("overgroup"));
+                EventBus.getDefault().post(new MessageEvent("exitGroup&"));
                 break;
             case R.id.img_close_person:
                 setPersonViewClose();
