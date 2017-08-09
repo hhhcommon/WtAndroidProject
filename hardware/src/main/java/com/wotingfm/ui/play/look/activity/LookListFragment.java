@@ -100,6 +100,7 @@ public class LookListFragment extends BaseFragment implements View.OnClickListen
         etSearchlike.requestFocus();
         //   InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
         inputMethodManager.toggleSoftInput(-30, InputMethodManager.HIDE_NOT_ALWAYS);
+        isOne = false;
         relatLable.setVisibility(View.VISIBLE);
     }
 
@@ -109,6 +110,7 @@ public class LookListFragment extends BaseFragment implements View.OnClickListen
     private int keyboardHeight;
     // 软键盘的显示状态
     private boolean isShowKeyboard;
+    private boolean isOne=true;
     private ViewTreeObserver.OnGlobalLayoutListener globalLayoutListener = new ViewTreeObserver.OnGlobalLayoutListener() {
 
         @Override
@@ -141,7 +143,7 @@ public class LookListFragment extends BaseFragment implements View.OnClickListen
             } else {
                 // 如果软键盘是收起的状态，并且heightDiff大于状态栏高度，
                 // 说明这时软键盘已经弹出
-                if (heightDiff > statusBarHeight) {
+                if (heightDiff > statusBarHeight&&isOne==false) {
                     isShowKeyboard = true;
                     relatLable.setVisibility(View.VISIBLE);
                 }
