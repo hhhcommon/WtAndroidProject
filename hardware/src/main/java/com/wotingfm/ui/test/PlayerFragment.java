@@ -1,5 +1,6 @@
 package com.wotingfm.ui.test;
 
+import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
@@ -78,6 +79,8 @@ import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.schedulers.Schedulers;
+
+import static com.wotingfm.common.application.BSApplication.singLesBeans;
 
 /**
  * 作者：xinLong on 2017/6/2 12:15
@@ -209,7 +212,10 @@ public class PlayerFragment extends BaseFragment implements View.OnClickListener
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EventBus.getDefault().register(this);
-        singLesBeans.clear();
+        if (singLesBeans == null)
+            singLesBeans = new ArrayList<>();
+        else
+            singLesBeans.clear();
     }
 
 
@@ -227,7 +233,8 @@ public class PlayerFragment extends BaseFragment implements View.OnClickListener
     @Override
     public void initView() {
         BSApplication.IS_CREATE = true;
-        mAVOptions = new AVOptions();
+        if (mAVOptions == null)
+            mAVOptions = new AVOptions();
         // the unit of timeout is ms
         mAVOptions.setInteger(AVOptions.KEY_PREPARE_TIMEOUT, 10 * 1000);
         mAVOptions.setInteger(AVOptions.KEY_GET_AV_FRAME_TIMEOUT, 10 * 1000);
@@ -260,7 +267,8 @@ public class PlayerFragment extends BaseFragment implements View.OnClickListener
         snapHelper.attachToRecyclerView(mRecyclerView);
         mPlayerAdapter = new PlayerAdapter(BSApplication.getInstance(), singLesBeans);
         mRecyclerView.setAdapter(mPlayerAdapter);
-        bdPlayer = new BDPlayer(getActivity());
+        if (bdPlayer == null)
+            bdPlayer = new BDPlayer(getActivity());
         setListener();
         historyHelper = new HistoryHelper(BSApplication.getInstance());
         Bundle bundle = getArguments();
@@ -279,6 +287,7 @@ public class PlayerFragment extends BaseFragment implements View.OnClickListener
                     singLesBeans.clear();
                     singLesBeans.add(singlesBase);
                     postionPlayer = 0;
+                    bdPlayer.stopPlayback();
                     bdPlayer.setVideoPath(singlesBase.single_file_url);
                     bdPlayer.start();
                     largeLabelSeekbar.setVisibility(View.VISIBLE);
@@ -476,6 +485,34 @@ public class PlayerFragment extends BaseFragment implements View.OnClickListener
         }
     }
 
+    private void before() {
+        if (singLesBeans.size() > postionPlayer && postionPlayer > 0 && BSApplication.IS_ONE == false && channelsBean == null) {
+            postionPlayer = postionPlayer - 1;
+            mRecyclerView.smoothScrollToPosition(postionPlayer);
+            Log.d("mingku", "测试=" + singLesBeans.toString());
+            bdPlayer.stopPlayback();
+            bdPlayer.setVideoPath(singLesBeans.get(postionPlayer).single_file_url);
+            bdPlayer.start();
+            seekbarVideo.setProgress(0);
+            ivPause.setImageResource(R.mipmap.music_play_icon_pause);
+            setBeforeOrNext(singLesBeans.get(postionPlayer));
+        }
+    }
+
+    private void next() {
+        if (postionPlayer < singLesBeans.size() - 1 && BSApplication.IS_ONE == false && channelsBean == null) {
+            postionPlayer = postionPlayer + 1;
+            mRecyclerView.smoothScrollToPosition(postionPlayer);
+            bdPlayer.stopPlayback();
+            Log.d("mingku", "测试=" + singLesBeans.toString());
+            bdPlayer.setVideoPath(singLesBeans.get(postionPlayer).single_file_url);
+            bdPlayer.start();
+            ivPause.setImageResource(R.mipmap.music_play_icon_pause);
+            seekbarVideo.setProgress(0);
+            setBeforeOrNext(singLesBeans.get(postionPlayer));
+        }
+    }
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -535,16 +572,7 @@ public class PlayerFragment extends BaseFragment implements View.OnClickListener
                 //  LookListActivity.start(this);
                 break;
             case R.id.ivBefore:
-                if (singLesBeans.size() > postionPlayer && postionPlayer > 0 && BSApplication.IS_ONE == false && channelsBean == null) {
-                    postionPlayer = postionPlayer - 1;
-                    mRecyclerView.smoothScrollToPosition(postionPlayer);
-                    bdPlayer.stopPlayback();
-                    bdPlayer.setVideoPath(singLesBeans.get(postionPlayer).single_file_url);
-                    bdPlayer.start();
-                    seekbarVideo.setProgress(0);
-                    ivPause.setImageResource(R.mipmap.music_play_icon_pause);
-                    setBeforeOrNext(singLesBeans.get(postionPlayer));
-                }
+                before();
                 break;
             case R.id.ivPause:
                 BDPlayer.PlayerState isPause = bdPlayer.getCurrentPlayerState();
@@ -561,16 +589,7 @@ public class PlayerFragment extends BaseFragment implements View.OnClickListener
                 }
                 break;
             case R.id.ivNext:
-                if (postionPlayer < singLesBeans.size() - 1 && BSApplication.IS_ONE == false && channelsBean == null) {
-                    postionPlayer = postionPlayer + 1;
-                    mRecyclerView.smoothScrollToPosition(postionPlayer);
-                    bdPlayer.stopPlayback();
-                    bdPlayer.setVideoPath(singLesBeans.get(postionPlayer).single_file_url);
-                    bdPlayer.start();
-                    ivPause.setImageResource(R.mipmap.music_play_icon_pause);
-                    seekbarVideo.setProgress(0);
-                    setBeforeOrNext(singLesBeans.get(postionPlayer));
-                }
+                next();
                 break;
             case R.id.ivPlayList:
                 if (playerDialog == null) {
@@ -626,7 +645,6 @@ public class PlayerFragment extends BaseFragment implements View.OnClickListener
     private int postionPlayer = 0;
     private BDPlayer bdPlayer;
     private PlayerAdapter mPlayerAdapter;
-    private List<SinglesBase> singLesBeans = new ArrayList<>();
     //数据源dialog
     private PlayerDialog playerDialog;
     //菜单dialohg
@@ -685,10 +703,8 @@ public class PlayerFragment extends BaseFragment implements View.OnClickListener
                 });//每隔一秒发送数据
     }
 
-
-    //接受到下载完成的通知
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onMoonEvent(MessageEvent messageEvent) {
+    public void onMoonEventBase(MessageEvent messageEvent) {
         String event = messageEvent.getMessage();
         if (!TextUtils.isEmpty(event) && "stop".equals(event)) {
             if (bdPlayer != null) {
@@ -711,28 +727,10 @@ public class PlayerFragment extends BaseFragment implements View.OnClickListener
                 mMediaPlayer.start();
             }
             ivPause.setImageResource(R.mipmap.music_play_icon_pause);
-        } else if (!TextUtils.isEmpty(event) && BSApplication.IS_ONE == false && "step".equals(event) && channelsBean == null) {
-            if (!singLesBeans.isEmpty() && singLesBeans.size() > 1 && singLesBeans.size() > postionPlayer && postionPlayer > 0) {
-                postionPlayer = postionPlayer - 1;
-                mRecyclerView.smoothScrollToPosition(postionPlayer);
-                bdPlayer.stopPlayback();
-                bdPlayer.setVideoPath(singLesBeans.get(postionPlayer).single_file_url);
-                bdPlayer.start();
-                seekbarVideo.setProgress(0);
-                ivPause.setImageResource(R.mipmap.music_play_icon_pause);
-                setBeforeOrNext(singLesBeans.get(postionPlayer));
-            }
-        } else if (!singLesBeans.isEmpty() && BSApplication.IS_ONE == false && singLesBeans.size() > 1 && "next".equals(event) && channelsBean == null) {
-            if (postionPlayer < singLesBeans.size() - 1) {
-                postionPlayer = postionPlayer + 1;
-                mRecyclerView.smoothScrollToPosition(postionPlayer);
-                bdPlayer.stopPlayback();
-                bdPlayer.setVideoPath(singLesBeans.get(postionPlayer).single_file_url);
-                bdPlayer.start();
-                ivPause.setImageResource(R.mipmap.music_play_icon_pause);
-                seekbarVideo.setProgress(0);
-                setBeforeOrNext(singLesBeans.get(postionPlayer));
-            }
+        } else if (!TextUtils.isEmpty(event) && "step".equals(event)) {
+            before();
+        } else if (!TextUtils.isEmpty(event) && "next".equals(event)) {
+            next();
         } else if (!TextUtils.isEmpty(event) && "stop_or_star".equals(event)) {
             BDPlayer.PlayerState isPause = bdPlayer.getCurrentPlayerState();
             if (channelsBean != null) {
@@ -839,6 +837,7 @@ public class PlayerFragment extends BaseFragment implements View.OnClickListener
     }
 
     private void prepare() {
+        release();
         if (mMediaPlayer == null) {
             mMediaPlayer = new PLMediaPlayer(BSApplication.getInstance(), mAVOptions);
             mMediaPlayer.setOnPreparedListener(mOnPreparedListener);

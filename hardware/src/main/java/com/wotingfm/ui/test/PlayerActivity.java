@@ -1,5 +1,9 @@
 package com.wotingfm.ui.test;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -40,13 +44,14 @@ public class PlayerActivity extends NoTitleBarBaseActivity {
         return R.layout.activity_player;
     }
 
-    private PlayerFragment playerFragment;
+    public PlayerFragment playerFragment;
 
     @Override
     public void initView() {
         playerFragment = PlayerFragment.newInstance();
         openMain(playerFragment);
     }
+
 
     public void open(Fragment frg) {
         if (BSApplication.IS_RESULT == true)
@@ -112,5 +117,10 @@ public class PlayerActivity extends NoTitleBarBaseActivity {
         }
     }
 
+
+    public void onMoonEvent(MessageEvent messageEvent) {
+        if (playerFragment != null)
+            playerFragment.onMoonEventBase(messageEvent);
+    }
 
 }

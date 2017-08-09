@@ -81,7 +81,7 @@ public class IMManger {
                 @Override
                 public void room(String roomid) {
                     IMMessage msg = MessageBuilder.createCustomMessage(sessionId, SessionTypeEnum.P2P, null);
-                    EventBus.getDefault().post(new MessageEvent("create&Rommid"+roomid));
+                    EventBus.getDefault().post(new MessageEvent("create&Rommid" + roomid));
                     //// data.put("chatRoom", chatRoom);
                     data.put("roomid", roomid);
                     roomID = roomid;

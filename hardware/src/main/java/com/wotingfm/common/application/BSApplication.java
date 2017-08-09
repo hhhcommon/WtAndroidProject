@@ -38,6 +38,7 @@ import com.woting.commonplat.manager.NetWorkManager;
 import com.woting.commonplat.manager.PhoneMsgManager;
 import com.wotingfm.R;
 import com.netease.nim.live.DemoCache;
+import com.wotingfm.common.bean.SinglesBase;
 import com.wotingfm.common.config.preference.Preferences;
 import com.wotingfm.common.net.RetrofitUtils;
 import com.wotingfm.common.utils.SystemUtil;
@@ -64,6 +65,7 @@ public class BSApplication extends MultiDexApplication {
     public static boolean IS_CREATE = false;
     public static boolean IS_LOOK = false;
     public static boolean IS_ONE = false;
+    public static List<SinglesBase> singLesBeans = new ArrayList<>();
 
     public void onCreate() {
         super.onCreate();

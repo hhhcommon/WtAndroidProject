@@ -102,10 +102,10 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
     protected void setStatusBarPaddingAndHeight(View toolBar) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             if (toolBar != null) {
-                int statusBarHeight = StatusBarUtil.getStatusBarHeight(getActivity());
-                toolBar.setPadding(toolBar.getPaddingLeft(), statusBarHeight, toolBar.getPaddingRight(),
+              //  int statusBarHeight = StatusBarUtil.getStatusBarHeight(getActivity());
+                toolBar.setPadding(toolBar.getPaddingLeft(), 20, toolBar.getPaddingRight(),
                         toolBar.getPaddingBottom());
-                toolBar.getLayoutParams().height = statusBarHeight +
+                toolBar.getLayoutParams().height = 20 +
                         (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 45, getResources().getDisplayMetrics());
             }
         }
@@ -265,7 +265,7 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
         toolbar = (WTToolbar) rootView.findViewById(R.id.toolbar);
         callBack = null;
         o2Toolbar = (WTToolbar) toolbar;
-        setStatusBarPaddingAndHeight(o2Toolbar);
+      //  setStatusBarPaddingAndHeight(o2Toolbar);
         initToolBar(o2Toolbar);
         ButterKnife.bind(this, rootView);
         initView();

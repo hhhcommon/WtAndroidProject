@@ -5,28 +5,36 @@
     android:background="@color/white"
     android:orientation="vertical">
 
+    <WebView
+        android:id="@+id/mWebView"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+         />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone">
+
+
+        <org.webrtc.SurfaceViewRenderer
+            android:id="@+id/fullscreen_video_view"
+            android:layout_width="144dp"
+            android:layout_height="144dp" />
+
+        <org.webrtc.SurfaceViewRenderer
+            android:id="@+id/pip_video_view"
+            android:layout_width="wrap_content"
+            android:layout_height="144dp"
+            android:layout_gravity="bottom|end"
+            android:layout_margin="144dp" />
+    </FrameLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:visibility="gone">
-
-            <org.webrtc.SurfaceViewRenderer
-                android:id="@+id/fullscreen_video_view"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" />
-
-            <org.webrtc.SurfaceViewRenderer
-                android:id="@+id/pip_video_view"
-                android:layout_width="wrap_content"
-                android:layout_height="144dp"
-                android:layout_gravity="bottom|end"
-                android:layout_margin="16dp" />
-        </FrameLayout>
 
         <TabHost
             android:id="@android:id/tabhost"
@@ -65,6 +73,7 @@
             android:layout_height="40dp"
             android:layout_gravity="bottom"
             android:background="#16181a"
+            android:visibility="gone"
             android:orientation="horizontal">
 
             <TextView
@@ -73,12 +82,14 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:gravity="center"
+                android:visibility="gone"
                 android:text="上一曲"
                 android:textColor="@color/white" />
 
             <TextView
                 android:id="@+id/tv_2"
                 android:layout_width="0dp"
+                android:visibility="gone"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:gravity="center"
@@ -86,6 +97,7 @@
                 android:textColor="@color/white" />
 
             <TextView
+                android:visibility="gone"
                 android:id="@+id/tv_3"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
@@ -110,11 +122,21 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
+                android:background="#16181a"
                 android:gravity="center"
-                android:text="按住对讲"
+                android:text="单人对讲"
                 android:textColor="@color/white"
                 android:visibility="gone" />
-
+            <TextView
+                android:id="@+id/tv_6"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="#16181a"
+                android:gravity="center"
+                android:text="多人对讲"
+                android:textColor="@color/white"
+                android:visibility="gone" />
         </LinearLayout>
 
     </LinearLayout>

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.wotingfm">
 
     <!-- Required -->
@@ -76,7 +77,6 @@
         android:glEsVersion="0x00020000"
         android:required="true" />
 
-
     <!-- supportsRtl 从左到右 -->
     <!-- android:screenOrientation="portrait" 强制竖屏 -->
     <application
@@ -86,7 +86,8 @@
         android:icon="@mipmap/logo"
         android:label="@string/app_name"
         android:supportsRtl="false"
-        android:theme="@style/AppBlackTheme">
+        android:theme="@style/AppBlackTheme"
+        tools:replace="icon,label,supportsRtl">
         <meta-data
             android:name="com.wotingfm.common.glide.GlideConfiguration"
             android:value="GlideModule" />
@@ -112,8 +113,8 @@
         <activity
             android:name=".ui.main.view.MainActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan"
-            android:theme="@style/NoActionBar"></activity>
+            android:theme="@style/NoActionBar"
+            android:windowSoftInputMode="adjustPan"></activity>
 
 
         <!-- 登录主页 -->
@@ -155,8 +156,7 @@
         <activity
             android:name=".ui.test.PlayerActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme"
-            />
+            android:theme="@style/AppTheme" />
 
         <!--  -->
         <activity

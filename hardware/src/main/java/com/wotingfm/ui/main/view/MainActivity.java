@@ -5,18 +5,23 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.FragmentTransaction;
 import android.app.TabActivity;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.media.AudioManager;
 import android.media.projection.MediaProjection;
 import android.media.projection.MediaProjectionManager;
 import android.net.Uri;
+import android.net.http.SslError;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
+import android.support.annotation.RequiresApi;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -24,6 +29,11 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.webkit.PermissionRequest;
+import android.webkit.SslErrorHandler;
+import android.webkit.WebChromeClient;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.LinearLayout;
 import android.widget.TabHost;
 import android.widget.TextView;
@@ -43,6 +53,7 @@ import com.wotingfm.common.service.WtDeviceControl;
 import com.wotingfm.common.utils.AndroidBug5497Workaround;
 import com.wotingfm.common.utils.IMManger;
 import com.wotingfm.common.utils.L;
+import com.wotingfm.common.utils.NetUtils;
 import com.wotingfm.common.utils.StatusBarUtil;
 import com.wotingfm.common.utils.T;
 import com.wotingfm.ui.intercom.alert.call.view.CallAlertActivity;
@@ -50,6 +61,7 @@ import com.wotingfm.ui.intercom.alert.receive.view.ReceiveAlertActivity;
 import com.wotingfm.ui.intercom.main.view.InterPhoneActivity;
 import com.wotingfm.ui.main.presenter.MainPresenter;
 import com.wotingfm.ui.play.live.LiveRoomActivity;
+import com.wotingfm.ui.play.look.activity.serch.SerchFragment;
 import com.wotingfm.ui.test.PlayerActivity;
 import com.wotingfm.ui.mine.main.MineActivity;
 
@@ -97,7 +109,9 @@ import rx.schedulers.Schedulers;
 
 import static android.R.attr.id;
 import static android.content.Intent.FLAG_ACTIVITY_REORDER_TO_FRONT;
+import static com.wotingfm.R.id.mWebView;
 import static com.wotingfm.R.id.relatLable;
+import static com.wotingfm.R.id.tvContent;
 import static com.wotingfm.R.mipmap.disconnect;
 
 
@@ -107,25 +121,53 @@ public class MainActivity extends TabActivity implements View.OnClickListener, A
     public static TabHost tabHost;
     private MainPresenter mainPresenter;
     private MainActivity context;
+    public WebView mWebView;
+    private LinearLayout largeLabel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         // AndroidBug5497Workaround.assistActivity(findViewById(android.R.id.content));
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);        // 透明状态栏
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);    // 透明导航栏
         setContentView(R.layout.activity_main);
         EventBus.getDefault().register(this);
+        largeLabel = (LinearLayout) findViewById(R.id.largeLabel);
         context = this;
         NIMClient.getService(MsgServiceObserve.class)
                 .observeReceiveMessage(incomingMessageObserver, true);
-
+        mWebView = (WebView) findViewById(R.id.mWebView);
+        // 启用javascript
+        mWebView.getSettings().setJavaScriptEnabled(true);
+        // 从assets目录下面的加载html
+        // mWebView.loadUrl("https://rtcmulticonnection.herokuapp.com/demos/Audio-Conferencing.html?roomid=123456789");
+        mWebView.loadUrl("https://apprtc.wotingfm.com/demos/Audio-Conferencing.html?simple=true");
+        mWebView.addJavascriptInterface(MainActivity.this, "android");
+        mWebView.setWebViewClient(new WebViewClient() {
+            @Override
+            public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
+                handler.proceed();
+            }
+        });
+        mWebView.setWebChromeClient(new WebChromeClient() {
+                                        @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+                                        @Override
+                                        public void onPermissionRequest(PermissionRequest request) {
+                                            request.grant(request.getResources());
+                                        }
+                                    }
+        );
+        // 设置允许JS弹窗
+        mWebView.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
         // applySelectedColor();
         applyTextColor(false);
         NIMClient.getService(MsgServiceObserve.class).observeReceiveMessage(incomingMessageObserver, true);
         InitTextView();
         mainPresenter = new MainPresenter(this);
+        IntentFilter mFilter = new IntentFilter();
     }
+
 
     // 初始化视图,主页跳转的3个界面
     private void InitTextView() {
@@ -140,6 +182,8 @@ public class MainActivity extends TabActivity implements View.OnClickListener, A
         tv_4.setClickable(true);
         tv_5 = (TextView) findViewById(R.id.tv_5);
         tv_5.setClickable(true);
+        tv_6 = (TextView) findViewById(R.id.tv_6);
+        tv_6.setClickable(true);
         tv_4.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -187,6 +231,30 @@ public class MainActivity extends TabActivity implements View.OnClickListener, A
                 return false;
             }
         });
+
+        tv_6.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        Log.e("按钮操作", "按下");
+                        //按下状态
+                        press_pttGroup();
+                        break;
+                    case MotionEvent.ACTION_UP:
+                        Log.e("按钮操作", "松手");
+                        //抬起手后的操作
+                        jack_pttGroup();
+                        break;
+                    case MotionEvent.ACTION_CANCEL:
+                        Log.e("按钮操作", "取消");
+                        //抬起手后的操作
+                        jack_pttGroup();
+                        break;
+                }
+                return false;
+            }
+        });
         tabHost = extracted();
         tabHost.addTab(tabHost.newTabSpec("one").setIndicator("one")
                 .setContent(new Intent(this, PlayerActivity.class)));
@@ -200,20 +268,48 @@ public class MainActivity extends TabActivity implements View.OnClickListener, A
         return getTabHost();
     }
 
+    private boolean isStar = true;
 
     // 对讲请求
     private void press_ptt() {
         WtDeviceControl.pushPTT();
-        onToggleMicBase(true);
         EventBus.getDefault().post(new MessageEvent("pause"));
         tv_5.setBackgroundResource(R.color.app_basic);
+        if (isStar == true) {
+            mWebView.loadUrl("javascript:beginSpeak()");
+            isStar = false;
+        }
+
     }
 
     // 松手，释放说话权
     private void jack_ptt() {
         WtDeviceControl.releasePTT();
-        onToggleMicBase(false);
-        tv_5.setBackgroundResource(R.color.white);
+        mWebView.loadUrl("javascript:stopSpeak()");
+        isStar = true;
+        tv_5.setBackgroundColor(Color.parseColor("#16181a"));
+    }
+
+    // 对讲请求
+    private void press_pttGroup() {
+        WtDeviceControl.pushPTT();
+        EventBus.getDefault().post(new MessageEvent("pause"));
+        tv_6.setBackgroundResource(R.color.app_basic);
+        if (isStarGroup == true) {
+            mWebView.loadUrl("javascript:beginSpeak()");
+            isStarGroup = false;
+        }
+
+    }
+
+    private boolean isStarGroup = true;
+
+    // 松手，释放说话权
+    private void jack_pttGroup() {
+        WtDeviceControl.releasePTT();
+        mWebView.loadUrl("javascript:stopSpeak()");
+        isStarGroup = true;
+        tv_6.setBackgroundColor(Color.parseColor("#16181a"));
     }
 
     // 开始语音识别
@@ -225,10 +321,10 @@ public class MainActivity extends TabActivity implements View.OnClickListener, A
     // 松手，结束语音识别
     private void jack() {
         WtDeviceControl.releaseVoiceStop();
-        tv_4.setBackgroundResource(R.color.white);
+        tv_4.setBackgroundColor(Color.parseColor("#16181a"));
     }
 
-    private TextView tv_4, tv_5, tv_title, tv_msg;
+    private TextView tv_4, tv_5, tv_6, tv_title, tv_msg;
     private LinearLayout lin_notify;
     private String type;
 
@@ -254,7 +350,6 @@ public class MainActivity extends TabActivity implements View.OnClickListener, A
                 // 通知消息的点击事件处理
                 mainPresenter.jumpNotify(type);
                 break;
-
         }
     }
 
@@ -275,9 +370,24 @@ public class MainActivity extends TabActivity implements View.OnClickListener, A
     }
 
     @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        if (mWebView != null) {
+            mWebView.loadUrl("javascript:exitRoom()");
+            mWebView.destroy();
+            mWebView = null;
+        }
+    }
+
+    @Override
     protected void onDestroy() {
         super.onDestroy();
         stop();
+        if (mWebView != null) {
+            mWebView.loadUrl("javascript:exitRoom()");
+            mWebView.destroy();
+            mWebView = null;
+        }
         Thread.setDefaultUncaughtExceptionHandler(null);
         disconnect();
         if (logToast != null) {
@@ -317,7 +427,7 @@ public class MainActivity extends TabActivity implements View.OnClickListener, A
             tabHost.setCurrentTabByTag("three");
         } else if ("acceptMain".equals(messageEvent.getMessage())) {
             EventBus.getDefault().post(new MessageEvent("pause"));
-            disconnect();
+         /*   disconnect();
             initPlayer();
             mainPresenter.connectToRoom(roomId, false, false, false, 0);
             activityRunning = true;
@@ -325,13 +435,34 @@ public class MainActivity extends TabActivity implements View.OnClickListener, A
             if (peerConnectionClient != null && !screencaptureEnabled) {
                 peerConnectionClient.startVideoSource();
             }
+            onToggleMicBase(false);*/
+            mWebView.loadUrl("javascript:joinRoom('" + roomId + "')");
             tv_5.setVisibility(View.VISIBLE);
-            onToggleMicBase(false);
+            largeLabel.setVisibility(View.VISIBLE);
+            tv_6.setVisibility(View.GONE);
         } else if (messageEvent.getMessage().contains("create&Rommid")) {
             roomId = messageEvent.getMessage().split("create&Rommid")[1];
         } else if ("over".equals(messageEvent.getMessage())) {
             tv_5.setVisibility(View.GONE);
+            largeLabel.setVisibility(View.GONE);
             disconnect();
+        } else if ("overgroup".equals(messageEvent.getMessage())) {
+            tv_6.setVisibility(View.GONE);
+            largeLabel.setVisibility(View.GONE);
+            disconnect();
+        } else if (messageEvent.getMessage().contains("enterGroup&")) {
+            tv_5.setVisibility(View.GONE);
+            EventBus.getDefault().post(new MessageEvent("pause"));
+            String roomid = messageEvent.getMessage().split("enterGroup&")[1];
+            mWebView.loadUrl("javascript:joinRoom('" + roomid + "')");
+            tv_6.setVisibility(View.VISIBLE);
+            largeLabel.setVisibility(View.VISIBLE);
+        } else if (messageEvent.getMessage().contains("exitGroup&")) {
+            tv_5.setVisibility(View.GONE);
+            EventBus.getDefault().post(new MessageEvent("start"));
+            mWebView.loadUrl("javascript:exitRoom()");
+            tv_6.setVisibility(View.GONE);
+            largeLabel.setVisibility(View.GONE);
         }
     }
 
@@ -353,8 +484,8 @@ public class MainActivity extends TabActivity implements View.OnClickListener, A
                 String roomid = map.get("roomid") + "";
                 //收到发起对讲
                 if ("LAUNCH".equals(type)) {
-                    disconnect();
-                    initPlayer();
+                  /*  disconnect();
+                    initPlayer();*/
                     roomId = roomid;
                     EventBus.getDefault().post(new MessageEvent("two"));
                     ReceiveAlertActivity.start(MainActivity.this, im.getFromAccount(), userId);
@@ -371,13 +502,18 @@ public class MainActivity extends TabActivity implements View.OnClickListener, A
                     EventBus.getDefault().post(new MessageEvent("start"));
                 } else if ("OVER".equals(type)) {
                     EventBus.getDefault().post(new MessageEvent("start"));
+                    mWebView.loadUrl("javascript:exitRoom()");
                     tv_5.setVisibility(View.GONE);
+                    largeLabel.setVisibility(View.GONE);
                 }
                 //接受对讲
                 else if ("ACCEPT".equals(type)) {
                     EventBus.getDefault().post(new MessageEvent("accept"));
                     EventBus.getDefault().post(new MessageEvent("pause"));
-                    activityRunning = true;
+                    mWebView.loadUrl("javascript:joinRoom('" + roomId + "')");
+                    tv_5.setVisibility(View.VISIBLE);
+                    largeLabel.setVisibility(View.VISIBLE);
+                  /*  activityRunning = true;
                     disconnect();
                     initPlayer();
                     mainPresenter.connectToRoom(roomId, false, false, false, 0);
@@ -385,8 +521,7 @@ public class MainActivity extends TabActivity implements View.OnClickListener, A
                     if (peerConnectionClient != null && !screencaptureEnabled) {
                         peerConnectionClient.startVideoSource();
                     }
-                    tv_5.setVisibility(View.VISIBLE);
-                    onToggleMicBase(false);
+                    onToggleMicBase(false);*/
                 }
             }
         }
