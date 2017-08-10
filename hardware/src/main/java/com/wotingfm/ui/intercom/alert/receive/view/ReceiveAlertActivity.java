@@ -102,7 +102,7 @@ public class ReceiveAlertActivity extends BaseActivity implements OnClickListene
                 break;
             case R.id.img_ok:
                 /**
-                 * 此处需要挂断电话等操作
+                 * 此处需要接收电话等操作
                  */
                 IMManger.getInstance().sendMsg(roomId, "ACCEPT", userId);
                 EventBus.getDefault().post(new MessageEvent("acceptMain"));
@@ -143,6 +143,8 @@ public class ReceiveAlertActivity extends BaseActivity implements OnClickListene
             /**
              * 此处需要挂断电话等操作
              */
+            IMManger.getInstance().sendMsg(roomId, "REFUSE", userId);
+            EventBus.getDefault().post(new MessageEvent("over"));
             presenter.musicClose();
             finish();
             return true;

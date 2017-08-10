@@ -1,5 +1,6 @@
 package com.wotingfm.ui.main.view;
 
+import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
