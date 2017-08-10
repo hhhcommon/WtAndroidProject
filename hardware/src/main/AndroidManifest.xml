@@ -161,6 +161,10 @@
             android:name=".ui.test.PlayerActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
+        <activity
+            android:name=".ui.play.look.activity.LookListActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" />
 
         <!-- WIFI测试 -->
         <activity

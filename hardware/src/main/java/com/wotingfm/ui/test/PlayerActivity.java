@@ -22,7 +22,6 @@ import com.wotingfm.common.utils.StatusBarUtil;
 import com.wotingfm.ui.base.baseactivity.AppManager;
 import com.wotingfm.ui.base.baseactivity.NoTitleBarBaseActivity;
 import com.wotingfm.ui.main.view.MainActivity;
-import com.wotingfm.ui.play.look.activity.LookListFragment;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -54,13 +53,11 @@ public class PlayerActivity extends NoTitleBarBaseActivity {
 
 
     public void open(Fragment frg) {
-        if (BSApplication.IS_RESULT == true)
-            getSupportFragmentManager().beginTransaction().remove(frg).commit();
         getSupportFragmentManager().beginTransaction()
                 .setCustomAnimations(
                         R.anim.slide_right_in, 0,
                         R.anim.slide_left_in, 0)
-                .add(R.id.fragment, frg)
+                .add(R.id.fragment_content, frg)
                 .addToBackStack(SequenceUUID.getUUID())
                 .commitAllowingStateLoss();
     }
@@ -68,19 +65,11 @@ public class PlayerActivity extends NoTitleBarBaseActivity {
 
     public void openMain(Fragment frg) {
         getSupportFragmentManager().beginTransaction()
-                .add(R.id.fragment, frg)
+                .add(R.id.fragment_content, frg)
                 .addToBackStack(SequenceUUID.getUUID())
                 .commitAllowingStateLoss();
     }
 
-    public void openNoAnim(Fragment frg) {
-        if (BSApplication.IS_RESULT == true)
-            getSupportFragmentManager().beginTransaction().remove(frg).commit();
-        getSupportFragmentManager().beginTransaction()
-                .add(R.id.fragment, frg)
-                .addToBackStack(SequenceUUID.getUUID())
-                .commitAllowingStateLoss();
-    }
 
     public void close() {
         getSupportFragmentManager().popBackStackImmediate();

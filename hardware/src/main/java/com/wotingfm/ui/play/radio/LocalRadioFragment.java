@@ -88,7 +88,7 @@ public class LocalRadioFragment extends BaseFragment implements OnLoadMoreListen
             @Override
             public void clickAlbums(ChannelsBean singlesBean) {
                 // RadioInfoActivity.start(LocalRadioActivity.this, singlesBean.title, singlesBean.id);
-                openFragment(PlayerFragment.newInstance(singlesBean));
+                startMain(singlesBean);
             }
         });
         mHeaderAndFooterWrapper = new HeaderAndFooterWrapper(mAdapter);

@@ -24,7 +24,6 @@ import com.wotingfm.common.net.RetrofitUtils;
 import com.wotingfm.common.view.BannerView;
 import com.wotingfm.ui.base.basefragment.BaseFragment;
 import com.wotingfm.ui.play.activity.AnchorPersonalCenterFragment;
-import com.wotingfm.ui.play.look.activity.LookListFragment;
 import com.wotingfm.ui.play.look.activity.RadioMoreFragment;
 import com.wotingfm.ui.play.radio.CountryRadioFragment;
 import com.wotingfm.ui.play.radio.LocalRadioFragment;
@@ -81,9 +80,7 @@ public class RadioStationFragment extends BaseFragment implements SwipeRefreshLa
         RadioStationAdapter selectedAdapter = new RadioStationAdapter(getActivity(), datas, new RadioStationAdapter.RadioStationClick() {
             @Override
             public void click(ChannelsBean dataBean) {
-                BSApplication.IS_RESULT = true;
-                BSApplication.isIS_BACK = true;
-                openFragment(PlayerFragment.newInstance(dataBean));
+                startMain(dataBean);
                 // RadioInfoActivity.start(getActivity(), dataBean.title, dataBean.id);
             }
         });

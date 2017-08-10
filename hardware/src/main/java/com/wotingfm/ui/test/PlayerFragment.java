@@ -50,7 +50,6 @@ import com.wotingfm.ui.base.basefragment.BaseFragment;
 import com.wotingfm.ui.play.activity.AnchorPersonalCenterFragment;
 import com.wotingfm.ui.play.activity.albums.AlbumsInfoFragmentMain;
 import com.wotingfm.ui.play.activity.albums.AlbumsListMeFragment;
-import com.wotingfm.ui.play.look.activity.LookListFragment;
 import com.wotingfm.ui.play.look.activity.classification.fragment.MinorClassificationFragment;
 import com.wotingfm.ui.play.look.activity.classification.fragment.SubcategoryFragment;
 import com.wotingfm.ui.play.look.activity.serch.SerchFragment;
@@ -80,7 +79,6 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 
-import static com.wotingfm.common.application.BSApplication.singLesBeans;
 
 /**
  * 作者：xinLong on 2017/6/2 12:15
@@ -108,101 +106,7 @@ public class PlayerFragment extends BaseFragment implements View.OnClickListener
     LinearLayout largeLabelSeekbar;
 
 
-    public static PlayerFragment newInstance(String albumsId) {
-        BSApplication.IS_RESULT = true;
-        BSApplication.IS_ONE = false;
-        EventBus.getDefault().post(new MessageEvent("stop"));
-        PlayerFragment fragment = new PlayerFragment();
-        Bundle bundle = new Bundle();
-        bundle.putString("albumsId", albumsId);
-        fragment.setArguments(bundle);
-        return fragment;
-    }
-
-    public static PlayerFragment newInstanceSerch(String albumsId, String id, String title) {
-        BSApplication.IS_RESULT = true;
-        BSApplication.IS_ONE = false;
-        EventBus.getDefault().post(new MessageEvent("stop"));
-        PlayerFragment fragment = new PlayerFragment();
-        Bundle bundle = new Bundle();
-        bundle.putString("albumsId", albumsId);
-        bundle.putString("id", id);
-        bundle.putString("title", title);
-        fragment.setArguments(bundle);
-        return fragment;
-    }
-
-    public static PlayerFragment newInstance(String albumsId, String q) {
-        BSApplication.IS_RESULT = true;
-        BSApplication.IS_ONE = false;
-        EventBus.getDefault().post(new MessageEvent("stop"));
-        PlayerFragment fragment = new PlayerFragment();
-        Bundle bundle = new Bundle();
-        bundle.putSerializable("albumsId", albumsId);
-        bundle.putString("q", q);
-        fragment.setArguments(bundle);
-        return fragment;
-    }
-
-    public static PlayerFragment newInstance(ChannelsBean singlesBase, String q) {
-        BSApplication.IS_ONE = true;
-        EventBus.getDefault().post(new MessageEvent("stop"));
-        PlayerFragment fragment = new PlayerFragment();
-        Bundle bundle = new Bundle();
-        bundle.putString("q", q);
-        bundle.putSerializable("channelsBean", singlesBase);
-        fragment.setArguments(bundle);
-        return fragment;
-    }
-
-    public static PlayerFragment newInstance(ChannelsBean singlesBase) {
-        BSApplication.IS_RESULT = true;
-        BSApplication.IS_ONE = true;
-        EventBus.getDefault().post(new MessageEvent("stop"));
-        PlayerFragment fragment = new PlayerFragment();
-        Bundle bundle = new Bundle();
-        bundle.putSerializable("channelsBean", singlesBase);
-        fragment.setArguments(bundle);
-        return fragment;
-    }
-
-    public static PlayerFragment newInstance(SinglesBase singlesBase) {
-        BSApplication.IS_ONE = true;
-        BSApplication.IS_RESULT = true;
-        EventBus.getDefault().post(new MessageEvent("stop"));
-        PlayerFragment fragment = new PlayerFragment();
-        Bundle bundle = new Bundle();
-        bundle.putSerializable("singlesBase", singlesBase);
-        fragment.setArguments(bundle);
-        return fragment;
-    }
-
-    public static PlayerFragment newInstance(SinglesBase singlesBase, String q) {
-        BSApplication.IS_ONE = true;
-        BSApplication.IS_RESULT = true;
-        EventBus.getDefault().post(new MessageEvent("stop"));
-        PlayerFragment fragment = new PlayerFragment();
-        Bundle bundle = new Bundle();
-        bundle.putString("q", q);
-        bundle.putSerializable("singlesBase", singlesBase);
-        fragment.setArguments(bundle);
-        return fragment;
-    }
-
-    public static PlayerFragment newInstance(List<SinglesDownload> singlesDownloads) {
-        BSApplication.IS_ONE = false;
-        BSApplication.IS_RESULT = true;
-        EventBus.getDefault().post(new MessageEvent("stop"));
-        PlayerFragment fragment = new PlayerFragment();
-        Bundle bundle = new Bundle();
-        bundle.putSerializable("singlesDownloads", (Serializable) singlesDownloads);
-        fragment.setArguments(bundle);
-        return fragment;
-    }
-
     public static PlayerFragment newInstance() {
-        BSApplication.IS_RESULT = true;
-        BSApplication.IS_ONE = false;
         PlayerFragment fragment = new PlayerFragment();
         return fragment;
     }
@@ -212,12 +116,9 @@ public class PlayerFragment extends BaseFragment implements View.OnClickListener
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EventBus.getDefault().register(this);
-        if (singLesBeans == null)
-            singLesBeans = new ArrayList<>();
-        else
-            singLesBeans.clear();
     }
 
+    public List<SinglesBase> singLesBeans = new ArrayList<>();
 
     private ChannelsBean channelsBean;
     private static final int MESSAGE_ID_RECONNECTING = 0x01;
@@ -227,7 +128,6 @@ public class PlayerFragment extends BaseFragment implements View.OnClickListener
     private AVOptions mAVOptions;
     private boolean mIsStopped = false;
     private boolean mIsActivityPaused = true;
-    private String q, title;
     private SinglesBase singlesBase;
 
     @Override
@@ -273,91 +173,96 @@ public class PlayerFragment extends BaseFragment implements View.OnClickListener
         historyHelper = new HistoryHelper(BSApplication.getInstance());
         Bundle bundle = getArguments();
         if (bundle != null) {
-            List<SinglesDownload> singlesBeanList = (List<SinglesDownload>) bundle.getSerializable("singlesDownloads");
+            singlesBeanList = (List<SinglesDownload>) bundle.getSerializable("singlesDownloads");
             albumsId = bundle.getString("albumsId");
-            q = bundle.getString("q");
             id = bundle.getString("id");
-            title = bundle.getString("title");
             singlesBase = (SinglesBase) bundle.getSerializable("singlesBase");
             channelsBean = (ChannelsBean) bundle.getSerializable("channelsBean");
-            relatiBottom.setVisibility(View.VISIBLE);
-            if (singlesBase != null) {
-                if (singlesBase.is_radio == false) {
-                    loadLayout.showContentView();
-                    singLesBeans.clear();
-                    singLesBeans.add(singlesBase);
-                    postionPlayer = 0;
-                    bdPlayer.stopPlayback();
-                    bdPlayer.setVideoPath(singlesBase.single_file_url);
-                    bdPlayer.start();
-                    largeLabelSeekbar.setVisibility(View.VISIBLE);
-                    ivPlayList.setVisibility(View.VISIBLE);
-                    setBeforeOrNext(singlesBase);
-                    mPlayerAdapter.notifyDataSetChanged();
-                } else {
-                    largeLabelSeekbar.setVisibility(View.GONE);
-                    loadLayout.showContentView();
-                    singLesBeans.clear();
-                    mAudioPath = singlesBase.single_file_url;
-                    singLesBeans.add(singlesBase);
-                    postionPlayer = 0;
-                    largeLabelSeekbar.setVisibility(View.INVISIBLE);
-                    ivPlayList.setVisibility(View.INVISIBLE);
-                    prepare();
-                    setBeforeOrNext(singlesBase);
-                    mPlayerAdapter.notifyDataSetChanged();
-                }
-            } else {
-                if (singlesBeanList != null) {
-                    if (bdPlayer != null)
-                        bdPlayer.stopPlayback();
-                    if (singLesBeans != null)
-                        singLesBeans.clear();
-                    singLesBeans.addAll(singlesBeanList);
-                    mPlayerAdapter.notifyDataSetChanged();
-                    largeLabelSeekbar.setVisibility(View.VISIBLE);
-                    ivPlayList.setVisibility(View.VISIBLE);
-                    if (singLesBeans != null && !singLesBeans.isEmpty()) {
-                        postionPlayer = 0;
-                        SinglesBase sb = singLesBeans.get(0);
-                        bdPlayer.stopPlayback();
-                        bdPlayer.setVideoPath(sb.single_file_url);
-                        bdPlayer.start();
-                        setBeforeOrNext(sb);
-                    }
-                } else {
-                    if (channelsBean != null) {
-                        largeLabelSeekbar.setVisibility(View.GONE);
-                        loadLayout.showContentView();
-                        singLesBeans.clear();
-                        SinglesBase s = new SinglesBase();
-                        s.album_title = channelsBean.title;
-                        s.id = channelsBean.id;
-                        mAudioPath = channelsBean.radio_url;
-                        s.single_logo_url = channelsBean.image_url;
-                        s.single_file_url = channelsBean.radio_url;
-                        s.album_title = channelsBean.desc;
-                        s.is_radio = true;
-                        singLesBeans.add(s);
-                        postionPlayer = 0;
-                        largeLabelSeekbar.setVisibility(View.INVISIBLE);
-                        ivPlayList.setVisibility(View.INVISIBLE);
-                        prepare();
-                        setBeforeOrNext(s);
-                        mPlayerAdapter.notifyDataSetChanged();
-                    } else {
-                        largeLabelSeekbar.setVisibility(View.VISIBLE);
-                        ivPlayList.setVisibility(View.VISIBLE);
-                        getPlayerList(TextUtils.isEmpty(albumsId) ? "" : albumsId);
-                    }
-                }
-            }
+            initData(albumsId, singlesBase, channelsBean, singlesBeanList);
+
         } else {
             ivPlayList.setVisibility(View.VISIBLE);
             getPlayerList(TextUtils.isEmpty(albumsId) ? "" : albumsId);
         }
-
     }
+
+    private List<SinglesDownload> singlesBeanList;
+
+    private void initData(String albumsId, SinglesBase singlesBase, ChannelsBean channelsBean, List<SinglesDownload> singlesBeanList) {
+        relatiBottom.setVisibility(View.VISIBLE);
+        if (singlesBase != null) {
+            if (singlesBase.is_radio == false) {
+                loadLayout.showContentView();
+                singLesBeans.clear();
+                singLesBeans.add(singlesBase);
+                postionPlayer = 0;
+                bdPlayer.stopPlayback();
+                bdPlayer.setVideoPath(singlesBase.single_file_url);
+                bdPlayer.start();
+                largeLabelSeekbar.setVisibility(View.VISIBLE);
+                ivPlayList.setVisibility(View.VISIBLE);
+                setBeforeOrNext(singlesBase);
+                mPlayerAdapter.notifyDataSetChanged();
+            } else {
+                largeLabelSeekbar.setVisibility(View.GONE);
+                loadLayout.showContentView();
+                singLesBeans.clear();
+                mAudioPath = singlesBase.single_file_url;
+                singLesBeans.add(singlesBase);
+                postionPlayer = 0;
+                largeLabelSeekbar.setVisibility(View.INVISIBLE);
+                ivPlayList.setVisibility(View.INVISIBLE);
+                prepare();
+                setBeforeOrNext(singlesBase);
+                mPlayerAdapter.notifyDataSetChanged();
+            }
+        } else {
+            if (singlesBeanList != null) {
+                if (bdPlayer != null)
+                    bdPlayer.stopPlayback();
+                if (singLesBeans != null)
+                    singLesBeans.clear();
+                singLesBeans.addAll(singlesBeanList);
+                mPlayerAdapter.notifyDataSetChanged();
+                largeLabelSeekbar.setVisibility(View.VISIBLE);
+                ivPlayList.setVisibility(View.VISIBLE);
+                if (singLesBeans != null && !singLesBeans.isEmpty()) {
+                    postionPlayer = 0;
+                    SinglesBase sb = singLesBeans.get(0);
+                    bdPlayer.stopPlayback();
+                    bdPlayer.setVideoPath(sb.single_file_url);
+                    bdPlayer.start();
+                    setBeforeOrNext(sb);
+                }
+            } else {
+                if (channelsBean != null) {
+                    largeLabelSeekbar.setVisibility(View.GONE);
+                    loadLayout.showContentView();
+                    singLesBeans.clear();
+                    SinglesBase s = new SinglesBase();
+                    s.album_title = channelsBean.title;
+                    s.id = channelsBean.id;
+                    mAudioPath = channelsBean.radio_url;
+                    s.single_logo_url = channelsBean.image_url;
+                    s.single_file_url = channelsBean.radio_url;
+                    s.album_title = channelsBean.desc;
+                    s.is_radio = true;
+                    singLesBeans.add(s);
+                    postionPlayer = 0;
+                    largeLabelSeekbar.setVisibility(View.INVISIBLE);
+                    ivPlayList.setVisibility(View.INVISIBLE);
+                    prepare();
+                    setBeforeOrNext(s);
+                    mPlayerAdapter.notifyDataSetChanged();
+                } else {
+                    largeLabelSeekbar.setVisibility(View.VISIBLE);
+                    ivPlayList.setVisibility(View.VISIBLE);
+                    getPlayerList(TextUtils.isEmpty(albumsId) ? "" : albumsId);
+                }
+            }
+        }
+    }
+
 
     private HistoryHelper historyHelper;
 
@@ -529,47 +434,14 @@ public class PlayerFragment extends BaseFragment implements View.OnClickListener
                 getActivity().sendBroadcast(push);
                 break;
             case R.id.ivPlayerFind:
-                if (getActivity() instanceof PlayerActivity) {
-                    PlayerActivity playerActivity = (PlayerActivity) getActivity();
-                    if (BSApplication.fragmentBase == null) {
-                        playerActivity.open(LookListFragment.newInstance(0));
-                        BSApplication.IS_LOOK = false;
-                    } else {
-                        BSApplication.isIS_BACK = true;
-                        if (BSApplication.fragmentBase instanceof SelectedFragment) {
-                            playerActivity.open(LookListFragment.newInstance(0));
-                        } else if (BSApplication.fragmentBase instanceof ClassificationFragment) {
-                            playerActivity.open(LookListFragment.newInstance(1));
-                        } else if (BSApplication.fragmentBase instanceof RadioStationFragment) {
-                            playerActivity.open(LookListFragment.newInstance(2));
-                        } else if (BSApplication.fragmentBase instanceof LiveFragment) {
-                            playerActivity.open(LookListFragment.newInstance(3));
-                        } else if (BSApplication.fragmentBase instanceof AlbumsListFragment) {
-                            playerActivity.open(SerchFragment.newInstance(q, 0));
-                        } else if (BSApplication.fragmentBase instanceof ProgramListFragment) {
-                            playerActivity.open(SerchFragment.newInstance(q, 1));
-                        } else if (BSApplication.fragmentBase instanceof AnchorListFragment) {
-                            playerActivity.open(SerchFragment.newInstance(q, 2));
-                        } else if (BSApplication.fragmentBase instanceof RadioStationListFragment) {
-                            playerActivity.open(SerchFragment.newInstance(q, 3));
-                        } else if (BSApplication.fragmentBase instanceof RadioStationListFragment) {
-                            playerActivity.open(SerchFragment.newInstance(q, 3));
-                        } else if (BSApplication.fragmentBase instanceof SubcategoryFragment) {
-                            playerActivity.open(MinorClassificationFragment.newInstance(id, title));
-                        } else if (BSApplication.fragmentBase instanceof AnchorPersonalCenterFragment && BSApplication.IS_LOOK == true) {
-                            playerActivity.open(LookListFragment.newInstance(0));
-                        } else if (BSApplication.fragmentBase instanceof AlbumsInfoFragmentMain && BSApplication.IS_LOOK == true) {
-                            playerActivity.open(LookListFragment.newInstance(0));
-                        } else if (BSApplication.fragmentBase instanceof RadioInfoFragment && BSApplication.IS_LOOK == true) {
-                            playerActivity.open(LookListFragment.newInstance(0));
-                        } else {
-                            playerActivity.open(BSApplication.fragmentBase);
-                        }
-                        BSApplication.fragmentBase = null;
-                        BSApplication.IS_LOOK = false;
-                    }
-                }
-                //  LookListActivity.start(this);
+                GlobalStateConfig.mineFromType = 4;
+                GlobalStateConfig.activityA = "A";
+                EventBus.getDefault().post(new MessageEvent("four"));
+                Intent push1 = new Intent(BroadcastConstants.MINE_ACTIVITY_CHANGE);
+                Bundle bundle1 = new Bundle();
+                bundle1.putInt("viewType", 4);
+                push1.putExtras(bundle1);
+                getActivity().sendBroadcast(push1);
                 break;
             case R.id.ivBefore:
                 before();
@@ -706,45 +578,78 @@ public class PlayerFragment extends BaseFragment implements View.OnClickListener
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMoonEventBase(MessageEvent messageEvent) {
         String event = messageEvent.getMessage();
-        if (!TextUtils.isEmpty(event) && "stop".equals(event)) {
-            if (bdPlayer != null) {
-                bdPlayer.stopPlayback();
-            }
-            release();
-        } else if (!TextUtils.isEmpty(event) && "pause".equals(event)) {
-            if (bdPlayer != null) {
-                bdPlayer.pause();
-            }
-            if (mMediaPlayer != null && channelsBean != null) {
-                mMediaPlayer.pause();
-            }
-            ivPause.setImageResource(R.mipmap.music_play_icon_play);
-        } else if (!TextUtils.isEmpty(event) && "start".equals(event)) {
-            if (bdPlayer != null) {
-                bdPlayer.start();
-            }
-            if (mMediaPlayer != null && channelsBean != null) {
-                mMediaPlayer.start();
-            }
-            ivPause.setImageResource(R.mipmap.music_play_icon_pause);
-        } else if (!TextUtils.isEmpty(event) && "step".equals(event)) {
-            before();
-        } else if (!TextUtils.isEmpty(event) && "next".equals(event)) {
-            next();
-        } else if (!TextUtils.isEmpty(event) && "stop_or_star".equals(event)) {
-            BDPlayer.PlayerState isPause = bdPlayer.getCurrentPlayerState();
-            if (channelsBean != null) {
-                PlayerResult();
-            } else {
-                if (bdPlayer.getCurrentPlayerState() == isPause.STATE_PLAYING) {
-                    bdPlayer.pause();
+        int type = messageEvent.getType();
+        switch (type) {
+            case 0:
+                if (!TextUtils.isEmpty(event) && "stop".equals(event)) {
+                    if (bdPlayer != null) {
+                        bdPlayer.stopPlayback();
+                    }
+                    release();
+                } else if (!TextUtils.isEmpty(event) && event.contains("stop&")) {
+                    if (bdPlayer != null) {
+                        bdPlayer.stopPlayback();
+                    }
+                    release();
+                    initData(event.split("stop&")[1], null, null, null);
+                } else if (!TextUtils.isEmpty(event) && "pause".equals(event)) {
+                    if (bdPlayer != null) {
+                        bdPlayer.pause();
+                    }
+                    if (mMediaPlayer != null && channelsBean != null) {
+                        mMediaPlayer.pause();
+                    }
                     ivPause.setImageResource(R.mipmap.music_play_icon_play);
-                } else if (bdPlayer.getCurrentPlayerState() == isPause.STATE_PAUSED) {
-                    bdPlayer.start();
+                } else if (!TextUtils.isEmpty(event) && "start".equals(event)) {
+                    if (bdPlayer != null) {
+                        bdPlayer.start();
+                    }
+                    if (mMediaPlayer != null && channelsBean != null) {
+                        mMediaPlayer.start();
+                    }
                     ivPause.setImageResource(R.mipmap.music_play_icon_pause);
+                } else if (!TextUtils.isEmpty(event) && "step".equals(event)) {
+                    before();
+                } else if (!TextUtils.isEmpty(event) && "next".equals(event)) {
+                    next();
+                } else if (!TextUtils.isEmpty(event) && "stop_or_star".equals(event)) {
+                    BDPlayer.PlayerState isPause = bdPlayer.getCurrentPlayerState();
+                    if (channelsBean != null) {
+                        PlayerResult();
+                    } else {
+                        if (bdPlayer.getCurrentPlayerState() == isPause.STATE_PLAYING) {
+                            bdPlayer.pause();
+                            ivPause.setImageResource(R.mipmap.music_play_icon_play);
+                        } else if (bdPlayer.getCurrentPlayerState() == isPause.STATE_PAUSED) {
+                            bdPlayer.start();
+                            ivPause.setImageResource(R.mipmap.music_play_icon_pause);
+                        }
+                    }
                 }
-            }
+                break;
+            case 1:
+                if (bdPlayer != null) {
+                    bdPlayer.stopPlayback();
+                }
+                release();
+                initData(null, null, messageEvent.getChannelsBean(), null);
+                break;
+            case 2:
+                if (bdPlayer != null) {
+                    bdPlayer.stopPlayback();
+                }
+                release();
+                initData(null, messageEvent.getSinglesBase(), null, null);
+                break;
+            case 3:
+                if (bdPlayer != null) {
+                    bdPlayer.stopPlayback();
+                }
+                release();
+                initData(null, null, null, messageEvent.getSinglesDownloads());
+                break;
         }
+
     }
 
 

@@ -71,7 +71,7 @@ public class RadioInfoTodayFragment extends BaseFragment {
                     c.desc = dataBean.channel.desc;
                     c.radio_url = singlesBean.fileUrl;
                     c.title = singlesBean.title;
-                    openFragment(PlayerFragment.newInstance(c));
+                    startMain(c);
                 }
 
                 @Override

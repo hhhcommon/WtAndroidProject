@@ -24,6 +24,11 @@ import com.woting.commonplat.widget.LoadingDialog;
 import com.woting.commonplat.widget.WTToolbar;
 import com.wotingfm.R;
 import com.wotingfm.common.application.BSApplication;
+import com.wotingfm.common.bean.ChannelsBean;
+import com.wotingfm.common.bean.MessageEvent;
+import com.wotingfm.common.bean.SinglesBase;
+import com.wotingfm.common.bean.SinglesDownload;
+import com.wotingfm.common.config.GlobalStateConfig;
 import com.wotingfm.common.utils.ProgressDialogUtils;
 import com.wotingfm.common.utils.StatusBarUtil;
 import com.wotingfm.ui.base.baseactivity.AppManager;
@@ -31,7 +36,7 @@ import com.wotingfm.ui.base.baseactivity.BaseToolBarActivity;
 import com.wotingfm.ui.intercom.main.view.InterPhoneActivity;
 import com.wotingfm.ui.main.view.MainActivity;
 import com.wotingfm.ui.mine.main.MineActivity;
-import com.wotingfm.ui.play.look.activity.LookListFragment;
+import com.wotingfm.ui.play.look.activity.LookListActivity;
 import com.wotingfm.ui.play.look.activity.RadioMoreFragment;
 import com.wotingfm.ui.play.look.activity.SelectedMoreFragment;
 import com.wotingfm.ui.play.look.activity.classification.fragment.MinorClassificationFragment;
@@ -40,6 +45,10 @@ import com.wotingfm.ui.play.look.fragment.LiveFragment;
 import com.wotingfm.ui.play.look.fragment.RadioStationFragment;
 import com.wotingfm.ui.test.PlayerActivity;
 import com.wotingfm.ui.test.PlayerFragment;
+
+import org.greenrobot.eventbus.EventBus;
+
+import java.util.List;
 
 import butterknife.ButterKnife;
 
@@ -54,6 +63,31 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
     private PlayerActivity playerActivity;
     private MineActivity playerActivityMain;
     private InterPhoneActivity interPhoneActivity;
+    private LookListActivity lookListActivity;
+
+    public void startMain(String albumsId) {
+        GlobalStateConfig.activityA = "A";
+        EventBus.getDefault().post(new MessageEvent("one"));
+        EventBus.getDefault().post(new MessageEvent("stop&" + albumsId));
+    }
+
+    public void startMain(ChannelsBean channelsBean) {
+        GlobalStateConfig.activityA = "A";
+        EventBus.getDefault().post(new MessageEvent("one"));
+        EventBus.getDefault().post(new MessageEvent(channelsBean, 1));
+    }
+
+    public void startMain(SinglesBase singlesBase) {
+        GlobalStateConfig.activityA = "A";
+        EventBus.getDefault().post(new MessageEvent("one"));
+        EventBus.getDefault().post(new MessageEvent(singlesBase, 2));
+    }
+
+    public void startMain(List<SinglesDownload> singlesDownloadsd) {
+        GlobalStateConfig.activityA = "A";
+        EventBus.getDefault().post(new MessageEvent("one"));
+        EventBus.getDefault().post(new MessageEvent(singlesDownloadsd, 3));
+    }
 
     @Override
     public void onClick(View view) {
@@ -63,38 +97,21 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
     protected WTToolbar o2Toolbar;
 
 
-    public boolean IS_BACK = false;
-
     public interface CallBack {
         void call();
     }
 
 
     private BaseToolBarActivity.CallBack callBack;
-    public int SerchCode = 0;
-
-    public void backResult() {
-        if (BSApplication.isIS_BACK == true) {
-            BSApplication.isIS_BACK = false;
-            BSApplication.fragmentBase = null;
-            closeFragment();
-            openFragmentNoAnim(LookListFragment.newInstance(0));
-        } else {
-            closeFragment();
-        }
-    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
-        if (item.getItemId() == android.R.id.home && IS_BACK == false) {
+        if (item.getItemId() == android.R.id.home) {
             hideSoftKeyboard();
             if (callBack != null) {
                 callBack.call();
-            } else {
-                backResult();
-                return true;
             }
+            closeFragment();
         }
         return super.onOptionsItemSelected(item);
     }
@@ -102,7 +119,7 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
     protected void setStatusBarPaddingAndHeight(View toolBar) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             if (toolBar != null) {
-              //  int statusBarHeight = StatusBarUtil.getStatusBarHeight(getActivity());
+                //  int statusBarHeight = StatusBarUtil.getStatusBarHeight(getActivity());
                 toolBar.setPadding(toolBar.getPaddingLeft(), 20, toolBar.getPaddingRight(),
                         toolBar.getPaddingBottom());
                 toolBar.getLayoutParams().height = 20 +
@@ -145,6 +162,17 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
                 actionBar.setHomeAsUpIndicator(R.mipmap.nav_icon_back_black);
                 actionBar.setTitle("");
             }
+        } else if (toolbar != null && lookListActivity != null) {
+            toolbar.setDividerColor(getResources().getColor(R.color.line_color));
+            toolbar.setShowDivider(true);
+            lookListActivity.setSupportActionBar(toolbar);
+            ActionBar actionBar = lookListActivity.getSupportActionBar();
+            if (actionBar != null) {
+                actionBar.setDisplayHomeAsUpEnabled(true);
+                setHasOptionsMenu(true);
+                actionBar.setHomeAsUpIndicator(R.mipmap.nav_icon_back_black);
+                actionBar.setTitle("");
+            }
         }
     }
 
@@ -172,6 +200,11 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
             if (actionBar != null) {
                 actionBar.setTitle(title);
             }
+        } else if (lookListActivity != null) {
+            ActionBar actionBar = lookListActivity.getSupportActionBar();
+            if (actionBar != null) {
+                actionBar.setTitle(title);
+            }
         }
     }
 
@@ -195,6 +228,12 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
             if (actionBar != null) {
                 actionBar.setTitle(title);
             }
+        } else if (lookListActivity != null) {
+            ActionBar actionBar = lookListActivity.getSupportActionBar();
+            this.callBack = callBackW;
+            if (actionBar != null) {
+                actionBar.setTitle(title);
+            }
         }
     }
 
@@ -214,6 +253,12 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
             o2Toolbar.setShowDivider(false);
         } else if (interPhoneActivity != null) {
             ActionBar actionBar = interPhoneActivity.getSupportActionBar();
+            if (actionBar != null) {
+                actionBar.setTitle(title);
+            }
+            o2Toolbar.setShowDivider(false);
+        } else if (lookListActivity != null) {
+            ActionBar actionBar = lookListActivity.getSupportActionBar();
             if (actionBar != null) {
                 actionBar.setTitle(title);
             }
@@ -262,10 +307,12 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
             playerActivityMain = (MineActivity) getActivity();
         } else if (getActivity() instanceof InterPhoneActivity)
             interPhoneActivity = (InterPhoneActivity) getActivity();
+        else if (getActivity() instanceof LookListActivity)
+            lookListActivity = (LookListActivity) getActivity();
         toolbar = (WTToolbar) rootView.findViewById(R.id.toolbar);
         callBack = null;
         o2Toolbar = (WTToolbar) toolbar;
-      //  setStatusBarPaddingAndHeight(o2Toolbar);
+        //  setStatusBarPaddingAndHeight(o2Toolbar);
         initToolBar(o2Toolbar);
         ButterKnife.bind(this, rootView);
         initView();
@@ -332,8 +379,8 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
 
 
     public void openFragment(Fragment fragment) {
-        if (!(this instanceof PlayerFragment))
-            BSApplication.fragmentBase = this;
+       /* if (!(this instanceof PlayerFragment))
+            BSApplication.fragmentBase = this;*/
         if (getActivity() instanceof PlayerActivity) {
             PlayerActivity playerActivity = (PlayerActivity) getActivity();
             playerActivity.open(fragment);
@@ -343,22 +390,13 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
         } else if (getActivity() instanceof InterPhoneActivity) {
             InterPhoneActivity interPhoneActivity = (InterPhoneActivity) getActivity();
             interPhoneActivity.open(fragment);
-        }
-
-    }
-
-    public void openFragmentNoAnim(Fragment fragment) {
-        if (getActivity() instanceof PlayerActivity) {
-            PlayerActivity playerActivity = (PlayerActivity) getActivity();
-            playerActivity.openNoAnim(fragment);
-        } else if (getActivity() instanceof MineActivity) {
-            MineActivity playerActivity = (MineActivity) getActivity();
-            playerActivity.open(fragment);
-        } else if (getActivity() instanceof InterPhoneActivity) {
-            InterPhoneActivity interPhoneActivity = (InterPhoneActivity) getActivity();
+        } else if (getActivity() instanceof LookListActivity) {
+            LookListActivity interPhoneActivity = (LookListActivity) getActivity();
             interPhoneActivity.open(fragment);
         }
+
     }
+
 
     public void closeFragment() {
         hideSoftKeyboard();
@@ -370,6 +408,12 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
             mineActivity.close();
         } else if (getActivity() instanceof InterPhoneActivity) {
             InterPhoneActivity mineActivity = (InterPhoneActivity) getActivity();
+            mineActivity.close();
+        } else if (getActivity() instanceof InterPhoneActivity) {
+            InterPhoneActivity mineActivity = (InterPhoneActivity) getActivity();
+            mineActivity.close();
+        } else if (getActivity() instanceof LookListActivity) {
+            LookListActivity mineActivity = (LookListActivity) getActivity();
             mineActivity.close();
         }
     }

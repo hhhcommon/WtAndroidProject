@@ -76,7 +76,7 @@ public class PlayerHistoryFragment extends BaseFragment {
                 playerHistoryListAdapter = new PlayerHistoryListAdapter(getActivity(), list, new PlayerHistoryListAdapter.PlayerHistoryClick() {
                     @Override
                     public void click(Player.DataBean.SinglesBean singlesBean) {
-                        openFragment(PlayerFragment.newInstance(singlesBean));
+                        startMain(singlesBean);
                     }
 
                     @Override

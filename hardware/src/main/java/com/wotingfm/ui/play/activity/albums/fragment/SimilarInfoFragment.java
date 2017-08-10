@@ -86,7 +86,7 @@ public class SimilarInfoFragment extends BaseFragment {
         albumsAdapter.setPlayerClick(new AlbumsAdapter.PlayerClick() {
             @Override
             public void clickAlbums(AlbumsBean singlesBean) {
-                openFragment(PlayerFragment.newInstance(albumsID));
+                startMain(albumsID);
             }
         });
         mRecyclerView.setAdapter(albumsAdapter);

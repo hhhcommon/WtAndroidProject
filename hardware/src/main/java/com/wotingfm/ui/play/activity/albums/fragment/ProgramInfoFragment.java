@@ -120,7 +120,7 @@ public class ProgramInfoFragment extends BaseFragment {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.relativeLable:
-                openFragment(PlayerFragment.newInstance(albumsID));
+                startMain(albumsID);
                 break;
             case R.id.ivSequence:
                 Collections.reverse(singlesBeanList);
