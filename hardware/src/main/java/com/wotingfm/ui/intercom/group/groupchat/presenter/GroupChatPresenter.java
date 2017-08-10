@@ -199,14 +199,13 @@ public class GroupChatPresenter {
 
     // 进入组
     private boolean enterGroup(String groupId) {
-
+        EventBus.getDefault().post(new MessageEvent("enterGroup&" + groupId));
         return true;
     }
 
     // 进入组成功后数据处理
     private void enterGroupOkData() {
         model.del(list.get(groupPosition).getPerson().get(childPosition).getId());// 删除跟本次id相关的数据
-        EventBus.getDefault().post(new MessageEvent("enterGroup&" + list.get(groupPosition).getPerson().get(childPosition).getId()));
         model.add(model.assemblyData(list.get(groupPosition).getPerson().get(childPosition), GlobalStateConfig.ok,""));// 把本次数据添加的数据库
         InterPhoneActivity.closeAll();
         activity.getActivity().sendBroadcast(new Intent(BroadcastConstants.VIEW_INTER_PHONE));// 跳转到对讲主页
@@ -225,11 +224,12 @@ public class GroupChatPresenter {
 
     // 退出个人对讲
     private boolean talkOver() {
-        // 挂断当前会话
         if (ChatPresenter.data != null && ChatPresenter.data.getID() != null) {
-            ChatPresenter.data.getID();
+            EventBus.getDefault().post(new MessageEvent("exitPerson&" + ChatPresenter.data.getACC_ID()));
+            return true;
+        }else{
+            return false;
         }
-        return true;
     }
 
     // 设置广播接收器

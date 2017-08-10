@@ -78,6 +78,7 @@ public class PersonMessageFragment extends Fragment implements View.OnClickListe
     private GridView gridView;
     private PersonMessageSubAdapter adapter;
     private ResultListener Listener;
+    private String acc_id;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -307,7 +308,6 @@ public class PersonMessageFragment extends Fragment implements View.OnClickListe
         tv_focus.setText("关注 " + focus);  // 关注
     }
 
-    private String acc_id;
 
     /**
      * 修改备注后设置界面数据

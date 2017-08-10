@@ -152,7 +152,7 @@ public class CallPresenter {
             } else if ("cancel".equals(msg)) {
                 EventBus.getDefault().post(new MessageEvent("over"));
             }else if("accept".equals(msg)){
-                EventBus.getDefault().post(new MessageEvent("over"));
+                EventBus.getDefault().post(new MessageEvent("acceptMain"));
                 dealPushCall();// 处理呼叫成功返回的数据
             }
         }

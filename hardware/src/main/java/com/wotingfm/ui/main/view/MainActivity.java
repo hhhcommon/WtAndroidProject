@@ -1,35 +1,18 @@
 package com.wotingfm.ui.main.view;
 
-import android.annotation.SuppressLint;
-import android.annotation.TargetApi;
-import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.FragmentTransaction;
 import android.app.TabActivity;
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.IntentFilter;
-import android.content.pm.PackageManager;
 import android.graphics.Color;
-import android.media.AudioManager;
-import android.media.projection.MediaProjection;
-import android.media.projection.MediaProjectionManager;
-import android.net.Uri;
 import android.net.http.SslError;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
-import android.os.Handler;
 import android.support.annotation.RequiresApi;
-import android.text.TextUtils;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.Window;
 import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.webkit.PermissionRequest;
 import android.webkit.SslErrorHandler;
 import android.webkit.WebChromeClient;
@@ -38,57 +21,21 @@ import android.webkit.WebViewClient;
 import android.widget.LinearLayout;
 import android.widget.TabHost;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.netease.nimlib.sdk.NIMClient;
-import com.netease.nimlib.sdk.Observer;
-import com.netease.nimlib.sdk.msg.MsgServiceObserve;
-import com.netease.nimlib.sdk.msg.model.IMMessage;
-import com.woting.commonplat.utils.KeyboardChangeListener;
 import com.wotingfm.R;
-import com.wotingfm.common.bean.AnchorInfo;
 import com.wotingfm.common.bean.MessageEvent;
-import com.wotingfm.common.bean.Room;
-import com.wotingfm.common.net.RetrofitUtils;
+import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.common.service.InterPhoneControl;
+import com.wotingfm.common.service.NotificationService;
 import com.wotingfm.common.service.WtDeviceControl;
-import com.wotingfm.common.utils.AndroidBug5497Workaround;
-import com.wotingfm.common.utils.IMManger;
-import com.wotingfm.common.utils.L;
-import com.wotingfm.common.utils.NetUtils;
-import com.wotingfm.common.utils.StatusBarUtil;
-import com.wotingfm.common.utils.T;
-import com.wotingfm.ui.intercom.alert.call.view.CallAlertActivity;
-import com.wotingfm.ui.intercom.alert.receive.view.ReceiveAlertActivity;
+import com.wotingfm.ui.intercom.main.chat.presenter.ChatPresenter;
 import com.wotingfm.ui.intercom.main.view.InterPhoneActivity;
 import com.wotingfm.ui.main.presenter.MainPresenter;
-import com.wotingfm.ui.play.live.LiveRoomActivity;
-import com.wotingfm.ui.play.look.activity.serch.SerchFragment;
+import com.wotingfm.ui.play.look.activity.LookListActivity;
 import com.wotingfm.ui.test.PlayerActivity;
 import com.wotingfm.ui.mine.main.MineActivity;
 
 import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
-import java.util.Set;
-
-import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action1;
-import rx.schedulers.Schedulers;
-
-import static android.R.attr.id;
-import static android.content.Intent.FLAG_ACTIVITY_REORDER_TO_FRONT;
-import static com.wotingfm.R.id.mWebView;
-import static com.wotingfm.R.id.relatLable;
-import static com.wotingfm.R.id.tvContent;
-import static com.wotingfm.R.mipmap.disconnect;
 
 
 public class MainActivity extends TabActivity implements View.OnClickListener {
@@ -97,7 +44,7 @@ public class MainActivity extends TabActivity implements View.OnClickListener {
     public WebView mWebView;
     private static final String TAG = MainActivity.class.getSimpleName();
     private TextView tv_4, tv_5, tv_title, tv_msg;
-    private LinearLayout lin_notify, largeLabel;
+    private LinearLayout lin_notify;
     private String type;
 
     @Override
@@ -113,7 +60,6 @@ public class MainActivity extends TabActivity implements View.OnClickListener {
 
     // 初始化视图,主页跳转的3个界面
     private void InitTextView() {
-        largeLabel = (LinearLayout) findViewById(R.id.largeLabel);
         lin_notify = (LinearLayout) findViewById(R.id.lin_notify);
         tv_title = (TextView) findViewById(R.id.tv_title);
         tv_msg = (TextView) findViewById(R.id.tv_msg);
@@ -134,8 +80,8 @@ public class MainActivity extends TabActivity implements View.OnClickListener {
                 .setContent(new Intent(this, InterPhoneActivity.class)));
         tabHost.addTab(tabHost.newTabSpec("three").setIndicator("three")
                 .setContent(new Intent(this, MineActivity.class)));
-//        tabHost.addTab(tabHost.newTabSpec("four").setIndicator("four")
-//                .setContent(new Intent(this, LookListActivity.class)));
+        tabHost.addTab(tabHost.newTabSpec("four").setIndicator("four")
+                .setContent(new Intent(this, LookListActivity.class)));
     }
 
     // 设置webView的参数
@@ -172,6 +118,7 @@ public class MainActivity extends TabActivity implements View.OnClickListener {
             case R.id.tv_2:
                 // 暂停，继续
                 WtDeviceControl.pushCenter();
+                NotificationService.test();
                 break;
             case R.id.tv_3:
                 // 下一首
@@ -263,16 +210,21 @@ public class MainActivity extends TabActivity implements View.OnClickListener {
     /**
      * 退出房间
      */
-    public void exitRoom(){
-        InterPhoneControl.quitRoom(mWebView,"");
+    public void exitRoomGroup(String id) {
+        InterPhoneControl.quitRoomGroup(mWebView, id);
+    }
+
+    public void exitRoomPerson(String id){
+        InterPhoneControl.quitRoomPerson(mWebView, id);
     }
 
     /**
      * 进入房间
+     *
      * @param roomId
      */
-    public void enterRoom(String roomId){
-        InterPhoneControl.enterRoom(mWebView,roomId);
+    public void enterRoom(String roomId) {
+        InterPhoneControl.enterRoom(mWebView, roomId);
     }
 
     /**
@@ -286,11 +238,45 @@ public class MainActivity extends TabActivity implements View.OnClickListener {
     public void notifyShow(boolean b, String type, String title, String msg) {
         if (b) {
             this.type = type;
-            lin_notify.setVisibility(View.VISIBLE);
             tv_title.setText(title);
             tv_msg.setText(msg);
+            Animation mAnimation = AnimationUtils.loadAnimation(this, R.anim.wt_slide_in_from_top);
+            lin_notify.startAnimation(mAnimation);
+            mAnimation.setAnimationListener(new Animation.AnimationListener() {
+                @Override
+                public void onAnimationStart(Animation animation) {
+                }
+
+                @Override
+                public void onAnimationEnd(Animation animation) {
+                    lin_notify.clearAnimation();
+                    lin_notify.layout(lin_notify.getLeft(), 0, lin_notify.getRight(), 220);
+                }
+
+                @Override
+                public void onAnimationRepeat(Animation animation) {
+
+                }
+            });
+
         } else {
-            lin_notify.setVisibility(View.GONE);
+            Animation mAnimation = AnimationUtils.loadAnimation(this, R.anim.wt_slide_out_from_top);
+            lin_notify.startAnimation(mAnimation);
+            mAnimation.setAnimationListener(new Animation.AnimationListener() {
+                @Override
+                public void onAnimationStart(Animation animation) {
+                }
+
+                @Override
+                public void onAnimationEnd(Animation animation) {
+                    lin_notify.clearAnimation();
+                    lin_notify.layout(lin_notify.getLeft(), -220, lin_notify.getRight(), 0);
+                }
+
+                @Override
+                public void onAnimationRepeat(Animation animation) {
+                }
+            });
         }
     }
 
@@ -298,18 +284,9 @@ public class MainActivity extends TabActivity implements View.OnClickListener {
         return getTabHost();
     }
 
-//    @Override
-//    public void onBackPressed() {
-//        super.onBackPressed();
-//        if (mWebView != null) {
-//            mWebView.loadUrl("javascript:exitRoom()");
-//            mWebView.destroy();
-//            mWebView = null;
-//        }
-//    }
-
     /**
      * 设置界面类型
+     *
      * @param type
      */
     public void setViewType(int type) {
@@ -334,11 +311,26 @@ public class MainActivity extends TabActivity implements View.OnClickListener {
     /**
      * 销毁传输对象
      */
-    public void destroyWebView(){
+    public void destroyWebView() {
         if (mWebView != null) {
             exitRoom();// 退出房间
             mWebView.destroy();
             mWebView = null;
+        }
+    }
+
+    /**
+     * 退出房间
+     */
+    private void exitRoom() {
+        if (ChatPresenter.data != null) {
+            // 此时有对讲状态
+            String _t = ChatPresenter.data.getTyPe().trim();
+            if (_t != null && !_t.equals("") && _t.equals("person")) {// 此时的对讲状态是单对单
+                exitRoomPerson(ChatPresenter.data.getACC_ID());
+            } else if (_t != null && !_t.equals("") && _t.equals("group")) {// 此时的对讲状态是群组
+                exitRoomGroup(ChatPresenter.data.getACC_ID());
+            }
         }
     }
 

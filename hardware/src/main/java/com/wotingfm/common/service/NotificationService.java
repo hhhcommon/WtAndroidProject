@@ -57,6 +57,10 @@ public class NotificationService extends Service {
         MsgQueue.add(s);
     }
 
+    public static void  test(){
+        ShowMsgQueue.add(assemblyData("1", "好友消息", "fafafaf"));
+    }
+
     /**
      * 采用存储转发机制
      */
@@ -202,7 +206,7 @@ public class NotificationService extends Service {
                         Intent it = new Intent(BroadcastConstants.VIEW_NOTIFY_SHOW);
                         it.putExtra("msg", msg);
                         sendBroadcast(it);
-                        sleep(4000);
+                        sleep(10000);
                         sendBroadcast(new Intent(BroadcastConstants.VIEW_NOTIFY_CLOSE));
                     }
                 } catch (Exception e) {
@@ -220,7 +224,7 @@ public class NotificationService extends Service {
      * @param message
      * @return
      */
-    private String assemblyData(String type, String title, String message) {
+    private static String assemblyData(String type, String title, String message) {
         Map<String, Object> map = new HashMap<>();
         map.put("type", type);
         map.put("title", title);

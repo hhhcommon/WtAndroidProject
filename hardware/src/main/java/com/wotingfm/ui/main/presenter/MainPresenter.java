@@ -167,6 +167,7 @@ public class MainPresenter extends BasePresenter {
                 assemblyMsg(true, content);
             } else if (action.equals(BroadcastConstants.VIEW_NOTIFY_CLOSE)) {
                 assemblyMsg(false, "");// 关闭通知消息
+                Log.e("推送消息", "关闭消息" );
             }
         }
     };
@@ -241,16 +242,21 @@ public class MainPresenter extends BasePresenter {
         } else if ("acceptMain".equals(messageEvent.getMessage())) {
             WtDeviceControl.pause();
             activity.enterRoom(roomId);
-        } else if (messageEvent.getMessage().contains("create&Rommid")) {
+        } else if (messageEvent.getMessage().contains("exitPerson&")) {// 退出个人对讲
+            String room_id = messageEvent.getMessage().split("exitPerson&")[1];
+            activity.exitRoomPerson(room_id);
+        }else if (messageEvent.getMessage().contains("create&Rommid")) {
             roomId = messageEvent.getMessage().split("create&Rommid")[1];
         } else if ("over".equals(messageEvent.getMessage())) {
+
         } else if (messageEvent.getMessage().contains("enterGroup&")) {
             WtDeviceControl.pause();
             String room_id = messageEvent.getMessage().split("enterGroup&")[1];
             activity.enterRoom(room_id);
         } else if (messageEvent.getMessage().contains("exitGroup&")) {
             WtDeviceControl.start();
-            activity.exitRoom();// 退出房间
+            String room_id = messageEvent.getMessage().split("exitGroup&")[1];
+            activity.exitRoomGroup(room_id);// 退出房间
         } else if (messageEvent.getMessage().equals("onDestroy")) {
             activity.destroyWebView();
         }
@@ -295,7 +301,7 @@ public class MainPresenter extends BasePresenter {
                             break;
                         case "OVER":
                             WtDeviceControl.start();
-                            activity.exitRoom();// 退出房间
+                            activity.exitRoomPerson(roomid);// 退出房间
                             break;
                     }
                 }

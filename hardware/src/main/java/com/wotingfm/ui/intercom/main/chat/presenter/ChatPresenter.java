@@ -11,6 +11,7 @@ import com.woting.commonplat.config.GlobalNetWorkConfig;
 import com.wotingfm.common.bean.MessageEvent;
 import com.wotingfm.common.config.GlobalStateConfig;
 import com.wotingfm.common.constant.BroadcastConstants;
+import com.wotingfm.common.service.InterPhoneControl;
 import com.wotingfm.common.utils.CommonUtils;
 import com.wotingfm.common.utils.IMManger;
 import com.wotingfm.common.utils.ToastUtils;
@@ -250,20 +251,35 @@ public class ChatPresenter {
 
     // 呼叫好友
     private boolean callPerson(String id, String accId) {
-        IMManger.getInstance().sendMsg(accId, "LAUNCH", CommonUtils.getUserId());
-        Intent intent = new Intent(activity.getActivity(), CallAlertActivity.class);
-        Bundle bundle = new Bundle();
-        bundle.putString("id", id);
-        bundle.putString("roomId", accId);
-        intent.putExtras(bundle);
-        activity.startActivity(intent);
-        return true;
+        if (id != null && !id.equals("")) {
+            boolean b = InterPhoneControl.call(accId);// 发送呼叫请求
+            if (b) {
+                Intent intent = new Intent(activity.getActivity(), CallAlertActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putString("id", id);
+                bundle.putString("roomId", accId);
+                intent.putExtras(bundle);
+                activity.startActivity(intent);
+                return true;
+            } else {
+                ToastUtils.show_always(activity.getActivity(), "呼叫失败，请稍后再试！");
+                return false;
+            }
+        }else{
+            ToastUtils.show_always(activity.getActivity(), "数据出错了，请稍后再试！");
+            return false;
+        }
     }
 
     // 挂断电话
     private boolean backPerson(String id) {
-
-        return true;
+        // 挂断当前会话
+        if (ChatPresenter.data != null && ChatPresenter.data.getID() != null) {
+            EventBus.getDefault().post(new MessageEvent("exitPerson&" + ChatPresenter.data.getACC_ID()));
+            return true;
+        }else{
+            return false;
+        }
     }
 
     // 呼叫好友成功后数据处理

@@ -1,138 +1,161 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<AbsoluteLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
     android:orientation="vertical">
 
-    <WebView
-        android:id="@+id/mWebView"
-        android:layout_width="100dp"
-        android:layout_height="100dp" />
-
-    <LinearLayout
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="match_parent">
 
+        <WebView
+            android:id="@+id/mWebView"
+            android:layout_width="100dp"
+            android:layout_height="100dp" />
 
-        <TabHost
-            android:id="@android:id/tabhost"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1">
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+
+            <TabHost
+                android:id="@android:id/tabhost"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/white"
+                    android:orientation="vertical">
+
+                    <FrameLayout
+                        android:id="@android:id/tabcontent"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:background="@color/white">
+
+                    </FrameLayout>
+
+                    <TabWidget
+                        android:id="@android:id/tabs"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:visibility="gone" />
+
+                </LinearLayout>
+
+            </TabHost>
 
             <LinearLayout
+                android:id="@+id/largeLabel"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@color/white"
-                android:orientation="vertical">
+                android:layout_height="40dp"
+                android:layout_gravity="bottom"
+                android:background="#16181a"
+                android:orientation="horizontal"
+                android:visibility="visible">
 
-                <FrameLayout
-                    android:id="@android:id/tabcontent"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
+                <TextView
+                    android:id="@+id/tv_1"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:background="@color/white">
+                    android:gravity="center"
+                    android:text="上一曲"
+                    android:textColor="@color/white" />
 
-                </FrameLayout>
+                <TextView
+                    android:id="@+id/tv_2"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="暂/播"
+                    android:textColor="@color/white" />
 
-                <TabWidget
-                    android:id="@android:id/tabs"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:visibility="gone" />
+                <TextView
+                    android:id="@+id/tv_3"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="下一曲"
+                    android:textColor="@color/white" />
+
+                <TextView
+                    android:id="@+id/tv_4"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="#16181a"
+                    android:gravity="center"
+                    android:text="指令"
+                    android:textColor="@color/white" />
+
+                <TextView
+                    android:id="@+id/tv_5"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1.5"
+                    android:background="#16181a"
+                    android:gravity="center"
+                    android:text="对讲"
+                    android:textColor="@color/white" />
 
             </LinearLayout>
 
-        </TabHost>
-
-        <LinearLayout
-            android:id="@+id/largeLabel"
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:layout_gravity="bottom"
-            android:background="#16181a"
-            android:orientation="horizontal"
-            android:visibility="visible">
-
-            <TextView
-                android:id="@+id/tv_1"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="上一曲"
-                android:textColor="@color/white" />
-
-            <TextView
-                android:id="@+id/tv_2"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="暂/播"
-                android:textColor="@color/white" />
-
-            <TextView
-                android:id="@+id/tv_3"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="下一曲"
-                android:textColor="@color/white" />
-
-            <TextView
-                android:id="@+id/tv_4"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:background="#16181a"
-                android:gravity="center"
-                android:text="指令"
-                android:textColor="@color/white" />
-
-            <TextView
-                android:id="@+id/tv_5"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1.5"
-                android:background="#16181a"
-                android:gravity="center"
-                android:text="对讲"
-                android:textColor="@color/white" />
-
         </LinearLayout>
 
-    </LinearLayout>
+    </FrameLayout>
 
     <LinearLayout
         android:id="@+id/lin_notify"
         android:layout_width="match_parent"
         android:layout_height="64dp"
-        android:background="#ff9f6e"
-        android:orientation="vertical"
-        android:paddingLeft="13.3dp"
-        android:visibility="gone">
+        android:layout_margin="10dp"
+        android:layout_x="0dp"
+        android:layout_y="-200px"
+        android:background="@drawable/background_circle_notify_app"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:visibility="visible">
 
-        <TextView
-            android:id="@+id/tv_title"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="14.7dp"
-            android:text="这是标题"
-            android:textColor="@color/white"
-            android:textSize="14.7dp" />
+        <ImageView
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginLeft="12dp"
+            android:src="@mipmap/logo" />
 
-        <TextView
-            android:id="@+id/tv_msg"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5.3dp"
-            android:text="这是内容"
-            android:textColor="@color/white"
-            android:textSize="14.7dp" />
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="64dp"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:paddingLeft="13.3dp">
 
+            <TextView
+                android:id="@+id/tv_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="14.7dp"
+                android:text="这是标题"
+                android:textColor="@color/white"
+                android:textSize="14.7dp" />
+
+            <TextView
+                android:id="@+id/tv_msg"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5.3dp"
+                android:text="这是内容"
+                android:textColor="@color/white"
+                android:textSize="14.7dp" />
+
+        </LinearLayout>
     </LinearLayout>
-</FrameLayout>
+</AbsoluteLayout>

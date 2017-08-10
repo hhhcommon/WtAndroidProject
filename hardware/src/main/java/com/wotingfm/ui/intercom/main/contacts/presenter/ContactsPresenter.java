@@ -191,8 +191,8 @@ public class ContactsPresenter {
     // 挂断当前个人对讲
     private boolean talkOver() {
         if (ChatPresenter.data != null && ChatPresenter.data.getID() != null) {
-            boolean b = InterPhoneControl.hangUp(ChatPresenter.data.getACC_ID(),ChatPresenter.data.getID());// 发送呼叫请求
-            return b;
+            EventBus.getDefault().post(new MessageEvent("exitPerson&" + ChatPresenter.data.getACC_ID()));
+            return true;
         }else{
             return false;
         }

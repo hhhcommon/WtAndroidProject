@@ -64,11 +64,21 @@ public class InterPhoneControl {
     }
 
     /**
-     * 退出房間
+     * 退出房間==个人
      * @param room_id
      * @return
      */
-   public static boolean quitRoom(WebView view,String room_id){
+    public static boolean quitRoomPerson(WebView view,String room_id){
+        view.loadUrl("javascript:exitRoom()");
+        return true;
+    }
+
+    /**
+     * 退出房間==群组
+     * @param room_id
+     * @return
+     */
+   public static boolean quitRoomGroup(WebView view,String room_id){
        view.loadUrl("javascript:exitRoom()");
        return true;
    }

@@ -646,13 +646,12 @@ public class GroupNewsForAddPresenter {
 
     // 进入组
     private boolean enterGroup(String groupId) {
-
+        EventBus.getDefault().post(new MessageEvent("enterGroup&" + groupId));
         return true;
     }
 
     // 进入组成功后数据处理
     private void enterGroupOkData(String groupId) {
-        EventBus.getDefault().post(new MessageEvent("enterGroup&" + groupId));
         model.del(groupId);// 删除跟本次id相关的数据
         model.add(model.assemblyData(g_news, GlobalStateConfig.ok, ""));// 把本次数据添加的数据库
         InterPhoneActivity.closeAll();
@@ -674,9 +673,11 @@ public class GroupNewsForAddPresenter {
     private boolean talkOver() {
         // 挂断当前会话
         if (ChatPresenter.data != null && ChatPresenter.data.getID() != null) {
-            ChatPresenter.data.getID();
+            EventBus.getDefault().post(new MessageEvent("exitPerson&" + ChatPresenter.data.getACC_ID()));
+            return true;
+        }else{
+            return false;
         }
-        return true;
     }
 
     // 设置广播接收器(群组信息更改)

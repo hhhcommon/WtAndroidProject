@@ -7,6 +7,7 @@ import android.util.Log;
 import com.wotingfm.common.bean.MessageEvent;
 import com.wotingfm.common.config.GlobalStateConfig;
 import com.wotingfm.common.constant.BroadcastConstants;
+import com.wotingfm.common.service.InterPhoneControl;
 import com.wotingfm.common.utils.CommonUtils;
 import com.wotingfm.common.utils.IMManger;
 import com.wotingfm.common.utils.ToastUtils;
@@ -298,9 +299,7 @@ public class SearchContactsForLocalPresenter {
 
     // 进入组
     private boolean enterGroup(String groupId) {
-        InterPhoneActivity.closeAll();
         EventBus.getDefault().post(new MessageEvent("enterGroup&" + groupId));
-        activity.getActivity().sendBroadcast(new Intent(BroadcastConstants.VIEW_INTER_PHONE));
         return true;
     }
 
@@ -316,22 +315,35 @@ public class SearchContactsForLocalPresenter {
 
     // 退出个人对讲
     private boolean talkOver() {
+        // 挂断当前会话
         if (ChatPresenter.data != null && ChatPresenter.data.getID() != null) {
-            ChatPresenter.data.getID();// 挂断电话
+            EventBus.getDefault().post(new MessageEvent("exitPerson&" + ChatPresenter.data.getACC_ID()));
+            return true;
+        }else{
+            return false;
         }
-        return true;
     }
 
     // 开始个人对讲
     private boolean talkOk(String id, String accId) {
-        IMManger.getInstance().sendMsg(accId, "LAUNCH", CommonUtils.getUserId());
-        Intent intent = new Intent(activity.getActivity(), CallAlertActivity.class);
-        Bundle bundle = new Bundle();
-        bundle.putString("id", id);
-        bundle.putString("roomId", accId);
-        intent.putExtras(bundle);
-        activity.startActivityForResult(intent, 0);
-        return true;
+        if (id != null && !id.equals("")) {
+            boolean b = InterPhoneControl.call(accId);// 发送呼叫请求
+            if (b) {
+                Intent intent = new Intent(activity.getActivity(), CallAlertActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putString("id", id);
+                bundle.putString("roomId", accId);
+                intent.putExtras(bundle);
+                activity.startActivity(intent);
+                return true;
+            } else {
+                ToastUtils.show_always(activity.getActivity(), "呼叫失败，请稍后再试！");
+                return false;
+            }
+        }else{
+            ToastUtils.show_always(activity.getActivity(), "数据出错了，请稍后再试！");
+            return false;
+        }
     }
 
     // 进入组成功后数据处理

@@ -12,8 +12,10 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.woting.commonplat.config.GlobalNetWorkConfig;
 import com.wotingfm.common.bean.AlbumsBean;
+import com.wotingfm.common.bean.MessageEvent;
 import com.wotingfm.common.config.GlobalStateConfig;
 import com.wotingfm.common.constant.BroadcastConstants;
+import com.wotingfm.common.service.InterPhoneControl;
 import com.wotingfm.common.utils.CommonUtils;
 import com.wotingfm.common.utils.IMManger;
 import com.wotingfm.common.utils.ToastUtils;
@@ -27,6 +29,7 @@ import com.wotingfm.ui.intercom.person.personmessage.view.PersonMessageFragment;
 import com.wotingfm.ui.intercom.person.personmessage.model.PersonMessageModel;
 import com.wotingfm.ui.intercom.person.personnote.view.EditPersonNoteFragment;
 
+import org.greenrobot.eventbus.EventBus;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
@@ -429,21 +432,29 @@ public class PersonMessagePresenter {
     // 退出组对讲
     private boolean talkOverGroup() {
         if (ChatPresenter.data != null && ChatPresenter.data.getID() != null) {
-            ChatPresenter.data.getID();// 退出组
+            EventBus.getDefault().post(new MessageEvent("exitGroup&" + ChatPresenter.data.getID()));
+            return true;
+        }else{
+            return false;
         }
-        return true;
     }
 
     // 进行呼叫
     private boolean callPerson(String acc_id) {
         if (id != null && !id.equals("")) {
-            IMManger.getInstance().sendMsg(acc_id, "LAUNCH", CommonUtils.getUserId());
-            Intent intent = new Intent(activity.getActivity(), CallAlertActivity.class);
-            Bundle bundle = new Bundle();
-            bundle.putString("roomId", acc_id);
-            bundle.putString("id", id);
-            intent.putExtras(bundle);
-            activity.startActivity(intent);
+            boolean b = InterPhoneControl.call(acc_id);// 发送呼叫请求
+            if (b) {
+                Intent intent = new Intent(activity.getActivity(), CallAlertActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putString("id", id);
+                bundle.putString("roomId", acc_id);
+                intent.putExtras(bundle);
+                activity.startActivity(intent);
+                return true;
+            } else {
+                ToastUtils.show_always(activity.getActivity(), "呼叫失败，请稍后再试！");
+                return false;
+            }
         } else {
             ToastUtils.show_always(activity.getActivity(), "数据出错了，请稍后再试！");
         }
@@ -476,9 +487,11 @@ public class PersonMessagePresenter {
     // 挂断当前个人对讲
     private boolean talkOver() {
         if (ChatPresenter.data != null && ChatPresenter.data.getID() != null) {
-            ChatPresenter.data.getID();// 挂断电话
+            EventBus.getDefault().post(new MessageEvent("exitPerson&" + ChatPresenter.data.getACC_ID()));
+            return true;
+        }else{
+            return false;
         }
-        return true;
     }
 
     // 呼叫成功后操作
