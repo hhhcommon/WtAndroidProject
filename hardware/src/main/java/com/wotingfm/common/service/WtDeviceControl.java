@@ -1,7 +1,11 @@
 package com.wotingfm.common.service;
 
+import android.webkit.WebView;
+import com.wotingfm.common.bean.MessageEvent;
 import com.wotingfm.common.config.GlobalStateConfig;
+import com.wotingfm.common.utils.VibratorUtils;
 import com.wotingfm.ui.intercom.main.chat.presenter.ChatPresenter;
+import org.greenrobot.eventbus.EventBus;
 
 /**
  * 控制接口的实现类
@@ -14,21 +18,35 @@ public class WtDeviceControl {
      * 暂停
      */
     public static void pushCenter() {
-
+        EventBus.getDefault().post(new MessageEvent("stop_or_star"));
     }
 
     /**
      * 点击上一首按钮
      */
     public static void pushUpButton() {
-
+        EventBus.getDefault().post(new MessageEvent("step"));
     }
 
     /**
      * 点击下一首按钮
      */
     public static void pushDownButton() {
+        EventBus.getDefault().post(new MessageEvent("next"));
+    }
 
+    /**
+     * 暂停
+     */
+    public static void pause() {
+        EventBus.getDefault().post(new MessageEvent("pause"));
+    }
+
+    /**
+     * 播放
+     */
+    public static void start() {
+        EventBus.getDefault().post(new MessageEvent("start"));
     }
 
     /**
@@ -54,12 +72,19 @@ public class WtDeviceControl {
     /**
      * 按下语音通话
      */
-    public static void pushPTT() {
+    public static void pushPTT(WebView view) {
         if (GlobalStateConfig.isActive) {
             SimulationService.talk();
         } else {
             if (ChatPresenter.data != null) {
-                InterPhoneControl.Press(ChatPresenter.data.getID());
+              boolean b=  InterPhoneControl.beginSpeak(view,"");
+                if(b){
+
+                }else{
+                    VibratorUtils.Vibrate(100);
+                }
+            }else{
+                VibratorUtils.Vibrate(100);
             }
         }
     }
@@ -67,12 +92,12 @@ public class WtDeviceControl {
     /**
      * 抬起语音通话
      */
-    public static void releasePTT() {
+    public static void releasePTT(WebView view) {
         if (GlobalStateConfig.isActive) {
             SimulationService.openDevice();
         } else {
             if (ChatPresenter.data != null) {
-                InterPhoneControl.Loosen(ChatPresenter.data.getID());
+                boolean b=  InterPhoneControl.stopSpeak(view,"");
             }
         }
     }

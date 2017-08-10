@@ -7,13 +7,21 @@ import android.content.IntentFilter;
 import android.media.MediaPlayer;
 import android.media.RingtoneManager;
 import android.net.Uri;
+import android.util.Log;
 
 import com.wotingfm.R;
+import com.wotingfm.common.bean.MessageEvent;
+import com.wotingfm.common.config.GlobalStateConfig;
+import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.common.utils.VibratorUtils;
 import com.wotingfm.ui.intercom.alert.receive.model.ReceiveModel;
 import com.wotingfm.ui.intercom.alert.receive.view.ReceiveAlertActivity;
 import com.wotingfm.ui.intercom.main.chat.dao.SearchTalkHistoryDao;
 import com.wotingfm.ui.intercom.main.contacts.model.Contact;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 /**
  * 作者：xinLong on 2017/6/5 13:55
@@ -24,13 +32,14 @@ public class ReceivePresenter {
     private ReceiveAlertActivity activity;
     private ReceiveModel model;
     private SearchTalkHistoryDao dao;
-    private MessageReceiver Receiver;
     private MediaPlayer musicPlayer;
     private long[] Vibrate = {400, 800, 400, 800};
+    private String id = null;
+    private String roomId = null;
 
     public ReceivePresenter(ReceiveAlertActivity activity) {
         this.activity = activity;
-        this.model = new ReceiveModel();
+        this.model = new ReceiveModel(activity);
         getSource();
         initDao();
         setReceiver();
@@ -43,6 +52,11 @@ public class ReceivePresenter {
         String id = null;
         try {
             id = activity.getIntent().getStringExtra("id");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        try {
+            roomId = activity.getIntent().getStringExtra("roomId");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -69,7 +83,22 @@ public class ReceivePresenter {
         } else {
             activity.finish();
         }
+    }
 
+    /**
+     * 获取roomId
+     * @return
+     */
+    public String getRoomId(){
+        return roomId;
+    }
+
+    /**
+     * 获取用户Id
+     * @return
+     */
+    public String getId(){
+        return id;
     }
 
     // 初始化数据库
@@ -79,13 +108,7 @@ public class ReceivePresenter {
 
     // 设置广播接收器
     private void setReceiver() {
-        if (Receiver == null) {
-            Receiver = new MessageReceiver();
-            IntentFilter filter = new IntentFilter();
-//            filter.addAction(BroadcastConstants.PUSH_CALL);
-//            filter.addAction(BroadcastConstants.PUSH_CALL_CALLALERT);
-            activity.registerReceiver(Receiver, filter);
-        }
+        EventBus.getDefault().register(this);
     }
 
     /**
@@ -117,7 +140,7 @@ public class ReceivePresenter {
     /**
      * 铃声关闭
      */
-    public void musicClose() {
+    private void musicClose() {
         if (musicPlayer != null) {
             musicPlayer.stop();
             musicPlayer = null;
@@ -129,37 +152,38 @@ public class ReceivePresenter {
         return RingtoneManager.getActualDefaultRingtoneUri(activity, RingtoneManager.TYPE_RINGTONE);
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMoonEvent(MessageEvent messageEvent) {
+        String msg = messageEvent.getMessage();
+        if(msg!=null&&!msg.trim().equals("")) {
+            Log.e("呼叫流程", "返回数据" + msg.toString());
+            if ("refuse".equals(msg) ||  "cancel".equals(msg)) {
+                EventBus.getDefault().post(new MessageEvent("over"));
+            }
+        }
+    }
+
+    /**
+     * 接受后操作
+     */
+    public void pushCallOk() {
+        model.del(id);// 删除跟本次id相关的数据
+        model.add(model.assemblyData(model.getUser(id), GlobalStateConfig.ok, ""));// 把本次数据添加的数据库
+        activity.sendBroadcast(new Intent(BroadcastConstants.VIEW_INTER_PHONE));// 跳转到对讲主页
+        activity.sendBroadcast(new Intent(BroadcastConstants.VIEW_INTER_PHONE_CHAT_OK));// 对讲主页界面，数据更新
+    }
+
     /**
      * 注销的操作
      */
     public void destroy() {
         musicClose();
         VibratorUtils.cancel(activity);
-        if (Receiver != null) {
-            activity.unregisterReceiver(Receiver);
-            Receiver = null;
-        }
+        EventBus.getDefault().unregister(this);
         if (dao != null) {
             dao = null;
         }
         model = null;
-    }
-
-    /*
-    * 接收socket的数据进行处理
-    */
-    class MessageReceiver extends BroadcastReceiver {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            String action = intent.getAction();
-//            if (action.equals(BroadcastConstants.PUSH_CALL)) {
-//
-//
-//            } else if (action.equals(BroadcastConstants.PUSH_CALL_CALLALERT)) {
-//
-//
-//            }
-        }
     }
 
 }

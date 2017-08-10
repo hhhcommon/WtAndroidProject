@@ -1,6 +1,10 @@
 package com.wotingfm.ui.intercom.alert.receive.model;
 
 import com.wotingfm.common.config.GlobalStateConfig;
+import com.wotingfm.common.utils.CommonUtils;
+import com.wotingfm.ui.intercom.alert.receive.view.ReceiveAlertActivity;
+import com.wotingfm.ui.intercom.main.chat.dao.SearchTalkHistoryDao;
+import com.wotingfm.ui.intercom.main.chat.model.DBTalkHistory;
 import com.wotingfm.ui.intercom.main.contacts.model.Contact;
 
 import java.util.List;
@@ -11,8 +15,17 @@ import java.util.List;
  */
 public class ReceiveModel {
 
-    public ReceiveModel() {
-        super();
+    private  ReceiveAlertActivity activity;
+    private SearchTalkHistoryDao dbDao;
+
+    public ReceiveModel(ReceiveAlertActivity activity) {
+        this.activity = activity;
+        initDao();      // 初始化数据库
+    }
+
+    // 初始化数据库
+    private void initDao() {
+        dbDao = new SearchTalkHistoryDao(activity);
     }
 
     /**
@@ -37,5 +50,45 @@ public class ReceiveModel {
 
         }
         return user;
+    }
+
+    /**
+     * 从数据库中删除一条数据
+     * @param id
+     */
+    public void del(String id){
+        if(dbDao==null){
+            initDao();
+            dbDao.deleteHistory(id);
+        }else{
+            dbDao.deleteHistory(id);
+        }
+    }
+
+    /**
+     * 在数据库中插入一条数据
+     * @param h
+     */
+    public void add(DBTalkHistory h){
+        if(dbDao==null){
+            initDao();
+            dbDao.addTalkHistory(h);
+        }else{
+            dbDao.addTalkHistory(h);
+        }
+    }
+
+    /**
+     * 组装数据库数据
+     * @param s
+     * @return
+     */
+    public DBTalkHistory assemblyData(Contact.user s,String callType, String CallTypeM) {
+        String id = s.getId();
+        String type = "person";
+        String addTime = Long.toString(System.currentTimeMillis());
+        String bjUserId = CommonUtils.getUserId();
+        DBTalkHistory h = new DBTalkHistory(bjUserId, type, id, addTime,callType,CallTypeM,s.getAcc_id());
+        return h;
     }
 }

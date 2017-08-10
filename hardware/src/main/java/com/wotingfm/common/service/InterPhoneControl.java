@@ -1,9 +1,18 @@
 package com.wotingfm.common.service;
 
 import android.content.Context;
+import android.view.View;
+import android.webkit.WebView;
+
+import com.wotingfm.common.bean.MessageEvent;
+import com.wotingfm.common.utils.CommonUtils;
+import com.wotingfm.common.utils.IMManger;
+import com.wotingfm.ui.intercom.main.chat.presenter.ChatPresenter;
+
+import org.greenrobot.eventbus.EventBus;
 
 /**
- * 对讲机数据组装
+ * 对讲控制
  * author：辛龙 (xinLong)
  * 2017/7/28 11:21
  * 邮箱：645700751@qq.com
@@ -11,129 +20,88 @@ import android.content.Context;
 public class InterPhoneControl {
 
     /**
-     * 退出小组
-     *
-     * @param groupId
-     */
-    public static void Quit(String groupId) {
-
-    }
-
-    /**
-     * 进入小组
-     *
-     * @param groupId
-     */
-    public static void Enter( String groupId) {
-
-    }
-
-    /**
-     * 取消说话
-     *
-     * @param groupId
-     */
-    public static void Loosen( String groupId) {
-
-    }
-
-    /**
-     * 请求说话
-     *
-     * @param groupId
-     */
-    public static void Press( String groupId) {
-
-    }
-
-    /**
-     * 个人请求通话-----呼叫
+     * 呼叫方==呼叫
      *
      * @param id
+     * @return
      */
-    public static void PersonTalkPress( String id) {
-
+    public static boolean call(String id) {
+        boolean b = IMManger.getInstance().sendMsg(id, "LAUNCH", CommonUtils.getUserId());
+        return b;
     }
 
     /**
-     * 个人请求通话----------呼叫传递(Server->被叫App)-------应答消息
-     *
-     * @param callId
-     * @param reMsgId
-     * @param callerId
+     * 呼叫方==挂断电话
+     * @param roomId
+     * @param userId
+     * @return
      */
-    public static void PersonTalkHJCDYD( String callId, String reMsgId, String callerId) {
-
+    public static boolean hangUp(String roomId,String userId) {
+        boolean b = IMManger.getInstance().sendMsg(roomId, "CANCEL", userId);
+        return b;
     }
 
     /**
-     * 个人开始通话------（获取说话权限）查看组内是否有人说话
-     *
-     * @param context
+     * 被叫方==接受
+     * @param roomId
+     * @param userId
+     * @return
      */
-    public static void PersonTalkPressStart(Context context) {
-
+    public static boolean accept(String roomId,String userId) {
+        boolean b = IMManger.getInstance().sendMsg(roomId, "ACCEPT", userId);
+        return b;
     }
 
     /**
-     * 个人结束通话------释放说话权限
-     *
-     * @param context
+     * 被叫方==拒绝接受
+     * @param roomId
+     * @param userId
+     * @return
      */
-    public static void PersonTalkPressStop(Context context) {
-
+    public static boolean refuse(String roomId,String userId) {
+        boolean b = IMManger.getInstance().sendMsg(roomId, "REFUSE", userId);
+        return b;
     }
 
     /**
-     * 个人请求通话----------接收应答
-     *
-     * @param context
-     * @param callId
-     * @param callerId
+     * 退出房間
+     * @param room_id
+     * @return
      */
-    public static void PersonTalkAllow(Context context, String callId, String callerId) {
+   public static boolean quitRoom(WebView view,String room_id){
+       view.loadUrl("javascript:exitRoom()");
+       return true;
+   }
 
+    /**
+     * 進入房間
+     * @param room_id
+     * @return
+     */
+    public static boolean enterRoom(WebView view, String room_id){
+        view.loadUrl("javascript:joinRoom('" + room_id + "')");
+        return true;
     }
 
     /**
-     * 个人请求通话----------拒绝应答
-     *
-     * @param context
-     * @param callId
-     * @param callerId
+     * 開始說話
+     * @param room_id
+     * @return
      */
-    public static void PersonTalkOver(Context context, String callId, String callerId) {
-
+    public static boolean beginSpeak(WebView view, String room_id){
+        view.loadUrl("javascript:beginSpeak()");
+        return true;
     }
-
     /**
-     * 个人请求通话----------应答超时
-     *
-     * @param context
-     * @param callId
-     * @param callerId
-     */
-    public static void PersonTalkTimeOver(Context context, String callId, String callerId) {
-
+    * 結束說話
+    * @param room_id
+    * @return
+            */
+    public static boolean stopSpeak(WebView view, String room_id){
+        view.loadUrl("javascript:stopSpeak()");
+        return true;
     }
 
-    /**
-     * 个人请求通话----------挂断电话
-     *
-     * @param context
-     * @param callId
-     */
-    public static void PersonTalkHangUp(Context context, String callId) {
 
-    }
-
-    /**
-     * socket 重连后发送的数据register
-     *
-     * @param context
-     */
-    public static void sendEntryMessage(Context context) {
-
-    }
 
 }

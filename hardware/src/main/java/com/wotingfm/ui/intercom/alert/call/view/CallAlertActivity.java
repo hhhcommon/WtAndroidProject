@@ -1,7 +1,6 @@
 package com.wotingfm.ui.intercom.alert.call.view;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.KeyEvent;
@@ -15,14 +14,9 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.woting.commonplat.utils.BitmapUtils;
 import com.wotingfm.R;
-import com.wotingfm.common.bean.MessageEvent;
+import com.wotingfm.common.service.InterPhoneControl;
 import com.wotingfm.common.utils.GlideUtils;
-import com.wotingfm.common.utils.IMManger;
 import com.wotingfm.ui.intercom.alert.call.presenter.CallPresenter;
-
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
 
 import jp.wasabeef.glide.transformations.BlurTransformation;
 
@@ -37,34 +31,15 @@ public class CallAlertActivity extends Activity implements OnClickListener {
     private TextView tv_name;
     private CallPresenter presenter;
 
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onMoonEvent(MessageEvent messageEvent) {
-        String msg = messageEvent.getMessage();
-        if ("refuse".equals(msg) || "cancel".equals(msg)) {
-            EventBus.getDefault().post(new MessageEvent("over"));
-            finish();
-        } else if ("accept".equals(msg)) {
-            EventBus.getDefault().post(new MessageEvent("over"));
-            finish();
-        }
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EventBus.getDefault().register(this);
-        // 隐藏标题栏
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
-        // 隐藏状态栏
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        requestWindowFeature(Window.FEATURE_NO_TITLE); // 隐藏标题栏
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);// 隐藏状态栏
         setContentView(R.layout.activity_call);
         inItView();
         presenter = new CallPresenter(this);
-        roomId = getIntent().getStringExtra("roomId");
-        userId = getIntent().getStringExtra("id");
     }
-
-    private String roomId, userId;
 
     // 设置界面
     private void inItView() {
@@ -82,7 +57,7 @@ public class CallAlertActivity extends Activity implements OnClickListener {
                 /**
                  * 此处需要挂断电话等操作
                  */
-                IMManger.getInstance().sendMsg(roomId, "CANCEL", userId);
+                InterPhoneControl.hangUp(presenter.getRoomId(),presenter.getId());
                 finish();
                 break;
         }
@@ -120,6 +95,7 @@ public class CallAlertActivity extends Activity implements OnClickListener {
             /**
              * 此处需要挂断电话等操作
              */
+            InterPhoneControl.hangUp(presenter.getRoomId(),presenter.getId());
             presenter.musicClose();
             finish();
             return true;
@@ -132,6 +108,5 @@ public class CallAlertActivity extends Activity implements OnClickListener {
         super.onDestroy();
         presenter.destroy();
         presenter = null;
-        EventBus.getDefault().unregister(this);
     }
 }

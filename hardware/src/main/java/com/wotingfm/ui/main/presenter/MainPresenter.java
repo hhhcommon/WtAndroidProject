@@ -7,27 +7,41 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import android.view.View;
 import android.webkit.URLUtil;
 
 import com.google.gson.GsonBuilder;
+import com.netease.nimlib.sdk.NIMClient;
+import com.netease.nimlib.sdk.Observer;
+import com.netease.nimlib.sdk.msg.MsgServiceObserve;
+import com.netease.nimlib.sdk.msg.model.IMMessage;
 import com.woting.commonplat.receiver.NetWorkChangeReceiver;
 import com.wotingfm.R;
 import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.bean.MessageEvent;
 import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.common.service.FloatingWindowService;
+import com.wotingfm.common.service.InterPhoneControl;
 import com.wotingfm.common.service.NotificationService;
+import com.wotingfm.common.service.WtDeviceControl;
+import com.wotingfm.common.utils.StatusBarUtil;
 import com.wotingfm.ui.base.basepresenter.BasePresenter;
+import com.wotingfm.ui.intercom.alert.receive.view.ReceiveAlertActivity;
 import com.wotingfm.ui.main.model.MainModel;
 import com.wotingfm.ui.main.view.MainActivity;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 import static com.iflytek.cloud.resource.Resource.getText;
@@ -37,19 +51,21 @@ import static com.iflytek.cloud.resource.Resource.getText;
  * 邮箱：645700751@qq.com
  */
 public class MainPresenter extends BasePresenter {
-    private final MainModel mainModel;
+    private MainModel mainModel;
     private MainActivity activity;
     private Intent FloatingWindow;
     private Intent NS;
+    private String roomId;
 
     private NetWorkChangeReceiver netWorkChangeReceiver;
 
     public MainPresenter(MainActivity mainActivity) {
         this.activity = mainActivity;
         this.mainModel = new MainModel(mainActivity);
-        getVersion();
+        NIMClient.getService(MsgServiceObserve.class).observeReceiveMessage(incomingMessageObserver, true);
         createService();
         registerReceiver();
+        getVersion();
     }
 
     private void createService() {
@@ -61,6 +77,7 @@ public class MainPresenter extends BasePresenter {
 
     //注册广播
     private void registerReceiver() {
+        EventBus.getDefault().register(this);
         IntentFilter m = new IntentFilter();
         m.addAction(BroadcastConstants.ACTIVITY_CHANGE);
         m.addAction(BroadcastConstants.VIEW_NOTIFY_SHOW);
@@ -71,6 +88,55 @@ public class MainPresenter extends BasePresenter {
         IntentFilter n = new IntentFilter();
         n.addAction(NetWorkChangeReceiver.intentFilter);
         activity.registerReceiver(netWorkChangeReceiver, n);
+    }
+
+    // 顶栏颜色设置
+    private void applySelectedColor() {
+        // -724225
+        // float[] colorHSV = new float[]{0f, 0f, 0f};
+        // int c = Color.HSVToColor(colorHSV);
+        int c = -1;
+        int color = Color.rgb(Color.red(c), Color.green(c), Color.blue(c));
+        StatusBarUtil.setStatusBarColor(activity, color, false);
+        // StatusBarUtil.setStatusBarColor(context, R.color.white, false);
+    }
+
+    // 顶栏颜色设置
+    public void applyTextColor(boolean b) {
+        if (b) {
+            StatusBarUtil.StatusBarLightMode(activity, false);
+        } else {
+            StatusBarUtil.StatusBarLightMode(activity, true);
+        }
+    }
+
+    // 发送注册账号请求
+    private void getVersion() {
+        mainModel.getVersion(new MainModel.OnLoadInterface() {
+            @Override
+            public void onSuccess(Object o) {
+                dealVersionSuccess(o);
+            }
+
+            @Override
+            public void onFailure(String msg) {
+
+            }
+        });
+    }
+
+    // 处理注册返回数据
+    private void dealVersionSuccess(Object o) {
+        try {
+            String s = new GsonBuilder().serializeNulls().create().toJson(o);
+            JSONObject js = new JSONObject(s);
+            int ret = js.getInt("ret");
+            Log.e("ret", String.valueOf(ret));
+            if (ret == 0) {
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     //接收定时服务发送过来的广播  用于界面更改
@@ -125,21 +191,6 @@ public class MainPresenter extends BasePresenter {
         }
     }
 
-    // 发送注册账号请求
-    private void getVersion() {
-        mainModel.getVersion(new MainModel.OnLoadInterface() {
-            @Override
-            public void onSuccess(Object o) {
-                dealVersionSuccess(o);
-            }
-
-            @Override
-            public void onFailure(String msg) {
-
-            }
-        });
-    }
-
     /**
      * 通知消息的点击事件处理
      *
@@ -172,55 +223,94 @@ public class MainPresenter extends BasePresenter {
             case "11":
                 break;
         }
-
     }
 
-    // 处理注册返回数据
-    private void dealVersionSuccess(Object o) {
-        try {
-            String s = new GsonBuilder().serializeNulls().create().toJson(o);
-            JSONObject js = new JSONObject(s);
-            int ret = js.getInt("ret");
-            Log.e("ret", String.valueOf(ret));
-            if (ret == 0) {
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMoonEvent(MessageEvent messageEvent) {
+        if ("one".equals(messageEvent.getMessage())) {
+            activity.setViewType(1);
+        } else if ("two".equals(messageEvent.getMessage())) {
+            activity.setViewType(2);
+        } else if ("three".equals(messageEvent.getMessage())) {
+            activity.setViewType(3);
+        } else if ("four".equals(messageEvent.getMessage())) {
+            activity.setViewType(4);
+        } else if ("acceptMain".equals(messageEvent.getMessage())) {
+            WtDeviceControl.pause();
+            activity.enterRoom(roomId);
+        } else if (messageEvent.getMessage().contains("create&Rommid")) {
+            roomId = messageEvent.getMessage().split("create&Rommid")[1];
+        } else if ("over".equals(messageEvent.getMessage())) {
+        } else if (messageEvent.getMessage().contains("enterGroup&")) {
+            WtDeviceControl.pause();
+            String room_id = messageEvent.getMessage().split("enterGroup&")[1];
+            activity.enterRoom(room_id);
+        } else if (messageEvent.getMessage().contains("exitGroup&")) {
+            WtDeviceControl.start();
+            activity.exitRoom();// 退出房间
+        } else if (messageEvent.getMessage().equals("onDestroy")) {
+            activity.destroyWebView();
         }
     }
 
-    /**********************对外接口************************/
+    /**
+     * 消息接收观察者
+     */
+    Observer<List<IMMessage>> incomingMessageObserver = new Observer<List<IMMessage>>() {
+        @Override
+        public void onEvent(List<IMMessage> messages) {
+            if (messages == null || messages.isEmpty()) {
+                return;
+            }
+            final IMMessage im = messages.get(messages.size() - 1);
+            if (im != null) {
+                Map<String, Object> map = im.getPushPayload();
+                String type = map.get("type") + "";
+                String userId = map.get("userId") + "";
+                String roomid = map.get("roomid") + "";
+
+                if (type != null && !type.trim().equals("")) {
+                    switch (type) {
+                        case "LAUNCH":// 收到别人邀请我对讲（单对单）
+                            roomId = roomid;
+                            EventBus.getDefault().post(new MessageEvent("two"));
+                            ReceiveAlertActivity.start(activity, im.getFromAccount(), userId);
+                            WtDeviceControl.pause();
+                            break;
+                        case "CANCEL":// 取消呼叫别人
+                            EventBus.getDefault().post(new MessageEvent("cancel"));
+                            WtDeviceControl.start();
+                            break;
+                        case "ACCEPT": // 我的对讲邀请被接受（单对单）
+                            EventBus.getDefault().post(new MessageEvent("accept"));
+                            WtDeviceControl.pause();
+                            activity.enterRoom(roomId);
+                            break;
+                        case "REFUSE":// 我的对讲邀请被拒绝（单对单）
+                            EventBus.getDefault().post(new MessageEvent("refuse"));
+                            WtDeviceControl.start();
+                            break;
+                        case "OVER":
+                            WtDeviceControl.start();
+                            activity.exitRoom();// 退出房间
+                            break;
+                    }
+                }
+            }
+        }
+    };
 
     /**
      * app退出时执行该操作
      */
     public void stop() {
+        mainModel = null;
         activity.stopService(FloatingWindow);
         activity.stopService(NS);
         activity.unregisterReceiver(netWorkChangeReceiver);
         activity.unregisterReceiver(endApplicationBroadcast);
+        Thread.setDefaultUncaughtExceptionHandler(null);
+        EventBus.getDefault().unregister(this);
         Log.e("app退出", "app退出");
     }
-
-
-    private boolean validateUrl(String url) {
-        if (URLUtil.isHttpsUrl(url) || URLUtil.isHttpUrl(url)) {
-            return true;
-        }
-
-        new AlertDialog.Builder(activity)
-                .setTitle(getText(R.string.invalid_url_title))
-                .setMessage(activity.getString(R.string.invalid_url_text, url))
-                .setCancelable(false)
-                .setNeutralButton(R.string.ok,
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                dialog.cancel();
-                            }
-                        })
-                .create()
-                .show();
-        return false;
-    }
-
 }

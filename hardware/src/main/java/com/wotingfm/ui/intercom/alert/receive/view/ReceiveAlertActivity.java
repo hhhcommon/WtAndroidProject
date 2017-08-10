@@ -1,6 +1,5 @@
 package com.wotingfm.ui.intercom.alert.receive.view;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -8,26 +7,20 @@ import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.netease.nim.live.NimController;
-import com.netease.nim.live.liveStreaming.CapturePreviewController;
 import com.woting.commonplat.utils.BitmapUtils;
 import com.wotingfm.R;
 import com.wotingfm.common.bean.MessageEvent;
+import com.wotingfm.common.service.InterPhoneControl;
 import com.wotingfm.common.utils.GlideUtils;
-import com.wotingfm.common.utils.IMManger;
 import com.wotingfm.ui.base.baseactivity.BaseActivity;
 import com.wotingfm.ui.intercom.alert.receive.presenter.ReceivePresenter;
-import com.wotingfm.ui.main.view.MainActivity;
-
 import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
-
 import jp.wasabeef.glide.transformations.BlurTransformation;
 
 import static android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP;
@@ -53,27 +46,12 @@ public class ReceiveAlertActivity extends BaseActivity implements OnClickListene
         context.startActivity(intent);
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onMoonEvent(MessageEvent messageEvent) {
-        String msg = messageEvent.getMessage();
-        if ("refuse".equals(msg) || "accept".equals(msg) || "cancel".equals(msg)) {
-            EventBus.getDefault().post(new MessageEvent("over"));
-            finish();
-        }
-
-    }
-
-    private String roomId, userId;
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EventBus.getDefault().register(this);
+        requestWindowFeature(Window.FEATURE_NO_TITLE); // 隐藏标题栏
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);// 隐藏状态栏
         setContentView(R.layout.activity_receive);
-        roomId = getIntent().getStringExtra("roomId");
-        userId = getIntent().getStringExtra("id");
-        //  getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);        //透明状态栏
-        //  getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);    //透明导航栏
         inItView();
         presenter = new ReceivePresenter(this);
     }
@@ -96,7 +74,7 @@ public class ReceiveAlertActivity extends BaseActivity implements OnClickListene
                 /**
                  * 此处需要挂断电话等操作
                  */
-                IMManger.getInstance().sendMsg(roomId, "REFUSE", userId);
+                InterPhoneControl.refuse(presenter.getRoomId(),presenter.getId());
                 EventBus.getDefault().post(new MessageEvent("over"));
                 finish();
                 break;
@@ -104,8 +82,9 @@ public class ReceiveAlertActivity extends BaseActivity implements OnClickListene
                 /**
                  * 此处需要接收电话等操作
                  */
-                IMManger.getInstance().sendMsg(roomId, "ACCEPT", userId);
+                InterPhoneControl.accept(presenter.getRoomId(),presenter.getId());
                 EventBus.getDefault().post(new MessageEvent("acceptMain"));
+                presenter.pushCallOk();
                 finish();
                 break;
         }
@@ -143,9 +122,8 @@ public class ReceiveAlertActivity extends BaseActivity implements OnClickListene
             /**
              * 此处需要挂断电话等操作
              */
-            IMManger.getInstance().sendMsg(roomId, "REFUSE", userId);
+            InterPhoneControl.refuse(presenter.getRoomId(),presenter.getId());
             EventBus.getDefault().post(new MessageEvent("over"));
-            presenter.musicClose();
             finish();
             return true;
         }
@@ -157,6 +135,5 @@ public class ReceiveAlertActivity extends BaseActivity implements OnClickListene
         super.onDestroy();
         presenter.destroy();
         presenter=null;
-        EventBus.getDefault().unregister(this);
     }
 }

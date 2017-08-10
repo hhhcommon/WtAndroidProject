@@ -8,33 +8,23 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.wotingfm.common.application.BSApplication;
+import com.wotingfm.common.bean.MessageEvent;
 import com.wotingfm.common.config.GlobalStateConfig;
 import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.common.constant.IntegerConstant;
+import com.wotingfm.common.service.InterPhoneControl;
 import com.wotingfm.common.utils.CommonUtils;
-import com.wotingfm.common.utils.IMManger;
 import com.wotingfm.common.utils.ToastUtils;
 import com.wotingfm.ui.intercom.alert.call.view.CallAlertActivity;
-import com.wotingfm.ui.intercom.alert.receive.view.ReceiveAlertActivity;
-import com.wotingfm.ui.intercom.main.chat.model.ChatModel;
-import com.wotingfm.ui.intercom.main.chat.model.DBTalkHistory;
-import com.wotingfm.ui.intercom.main.chat.model.TalkHistory;
 import com.wotingfm.ui.intercom.main.chat.presenter.ChatPresenter;
 import com.wotingfm.ui.intercom.main.contacts.fragment.ContactsFragment;
 import com.wotingfm.ui.intercom.main.contacts.model.Contact;
 import com.wotingfm.ui.intercom.main.contacts.model.ContactsModel;
-import com.wotingfm.ui.intercom.main.contacts.view.CharacterParser;
-import com.wotingfm.ui.intercom.main.contacts.view.PinyinComparator;
 import com.wotingfm.ui.intercom.main.view.InterPhoneActivity;
-import com.wotingfm.ui.intercom.main.view.InterPhoneFragment;
 import com.wotingfm.ui.intercom.person.personmessage.view.PersonMessageFragment;
-import com.wotingfm.ui.intercom.person.personnote.view.EditPersonNoteFragment;
 import com.wotingfm.ui.user.logo.LogoActivity;
-
-import java.util.Collections;
+import org.greenrobot.eventbus.EventBus;
 import java.util.List;
-
-import static android.media.CamcorderProfile.get;
 
 /**
  * 通讯录业务处理中心
@@ -141,9 +131,11 @@ public class ContactsPresenter {
     // 退出组对讲
     private boolean talkOverGroup() {
         if (ChatPresenter.data != null && ChatPresenter.data.getID() != null) {
-            ChatPresenter.data.getID();// 退出组
+            EventBus.getDefault().post(new MessageEvent("exitGroup&" + ChatPresenter.data.getID()));
+            return true;
+        }else{
+            return false;
         }
-        return true;
     }
 
     // 进行呼叫
@@ -151,17 +143,24 @@ public class ContactsPresenter {
         String id = list.get(position).getId();
         Contact.user u = list.get(position);
         if (id != null && !id.equals("")) {
-            IMManger.getInstance().sendMsg(u.getAcc_id(), "LAUNCH", CommonUtils.getUserId());
-            Intent intent = new Intent(activity.getActivity(), CallAlertActivity.class);
-            Bundle bundle = new Bundle();
-            bundle.putString("id", id);
-            bundle.putString("roomId", u.getAcc_id());
-            intent.putExtras(bundle);
-            activity.startActivity(intent);
+            boolean b = InterPhoneControl.call(u.getAcc_id());// 发送呼叫请求
+            if (b) {
+                Intent intent = new Intent(activity.getActivity(), CallAlertActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putString("id", id);
+                bundle.putString("roomId", u.getAcc_id());
+                intent.putExtras(bundle);
+                activity.startActivity(intent);
+                return true;
+            } else {
+                ToastUtils.show_always(activity.getActivity(), "呼叫失败，请稍后再试！");
+                return false;
+            }
         } else {
             ToastUtils.show_always(activity.getActivity(), "数据出错了，请稍后再试！");
+            return false;
         }
-        return true;
+
     }
 
     /**
@@ -192,9 +191,11 @@ public class ContactsPresenter {
     // 挂断当前个人对讲
     private boolean talkOver() {
         if (ChatPresenter.data != null && ChatPresenter.data.getID() != null) {
-            ChatPresenter.data.getID();// 挂断电话
+            boolean b = InterPhoneControl.hangUp(ChatPresenter.data.getACC_ID(),ChatPresenter.data.getID());// 发送呼叫请求
+            return b;
+        }else{
+            return false;
         }
-        return true;
     }
 
     // 呼叫成功后操作
