@@ -40,7 +40,10 @@ public class CallAlertActivity extends Activity implements OnClickListener {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMoonEvent(MessageEvent messageEvent) {
         String msg = messageEvent.getMessage();
-        if ("refuse".equals(msg) || "accept".equals(msg) || "cancel".equals(msg)) {
+        if ("refuse".equals(msg) || "cancel".equals(msg)) {
+            EventBus.getDefault().post(new MessageEvent("over"));
+            finish();
+        } else if ("accept".equals(msg)) {
             EventBus.getDefault().post(new MessageEvent("over"));
             finish();
         }
@@ -128,7 +131,7 @@ public class CallAlertActivity extends Activity implements OnClickListener {
     protected void onDestroy() {
         super.onDestroy();
         presenter.destroy();
-        presenter=null;
+        presenter = null;
         EventBus.getDefault().unregister(this);
     }
 }
