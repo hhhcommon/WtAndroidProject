@@ -5,7 +5,7 @@ android {
 
     defaultConfig {
         applicationId "com.wotingfm"
-        minSdkVersion 15
+        minSdkVersion 14
         targetSdkVersion 21
         versionCode 1
         versionName "1.0"
@@ -68,10 +68,6 @@ android {
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
-    testCompile 'junit:junit:4.12'
-    compile 'com.android.support:multidex:1.0.1'
-    androidTestCompile 'com.android.support:multidex-instrumentation:1.0.1'
-    compile 'com.android.support:design:25.3.1'
     compile 'com.jakewharton:butterknife:8.6.0'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.6.0'
     compile 'com.github.mcxtzhang:SwipeDelMenuLayout:V1.2.5'
@@ -80,9 +76,7 @@ dependencies {
  /*   compile('org.xwalk:xwalk_core_library:23.+') {
         exclude group: 'com.android.support'
     }*/
-    // 顶栏样式
     compile project(':CommonPlat')
-
     // SUB-PROJECT DEPENDENCIES START
 
 }
