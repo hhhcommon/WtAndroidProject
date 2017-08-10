@@ -6,11 +6,18 @@ package com.wotingfm.ui.mine.bluetooth.model;
  * 邮箱：645700751@qq.com
  */
 public class BluetoothInfo {
-    private String bluetoothName;// 蓝牙名字
-
+    private String bluetoothName;   // 蓝牙名字
     private String bluetoothAddress;// 蓝牙地址
+    private int bluetoothType;      // 蓝牙设备的类型
+    private boolean Type;           // 蓝牙是否连接成功
 
-    private int bluetoothType;// 1为已配对设备 0为可以配对设备
+    public boolean isType() {
+        return Type;
+    }
+
+    public void setType(boolean type) {
+        Type = type;
+    }
 
     public int getBluetoothType() {
         return bluetoothType;

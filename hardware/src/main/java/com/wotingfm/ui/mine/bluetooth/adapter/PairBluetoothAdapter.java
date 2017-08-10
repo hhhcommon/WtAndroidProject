@@ -21,8 +21,7 @@ import java.util.List;
 public class PairBluetoothAdapter extends BaseAdapter {
     private Context context;
     private List<BluetoothInfo> list;
-    private PairInfoListener pairInfoListener;
-
+    private itemClickListener Listener;
     public PairBluetoothAdapter(Context context, List<BluetoothInfo> list) {
         this.context = context;
         this.list = list;
@@ -33,8 +32,8 @@ public class PairBluetoothAdapter extends BaseAdapter {
         notifyDataSetChanged();
     }
 
-    public void setListener(PairInfoListener pairInfoListener) {
-        this.pairInfoListener = pairInfoListener;
+    public void itemClickListener(itemClickListener l) {
+        Listener = l;
     }
 
     @Override
@@ -60,6 +59,8 @@ public class PairBluetoothAdapter extends BaseAdapter {
             convertView = LayoutInflater.from(context).inflate(R.layout.adapter_user_bluetooth_pair, parent, false);
             holder.textBluetoothName = (TextView) convertView.findViewById(R.id.text_bluetooth_name);// 设备名字
             holder.viewConn = convertView.findViewById(R.id.view_conn);
+            holder.re_main = convertView.findViewById(R.id.re_main);
+            holder.img_r = convertView.findViewById(R.id.img_r);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
@@ -70,24 +71,29 @@ public class PairBluetoothAdapter extends BaseAdapter {
         } else {
             holder.textBluetoothName.setText(bName.getBluetoothName());
         }
+        if(bName.isType()){
+            holder.viewConn .setVisibility(View.VISIBLE);
+            holder.img_r.setVisibility(View.GONE);
+        }else{
+            holder.viewConn .setVisibility(View.GONE);
+            holder.img_r.setVisibility(View.VISIBLE);
+        }
         Log.w("TAG", "bName" + bName + "position == " + position);
-        holder.viewConn.setOnClickListener(new View.OnClickListener() {
+        holder.re_main.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                pairInfoListener.pairInfo(position);
+                Listener.click(position);
             }
         });
-
         return convertView;
     }
 
-    public interface PairInfoListener {
-        void pairInfo(int p);
+    public interface itemClickListener{
+        void click(int position);
     }
 
     class ViewHolder {
         TextView textBluetoothName;
-        View viewConn;
-//        ImageView imageConnInfo;// 配对过的设备信息
+        View viewConn,img_r,re_main;
     }
 }

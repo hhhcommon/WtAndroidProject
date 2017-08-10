@@ -1,48 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="44dp"
     android:background="@color/white">
 
-    <LinearLayout
+    <RelativeLayout
+        android:id="@+id/re_main"
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:gravity="center_vertical"
-        android:layout_marginLeft="14dp"
-        android:orientation="vertical">
+        android:layout_height="match_parent">
 
         <TextView
             android:id="@+id/text_bluetooth_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="16sp"
-            android:textColor="@color/black_head_word"/>
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/view_conn"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_alignParentRight="true"
-        android:layout_marginRight="8dp"
-        android:gravity="center">
-
-        <TextView
-            android:id="@+id/text_conn_success"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/app_basic"
-            android:layout_marginRight="12dp"
-            android:text="@string/connection_success"/>
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="12dp"
+            android:text="蓝牙名称"
+            android:textColor="@color/black_head_word"
+            android:textSize="16sp" />
 
         <ImageView
-            android:id="@+id/image_conn_info"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@mipmap/bluetooth_icon_connected_n"/>
+            android:id="@+id/img_r"
+            style="@style/MineRightImageStyle" />
 
-    </LinearLayout>
+        <LinearLayout
+            android:id="@+id/view_conn"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="12dp"
+            android:visibility="gone"
+            android:gravity="center">
+
+            <TextView
+                android:id="@+id/text_conn_success"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="12dp"
+                android:text="@string/connection_success"
+                android:textColor="@color/app_basic" />
+
+            <ImageView
+                android:id="@+id/image_conn_info"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/bluetooth_icon_connected_n" />
+
+        </LinearLayout>
+    </RelativeLayout>
+
 
 </RelativeLayout>

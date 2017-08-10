@@ -4,17 +4,18 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.woting.commonplat.widget.HeightListView;
 import com.wotingfm.R;
+import com.wotingfm.common.utils.ToastUtils;
 import com.wotingfm.ui.mine.bluetooth.presenter.BlueToothPresenter;
 import com.wotingfm.ui.mine.main.MineActivity;
 import com.wotingfm.ui.mine.bluetooth.adapter.PairBluetoothAdapter;
@@ -37,6 +38,7 @@ public class BluetoothFragment extends Fragment implements View.OnClickListener 
     private ImageView imageBluetoothSet, image_bluetooth_detection_set;
     private View rootView;
     private BlueToothPresenter presenter;
+    private ProgressBar progressBar_scan;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -54,28 +56,31 @@ public class BluetoothFragment extends Fragment implements View.OnClickListener 
         ImageView leftImage = (ImageView) rootView.findViewById(R.id.head_left_btn);// 返回
         leftImage.setOnClickListener(this);
         TextView textTitle = (TextView) rootView.findViewById(R.id.tv_center);// 标题
-        textTitle.setText(getString(R.string.bluetooth_settings));// 设置标题
+        textTitle.setText(getString(R.string.bluetooth_settings));            // 设置标题
 
         View headView = LayoutInflater.from(this.getActivity()).inflate(R.layout.head_view_bluetooth, null);
 
-        headView.findViewById(R.id.bluetooth_set).setOnClickListener(this);// 开启蓝牙按钮
-        text_bluetooth_set = (TextView) headView.findViewById(R.id.text_bluetooth_set);// 提示内容：开启蓝牙
+        headView.findViewById(R.id.bluetooth_set).setOnClickListener(this);   // 开启蓝牙按钮
+        text_bluetooth_set = (TextView) headView.findViewById(R.id.text_bluetooth_set);  // 提示内容：开启蓝牙
         text_bluetooth_news = (TextView) headView.findViewById(R.id.text_bluetooth_news);// 提示内容：蓝牙开启中
-        imageBluetoothSet = (ImageView) headView.findViewById(R.id.image_bluetooth_set);// 蓝牙开启显示图片
+        imageBluetoothSet = (ImageView) headView.findViewById(R.id.image_bluetooth_set); // 蓝牙开启显示图片
 
-        headView.findViewById(R.id.bluetooth_detection).setOnClickListener(this);  // 开放检测按钮
-        text_bluetooth_detection = (TextView) headView.findViewById(R.id.text_bluetooth_detection);// 提示内容：开放检测
-        text_bluetooth_detection_news = (TextView) headView.findViewById(R.id.text_bluetooth_detection_news);// 提示内容：已关闭，仅允许配对设备检测到
-        image_bluetooth_detection_set = (ImageView) headView.findViewById(R.id.image_bluetooth_detection_set);// 开放检测显示图片
+        headView.findViewById(R.id.bluetooth_detection).setOnClickListener(this);        // 开放检测按钮
+        text_bluetooth_detection = (TextView) headView.findViewById(R.id.text_bluetooth_detection);            // 提示内容：开放检测
+        text_bluetooth_detection_news = (TextView) headView.findViewById(R.id.text_bluetooth_detection_news);  // 提示内容：已关闭，仅允许配对设备检测到
+        image_bluetooth_detection_set = (ImageView) headView.findViewById(R.id.image_bluetooth_detection_set); // 开放检测显示图片
 
         headView.findViewById(R.id.lin_phone_name).setOnClickListener(this);  // 手机名称
-        tv_phone_name = (TextView) headView.findViewById(R.id.tv_phone_name);// 提示内容：手机名称
+        tv_phone_name = (TextView) headView.findViewById(R.id.tv_phone_name); // 提示内容：手机名称
 
-        textPairDevice = (TextView) headView.findViewById(R.id.text_pair_device);// "已经配对过的设备"
+        headView.findViewById(R.id.lin_base).setOnClickListener(this);        // 设置底座
+
+        textPairDevice = (TextView) headView.findViewById(R.id.text_pair_device);      // "已经配对过的设备"
         pairBluetoothList = (ListView) headView.findViewById(R.id.list_pair_bluetooth);// 已经配对过的列表
-        textPairDevice = (TextView) headView.findViewById(R.id.text_pair_device);// "已经配对过的设备"
+        textPairDevice = (TextView) headView.findViewById(R.id.text_pair_device);      // "已经配对过的设备"
 
-        text_use_device = (TextView) headView.findViewById(R.id.text_use_device);// "可用的设备"
+        text_use_device = (TextView) headView.findViewById(R.id.text_use_device);      // "可用的设备"
+        progressBar_scan = (ProgressBar) headView.findViewById(R.id.progressBar_scan); // 扫描等待提示
 
         userBluetoothList = (ListView) rootView.findViewById(R.id.list_user_bluetooth);// 搜索到的可用可配对设备列表
         userBluetoothList.setSelector(new ColorDrawable(Color.TRANSPARENT));
@@ -131,7 +136,7 @@ public class BluetoothFragment extends Fragment implements View.OnClickListener 
         text_bluetooth_detection.setText("开放检测");// 提示内容：开放检测
         text_bluetooth_detection.setTextColor(Color.parseColor("#16181a"));
         text_bluetooth_detection_news.setText("已开启，允许周围设备检测到");// 提示内容：已开启，允许周围设备检测到
-        text_bluetooth_detection.setTextColor(Color.parseColor("#959698"));
+        text_bluetooth_detection_news.setTextColor(Color.parseColor("#959698"));
         image_bluetooth_detection_set.setImageResource(R.mipmap.on_switch);// 开放检测显示图片
     }
 
@@ -140,18 +145,18 @@ public class BluetoothFragment extends Fragment implements View.OnClickListener 
      *
      * @param b 是否已经开启蓝牙
      */
-    public void setViewFordDetectionClose(boolean b) {
+    public void setViewForDetectionClose(boolean b) {
         if (b) {
             text_bluetooth_detection.setText("开放检测");// 提示内容：开放检测
             text_bluetooth_detection.setTextColor(Color.parseColor("#16181a"));
             text_bluetooth_detection_news.setText("已关闭，仅允许配对设备检测到");// 提示内容：已关闭，仅允许配对设备检测到
-            text_bluetooth_detection.setTextColor(Color.parseColor("#959698"));
+            text_bluetooth_detection_news.setTextColor(Color.parseColor("#959698"));
             image_bluetooth_detection_set.setImageResource(R.mipmap.off_switch);// 开放检测显示图片
         } else {
             text_bluetooth_detection.setText("开放检测");// 提示内容：开放检测
             text_bluetooth_detection.setTextColor(Color.parseColor("#959698"));
             text_bluetooth_detection_news.setText("已关闭，仅允许配对设备检测到");// 提示内容：已关闭，仅允许配对设备检测到
-            text_bluetooth_detection.setTextColor(Color.parseColor("#959698"));
+            text_bluetooth_detection_news.setTextColor(Color.parseColor("#959698"));
             image_bluetooth_detection_set.setImageResource(R.mipmap.off_switch);// 开放检测显示图片
         }
     }
@@ -163,6 +168,19 @@ public class BluetoothFragment extends Fragment implements View.OnClickListener 
      */
     public void setPhoneName(String name) {
         tv_phone_name.setText(name);
+    }
+
+    /**
+     * 扫描等待提示的展示
+     *
+     * @param b
+     */
+    public void setViewForScan(boolean b) {
+        if (b) {
+            progressBar_scan.setVisibility(View.VISIBLE);
+        } else {
+            progressBar_scan.setVisibility(View.GONE);
+        }
     }
 
     /**
@@ -209,13 +227,19 @@ public class BluetoothFragment extends Fragment implements View.OnClickListener 
     // 子条目点击事件  发送配对请求
     private void setItemForPair(final List<BluetoothInfo> pairList) {
         // 已经配对过的设备点击则直接连接
-        pairBluetoothList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        pairAdapter.itemClickListener(new PairBluetoothAdapter.itemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            public void click(int position) {
                 presenter.link(pairList, position);
-
             }
         });
+//        pairBluetoothList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                presenter.link(pairList, position);
+//
+//            }
+//        });
 
     }
 
@@ -245,7 +269,12 @@ public class BluetoothFragment extends Fragment implements View.OnClickListener 
                 presenter.setDetection();
                 break;
             case R.id.lin_phone_name:// 修改手机昵称按钮
+                presenter.upDataName();
                 break;
+            case R.id.lin_base:// 一键连接底座
+                ToastUtils.show_always(this.getActivity(),"一键连接底座");
+                break;
+
         }
     }
 
