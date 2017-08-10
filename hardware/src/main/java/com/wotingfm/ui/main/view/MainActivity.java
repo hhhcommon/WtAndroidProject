@@ -96,7 +96,6 @@ public class MainActivity extends TabActivity implements View.OnClickListener {
     private MainPresenter mainPresenter;
     private MainActivity context;
     public WebView mWebView;
-    private LinearLayout largeLabel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -107,7 +106,6 @@ public class MainActivity extends TabActivity implements View.OnClickListener {
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);    // 透明导航栏
         setContentView(R.layout.activity_main);
         EventBus.getDefault().register(this);
-        largeLabel = (LinearLayout) findViewById(R.id.largeLabel);
         context = this;
         NIMClient.getService(MsgServiceObserve.class)
                 .observeReceiveMessage(incomingMessageObserver, true);
@@ -400,26 +398,22 @@ public class MainActivity extends TabActivity implements View.OnClickListener {
             EventBus.getDefault().post(new MessageEvent("pause"));
             mWebView.loadUrl("javascript:joinRoom('" + roomId + "')");
             tv_5.setVisibility(View.VISIBLE);
-            largeLabel.setVisibility(View.VISIBLE);
             tv_6.setVisibility(View.GONE);
         } else if (messageEvent.getMessage().contains("create&Rommid")) {
             roomId = messageEvent.getMessage().split("create&Rommid")[1];
         } else if ("over".equals(messageEvent.getMessage())) {
             tv_5.setVisibility(View.GONE);
-            largeLabel.setVisibility(View.GONE);
         } else if (messageEvent.getMessage().contains("enterGroup&")) {
             tv_5.setVisibility(View.GONE);
             EventBus.getDefault().post(new MessageEvent("pause"));
             String roomid = messageEvent.getMessage().split("enterGroup&")[1];
             mWebView.loadUrl("javascript:joinRoom('" + roomid + "')");
             tv_6.setVisibility(View.VISIBLE);
-            largeLabel.setVisibility(View.VISIBLE);
         } else if (messageEvent.getMessage().contains("exitGroup&")) {
             tv_5.setVisibility(View.GONE);
             EventBus.getDefault().post(new MessageEvent("start"));
             mWebView.loadUrl("javascript:exitRoom()");
             tv_6.setVisibility(View.GONE);
-            largeLabel.setVisibility(View.GONE);
         } else if (messageEvent.getMessage().equals("onDestroy")) {
             if (mWebView != null) {
                 mWebView.loadUrl("javascript:exitRoom()");
@@ -465,7 +459,6 @@ public class MainActivity extends TabActivity implements View.OnClickListener {
                     EventBus.getDefault().post(new MessageEvent("start"));
                     mWebView.loadUrl("javascript:exitRoom()");
                     tv_5.setVisibility(View.GONE);
-                    largeLabel.setVisibility(View.GONE);
                 }
                 //接受对讲
                 else if ("ACCEPT".equals(type)) {
@@ -473,7 +466,6 @@ public class MainActivity extends TabActivity implements View.OnClickListener {
                     EventBus.getDefault().post(new MessageEvent("pause"));
                     mWebView.loadUrl("javascript:joinRoom('" + roomId + "')");
                     tv_5.setVisibility(View.VISIBLE);
-                    largeLabel.setVisibility(View.VISIBLE);
                 }
             }
         }

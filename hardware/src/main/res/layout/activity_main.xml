@@ -54,7 +54,7 @@
             android:layout_gravity="bottom"
             android:background="#16181a"
             android:orientation="horizontal"
-            android:visibility="gone">
+          >
 
             <TextView
                 android:id="@+id/tv_1"
@@ -64,7 +64,7 @@
                 android:gravity="center"
                 android:text="上一曲"
                 android:textColor="@color/white"
-                android:visibility="gone" />
+                 />
 
             <TextView
                 android:id="@+id/tv_2"
@@ -74,7 +74,7 @@
                 android:gravity="center"
                 android:text="暂/播"
                 android:textColor="@color/white"
-                android:visibility="gone" />
+                 />
 
             <TextView
                 android:id="@+id/tv_3"
@@ -84,7 +84,7 @@
                 android:gravity="center"
                 android:text="下一曲"
                 android:textColor="@color/white"
-                android:visibility="gone" />
+             />
 
             <TextView
                 android:id="@+id/tv_4"
