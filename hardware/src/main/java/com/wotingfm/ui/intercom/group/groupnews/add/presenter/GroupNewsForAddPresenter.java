@@ -12,6 +12,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.woting.commonplat.config.GlobalNetWorkConfig;
 import com.woting.commonplat.utils.JsonEncloseUtils;
+import com.wotingfm.common.bean.MessageEvent;
 import com.wotingfm.common.config.GlobalStateConfig;
 import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.common.utils.BeanCloneUtil;
@@ -31,6 +32,7 @@ import com.wotingfm.ui.intercom.main.view.InterPhoneActivity;
 import com.wotingfm.ui.intercom.person.personmessage.view.PersonMessageFragment;
 import com.wotingfm.ui.mine.qrcodes.EWMShowFragment;
 
+import org.greenrobot.eventbus.EventBus;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
@@ -46,8 +48,8 @@ import java.util.Map;
  */
 public class GroupNewsForAddPresenter {
 
-    private  GroupNewsForAddFragment activity;
-    private  GroupNewsForAddModel model;
+    private GroupNewsForAddFragment activity;
+    private GroupNewsForAddModel model;
     private String gid;
     private Contact.group g_news;
     private List<Contact.user> list;
@@ -304,7 +306,7 @@ public class GroupNewsForAddPresenter {
             group.setId(number);
             group.setLocation(address);
             group.setIntroduction(introduce);
-            List<Contact.user> _list= BeanCloneUtil.cloneTo(list);
+            List<Contact.user> _list = BeanCloneUtil.cloneTo(list);
             GroupManageFragment fragment = new GroupManageFragment();
             Bundle bundle = new Bundle();
             bundle.putSerializable("group", group);
@@ -313,7 +315,7 @@ public class GroupNewsForAddPresenter {
             InterPhoneActivity.open(fragment);
         } else {
             if (g_news != null) {
-                List<Contact.user> _list= BeanCloneUtil.cloneTo(list);
+                List<Contact.user> _list = BeanCloneUtil.cloneTo(list);
                 GroupManageFragment fragment = new GroupManageFragment();
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("group", g_news);
@@ -341,7 +343,7 @@ public class GroupNewsForAddPresenter {
      */
     public void jumpGroupNumberShow() {
         if (list != null && list.size() > 0) {
-            List<Contact.user> _list= BeanCloneUtil.cloneTo(list);
+            List<Contact.user> _list = BeanCloneUtil.cloneTo(list);
             GroupNumberShowFragment fragment = new GroupNumberShowFragment();
             Bundle bundle = new Bundle();
             bundle.putSerializable("list", (Serializable) _list);
@@ -383,7 +385,7 @@ public class GroupNewsForAddPresenter {
                 // 判断是否是群主
                 if (model.judgeMine(g_news)) {
                     //群主跳转到退出群组的界面
-                    List<Contact.user> _list= BeanCloneUtil.cloneTo(list);
+                    List<Contact.user> _list = BeanCloneUtil.cloneTo(list);
                     GroupExitFragment fragment = new GroupExitFragment();
                     Bundle bundle = new Bundle();
                     bundle.putSerializable("group", g_news);
@@ -392,12 +394,12 @@ public class GroupNewsForAddPresenter {
                     InterPhoneActivity.open(fragment);
                     fragment.setResultListener(new GroupExitFragment.ResultListener() {
                         @Override
-                        public void resultListener(boolean type,int changeType) {
+                        public void resultListener(boolean type, int changeType) {
                             if (type) {
-                                if(changeType==0){
+                                if (changeType == 0) {
                                     // 群已经解散
                                     InterPhoneActivity.close();
-                                }else{
+                                } else {
                                     // 群主已转让
                                     getData();
                                 }
@@ -416,7 +418,7 @@ public class GroupNewsForAddPresenter {
     /**
      * 发送退出群组的请求
      */
-    public void del(){
+    public void del() {
         if (GlobalNetWorkConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
             activity.dialogShow();
             model.exitGroup(gid, new GroupNewsForAddModel.OnLoadInterface() {
@@ -498,7 +500,7 @@ public class GroupNewsForAddPresenter {
                     ToastUtils.show_always(activity.getActivity(), "数据出错了，请稍后再试！");
                 }
             } else if (type == 2) {// 添加群成员
-                List<Contact.user> list2= BeanCloneUtil.cloneTo(list);
+                List<Contact.user> list2 = BeanCloneUtil.cloneTo(list);
                 GroupNumberAddFragment fragment = new GroupNumberAddFragment();
                 Bundle bundle = new Bundle();
                 bundle.putString("gid", gid);
@@ -512,7 +514,7 @@ public class GroupNewsForAddPresenter {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-                List<Contact.user> list3= BeanCloneUtil.cloneTo(list);
+                List<Contact.user> list3 = BeanCloneUtil.cloneTo(list);
                 GroupNumberDelFragment fragment = new GroupNumberDelFragment();
                 Bundle bundle = new Bundle();
                 bundle.putString("gid", gid);// 群id
@@ -650,6 +652,7 @@ public class GroupNewsForAddPresenter {
 
     // 进入组成功后数据处理
     private void enterGroupOkData(String groupId) {
+        EventBus.getDefault().post(new MessageEvent("enterGroup&" + groupId));
         model.del(groupId);// 删除跟本次id相关的数据
         model.add(model.assemblyData(g_news, GlobalStateConfig.ok, ""));// 把本次数据添加的数据库
         InterPhoneActivity.closeAll();
@@ -662,6 +665,7 @@ public class GroupNewsForAddPresenter {
         if (ChatPresenter.data != null && ChatPresenter.data.getID() != null) {
             // 退出组
             String id = ChatPresenter.data.getID();
+            EventBus.getDefault().post(new MessageEvent("exitGroup&" + id));
         }
         return true;
     }
@@ -705,6 +709,6 @@ public class GroupNewsForAddPresenter {
             activity.getActivity().unregisterReceiver(Receiver);
             Receiver = null;
         }
-        model=null;
+        model = null;
     }
 }

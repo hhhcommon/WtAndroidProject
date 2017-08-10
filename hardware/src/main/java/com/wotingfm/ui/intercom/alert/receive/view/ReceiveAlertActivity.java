@@ -22,6 +22,7 @@ import com.wotingfm.common.utils.GlideUtils;
 import com.wotingfm.common.utils.IMManger;
 import com.wotingfm.ui.base.baseactivity.BaseActivity;
 import com.wotingfm.ui.intercom.alert.receive.presenter.ReceivePresenter;
+import com.wotingfm.ui.main.view.MainActivity;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;

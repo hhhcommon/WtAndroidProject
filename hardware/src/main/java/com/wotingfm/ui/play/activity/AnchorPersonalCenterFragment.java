@@ -109,11 +109,15 @@ public class AnchorPersonalCenterFragment extends BaseFragment implements View.O
         anchorPersonalCenterInfoAdapter.setAlbumsMoreClick(new AnchorPersonalCenterInfoAdapter.AlbumsMoreClick() {
             @Override
             public void ItmeClick(String albumsId) {
+                BSApplication.IS_RESULT = true;
+                BSApplication.isIS_BACK = true;
                 openFragment(PlayerFragment.newInstance(albumsId));
             }
 
             @Override
             public void ItmeSendClick(AnchorInfo.DataBeanXX.UserBean.DataBeanX.DataBean dataBean) {
+                BSApplication.IS_RESULT = true;
+                BSApplication.isIS_BACK = true;
                 SinglesBase singlesBase = new SinglesBase();
                 singlesBase.album_logo_url = dataBean.single_logo_url;
                 singlesBase.album_title = dataBean.single_title;

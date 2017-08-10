@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.woting.commonplat.config.GlobalNetWorkConfig;
+import com.wotingfm.common.bean.MessageEvent;
 import com.wotingfm.common.config.GlobalStateConfig;
 import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.common.utils.CommonUtils;
@@ -23,6 +24,8 @@ import com.wotingfm.ui.intercom.main.contacts.model.Contact;
 import com.wotingfm.ui.intercom.main.view.InterPhoneActivity;
 import com.wotingfm.ui.intercom.person.personmessage.view.PersonMessageFragment;
 import com.wotingfm.ui.user.logo.LogoActivity;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -125,7 +128,7 @@ public class ChatPresenter {
                         } else {
                             Log.e("信令控制", "退出组失败");
                         }
-                        boolean cp = callPerson(n_id,_data.getACC_ID());// 呼叫好友
+                        boolean cp = callPerson(n_id, _data.getACC_ID());// 呼叫好友
                         if (cp) {
                             Log.e("信令控制", "呼叫好友成功");
                             callPersonOkData(1);
@@ -136,7 +139,7 @@ public class ChatPresenter {
                 } else {
                     // 此时没有对讲状态
                     String n_id = _data.getID();
-                    boolean cp = callPerson(n_id,_data.getACC_ID());// 呼叫好友
+                    boolean cp = callPerson(n_id, _data.getACC_ID());// 呼叫好友
                     if (cp) {
                         Log.e("信令控制", "呼叫好友成功");
                         callPersonOkData(3);
@@ -197,7 +200,7 @@ public class ChatPresenter {
      * @param new_id
      * @param type
      */
-    public void callOk(String old_id, String new_id, int type,String accId) {
+    public void callOk(String old_id, String new_id, int type, String accId) {
         if (type == 1) {
             // 挂断上次好友
             boolean bp = backPerson(old_id);
@@ -207,7 +210,7 @@ public class ChatPresenter {
                 Log.e("信令控制", "挂断好友失败");
             }
             // 呼叫好友
-            boolean cp = callPerson(new_id,accId);
+            boolean cp = callPerson(new_id, accId);
             if (cp) {
                 Log.e("信令控制", "呼叫好友成功");
                 callPersonOkData(2);
@@ -235,18 +238,18 @@ public class ChatPresenter {
 
     // 进入当前组
     private boolean enterGroup(String id) {
-
+        EventBus.getDefault().post(new MessageEvent("enterGroup&" + id));
         return true;
     }
 
     // 退出当前组
     private boolean exitGroup(String id) {
-
+        EventBus.getDefault().post(new MessageEvent("exitGroup&" + id));
         return true;
     }
 
     // 呼叫好友
-    private boolean callPerson(String id,String accId) {
+    private boolean callPerson(String id, String accId) {
         IMManger.getInstance().sendMsg(accId, "LAUNCH", CommonUtils.getUserId());
         Intent intent = new Intent(activity.getActivity(), CallAlertActivity.class);
         Bundle bundle = new Bundle();
@@ -269,21 +272,21 @@ public class ChatPresenter {
             activity.setGroupViewClose();
             TalkHistory _d = list.remove(position);
             activity.setPersonViewShow(_d);
-            model.add(model.assemblyData(_d, GlobalStateConfig.ok,""));
+            model.add(model.assemblyData(_d, GlobalStateConfig.ok, ""));
             list.add(0, data);
             if (list != null && list.size() > 0) activity.updateUI(list);
             data = _d;// 替换此时对讲对象
         } else if (type == 2) {
             TalkHistory _d = list.remove(position);
             activity.setPersonViewShow(_d);
-            model.add(model.assemblyData(_d, GlobalStateConfig.ok,""));
+            model.add(model.assemblyData(_d, GlobalStateConfig.ok, ""));
             list.add(0, data);
             if (list != null && list.size() > 0) activity.updateUI(list);
             data = _d;// 替换此时对讲对象
         } else if (type == 3) {
             TalkHistory _d = list.remove(position);
             activity.setPersonViewShow(_d);
-            model.add(model.assemblyData(_d, GlobalStateConfig.ok,""));
+            model.add(model.assemblyData(_d, GlobalStateConfig.ok, ""));
             if (list != null && list.size() > 0) activity.updateUI(list);
             data = _d;// 替换此时对讲对象
         }
@@ -295,21 +298,21 @@ public class ChatPresenter {
             activity.setPersonViewClose();
             TalkHistory _d = list.remove(position);
             activity.setGroupViewShow(_d);
-            model.add(model.assemblyData(_d, GlobalStateConfig.ok,""));
+            model.add(model.assemblyData(_d, GlobalStateConfig.ok, ""));
             list.add(0, data);
             if (list != null && list.size() > 0) activity.updateUI(list);
             data = _d;// 替换此时对讲对象
         } else if (type == 2) {
             TalkHistory _d = list.remove(position);
             activity.setGroupViewShow(_d);
-            model.add(model.assemblyData(_d, GlobalStateConfig.ok,""));
+            model.add(model.assemblyData(_d, GlobalStateConfig.ok, ""));
             list.add(0, data);
             if (list != null && list.size() > 0) activity.updateUI(list);
             data = _d;// 替换此时对讲对象
         } else if (type == 3) {
             TalkHistory _d = list.remove(position);
             activity.setGroupViewShow(_d);
-            model.add(model.assemblyData(_d, GlobalStateConfig.ok,""));
+            model.add(model.assemblyData(_d, GlobalStateConfig.ok, ""));
             if (list != null && list.size() > 0) activity.updateUI(list);
             data = _d;// 替换此时对讲对象
         }

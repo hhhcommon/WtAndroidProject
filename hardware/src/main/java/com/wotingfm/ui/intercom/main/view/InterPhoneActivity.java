@@ -13,9 +13,12 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 import com.woting.commonplat.utils.SequenceUUID;
 import com.wotingfm.R;
+import com.wotingfm.common.bean.MessageEvent;
 import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.ui.base.baseactivity.AppManager;
 import com.wotingfm.ui.base.baseactivity.BaseFragmentActivity;
+
+import org.greenrobot.eventbus.EventBus;
 
 /**
  * 对讲模块主页
@@ -157,6 +160,7 @@ public class InterPhoneActivity extends BaseFragmentActivity {
         if (getSupportFragmentManager().getBackStackEntryCount() == 1) {
             long time = System.currentTimeMillis();
             if (time - tempTime <= 2000) {
+                EventBus.getDefault().post(new MessageEvent("onDestroy"));
                 android.os.Process.killProcess(android.os.Process.myPid());
             } else {
                 tempTime = time;

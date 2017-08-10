@@ -7,6 +7,7 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.wotingfm.common.bean.MessageEvent;
 import com.wotingfm.common.config.GlobalStateConfig;
 import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.common.utils.ToastUtils;
@@ -17,6 +18,8 @@ import com.wotingfm.ui.intercom.group.groupnews.add.view.GroupNewsForAddFragment
 import com.wotingfm.ui.intercom.main.chat.model.TalkHistory;
 import com.wotingfm.ui.intercom.main.chat.presenter.ChatPresenter;
 import com.wotingfm.ui.intercom.main.view.InterPhoneActivity;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.List;
 
@@ -203,6 +206,7 @@ public class GroupChatPresenter {
     // 进入组成功后数据处理
     private void enterGroupOkData() {
         model.del(list.get(groupPosition).getPerson().get(childPosition).getId());// 删除跟本次id相关的数据
+        EventBus.getDefault().post(new MessageEvent("enterGroup&" + list.get(groupPosition).getPerson().get(childPosition).getId()));
         model.add(model.assemblyData(list.get(groupPosition).getPerson().get(childPosition), GlobalStateConfig.ok,""));// 把本次数据添加的数据库
         InterPhoneActivity.closeAll();
         activity.getActivity().sendBroadcast(new Intent(BroadcastConstants.VIEW_INTER_PHONE));// 跳转到对讲主页
@@ -214,6 +218,7 @@ public class GroupChatPresenter {
         if (ChatPresenter.data != null && ChatPresenter.data.getID() != null) {
             // 退出组
             String id = ChatPresenter.data.getID();
+            EventBus.getDefault().post(new MessageEvent("exitGroup&" + id));
         }
         return true;
     }

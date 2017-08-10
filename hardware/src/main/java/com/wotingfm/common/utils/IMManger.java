@@ -33,7 +33,6 @@ import com.wotingfm.ui.intercom.alert.receive.view.ReceiveAlertActivity;
 import com.wotingfm.ui.main.view.MainActivity;
 import com.wotingfm.ui.test.PlayerActivity;
 
-import org.appspot.apprtc.CallActivity;
 import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
@@ -81,7 +80,7 @@ public class IMManger {
                 @Override
                 public void room(String roomid) {
                     IMMessage msg = MessageBuilder.createCustomMessage(sessionId, SessionTypeEnum.P2P, null);
-                    EventBus.getDefault().post(new MessageEvent("create&Rommid"+roomid));
+                    EventBus.getDefault().post(new MessageEvent("create&Rommid" + roomid));
                     //// data.put("chatRoom", chatRoom);
                     data.put("roomid", roomid);
                     roomID = roomid;

@@ -65,86 +65,88 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.SimpleHolder> 
     public void onBindViewHolder(final SimpleHolder holder, int position) {
         holder.layout_content.getLayoutParams().width = getScreenWidth(mContext);
         TalkHistory data = t.get(position);
-        String name = "";
-        try {
-            name = data.getName();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        holder.tv_name.setText(name);
-        String type = data.getTyPe();
-        if (type.equals("person")) {
-            String CallType = "";
+        if(data!=null) {
+            String name = "";
             try {
-                CallType = data.getCallType();
+                name = data.getName();
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            if (CallType.trim().equals("ok")) {
-                holder.tv_news.setText("[语音通话] " + TimeUtils.converTime(Long.parseLong(data.getAddTime())));
-            } else {
-                String news = "";
+            holder.tv_name.setText(name);
+            String type = data.getTyPe();
+            if (type.equals("person")) {
+                String CallType = "";
                 try {
-                    news = data.getCallTypeM();
+                    CallType = data.getCallType();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-                holder.tv_news.setText("[语音通话] " + news);
-            }
-            if (t.get(position).getURL() != null && !t.get(position).getURL().equals("") && t.get(position).getURL().startsWith("http")) {
-                GlideUtils.loadImageViewRound(t.get(position).getURL(), holder.img_url, 60, 60);
-            } else {
-                GlideUtils.loadImageViewRound(R.mipmap.icon_avatar_d, holder.img_url, 60, 60);
-            }
-
-            holder.lin_img.setBackgroundResource(R.mipmap.avatar_p);
-        } else {
-            String num = "";
-            try {
-                num = data.getGroupNum();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            holder.tv_news.setText("(" + num + "人)");
-            if (t.get(position).getURL() != null && !t.get(position).getURL().equals("") && t.get(position).getURL().startsWith("http")) {
-                GlideUtils.loadImageViewRoundCorners(t.get(position).getURL(), holder.img_url, 60, 60);
-            } else {
-                GlideUtils.loadImageViewRoundCorners(R.mipmap.icon_avatar_d, holder.img_url, 60, 60);
-            }
-            holder.lin_img.setBackgroundResource(R.mipmap.avatar_g);
-        }
-
-
-        holder.img_voice.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //判断是否有删除菜单打开
-                if (menuIsOpen()) {
-                    closeMenu();//关闭菜单
+                if (CallType.trim().equals("ok")) {
+                    holder.tv_news.setText("[语音通话] " + TimeUtils.converTime(Long.parseLong(data.getAddTime())));
                 } else {
-                    int n = holder.getLayoutPosition();
-                    clickListener.onItemClick(view, n);
+                    String news = "";
+                    try {
+                        news = data.getCallTypeM();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    holder.tv_news.setText("[语音通话] " + news);
                 }
-            }
-        });
+                if (t.get(position).getURL() != null && !t.get(position).getURL().equals("") && t.get(position).getURL().startsWith("http")) {
+                    GlideUtils.loadImageViewRound(t.get(position).getURL(), holder.img_url, 60, 60);
+                } else {
+                    GlideUtils.loadImageViewRound(R.mipmap.icon_avatar_d, holder.img_url, 60, 60);
+                }
 
-        holder.tv_Delete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (menuIsOpen()) {
-                    closeMenu();//关闭菜单
+                holder.lin_img.setBackgroundResource(R.mipmap.avatar_p);
+            } else {
+                String num = "";
+                try {
+                    num = data.getGroupNum();
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
-                int n = holder.getLayoutPosition();
-                clickListener.onDeleteBtnClick(view, n);
+                holder.tv_news.setText("(" + num + "人)");
+                if (t.get(position).getURL() != null && !t.get(position).getURL().equals("") && t.get(position).getURL().startsWith("http")) {
+                    GlideUtils.loadImageViewRoundCorners(t.get(position).getURL(), holder.img_url, 60, 60);
+                } else {
+                    GlideUtils.loadImageViewRoundCorners(R.mipmap.icon_avatar_d, holder.img_url, 60, 60);
+                }
+                holder.lin_img.setBackgroundResource(R.mipmap.avatar_g);
             }
-        });
-        holder.layout_content.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                int n = holder.getLayoutPosition();
-                clickListener.onClick(view, n);
-            }
-        });
+
+
+            holder.img_voice.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    //判断是否有删除菜单打开
+                    if (menuIsOpen()) {
+                        closeMenu();//关闭菜单
+                    } else {
+                        int n = holder.getLayoutPosition();
+                        clickListener.onItemClick(view, n);
+                    }
+                }
+            });
+
+            holder.tv_Delete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (menuIsOpen()) {
+                        closeMenu();//关闭菜单
+                    }
+                    int n = holder.getLayoutPosition();
+                    clickListener.onDeleteBtnClick(view, n);
+                }
+            });
+            holder.layout_content.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    int n = holder.getLayoutPosition();
+                    clickListener.onClick(view, n);
+                }
+            });
+        }
 
     }
 

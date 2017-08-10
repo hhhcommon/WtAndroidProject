@@ -1,5 +1,9 @@
 package com.wotingfm.ui.test;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -40,7 +44,7 @@ public class PlayerActivity extends NoTitleBarBaseActivity {
         return R.layout.activity_player;
     }
 
-    private PlayerFragment playerFragment;
+    public PlayerFragment playerFragment;
 
     @Override
     public void initView() {
@@ -48,8 +52,10 @@ public class PlayerActivity extends NoTitleBarBaseActivity {
         openMain(playerFragment);
     }
 
+
     public void open(Fragment frg) {
-        getSupportFragmentManager().beginTransaction().remove(frg).commit();
+        if (BSApplication.IS_RESULT == true)
+            getSupportFragmentManager().beginTransaction().remove(frg).commit();
         getSupportFragmentManager().beginTransaction()
                 .setCustomAnimations(
                         R.anim.slide_right_in, 0,
@@ -68,7 +74,8 @@ public class PlayerActivity extends NoTitleBarBaseActivity {
     }
 
     public void openNoAnim(Fragment frg) {
-        getSupportFragmentManager().beginTransaction().remove(frg).commit();
+        if (BSApplication.IS_RESULT == true)
+            getSupportFragmentManager().beginTransaction().remove(frg).commit();
         getSupportFragmentManager().beginTransaction()
                 .add(R.id.fragment, frg)
                 .addToBackStack(SequenceUUID.getUUID())
@@ -96,6 +103,7 @@ public class PlayerActivity extends NoTitleBarBaseActivity {
             if (BSApplication.IS_RESULT == true) {
                 long time = System.currentTimeMillis();
                 if (time - tempTime <= 2000) {
+                    EventBus.getDefault().post(new MessageEvent("onDestroy"));
                     android.os.Process.killProcess(android.os.Process.myPid());
                 } else {
                     tempTime = time;

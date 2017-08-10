@@ -12,4 +12,5 @@ public class BroadcastConstants {
     public static final String PUSH_NETWORK_CONNECTED = "PUSH_NETWORK_CONNECTED";     // 网络连接成功
     public static final String PUSH_NETWORK_UNCONNECTED = "PUSH_NETWORK_UNCONNECTED"; // 网络连接失败
     public static final String SEARCHVOICE = "SEARCHVOICE";
+    public static final String SEARCHVOICEPLAYER1 = "SEARCHVOICEPLAYER1";
 }

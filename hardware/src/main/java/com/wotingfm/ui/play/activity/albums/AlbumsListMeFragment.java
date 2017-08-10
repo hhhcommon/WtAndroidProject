@@ -83,6 +83,8 @@ public class AlbumsListMeFragment extends BaseFragment implements OnLoadMoreList
             mAdapter.setPlayerClick(new AlbumsAdapter.PlayerClick() {
                 @Override
                 public void clickAlbums(AlbumsBean singlesBean) {
+                    BSApplication.IS_RESULT = true;
+                    BSApplication.isIS_BACK = true;
                     openFragment(PlayerFragment.newInstance(singlesBean.id));
                    // PlayerActivity.start(getActivity(), singlesBean.id);
                 }
