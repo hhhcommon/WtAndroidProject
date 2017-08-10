@@ -67,4 +67,6 @@ public class BroadcastConstants {
 
     // 通知消息关闭
     public static final String VIEW_NOTIFY_CLOSE = "VIEW_NOTIFY_CLOSE";
+
+    public static final String PUSH_NOTIFICATION = "PUSH_NOTIFICATION";
 }

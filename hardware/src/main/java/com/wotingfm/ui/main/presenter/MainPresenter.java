@@ -1,6 +1,9 @@
 package com.wotingfm.ui.main.presenter;
 
 import android.app.AlertDialog;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -10,6 +13,7 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.net.Uri;
 import android.preference.PreferenceManager;
+import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.view.View;
 import android.webkit.URLUtil;
@@ -157,7 +161,7 @@ public class MainPresenter extends BasePresenter {
                 } else if (viewType == 3) {
                     EventBus.getDefault().post(new MessageEvent("three"));
                     // mainActivity.changeThree();
-                }else if (viewType == 4) {
+                } else if (viewType == 4) {
                     EventBus.getDefault().post(new MessageEvent("four"));
                     // mainActivity.changeThree();
                 }
@@ -167,7 +171,7 @@ public class MainPresenter extends BasePresenter {
                 assemblyMsg(true, content);
             } else if (action.equals(BroadcastConstants.VIEW_NOTIFY_CLOSE)) {
                 assemblyMsg(false, "");// 关闭通知消息
-                Log.e("推送消息", "关闭消息" );
+                Log.e("推送消息", "关闭消息");
             }
         }
     };
@@ -186,13 +190,53 @@ public class MainPresenter extends BasePresenter {
                 String title = js.getString("title");
                 String message = js.getString("message");
                 Log.e("ret", type);
-                activity.notifyShow(true, type, title, message);
+                //  activity.notifyShow(true, type, title, message);
+                setNewMessageNotification(type, title, message);
             } catch (Exception e) {
                 e.printStackTrace();
             }
         } else {
-            activity.notifyShow(false, "", "", "");
+            //  activity.notifyShow(false, "", "", "");
+            notificationCancel();
         }
+    }
+
+    // 设置通知消息
+    private void setNewMessageNotification(String type, String message, String title) {
+        NotificationManager mNotificationManager = (NotificationManager) activity.getSystemService(Context.NOTIFICATION_SERVICE);
+        NotificationCompat.Builder mNotifyBuilder =
+                new NotificationCompat.Builder(activity)
+                        .setContentTitle(title)
+                        .setContentText(message)
+                        .setSmallIcon(R.mipmap.logo)
+                        .setFullScreenIntent(null, false);
+        mNotificationManager.notify(1, mNotifyBuilder.build());
+
+//        NotificationManager mNotificationManager = (NotificationManager) activity.getSystemService(Context.NOTIFICATION_SERVICE);
+////        Intent pushIntent = new Intent(BroadcastConstants.PUSH_NOTIFICATION);
+//////        Intent pushIntent = new Intent(mContext, NotifyNewActivity.class);
+//////        PendingIntent in = PendingIntent.getActivity(mContext, 0, pushIntent, 0);
+////        PendingIntent in = PendingIntent.getBroadcast(mContext, 2, pushIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+//        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(activity);
+//        mBuilder.setContentTitle(title)  // 设置通知栏标题
+//                .setContentText(message) // 设置通知栏显示内容
+//                // .setContentIntent(in) // 设置通知栏点击意图
+//                .setWhen(System.currentTimeMillis())       // 通知产生时间
+//                .setPriority(Notification.PRIORITY_MAX)    // 设置该通知优先级
+//                .setAutoCancel(true)                       // 设置点击通知消息时通知栏的通知自动消失
+//                .setDefaults(Notification.DEFAULT_VIBRATE | Notification.DEFAULT_SOUND)// 通知声音、闪灯和振动方式为使用当前的用户默认设置
+//                //	Notification.DEFAULT_VIBRATE  // 添加默认震动提醒 需要 VIBRATE permission
+//                //	Notification.DEFAULT_SOUND    // 添加默认声音提醒
+//                //	Notification.DEFAULT_LIGHTS   // 添加默认三色灯提醒
+//                //	Notification.DEFAULT_ALL      // 添加默认以上3种全部提醒
+//                .setFullScreenIntent(null, false)
+//                .setSmallIcon(R.mipmap.logo);     // 设置通知图标
+//        mNotificationManager.notify(1, mBuilder.build());
+    }
+
+    private void notificationCancel() {
+        NotificationManager mNotificationManager = (NotificationManager) activity.getSystemService(Context.NOTIFICATION_SERVICE);
+        mNotificationManager.cancelAll();
     }
 
     /**
@@ -245,7 +289,7 @@ public class MainPresenter extends BasePresenter {
         } else if (messageEvent.getMessage().contains("exitPerson&")) {// 退出个人对讲
             String room_id = messageEvent.getMessage().split("exitPerson&")[1];
             activity.exitRoomPerson(room_id);
-        }else if (messageEvent.getMessage().contains("create&Rommid")) {
+        } else if (messageEvent.getMessage().contains("create&Rommid")) {
             roomId = messageEvent.getMessage().split("create&Rommid")[1];
         } else if ("over".equals(messageEvent.getMessage())) {
 

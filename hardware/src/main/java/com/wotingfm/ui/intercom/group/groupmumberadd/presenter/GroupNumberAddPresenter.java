@@ -134,7 +134,9 @@ public class GroupNumberAddPresenter {
             int ret = js.getInt("ret");
             Log.e("ret", String.valueOf(ret));
             if (ret == 0) {
-                remove();
+                ToastUtils.show_always(activity.getActivity(), "您的邀请已经发送！");
+                InterPhoneActivity.close();
+//                remove();
             } else {
                 String msg = js.getString("msg");
                 if (msg != null && !msg.trim().equals("")) {
