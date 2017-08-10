@@ -62,6 +62,7 @@ import com.wotingfm.ui.intercom.alert.receive.view.ReceiveAlertActivity;
 import com.wotingfm.ui.intercom.main.view.InterPhoneActivity;
 import com.wotingfm.ui.main.presenter.MainPresenter;
 import com.wotingfm.ui.play.live.LiveRoomActivity;
+import com.wotingfm.ui.play.look.activity.LookListActivity;
 import com.wotingfm.ui.play.look.activity.serch.SerchFragment;
 import com.wotingfm.ui.test.PlayerActivity;
 import com.wotingfm.ui.mine.main.MineActivity;
@@ -234,6 +235,8 @@ public class MainActivity extends TabActivity implements View.OnClickListener {
                 .setContent(new Intent(this, InterPhoneActivity.class)));
         tabHost.addTab(tabHost.newTabSpec("three").setIndicator("three")
                 .setContent(new Intent(this, MineActivity.class)));
+        tabHost.addTab(tabHost.newTabSpec("four").setIndicator("four")
+                .setContent(new Intent(this, LookListActivity.class)));
     }
 
     private TabHost extracted() {
@@ -391,17 +394,10 @@ public class MainActivity extends TabActivity implements View.OnClickListener {
             tabHost.setCurrentTabByTag("two");
         } else if ("three".equals(messageEvent.getMessage())) {
             tabHost.setCurrentTabByTag("three");
+        } else if ("four".equals(messageEvent.getMessage())) {
+            tabHost.setCurrentTabByTag("four");
         } else if ("acceptMain".equals(messageEvent.getMessage())) {
             EventBus.getDefault().post(new MessageEvent("pause"));
-         /*   disconnect();
-            initPlayer();
-            mainPresenter.connectToRoom(roomId, false, false, false, 0);
-            activityRunning = true;
-            // Video is not paused for screencapture. See onPause.
-            if (peerConnectionClient != null && !screencaptureEnabled) {
-                peerConnectionClient.startVideoSource();
-            }
-            onToggleMicBase(false);*/
             mWebView.loadUrl("javascript:joinRoom('" + roomId + "')");
             tv_5.setVisibility(View.VISIBLE);
             largeLabel.setVisibility(View.VISIBLE);
@@ -451,8 +447,6 @@ public class MainActivity extends TabActivity implements View.OnClickListener {
                 String roomid = map.get("roomid") + "";
                 //收到发起对讲
                 if ("LAUNCH".equals(type)) {
-                  /*  disconnect();
-                    initPlayer();*/
                     roomId = roomid;
                     EventBus.getDefault().post(new MessageEvent("two"));
                     ReceiveAlertActivity.start(MainActivity.this, im.getFromAccount(), userId);
@@ -480,20 +474,10 @@ public class MainActivity extends TabActivity implements View.OnClickListener {
                     mWebView.loadUrl("javascript:joinRoom('" + roomId + "')");
                     tv_5.setVisibility(View.VISIBLE);
                     largeLabel.setVisibility(View.VISIBLE);
-                  /*  activityRunning = true;
-                    disconnect();
-                    initPlayer();
-                    mainPresenter.connectToRoom(roomId, false, false, false, 0);
-                    // Video is not paused for screencapture. See onPause.
-                    if (peerConnectionClient != null && !screencaptureEnabled) {
-                        peerConnectionClient.startVideoSource();
-                    }
-                    onToggleMicBase(false);*/
                 }
             }
         }
     };
 
 
-    private static final String TAG = MainActivity.class.getSimpleName();
 }

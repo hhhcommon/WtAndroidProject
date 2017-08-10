@@ -79,7 +79,7 @@ public class ProvincesAndCitiesListRadioFragment extends BaseFragment implements
                 @Override
                 public void clickAlbums(ChannelsBean singlesBean) {
                     // RadioInfoActivity.start(ProvincesAndCitiesListRadioActivity.this, title, singlesBean.id);
-                    openFragment(PlayerFragment.newInstance(singlesBean));
+                    startMain(singlesBean);
                 }
             });
             mRecyclerView.setIAdapter(mAdapter);

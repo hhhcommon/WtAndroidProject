@@ -76,7 +76,7 @@ public class MeSubscribeListFragment extends BaseFragment {
         playerHistoryListAdapter = new PlayerSubscribleListAdapter(getActivity(), albumsBeens, new PlayerSubscribleListAdapter.PlayerHistoryClick() {
             @Override
             public void click(AlbumsBean singlesBean) {
-                openFragment(PlayerFragment.newInstance(singlesBean.id));
+                startMain(singlesBean.id);
             }
 
             @Override

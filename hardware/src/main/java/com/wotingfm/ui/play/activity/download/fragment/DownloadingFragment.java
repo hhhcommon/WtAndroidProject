@@ -96,7 +96,7 @@ public class DownloadingFragment extends BaseFragment {
                         if(getActivity()!=null) {
                             List<SinglesDownload> singlesDownloads = new ArrayList<>();
                             singlesDownloads.add(singlesDownload);
-                            openFragment(PlayerFragment.newInstance(singlesDownloads));
+                            startMain(singlesDownloads);
                         }
                     }
                 });

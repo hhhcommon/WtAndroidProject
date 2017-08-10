@@ -136,7 +136,7 @@ public class AlbumsFragment extends BaseFragment {
 
                         @Override
                         public void click(List<SinglesDownload> singlesDownloads) {
-                            openFragment(PlayerFragment.newInstance(singlesDownloads));
+                            startMain(singlesDownloads);
                         }
                     });
                     mRecyclerView.setAdapter(albumsDownloadAdapter);

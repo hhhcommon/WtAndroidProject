@@ -65,7 +65,7 @@ public class BSApplication extends MultiDexApplication {
     public static boolean IS_CREATE = false;
     public static boolean IS_LOOK = false;
     public static boolean IS_ONE = false;
-    public static List<SinglesBase> singLesBeans = new ArrayList<>();
+
 
     public void onCreate() {
         super.onCreate();

@@ -21,7 +21,9 @@ import com.wotingfm.R;
 import com.wotingfm.common.adapter.userAdapter.AnchorPersonalCenterInfoAdapter;
 import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.bean.AnchorInfo;
+import com.wotingfm.common.bean.MessageEvent;
 import com.wotingfm.common.bean.SinglesBase;
+import com.wotingfm.common.config.GlobalStateConfig;
 import com.wotingfm.common.net.RetrofitUtils;
 import com.wotingfm.common.utils.CommonUtils;
 import com.wotingfm.common.utils.L;
@@ -37,6 +39,8 @@ import com.wotingfm.ui.test.PlayerFragment;
 import com.wotingfm.ui.user.login.view.LoginFragment;
 import com.wotingfm.ui.user.logo.LogoActivity;
 import com.zhy.adapter.recyclerview.wrapper.HeaderAndFooterWrapper;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -109,9 +113,7 @@ public class AnchorPersonalCenterFragment extends BaseFragment implements View.O
         anchorPersonalCenterInfoAdapter.setAlbumsMoreClick(new AnchorPersonalCenterInfoAdapter.AlbumsMoreClick() {
             @Override
             public void ItmeClick(String albumsId) {
-                BSApplication.IS_RESULT = true;
-                BSApplication.isIS_BACK = true;
-                openFragment(PlayerFragment.newInstance(albumsId));
+                startMain(albumsId);
             }
 
             @Override
@@ -125,7 +127,7 @@ public class AnchorPersonalCenterFragment extends BaseFragment implements View.O
                 singlesBase.album_id = dataBean.album_id;
                 singlesBase.creator_id = uid;
                 singlesBase.single_file_url = dataBean.single_file_url;
-                openFragment(PlayerFragment.newInstance(singlesBase));
+                startMain(singlesBase);
             }
 
             @Override
@@ -335,7 +337,7 @@ public class AnchorPersonalCenterFragment extends BaseFragment implements View.O
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == 7070 && resultCode == RESULT_OK && data != null) {
             String albumsId = data.getStringExtra("albumsId");
-            openFragment(PlayerFragment.newInstance(albumsId));
+            startMain(albumsId);
         }
     }
 }

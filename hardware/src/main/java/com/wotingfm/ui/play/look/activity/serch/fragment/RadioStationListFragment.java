@@ -79,9 +79,7 @@ public class RadioStationListFragment extends BaseFragment implements OnLoadMore
             @Override
             public void click(ChannelsBean dataBean) {
                 hideSoftKeyboard();
-                BSApplication.IS_RESULT = true;
-                BSApplication.isIS_BACK = true;
-                openFragment(PlayerFragment.newInstance(dataBean, q));
+                startMain(dataBean);
                 // RadioInfoActivity.start(getActivity(), dataBean.title, dataBean.id);
             }
         });

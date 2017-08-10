@@ -79,9 +79,7 @@ public class ProgramListFragment extends BaseFragment implements OnLoadMoreListe
             @Override
             public void click(SinglesBase s) {
                 hideSoftKeyboard();
-                BSApplication.IS_RESULT = true;
-                BSApplication.isIS_BACK = true;
-                openFragment(PlayerFragment.newInstance(s, q));
+                startMain(s);
             }
         });
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());

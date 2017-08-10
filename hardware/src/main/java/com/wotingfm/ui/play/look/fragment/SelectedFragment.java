@@ -1,5 +1,6 @@
 package com.wotingfm.ui.play.look.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -14,8 +15,11 @@ import com.wotingfm.R;
 import com.wotingfm.common.adapter.findHome.SelectedAdapter;
 import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.bean.HomeBanners;
+import com.wotingfm.common.bean.MessageEvent;
 import com.wotingfm.common.bean.Player;
 import com.wotingfm.common.bean.Selected;
+import com.wotingfm.common.config.GlobalStateConfig;
+import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.common.net.RetrofitUtils;
 import com.wotingfm.common.view.BannerView;
 import com.wotingfm.ui.base.basefragment.BaseFragment;
@@ -24,6 +28,8 @@ import com.wotingfm.ui.play.look.activity.SelectedMoreFragment;
 import com.wotingfm.ui.test.PlayerActivity;
 import com.wotingfm.ui.test.PlayerFragment;
 import com.zhy.adapter.recyclerview.wrapper.HeaderAndFooterWrapper;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -71,9 +77,7 @@ public class SelectedFragment extends BaseFragment implements SwipeRefreshLayout
         SelectedAdapter selectedAdapter = new SelectedAdapter(getActivity(), datas, new SelectedAdapter.SelectedClickBase() {
             @Override
             public void click(Selected.DataBeanX.DataBean dataBean) {
-                BSApplication.IS_RESULT = true;
-                BSApplication.isIS_BACK = true;
-                openFragment(PlayerFragment.newInstance(dataBean.id));
+                startMain(dataBean.id);
             }
 
             @Override

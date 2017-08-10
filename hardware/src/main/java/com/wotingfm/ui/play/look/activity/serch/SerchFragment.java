@@ -25,7 +25,6 @@ import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.ui.base.baseactivity.AppManager;
 import com.wotingfm.ui.base.baseactivity.NoTitleBarBaseActivity;
 import com.wotingfm.ui.base.basefragment.BaseFragment;
-import com.wotingfm.ui.play.look.activity.LookListFragment;
 import com.wotingfm.ui.play.look.activity.serch.fragment.AlbumsListFragment;
 import com.wotingfm.ui.play.look.activity.serch.fragment.AnchorListFragment;
 import com.wotingfm.ui.play.look.activity.serch.fragment.ProgramListFragment;
@@ -116,7 +115,8 @@ public class SerchFragment extends BaseFragment {
                 @Override
                 public void onClick(View v) {
                     hideSoftKeyboard();
-                    backResult();
+                    closeFragment();
+                    //backResult();
                 }
             });
             etSearchlike.addTextChangedListener(new TextWatcher() {

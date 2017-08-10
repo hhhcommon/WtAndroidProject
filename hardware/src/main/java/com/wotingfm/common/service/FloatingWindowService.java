@@ -234,7 +234,7 @@ public class FloatingWindowService extends Service {
             if (action.equals(BroadcastConstants.MINE_ACTIVITY_CHANGE)) {
                 // 按钮切换-----档位切换广播
                 int viewType = intent.getIntExtra("viewType", 1);
-                if (viewType == 1) {
+                if (viewType == 1 || viewType == 4) {
                     lin_d.setBackgroundResource(R.mipmap.test_bb);
                 } else if (viewType == 2) {
                     lin_d.setBackgroundResource(R.mipmap.test_aa);

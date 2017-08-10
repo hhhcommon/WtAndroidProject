@@ -84,7 +84,7 @@ public class CountryRadioFragment extends BaseFragment implements OnLoadMoreList
         mAdapter = new RadioAdapter(getActivity(), albumsBeanList, new RadioAdapter.RadioClick() {
             @Override
             public void clickAlbums(ChannelsBean singlesBean) {
-                openFragment(PlayerFragment.newInstance(singlesBean));
+                startMain(singlesBean);
                 //RadioInfoActivity.start(CountryRadioActivity.this, singlesBean.title, singlesBean.id);
             }
         });

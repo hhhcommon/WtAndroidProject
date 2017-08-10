@@ -88,8 +88,11 @@ public class MainPresenter extends BasePresenter {
                 } else if (viewType == 2) {
                     EventBus.getDefault().post(new MessageEvent("two"));
                     // mainActivity.changeTwo();
-                } else {
+                } else if (viewType == 3) {
                     EventBus.getDefault().post(new MessageEvent("three"));
+                    // mainActivity.changeThree();
+                }else if (viewType == 4) {
+                    EventBus.getDefault().post(new MessageEvent("four"));
                     // mainActivity.changeThree();
                 }
             } else if (action.equals(BroadcastConstants.VIEW_NOTIFY_SHOW)) {

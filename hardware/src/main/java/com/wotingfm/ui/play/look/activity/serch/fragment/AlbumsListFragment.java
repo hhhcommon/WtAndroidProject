@@ -96,9 +96,7 @@ public class AlbumsListFragment extends BaseFragment implements OnLoadMoreListen
             @Override
             public void clickAlbums(AlbumsBean singlesBean) {
                 hideSoftKeyboard();
-                BSApplication.IS_RESULT = true;
-                BSApplication.isIS_BACK = true;
-                openFragment(PlayerFragment.newInstance(singlesBean.id,q));
+                startMain(singlesBean.id);
             }
         });
         mRecyclerView.setIAdapter(mAdapter);

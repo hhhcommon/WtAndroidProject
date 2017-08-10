@@ -10,7 +10,6 @@ import android.graphics.Color;
 import android.graphics.Rect;
 import android.media.AudioManager;
 import android.os.Build;
-import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
@@ -32,6 +31,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.woting.commonplat.manager.VoiceRecognizer;
+import com.woting.commonplat.utils.SequenceUUID;
 import com.wotingfm.R;
 import com.wotingfm.common.adapter.MyAdapter;
 import com.wotingfm.common.application.BSApplication;
@@ -39,6 +39,7 @@ import com.wotingfm.common.bean.MessageEvent;
 import com.wotingfm.common.config.GlobalStateConfig;
 import com.wotingfm.common.utils.NetUtils;
 import com.wotingfm.common.utils.T;
+import com.wotingfm.ui.base.baseactivity.NoTitleBarBaseActivity;
 import com.wotingfm.ui.base.basefragment.BaseFragment;
 import com.wotingfm.ui.play.look.activity.serch.SerchFragment;
 import com.wotingfm.ui.play.look.fragment.ClassificationFragment;
@@ -53,6 +54,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
+
+import static com.wotingfm.R.layout.activity_look_list;
 
 /**
  * Created by amine on 2017/6/21.
@@ -78,14 +81,7 @@ public class LookListFragment extends BaseFragment implements View.OnClickListen
     RelativeLayout layout_main;
     @BindView(R.id.tvSubmitSerch)
     TextView tvSubmitSerch;
-
-    public static LookListFragment newInstance(int code) {
-        LookListFragment fragment = new LookListFragment();
-        Bundle bundle = new Bundle();
-        bundle.putSerializable("code", code);
-        fragment.setArguments(bundle);
-        return fragment;
-    }
+    public static LookListFragment context;
 
     private List<Fragment> mFragment = new ArrayList<>();
     private MyAdapter mAdapter;
@@ -110,7 +106,7 @@ public class LookListFragment extends BaseFragment implements View.OnClickListen
     private int keyboardHeight;
     // 软键盘的显示状态
     private boolean isShowKeyboard;
-    private boolean isOne=true;
+    private boolean isOne = true;
     private ViewTreeObserver.OnGlobalLayoutListener globalLayoutListener = new ViewTreeObserver.OnGlobalLayoutListener() {
 
         @Override
@@ -143,7 +139,7 @@ public class LookListFragment extends BaseFragment implements View.OnClickListen
             } else {
                 // 如果软键盘是收起的状态，并且heightDiff大于状态栏高度，
                 // 说明这时软键盘已经弹出
-                if (heightDiff > statusBarHeight&&isOne==false) {
+                if (heightDiff > statusBarHeight && isOne == false) {
                     isShowKeyboard = true;
                     relatLable.setVisibility(View.VISIBLE);
                 }
@@ -153,7 +149,8 @@ public class LookListFragment extends BaseFragment implements View.OnClickListen
 
     @Override
     public void initView() {
-
+        context = this;
+        imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
         statusBarHeight = getStatusBarHeight(BSApplication.getInstance());
 
         layout_main.getViewTreeObserver().addOnGlobalLayoutListener(globalLayoutListener);
@@ -188,17 +185,13 @@ public class LookListFragment extends BaseFragment implements View.OnClickListen
                     if (!TextUtils.isEmpty(content)) {
                         closeKeyboard(etSearchlike);
                         openFragment(SerchFragment.newInstance(content, 0));
-                        SerchCode = viewPager.getCurrentItem();
+                        //  openFragment(SerchFragment.newInstance(content, 0));
                         etSearchlike.setText("");
                     }
                 }
                 return false;
             }
         });
-        Bundle bundle = getArguments();
-        if (bundle != null) {
-            viewPager.setCurrentItem(bundle.getInt("code", 0));
-        }
     }
 
     // 广播接收器
@@ -213,7 +206,6 @@ public class LookListFragment extends BaseFragment implements View.OnClickListen
                     public void run() {
                         if (videoDialog != null) videoDialog.dismiss();
                         etSearchlike.setText("");
-                        SerchCode = viewPager.getCurrentItem();
                         closeKeyboard(etSearchlike);
                         openFragment(SerchFragment.newInstance(str.trim(), 0));
                     }
@@ -242,13 +234,11 @@ public class LookListFragment extends BaseFragment implements View.OnClickListen
                 }
                 closeKeyboard(etSearchlike);
                 openFragment(SerchFragment.newInstance(content, 0));
-                SerchCode = viewPager.getCurrentItem();
                 etSearchlike.setText("");
                 break;
             case R.id.ivBack:
             case R.id.ivClose:
                 closeKeyboard(etSearchlike);
-                closeFragment();
                 GlobalStateConfig.mineFromType = 0;
                 GlobalStateConfig.activityA = "A";
                 EventBus.getDefault().post(new MessageEvent("one"));
@@ -262,14 +252,16 @@ public class LookListFragment extends BaseFragment implements View.OnClickListen
         }
     }
 
-    public void closeKeyboard(View view) {
-        InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-    }
-
     @Override
     protected int getLayoutResource() {
         return R.layout.activity_look_list;
+    }
+
+    private InputMethodManager imm;
+
+    public void closeKeyboard(View view) {
+
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
     private TextView tvTitle, tvContent;
@@ -370,4 +362,5 @@ public class LookListFragment extends BaseFragment implements View.OnClickListen
             getActivity().unregisterReceiver(mBroadcastReceiver
             );
     }
+
 }

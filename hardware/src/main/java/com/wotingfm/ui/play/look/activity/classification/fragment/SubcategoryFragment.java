@@ -98,9 +98,7 @@ public class SubcategoryFragment extends BaseFragment implements OnLoadMoreListe
         mAdapter.setPlayerClick(new AlbumsAdapter.PlayerClick() {
             @Override
             public void clickAlbums(AlbumsBean singlesBean) {
-                BSApplication.IS_RESULT = true;
-                BSApplication.isIS_BACK = true;
-                openFragment(PlayerFragment.newInstanceSerch(singlesBean.id,id, bundle.getString("title")));
+                startMain(singlesBean.id);
             }
         });
         mRecyclerView.setIAdapter(mAdapter);
