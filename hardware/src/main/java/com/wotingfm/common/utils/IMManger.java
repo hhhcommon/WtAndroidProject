@@ -19,7 +19,9 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.netease.nimlib.sdk.InvocationFuture;
 import com.netease.nimlib.sdk.NIMClient;
+import com.netease.nimlib.sdk.RequestCallback;
 import com.netease.nimlib.sdk.msg.MessageBuilder;
 import com.netease.nimlib.sdk.msg.MsgService;
 import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
@@ -48,6 +50,7 @@ import static android.R.attr.type;
 import static cn.jpush.android.api.JPushInterface.a.e;
 import static cn.jpush.android.api.JPushInterface.a.r;
 import static com.iflytek.cloud.resource.Resource.getText;
+import static com.netease.nimlib.sdk.NIMClient.getService;
 
 /**
  * Created by amine on 2017/7/25.
@@ -69,8 +72,10 @@ public class IMManger {
     }
 
     private String roomID;
+    private boolean isSuccess = false;
 
-    public void sendMsg(final String sessionId, final String type, final String userId) {
+    public boolean sendMsg(final String sessionId, final String type, final String userId) {
+        isSuccess = false;
         final Map<String, Object> data = new HashMap<>();
         data.put("sessionId", sessionId);
         data.put("type", type);
@@ -78,15 +83,31 @@ public class IMManger {
         if ("LAUNCH".equals(type)) {
             apprtcRoom(new RoomResult() {
                 @Override
-                public void room(String roomid) {
+                public void room(final String roomid) {
                     IMMessage msg = MessageBuilder.createCustomMessage(sessionId, SessionTypeEnum.P2P, null);
-                    EventBus.getDefault().post(new MessageEvent("create&Rommid" + roomid));
                     //// data.put("chatRoom", chatRoom);
                     data.put("roomid", roomid);
                     roomID = roomid;
                     msg.setPushPayload(data);
                     // msg.setRemoteExtension(data); // 设置服务器扩展字段
-                    NIMClient.getService(MsgService.class).sendMessage(msg, false);
+                    InvocationFuture invocationFuture = NIMClient.getService(MsgService.class).sendMessage(msg, false);
+                    invocationFuture.setCallback(new RequestCallback() {
+                        @Override
+                        public void onSuccess(Object o) {
+                            isSuccess = true;
+                            EventBus.getDefault().post(new MessageEvent("create&Rommid" + roomid));
+                        }
+
+                        @Override
+                        public void onFailed(int i) {
+                            isSuccess = false;
+                        }
+
+                        @Override
+                        public void onException(Throwable throwable) {
+
+                        }
+                    });
                 }
             });
 
@@ -94,8 +115,25 @@ public class IMManger {
             IMMessage msg = MessageBuilder.createCustomMessage(sessionId, SessionTypeEnum.P2P, null);
             data.put("roomid", roomID);
             msg.setPushPayload(data); // 设置服务器扩展字段
-            NIMClient.getService(MsgService.class).sendMessage(msg, false);
+            InvocationFuture invocationFuture = NIMClient.getService(MsgService.class).sendMessage(msg, false);
+            invocationFuture.setCallback(new RequestCallback() {
+                @Override
+                public void onSuccess(Object o) {
+                    isSuccess = true;
+                }
+
+                @Override
+                public void onFailed(int i) {
+                    isSuccess = false;
+                }
+
+                @Override
+                public void onException(Throwable throwable) {
+
+                }
+            });
         }
+        return isSuccess;
     }
 
     public void apprtcRoom(final RoomResult roomResult) {
