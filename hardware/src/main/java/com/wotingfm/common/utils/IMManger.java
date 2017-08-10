@@ -105,7 +105,7 @@ public class IMManger {
 
                         @Override
                         public void onException(Throwable throwable) {
-
+                            isSuccess = false;
                         }
                     });
                 }
@@ -129,7 +129,7 @@ public class IMManger {
 
                 @Override
                 public void onException(Throwable throwable) {
-
+                    isSuccess = false;
                 }
             });
         }
