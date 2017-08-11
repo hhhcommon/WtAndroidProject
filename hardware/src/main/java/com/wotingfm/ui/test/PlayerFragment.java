@@ -34,6 +34,7 @@ import com.woting.commonplat.widget.LoadFrameLayout;
 import com.wotingfm.R;
 import com.wotingfm.common.adapter.PlayerAdapter;
 import com.wotingfm.common.application.BSApplication;
+import com.wotingfm.common.bean.BaseResult;
 import com.wotingfm.common.bean.ChannelsBean;
 import com.wotingfm.common.bean.MessageEvent;
 import com.wotingfm.common.bean.Player;
@@ -43,6 +44,8 @@ import com.wotingfm.common.config.GlobalStateConfig;
 import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.common.database.HistoryHelper;
 import com.wotingfm.common.net.RetrofitUtils;
+import com.wotingfm.common.utils.CommonUtils;
+import com.wotingfm.common.utils.L;
 import com.wotingfm.common.utils.TimeUtil;
 import com.wotingfm.common.view.MenuDialog;
 import com.wotingfm.common.view.PlayerDialog;
@@ -288,7 +291,20 @@ public class PlayerFragment extends BaseFragment implements View.OnClickListener
             contentValues.put("single_file_url", sb.single_file_url);
             contentValues.put("album_title", sb.album_title);
             historyHelper.insertTotable(sb.id, contentValues);
+            RetrofitUtils.getInstance().playSingles(sb.id)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new Action1<BaseResult>() {
+                        @Override
+                        public void call(BaseResult baseResult) {
+                        }
+                    }, new Action1<Throwable>() {
+                        @Override
+                        public void call(Throwable throwable) {
+                        }
+                    });
         }
+
     }
 
 
