@@ -501,15 +501,25 @@ public interface RetrofitService {
     @GET(Api.URL_GET_MY_FAVORITE)
     Observable<Object> getMyFavorite(@Path("id") String id);
 
-
     // 解散群
     @DELETE(Api.URL_GROUP_DISSOLVE)
     Observable<Object> groupDissolve(@Path("id") String id);
 
-
     //取消关注
     @DELETE(Api.URL_DEL_FANS)
     Observable<Object> delFocus(@Query("idol_id") String idol_id, @Query("user_id") String user_id);
+
+    // 好友同意加入群组
+    @POST(Api.URL_AGREE_INVITEE_MSG)
+    Observable<Object> agreeEnterGroup(@Path("id") String id);
+
+    // 好友拒绝加入群组
+    @POST(Api.URL_REFUSE_INVITEE_MSG)
+    Observable<Object> refuseEnterGroup(@Path("id") String id);
+
+    // 删除加入群组后的展示消息
+    @DELETE(Api.URL_DEL_INVITEE_MSG)
+    Observable<Object> delEnterGroup(@Path("id") String id);
 }
 
 

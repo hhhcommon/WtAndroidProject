@@ -3,14 +3,9 @@ package com.wotingfm.ui.mine.message.notify.model;
 import android.util.Log;
 
 import com.google.gson.GsonBuilder;
-import com.wotingfm.common.application.BSApplication;
-import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.common.net.RetrofitUtils;
 
-import java.text.ParsePosition;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import rx.android.schedulers.AndroidSchedulers;
@@ -34,7 +29,7 @@ public class MsgNotifyModel {
         List<Msg> msg = new ArrayList<>();
 
         try {
-            List<SrcMsg.applyMes> apply = s_msg.getGroup_apply_mes();
+            List<SrcMsg.groupApplyMes> apply = s_msg.getGroup_apply_mes();
             if (apply != null && apply.size() > 0) {
                 List<Msg> _msg = assemblyApply(apply);
                 if (_msg != null && _msg.size() > 0) {
@@ -46,7 +41,7 @@ public class MsgNotifyModel {
         }
 
         try {
-            List<SrcMsg.approveMes> approve = s_msg.getGroup_approve_mes();
+            List<SrcMsg.groupApproveMes> approve = s_msg.getGroup_approve_mes();
             if (approve != null && approve.size() > 0) {
                 List<Msg> _msg = assemblyApprove(approve);
                 if (_msg != null && _msg.size() > 0) {
@@ -58,9 +53,34 @@ public class MsgNotifyModel {
         }
 
         try {
-            List<SrcMsg.MesPerson> person = s_msg.getFriend_apply_mes();
+            List<SrcMsg.friendApplyMes> person = s_msg.getFriend_apply_mes();
             if (person != null && person.size() > 0) {
                 List<Msg> _msg = assemblyMsgForPerson(person);
+                if (_msg != null && _msg.size() > 0) {
+                    msg.addAll(_msg);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
+        try {
+            List<SrcMsg.inviteeMes> invitee = s_msg.getInvitee_mes();
+            if (invitee != null && invitee.size() > 0) {
+                List<Msg> _msg = assemblyInvitee(invitee);
+                if (_msg != null && _msg.size() > 0) {
+                    msg.addAll(_msg);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        try {
+            List<SrcMsg.groupAdminMes> admin = s_msg.getGroup_admin_mes();
+            if (admin != null && admin.size() > 0) {
+                List<Msg> _msg = assemblyAdminMsg(admin);
                 if (_msg != null && _msg.size() > 0) {
                     msg.addAll(_msg);
                 }
@@ -75,46 +95,51 @@ public class MsgNotifyModel {
         } else {
             return msg;
         }
-
     }
 
-    // 组消息（主动）
-    private List<Msg> assemblyApply(List<SrcMsg.applyMes> apply) {
+    // 群主邀请好友入群
+    private List<Msg> assemblyInvitee(List<SrcMsg.inviteeMes> invitee) {
         List<Msg> msg = new ArrayList<>();
-        for (int i = 0; i < apply.size(); i++) {
+        for (int i = 0; i < invitee.size(); i++) {
             Msg _msg = new Msg();
 
-            if (apply.get(i).getId() != null && !apply.get(i).getId().equals("")) {
-                _msg.setMsg_id(apply.get(i).getId());
+            if (invitee.get(i).getId() != null && !invitee.get(i).getId().equals("")) {
+                _msg.setMsg_id(invitee.get(i).getId());
             } else {
                 _msg.setMsg_id("");
             }
-            _msg.setMsg_type("3");
+            _msg.setMsg_type("5");
 
-            if (apply.get(i).getAvatar() != null && !apply.get(i).getAvatar().equals("")) {
-                _msg.setAvatar(apply.get(i).getAvatar());
+            if (invitee.get(i).getAvatar() != null && !invitee.get(i).getAvatar().equals("")) {
+                _msg.setAvatar(invitee.get(i).getAvatar());
             } else {
                 _msg.setAvatar("");
             }
 
-            if (apply.get(i).getGroup_name() != null && !apply.get(i).getGroup_name().equals("")) {
-                _msg.setTitle(apply.get(i).getGroup_name());
+            if (invitee.get(i).getGroup_name() != null && !invitee.get(i).getGroup_name().equals("")) {
+                _msg.setTitle(invitee.get(i).getGroup_name());
             } else {
                 _msg.setTitle("群消息");
             }
 
-            if (apply.get(i).getStatus() != null) {
-                if (apply.get(i).getStatus().equals("1")) {
-                    _msg.setNews("已通过了您的加群申请");
-                } else {
-                    _msg.setNews("拒绝了您的加群申请");
-                }
+            if (invitee.get(i).getInvitee_agreed() != null && !invitee.get(i).getInvitee_agreed().equals("")) {
+                _msg.setStatus(invitee.get(i).getInvitee_agreed());
             } else {
-                _msg.setNews("拒绝了您的加群申请");
+                _msg.setStatus("0");
             }
 
-            if (apply.get(i).getApprove_at() != null && !apply.get(i).getApprove_at().equals("")) {
-                _msg.setTime(apply.get(i).getApprove_at());
+            if (invitee.get(i).getStatus() != null) {
+                if (invitee.get(i).getStatus().equals("2")) {
+                    _msg.setNews("群主邀请您加入该群");
+                } else {
+                    _msg.setNews("您已经同意了群主的加群邀请");
+                }
+            } else {
+                _msg.setNews("您已经同意了群主的加群邀请");
+            }
+
+            if (invitee.get(i).getApprove_at() != null && !invitee.get(i).getApprove_at().equals("")) {
+                _msg.setTime(invitee.get(i).getApprove_at());
             } else {
                 _msg.setTime("");
             }
@@ -124,8 +149,74 @@ public class MsgNotifyModel {
         return msg;
     }
 
-    // 组消息（接收）
-    private List<Msg> assemblyApprove(List<SrcMsg.approveMes> approve) {
+
+    // 管理员收到的组申请消息
+    private List<Msg> assemblyAdminMsg(List<SrcMsg.groupAdminMes> admin) {
+        List<Msg> msg = new ArrayList<>();
+        for (int i = 0; i < admin.size(); i++) {
+            Msg _msg = new Msg();
+            if (admin.get(i).getId() != null && !admin.get(i).getId().equals("")) {
+                _msg.setMsg_id(admin.get(i).getId());
+            } else {
+                _msg.setMsg_id("");
+            }
+            _msg.setMsg_type("4");
+
+            if (admin.get(i).getAvatar() != null && !admin.get(i).getAvatar().equals("")) {
+                _msg.setAvatar(admin.get(i).getAvatar());
+            } else {
+                _msg.setAvatar("");
+            }
+
+            if (admin.get(i).getApplier_name() != null && !admin.get(i).getApplier_name().equals("")) {
+                _msg.setTitle(admin.get(i).getApplier_name());
+            } else {
+                _msg.setTitle("群消息");
+            }
+
+            if (admin.get(i).getGroup_name() != null && !admin.get(i).getGroup_name().equals("")) {
+                _msg.setNews("申请加入   " + admin.get(i).getGroup_name());
+            } else {
+                _msg.setNews("申请加入群");
+            }
+
+            if (admin.get(i).getContent() != null && !admin.get(i).getContent().trim().equals("")) {
+                _msg.setIntroduce("验证信息： " + admin.get(i).getContent());
+            } else {
+                _msg.setIntroduce("暂无验证信息");
+            }
+
+            if (admin.get(i).getGroup_id() != null && !admin.get(i).getGroup_id().equals("")) {
+                _msg.setGroup_id(admin.get(i).getGroup_id());
+            } else {
+                _msg.setGroup_id("");
+            }
+
+            if (admin.get(i).getUser_id() != null && !admin.get(i).getUser_id().equals("")) {
+                _msg.setApply_id(admin.get(i).getUser_id());
+            } else {
+                _msg.setApply_id("");
+            }
+
+            if (admin.get(i).getStatus() != null && !admin.get(i).getStatus().equals("")) {
+                _msg.setStatus(admin.get(i).getStatus());
+            } else {
+                _msg.setStatus("0");
+            }
+
+            if (admin.get(i).getApprove_at() != null && !admin.get(i).getApprove_at().equals("")) {
+                _msg.setTime(admin.get(i).getApprove_at());
+            } else {
+                _msg.setTime("");
+            }
+            msg.add(_msg);
+        }
+
+        return msg;
+    }
+
+    // 群主收到的组申消息
+    private List<Msg> assemblyApprove(List<SrcMsg.groupApproveMes> approve) {
         List<Msg> msg = new ArrayList<>();
         for (int i = 0; i < approve.size(); i++) {
             Msg _msg = new Msg();
@@ -189,8 +280,54 @@ public class MsgNotifyModel {
         return msg;
     }
 
+    // 组申请消息被处理（申请者收到的消息）
+    private List<Msg> assemblyApply(List<SrcMsg.groupApplyMes> apply) {
+        List<Msg> msg = new ArrayList<>();
+        for (int i = 0; i < apply.size(); i++) {
+            Msg _msg = new Msg();
+
+            if (apply.get(i).getId() != null && !apply.get(i).getId().equals("")) {
+                _msg.setMsg_id(apply.get(i).getId());
+            } else {
+                _msg.setMsg_id("");
+            }
+            _msg.setMsg_type("3");
+
+            if (apply.get(i).getAvatar() != null && !apply.get(i).getAvatar().equals("")) {
+                _msg.setAvatar(apply.get(i).getAvatar());
+            } else {
+                _msg.setAvatar("");
+            }
+
+            if (apply.get(i).getGroup_name() != null && !apply.get(i).getGroup_name().equals("")) {
+                _msg.setTitle(apply.get(i).getGroup_name());
+            } else {
+                _msg.setTitle("群消息");
+            }
+
+            if (apply.get(i).getStatus() != null) {
+                if (apply.get(i).getStatus().equals("1")) {
+                    _msg.setNews("已通过了您的加群申请");
+                } else {
+                    _msg.setNews("拒绝了您的加群申请");
+                }
+            } else {
+                _msg.setNews("拒绝了您的加群申请");
+            }
+
+            if (apply.get(i).getApprove_at() != null && !apply.get(i).getApprove_at().equals("")) {
+                _msg.setTime(apply.get(i).getApprove_at());
+            } else {
+                _msg.setTime("");
+            }
+            msg.add(_msg);
+        }
+
+        return msg;
+    }
+
     // 组装好友展示消息
-    private List<Msg> assemblyMsgForPerson(List<SrcMsg.MesPerson> person) {
+    private List<Msg> assemblyMsgForPerson(List<SrcMsg.friendApplyMes> person) {
         List<Msg> msg = new ArrayList<>();
         for (int i = 0; i < person.size(); i++) {
             Msg _msg = new Msg();
@@ -337,6 +474,111 @@ public class MsgNotifyModel {
                         public void call(Object o) {
                             try {
                                 Log.e("消息处理同意==返回数据", new GsonBuilder().serializeNulls().create().toJson(o));
+                                //填充UI
+                                listener.onSuccess(o);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                                listener.onFailure("");
+                            }
+                        }
+                    }, new Action1<Throwable>() {
+                        @Override
+                        public void call(Throwable throwable) {
+                            throwable.printStackTrace();
+                            listener.onFailure("");
+                        }
+                    });
+        } catch (Exception e) {
+            e.printStackTrace();
+            listener.onFailure("");
+        }
+    }
+
+    /**
+     * 消息==同意加入群组
+     *
+     * @param listener 监听
+     */
+    public void loadNewsForAgreeEnterGroup(String id, final OnLoadInterface listener) {
+        try {
+            RetrofitUtils.getInstance().msgAgreeEnterGroup(id)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new Action1<Object>() {
+                        @Override
+                        public void call(Object o) {
+                            try {
+                                Log.e("同意加入群组==返回数据", new GsonBuilder().serializeNulls().create().toJson(o));
+                                //填充UI
+                                listener.onSuccess(o);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                                listener.onFailure("");
+                            }
+                        }
+                    }, new Action1<Throwable>() {
+                        @Override
+                        public void call(Throwable throwable) {
+                            throwable.printStackTrace();
+                            listener.onFailure("");
+                        }
+                    });
+        } catch (Exception e) {
+            e.printStackTrace();
+            listener.onFailure("");
+        }
+    }
+
+    /**
+     * 消息==拒绝加入群组
+     *
+     * @param listener 监听
+     */
+    public void loadNewsForRefuseEnterGroup(String id, final OnLoadInterface listener) {
+        try {
+            RetrofitUtils.getInstance().msgRefuseEnterGroup(id)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new Action1<Object>() {
+                        @Override
+                        public void call(Object o) {
+                            try {
+                                Log.e("同意加入群组==返回数据", new GsonBuilder().serializeNulls().create().toJson(o));
+                                //填充UI
+                                listener.onSuccess(o);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                                listener.onFailure("");
+                            }
+                        }
+                    }, new Action1<Throwable>() {
+                        @Override
+                        public void call(Throwable throwable) {
+                            throwable.printStackTrace();
+                            listener.onFailure("");
+                        }
+                    });
+        } catch (Exception e) {
+            e.printStackTrace();
+            listener.onFailure("");
+        }
+    }
+
+    /**
+     * 消息==删除加入群组后的展示消息
+     *
+     * @param listener 监听
+     */
+    public void loadNewsForDelEnterGroup(String id, final OnLoadInterface listener) {
+        try {
+            RetrofitUtils.getInstance().msgDelEnterGroup(id)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new Action1<Object>() {
+                        @Override
+                        public void call(Object o) {
+                            try {
+                                Log.e("删除加入群组后的展示消息==返回数据", new GsonBuilder().serializeNulls().create().toJson(o));
                                 //填充UI
                                 listener.onSuccess(o);
                             } catch (Exception e) {

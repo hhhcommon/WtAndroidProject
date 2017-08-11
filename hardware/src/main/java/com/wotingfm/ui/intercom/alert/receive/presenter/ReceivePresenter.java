@@ -31,7 +31,6 @@ public class ReceivePresenter {
 
     private ReceiveAlertActivity activity;
     private ReceiveModel model;
-    private SearchTalkHistoryDao dao;
     private MediaPlayer musicPlayer;
     private long[] Vibrate = {400, 800, 400, 800};
     private String id = null;
@@ -41,7 +40,6 @@ public class ReceivePresenter {
         this.activity = activity;
         this.model = new ReceiveModel(activity);
         getSource();
-        initDao();
         setReceiver();
         musicOpen();
         VibratorUtils.Vibrate(activity, Vibrate, true);
@@ -49,7 +47,6 @@ public class ReceivePresenter {
 
     // 获取展示数据
     private void getSource() {
-        String id = null;
         try {
             id = activity.getIntent().getStringExtra("id");
         } catch (Exception e) {
@@ -99,11 +96,6 @@ public class ReceivePresenter {
      */
     public String getId(){
         return id;
-    }
-
-    // 初始化数据库
-    private void initDao() {
-        dao = new SearchTalkHistoryDao(activity);
     }
 
     // 设置广播接收器
@@ -180,9 +172,6 @@ public class ReceivePresenter {
         musicClose();
         VibratorUtils.cancel(activity);
         EventBus.getDefault().unregister(this);
-        if (dao != null) {
-            dao = null;
-        }
         model = null;
     }
 

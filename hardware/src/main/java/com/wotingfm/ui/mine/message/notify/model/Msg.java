@@ -8,7 +8,8 @@ package com.wotingfm.ui.mine.message.notify.model;
 public class Msg {
 
     private String msg_id;          // 消息id
-    private String msg_type;        // 消息类型 1 通知消息；2 好友消息；3 群申请消息（主动）；4 群申请消息（审核）；
+    private String msg_type;        // 消息类型 1 通知消息；2 好友消息friend_apply_msg；3 加群消息被处理group_apply_msg；
+                                    //          4 群申请消息（群主、管理员）；5 群主邀请好友入群消息invitee_msg；
     private String avatar;          // 头像
     private String title;           // 标题
     private String news;            // 展示消息

@@ -98,6 +98,11 @@ public class Api {
     public static final String URL_GET_MY_FAVORITE = "api/users/{id}/likes";
     // 解散群
     public static final String URL_GROUP_DISSOLVE = "api/chat-groups/{id}";
-
+    // 删除加入群组后的展示消息
+    public static final String URL_DEL_INVITEE_MSG = "api/chat-groups/invitee/{id}";
+    // 好友拒绝加入群组
+    public static final String URL_REFUSE_INVITEE_MSG = "api/chat-groups/invitee/{id}/deny";
+    // 好友同意加入群组
+    public static final String URL_AGREE_INVITEE_MSG = "api/chat-groups/invitee/{id}/approve";
 
 }

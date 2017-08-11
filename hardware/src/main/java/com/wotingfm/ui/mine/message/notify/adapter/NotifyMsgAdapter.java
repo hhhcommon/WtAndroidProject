@@ -87,6 +87,19 @@ public class NotifyMsgAdapter extends RecyclerView.Adapter<NotifyMsgAdapter.Simp
                 holder.tv_oks.setVisibility(View.GONE);
             }
 
+        }else if (m.getMsg_type() != null && m.getMsg_type().equals("5")) {
+            // 群主邀请好友入群
+            holder.tv_introduce.setVisibility(View.GONE);
+            if (m.getStatus() != null && m.getStatus().equals("2")) {
+                holder.tv_ok.setVisibility(View.VISIBLE);
+                holder.tv_oks.setVisibility(View.GONE);
+            } else if (m.getStatus() != null && m.getStatus().equals("1")) {
+                holder.tv_ok.setVisibility(View.GONE);
+                holder.tv_oks.setVisibility(View.VISIBLE);
+            } else {
+                holder.tv_ok.setVisibility(View.GONE);
+                holder.tv_oks.setVisibility(View.GONE);
+            }
         }
         if (m.getAvatar() != null && !m.getAvatar().equals("") && m.getAvatar().startsWith("http")) {
             GlideUtils.loadImageViewRound(m.getAvatar(), holder.img_url, 60, 60);

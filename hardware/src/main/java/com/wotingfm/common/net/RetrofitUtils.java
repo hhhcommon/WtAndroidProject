@@ -1590,4 +1590,45 @@ public class RetrofitUtils {
                     }
                 });
     }
+
+
+    /**
+     * 好友同意加入群组
+     */
+    public Observable<Object> msgAgreeEnterGroup(String id) throws Exception {
+        return retrofitService.agreeEnterGroup(id)
+                .map(new Func1<Object, Object>() {
+                    @Override
+                    public Object call(Object O) {
+                        return O;
+                    }
+                });
+    }
+
+    /**
+     * 好友拒绝加入群组
+     */
+    public Observable<Object> msgRefuseEnterGroup(String id) throws Exception {
+        return retrofitService.refuseEnterGroup(id)
+                .map(new Func1<Object, Object>() {
+                    @Override
+                    public Object call(Object O) {
+                        return O;
+                    }
+                });
+    }
+
+    /**
+     * 删除加入群组后的展示消息
+     */
+    public Observable<Object> msgDelEnterGroup(String id) throws Exception {
+        return retrofitService.delEnterGroup(id)
+                .map(new Func1<Object, Object>() {
+                    @Override
+                    public Object call(Object O) {
+                        return O;
+                    }
+                });
+    }
+
 }

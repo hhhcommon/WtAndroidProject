@@ -76,6 +76,21 @@ public class MsgNotifyPresenter {
                     activity.dialogCancel();
                 }
             });
+        } else if (type != null && type.equals("5")) {
+            String id = msg.get(position).getMsg_id();
+            activity.dialogShow();
+            model.loadNewsForAgreeEnterGroup(id, new MsgNotifyModel.OnLoadInterface() {
+                @Override
+                public void onSuccess(Object o) {
+                    activity.dialogCancel();
+                    dealAgreeEnterGroup(o, position);
+                }
+
+                @Override
+                public void onFailure(String msg) {
+                    activity.dialogCancel();
+                }
+            });
         }
     }
 
@@ -86,63 +101,115 @@ public class MsgNotifyPresenter {
      */
     public void del(final int position) {
         String type = msg.get(position).getMsg_type();
-        if (type != null && !type.equals("4")) {
-            String id = msg.get(position).getMsg_id();
-            if (id != null && !id.equals("")) {
-                activity.dialogShow();
-                String dType = "";
-                if (type.equals("2")) {
-                    dType = "friend";
-                } else if (type.equals("3")) {
-                    dType = "group";
-                }
-                model.loadNewsForDel(id, dType, new MsgNotifyModel.OnLoadInterface() {
-                    @Override
-                    public void onSuccess(Object o) {
-                        activity.dialogCancel();
-                        dealDelSuccess(o, position);
-                    }
+        if (type != null && !type.trim().equals("")) {
+            switch (type) {
+                case "1":// 通知消息
+                    break;
+                case "2":// 好友展示消息
+                    String id = msg.get(position).getMsg_id();
+                    if (id != null && !id.equals("")) {
+                        activity.dialogShow();
+                        model.loadNewsForDel(id, "friend", new MsgNotifyModel.OnLoadInterface() {
+                            @Override
+                            public void onSuccess(Object o) {
+                                activity.dialogCancel();
+                                dealDelSuccess(o, position);
+                            }
 
-                    @Override
-                    public void onFailure(String msg) {
-                        activity.dialogCancel();
+                            @Override
+                            public void onFailure(String msg) {
+                                activity.dialogCancel();
+                            }
+                        });
                     }
-                });
-            }
-        } else if (type != null && type.equals("4")) {
-            String status = msg.get(position).getStatus();
-            if (status.equals("1")) {
-                activity.dialogShow();
-                String dType = "group";
-                String id = msg.get(position).getMsg_id();
-                model.loadNewsForDel(id, dType, new MsgNotifyModel.OnLoadInterface() {
-                    @Override
-                    public void onSuccess(Object o) {
-                        activity.dialogCancel();
-                        dealDelSuccess(o, position);
-                    }
+                    break;
+                case "3":
+                    String gid = msg.get(position).getMsg_id();
+                    if (gid != null && !gid.equals("")) {
+                        activity.dialogShow();
+                        model.loadNewsForDel(gid, "group", new MsgNotifyModel.OnLoadInterface() {
+                            @Override
+                            public void onSuccess(Object o) {
+                                activity.dialogCancel();
+                                dealDelSuccess(o, position);
+                            }
 
-                    @Override
-                    public void onFailure(String msg) {
-                        activity.dialogCancel();
+                            @Override
+                            public void onFailure(String msg) {
+                                activity.dialogCancel();
+                            }
+                        });
                     }
-                });
-            } else {
-                String gid = msg.get(position).getGroup_id();
-                String pid = msg.get(position).getApply_id();
-                activity.dialogShow();
-                model.loadNewsForRefuse(gid, pid, new MsgNotifyModel.OnLoadInterface() {
-                    @Override
-                    public void onSuccess(Object o) {
-                        activity.dialogCancel();
-                        dealRefuseSuccess(o, position);
-                    }
+                    break;
+                case "4":
+                    String status = msg.get(position).getStatus();
+                    if (status.equals("1")) {
+                        activity.dialogShow();
+                        String mid = msg.get(position).getMsg_id();
+                        model.loadNewsForDel(mid, "group", new MsgNotifyModel.OnLoadInterface() {
+                            @Override
+                            public void onSuccess(Object o) {
+                                activity.dialogCancel();
+                                dealDelSuccess(o, position);
+                            }
 
-                    @Override
-                    public void onFailure(String msg) {
-                        activity.dialogCancel();
+                            @Override
+                            public void onFailure(String msg) {
+                                activity.dialogCancel();
+                            }
+                        });
+                    } else {
+                        String _gid = msg.get(position).getGroup_id();
+                        String _pid = msg.get(position).getApply_id();
+                        activity.dialogShow();
+                        model.loadNewsForRefuse(_gid, _pid, new MsgNotifyModel.OnLoadInterface() {
+                            @Override
+                            public void onSuccess(Object o) {
+                                activity.dialogCancel();
+                                dealRefuseSuccess(o, position);
+                            }
+
+                            @Override
+                            public void onFailure(String msg) {
+                                activity.dialogCancel();
+                            }
+                        });
                     }
-                });
+                    break;
+                case "5":// 群主邀请好友加入群组
+                    String _status = msg.get(position).getStatus();
+                    if (_status.equals("1")) {
+                        activity.dialogShow();
+                        String _mid = msg.get(position).getMsg_id();
+                        model.loadNewsForDelEnterGroup(_mid, new MsgNotifyModel.OnLoadInterface() {
+                            @Override
+                            public void onSuccess(Object o) {
+                                activity.dialogCancel();
+                                dealDelSuccess(o, position);
+                            }
+
+                            @Override
+                            public void onFailure(String msg) {
+                                activity.dialogCancel();
+                            }
+                        });
+                    } else {
+                        String mid = msg.get(position).getMsg_id();
+                        activity.dialogShow();
+                        model.loadNewsForRefuseEnterGroup(mid,new MsgNotifyModel.OnLoadInterface() {
+                            @Override
+                            public void onSuccess(Object o) {
+                                activity.dialogCancel();
+                                dealRefuseSuccess(o, position);
+                            }
+
+                            @Override
+                            public void onFailure(String msg) {
+                                activity.dialogCancel();
+                            }
+                        });
+                    }
+                    break;
             }
         }
     }
@@ -175,6 +242,22 @@ public class MsgNotifyPresenter {
         } catch (Exception e) {
             e.printStackTrace();
             activity.isLoginView(4);
+        }
+    }
+
+    // 处理同意加入群消息
+    private void dealAgreeEnterGroup(Object o, int position) {
+        try {
+            String s = new GsonBuilder().serializeNulls().create().toJson(o);
+            JSONObject js = new JSONObject(s);
+            int ret = js.getInt("ret");
+            Log.e("ret", String.valueOf(ret));
+            if (ret == 0) {
+                msg.get(position).setStatus("1");
+                activity.updateUI(msg);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
