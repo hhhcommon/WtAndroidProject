@@ -39,8 +39,8 @@ public class ReceivePresenter {
 
     public ReceivePresenter(ReceiveAlertActivity activity) {
         this.activity = activity;
-        this.model = new ReceiveModel(activity);
         getSource();
+        this.model = new ReceiveModel(activity);
         initDao();
         setReceiver();
         musicOpen();
@@ -49,7 +49,6 @@ public class ReceivePresenter {
 
     // 获取展示数据
     private void getSource() {
-        String id = null;
         try {
             id = activity.getIntent().getStringExtra("id");
         } catch (Exception e) {
@@ -60,7 +59,7 @@ public class ReceivePresenter {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        if (id != null && !id.equals("")) {
+       /* if (id != null && !id.equals("")) {
             Contact.user user = model.getUser(id);
             if (user != null) {
                 String url = "";
@@ -69,7 +68,6 @@ public class ReceivePresenter {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-
                 String name = "";
                 try {
                     name = user.getName();
@@ -82,7 +80,7 @@ public class ReceivePresenter {
             }
         } else {
             activity.finish();
-        }
+        }*/
     }
 
     /**
@@ -167,8 +165,8 @@ public class ReceivePresenter {
      * 接受后操作
      */
     public void pushCallOk() {
-        model.del(id);// 删除跟本次id相关的数据
-        model.add(model.assemblyData(model.getUser(id), GlobalStateConfig.ok, ""));// 把本次数据添加的数据库
+/*        model.del(id);// 删除跟本次id相关的数据
+        model.add(model.assemblyData(model.getUser(id), GlobalStateConfig.ok, ""));// 把本次数据添加的数据库*/
         activity.sendBroadcast(new Intent(BroadcastConstants.VIEW_INTER_PHONE));// 跳转到对讲主页
         activity.sendBroadcast(new Intent(BroadcastConstants.VIEW_INTER_PHONE_CHAT_OK));// 对讲主页界面，数据更新
     }

@@ -20,7 +20,9 @@ import com.wotingfm.common.service.InterPhoneControl;
 import com.wotingfm.common.utils.GlideUtils;
 import com.wotingfm.ui.base.baseactivity.BaseActivity;
 import com.wotingfm.ui.intercom.alert.receive.presenter.ReceivePresenter;
+
 import org.greenrobot.eventbus.EventBus;
+
 import jp.wasabeef.glide.transformations.BlurTransformation;
 
 import static android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP;
@@ -40,7 +42,7 @@ public class ReceiveAlertActivity extends BaseActivity implements OnClickListene
 
     public static void start(Context context, String roomId, String userId) {
         Intent intent = new Intent(context, ReceiveAlertActivity.class);
-        intent.setFlags(FLAG_ACTIVITY_REORDER_TO_FRONT | FLAG_ACTIVITY_NEW_TASK | FLAG_ACTIVITY_CLEAR_TOP);
+        intent.setFlags(FLAG_ACTIVITY_REORDER_TO_FRONT);
         intent.putExtra("roomId", roomId);
         intent.putExtra("id", userId);
         context.startActivity(intent);
@@ -74,7 +76,7 @@ public class ReceiveAlertActivity extends BaseActivity implements OnClickListene
                 /**
                  * 此处需要挂断电话等操作
                  */
-                InterPhoneControl.refuse(presenter.getRoomId(),presenter.getId());
+                InterPhoneControl.refuse(presenter.getRoomId(), presenter.getId());
                 EventBus.getDefault().post(new MessageEvent("over"));
                 finish();
                 break;
@@ -82,7 +84,7 @@ public class ReceiveAlertActivity extends BaseActivity implements OnClickListene
                 /**
                  * 此处需要接收电话等操作
                  */
-                InterPhoneControl.accept(presenter.getRoomId(),presenter.getId());
+                InterPhoneControl.accept(presenter.getRoomId(), presenter.getId());
                 EventBus.getDefault().post(new MessageEvent("acceptMain"));
                 presenter.pushCallOk();
                 finish();
@@ -122,7 +124,7 @@ public class ReceiveAlertActivity extends BaseActivity implements OnClickListene
             /**
              * 此处需要挂断电话等操作
              */
-            InterPhoneControl.refuse(presenter.getRoomId(),presenter.getId());
+            InterPhoneControl.refuse(presenter.getRoomId(), presenter.getId());
             EventBus.getDefault().post(new MessageEvent("over"));
             finish();
             return true;
@@ -134,6 +136,6 @@ public class ReceiveAlertActivity extends BaseActivity implements OnClickListene
     protected void onDestroy() {
         super.onDestroy();
         presenter.destroy();
-        presenter=null;
+        presenter = null;
     }
 }
