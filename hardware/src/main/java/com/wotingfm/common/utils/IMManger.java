@@ -92,20 +92,21 @@ public class IMManger {
                     NIMClient.getService(MsgService.class).sendMessage(msg, false).setCallback(new RequestCallback<Void>() {
                         @Override
                         public void onSuccess(Void aVoid) {
+                            Log.i("mingku", "onSuccess");
                             isSuccess = true;
-                            EventBus.getDefault().post(new MessageEvent("create&Rommid" + roomid));
                         }
 
                         @Override
                         public void onFailed(int i) {
-                            isSuccess = false;
+                            Log.i("mingku", "onFailed");
                         }
 
                         @Override
                         public void onException(Throwable throwable) {
-                            isSuccess = false;
+                            Log.i("mingku", "throwable" + throwable.getMessage());
                         }
                     });
+                    EventBus.getDefault().post(new MessageEvent("create&Rommid" + roomid));
                 }
             });
 
@@ -113,24 +114,10 @@ public class IMManger {
             IMMessage msg = MessageBuilder.createCustomMessage(sessionId, SessionTypeEnum.P2P, null);
             data.put("roomid", roomID);
             msg.setPushPayload(data); // 设置服务器扩展字段
-            NIMClient.getService(MsgService.class).sendMessage(msg, false).setCallback(new RequestCallback<Void>() {
-                @Override
-                public void onSuccess(Void aVoid) {
-                    isSuccess = true;
-                }
-
-                @Override
-                public void onFailed(int i) {
-                    isSuccess = false;
-                }
-
-                @Override
-                public void onException(Throwable throwable) {
-                    isSuccess = false;
-                }
-            });
+            isSuccess = true;
+            NIMClient.getService(MsgService.class).sendMessage(msg, false);
         }
-        return isSuccess;
+        return true;
     }
 
     public void apprtcRoom(final RoomResult roomResult) {

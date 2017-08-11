@@ -275,6 +275,7 @@ public class MainPresenter extends BasePresenter {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMoonEvent(MessageEvent messageEvent) {
+        Log.i("mingku", "messageEvent=" + messageEvent.getMessage());
         if ("one".equals(messageEvent.getMessage())) {
             activity.setViewType(1);
         } else if ("two".equals(messageEvent.getMessage())) {
@@ -286,6 +287,8 @@ public class MainPresenter extends BasePresenter {
         } else if ("acceptMain".equals(messageEvent.getMessage())) {
             WtDeviceControl.pause();
             activity.enterRoom(roomId);
+        } else if (messageEvent.getMessage().equals("exitPerson&")) {// 退出个人对讲
+            activity.exitRoomPerson(null);
         } else if (messageEvent.getMessage().contains("exitPerson&")) {// 退出个人对讲
             String room_id = messageEvent.getMessage().split("exitPerson&")[1];
             activity.exitRoomPerson(room_id);
@@ -293,10 +296,16 @@ public class MainPresenter extends BasePresenter {
             roomId = messageEvent.getMessage().split("create&Rommid")[1];
         } else if ("over".equals(messageEvent.getMessage())) {
 
+        } else if (messageEvent.getMessage().equals("enterGroup&")) {
+            WtDeviceControl.pause();
+            activity.enterRoom(null);
         } else if (messageEvent.getMessage().contains("enterGroup&")) {
             WtDeviceControl.pause();
             String room_id = messageEvent.getMessage().split("enterGroup&")[1];
             activity.enterRoom(room_id);
+        } else if (messageEvent.getMessage().equals("exitGroup&")) {
+            WtDeviceControl.start();
+            activity.exitRoomGroup(null);// 退出房间
         } else if (messageEvent.getMessage().contains("exitGroup&")) {
             WtDeviceControl.start();
             String room_id = messageEvent.getMessage().split("exitGroup&")[1];
