@@ -128,8 +128,8 @@ public class MsgNotifyModel {
                 _msg.setStatus("0");
             }
 
-            if (invitee.get(i).getStatus() != null) {
-                if (invitee.get(i).getStatus().equals("2")) {
+            if (invitee.get(i).getInvitee_agreed() != null) {
+                if (invitee.get(i).getInvitee_agreed().equals("2")) {
                     _msg.setNews("群主邀请您加入该群");
                 } else {
                     _msg.setNews("您已经同意了群主的加群邀请");
@@ -371,17 +371,18 @@ public class MsgNotifyModel {
      * @return
      */
     private List<Msg> sorting(List<Msg> msg) {
-        Msg temp_r = new Msg();
         //冒泡排序，大的在数组的前列
-        for (int i = 0; i < msg.size() - 1; i++) {
-            for (int j = i + 1; j < msg.size(); j++) {
-                long d1 = Long.parseLong(msg.get(i).getTime());
-                long d2 = Long.parseLong(msg.get(j).getTime());
-                if (d1 < d2) {
-                    //如果队前日期靠前，调换顺序
-                    temp_r = msg.get(i);
-                    msg.set(i, msg.get(j));
-                    msg.set(j, temp_r);
+        if(msg!=null&&msg.size()>1){
+            for (int i = 0; i < msg.size() - 1; i++) {
+                for (int j = i + 1; j < msg.size(); j++) {
+                    long d1 = Long.parseLong(msg.get(i).getTime());
+                    long d2 = Long.parseLong(msg.get(j).getTime());
+                    if (d1 < d2) {
+                        //如果队前日期靠前，调换顺序
+                        Msg temp_r = msg.get(i);
+                        msg.set(i, msg.get(j));
+                        msg.set(j, temp_r);
+                    }
                 }
             }
         }
