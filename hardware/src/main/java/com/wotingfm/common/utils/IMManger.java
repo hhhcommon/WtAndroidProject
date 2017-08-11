@@ -72,10 +72,9 @@ public class IMManger {
     }
 
     private String roomID;
-    private boolean isSuccess = false;
+    private boolean isSuccess = true;
 
     public boolean sendMsg(final String sessionId, final String type, final String userId) {
-        isSuccess = false;
         final Map<String, Object> data = new HashMap<>();
         data.put("sessionId", sessionId);
         data.put("type", type);
@@ -90,10 +89,9 @@ public class IMManger {
                     roomID = roomid;
                     msg.setPushPayload(data);
                     // msg.setRemoteExtension(data); // 设置服务器扩展字段
-                    InvocationFuture invocationFuture = NIMClient.getService(MsgService.class).sendMessage(msg, false);
-                    invocationFuture.setCallback(new RequestCallback() {
+                    NIMClient.getService(MsgService.class).sendMessage(msg, false).setCallback(new RequestCallback<Void>() {
                         @Override
-                        public void onSuccess(Object o) {
+                        public void onSuccess(Void aVoid) {
                             isSuccess = true;
                             EventBus.getDefault().post(new MessageEvent("create&Rommid" + roomid));
                         }
@@ -115,10 +113,9 @@ public class IMManger {
             IMMessage msg = MessageBuilder.createCustomMessage(sessionId, SessionTypeEnum.P2P, null);
             data.put("roomid", roomID);
             msg.setPushPayload(data); // 设置服务器扩展字段
-            InvocationFuture invocationFuture = NIMClient.getService(MsgService.class).sendMessage(msg, false);
-            invocationFuture.setCallback(new RequestCallback() {
+            NIMClient.getService(MsgService.class).sendMessage(msg, false).setCallback(new RequestCallback<Void>() {
                 @Override
-                public void onSuccess(Object o) {
+                public void onSuccess(Void aVoid) {
                     isSuccess = true;
                 }
 
