@@ -843,8 +843,10 @@ public class PlayerFragment extends BaseFragment implements View.OnClickListener
         @Override
         public void onPrepared(PLMediaPlayer mp, int preparedTime) {
             Log.i("minhgku", "On Prepared !");
-            mMediaPlayer.start();
-            mIsStopped = false;
+            if(mMediaPlayer!=null) {
+                mMediaPlayer.start();
+                mIsStopped = false;
+            }
         }
     };
 
