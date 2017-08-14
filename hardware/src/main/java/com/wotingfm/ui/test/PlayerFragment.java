@@ -197,7 +197,7 @@ public class PlayerFragment extends BaseFragment implements View.OnClickListener
                     singLesBeans.addAll(singlesBases);
                     mPlayerAdapter.notifyDataSetChanged();
                     postionPlayer = singlesBaseww.postionPlayer;
-                    mRecyclerView.smoothScrollToPosition(postionPlayer);
+                    mRecyclerView.scrollToPosition(postionPlayer);
                     relatiBottom.setVisibility(View.VISIBLE);
                     if (is_radio == true) {
                         largeLabelSeekbar.setVisibility(View.INVISIBLE);
@@ -309,6 +309,7 @@ public class PlayerFragment extends BaseFragment implements View.OnClickListener
                 }
             }
         }
+        mRecyclerView.smoothScrollToPosition(postionPlayer);
     }
 
 
@@ -541,7 +542,7 @@ public class PlayerFragment extends BaseFragment implements View.OnClickListener
                         @Override
                         public void play(SinglesBase singlesBean, int postion) {
                             postionPlayer = postion;
-                            mRecyclerView.smoothScrollToPosition(postion);
+                            mRecyclerView.scrollToPosition(postionPlayer);
                             bdPlayer.stopPlayback();
                             bdPlayer.setVideoPath(singLesBeans.get(postionPlayer).single_file_url);
                             bdPlayer.start();
@@ -843,7 +844,7 @@ public class PlayerFragment extends BaseFragment implements View.OnClickListener
         @Override
         public void onPrepared(PLMediaPlayer mp, int preparedTime) {
             Log.i("minhgku", "On Prepared !");
-            if(mMediaPlayer!=null) {
+            if (mMediaPlayer != null) {
                 mMediaPlayer.start();
                 mIsStopped = false;
             }

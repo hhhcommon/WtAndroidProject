@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.wotingfm.R;
@@ -23,15 +24,17 @@ import java.util.List;
 public class AlbumsInfoProgramAdapter extends CommonAdapter<Player.DataBean.SinglesBean> {
     private AlbumsInfoClick playerClick;
 
-    public AlbumsInfoProgramAdapter(Context context, List<Player.DataBean.SinglesBean> datas) {
+    public AlbumsInfoProgramAdapter(Context context, List<Player.DataBean.SinglesBean> datas, AlbumsInfoClick albumsInfoClick) {
         super(context, R.layout.item_albums_info_program, datas);
+        this.playerClick = albumsInfoClick;
     }
 
     @Override
     protected void convert(ViewHolder holder, final Player.DataBean.SinglesBean s, final int position) {
         holder.setText(R.id.tvTitle, s.single_title);
+        LinearLayout largeLabel = (LinearLayout) holder.itemView.findViewById(R.id.largeLabel);
         holder.setText(R.id.tvTime, s.single_seconds);
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
+        largeLabel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (playerClick != null) {
@@ -41,10 +44,6 @@ public class AlbumsInfoProgramAdapter extends CommonAdapter<Player.DataBean.Sing
         });
     }
 
-
-    public void setPlayerClick(AlbumsInfoClick playerClick) {
-        this.playerClick = playerClick;
-    }
 
     public interface AlbumsInfoClick {
         void player(Player.DataBean.SinglesBean albumsBean, int postion);

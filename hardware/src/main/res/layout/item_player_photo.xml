@@ -8,20 +8,20 @@
 
     <View
         android:id="@+id/view"
-        android:layout_width="50dp"
+        android:layout_width="33.5dp"
+        android:visibility="gone"
         android:layout_height="match_parent" />
 
-    <View
-        android:id="@+id/view1"
-        android:layout_width="16.5dp"
-        android:layout_height="match_parent" />
 
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:id="@+id/largeLabel"
         android:layout_gravity="center"
         android:gravity="center"
+        android:paddingLeft="16.5dp"
+        android:paddingRight="16.5dp"
         android:orientation="vertical">
 
 
@@ -65,12 +65,10 @@
             android:textSize="13sp" />
     </LinearLayout>
 
-    <View
-        android:layout_width="16.5dp"
-        android:layout_height="match_parent" />
 
     <View
         android:id="@+id/view2"
+        android:visibility="gone"
         android:layout_width="33.5dp"
         android:layout_height="match_parent" />
 </LinearLayout>
