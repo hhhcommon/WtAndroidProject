@@ -332,6 +332,7 @@ public class MainPresenter extends BasePresenter {
                 String roomid = map.get("roomid") + "";
 
                 if (type != null && !type.trim().equals("")) {
+                    Log.e("单对单对讲收到的数据",type);
                     switch (type) {
                         case "LAUNCH":// 收到别人邀请我对讲（单对单）
                             roomId = roomid;

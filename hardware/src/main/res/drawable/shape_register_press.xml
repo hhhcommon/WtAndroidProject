@@ -1,5 +1,5 @@
 <shape xmlns:android="http://schemas.android.com/apk/res/android"
-       android:shape="rectangle" >
+    android:shape="rectangle" >
     <!--rectangle-矩形；oval-椭圆；line-线；ring-环-->
     <!--angle的值：从左到右为0；然后逆时针旋转，90度为从下到上，270为从上到下-->
     <!--android:centerColor="#77333333"-->
