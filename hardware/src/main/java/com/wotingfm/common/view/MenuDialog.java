@@ -20,6 +20,7 @@ import com.woting.commonplat.utils.FileSizeUtil;
 import com.wotingfm.R;
 import com.wotingfm.common.adapter.PlayerListAdapter;
 import com.wotingfm.common.application.BSApplication;
+import com.wotingfm.common.bean.BaseResult;
 import com.wotingfm.common.bean.ChannelsBean;
 import com.wotingfm.common.bean.MessageEvent;
 import com.wotingfm.common.bean.Player;
@@ -165,6 +166,18 @@ public class MenuDialog extends Dialog implements View.OnClickListener {
                                 }
                             }
                         }
+                        RetrofitUtils.getInstance().downloadSingle(pdsBase.id)
+                                .subscribeOn(Schedulers.io())
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .subscribe(new Action1<BaseResult>() {
+                                    @Override
+                                    public void call(BaseResult baseResult) {
+                                    }
+                                }, new Action1<Throwable>() {
+                                    @Override
+                                    public void call(Throwable throwable) {
+                                    }
+                                });
                         final File saveFile = new File(SDCardUtils.getSDPath() + DbConfig.ALBUMS + "/" + pdsBase.single_file_url);
                         HttpRequest.download(pdsBase.single_file_url, saveFile, new FileDownloadCallback() {
                             //开始下载

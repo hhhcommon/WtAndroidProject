@@ -504,6 +504,26 @@ public class RetrofitUtils {
                 });
     }
 
+    public Observable<BaseResult> playSingles(String singleId) {
+        return retrofitService.playSingles(singleId)
+                .map(new Func1<BaseResult, BaseResult>() {
+                    @Override
+                    public BaseResult call(BaseResult s) {
+                        return s;
+                    }
+                });
+    }
+
+    public Observable<BaseResult> downloadSingle(String singleId) {
+        return retrofitService.downloadSingle(singleId)
+                .map(new Func1<BaseResult, BaseResult>() {
+                    @Override
+                    public BaseResult call(BaseResult s) {
+                        return s;
+                    }
+                });
+    }
+
     public Observable<BaseResult> reservationsRadio(String albumsId) {
         return retrofitService.reservationsRadio(albumsId)
                 .map(new Func1<BaseResult, BaseResult>() {

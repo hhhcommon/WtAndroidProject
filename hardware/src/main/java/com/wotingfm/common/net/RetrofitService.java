@@ -50,6 +50,14 @@ public interface RetrofitService {
     @GET("api/listenings/player")
     Observable<Player> getPlayerList(@Query("album_id") String album_id);
 
+    //播放节目
+    @GET("api/listenings/singles/{singleId}/plays")
+    Observable<BaseResult> playSingles(@Path("singleId") String singleId);
+
+    //播放节目
+    @POST(" api/listenings/singles/{single}/downloads")
+    Observable<BaseResult> downloadSingle(@Path("single") String single);
+
     //fm
     @POST("api/app-rtc/rooms")
     Observable<Room> apprtcRoom();

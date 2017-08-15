@@ -14,6 +14,7 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.webkit.URLUtil;
@@ -275,43 +276,45 @@ public class MainPresenter extends BasePresenter {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMoonEvent(MessageEvent messageEvent) {
-        Log.i("mingku", "messageEvent=" + messageEvent.getMessage());
-        if ("one".equals(messageEvent.getMessage())) {
-            activity.setViewType(1);
-        } else if ("two".equals(messageEvent.getMessage())) {
-            activity.setViewType(2);
-        } else if ("three".equals(messageEvent.getMessage())) {
-            activity.setViewType(3);
-        } else if ("four".equals(messageEvent.getMessage())) {
-            activity.setViewType(4);
-        } else if ("acceptMain".equals(messageEvent.getMessage())) {
-            WtDeviceControl.pause();
-            activity.enterRoom(roomId);
-        } else if (messageEvent.getMessage().equals("exitPerson&")) {// 退出个人对讲
-            activity.exitRoomPerson(null);
-        } else if (messageEvent.getMessage().contains("exitPerson&")) {// 退出个人对讲
-            String room_id = messageEvent.getMessage().split("exitPerson&")[1];
-            activity.exitRoomPerson(room_id);
-        } else if (messageEvent.getMessage().contains("create&Rommid")) {
-            roomId = messageEvent.getMessage().split("create&Rommid")[1];
-        } else if ("over".equals(messageEvent.getMessage())) {
+        String event = messageEvent.getMessage();
+        if (!TextUtils.isEmpty(event)) {
+            if ("one".equals(event)) {
+                activity.setViewType(1);
+            } else if ("two".equals(event)) {
+                activity.setViewType(2);
+            } else if ("three".equals(event)) {
+                activity.setViewType(3);
+            } else if ("four".equals(event)) {
+                activity.setViewType(4);
+            } else if ("acceptMain".equals(event)) {
+                WtDeviceControl.pause();
+                activity.enterRoom(roomId);
+            } else if (event.equals("exitPerson&")) {// 退出个人对讲
+                activity.exitRoomPerson(null);
+            } else if (event.contains("exitPerson&")) {// 退出个人对讲
+                String room_id = event.split("exitPerson&")[1];
+                activity.exitRoomPerson(room_id);
+            } else if (event.contains("create&Rommid")) {
+                roomId = event.split("create&Rommid")[1];
+            } else if ("over".equals(event)) {
 
-        } else if (messageEvent.getMessage().equals("enterGroup&")) {
-            WtDeviceControl.pause();
-            activity.enterRoom(null);
-        } else if (messageEvent.getMessage().contains("enterGroup&")) {
-            WtDeviceControl.pause();
-            String room_id = messageEvent.getMessage().split("enterGroup&")[1];
-            activity.enterRoom(room_id);
-        } else if (messageEvent.getMessage().equals("exitGroup&")) {
-            WtDeviceControl.start();
-            activity.exitRoomGroup(null);// 退出房间
-        } else if (messageEvent.getMessage().contains("exitGroup&")) {
-            WtDeviceControl.start();
-            String room_id = messageEvent.getMessage().split("exitGroup&")[1];
-            activity.exitRoomGroup(room_id);// 退出房间
-        } else if (messageEvent.getMessage().equals("onDestroy")) {
-            activity.destroyWebView();
+            } else if (event.equals("enterGroup&")) {
+                WtDeviceControl.pause();
+                activity.enterRoom(null);
+            } else if (event.contains("enterGroup&")) {
+                WtDeviceControl.pause();
+                String room_id = event.split("enterGroup&")[1];
+                activity.enterRoom(room_id);
+            } else if (event.equals("exitGroup&")) {
+                WtDeviceControl.start();
+                activity.exitRoomGroup(null);// 退出房间
+            } else if (event.contains("exitGroup&")) {
+                WtDeviceControl.start();
+                String room_id = event.split("exitGroup&")[1];
+                activity.exitRoomGroup(room_id);// 退出房间
+            } else if (event.equals("onDestroy")) {
+                activity.destroyWebView();
+            }
         }
     }
 
