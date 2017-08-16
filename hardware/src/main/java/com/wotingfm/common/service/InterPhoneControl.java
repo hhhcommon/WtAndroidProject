@@ -4,12 +4,17 @@ import android.content.Context;
 import android.view.View;
 import android.webkit.WebView;
 
+import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.bean.MessageEvent;
+import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.common.utils.CommonUtils;
 import com.wotingfm.common.utils.IMManger;
 import com.wotingfm.ui.intercom.main.chat.presenter.ChatPresenter;
 
 import org.greenrobot.eventbus.EventBus;
+
+import static com.wotingfm.R.id.mWebView;
+import static com.wotingfm.R.id.view;
 
 /**
  * 对讲控制
@@ -32,86 +37,98 @@ public class InterPhoneControl {
 
     /**
      * 呼叫方==挂断电话
+     *
      * @param roomId
      * @param userId
      * @return
      */
-    public static boolean hangUp(String roomId,String userId) {
+    public static boolean hangUp(String roomId, String userId) {
         boolean b = IMManger.getInstance().sendMsg(roomId, "CANCEL", userId);
         return b;
     }
 
     /**
      * 被叫方==接受
+     *
      * @param roomId
      * @param userId
      * @return
      */
-    public static boolean accept(String roomId,String userId) {
+    public static boolean accept(String roomId, String userId) {
         boolean b = IMManger.getInstance().sendMsg(roomId, "ACCEPT", userId);
         return b;
     }
 
     /**
      * 被叫方==拒绝接受
+     *
      * @param roomId
      * @param userId
      * @return
      */
-    public static boolean refuse(String roomId,String userId) {
+    public static boolean refuse(String roomId, String userId) {
         boolean b = IMManger.getInstance().sendMsg(roomId, "REFUSE", userId);
         return b;
     }
 
     /**
      * 退出房間==个人
+     *
      * @param room_id
      * @return
      */
-    public static boolean quitRoomPerson(WebView view,String room_id){
+    public static boolean quitRoomPerson(WebView view, String room_id) {
         view.loadUrl("javascript:exitRoom()");
         return true;
     }
 
     /**
      * 退出房間==群组
+     *
      * @param room_id
      * @return
      */
-   public static boolean quitRoomGroup(WebView view,String room_id){
-       view.loadUrl("javascript:exitRoom()");
-       return true;
-   }
+    public static boolean quitRoomGroup(WebView view, String room_id) {
+        view.loadUrl("javascript:exitRoom()");
+        return true;
+    }
 
     /**
      * 進入房間
+     *
      * @param room_id
      * @return
      */
-    public static boolean enterRoom(WebView view, String room_id){
-        view.loadUrl("javascript:joinRoom('" + room_id + "')");
+    public static boolean enterRoom(WebView view, String room_id) {
+        view.loadUrl("javascript:exitRoom()");
+        String userId = BSApplication.SharedPreferences.getString(StringConstant.USER_ID, "");// 头像
+        String username = BSApplication.SharedPreferences.getString(StringConstant.NICK_NAME, "我听");// 昵称
+        String useravatar = BSApplication.SharedPreferences.getString(StringConstant.PORTRAIT, "000");// id
+        view.loadUrl("javascript:joinRoom('" + room_id + "','" + userId + "','" + username + "','" + useravatar + "')");
         return true;
     }
 
     /**
      * 開始說話
+     *
      * @param room_id
      * @return
      */
-    public static boolean beginSpeak(WebView view, String room_id){
+    public static boolean beginSpeak(WebView view, String room_id) {
         view.loadUrl("javascript:beginSpeak()");
         return true;
     }
+
     /**
-    * 結束說話
-    * @param room_id
-    * @return
-            */
-    public static boolean stopSpeak(WebView view, String room_id){
+     * 結束說話
+     *
+     * @param room_id
+     * @return
+     */
+    public static boolean stopSpeak(WebView view, String room_id) {
         view.loadUrl("javascript:stopSpeak()");
         return true;
     }
-
 
 
 }
