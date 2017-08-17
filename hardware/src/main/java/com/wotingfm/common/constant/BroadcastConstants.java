@@ -68,5 +68,11 @@ public class BroadcastConstants {
     // 通知消息关闭
     public static final String VIEW_NOTIFY_CLOSE = "VIEW_NOTIFY_CLOSE";
 
+    // 无人说话
+    public static final String PUSH_CHAT_CLOSE = "PUSH_CHAT_CLOSE";
+
+    // 有人在说话
+    public static final String PUSH_CHAT_OPEN = "PUSH_CHAT_OPEN";
+
     public static final String PUSH_NOTIFICATION = "PUSH_NOTIFICATION";
 }

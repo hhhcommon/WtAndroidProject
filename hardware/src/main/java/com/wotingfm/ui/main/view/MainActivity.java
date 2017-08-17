@@ -27,6 +27,7 @@ import android.widget.TextView;
 
 import com.wotingfm.R;
 import com.wotingfm.common.bean.MessageEvent;
+import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.common.service.InterPhoneControl;
 import com.wotingfm.common.service.NotificationService;
 import com.wotingfm.common.service.WtDeviceControl;
@@ -347,6 +348,23 @@ public class MainActivity extends TabActivity implements View.OnClickListener {
                 @Override
                 public void run() {
                     Log.i("mingku", "userId=" + userId + ":" + username + ":" + useravatar + ":" + roomNumber);
+                    Intent intent = new Intent(BroadcastConstants.PUSH_CHAT_OPEN);
+                    try {
+                        intent.putExtra("name", username);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    try {
+                        intent.putExtra("url", useravatar);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    try {
+                        intent.putExtra("num", roomNumber);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    sendBroadcast(intent);
                 }
             });
     }
@@ -361,6 +379,7 @@ public class MainActivity extends TabActivity implements View.OnClickListener {
                 @Override
                 public void run() {
                     Log.i("mingku", "没有人在说话");
+                    sendBroadcast(new Intent(BroadcastConstants.PUSH_CHAT_CLOSE));
                 }
             });
     }

@@ -454,6 +454,8 @@ public class ChatPresenter {
             filter.addAction(BroadcastConstants.VIEW_PERSON_CLOSE);// 好友界面关闭广播
             filter.addAction(BroadcastConstants.PUSH_CALL_SEND);// 单对单呼叫成功
             filter.addAction(BroadcastConstants.VIEW_INTER_PHONE_CHAT_OK);// 有新的对讲连接时，对讲界面数据更改
+            filter.addAction(BroadcastConstants.PUSH_CHAT_CLOSE);// 无人在说话
+            filter.addAction(BroadcastConstants.PUSH_CHAT_OPEN);// 有人在说话
             activity.getActivity().registerReceiver(Receiver, filter);
         }
     }
@@ -481,6 +483,35 @@ public class ChatPresenter {
                 if (type != null && !type.trim().equals("") && type.trim().equals("chat")) {
                     callPersonOkData(personViewType);
                 }
+            } else if (action.equals(BroadcastConstants.PUSH_CHAT_OPEN)) {// 有人在说话
+                String name = intent.getStringExtra("name");
+                String url = intent.getStringExtra("url");
+                setViewChatOpen(name, url);
+            } else if (action.equals(BroadcastConstants.PUSH_CHAT_CLOSE)) {// 无人在说话
+                setViewChatClose();
+            }
+        }
+    }
+
+    // 更改当前说话人界面类型
+    private void setViewChatOpen(String name, String url) {
+        if (data != null) {// 此时有对讲状态
+            String _t = data.getTyPe().trim();
+            if (_t != null && !_t.equals("") && _t.equals("person")) {
+                activity.setPersonViewTalk(name, url);
+            } else if (_t != null && !_t.equals("") && _t.equals("group")) {
+            }
+        }
+    }
+
+    // 更改当前说话人界面类型
+    private void setViewChatClose() {
+        if (data != null) {// 此时有对讲状态
+            String _t = data.getTyPe().trim();
+            if (_t != null && !_t.equals("") && _t.equals("person")) {
+                activity.setPersonViewTalkClose();
+            } else if (_t != null && !_t.equals("") && _t.equals("group")) {
+                activity.setGroupViewClose();
             }
         }
     }

@@ -83,6 +83,7 @@ public class InterPhoneControl {
      */
     public static boolean quitRoomGroup(WebView view, String room_id) {
         view.loadUrl("javascript:exitRoom()");
+        view.reload();
         return true;
     }
 
