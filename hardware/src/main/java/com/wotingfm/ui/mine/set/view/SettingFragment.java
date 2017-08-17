@@ -203,7 +203,6 @@ public class SettingFragment extends Fragment implements View.OnClickListener {
             @Override
             public void onClick(View v) {
                 presenter.cancel();
-                NIMClient.getService(AuthService.class).logout();
                 LDialog.dismiss();
             }
         }); // 确定

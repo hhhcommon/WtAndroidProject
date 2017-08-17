@@ -22,6 +22,8 @@ import android.webkit.URLUtil;
 import com.google.gson.GsonBuilder;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.Observer;
+import com.netease.nimlib.sdk.StatusCode;
+import com.netease.nimlib.sdk.auth.AuthServiceObserver;
 import com.netease.nimlib.sdk.msg.MsgServiceObserve;
 import com.netease.nimlib.sdk.msg.model.IMMessage;
 import com.woting.commonplat.receiver.NetWorkChangeReceiver;
@@ -29,6 +31,8 @@ import com.wotingfm.R;
 import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.bean.MessageEvent;
 import com.wotingfm.common.constant.BroadcastConstants;
+import com.wotingfm.common.constant.StringConstant;
+import com.wotingfm.common.net.RetrofitUtils;
 import com.wotingfm.common.service.FloatingWindowService;
 import com.wotingfm.common.service.InterPhoneControl;
 import com.wotingfm.common.service.NotificationService;
@@ -68,6 +72,32 @@ public class MainPresenter extends BasePresenter {
         this.activity = mainActivity;
         this.mainModel = new MainModel(mainActivity);
         NIMClient.getService(MsgServiceObserve.class).observeReceiveMessage(incomingMessageObserver, true);
+        NIMClient.getService(AuthServiceObserver.class).observeOnlineStatus(
+                new Observer<StatusCode> () {
+                    public void onEvent(StatusCode status) {
+                        Log.i("tag", "User status changed to: " + status);
+                        if (status.wontAutoLogin()) {
+                            RetrofitUtils.INSTANCE=null;
+                            SharedPreferences.Editor et = BSApplication.SharedPreferences.edit();
+                            et.putString(StringConstant.IS_LOGIN, "false");
+                            et.putString(StringConstant.USER_ID, "");
+                            et.putString(StringConstant.TOKEN, "");
+                            et.putString(StringConstant.USER_NUM, "");
+                            et.putString(StringConstant.NICK_NAME, "");
+                            et.putString(StringConstant.PORTRAIT, "");
+                            et.putString(StringConstant.USER_PHONE_NUMBER, "");
+                            et.putString(StringConstant.GENDER, "");
+                            et.putString(StringConstant.AGE, "");
+                            et.putString(StringConstant.REGION, "");
+                            et.putString(StringConstant.USER_SIGN, "");
+
+                            if (!et.commit()) {
+                                Log.v("commit", "数据 commit 失败!");
+                            }
+                            // 被踢出、账号被禁用、密码错误等情况，自动登录失败，需要返回到登录界面进行重新登录操作
+                        }
+                    }
+                }, true);
         createService();
         registerReceiver();
         getVersion();

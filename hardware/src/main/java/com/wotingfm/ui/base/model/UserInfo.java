@@ -3,6 +3,8 @@ package com.wotingfm.ui.base.model;
 import android.content.SharedPreferences;
 import android.util.Log;
 
+import com.netease.nimlib.sdk.NIMClient;
+import com.netease.nimlib.sdk.auth.AuthService;
 import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.common.net.RetrofitUtils;
@@ -166,6 +168,7 @@ public class UserInfo {
     public void unRegisterLogin() {
         RetrofitUtils.INSTANCE=null;
         SharedPreferences.Editor et = BSApplication.SharedPreferences.edit();
+        NIMClient.getService(AuthService.class).logout();
         et.putString(StringConstant.IS_LOGIN, "false");
         et.putString(StringConstant.USER_ID, "");
         et.putString(StringConstant.TOKEN, "");
