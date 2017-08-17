@@ -11,6 +11,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
+
 import com.woting.commonplat.utils.SequenceUUID;
 import com.wotingfm.R;
 import com.wotingfm.common.bean.MessageEvent;
@@ -47,6 +48,7 @@ public class InterPhoneActivity extends BaseFragmentActivity {
      * @param frg
      */
     public static void open(Fragment frg) {
+        hintKbTwo();
         context.getSupportFragmentManager().beginTransaction()
 //                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                 .setCustomAnimations(
@@ -55,7 +57,6 @@ public class InterPhoneActivity extends BaseFragmentActivity {
                 .add(R.id.fragment_content, frg)
                 .addToBackStack(SequenceUUID.getUUID())
                 .commitAllowingStateLoss();
-//        hintKbTwo();
     }
 
     /**
@@ -63,8 +64,8 @@ public class InterPhoneActivity extends BaseFragmentActivity {
      */
     public static void close() {
         if (context != null && context.getSupportFragmentManager() != null) {
-            hintKbTwo();
             context.getSupportFragmentManager().popBackStackImmediate();// 立即删除回退栈中的数据
+            hintKbTwo();
         }
     }
 

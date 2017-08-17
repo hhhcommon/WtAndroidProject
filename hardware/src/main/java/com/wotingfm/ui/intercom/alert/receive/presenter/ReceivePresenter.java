@@ -14,7 +14,6 @@ import com.wotingfm.common.utils.VibratorUtils;
 import com.wotingfm.ui.intercom.alert.receive.model.ReceiveModel;
 import com.wotingfm.ui.intercom.alert.receive.view.ReceiveAlertActivity;
 import com.wotingfm.ui.intercom.main.contacts.model.Contact;
-import com.wotingfm.ui.intercom.main.view.InterPhoneActivity;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -32,14 +31,15 @@ public class ReceivePresenter {
     private long[] Vibrate = {400, 800, 400, 800};
     private String id = null;
     private String roomId = null;
+    private int callType=0;
 
     public ReceivePresenter(ReceiveAlertActivity activity) {
         this.activity = activity;
         this.model = new ReceiveModel(activity);
-        getSource();
-        setReceiver();
         musicOpen();
         VibratorUtils.Vibrate(activity, Vibrate, true);
+        getSource();
+        setReceiver();
     }
 
     // 获取展示数据
@@ -85,6 +85,14 @@ public class ReceivePresenter {
      */
     public String getRoomId(){
         return roomId;
+    }
+
+    /**
+     * 设置呼叫类型
+     * @param type
+     */
+    public void setCallType(int type){
+        callType=type;
     }
 
     /**
@@ -147,6 +155,7 @@ public class ReceivePresenter {
         if(msg!=null&&!msg.trim().equals("")) {
             Log.e("呼叫流程", "返回数据" + msg.toString());
             if ( "cancel".equals(msg)) {
+                callType=0;
                 activity.finish();
             }
         }
@@ -155,12 +164,12 @@ public class ReceivePresenter {
     /**
      * 接受后操作
      */
-    public void pushCallOk() {
+    private void pushCallOk() {
         model.del(id);// 删除跟本次id相关的数据
         model.add(model.assemblyData(model.getUser(id), GlobalStateConfig.ok, ""));// 把本次数据添加的数据库
         activity.sendBroadcast(new Intent(BroadcastConstants.VIEW_INTER_PHONE));// 跳转到对讲主页
-        InterPhoneActivity.closeAll();
-//        activity.sendBroadcast(new Intent(BroadcastConstants.VIEW_INTER_PHONE_CHAT_OK));// 对讲主页界面，数据更新
+        activity.sendBroadcast(new Intent(BroadcastConstants.VIEW_INTER_PHONE_CHAT_OK));// 对讲主页界面，数据更新
+        activity.sendBroadcast(new Intent(BroadcastConstants.VIEW_INTER_PHONE_CLOSE_ALL));// 关闭所有对讲模块界面
     }
 
     /**
@@ -169,6 +178,7 @@ public class ReceivePresenter {
     public void destroy() {
         musicClose();
         VibratorUtils.cancel(activity);
+        if(callType==1)pushCallOk();
         EventBus.getDefault().unregister(this);
         model = null;
     }

@@ -48,7 +48,7 @@ public class MineFragment extends Fragment implements View.OnClickListener {
     private FragmentActivity context;
     private MinePresenter presenter;
     private ImageView image_head, img_bg;
-    private TextView text_user_name, text_user_number, text_wifi_name;
+    private TextView text_user_name, text_user_number, text_wifi_name,tv_bg_clear;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -73,6 +73,7 @@ public class MineFragment extends Fragment implements View.OnClickListener {
     // 初始化视图
     private void initView() {
         img_bg = (ImageView) rootView.findViewById(R.id.img_bg);//
+        tv_bg_clear = (TextView) rootView.findViewById(R.id.tv_bg_clear);// 背景遮罩
         image_head = (ImageView) rootView.findViewById(R.id.image_head);// 头像
         image_head.setOnClickListener(this);
         text_user_name = (TextView) rootView.findViewById(R.id.text_user_name);// 昵称
@@ -105,7 +106,7 @@ public class MineFragment extends Fragment implements View.OnClickListener {
         } else {
             GlideUtils.loadImageViewSrc(R.mipmap.p, img_bg, true, 8);
         }
-
+        tv_bg_clear.setVisibility(View.VISIBLE);
         if (url != null && !url.trim().equals("") && url.startsWith("http")) {
             GlideUtils.loadImageViewRound(url, image_head, 150, 150);
         } else {
@@ -120,7 +121,8 @@ public class MineFragment extends Fragment implements View.OnClickListener {
      */
     public void setView() {
         image_head.setImageResource(R.mipmap.icon_avatar_d);
-        GlideUtils.loadImageViewSrc(R.mipmap.p, img_bg, true, 8);
+        GlideUtils.loadImageViewSrc(R.mipmap.p, img_bg, false, 8);
+        tv_bg_clear.setVisibility(View.GONE);
         text_user_name.setText("点击登录");
         text_user_number.setText("登录后可享受更多服务");
     }

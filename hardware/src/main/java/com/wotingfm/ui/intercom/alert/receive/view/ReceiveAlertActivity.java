@@ -70,6 +70,7 @@ public class ReceiveAlertActivity extends BaseActivity implements OnClickListene
                  * 此处需要挂断电话等操作
                  */
                 InterPhoneControl.refuse(presenter.getRoomId(), presenter.getId());
+                presenter.setCallType(0);
                 finish();
                 break;
             case R.id.img_ok:
@@ -78,7 +79,7 @@ public class ReceiveAlertActivity extends BaseActivity implements OnClickListene
                  */
                 InterPhoneControl.accept(presenter.getRoomId(), presenter.getId());
                 EventBus.getDefault().post(new MessageEvent("enterPersonRoom&"+presenter.getRoomId()));
-                presenter.pushCallOk();
+                presenter.setCallType(1);
                 finish();
                 break;
         }
@@ -116,7 +117,7 @@ public class ReceiveAlertActivity extends BaseActivity implements OnClickListene
              * 此处需要挂断电话等操作
              */
             InterPhoneControl.refuse(presenter.getRoomId(), presenter.getId());
-            EventBus.getDefault().post(new MessageEvent("over"));
+            presenter.setCallType(0);
             finish();
             return true;
         }

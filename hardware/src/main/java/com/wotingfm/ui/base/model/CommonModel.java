@@ -58,5 +58,4 @@ public class CommonModel {
         return b;
     }
 
-
 }

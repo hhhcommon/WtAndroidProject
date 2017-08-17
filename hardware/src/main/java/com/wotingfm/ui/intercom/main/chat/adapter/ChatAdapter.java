@@ -100,7 +100,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.SimpleHolder> 
                 }
                 holder.tv_news.setText("(" + num + "人)");
                 if (t.get(position).getURL() != null && !t.get(position).getURL().equals("") && t.get(position).getURL().startsWith("http")) {
-                    GlideUtils.loadImageViewRoundCorners(t.get(position).getURL(), holder.img_url, 60, 60);
+                    GlideUtils.loadImageViewRoundCorners(t.get(position).getURL(), holder.img_url, 150, 150);
                 } else {
                     GlideUtils.loadImageViewRoundCorners(R.mipmap.icon_avatar_d, holder.img_url, 60, 60);
                 }

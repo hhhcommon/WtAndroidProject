@@ -3,13 +3,9 @@ package com.wotingfm.common.service;
 import android.webkit.WebView;
 
 import com.wotingfm.common.application.BSApplication;
-import com.wotingfm.common.bean.MessageEvent;
 import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.common.utils.CommonUtils;
 import com.wotingfm.common.utils.IMManger;
-
-import static com.wotingfm.R.id.mWebView;
-import static com.wotingfm.R.id.view;
 
 /**
  * 对讲控制
@@ -97,9 +93,9 @@ public class InterPhoneControl {
     public static boolean enterRoom(WebView view, String room_id) {
         view.loadUrl("javascript:exitRoom()");
         String userId = BSApplication.SharedPreferences.getString(StringConstant.USER_ID, "");// 头像
-        String username = BSApplication.SharedPreferences.getString(StringConstant.NICK_NAME, "我听");// 昵称
-        String useravatar = BSApplication.SharedPreferences.getString(StringConstant.PORTRAIT, "000");// id
-        view.loadUrl("javascript:joinRoom('" + room_id + "','" + userId + "','" + username + "','" + useravatar + "')");
+        String userName = BSApplication.SharedPreferences.getString(StringConstant.NICK_NAME, "我听");// 昵称
+        String userAvatar = BSApplication.SharedPreferences.getString(StringConstant.PORTRAIT, "000");// id
+        view.loadUrl("javascript:joinRoom('" + room_id + "','" + userId + "','" + userName + "','" + userAvatar + "')");
         return true;
     }
 

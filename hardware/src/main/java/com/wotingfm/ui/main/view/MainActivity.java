@@ -1,18 +1,14 @@
 package com.wotingfm.ui.main.view;
 
-import android.Manifest;
 import android.app.TabActivity;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.graphics.Color;
-import android.net.Uri;
 import android.net.http.SslError;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.annotation.RequiresApi;
-import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -28,18 +24,18 @@ import android.webkit.WebViewClient;
 import android.widget.LinearLayout;
 import android.widget.TabHost;
 import android.widget.TextView;
+
 import com.wotingfm.R;
 import com.wotingfm.common.bean.MessageEvent;
 import com.wotingfm.common.service.InterPhoneControl;
 import com.wotingfm.common.service.NotificationService;
 import com.wotingfm.common.service.WtDeviceControl;
-import com.wotingfm.common.utils.T;
 import com.wotingfm.ui.intercom.main.chat.presenter.ChatPresenter;
 import com.wotingfm.ui.intercom.main.view.InterPhoneActivity;
 import com.wotingfm.ui.main.presenter.MainPresenter;
+import com.wotingfm.ui.mine.main.MineActivity;
 import com.wotingfm.ui.play.look.activity.LookListActivity;
 import com.wotingfm.ui.test.PlayerActivity;
-import com.wotingfm.ui.mine.main.MineActivity;
 
 import org.greenrobot.eventbus.EventBus;
 

@@ -117,16 +117,12 @@ public class ChatPresenter {
                     if (_t != null && !_t.equals("") && _t.equals("person")) {
                         // 此时的对讲状态是单对单
                         String n_id = _data.getID();// 本次id
-                        activity.dialogShow( n_id, 1);
+                        activity.dialogShow(n_id, 1);
                     } else if (_t != null && !_t.equals("") && _t.equals("group")) {
                         // 此时的对讲状态是群组
                         String n_id = _data.getID();
-                        boolean et = talkOverGroup();// 退出上次组
-                        if (et) {
-                            Log.e("信令控制", "退出组成功");
-                        } else {
-                            Log.e("信令控制", "退出组失败");
-                        }
+                        // 退出组，关闭对讲页面群组数据
+                        activity.getActivity().sendBroadcast(new Intent(BroadcastConstants.VIEW_GROUP_CLOSE));
                         boolean cp = callPerson(n_id, _data.getACC_ID());// 呼叫好友
                         if (cp) {
                             Log.e("信令控制", "呼叫好友成功");
@@ -154,16 +150,12 @@ public class ChatPresenter {
                     if (_t != null && !_t.equals("") && _t.equals("person")) {
                         // 此时的对讲状态是单对单
                         String n_id = _data.getID();// 本次id
-                        activity.dialogShow( n_id, 2);
+                        activity.dialogShow(n_id, 2);
                     } else if (_t != null && !_t.equals("") && _t.equals("group")) {
                         // 此时的对讲状态是群组
+                        // 退出组，关闭对讲页面群组数据
+                        activity.getActivity().sendBroadcast(new Intent(BroadcastConstants.VIEW_GROUP_CLOSE));
                         String n_id = _data.getID();
-                        boolean et = talkOverGroup(); // 退出上次组
-                        if (et) {
-                            Log.e("信令控制", "退出组成功");
-                        } else {
-                            Log.e("信令控制", "退出组失败");
-                        }
                         boolean cp = enterGroup(n_id);// 进入组
                         if (cp) {
                             Log.e("信令控制", "进入组成功");
@@ -198,7 +190,8 @@ public class ChatPresenter {
      */
     public void callOk(String new_id, int type, String accId) {
         if (type == 1) {
-             talkOver();// 挂断上次好友
+            // 挂断当前会话,关闭对讲页面好友数据
+            activity.getActivity().sendBroadcast(new Intent(BroadcastConstants.VIEW_PERSON_CLOSE));
             boolean cp = callPerson(new_id, accId);  // 呼叫好友
             if (cp) {
                 Log.e("信令控制", "呼叫好友成功");
@@ -207,7 +200,8 @@ public class ChatPresenter {
                 Log.e("信令控制", "呼叫好友失败");
             }
         } else {
-            talkOver();// 挂断上次好友
+            // 挂断当前会话,关闭对讲页面好友数据
+            activity.getActivity().sendBroadcast(new Intent(BroadcastConstants.VIEW_PERSON_CLOSE));
             boolean cp = enterGroup(new_id);// 进入群组
             if (cp) {
                 Log.e("信令控制", "进入组成功");
@@ -237,7 +231,7 @@ public class ChatPresenter {
         if (ChatPresenter.data != null && ChatPresenter.data.getID() != null) {
             EventBus.getDefault().post(new MessageEvent("exitGroup&" + ChatPresenter.data.getID()));
             return true;
-        }else{
+        } else {
             return false;
         }
     }
@@ -381,7 +375,7 @@ public class ChatPresenter {
      * 界面跳转(此时群肯定是自己所在的群)
      * 判断该群是不是自己创建的
      */
-    public void jump() {
+    public void jumpGroup() {
         if (model.judgeGroupCreate(data.getID())) {
             GroupNewsForAddFragment fragment = new GroupNewsForAddFragment();
             Bundle bundle = new Bundle();
@@ -396,6 +390,31 @@ public class ChatPresenter {
             bundle.putString("type", "false");
             fragment.setArguments(bundle);
             InterPhoneActivity.open(fragment);
+        }
+    }
+
+    /**
+     * 界面跳转
+     * 判断是不是自己好友
+     */
+    public void jumpPerson() {
+        String id = data.getID();
+        if (id != null && !id.trim().equals("")) {
+            if (model.judgeFriends(id)) {
+                PersonMessageFragment fragment = new PersonMessageFragment();
+                Bundle bundle = new Bundle();
+                bundle.putString("type", "true");
+                bundle.putString("id", id);
+                fragment.setArguments(bundle);
+                InterPhoneActivity.open(fragment);
+            } else {
+                PersonMessageFragment fragment = new PersonMessageFragment();
+                Bundle bundle = new Bundle();
+                bundle.putString("type", "false");
+                bundle.putString("id", id);
+                fragment.setArguments(bundle);
+                InterPhoneActivity.open(fragment);
+            }
         }
     }
 
