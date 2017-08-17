@@ -854,7 +854,6 @@ public class PlayerFragment extends BaseFragment implements View.OnClickListener
     private PLMediaPlayer.OnInfoListener mOnInfoListener = new PLMediaPlayer.OnInfoListener() {
         @Override
         public boolean onInfo(PLMediaPlayer mp, int what, int extra) {
-            Log.i("mingku", "OnInfo, what = " + what + ", extra = " + extra);
             switch (what) {
                 case PLMediaPlayer.MEDIA_INFO_BUFFERING_START:
                     mLoadingView.setVisibility(View.VISIBLE);

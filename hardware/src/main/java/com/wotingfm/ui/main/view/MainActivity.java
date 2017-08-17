@@ -1,18 +1,25 @@
 package com.wotingfm.ui.main.view;
 
+import android.Manifest;
 import android.app.TabActivity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.net.Uri;
 import android.net.http.SslError;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.annotation.RequiresApi;
+import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.webkit.JavascriptInterface;
 import android.webkit.PermissionRequest;
 import android.webkit.SslErrorHandler;
 import android.webkit.WebChromeClient;
@@ -26,6 +33,7 @@ import com.wotingfm.common.bean.MessageEvent;
 import com.wotingfm.common.service.InterPhoneControl;
 import com.wotingfm.common.service.NotificationService;
 import com.wotingfm.common.service.WtDeviceControl;
+import com.wotingfm.common.utils.T;
 import com.wotingfm.ui.intercom.main.chat.presenter.ChatPresenter;
 import com.wotingfm.ui.intercom.main.view.InterPhoneActivity;
 import com.wotingfm.ui.main.presenter.MainPresenter;
@@ -88,7 +96,7 @@ public class MainActivity extends TabActivity implements View.OnClickListener {
         // 从assets目录下面的加载html
         // mWebView.loadUrl("https://rtcmulticonnection.herokuapp.com/demos/Audio-Conferencing.html?roomid=123456789");
         mWebView.loadUrl("https://apprtc.wotingfm.com/demos/Audio-Conferencing.html?simple=true");
-        mWebView.addJavascriptInterface(MainActivity.this, "android");
+        mWebView.addJavascriptInterface(this, "android");
         mWebView.setWebViewClient(new WebViewClient() {
             @Override
             public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
@@ -104,6 +112,20 @@ public class MainActivity extends TabActivity implements View.OnClickListener {
                                     }
         );
         mWebView.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);// 设置允许JS弹窗
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (mWebView != null)
+            mWebView.onResume();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (mWebView != null)
+            mWebView.onPause();
     }
 
     @Override
@@ -212,7 +234,7 @@ public class MainActivity extends TabActivity implements View.OnClickListener {
         InterPhoneControl.quitRoomGroup(mWebView, id);
     }
 
-    public void exitRoomPerson(String id){
+    public void exitRoomPerson(String id) {
         InterPhoneControl.quitRoomPerson(mWebView, id);
     }
 
@@ -316,6 +338,23 @@ public class MainActivity extends TabActivity implements View.OnClickListener {
             mWebView = null;
         }
     }
+
+    private Handler handler = new Handler(Looper.myLooper());
+
+    /**
+     * Java方法，谁在说话
+     */
+    @JavascriptInterface
+    public void beginSpeakCallBack(final String userId, final String username, final String useravatar, final String roomNumber) {
+        if (handler != null)
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    Log.i("mingku", "userId=" + userId + ":" + username + ":" + useravatar + ":" + roomNumber);
+                }
+            });
+    }
+
 
     /**
      * 退出房间
