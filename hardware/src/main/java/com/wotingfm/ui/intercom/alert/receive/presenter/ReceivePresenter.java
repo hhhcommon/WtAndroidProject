@@ -30,8 +30,8 @@ public class ReceivePresenter {
     private MediaPlayer musicPlayer;
     private long[] Vibrate = {400, 800, 400, 800};
     private String id = null;
-    private String roomId = null;
     private int callType=0;
+    private String accId;
 
     public ReceivePresenter(ReceiveAlertActivity activity) {
         this.activity = activity;
@@ -50,7 +50,7 @@ public class ReceivePresenter {
             e.printStackTrace();
         }
         try {
-            roomId = activity.getIntent().getStringExtra("roomId");
+            accId = activity.getIntent().getStringExtra("accId");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -80,11 +80,11 @@ public class ReceivePresenter {
     }
 
     /**
-     * 获取roomId
+     * 获取AccId
      * @return
      */
-    public String getRoomId(){
-        return roomId;
+    public String getAccId(){
+        return accId;
     }
 
     /**

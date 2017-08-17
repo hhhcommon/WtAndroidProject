@@ -16,15 +16,11 @@ import android.widget.TextView;
 
 import com.woting.commonplat.widget.TipView;
 import com.wotingfm.R;
-import com.wotingfm.common.bean.MessageEvent;
-import com.wotingfm.common.service.InterPhoneControl;
 import com.wotingfm.common.utils.GlideUtils;
 import com.wotingfm.common.view.RippleImageView;
 import com.wotingfm.ui.intercom.main.chat.adapter.ChatAdapter;
 import com.wotingfm.ui.intercom.main.chat.model.TalkHistory;
 import com.wotingfm.ui.intercom.main.chat.presenter.ChatPresenter;
-
-import org.greenrobot.eventbus.EventBus;
 
 import java.util.List;
 
@@ -117,12 +113,12 @@ public class ChatFragment extends Fragment implements ChatAdapter.IonSlidingView
                 presenter.jumpPerson();
                 break;
             case R.id.img_close_group:
+                presenter.talkOverGroup();
                 setGroupViewClose();
-                EventBus.getDefault().post(new MessageEvent("exitGroup&" + ChatPresenter.data.getID()));
                 break;
             case R.id.img_close_person:
-                setPersonViewClose();
-                InterPhoneControl.over(accId);// 结束通话
+                presenter.talkOver();
+                setPersonViewClose();// 关闭好友对讲界面
                 break;
         }
     }

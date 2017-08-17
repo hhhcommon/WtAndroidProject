@@ -152,6 +152,7 @@ public class CallPresenter {
         String msg = messageEvent.getMessage();
         if (msg != null && !msg.trim().equals("")) {
             Log.e("呼叫流程", "返回数据" + msg.toString());
+
             if ("refuse".equals(msg)) {
                 /**
                  * 此处需要进行延时挂断操作（未实现）
@@ -160,7 +161,7 @@ public class CallPresenter {
             } else if ("cancel".equals(msg)) {
                 activity.finish();
             } else if ("accept".equals(msg)) {
-                EventBus.getDefault().post(new MessageEvent("enterPersonRoom&"+roomId));
+                EventBus.getDefault().post(new MessageEvent("enterPersonRoom"));
                 callType=1;
                 activity.finish();
             }

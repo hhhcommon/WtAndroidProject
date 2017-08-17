@@ -36,7 +36,7 @@ public class ReceiveAlertActivity extends BaseActivity implements OnClickListene
     public static void start(Context context, String roomId, String userId) {
         Intent intent = new Intent(context, ReceiveAlertActivity.class);
         intent.setFlags(FLAG_ACTIVITY_REORDER_TO_FRONT);
-        intent.putExtra("roomId", roomId);
+        intent.putExtra("accId", roomId);
         intent.putExtra("id", userId);
         context.startActivity(intent);
     }
@@ -69,7 +69,7 @@ public class ReceiveAlertActivity extends BaseActivity implements OnClickListene
                 /**
                  * 此处需要挂断电话等操作
                  */
-                InterPhoneControl.refuse(presenter.getRoomId(), presenter.getId());
+                InterPhoneControl.refuse(presenter.getAccId(), presenter.getId());
                 presenter.setCallType(0);
                 finish();
                 break;
@@ -77,8 +77,8 @@ public class ReceiveAlertActivity extends BaseActivity implements OnClickListene
                 /**
                  * 此处需要接收电话等操作
                  */
-                InterPhoneControl.accept(presenter.getRoomId(), presenter.getId());
-                EventBus.getDefault().post(new MessageEvent("enterPersonRoom&"+presenter.getRoomId()));
+                InterPhoneControl.accept(presenter.getAccId(), presenter.getId());
+                EventBus.getDefault().post(new MessageEvent("enterPersonRoom"));
                 presenter.setCallType(1);
                 finish();
                 break;
@@ -116,7 +116,7 @@ public class ReceiveAlertActivity extends BaseActivity implements OnClickListene
             /**
              * 此处需要挂断电话等操作
              */
-            InterPhoneControl.refuse(presenter.getRoomId(), presenter.getId());
+            InterPhoneControl.refuse(presenter.getAccId(), presenter.getId());
             presenter.setCallType(0);
             finish();
             return true;

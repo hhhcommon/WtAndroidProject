@@ -1,8 +1,6 @@
 package com.wotingfm.common.service;
 
-import android.content.Context;
 import android.util.Log;
-import android.view.View;
 import android.webkit.WebView;
 
 import com.wotingfm.common.application.BSApplication;
@@ -72,6 +70,7 @@ public class InterPhoneControl {
      * @return
      */
     public static boolean quitRoomPerson(WebView view, String room_id) {
+        Log.e("退出房间","room_id="+room_id);
         view.loadUrl("javascript:exitRoom()");
         return true;
     }
@@ -127,11 +126,11 @@ public class InterPhoneControl {
 
     /**
      * 結束单对单說話
-     * @param room_id
+     * @param acc_id
      * @return
      */
-    public static boolean over( String room_id){
-        IMManger.getInstance().sendMsg(room_id, "OVER", "");
+    public static boolean over( String acc_id){
+        IMManger.getInstance().sendMsg(acc_id, "OVER", "");
         return true;
     }
 

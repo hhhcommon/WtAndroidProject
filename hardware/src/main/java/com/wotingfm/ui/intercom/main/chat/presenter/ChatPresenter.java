@@ -219,15 +219,15 @@ public class ChatPresenter {
     }
 
     // 挂断当前个人对讲
-    private void talkOver() {
+    public void talkOver() {
         if (ChatPresenter.data != null && ChatPresenter.data.getID() != null) {
-            EventBus.getDefault().post(new MessageEvent("exitPerson&" + ChatPresenter.data.getACC_ID()));
+            EventBus.getDefault().post(new MessageEvent("exitPerson"));
             InterPhoneControl.over(ChatPresenter.data.getACC_ID());// 结束通话
         }
     }
 
     // 退出组对讲
-    private boolean talkOverGroup() {
+    public boolean talkOverGroup() {
         if (ChatPresenter.data != null && ChatPresenter.data.getID() != null) {
             EventBus.getDefault().post(new MessageEvent("exitGroup&" + ChatPresenter.data.getID()));
             return true;

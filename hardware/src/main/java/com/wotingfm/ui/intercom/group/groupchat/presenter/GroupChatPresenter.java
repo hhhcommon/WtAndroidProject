@@ -146,13 +146,8 @@ public class GroupChatPresenter {
                     // 此时的对讲状态是单对单
                     activity.dialogShow(groupId);
                 } else if (_t != null && !_t.equals("") && _t.equals("group")) {
-                    // 此时的对讲状态是群组
-                    boolean to = takeOverGroup();// 退出组
-                    if (to) {
-                        Log.e("信令控制", "退出组成功");
-                    } else {
-                        Log.e("信令控制", "退出组失败");
-                    }
+                    // 退出组，关闭对讲页面群组数据
+                    activity.getActivity().sendBroadcast(new Intent(BroadcastConstants.VIEW_GROUP_CLOSE));
                     boolean et = enterGroup(groupId);// 进入组
                     if (et) {
                         Log.e("信令控制", "进入组成功");
@@ -180,12 +175,6 @@ public class GroupChatPresenter {
      * 同意挂断当前对讲后的操作
      */
     public void callOk(String groupId) {
-        boolean to = talkOver();// 退出个人对讲
-        if (to) {
-            Log.e("信令控制", "挂断好友成功");
-        } else {
-            Log.e("信令控制", "挂断好友失败");
-        }
         // 关闭对讲页面好友数据
         activity.getActivity().sendBroadcast(new Intent(BroadcastConstants.VIEW_PERSON_CLOSE));
         boolean et = enterGroup(groupId);// 进入组
@@ -210,26 +199,6 @@ public class GroupChatPresenter {
         activity.getActivity().sendBroadcast(new Intent(BroadcastConstants.VIEW_INTER_PHONE));// 跳转到对讲主页
         activity.getActivity().sendBroadcast(new Intent(BroadcastConstants.VIEW_INTER_PHONE_CHAT_OK));// 对讲主页界面，数据更新
         activity.getActivity().sendBroadcast(new Intent(BroadcastConstants.VIEW_INTER_PHONE_CLOSE_ALL));
-    }
-
-    // 退出组
-    private boolean takeOverGroup() {
-        if (ChatPresenter.data != null && ChatPresenter.data.getID() != null) {
-            // 退出组
-            String id = ChatPresenter.data.getID();
-            EventBus.getDefault().post(new MessageEvent("exitGroup&" + id));
-        }
-        return true;
-    }
-
-    // 退出个人对讲
-    private boolean talkOver() {
-        if (ChatPresenter.data != null && ChatPresenter.data.getID() != null) {
-            EventBus.getDefault().post(new MessageEvent("exitPerson&" + ChatPresenter.data.getACC_ID()));
-            return true;
-        }else{
-            return false;
-        }
     }
 
     // 设置广播接收器
