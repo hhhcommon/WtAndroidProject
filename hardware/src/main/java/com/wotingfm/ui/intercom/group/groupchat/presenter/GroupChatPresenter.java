@@ -207,9 +207,9 @@ public class GroupChatPresenter {
     private void enterGroupOkData() {
         model.del(list.get(groupPosition).getPerson().get(childPosition).getId());// 删除跟本次id相关的数据
         model.add(model.assemblyData(list.get(groupPosition).getPerson().get(childPosition), GlobalStateConfig.ok,""));// 把本次数据添加的数据库
-        InterPhoneActivity.closeAll();
         activity.getActivity().sendBroadcast(new Intent(BroadcastConstants.VIEW_INTER_PHONE));// 跳转到对讲主页
         activity.getActivity().sendBroadcast(new Intent(BroadcastConstants.VIEW_INTER_PHONE_CHAT_OK));// 对讲主页界面，数据更新
+        activity.getActivity().sendBroadcast(new Intent(BroadcastConstants.VIEW_INTER_PHONE_CLOSE_ALL));
     }
 
     // 退出组

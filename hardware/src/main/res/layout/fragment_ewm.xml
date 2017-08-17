@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:background="@color/white"
-    android:paddingTop="20dp"
-    android:orientation="vertical">
+              android:layout_width="fill_parent"
+              android:layout_height="fill_parent"
+              android:background="@color/white"
+              android:orientation="vertical"
+              android:paddingTop="20dp">
 
     <RelativeLayout
         android:id="@+id/id_title"
@@ -14,7 +14,7 @@
         <ImageView
             android:id="@+id/head_left_btn"
             style="@style/LeftImageStyle"
-            android:src="@mipmap/nav_icon_back_black" />
+            android:src="@mipmap/nav_icon_back_black"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -22,14 +22,14 @@
             android:layout_centerInParent="true"
             android:text="二维码"
             android:textColor="@color/black"
-            android:textSize="17sp" />
+            android:textSize="17sp"/>
 
     </RelativeLayout>
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="0.7dp"
-        android:background="@color/line_color" />
+        android:background="@color/line_color"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -42,23 +42,33 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
-            android:gravity="center"
             android:layout_marginTop="53.3dp"
             android:background="@drawable/background_circle_white"
+            android:gravity="center"
             android:orientation="vertical">
 
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="70.7dp">
 
-                <ImageView
-                    android:id="@+id/image"
+                <RelativeLayout
+                    android:id="@+id/r_image"
                     android:layout_width="44dp"
                     android:layout_height="44dp"
                     android:layout_centerVertical="true"
-                    android:layout_marginLeft="15dp"
-                    android:scaleType="centerCrop"
-                    android:src="@mipmap/icon_avatar_d" />
+                    android:layout_marginLeft="15dp">
+
+                    <ImageView
+                        android:id="@+id/image"
+                        android:layout_width="44dp"
+                        android:layout_height="44dp"
+                        android:scaleType="centerCrop"/>
+                    <ImageView
+                        android:layout_width="44dp"
+                        android:layout_height="44dp"
+                        android:src="@drawable/background_person"
+                        android:scaleType="centerCrop"/>
+                </RelativeLayout>
 
                 <TextView
                     android:id="@+id/name"
@@ -66,10 +76,10 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="9.3dp"
                     android:layout_marginTop="16dp"
-                    android:layout_toRightOf="@id/image"
+                    android:layout_toRightOf="@id/r_image"
                     android:text="我听"
                     android:textColor="@color/black"
-                    android:textSize="16sp" />
+                    android:textSize="16sp"/>
 
                 <TextView
                     android:id="@+id/tv_news"
@@ -78,24 +88,24 @@
                     android:layout_below="@+id/name"
                     android:layout_marginLeft="9.3dp"
                     android:layout_marginTop="4dp"
-                    android:layout_toRightOf="@id/image"
+                    android:layout_toRightOf="@id/r_image"
                     android:text="扫一扫二维码，加我为好友。"
                     android:textColor="#959698"
-                    android:textSize="13.3sp" />
+                    android:textSize="13.3sp"/>
 
             </RelativeLayout>
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="@color/line_color" />
+                android:background="@color/line_color"/>
 
             <ImageView
                 android:id="@+id/imageView_ewm"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="0.7dp"
-                android:scaleType="centerCrop" />
+                android:scaleType="centerCrop"/>
 
         </LinearLayout>
 

@@ -1,7 +1,6 @@
 package com.wotingfm.ui.intercom.person.personmessage.adapter;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,14 +8,11 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.woting.commonplat.utils.BitmapUtils;
 import com.wotingfm.R;
 import com.wotingfm.common.bean.AlbumsBean;
 import com.wotingfm.common.utils.GlideUtils;
-import com.wotingfm.ui.intercom.main.contacts.model.Contact;
 import com.wotingfm.ui.intercom.main.view.InterPhoneActivity;
 import com.wotingfm.ui.play.activity.albums.AlbumsInfoFragmentMain;
-import com.wotingfm.ui.play.activity.albums.fragment.AlbumsInfoFragment;
 
 import java.util.List;
 
@@ -79,9 +75,9 @@ public class PersonMessageSubAdapter extends BaseAdapter {
         holder.tv_name.setText(name);
 
         if (sub.logo_url != null && !sub.logo_url.equals("")) {
-            GlideUtils.loadImageViewSrc(sub.logo_url, holder.img_view, false, 0);
+            GlideUtils.loadImageViewSrc(sub.logo_url, holder.img_view, 350,350,false, 0);
         } else {
-            GlideUtils.loadImageViewSrc(R.mipmap.p, holder.img_view, false, 0);
+            GlideUtils.loadImageViewSrc(R.mipmap.p, holder.img_view,350,350, false, 0);
         }
         convertView.setOnClickListener(new View.OnClickListener() {
             @Override

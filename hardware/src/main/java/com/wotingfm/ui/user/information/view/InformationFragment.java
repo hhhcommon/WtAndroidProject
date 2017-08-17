@@ -1,12 +1,8 @@
 package com.wotingfm.ui.user.information.view;
 
 import android.app.Dialog;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.text.Editable;
-import android.text.InputType;
-import android.text.TextWatcher;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -17,14 +13,11 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.woting.commonplat.utils.BitmapUtils;
 import com.wotingfm.R;
 import com.wotingfm.common.utils.DialogUtils;
 import com.wotingfm.common.utils.GlideUtils;
 import com.wotingfm.ui.user.information.presenter.InformationPresenter;
-import com.wotingfm.ui.user.login.presenter.LoginPresenter;
 import com.wotingfm.ui.user.logo.LogoActivity;
-import com.wotingfm.ui.user.retrievepassword.view.RetrievePassWordFragment;
 
 /**
  * 信息完善界面
@@ -101,7 +94,7 @@ public class InformationFragment extends Fragment implements View.OnClickListene
      */
     public void setImageUrl(String url) {
         if (url != null && !url.equals("")) {
-            GlideUtils.loadImageViewRound(url, img_url, 72, 72);
+            GlideUtils.loadImageViewRound(url, img_url, 150,150);
             tv_news.setVisibility(View.INVISIBLE);
         } else {
             GlideUtils.loadImageViewRound(R.mipmap.icon_avatar_d, img_url, 72, 72);

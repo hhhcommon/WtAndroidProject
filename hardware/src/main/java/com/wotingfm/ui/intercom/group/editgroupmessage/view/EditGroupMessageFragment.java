@@ -1,7 +1,6 @@
 package com.wotingfm.ui.intercom.group.editgroupmessage.view;
 
 import android.app.Dialog;
-import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -12,14 +11,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.woting.commonplat.manager.PhoneMsgManager;
-import com.woting.commonplat.utils.BitmapUtils;
 import com.wotingfm.R;
 import com.wotingfm.common.config.GlobalStateConfig;
 import com.wotingfm.common.utils.DialogUtils;
@@ -83,7 +78,7 @@ public class EditGroupMessageFragment extends Fragment implements View.OnClickLi
             case R.id.head_left_btn:
                 InterPhoneActivity.close();
                 break;
-            case R.id.view_head_portrait:// 头像按钮
+            case R.id.re_headView:// 头像按钮
                 if (imgDialog != null) {
                     imgDialog.show();
                 }
@@ -126,7 +121,7 @@ public class EditGroupMessageFragment extends Fragment implements View.OnClickLi
      */
     public void setViewForImage(String url) {
         if (url != null && !url.equals("")) {
-            GlideUtils.loadImageViewRoundCorners(url, image_headView, 60, 60);
+            GlideUtils.loadImageViewRoundCorners(url, image_headView,150, 150);
         } else {
             GlideUtils.loadImageViewRoundCorners(R.mipmap.craate_group_icon_upload_avatar_n, image_headView, 60, 60);
         }

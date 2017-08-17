@@ -1,9 +1,6 @@
 package com.wotingfm.ui.intercom.alert.receive.presenter;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.media.MediaPlayer;
 import android.media.RingtoneManager;
 import android.net.Uri;
@@ -16,8 +13,8 @@ import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.common.utils.VibratorUtils;
 import com.wotingfm.ui.intercom.alert.receive.model.ReceiveModel;
 import com.wotingfm.ui.intercom.alert.receive.view.ReceiveAlertActivity;
-import com.wotingfm.ui.intercom.main.chat.dao.SearchTalkHistoryDao;
 import com.wotingfm.ui.intercom.main.contacts.model.Contact;
+import com.wotingfm.ui.intercom.main.view.InterPhoneActivity;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -149,8 +146,8 @@ public class ReceivePresenter {
         String msg = messageEvent.getMessage();
         if(msg!=null&&!msg.trim().equals("")) {
             Log.e("呼叫流程", "返回数据" + msg.toString());
-            if ("refuse".equals(msg) ||  "cancel".equals(msg)) {
-                EventBus.getDefault().post(new MessageEvent("over"));
+            if ( "cancel".equals(msg)) {
+                activity.finish();
             }
         }
     }
@@ -162,7 +159,8 @@ public class ReceivePresenter {
         model.del(id);// 删除跟本次id相关的数据
         model.add(model.assemblyData(model.getUser(id), GlobalStateConfig.ok, ""));// 把本次数据添加的数据库
         activity.sendBroadcast(new Intent(BroadcastConstants.VIEW_INTER_PHONE));// 跳转到对讲主页
-        activity.sendBroadcast(new Intent(BroadcastConstants.VIEW_INTER_PHONE_CHAT_OK));// 对讲主页界面，数据更新
+        InterPhoneActivity.closeAll();
+//        activity.sendBroadcast(new Intent(BroadcastConstants.VIEW_INTER_PHONE_CHAT_OK));// 对讲主页界面，数据更新
     }
 
     /**

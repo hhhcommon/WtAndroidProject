@@ -1,15 +1,13 @@
 package com.wotingfm.ui.intercom.group.groupnews.add.adapter;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
-import com.woting.commonplat.utils.BitmapUtils;
 import com.wotingfm.R;
 import com.wotingfm.common.utils.GlideUtils;
 import com.wotingfm.ui.intercom.main.contacts.model.Contact;
@@ -57,7 +55,7 @@ public class GroupNewsPersonForAddAdapter extends BaseAdapter {
             holder = new ViewHolder();
             convertView = LayoutInflater.from(context).inflate(R.layout.adapter_groupnewspersonforadd, null);
             holder.img_view = (ImageView) convertView.findViewById(R.id.img_view);
-            holder.lin_img = (LinearLayout) convertView.findViewById(R.id.lin_img);
+            holder.lin_img = (RelativeLayout) convertView.findViewById(R.id.lin_img);
 
             holder.img_add = (ImageView) convertView.findViewById(R.id.img_add);
             holder.img_del = (ImageView) convertView.findViewById(R.id.img_del);
@@ -70,7 +68,7 @@ public class GroupNewsPersonForAddAdapter extends BaseAdapter {
             // 正常
             holder.lin_img.setVisibility(View.VISIBLE);
             if (lists.getAvatar() != null && !lists.getAvatar().equals("") && lists.getAvatar().startsWith("http:")) {
-                GlideUtils.loadImageViewRound(lists.getAvatar(), holder.img_view, 60, 60);
+                GlideUtils.loadImageViewRound(lists.getAvatar(), holder.img_view, 150, 150);
             } else {
                 GlideUtils.loadImageViewRound(R.mipmap.icon_avatar_d, holder.img_view, 60, 60);
             }
@@ -92,6 +90,6 @@ public class GroupNewsPersonForAddAdapter extends BaseAdapter {
 
     class ViewHolder {
         public ImageView img_view, img_add, img_del;
-        public LinearLayout lin_img;
+        public RelativeLayout lin_img;
     }
 }

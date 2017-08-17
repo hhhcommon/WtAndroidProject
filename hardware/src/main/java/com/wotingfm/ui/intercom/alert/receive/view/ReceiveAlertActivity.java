@@ -2,7 +2,6 @@ package com.wotingfm.ui.intercom.alert.receive.view;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
@@ -12,8 +11,6 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-import com.woting.commonplat.utils.BitmapUtils;
 import com.wotingfm.R;
 import com.wotingfm.common.bean.MessageEvent;
 import com.wotingfm.common.service.InterPhoneControl;
@@ -23,10 +20,6 @@ import com.wotingfm.ui.intercom.alert.receive.presenter.ReceivePresenter;
 
 import org.greenrobot.eventbus.EventBus;
 
-import jp.wasabeef.glide.transformations.BlurTransformation;
-
-import static android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP;
-import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 import static android.content.Intent.FLAG_ACTIVITY_REORDER_TO_FRONT;
 
 /**
@@ -77,7 +70,6 @@ public class ReceiveAlertActivity extends BaseActivity implements OnClickListene
                  * 此处需要挂断电话等操作
                  */
                 InterPhoneControl.refuse(presenter.getRoomId(), presenter.getId());
-                EventBus.getDefault().post(new MessageEvent("over"));
                 finish();
                 break;
             case R.id.img_ok:
@@ -85,7 +77,7 @@ public class ReceiveAlertActivity extends BaseActivity implements OnClickListene
                  * 此处需要接收电话等操作
                  */
                 InterPhoneControl.accept(presenter.getRoomId(), presenter.getId());
-                EventBus.getDefault().post(new MessageEvent("acceptMain"));
+                EventBus.getDefault().post(new MessageEvent("enterPersonRoom&"+presenter.getRoomId()));
                 presenter.pushCallOk();
                 finish();
                 break;
@@ -99,14 +91,13 @@ public class ReceiveAlertActivity extends BaseActivity implements OnClickListene
         // 其中radius的取值范围是1-25，radius越大，模糊度越高。
         // 设置高斯模糊背景
         if (url != null && !url.equals("")) {
-            Glide.with(this).load(url).bitmapTransform(new BlurTransformation(this, 15)).into(img_bg);
+            GlideUtils.loadImageViewSrc(url, img_bg, true, 20);
         } else {
-            Bitmap bmp = BitmapUtils.readBitMap(this, R.mipmap.p);
-            img_bg.setImageBitmap(bmp);
+            GlideUtils.loadImageViewSrc(R.mipmap.p, img_bg, true, 20);
         }
         // 设置好友头像
         if (url != null && !url.equals("")) {
-            GlideUtils.loadImageViewRound(url, img_url, 60, 60);
+            GlideUtils.loadImageViewRound(url, img_url, 150, 150);
         } else {
             GlideUtils.loadImageViewRound(R.mipmap.icon_avatar_d, img_url, 60, 60);
         }

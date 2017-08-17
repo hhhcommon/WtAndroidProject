@@ -21,10 +21,8 @@ import android.webkit.WebViewClient;
 import android.widget.LinearLayout;
 import android.widget.TabHost;
 import android.widget.TextView;
-
 import com.wotingfm.R;
 import com.wotingfm.common.bean.MessageEvent;
-import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.common.service.InterPhoneControl;
 import com.wotingfm.common.service.NotificationService;
 import com.wotingfm.common.service.WtDeviceControl;

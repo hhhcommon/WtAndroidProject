@@ -1,8 +1,6 @@
 package com.wotingfm.ui.intercom.person.personmessage.view;
 
 import android.app.Dialog;
-import android.content.Intent;
-import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -15,8 +13,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ImageView;
@@ -24,38 +20,20 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 import com.woting.commonplat.manager.PhoneMsgManager;
-import com.woting.commonplat.utils.BitmapUtils;
-import com.woting.commonplat.widget.GlideCircleTransform;
 import com.woting.commonplat.widget.TipView;
 import com.wotingfm.R;
 import com.wotingfm.common.bean.AlbumsBean;
-import com.wotingfm.common.bean.MessageEvent;
 import com.wotingfm.common.utils.DialogUtils;
 import com.wotingfm.common.utils.GlideUtils;
-import com.wotingfm.common.utils.IMManger;
 import com.wotingfm.common.utils.ToastUtils;
 import com.wotingfm.common.view.myscrollview.ObservableScrollView;
 import com.wotingfm.ui.base.baseinterface.ScrollViewListener;
-import com.wotingfm.ui.intercom.add.search.net.view.SearchContactsForNetFragment;
-import com.wotingfm.ui.intercom.group.groupnews.add.adapter.GroupNewsPersonForAddAdapter;
-import com.wotingfm.ui.intercom.group.groupnews.noadd.view.GroupNewsForNoAddFragment;
-import com.wotingfm.ui.intercom.main.contacts.model.Contact;
 import com.wotingfm.ui.intercom.main.view.InterPhoneActivity;
 import com.wotingfm.ui.intercom.person.personmessage.adapter.PersonMessageSubAdapter;
 import com.wotingfm.ui.intercom.person.personmessage.presenter.PersonMessagePresenter;
-import com.wotingfm.ui.intercom.person.personnote.view.EditPersonNoteFragment;
-
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.List;
-
-import jp.wasabeef.glide.transformations.BlurTransformation;
-
-import static com.wotingfm.ui.main.view.MainActivity.tabHost;
 
 /**
  * 用户详情，区分好友与非好友
@@ -296,7 +274,7 @@ public class PersonMessageFragment extends Fragment implements View.OnClickListe
         }
 
         if (url != null && !url.equals("") && url.startsWith("http")) {
-            GlideUtils.loadImageViewRound(url, img_url, 60, 60);
+            GlideUtils.loadImageViewRound(url, img_url, 150, 150);
         } else {
             GlideUtils.loadImageViewRound(R.mipmap.icon_avatar_d, img_url, 60, 60);
         }

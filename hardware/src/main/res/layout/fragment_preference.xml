@@ -149,9 +149,9 @@
         android:layout_marginBottom="20dp"
         android:layout_marginLeft="12dp"
         android:layout_marginRight="12dp"
-        android:background="@drawable/background_preference_enter"
+        android:background="@drawable/wt_user_register_background"
         android:gravity="center"
         android:text="进入我听"
-        android:textColor="#fd8548"
+        android:textColor="#ffffff"
         android:textSize="15sp" />
 </RelativeLayout>

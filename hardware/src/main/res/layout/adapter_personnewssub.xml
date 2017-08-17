@@ -9,8 +9,7 @@
         android:id="@+id/img_view"
         android:layout_width="92dp"
         android:layout_height="92dp"
-        android:scaleType="fitXY"
-        android:src="@mipmap/p" />
+        android:scaleType="centerCrop"/>
 
     <TextView
         android:id="@+id/tv_name"

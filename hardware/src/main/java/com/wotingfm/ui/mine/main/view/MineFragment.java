@@ -107,7 +107,7 @@ public class MineFragment extends Fragment implements View.OnClickListener {
         }
 
         if (url != null && !url.trim().equals("") && url.startsWith("http")) {
-            GlideUtils.loadImageViewRound(url, image_head, 70, 70);
+            GlideUtils.loadImageViewRound(url, image_head, 150, 150);
         } else {
             GlideUtils.loadImageViewRound(R.mipmap.icon_avatar_d, image_head, 70, 70);
         }

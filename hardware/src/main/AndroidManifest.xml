@@ -148,6 +148,7 @@
         <activity
             android:name=".ui.intercom.main.view.InterPhoneActivity"
             android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize|stateAlwaysHidden"
             android:theme="@style/AppTheme" />
 
         <!-- 图片剪切 -->

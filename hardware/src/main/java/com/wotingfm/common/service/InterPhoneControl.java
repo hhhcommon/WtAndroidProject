@@ -1,15 +1,9 @@
 package com.wotingfm.common.service;
 
-import android.content.Context;
-import android.view.View;
 import android.webkit.WebView;
 
-import com.wotingfm.common.bean.MessageEvent;
 import com.wotingfm.common.utils.CommonUtils;
 import com.wotingfm.common.utils.IMManger;
-import com.wotingfm.ui.intercom.main.chat.presenter.ChatPresenter;
-
-import org.greenrobot.eventbus.EventBus;
 
 /**
  * 对讲控制
@@ -112,6 +106,14 @@ public class InterPhoneControl {
         return true;
     }
 
-
+    /**
+     * 結束单对单說話
+     * @param room_id
+     * @return
+     */
+    public static boolean over( String room_id){
+        IMManger.getInstance().sendMsg(room_id, "OVER", "");
+        return true;
+    }
 
 }

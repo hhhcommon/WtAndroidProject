@@ -10,7 +10,6 @@ import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.woting.commonplat.widget.GlideCircleTransform;
-import com.wotingfm.R;
 import com.wotingfm.common.application.BSApplication;
 
 import jp.wasabeef.glide.transformations.BlurTransformation;
@@ -112,7 +111,7 @@ public class GlideUtils {
      * @param height
      */
     public static void loadImageViewRoundCorners(Object path, ImageView mImageView, int width, int height) {
-        Glide.with(BSApplication.mContext).load(path).crossFade(1000).bitmapTransform(new RoundedCornersTransformation(BSApplication.mContext, 4, 0, RoundedCornersTransformation.CornerType.ALL)).override(width, height).into(mImageView);
+        Glide.with(BSApplication.mContext).load(path).crossFade(1000).bitmapTransform(new RoundedCornersTransformation(BSApplication.mContext, 16, 0, RoundedCornersTransformation.CornerType.ALL)).override(width, height).into(mImageView);
     }
 
     /**

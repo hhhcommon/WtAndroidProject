@@ -1,7 +1,6 @@
 package com.wotingfm.ui.intercom.group.creat.view;
 
 import android.app.Dialog;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.DisplayMetrics;
@@ -14,7 +13,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.woting.commonplat.utils.BitmapUtils;
 import com.wotingfm.R;
 import com.wotingfm.common.utils.DialogUtils;
 import com.wotingfm.common.utils.GlideUtils;
@@ -117,7 +115,7 @@ public class CreateGroupMainFragment extends Fragment implements View.OnClickLis
      */
     public void setImageUrl(String url) {
         if (url != null && !url.equals("")) {
-            GlideUtils.loadImageViewRoundCorners(url, img_url, 72, 72);
+            GlideUtils.loadImageViewRoundCorners(url, img_url, 150, 150);
             tv_show.setVisibility(View.INVISIBLE);
         } else {
             GlideUtils.loadImageViewRoundCorners(R.mipmap.icon_avatar_d, img_url, 72, 72);

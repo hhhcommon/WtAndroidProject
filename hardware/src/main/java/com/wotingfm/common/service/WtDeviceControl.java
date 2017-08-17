@@ -1,10 +1,12 @@
 package com.wotingfm.common.service;
 
 import android.webkit.WebView;
+
 import com.wotingfm.common.bean.MessageEvent;
 import com.wotingfm.common.config.GlobalStateConfig;
 import com.wotingfm.common.utils.VibratorUtils;
 import com.wotingfm.ui.intercom.main.chat.presenter.ChatPresenter;
+
 import org.greenrobot.eventbus.EventBus;
 
 /**
@@ -56,6 +58,20 @@ public class WtDeviceControl {
     }
 
     /**
+     * 设置静音（呼叫成功以及对讲状态）===待定
+     */
+    public static void setMute() {
+        EventBus.getDefault().post(new MessageEvent("pause"));
+    }
+
+    /**
+     * 恢复静音前设置（呼叫成功以及对讲状态）===待定
+     */
+    public static void setMuteResume() {
+        EventBus.getDefault().post(new MessageEvent("start"));
+    }
+
+    /**
      * 语音指令-开始
      */
     public static void pushVoiceStart() {
@@ -77,13 +93,13 @@ public class WtDeviceControl {
             SimulationService.talk();
         } else {
             if (ChatPresenter.data != null) {
-              boolean b=  InterPhoneControl.beginSpeak(view,"");
-                if(b){
+                boolean b = InterPhoneControl.beginSpeak(view, "");
+                if (b) {
 
-                }else{
+                } else {
                     VibratorUtils.Vibrate(100);
                 }
-            }else{
+            } else {
                 VibratorUtils.Vibrate(100);
             }
         }
@@ -97,7 +113,7 @@ public class WtDeviceControl {
             SimulationService.openDevice();
         } else {
             if (ChatPresenter.data != null) {
-                boolean b=  InterPhoneControl.stopSpeak(view,"");
+                boolean b = InterPhoneControl.stopSpeak(view, "");
             }
         }
     }

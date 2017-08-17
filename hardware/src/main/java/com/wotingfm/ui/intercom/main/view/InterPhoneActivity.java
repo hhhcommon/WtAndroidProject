@@ -55,7 +55,7 @@ public class InterPhoneActivity extends BaseFragmentActivity {
                 .add(R.id.fragment_content, frg)
                 .addToBackStack(SequenceUUID.getUUID())
                 .commitAllowingStateLoss();
-        hintKbTwo();
+//        hintKbTwo();
     }
 
     /**
@@ -63,8 +63,8 @@ public class InterPhoneActivity extends BaseFragmentActivity {
      */
     public static void close() {
         if (context != null && context.getSupportFragmentManager() != null) {
-            context.getSupportFragmentManager().popBackStackImmediate();// 立即删除回退栈中的数据
             hintKbTwo();
+            context.getSupportFragmentManager().popBackStackImmediate();// 立即删除回退栈中的数据
         }
     }
 
@@ -132,7 +132,6 @@ public class InterPhoneActivity extends BaseFragmentActivity {
             String action = intent.getAction();
             if (action.equals(BroadcastConstants.VIEW_INTER_PHONE_CLOSE_ALL)) {
                 closeAll();
-                sendBroadcast(new Intent(BroadcastConstants.VIEW_INTER_PHONE));
             }
         }
     }

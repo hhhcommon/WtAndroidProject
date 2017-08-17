@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/white"
-    android:paddingTop="20dp">
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/white"
+                android:paddingTop="20dp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -16,17 +16,17 @@
 
             <ImageView
                 android:id="@+id/head_left_btn"
-                style="@style/LeftImageStyle" />
+                style="@style/LeftImageStyle"/>
 
             <TextView
                 android:id="@+id/tv_center"
                 style="@style/HeadWordStyle"
                 android:layout_centerInParent="true"
-                android:text="编辑资料" />
+                android:text="编辑资料"/>
 
         </RelativeLayout>
 
-        <include layout="@layout/include_tv" />
+        <include layout="@layout/include_tv"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -47,24 +47,27 @@
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="12dp"
                     android:text="头像"
-                    android:textColor="@color/black_head_word" />
+                    android:textColor="@color/black_head_word"/>
 
-                <LinearLayout
+                <RelativeLayout
                     android:layout_width="60dp"
                     android:layout_height="60dp"
                     android:layout_centerVertical="true"
-                    android:layout_toLeftOf="@+id/image_headView_enter"
-                    android:padding="1dp"
-                    android:background="@mipmap/avatar_g"
-                    android:scaleType="centerCrop">
+                    android:layout_toLeftOf="@+id/image_headView_enter">
 
                     <ImageView
                         android:id="@+id/image_headView"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:scaleType="centerCrop"
-                        android:src="@mipmap/craate_group_icon_upload_avatar_n" />
-                </LinearLayout>
+                        android:src="@mipmap/craate_group_icon_upload_avatar_n"/>
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/background_group"/>
+                </RelativeLayout>
 
 
                 <ImageView
@@ -74,7 +77,7 @@
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
                     android:layout_marginRight="7dp"
-                    android:src="@mipmap/chat_icon_next" />
+                    android:src="@mipmap/chat_icon_next"/>
 
             </RelativeLayout>
 
@@ -91,7 +94,7 @@
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="12dp"
                     android:text="群名称"
-                    android:textColor="@color/black_head_word" />
+                    android:textColor="@color/black_head_word"/>
 
                 <TextView
                     android:id="@+id/tv_groupName"
@@ -101,7 +104,7 @@
                     android:layout_toLeftOf="@+id/image_groupName_enter"
                     android:text="群名称"
                     android:textColor="#959698"
-                    android:textSize="13sp" />
+                    android:textSize="13sp"/>
 
                 <ImageView
                     android:id="@+id/image_groupName_enter"
@@ -110,11 +113,11 @@
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
                     android:layout_marginRight="7dp"
-                    android:src="@mipmap/chat_icon_next" />
+                    android:src="@mipmap/chat_icon_next"/>
 
             </RelativeLayout>
 
-            <include layout="@layout/include_tv" />
+            <include layout="@layout/include_tv"/>
 
             <RelativeLayout
                 android:id="@+id/re_groupAddress"
@@ -128,7 +131,7 @@
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="12dp"
                     android:text="群地点"
-                    android:textColor="@color/black_head_word" />
+                    android:textColor="@color/black_head_word"/>
 
                 <TextView
                     android:id="@+id/tv_groupAddress"
@@ -138,7 +141,7 @@
                     android:layout_toLeftOf="@+id/image_groupAddress_enter"
                     android:text="北京"
                     android:textColor="#959698"
-                    android:textSize="13sp" />
+                    android:textSize="13sp"/>
 
                 <ImageView
                     android:id="@+id/image_groupAddress_enter"
@@ -147,11 +150,11 @@
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
                     android:layout_marginRight="7dp"
-                    android:src="@mipmap/chat_icon_next" />
+                    android:src="@mipmap/chat_icon_next"/>
 
             </RelativeLayout>
 
-            <include layout="@layout/include_tv" />
+            <include layout="@layout/include_tv"/>
 
             <RelativeLayout
                 android:id="@+id/re_groupIntroduce"
@@ -167,7 +170,7 @@
                     android:layout_marginLeft="12dp"
                     android:layout_marginTop="12dp"
                     android:text="群介绍"
-                    android:textColor="@color/black_head_word" />
+                    android:textColor="@color/black_head_word"/>
 
                 <ImageView
                     android:id="@+id/image_groupIntroduce_enter"
@@ -176,7 +179,7 @@
                     android:layout_alignParentRight="true"
                     android:layout_marginRight="7dp"
                     android:layout_marginTop="12dp"
-                    android:src="@mipmap/chat_icon_next" />
+                    android:src="@mipmap/chat_icon_next"/>
 
                 <TextView
                     android:id="@+id/tv_groupIntroduce"
@@ -188,7 +191,7 @@
                     android:layout_marginTop="12dp"
                     android:text="此处显示群的介绍信息"
                     android:textColor="#cccccd"
-                    android:textSize="12sp" />
+                    android:textSize="12sp"/>
             </RelativeLayout>
         </LinearLayout>
     </LinearLayout>

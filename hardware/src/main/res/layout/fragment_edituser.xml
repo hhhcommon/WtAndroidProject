@@ -57,7 +57,7 @@
             android:gravity="top"
             android:hint="给自己起一个美丽的名称吧"
             android:lineSpacingExtra="2sp"
-            android:maxLength="20"
+            android:maxLength="15"
             android:singleLine="true"
             android:maxLines="1"
             android:paddingLeft="12dp"

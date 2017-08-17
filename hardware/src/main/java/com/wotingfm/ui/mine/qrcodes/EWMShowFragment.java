@@ -3,7 +3,6 @@ package com.wotingfm.ui.mine.qrcodes;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -79,7 +78,7 @@ public class EWMShowFragment extends Fragment implements OnClickListener {
         }
 
         if (imageUrl != null && !imageUrl.equals("") && imageUrl.startsWith("http:")) {
-            GlideUtils.loadImageViewRound(imageUrl, imageHead, 80, 80);
+            GlideUtils.loadImageViewRound(imageUrl, imageHead, 150, 150);
         } else {
             GlideUtils.loadImageViewRound(R.mipmap.icon_avatar_d, imageHead, 80, 80);
         }

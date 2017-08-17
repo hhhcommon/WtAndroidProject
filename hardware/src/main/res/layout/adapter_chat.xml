@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.wotingfm.common.view.slidingbutton.SlidingButtonView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginBottom="0.7dp"
-    android:background="@color/white">
+                                                          android:layout_width="match_parent"
+                                                          android:layout_height="wrap_content"
+                                                          android:layout_marginBottom="0.7dp"
+                                                          android:background="@color/white">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -19,19 +19,18 @@
             android:text="删 除"
             android:textColor="@color/white"
             android:textSize="15sp"
-            android:visibility="visible" />
+            android:visibility="visible"/>
 
         <RelativeLayout
             android:id="@+id/layout_content"
             android:layout_width="match_parent"
             android:layout_height="73dp">
 
-            <LinearLayout
+            <RelativeLayout
                 android:id="@+id/lin_img"
                 android:layout_width="52dp"
                 android:layout_height="52dp"
                 android:layout_centerVertical="true"
-                android:padding="1dp"
                 android:layout_gravity="center_vertical"
                 android:layout_marginLeft="12dp">
 
@@ -39,8 +38,13 @@
                     android:id="@+id/img_url"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:scaleType="centerCrop" />
-            </LinearLayout>
+                    android:scaleType="centerCrop"/>
+
+                <ImageView
+                    android:id="@+id/img_bg"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"/>
+            </RelativeLayout>
 
 
             <include
@@ -49,7 +53,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="73dp"
                 android:layout_marginLeft="12dp"
-                android:layout_toRightOf="@id/lin_img" />
+                android:layout_toRightOf="@id/lin_img"/>
 
 
             <ImageView
@@ -59,7 +63,7 @@
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:layout_marginRight="12dp"
-                android:src="@mipmap/chat_icon_call" />
+                android:src="@mipmap/chat_icon_call"/>
         </RelativeLayout>
 
 

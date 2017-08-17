@@ -11,7 +11,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.EditText;
@@ -234,6 +233,8 @@ public class SearchContactsForLocalFragment extends Fragment implements View.OnC
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.tv_clear:
+//                InputMethodManager m = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+//                m .hideSoftInputFromWindow(et_search.getWindowToken(), 0);//比如EditView
                 InterPhoneActivity.close();
                 break;
         }
@@ -284,9 +285,9 @@ public class SearchContactsForLocalFragment extends Fragment implements View.OnC
     @Override
     public void onDestroy() {
         super.onDestroy();
-        Log.e("界面","执行销毁");
+        Log.e("界面", "执行销毁");
         presenter.destroy();
-        presenter=null;
+        presenter = null;
     }
 
 }

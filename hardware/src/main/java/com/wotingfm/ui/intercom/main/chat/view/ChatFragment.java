@@ -1,10 +1,8 @@
 package com.wotingfm.ui.intercom.main.chat.view;
 
 import android.app.Dialog;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -13,22 +11,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.woting.commonplat.widget.TipView;
 import com.wotingfm.R;
 import com.wotingfm.common.bean.MessageEvent;
-import com.wotingfm.common.utils.IMManger;
+import com.wotingfm.common.service.InterPhoneControl;
 import com.wotingfm.common.view.RippleImageView;
-import com.wotingfm.ui.intercom.group.groupnews.add.view.GroupNewsForAddFragment;
 import com.wotingfm.ui.intercom.main.chat.adapter.ChatAdapter;
 import com.wotingfm.ui.intercom.main.chat.model.TalkHistory;
 import com.wotingfm.ui.intercom.main.chat.presenter.ChatPresenter;
-import com.wotingfm.ui.intercom.main.contacts.model.Contact;
-import com.wotingfm.ui.intercom.main.view.InterPhoneActivity;
-import com.wotingfm.ui.intercom.person.personmessage.view.PersonMessageFragment;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -54,10 +47,9 @@ public class ChatFragment extends Fragment implements ChatAdapter.IonSlidingView
     private TipView tip_view;
     private Dialog confirmDialog;
     private int type;
-    private String old_id;
     private String new_id;
     private int callType;
-
+    private String accId;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         if (rootView == null) {
@@ -117,8 +109,7 @@ public class ChatFragment extends Fragment implements ChatAdapter.IonSlidingView
                 break;
             case R.id.img_close_person:
                 setPersonViewClose();
-                IMManger.getInstance().sendMsg(sessionId, "OVER", "");
-                EventBus.getDefault().post(new MessageEvent("over"));
+                InterPhoneControl.over(accId);// 结束通话
                 break;
         }
     }
@@ -139,7 +130,7 @@ public class ChatFragment extends Fragment implements ChatAdapter.IonSlidingView
         mAdapter.setOnSlidListener(this);
     }
 
-    private String sessionId;
+
 
     /**
      * 设置好友界面--展示
@@ -149,7 +140,7 @@ public class ChatFragment extends Fragment implements ChatAdapter.IonSlidingView
     public void setPersonViewShow(TalkHistory h) {
         re_person.setVisibility(View.VISIBLE);
         tv_person_person.setText(h.getName());
-        sessionId = h.getACC_ID();
+        accId = h.getACC_ID();
     }
 
     /**
@@ -295,7 +286,7 @@ public class ChatFragment extends Fragment implements ChatAdapter.IonSlidingView
             @Override
             public void onClick(View v) {
                 dialogCancel();
-                presenter.callOk(old_id, new_id, callType, sessionId);
+                presenter.callOk( new_id, callType, accId);
 
             }
         });
@@ -304,8 +295,7 @@ public class ChatFragment extends Fragment implements ChatAdapter.IonSlidingView
     /**
      * 展示弹出框
      */
-    public void dialogShow(String old_id, String new_id, int type) {
-        this.old_id = old_id;
+    public void dialogShow( String new_id, int type) {
         this.new_id = new_id;
         this.callType = type;
         confirmDialog.show();
