@@ -351,6 +351,19 @@ public class MainActivity extends TabActivity implements View.OnClickListener {
             });
     }
 
+    /**
+     * Java方法，房间没有人在说话的时候
+     */
+    @JavascriptInterface
+    public void noPeopleSpoke() {
+        if (handler != null)
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    Log.i("mingku", "没有人在说话");
+                }
+            });
+    }
 
     /**
      * 退出房间

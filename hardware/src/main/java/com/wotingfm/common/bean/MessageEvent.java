@@ -12,6 +12,7 @@ public class MessageEvent {
     public ChannelsBean channelsBean;
     public SinglesBase singlesBase;
     public int type;
+    public String roomid;
     public List<SinglesDownload> singlesDownloads;
 
     public MessageEvent(String message) {
@@ -31,7 +32,10 @@ public class MessageEvent {
         this.singlesDownloads = singlesDownloads;
         this.type = type;
     }
-
+    public MessageEvent(String roomid, int type) {
+        this.roomid = roomid;
+        this.type = type;
+    }
     public ChannelsBean getChannelsBean() {
         return channelsBean;
     }
@@ -51,4 +55,9 @@ public class MessageEvent {
     public String getMessage() {
         return message;
     }
+
+    public String getRoomid() {
+        return roomid;
+    }
+
 }

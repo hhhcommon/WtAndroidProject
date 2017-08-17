@@ -1,5 +1,8 @@
 package com.wotingfm.common.service;
 
+import android.content.Context;
+import android.util.Log;
+import android.view.View;
 import android.webkit.WebView;
 
 import com.wotingfm.common.application.BSApplication;
@@ -91,7 +94,7 @@ public class InterPhoneControl {
      * @return
      */
     public static boolean enterRoom(WebView view, String room_id) {
-        view.loadUrl("javascript:exitRoom()");
+        Log.d("mingku","room_id="+room_id);
         String userId = BSApplication.SharedPreferences.getString(StringConstant.USER_ID, "");// 头像
         String userName = BSApplication.SharedPreferences.getString(StringConstant.NICK_NAME, "我听");// 昵称
         String userAvatar = BSApplication.SharedPreferences.getString(StringConstant.PORTRAIT, "000");// id
