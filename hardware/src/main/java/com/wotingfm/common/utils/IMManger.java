@@ -106,7 +106,7 @@ public class IMManger {
                             Log.i("mingku", "throwable" + throwable.getMessage());
                         }
                     });
-                    EventBus.getDefault().post(new MessageEvent("create&Rommid" + roomid));
+                    EventBus.getDefault().post(new MessageEvent(roomid, 10));
                 }
             });
 

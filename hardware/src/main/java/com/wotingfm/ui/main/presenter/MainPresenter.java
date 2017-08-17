@@ -294,8 +294,8 @@ public class MainPresenter extends BasePresenter {
             } else if (event.contains("exitPerson&")) {// 退出个人对讲
                 String room_id = event.split("exitPerson&")[1];
                 activity.exitRoomPerson(room_id);
-            } else if (event.contains("create&Rommid")) {
-                roomId = event.split("create&Rommid")[1];
+            } else if (messageEvent.getType() == 10) {
+                roomId = messageEvent.getRoomid();
             } else if ("over".equals(event)) {
 
             } else if (event.equals("enterGroup&")) {
@@ -307,13 +307,17 @@ public class MainPresenter extends BasePresenter {
                 activity.enterRoom(room_id);
             } else if (event.equals("exitGroup&")) {
                 WtDeviceControl.start();
-                activity.exitRoomGroup(null);// 退出房间
+                activity.exitRoomGroup(roomId);// 退出房间
             } else if (event.contains("exitGroup&")) {
                 WtDeviceControl.start();
                 String room_id = event.split("exitGroup&")[1];
                 activity.exitRoomGroup(room_id);// 退出房间
             } else if (event.equals("onDestroy")) {
                 activity.destroyWebView();
+            }
+        } else {
+            if (messageEvent != null && messageEvent.getType() == 10) {
+                roomId = messageEvent.getRoomid();
             }
         }
     }
@@ -333,11 +337,11 @@ public class MainPresenter extends BasePresenter {
                 String type = map.get("type") + "";
                 String userId = map.get("userId") + "";
                 String roomid = map.get("roomid") + "";
-
                 if (type != null && !type.trim().equals("")) {
                     switch (type) {
                         case "LAUNCH":// 收到别人邀请我对讲（单对单）
-                            roomId = roomid;
+                            if (!TextUtils.isEmpty(roomid))
+                                roomId = roomid;
                             EventBus.getDefault().post(new MessageEvent("two"));
                             ReceiveAlertActivity.start(activity, im.getFromAccount(), userId);
                             WtDeviceControl.pause();
@@ -349,7 +353,7 @@ public class MainPresenter extends BasePresenter {
                         case "ACCEPT": // 我的对讲邀请被接受（单对单）
                             EventBus.getDefault().post(new MessageEvent("accept"));
                             WtDeviceControl.pause();
-                            activity.enterRoom(roomId);
+                           // activity.enterRoom(roomId);
                             break;
                         case "REFUSE":// 我的对讲邀请被拒绝（单对单）
                             EventBus.getDefault().post(new MessageEvent("refuse"));
@@ -357,7 +361,7 @@ public class MainPresenter extends BasePresenter {
                             break;
                         case "OVER":
                             WtDeviceControl.start();
-                            activity.exitRoomPerson(roomid);// 退出房间
+                            activity.exitRoomPerson("");// 退出房间
                             break;
                     }
                 }
