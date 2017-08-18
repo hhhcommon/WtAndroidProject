@@ -177,6 +177,15 @@ public class InterPhoneActivity extends BaseFragmentActivity {
     }
 
     @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        if (hasFocus){
+//            waveLineView.justDrawBackground();
+        }
+    }
+
+
+    @Override
     protected void onDestroy() {
         super.onDestroy();
         if (Receiver != null) {

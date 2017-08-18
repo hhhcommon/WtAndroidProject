@@ -7,7 +7,13 @@
         android:id="@+id/img_bg"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scaleType="fitXY"/>
+        android:scaleType="centerCrop"/>
+
+    <TextView
+        android:id="@+id/tv_bg_clear"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/transparent_20_black"/>
 
     <LinearLayout
         android:layout_width="match_parent"

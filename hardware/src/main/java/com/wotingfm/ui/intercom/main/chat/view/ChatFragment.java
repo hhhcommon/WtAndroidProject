@@ -9,6 +9,7 @@ import android.support.v4.view.animation.LinearOutSlowInInterpolator;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,7 +21,8 @@ import android.widget.TextView;
 import com.woting.commonplat.widget.TipView;
 import com.wotingfm.R;
 import com.wotingfm.common.utils.GlideUtils;
-import com.wotingfm.common.view.WaveView;
+import com.wotingfm.common.view.waveline.WaveLineView;
+import com.wotingfm.common.view.waveview.WaveView;
 import com.wotingfm.ui.intercom.main.chat.adapter.ChatAdapter;
 import com.wotingfm.ui.intercom.main.chat.model.TalkHistory;
 import com.wotingfm.ui.intercom.main.chat.presenter.ChatPresenter;
@@ -40,7 +42,7 @@ public class ChatFragment extends Fragment implements ChatAdapter.IonSlidingView
     private RecyclerView mRecyclerView;
     private ChatAdapter mAdapter;
     private ImageView img_url_group, img_person_group,img_url_person,img_person_person;
-    private RelativeLayout re_group, re_person;
+    private RelativeLayout re_group, re_person,re_back;
     private TextView tv_groupName, tv_groupNum, tv_person_group, tv_person_person,tv_group_talked,tv_person_name,tv_person_talked,tv_line;
     private LinearLayout lin_back,lin_group_talking,lin_person_talking;
     private TipView tip_view;
@@ -50,6 +52,7 @@ public class ChatFragment extends Fragment implements ChatAdapter.IonSlidingView
     private int callType;
     private String accId;
     private WaveView WaveView_group,WaveView_person;
+    private WaveLineView waveLineView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -71,9 +74,13 @@ public class ChatFragment extends Fragment implements ChatAdapter.IonSlidingView
         lin_back = (LinearLayout) rootView.findViewById(R.id.lin_back);//全局界面
         tv_line = (TextView) rootView.findViewById(R.id.tv_line);//
         tv_line.setVisibility(View.GONE);
+        re_back = (RelativeLayout) rootView.findViewById(R.id.re_back);//
+        re_back.setVisibility(View.GONE);
+
         // 组的界面
         re_group = (RelativeLayout) rootView.findViewById(R.id.re_group);// 组的全局界面
         re_group.setVisibility(View.GONE);
+        waveLineView = (WaveLineView) rootView.findViewById(R.id.waveLineView);
         img_url_group = (ImageView) rootView.findViewById(R.id.img_url_group);// 组的头像
         img_url_group.setOnClickListener(this);// 监听，跳转到群详情
         tv_groupName = (TextView) rootView.findViewById(R.id.tv_groupName);// 组名称
@@ -84,6 +91,7 @@ public class ChatFragment extends Fragment implements ChatAdapter.IonSlidingView
         tv_person_group = (TextView) rootView.findViewById(R.id.tv_person_group);// 群组说话人名称
         img_person_group = (ImageView) rootView.findViewById(R.id.img_person_group);// 群组说话人头像
         WaveView_group = (WaveView) rootView.findViewById(R.id.WaveView_group);// 群组说话人水波纹
+
         WaveView_group.setDuration(2000);
         WaveView_group.setInitialRadius(62f);
         WaveView_group.setMaxRadius(200f);
@@ -164,6 +172,7 @@ public class ChatFragment extends Fragment implements ChatAdapter.IonSlidingView
      */
     public void setPersonViewShow(TalkHistory h) {
         tv_line.setVisibility(View.VISIBLE);
+        re_back.setVisibility(View.VISIBLE);
         re_person.setVisibility(View.VISIBLE);
         String p_name = h.getName();
         if (p_name == null || p_name.trim().equals("")) {
@@ -184,10 +193,12 @@ public class ChatFragment extends Fragment implements ChatAdapter.IonSlidingView
      */
     public void setPersonViewClose() {
         tv_line.setVisibility(View.GONE);
+        re_back.setVisibility(View.GONE);
         re_person.setVisibility(View.GONE);
         tv_person_talked.setVisibility(View.VISIBLE);
         lin_person_talking.setVisibility(View.GONE);
         WaveView_person.stop();
+        waveLineView.stopAnim();
         presenter.setNull();
     }
 
@@ -204,6 +215,7 @@ public class ChatFragment extends Fragment implements ChatAdapter.IonSlidingView
             GlideUtils.loadImageViewRound(R.mipmap.icon_avatar_d, img_person_person, 60, 60);
         }
         WaveView_person.start();
+        waveLineView.startAnim();
     }
 
     /**
@@ -213,6 +225,7 @@ public class ChatFragment extends Fragment implements ChatAdapter.IonSlidingView
         tv_person_talked.setVisibility(View.VISIBLE);
         lin_person_talking.setVisibility(View.GONE);
         WaveView_person.stop();
+        waveLineView.stopAnim();
     }
 
     /**
@@ -222,6 +235,7 @@ public class ChatFragment extends Fragment implements ChatAdapter.IonSlidingView
      */
     public void setGroupViewShow(TalkHistory h) {
         tv_line.setVisibility(View.VISIBLE);
+        re_back.setVisibility(View.VISIBLE);
         re_group.setVisibility(View.VISIBLE);
         String g_name = h.getName();
         if (g_name == null || g_name.trim().equals("")) {
@@ -243,10 +257,12 @@ public class ChatFragment extends Fragment implements ChatAdapter.IonSlidingView
      */
     public void setGroupViewClose() {
         tv_line.setVisibility(View.GONE);
+        re_back.setVisibility(View.GONE);
         re_group.setVisibility(View.GONE);
         tv_group_talked.setVisibility(View.VISIBLE);
         lin_group_talking.setVisibility(View.GONE);
         WaveView_group.stop();
+        waveLineView.stopAnim();
         presenter.setNull();
     }
 
@@ -263,6 +279,7 @@ public class ChatFragment extends Fragment implements ChatAdapter.IonSlidingView
             GlideUtils.loadImageViewRound(R.mipmap.icon_avatar_d, img_person_group, 60, 60);
         }
         WaveView_group.start();
+        waveLineView.startAnim();
     }
 
     /**
@@ -272,6 +289,7 @@ public class ChatFragment extends Fragment implements ChatAdapter.IonSlidingView
         tv_group_talked.setVisibility(View.VISIBLE);
         lin_group_talking.setVisibility(View.GONE);
         WaveView_group.stop();
+        waveLineView.stopAnim();
     }
 
     /**
@@ -393,6 +411,23 @@ public class ChatFragment extends Fragment implements ChatAdapter.IonSlidingView
     public void onDestroy() {
         super.onDestroy();
         presenter.destroy();
+        waveLineView.release();
     }
+    @Override
+    public void onResume() {
+        super.onResume();
+        waveLineView.onResume();
+        Log.e("聊天页面","onResume");
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        waveLineView.onPause();
+        Log.e("聊天页面","onPause");
+    }
+
+
+
 
 }

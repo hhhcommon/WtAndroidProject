@@ -100,11 +100,11 @@ public class ReceiveAlertActivity extends BaseActivity implements OnClickListene
      */
     public void setViewData(String url, String name) {
         // 其中radius的取值范围是1-25，radius越大，模糊度越高。
-        // 设置高斯模糊背景
+        // 不设置高斯模糊背景
         if (url != null && !url.equals("")) {
-            GlideUtils.loadImageViewSrc(url, img_bg, true, 20);
+            GlideUtils.loadImageViewSrc(url, img_bg, false, 20);
         } else {
-            GlideUtils.loadImageViewSrc(R.mipmap.p, img_bg, true, 20);
+            GlideUtils.loadImageViewSrc(R.mipmap.p, img_bg, false, 20);
         }
         // 设置好友头像
         if (url != null && !url.equals("")) {

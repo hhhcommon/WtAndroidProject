@@ -1,4 +1,4 @@
-package com.wotingfm.common.view;
+package com.wotingfm.common.view.waveview;
 
 import android.content.Context;
 import android.graphics.Canvas;
