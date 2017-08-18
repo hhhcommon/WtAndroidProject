@@ -309,6 +309,8 @@ public class MainPresenter extends BasePresenter {
             Log.i("tag", "User status changed to: " + status);
             if (status.wontAutoLogin()) {
                 mainModel.unRegisterLogin();
+                // 发送注销登录广播通知所有界面
+                activity.sendBroadcast(new Intent(BroadcastConstants.CANCEL));
             }
         }
     };

@@ -74,5 +74,8 @@ public class BroadcastConstants {
     // 有人在说话
     public static final String PUSH_CHAT_OPEN = "PUSH_CHAT_OPEN";
 
+    // 群成员
+    public static final String PUSH_CHAT_GROUP_NUM = "PUSH_CHAT_GROUP_NUM";
+
     public static final String PUSH_NOTIFICATION = "PUSH_NOTIFICATION";
 }

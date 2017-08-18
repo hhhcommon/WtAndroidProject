@@ -13,10 +13,12 @@ import android.widget.TextView;
 
 import com.wotingfm.R;
 import com.wotingfm.common.bean.MessageEvent;
+import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.common.service.InterPhoneControl;
 import com.wotingfm.common.utils.GlideUtils;
 import com.wotingfm.ui.base.baseactivity.BaseActivity;
 import com.wotingfm.ui.intercom.alert.receive.presenter.ReceivePresenter;
+import com.wotingfm.ui.intercom.main.chat.presenter.ChatPresenter;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -77,6 +79,14 @@ public class ReceiveAlertActivity extends BaseActivity implements OnClickListene
                 /**
                  * 此处需要接收电话等操作
                  */
+                if (ChatPresenter.data != null) {
+                    String type = ChatPresenter.data.getTyPe().trim();
+                    if (type != null && !type.equals("") && type.equals("person")) {
+                        sendBroadcast(new Intent(BroadcastConstants.VIEW_PERSON_CLOSE));// 好友界面关闭
+                    } else {
+                        sendBroadcast(new Intent(BroadcastConstants.VIEW_GROUP_CLOSE)); // 群组界面关闭
+                    }
+                }
                 InterPhoneControl.accept(presenter.getAccId(), presenter.getId());
                 EventBus.getDefault().post(new MessageEvent("enterPersonRoom"));
                 presenter.setCallType(1);

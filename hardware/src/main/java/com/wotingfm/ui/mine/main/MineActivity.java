@@ -11,7 +11,6 @@ import com.woting.commonplat.utils.SequenceUUID;
 import com.wotingfm.R;
 import com.wotingfm.common.bean.MessageEvent;
 import com.wotingfm.common.constant.BroadcastConstants;
-import com.wotingfm.common.utils.L;
 import com.wotingfm.ui.base.baseactivity.AppManager;
 import com.wotingfm.ui.base.baseactivity.BaseFragmentActivity;
 import com.wotingfm.ui.mine.main.view.MineFragment;
@@ -32,7 +31,18 @@ public class MineActivity extends BaseFragmentActivity {
         setContentView(R.layout.activity_mine);
         AppManager.getAppManager().addActivity(this);
         context = this;
-        MineActivity.open(new MineFragment());
+        openOne(new MineFragment());
+    }
+
+    /**
+     * 打开新的 Fragment
+     */
+    private void openOne(Fragment frg) {
+        context.getSupportFragmentManager().beginTransaction()
+                .add(R.id.fragment_content, frg)
+                .addToBackStack(SequenceUUID.getUUID())
+                .commit();
+        hintKbTwo();
     }
 
     /**

@@ -1,6 +1,7 @@
 package com.wotingfm.ui.intercom.alert.receive.presenter;
 
 import android.content.Intent;
+import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.RingtoneManager;
 import android.net.Uri;
@@ -30,8 +31,9 @@ public class ReceivePresenter {
     private MediaPlayer musicPlayer;
     private long[] Vibrate = {400, 800, 400, 800};
     private String id = null;
-    private int callType=0;
+    private int callType = 0;
     private String accId;
+//    private SoundPool soundPool;
 
     public ReceivePresenter(ReceiveAlertActivity activity) {
         this.activity = activity;
@@ -81,25 +83,28 @@ public class ReceivePresenter {
 
     /**
      * 获取AccId
+     *
      * @return
      */
-    public String getAccId(){
+    public String getAccId() {
         return accId;
     }
 
     /**
      * 设置呼叫类型
+     *
      * @param type
      */
-    public void setCallType(int type){
-        callType=type;
+    public void setCallType(int type) {
+        callType = type;
     }
 
     /**
      * 获取用户Id
+     *
      * @return
      */
-    public String getId(){
+    public String getId() {
         return id;
     }
 
@@ -112,26 +117,16 @@ public class ReceivePresenter {
      * 铃声开启
      */
     public void musicOpen() {
-        musicPlayer = MediaPlayer.create(activity, R.raw.ringback);
-        if (musicPlayer == null) {
-            musicPlayer = MediaPlayer.create(activity, R.raw.talkno);
+        ////////////
+        musicPlayer = MediaPlayer.create(activity, R.raw.talkno);
+        musicPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+        musicPlayer.setLooping(true);
+        try {
+            musicPlayer.prepare();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        //  musicPlayer = MediaPlayer.create(instance, getSystemDefaultRingtoneUri());
-        if (musicPlayer != null) {
-            musicPlayer.start();
-            // 监听音频播放完的代码，实现音频的自动循环播放
-            musicPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-                @Override
-                public void onCompletion(MediaPlayer arg0) {
-                    if (musicPlayer != null) {
-                        musicPlayer.start();
-                        musicPlayer.setLooping(true);
-                    }
-                }
-            });
-        } else {
-            // 播放器初始化失败
-        }
+        musicPlayer.start();
     }
 
     /**
@@ -152,10 +147,10 @@ public class ReceivePresenter {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMoonEvent(MessageEvent messageEvent) {
         String msg = messageEvent.getMessage();
-        if(msg!=null&&!msg.trim().equals("")) {
+        if (msg != null && !msg.trim().equals("")) {
             Log.e("呼叫流程", "返回数据" + msg.toString());
-            if ( "cancel".equals(msg)) {
-                callType=0;
+            if ("cancel".equals(msg)) {
+                callType = 0;
                 activity.finish();
             }
         }
@@ -178,7 +173,7 @@ public class ReceivePresenter {
     public void destroy() {
         musicClose();
         VibratorUtils.cancel(activity);
-        if(callType==1)pushCallOk();
+        if (callType == 1) pushCallOk();
         EventBus.getDefault().unregister(this);
         model = null;
     }

@@ -1,6 +1,7 @@
 package com.wotingfm.ui.intercom.alert.call.presenter;
 
 import android.content.Intent;
+import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.RingtoneManager;
 import android.net.Uri;
@@ -30,7 +31,7 @@ public class CallPresenter {
     private String id = null;
     private String roomId = null;
     private String fromType = "";// 界面来源
-    private int callType=0;
+    private int callType = 0;
 
     public CallPresenter(CallAlertActivity activity) {
         this.activity = activity;
@@ -105,26 +106,15 @@ public class CallPresenter {
      * 铃声开启
      */
     public void musicOpen() {
-        musicPlayer = MediaPlayer.create(activity, R.raw.ringback);
-        if (musicPlayer == null) {
-            musicPlayer = MediaPlayer.create(activity, R.raw.talkno);
+        musicPlayer = MediaPlayer.create(activity, R.raw.talkno);
+        musicPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+        musicPlayer.setLooping(true);
+        try {
+            musicPlayer.prepare();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        //  musicPlayer = MediaPlayer.create(instance, getSystemDefaultRingtoneUri());
-        if (musicPlayer != null) {
-            musicPlayer.start();
-            // 监听音频播放完的代码，实现音频的自动循环播放
-            musicPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-                @Override
-                public void onCompletion(MediaPlayer arg0) {
-                    if (musicPlayer != null) {
-                        musicPlayer.start();
-                        musicPlayer.setLooping(true);
-                    }
-                }
-            });
-        } else {
-            // 播放器初始化失败
-        }
+        musicPlayer.start();
     }
 
     /**
@@ -162,7 +152,7 @@ public class CallPresenter {
                 activity.finish();
             } else if ("accept".equals(msg)) {
                 EventBus.getDefault().post(new MessageEvent("enterPersonRoom"));
-                callType=1;
+                callType = 1;
                 activity.finish();
             }
         }
@@ -180,7 +170,7 @@ public class CallPresenter {
      */
     public void destroy() {
         musicClose();
-        if(callType==1)dealPushCall();
+        if (callType == 1) dealPushCall();
         EventBus.getDefault().unregister(this);
         model = null;
     }

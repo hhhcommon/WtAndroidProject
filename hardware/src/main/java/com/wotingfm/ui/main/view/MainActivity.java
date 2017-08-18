@@ -347,7 +347,7 @@ public class MainActivity extends TabActivity implements View.OnClickListener {
             handler.post(new Runnable() {
                 @Override
                 public void run() {
-                    Log.i("mingku", "userId=" + userId + ":" + username + ":" + useravatar + ":" + roomNumber);
+                    Log.e("说话人数据", "userId=" + userId + ":" + username + ":" + useravatar + ":" + roomNumber);
                     Intent intent = new Intent(BroadcastConstants.PUSH_CHAT_OPEN);
                     try {
                         intent.putExtra("name", username);
@@ -378,8 +378,30 @@ public class MainActivity extends TabActivity implements View.OnClickListener {
             handler.post(new Runnable() {
                 @Override
                 public void run() {
-                    Log.i("mingku", "没有人在说话");
+                    Log.e("说话结束", "没有人在说话");
                     sendBroadcast(new Intent(BroadcastConstants.PUSH_CHAT_CLOSE));
+                }
+            });
+    }
+
+    /**
+     * Java方法，人数监听
+     */
+    @JavascriptInterface
+    public void roomNumberListen(final String roomNumber) {
+        if (handler != null)
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    Log.e("群成员变化", "人数： "+roomNumber);
+                    Intent intent = new Intent(BroadcastConstants.PUSH_CHAT_GROUP_NUM);
+                    try {
+                        intent.putExtra("num", roomNumber);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    sendBroadcast(intent);
+
                 }
             });
     }

@@ -27,7 +27,7 @@ public class RippleImageView extends RelativeLayout {
     private static final int MSG_WAVE3_ANIMATION = 2;
     private static final int IMAMGEVIEW_SIZE = 62;
     /**三张波纹图片*/
-    private static final int SIZE =3 ;
+    private static final int SIZE =5 ;
 
     /**动画默认循环播放时间*/
     private  int show_spacing_time=SHOW_SPACING_TIME;

@@ -21,7 +21,7 @@
             android:id="@+id/re_group"
             android:layout_width="match_parent"
             android:layout_height="320dp"
-            android:background="@color/background_color"
+            android:background="@color/white"
             android:visibility="gone">
 
             <RelativeLayout
@@ -33,6 +33,7 @@
                 <ImageView
                     android:id="@+id/img_url_group"
                     android:layout_width="52dp"
+                    android:scaleType="centerCrop"
                     android:layout_height="52dp"/>
 
                 <ImageView
@@ -94,15 +95,19 @@
                     android:layout_height="125.8dp"
                     android:layout_centerHorizontal="true">
 
-                    <com.wotingfm.common.view.RippleImageView
-                        android:id="@+id/rippleImageView"
+                    <!--<com.wotingfm.common.view.RippleImageView-->
+                        <!--android:id="@+id/rippleImageView"-->
+                        <!--android:layout_width="125.8dp"-->
+                        <!--android:layout_height="125.8dp"></com.wotingfm.common.view.RippleImageView>-->
+                    <com.wotingfm.common.view.WaveView
+                        android:id="@+id/WaveView_group"
                         android:layout_width="125.8dp"
-                        android:layout_height="125.8dp"></com.wotingfm.common.view.RippleImageView>
-
+                        android:layout_height="125.8dp"></com.wotingfm.common.view.WaveView>
                     <ImageView
                         android:id="@+id/img_person_group"
                         android:layout_width="60dp"
                         android:layout_height="60dp"
+                        android:scaleType="centerCrop"
                         android:layout_centerInParent="true"/>
 
                     <ImageView
@@ -138,8 +143,8 @@
             android:id="@+id/re_person"
             android:layout_width="match_parent"
             android:layout_height="320dp"
-            android:background="@color/background_color"
-            android:visibility="visible">
+            android:background="@color/white"
+            android:visibility="gone">
 
             <RelativeLayout
                 android:layout_width="52dp"
@@ -150,6 +155,7 @@
                 <ImageView
                     android:id="@+id/img_url_person"
                     android:layout_width="52dp"
+                    android:scaleType="centerCrop"
                     android:layout_height="52dp"/>
 
                 <ImageView
@@ -212,15 +218,19 @@
                     android:layout_centerHorizontal="true"
                     >
 
-                    <com.wotingfm.common.view.RippleImageView
-                        android:id="@+id/rippleImageView_person"
+                    <!--<com.wotingfm.common.view.RippleImageView-->
+                        <!--android:id="@+id/rippleImageView_person"-->
+                        <!--android:layout_width="125.8dp"-->
+                        <!--android:layout_height="125.8dp"></com.wotingfm.common.view.RippleImageView>-->
+                    <com.wotingfm.common.view.WaveView
+                        android:id="@+id/WaveView_person"
                         android:layout_width="125.8dp"
-                        android:layout_height="125.8dp"></com.wotingfm.common.view.RippleImageView>
-
+                        android:layout_height="125.8dp"></com.wotingfm.common.view.WaveView>
                     <ImageView
                         android:id="@+id/img_person_person"
                         android:layout_width="60dp"
                         android:layout_height="60dp"
+                        android:scaleType="centerCrop"
                         android:layout_centerInParent="true"/>
 
                     <ImageView
@@ -254,6 +264,7 @@
 
 
         <TextView
+            android:id="@+id/tv_line"
             android:layout_width="match_parent"
             android:layout_height="0.7dp"
             android:background="@color/line_color"/>

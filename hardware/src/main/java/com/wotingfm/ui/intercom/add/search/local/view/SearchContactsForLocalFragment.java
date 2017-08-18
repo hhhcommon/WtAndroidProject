@@ -233,8 +233,8 @@ public class SearchContactsForLocalFragment extends Fragment implements View.OnC
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.tv_clear:
-//                InputMethodManager m = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-//                m .hideSoftInputFromWindow(et_search.getWindowToken(), 0);//比如EditView
+                InputMethodManager m = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                m .hideSoftInputFromWindow(et_search.getWindowToken(), 0);//比如EditView
                 InterPhoneActivity.close();
                 break;
         }

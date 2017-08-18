@@ -95,7 +95,6 @@ public class InterPhoneControl {
      */
     public static boolean enterRoom(WebView view, String room_id) {
         Log.d("mingku","room_id="+room_id);
-        view.loadUrl("javascript:exitRoom()");
         String userId = BSApplication.SharedPreferences.getString(StringConstant.USER_ID, "");// 头像
         String userName = BSApplication.SharedPreferences.getString(StringConstant.NICK_NAME, "我听");// 昵称
         String userAvatar = BSApplication.SharedPreferences.getString(StringConstant.PORTRAIT, "000");// id
