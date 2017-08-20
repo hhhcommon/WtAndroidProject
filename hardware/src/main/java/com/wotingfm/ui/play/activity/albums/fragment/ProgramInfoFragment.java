@@ -90,7 +90,13 @@ public class ProgramInfoFragment extends BaseFragment {
         mRecyclerView.setNestedScrollingEnabled(false);
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         mRecyclerView.setLayoutManager(layoutManager);
-        albumsInfoProgramAdapter = new AlbumsInfoProgramAdapter(getActivity(), singlesBeanList);
+        albumsInfoProgramAdapter = new AlbumsInfoProgramAdapter(getActivity(), singlesBeanList, new AlbumsInfoProgramAdapter.AlbumsInfoClick() {
+            @Override
+            public void player(Player.DataBean.SinglesBean albumsBean, int postion) {
+                closeFragment();
+                startMain(albumsBean);
+            }
+        });
         mRecyclerView.setAdapter(albumsInfoProgramAdapter);
         mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override

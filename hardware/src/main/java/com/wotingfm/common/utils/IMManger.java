@@ -1,56 +1,25 @@
 package com.wotingfm.common.utils;
 
-import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.net.Uri;
-import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.util.Log;
-import android.view.KeyEvent;
-import android.view.inputmethod.EditorInfo;
-import android.webkit.URLUtil;
-import android.widget.ArrayAdapter;
-import android.widget.EditText;
-import android.widget.ImageButton;
-import android.widget.ListView;
-import android.widget.TextView;
 
-import com.netease.nimlib.sdk.InvocationFuture;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.RequestCallback;
 import com.netease.nimlib.sdk.msg.MessageBuilder;
 import com.netease.nimlib.sdk.msg.MsgService;
 import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
 import com.netease.nimlib.sdk.msg.model.IMMessage;
-import com.wotingfm.R;
-import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.bean.MessageEvent;
 import com.wotingfm.common.bean.Room;
 import com.wotingfm.common.net.RetrofitUtils;
-import com.wotingfm.ui.intercom.alert.receive.view.ReceiveAlertActivity;
-import com.wotingfm.ui.main.view.MainActivity;
-import com.wotingfm.ui.test.PlayerActivity;
 
 import org.greenrobot.eventbus.EventBus;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Random;
 
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.schedulers.Schedulers;
-
-import static android.R.attr.type;
-import static cn.jpush.android.api.JPushInterface.a.e;
-import static cn.jpush.android.api.JPushInterface.a.r;
-import static com.iflytek.cloud.resource.Resource.getText;
-import static com.netease.nimlib.sdk.NIMClient.getService;
 
 /**
  * Created by amine on 2017/7/25.
@@ -106,7 +75,8 @@ public class IMManger {
                             Log.i("mingku", "throwable" + throwable.getMessage());
                         }
                     });
-                    EventBus.getDefault().post(new MessageEvent("create&Rommid" + roomid));
+                    EventBus.getDefault().post(new MessageEvent(roomid, 10));
+                    Log.e("roomId_44444444",roomid);
                 }
             });
 

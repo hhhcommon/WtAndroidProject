@@ -181,7 +181,7 @@ public class RegisterFragment extends Fragment implements View.OnClickListener {
      */
     public void setRegisterBackground(boolean type) {
         if (type) {
-            tv_confirm.setBackgroundResource(R.drawable.background_login_tvlogin_on);
+            tv_confirm.setBackgroundResource(R.drawable.wt_user_register_background);
         } else {
             tv_confirm.setBackgroundResource(R.drawable.background_login_tvlogin_off);
         }

@@ -1,7 +1,6 @@
 package com.wotingfm.ui.intercom.group.transfergroup.adapter;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,7 +8,6 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.woting.commonplat.utils.BitmapUtils;
 import com.wotingfm.R;
 import com.wotingfm.common.utils.GlideUtils;
 import com.wotingfm.ui.intercom.main.contacts.model.Contact;
@@ -80,7 +78,7 @@ public class TransferManagerAdapter extends BaseAdapter {
         }
 
         if (lists.getAvatar() != null && !lists.getAvatar().equals("") && lists.getAvatar().startsWith("http")) {
-            GlideUtils.loadImageViewRound(lists.getAvatar(), holder.img_touXiang, 60, 60);
+            GlideUtils.loadImageViewRound(lists.getAvatar(), holder.img_touXiang, 150, 150);
         } else {
             GlideUtils.loadImageViewRound(R.mipmap.icon_avatar_d, holder.img_touXiang, 60, 60);
         }

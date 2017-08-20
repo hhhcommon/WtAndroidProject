@@ -1,7 +1,6 @@
 package com.wotingfm.ui.mine.message.notify.adapter;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
@@ -9,11 +8,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.woting.commonplat.utils.BitmapUtils;
 import com.wotingfm.R;
 import com.wotingfm.common.utils.GlideUtils;
 import com.wotingfm.common.utils.TimeUtil;
@@ -102,7 +99,7 @@ public class NotifyMsgAdapter extends RecyclerView.Adapter<NotifyMsgAdapter.Simp
             }
         }
         if (m.getAvatar() != null && !m.getAvatar().equals("") && m.getAvatar().startsWith("http")) {
-            GlideUtils.loadImageViewRound(m.getAvatar(), holder.img_url, 60, 60);
+            GlideUtils.loadImageViewRound(m.getAvatar(), holder.img_url, 150, 150);
         } else {
             GlideUtils.loadImageViewRound(R.mipmap.icon_avatar_d, holder.img_url, 60, 60);
         }
@@ -162,7 +159,7 @@ public class NotifyMsgAdapter extends RecyclerView.Adapter<NotifyMsgAdapter.Simp
 
     class SimpleHolder extends RecyclerView.ViewHolder {
         public ImageView img_url;
-        public LinearLayout lin_img;
+        public RelativeLayout lin_img;
         public TextView tv_title, tv_news, tv_ok, tv_Delete, tv_oks, tv_introduce, tv_time;
         public RelativeLayout layout_content, re_adapter;
 
@@ -170,7 +167,7 @@ public class NotifyMsgAdapter extends RecyclerView.Adapter<NotifyMsgAdapter.Simp
             super(itemView);
             tv_Delete = (TextView) itemView.findViewById(R.id.tv_delete);// 删除按钮
             img_url = (ImageView) itemView.findViewById(R.id.img_url);// 头像
-            lin_img = (LinearLayout) itemView.findViewById(R.id.lin_img);// 头像背景图
+            lin_img = (RelativeLayout) itemView.findViewById(R.id.lin_img);// 头像背景图
 
             tv_title = (TextView) itemView.findViewById(R.id.tv_title);
             tv_news = (TextView) itemView.findViewById(R.id.tv_news);

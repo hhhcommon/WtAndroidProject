@@ -6,6 +6,8 @@ import android.graphics.Color;
 import android.net.http.SslError;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.annotation.RequiresApi;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -13,6 +15,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.webkit.JavascriptInterface;
 import android.webkit.PermissionRequest;
 import android.webkit.SslErrorHandler;
 import android.webkit.WebChromeClient;
@@ -31,9 +34,9 @@ import com.wotingfm.common.service.WtDeviceControl;
 import com.wotingfm.ui.intercom.main.chat.presenter.ChatPresenter;
 import com.wotingfm.ui.intercom.main.view.InterPhoneActivity;
 import com.wotingfm.ui.main.presenter.MainPresenter;
+import com.wotingfm.ui.mine.main.MineActivity;
 import com.wotingfm.ui.play.look.activity.LookListActivity;
 import com.wotingfm.ui.test.PlayerActivity;
-import com.wotingfm.ui.mine.main.MineActivity;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -90,7 +93,7 @@ public class MainActivity extends TabActivity implements View.OnClickListener {
         // 从assets目录下面的加载html
         // mWebView.loadUrl("https://rtcmulticonnection.herokuapp.com/demos/Audio-Conferencing.html?roomid=123456789");
         mWebView.loadUrl("https://apprtc.wotingfm.com/demos/Audio-Conferencing.html?simple=true");
-        mWebView.addJavascriptInterface(MainActivity.this, "android");
+        mWebView.addJavascriptInterface(this, "android");
         mWebView.setWebViewClient(new WebViewClient() {
             @Override
             public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
@@ -106,6 +109,20 @@ public class MainActivity extends TabActivity implements View.OnClickListener {
                                     }
         );
         mWebView.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);// 设置允许JS弹窗
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (mWebView != null)
+            mWebView.onResume();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (mWebView != null)
+            mWebView.onPause();
     }
 
     @Override
@@ -214,7 +231,7 @@ public class MainActivity extends TabActivity implements View.OnClickListener {
         InterPhoneControl.quitRoomGroup(mWebView, id);
     }
 
-    public void exitRoomPerson(String id){
+    public void exitRoomPerson(String id) {
         InterPhoneControl.quitRoomPerson(mWebView, id);
     }
 
@@ -317,6 +334,76 @@ public class MainActivity extends TabActivity implements View.OnClickListener {
             mWebView.destroy();
             mWebView = null;
         }
+    }
+
+    private Handler handler = new Handler(Looper.myLooper());
+
+    /**
+     * Java方法，谁在说话
+     */
+    @JavascriptInterface
+    public void beginSpeakCallBack(final String userId, final String username, final String useravatar, final String roomNumber) {
+        if (handler != null)
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    Log.e("说话人数据", "userId=" + userId + ":" + username + ":" + useravatar + ":" + roomNumber);
+                    Intent intent = new Intent(BroadcastConstants.PUSH_CHAT_OPEN);
+                    try {
+                        intent.putExtra("name", username);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    try {
+                        intent.putExtra("url", useravatar);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    try {
+                        intent.putExtra("num", roomNumber);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    sendBroadcast(intent);
+                }
+            });
+    }
+
+    /**
+     * Java方法，房间没有人在说话的时候
+     */
+    @JavascriptInterface
+    public void noPeopleSpoke() {
+        if (handler != null)
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    Log.e("说话结束", "没有人在说话");
+                    sendBroadcast(new Intent(BroadcastConstants.PUSH_CHAT_CLOSE));
+                }
+            });
+    }
+
+    /**
+     * Java方法，人数监听
+     */
+    @JavascriptInterface
+    public void roomNumberListen(final String roomNumber) {
+        if (handler != null)
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    Log.e("群成员变化", "人数： "+roomNumber);
+                    Intent intent = new Intent(BroadcastConstants.PUSH_CHAT_GROUP_NUM);
+                    try {
+                        intent.putExtra("num", roomNumber);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    sendBroadcast(intent);
+
+                }
+            });
     }
 
     /**

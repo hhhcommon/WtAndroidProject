@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    style="@style/LinearLayoutStyle">
+                style="@style/LinearLayoutStyle">
 
 
     <ScrollView style="@style/ScrollViewStyle">
@@ -17,13 +17,14 @@
                 <ImageView
                     android:id="@+id/img_bg"
                     android:layout_width="match_parent"
-                    android:scaleType="centerCrop"
-                    android:layout_height="220dp" />
+                    android:layout_height="220dp"
+                    android:scaleType="centerCrop"/>
 
                 <TextView
+                    android:id="@+id/tv_bg_clear"
                     android:layout_width="match_parent"
                     android:layout_height="220dp"
-                    android:background="@color/transparent_40_black" />
+                    android:background="@color/transparent_40_black"/>
 
                 <LinearLayout
                     android:id="@+id/view_login"
@@ -35,17 +36,19 @@
                     <RelativeLayout
                         android:layout_width="70dp"
                         android:layout_height="70dp"
-                        android:background="@mipmap/person_bg"
                         android:layout_marginTop="74.7dp">
 
                         <ImageView
                             android:id="@+id/image_head"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:layout_margin="1.5dp"
-                            android:src="@mipmap/icon_avatar_d" />
-                    </RelativeLayout>
+                            android:src="@mipmap/icon_avatar_d"/>
 
+                        <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:src="@drawable/background_circle_person_white"/>
+                    </RelativeLayout>
 
                     <TextView
                         android:id="@+id/text_user_name"
@@ -53,7 +56,7 @@
                         android:layout_marginTop="12.3dp"
                         android:text="莉莉"
                         android:textColor="@color/white"
-                        android:textSize="16sp" />
+                        android:textSize="16sp"/>
 
                     <TextView
                         android:id="@+id/text_user_number"
@@ -62,7 +65,7 @@
                         android:layout_marginTop="8dp"
                         android:text="我听号：12345678"
                         android:textColor="#ccffffff"
-                        android:textSize="12sp" />
+                        android:textSize="12sp"/>
 
                 </LinearLayout>
             </RelativeLayout>
@@ -70,7 +73,7 @@
 
             <TextView
                 style="@style/MineIdentifyingTextStyle"
-                android:text="@string/connect_car_audio_system" />
+                android:text="@string/connect_car_audio_system"/>
 
             <RelativeLayout
                 android:id="@+id/fm_set"
@@ -79,18 +82,18 @@
                 <ImageView
                     android:id="@+id/image_fm"
                     style="@style/MineLeftImageStyle"
-                    android:src="@mipmap/icon_fm_n" />
+                    android:src="@mipmap/icon_fm_n"/>
 
                 <TextView
                     style="@style/MineTextStyle"
                     android:layout_toRightOf="@id/image_fm"
-                    android:text="@string/fm_settings" />
+                    android:text="@string/fm_settings"/>
 
-                <ImageView style="@style/MineRightImageStyle" />
+                <ImageView style="@style/MineRightImageStyle"/>
 
             </RelativeLayout>
 
-            <include layout="@layout/include_tv" />
+            <include layout="@layout/include_tv"/>
 
             <RelativeLayout
                 android:id="@+id/bluetooth_set"
@@ -99,24 +102,24 @@
                 <ImageView
                     android:id="@+id/image_bluetooth"
                     style="@style/MineLeftImageStyle"
-                    android:src="@mipmap/icon_bluetooth_n" />
+                    android:src="@mipmap/icon_bluetooth_n"/>
 
                 <TextView
                     style="@style/MineTextStyle"
                     android:layout_toRightOf="@id/image_bluetooth"
-                    android:text="@string/bluetooth_settings" />
+                    android:text="@string/bluetooth_settings"/>
 
-                <ImageView style="@style/MineRightImageStyle" />
+                <ImageView style="@style/MineRightImageStyle"/>
 
             </RelativeLayout>
 
-            <include layout="@layout/include_tv" />
+            <include layout="@layout/include_tv"/>
 
             <TextView
                 style="@style/MineIdentifyingTextStyle"
-                android:text="@string/connection_device" />
+                android:text="@string/connection_device"/>
 
-            <include layout="@layout/include_tv" />
+            <include layout="@layout/include_tv"/>
 
             <RelativeLayout
                 android:id="@+id/wifi_set"
@@ -125,17 +128,17 @@
                 <ImageView
                     android:id="@+id/image_wifi"
                     style="@style/MineLeftImageStyle"
-                    android:src="@mipmap/icon_wifi_n" />
+                    android:src="@mipmap/icon_wifi_n"/>
 
                 <TextView
                     android:id="@+id/text_wifi_set"
                     style="@style/MineTextStyle"
                     android:layout_toRightOf="@id/image_wifi"
-                    android:text="@string/wlan" />
+                    android:text="@string/wlan"/>
 
                 <ImageView
                     android:id="@+id/image_wifi_set"
-                    style="@style/MineRightImageStyle" />
+                    style="@style/MineRightImageStyle"/>
 
                 <TextView
                     android:id="@+id/text_wifi_name"
@@ -146,11 +149,11 @@
                     android:layout_toLeftOf="@id/image_wifi_set"
                     android:maxLines="1"
                     android:text="@string/connected"
-                    android:textColor="@color/tip_color" />
+                    android:textColor="@color/tip_color"/>
 
             </RelativeLayout>
 
-            <include layout="@layout/include_tv" />
+            <include layout="@layout/include_tv"/>
 
             <RelativeLayout
                 android:id="@+id/flow_set"
@@ -159,15 +162,15 @@
                 <ImageView
                     android:id="@+id/image_flow"
                     style="@style/MineLeftImageStyle"
-                    android:src="@mipmap/icon_flow_n" />
+                    android:src="@mipmap/icon_flow_n"/>
 
                 <TextView
                     android:id="@+id/text_flow_set"
                     style="@style/MineTextStyle"
                     android:layout_toRightOf="@id/image_flow"
-                    android:text="@string/flow_management" />
+                    android:text="@string/flow_management"/>
 
-                <ImageView style="@style/MineRightImageStyle" />
+                <ImageView style="@style/MineRightImageStyle"/>
 
             </RelativeLayout>
 
@@ -179,14 +182,14 @@
                 <ImageView
                     android:id="@+id/image_set"
                     style="@style/MineLeftImageStyle"
-                    android:src="@mipmap/icon_set_n" />
+                    android:src="@mipmap/icon_set_n"/>
 
                 <TextView
                     style="@style/MineTextStyle"
                     android:layout_toRightOf="@id/image_set"
-                    android:text="@string/setting" />
+                    android:text="@string/setting"/>
 
-                <ImageView style="@style/MineRightImageStyle" />
+                <ImageView style="@style/MineRightImageStyle"/>
 
             </RelativeLayout>
 
@@ -202,21 +205,21 @@
         <ImageView
             android:id="@+id/head_left_btn"
             style="@style/LeftImageStyle"
-            android:src="@mipmap/nav_icon_back_white" />
+            android:src="@mipmap/nav_icon_back_white"/>
 
         <ImageView
             android:id="@+id/image_info"
             android:layout_width="44dp"
             android:layout_height="44dp"
             android:layout_toLeftOf="@+id/image_qr_code"
-            android:src="@mipmap/nav_icon_news_n" />
+            android:src="@mipmap/nav_icon_news_n"/>
 
         <ImageView
             android:id="@+id/image_qr_code"
             android:layout_width="44dp"
             android:layout_height="44dp"
             android:layout_alignParentRight="true"
-            android:src="@mipmap/nav_icon_qr_code_n" />
+            android:src="@mipmap/nav_icon_qr_code_n"/>
 
     </RelativeLayout>
 </RelativeLayout>

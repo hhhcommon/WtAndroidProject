@@ -1,31 +1,23 @@
 package com.wotingfm.ui.intercom.main.chat.adapter;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-import com.woting.commonplat.utils.BitmapUtils;
 import com.wotingfm.R;
 import com.wotingfm.common.utils.GlideUtils;
 import com.wotingfm.common.utils.TimeUtils;
 import com.wotingfm.common.view.slidingbutton.SlidingButtonView;
 import com.wotingfm.ui.intercom.main.chat.model.TalkHistory;
-import com.wotingfm.ui.intercom.main.contacts.model.Contact;
 
 import java.util.List;
-
-import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 
 /**
  * 作者：xinLong on 2017/6/12 13:42
@@ -65,7 +57,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.SimpleHolder> 
     public void onBindViewHolder(final SimpleHolder holder, int position) {
         holder.layout_content.getLayoutParams().width = getScreenWidth(mContext);
         TalkHistory data = t.get(position);
-        if(data!=null) {
+        if (data != null) {
             String name = "";
             try {
                 name = data.getName();
@@ -93,12 +85,12 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.SimpleHolder> 
                     holder.tv_news.setText("[语音通话] " + news);
                 }
                 if (t.get(position).getURL() != null && !t.get(position).getURL().equals("") && t.get(position).getURL().startsWith("http")) {
-                    GlideUtils.loadImageViewRound(t.get(position).getURL(), holder.img_url, 60, 60);
+                    GlideUtils.loadImageViewRound(t.get(position).getURL(), holder.img_url, 150, 150);
                 } else {
                     GlideUtils.loadImageViewRound(R.mipmap.icon_avatar_d, holder.img_url, 60, 60);
                 }
 
-                holder.lin_img.setBackgroundResource(R.mipmap.avatar_p);
+                holder.img_bg.setImageResource(R.drawable.background_person);
             } else {
                 String num = "";
                 try {
@@ -108,13 +100,12 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.SimpleHolder> 
                 }
                 holder.tv_news.setText("(" + num + "人)");
                 if (t.get(position).getURL() != null && !t.get(position).getURL().equals("") && t.get(position).getURL().startsWith("http")) {
-                    GlideUtils.loadImageViewRoundCorners(t.get(position).getURL(), holder.img_url, 60, 60);
+                    GlideUtils.loadImageViewRoundCorners(t.get(position).getURL(), holder.img_url, 150, 150);
                 } else {
                     GlideUtils.loadImageViewRoundCorners(R.mipmap.icon_avatar_d, holder.img_url, 60, 60);
                 }
-                holder.lin_img.setBackgroundResource(R.mipmap.avatar_g);
+                holder.img_bg.setImageResource(R.drawable.background_group);
             }
-
 
             holder.img_voice.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -151,8 +142,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.SimpleHolder> 
     }
 
     class SimpleHolder extends RecyclerView.ViewHolder {
-        public LinearLayout lin_img;
-        public ImageView img_url, img_voice;
+        public ImageView img_url, img_voice, img_bg;
         public TextView tv_name, tv_news, tv_Delete;
         public RelativeLayout layout_content;
 
@@ -163,7 +153,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.SimpleHolder> 
             tv_name = (TextView) itemView.findViewById(R.id.tv_name);
             tv_news = (TextView) itemView.findViewById(R.id.tv_news);
             img_voice = (ImageView) itemView.findViewById(R.id.img_voice);
-            lin_img = (LinearLayout) itemView.findViewById(R.id.lin_img);
+            img_bg = (ImageView) itemView.findViewById(R.id.img_bg);
             layout_content = (RelativeLayout) itemView.findViewById(R.id.layout_content);
             ((SlidingButtonView) itemView).setSlidingButtonListener(ChatAdapter.this);
         }

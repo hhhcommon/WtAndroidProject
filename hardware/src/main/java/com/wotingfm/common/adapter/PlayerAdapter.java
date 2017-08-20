@@ -42,10 +42,8 @@ public class PlayerAdapter extends CommonAdapter<SinglesBase> {
         holder.setText(R.id.tvTitle, s.single_title);
         holder.setText(R.id.tvContent, s.album_title);
         View view = holder.itemView.findViewById(R.id.view);
-        View view1 = holder.itemView.findViewById(R.id.view1);
         View view2 = holder.itemView.findViewById(R.id.view2);
         view.setVisibility(position == 0 ? View.VISIBLE : View.GONE);
-        view1.setVisibility(position != 0 ? View.VISIBLE : View.GONE);
         view2.setVisibility(position == datas.size() - 1 ? View.VISIBLE : View.GONE);
         ImageView imageView = (ImageView) holder.itemView.findViewById(R.id.ivPhoto);
         Glide.with(BSApplication.getInstance()).load(s.single_logo_url)// Glide

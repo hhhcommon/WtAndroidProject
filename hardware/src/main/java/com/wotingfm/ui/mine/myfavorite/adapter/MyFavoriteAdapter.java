@@ -1,7 +1,6 @@
 package com.wotingfm.ui.mine.myfavorite.adapter;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,7 +8,6 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.woting.commonplat.utils.BitmapUtils;
 import com.wotingfm.R;
 import com.wotingfm.common.utils.GlideUtils;
 import com.wotingfm.ui.mine.myfavorite.model.Favorite;
@@ -69,7 +67,7 @@ public class MyFavoriteAdapter extends BaseAdapter {
         Favorite lists = list.get(position);
 
         if (lists.getLogo_url() != null && !lists.getLogo_url().equals("") && lists.getLogo_url().startsWith("http")) {
-            GlideUtils.loadImageViewRoundCorners(lists.getLogo_url(), holder.img_touXiang, 60, 60);
+            GlideUtils.loadImageViewRoundCorners(lists.getLogo_url(), holder.img_touXiang, 250, 250);
         } else {
             GlideUtils.loadImageViewRoundCorners(R.mipmap.p, holder.img_touXiang, 60, 60);
         }

@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.wotingfm.common.view.slidingbutton.SlidingButtonView xmlns:android="http://schemas.android.com/apk/res/android"
 
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginBottom="0.7dp"
-    android:background="@color/white">
+                                                          android:layout_width="match_parent"
+                                                          android:layout_height="wrap_content"
+                                                          android:layout_marginBottom="0.7dp"
+                                                          android:background="@color/white">
 
     <RelativeLayout
         android:id="@+id/re_adapter"
@@ -21,29 +21,32 @@
             android:text="删 除"
             android:textColor="@color/white"
             android:textSize="15sp"
-            android:visibility="visible" />
+            android:visibility="visible"/>
 
         <RelativeLayout
             android:id="@+id/layout_content"
             android:layout_width="match_parent"
             android:layout_height="60dp">
 
-            <LinearLayout
+            <RelativeLayout
                 android:id="@+id/lin_img"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_centerVertical="true"
                 android:layout_gravity="center_vertical"
-                android:layout_marginLeft="12dp"
-                android:background="@mipmap/avatar_p"
-                android:padding="1dp">
+                android:layout_marginLeft="12dp">
 
                 <ImageView
                     android:id="@+id/img_url"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:scaleType="centerCrop" />
-            </LinearLayout>
+                    android:scaleType="centerCrop"/>
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/background_person"/>
+            </RelativeLayout>
 
             <include
                 android:id="@+id/view_head"
@@ -51,7 +54,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
                 android:layout_marginLeft="12dp"
-                android:layout_toRightOf="@id/lin_img" />
+                android:layout_toRightOf="@id/lin_img"/>
 
             <TextView
                 android:id="@+id/tv_oks"
@@ -65,7 +68,7 @@
                 android:text="已通过"
                 android:textColor="#959698"
                 android:textSize="13.3sp"
-                android:visibility="gone" />
+                android:visibility="gone"/>
 
             <TextView
                 android:id="@+id/tv_ok"
@@ -79,7 +82,7 @@
                 android:lineSpacingExtra="0sp"
                 android:text="通过"
                 android:textColor="#fd8548"
-                android:textSize="13.3sp" />
+                android:textSize="13.3sp"/>
         </RelativeLayout>
 
 

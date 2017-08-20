@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:paddingTop="20dp"
-    android:background="@color/white">
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/white"
+                android:paddingTop="20dp">
 
     <include
         android:id="@+id/view_head"
         layout="@layout/common_head"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"/>
 
     <RelativeLayout
         android:id="@+id/lin_phoneNumber"
@@ -28,7 +28,7 @@
             android:layout_height="24dp"
             android:layout_centerVertical="true"
             android:layout_marginLeft="10dp"
-            android:src="@mipmap/login_icon_phone" />
+            android:src="@mipmap/login_icon_phone"/>
 
         <EditText
             android:id="@+id/et_phoneNumber"
@@ -45,7 +45,7 @@
             android:singleLine="true"
             android:textColor="@color/black_head_word"
             android:textColorHint="@color/gray_edit_hint_word"
-            android:textSize="14.7sp" />
+            android:textSize="14.7sp"/>
     </RelativeLayout>
 
 
@@ -66,7 +66,7 @@
             android:layout_height="24dp"
             android:layout_centerVertical="true"
             android:layout_marginLeft="10dp"
-            android:src="@mipmap/login_icon_password" />
+            android:src="@mipmap/login_icon_password"/>
 
         <EditText
             android:id="@+id/et_passWord"
@@ -80,7 +80,7 @@
             android:singleLine="true"
             android:textColor="@color/black_head_word"
             android:textColorHint="@color/gray_edit_hint_word"
-            android:textSize="14.7sp" />
+            android:textSize="14.7sp"/>
 
         <ImageView
             android:id="@+id/img_eye"
@@ -88,7 +88,7 @@
             android:layout_height="24dp"
             android:layout_centerVertical="true"
             android:layout_marginRight="10dp"
-            android:src="@mipmap/login_icon_password_look" />
+            android:src="@mipmap/login_icon_password_look"/>
     </LinearLayout>
 
     <TextView
@@ -115,5 +115,5 @@
         android:lineSpacingExtra="0sp"
         android:text="忘记密码?"
         android:textColor="@color/black_head_word"
-        android:textSize="14.7sp" />
+        android:textSize="14.7sp"/>
 </RelativeLayout>

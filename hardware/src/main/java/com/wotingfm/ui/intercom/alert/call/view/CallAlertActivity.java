@@ -1,7 +1,6 @@
 package com.wotingfm.ui.intercom.alert.call.view;
 
 import android.app.Activity;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
@@ -11,14 +10,10 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-import com.woting.commonplat.utils.BitmapUtils;
 import com.wotingfm.R;
 import com.wotingfm.common.service.InterPhoneControl;
 import com.wotingfm.common.utils.GlideUtils;
 import com.wotingfm.ui.intercom.alert.call.presenter.CallPresenter;
-
-import jp.wasabeef.glide.transformations.BlurTransformation;
 
 /**
  * 呼叫弹出框
@@ -57,7 +52,7 @@ public class CallAlertActivity extends Activity implements OnClickListener {
                 /**
                  * 此处需要挂断电话等操作
                  */
-                InterPhoneControl.hangUp(presenter.getRoomId(),presenter.getId());
+                InterPhoneControl.hangUp(presenter.getRoomId(), presenter.getId());
                 finish();
                 break;
         }
@@ -68,16 +63,15 @@ public class CallAlertActivity extends Activity implements OnClickListener {
      */
     public void setViewData(String url, String name) {
         // 其中radius的取值范围是1-25，radius越大，模糊度越高。
-        // 设置高斯模糊背景
+        // 不设置高斯模糊背景
         if (url != null && !url.equals("")) {
-            Glide.with(this).load(url).bitmapTransform(new BlurTransformation(this, 15)).into(img_bg);
+            GlideUtils.loadImageViewSrc(url, img_bg, false, 20);
         } else {
-            Bitmap bmp = BitmapUtils.readBitMap(this, R.mipmap.p);
-            img_bg.setImageBitmap(bmp);
+            GlideUtils.loadImageViewSrc(R.mipmap.p, img_bg, false, 20);
         }
         // 设置好友头像
         if (url != null && !url.equals("")) {
-            GlideUtils.loadImageViewRound(url, img_url, 60, 60);
+            GlideUtils.loadImageViewRound(url, img_url, 150, 150);
         } else {
             GlideUtils.loadImageViewRound(R.mipmap.icon_avatar_d, img_url, 60, 60);
         }
@@ -95,7 +89,7 @@ public class CallAlertActivity extends Activity implements OnClickListener {
             /**
              * 此处需要挂断电话等操作
              */
-            InterPhoneControl.hangUp(presenter.getRoomId(),presenter.getId());
+            InterPhoneControl.hangUp(presenter.getRoomId(), presenter.getId());
             presenter.musicClose();
             finish();
             return true;

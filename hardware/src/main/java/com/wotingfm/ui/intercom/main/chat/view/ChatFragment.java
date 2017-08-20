@@ -1,36 +1,31 @@
 package com.wotingfm.ui.intercom.main.chat.view;
 
 import android.app.Dialog;
-import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
+import android.support.v4.view.animation.LinearOutSlowInInterpolator;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.woting.commonplat.widget.TipView;
 import com.wotingfm.R;
-import com.wotingfm.common.bean.MessageEvent;
-import com.wotingfm.common.utils.IMManger;
-import com.wotingfm.common.view.RippleImageView;
-import com.wotingfm.ui.intercom.group.groupnews.add.view.GroupNewsForAddFragment;
+import com.wotingfm.common.utils.GlideUtils;
+import com.wotingfm.common.view.waveline.WaveLineView;
+import com.wotingfm.common.view.waveview.WaveView;
 import com.wotingfm.ui.intercom.main.chat.adapter.ChatAdapter;
 import com.wotingfm.ui.intercom.main.chat.model.TalkHistory;
 import com.wotingfm.ui.intercom.main.chat.presenter.ChatPresenter;
-import com.wotingfm.ui.intercom.main.contacts.model.Contact;
-import com.wotingfm.ui.intercom.main.view.InterPhoneActivity;
-import com.wotingfm.ui.intercom.person.personmessage.view.PersonMessageFragment;
-
-import org.greenrobot.eventbus.EventBus;
 
 import java.util.List;
 
@@ -46,17 +41,18 @@ public class ChatFragment extends Fragment implements ChatAdapter.IonSlidingView
     private ChatPresenter presenter;
     private RecyclerView mRecyclerView;
     private ChatAdapter mAdapter;
-    private ImageView img_url_group, img_person_group;
-    private RelativeLayout re_group, re_person;
-    private TextView tv_groupName_group, tv_news_group, tv_person_group, tv_person_person;
-    private RippleImageView rippleImageView_person, rippleImageView_group;
-    private LinearLayout lin_back;
+    private ImageView img_url_group, img_person_group,img_url_person,img_person_person;
+    private RelativeLayout re_group, re_person,re_back;
+    private TextView tv_groupName, tv_groupNum, tv_person_group, tv_person_person,tv_group_talked,tv_person_name,tv_person_talked,tv_line;
+    private LinearLayout lin_back,lin_group_talking,lin_person_talking;
     private TipView tip_view;
     private Dialog confirmDialog;
     private int type;
-    private String old_id;
     private String new_id;
     private int callType;
+    private String accId;
+    private WaveView WaveView_group,WaveView_person;
+    private WaveLineView waveLineView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -75,25 +71,53 @@ public class ChatFragment extends Fragment implements ChatAdapter.IonSlidingView
     private void inItView() {
         tip_view = (TipView) rootView.findViewById(R.id.tip_view);// 提示界面
         tip_view.setTipClick(this);
-        lin_back = (LinearLayout) rootView.findViewById(R.id.lin_back);
+        lin_back = (LinearLayout) rootView.findViewById(R.id.lin_back);//全局界面
+        tv_line = (TextView) rootView.findViewById(R.id.tv_line);//
+        tv_line.setVisibility(View.GONE);
+        re_back = (RelativeLayout) rootView.findViewById(R.id.re_back);//
+        re_back.setVisibility(View.GONE);
+
         // 组的界面
-        re_group = (RelativeLayout) rootView.findViewById(R.id.re_group);
+        re_group = (RelativeLayout) rootView.findViewById(R.id.re_group);// 组的全局界面
         re_group.setVisibility(View.GONE);
-        rootView.findViewById(R.id.img_close_group).setOnClickListener(this);
-        img_url_group = (ImageView) rootView.findViewById(R.id.img_url_group);
-        img_url_group.setOnClickListener(this);
-        tv_groupName_group = (TextView) rootView.findViewById(R.id.tv_groupName_group);
-        tv_news_group = (TextView) rootView.findViewById(R.id.tv_news_group);
-        tv_person_group = (TextView) rootView.findViewById(R.id.tv_person_group);
-        img_person_group = (ImageView) rootView.findViewById(R.id.img_url_group);
-        rippleImageView_group = (RippleImageView) rootView.findViewById(R.id.rippleImageView);
+        waveLineView = (WaveLineView) rootView.findViewById(R.id.waveLineView);
+        img_url_group = (ImageView) rootView.findViewById(R.id.img_url_group);// 组的头像
+        img_url_group.setOnClickListener(this);// 监听，跳转到群详情
+        tv_groupName = (TextView) rootView.findViewById(R.id.tv_groupName);// 组名称
+        tv_groupNum = (TextView) rootView.findViewById(R.id.tv_groupNum);
+        rootView.findViewById(R.id.img_close_group).setOnClickListener(this);// 退出组对讲按钮
+        tv_group_talked = (TextView) rootView.findViewById(R.id.tv_group_talked);// 无人说话提示界面
+        lin_group_talking = (LinearLayout) rootView.findViewById(R.id.lin_group_talking);//有人说话提示界面
+        tv_person_group = (TextView) rootView.findViewById(R.id.tv_person_group);// 群组说话人名称
+        img_person_group = (ImageView) rootView.findViewById(R.id.img_person_group);// 群组说话人头像
+        WaveView_group = (WaveView) rootView.findViewById(R.id.WaveView_group);// 群组说话人水波纹
+
+        WaveView_group.setDuration(2000);
+        WaveView_group.setInitialRadius(62f);
+        WaveView_group.setMaxRadius(200f);
+        WaveView_group.setStyle(Paint.Style.FILL);
+        WaveView_group.setColor(Color.parseColor("#3CDCAF"));
+        WaveView_group.setInterpolator(new LinearOutSlowInInterpolator());
+        WaveView_group.start();
 
         // 用户的界面
         re_person = (RelativeLayout) rootView.findViewById(R.id.re_person);
         re_person.setVisibility(View.GONE);
-        rootView.findViewById(R.id.img_close_person).setOnClickListener(this);
-        tv_person_person = (TextView) rootView.findViewById(R.id.tv_person_person);
-        rippleImageView_person = (RippleImageView) rootView.findViewById(R.id.rippleImageView_person);
+        img_url_person = (ImageView) rootView.findViewById(R.id.img_url_person);// 好友的头像
+        img_url_person.setOnClickListener(this);// 监听，跳转到个人详情
+        tv_person_name = (TextView) rootView.findViewById(R.id.tv_person_name);// 好友名称
+        rootView.findViewById(R.id.img_close_person).setOnClickListener(this);// // 退出个人对讲按钮
+        tv_person_talked = (TextView) rootView.findViewById(R.id.tv_person_talked);// 无人说话提示界面
+        lin_person_talking = (LinearLayout) rootView.findViewById(R.id.lin_person_talking);//有人说话提示界面
+        tv_person_person = (TextView) rootView.findViewById(R.id.tv_person_person);// 说话人名称
+        img_person_person = (ImageView) rootView.findViewById(R.id.img_person_person);// 说话人头像
+        WaveView_person = (WaveView) rootView.findViewById(R.id.WaveView_person);// 单人对讲水波纹
+        WaveView_person.setDuration(2000);
+        WaveView_person.setInitialRadius(62f);
+        WaveView_person.setMaxRadius(200f);
+        WaveView_person.setStyle(Paint.Style.FILL);
+        WaveView_person.setColor(Color.parseColor("#3CDCAF"));
+        WaveView_person.setInterpolator(new LinearOutSlowInInterpolator());
 
         // 列表
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.recycler_view);
@@ -109,16 +133,18 @@ public class ChatFragment extends Fragment implements ChatAdapter.IonSlidingView
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.img_url_group:
-                presenter.jump();
+                presenter.jumpGroup();
+                break;
+            case R.id.img_url_person:
+                presenter.jumpPerson();
                 break;
             case R.id.img_close_group:
+                presenter.talkOverGroup();
                 setGroupViewClose();
-                EventBus.getDefault().post(new MessageEvent("exitGroup&" + ChatPresenter.data.getID()));
                 break;
             case R.id.img_close_person:
-                setPersonViewClose();
-                IMManger.getInstance().sendMsg(sessionId, "OVER", "");
-                EventBus.getDefault().post(new MessageEvent("over"));
+                presenter.talkOver();
+                setPersonViewClose();// 关闭好友对讲界面
                 break;
         }
     }
@@ -139,40 +165,67 @@ public class ChatFragment extends Fragment implements ChatAdapter.IonSlidingView
         mAdapter.setOnSlidListener(this);
     }
 
-    private String sessionId;
-
     /**
      * 设置好友界面--展示
      *
      * @param h
      */
     public void setPersonViewShow(TalkHistory h) {
+        tv_line.setVisibility(View.VISIBLE);
+        re_back.setVisibility(View.VISIBLE);
         re_person.setVisibility(View.VISIBLE);
-        tv_person_person.setText(h.getName());
-        sessionId = h.getACC_ID();
+        String p_name = h.getName();
+        if (p_name == null || p_name.trim().equals("")) {
+            p_name = "未知";
+        }
+        tv_person_name.setText(p_name);// 好友名称
+        if (h.getURL() != null && !h.getURL().equals("") &&h.getURL().startsWith("http")) {// 好友头像
+            GlideUtils.loadImageViewRound(h.getURL(), img_url_person, 150, 150);
+        } else {
+            GlideUtils.loadImageViewRound(R.mipmap.icon_avatar_d, img_url_person, 60, 60);
+        }
+        tv_person_talked.setVisibility(View.VISIBLE);
+        lin_person_talking.setVisibility(View.GONE);
     }
 
     /**
      * 设置好友界面--关闭
      */
     public void setPersonViewClose() {
+        tv_line.setVisibility(View.GONE);
+        re_back.setVisibility(View.GONE);
         re_person.setVisibility(View.GONE);
-        rippleImageView_person.stopWaveAnimation();
+        tv_person_talked.setVisibility(View.VISIBLE);
+        lin_person_talking.setVisibility(View.GONE);
+        WaveView_person.stop();
+        waveLineView.stopAnim();
         presenter.setNull();
     }
 
     /**
      * 设置好友界面--有人说话
      */
-    public void setPersonViewTalk(String name) {
-        rippleImageView_person.startWaveAnimation();// 开始动画
+    public void setPersonViewTalk(String name,String url) {
+        tv_person_talked.setVisibility(View.GONE);
+        lin_person_talking.setVisibility(View.VISIBLE);
+        tv_person_person.setText(name);// 说话人名称
+        if (url!= null && !url.equals("") &&url.startsWith("http")) {// 说话人头像
+            GlideUtils.loadImageViewRound(url, img_person_person, 150, 150);
+        } else {
+            GlideUtils.loadImageViewRound(R.mipmap.icon_avatar_d, img_person_person, 60, 60);
+        }
+        WaveView_person.start();
+        waveLineView.startAnim();
     }
 
     /**
      * 设置好友界面--有人说话完毕
      */
     public void setPersonViewTalkClose() {
-        rippleImageView_person.stopWaveAnimation();// 结束动画
+        tv_person_talked.setVisibility(View.VISIBLE);
+        lin_person_talking.setVisibility(View.GONE);
+        WaveView_person.stop();
+        waveLineView.stopAnim();
     }
 
     /**
@@ -181,35 +234,69 @@ public class ChatFragment extends Fragment implements ChatAdapter.IonSlidingView
      * @param h
      */
     public void setGroupViewShow(TalkHistory h) {
+        tv_line.setVisibility(View.VISIBLE);
+        re_back.setVisibility(View.VISIBLE);
         re_group.setVisibility(View.VISIBLE);
-        img_url_group.setImageResource(R.mipmap.test);// 群头像
         String g_name = h.getName();
         if (g_name == null || g_name.trim().equals("")) {
             g_name = "未知";
         }
-        tv_groupName_group.setText(g_name);// 群名称
+        tv_groupName.setText(g_name);// 群名称
+        setGroupViewNum(h.getGroupNum());
+        if (h.getURL() != null && !h.getURL().equals("") &&h.getURL().startsWith("http")) {// 群头像
+            GlideUtils.loadImageViewRoundCorners(h.getURL(), img_url_group, 150, 150);
+        } else {
+            GlideUtils.loadImageViewRoundCorners(R.mipmap.icon_avatar_d, img_url_group, 60, 60);
+        }
+        tv_group_talked.setVisibility(View.VISIBLE);
+        lin_group_talking.setVisibility(View.GONE);
     }
 
     /**
      * 设置群组界面关闭
      */
     public void setGroupViewClose() {
+        tv_line.setVisibility(View.GONE);
+        re_back.setVisibility(View.GONE);
         re_group.setVisibility(View.GONE);
+        tv_group_talked.setVisibility(View.VISIBLE);
+        lin_group_talking.setVisibility(View.GONE);
+        WaveView_group.stop();
+        waveLineView.stopAnim();
         presenter.setNull();
     }
 
     /**
      * 设置群组界面--有人说话
      */
-    public void setGroupViewTalk() {
-        rippleImageView_group.startWaveAnimation();//开始动画
+    public void setGroupViewTalk(String name,String url) {
+        tv_group_talked.setVisibility(View.GONE);
+        lin_group_talking.setVisibility(View.VISIBLE);
+        tv_person_group.setText(name);// 说话人名称
+        if (url!= null && !url.equals("") &&url.startsWith("http")) {// 说话人头像
+            GlideUtils.loadImageViewRound(url, img_person_group, 150, 150);
+        } else {
+            GlideUtils.loadImageViewRound(R.mipmap.icon_avatar_d, img_person_group, 60, 60);
+        }
+        WaveView_group.start();
+        waveLineView.startAnim();
     }
 
     /**
      * 设置群组界面--有人说话完毕
      */
     public void setGroupViewTalkClose() {
-        rippleImageView_group.stopWaveAnimation();// 结束动画
+        tv_group_talked.setVisibility(View.VISIBLE);
+        lin_group_talking.setVisibility(View.GONE);
+        WaveView_group.stop();
+        waveLineView.stopAnim();
+    }
+
+    /**
+     * 设置群组成员数
+     */
+    public void setGroupViewNum(String num) {
+        tv_groupNum.setText("("+num+")人");
     }
 
     /**
@@ -244,6 +331,8 @@ public class ChatFragment extends Fragment implements ChatAdapter.IonSlidingView
             tip_view.setTipView(TipView.TipStatus.NO_NET);
         } else if (type == 3) {
             // 没有登录
+            setGroupViewClose();
+            setPersonViewClose();
             lin_back.setVisibility(View.GONE);
             tip_view.setVisibility(View.VISIBLE);
             tip_view.setTipView(TipView.TipStatus.NO_LOGIN);
@@ -295,7 +384,7 @@ public class ChatFragment extends Fragment implements ChatAdapter.IonSlidingView
             @Override
             public void onClick(View v) {
                 dialogCancel();
-                presenter.callOk(old_id, new_id, callType, sessionId);
+                presenter.callOk( new_id, callType, accId);
 
             }
         });
@@ -304,10 +393,10 @@ public class ChatFragment extends Fragment implements ChatAdapter.IonSlidingView
     /**
      * 展示弹出框
      */
-    public void dialogShow(String old_id, String new_id, int type) {
-        this.old_id = old_id;
+    public void dialogShow( String new_id, int type,String acc_id ) {
         this.new_id = new_id;
         this.callType = type;
+        this.accId = acc_id;
         confirmDialog.show();
     }
 
@@ -322,6 +411,23 @@ public class ChatFragment extends Fragment implements ChatAdapter.IonSlidingView
     public void onDestroy() {
         super.onDestroy();
         presenter.destroy();
+        waveLineView.release();
     }
+    @Override
+    public void onResume() {
+        super.onResume();
+        waveLineView.onResume();
+        Log.e("聊天页面","onResume");
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        waveLineView.onPause();
+        Log.e("聊天页面","onPause");
+    }
+
+
+
 
 }

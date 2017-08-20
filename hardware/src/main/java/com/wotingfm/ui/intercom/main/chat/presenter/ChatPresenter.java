@@ -13,7 +13,6 @@ import com.wotingfm.common.config.GlobalStateConfig;
 import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.common.service.InterPhoneControl;
 import com.wotingfm.common.utils.CommonUtils;
-import com.wotingfm.common.utils.IMManger;
 import com.wotingfm.common.utils.ToastUtils;
 import com.wotingfm.ui.intercom.alert.call.view.CallAlertActivity;
 import com.wotingfm.ui.intercom.group.groupnews.add.view.GroupNewsForAddFragment;
@@ -43,6 +42,7 @@ public class ChatPresenter {
     public static TalkHistory data;// 此时当前的聊天对象，挂断后置为null
     private MessageReceiver Receiver;
     private int position;
+    private int personViewType = 0;
 
     public ChatPresenter(ChatFragment activity) {
         this.activity = activity;
@@ -116,23 +116,18 @@ public class ChatPresenter {
                     String _t = data.getTyPe().trim();
                     if (_t != null && !_t.equals("") && _t.equals("person")) {
                         // 此时的对讲状态是单对单
-                        String o_id = data.getID();// 上次id
                         String n_id = _data.getID();// 本次id
-                        activity.dialogShow(o_id, n_id, 1);
+                        String acc_id = _data.getACC_ID();// 本次acc_id
+                        activity.dialogShow(n_id, 1,acc_id);
                     } else if (_t != null && !_t.equals("") && _t.equals("group")) {
                         // 此时的对讲状态是群组
-                        String o_id = data.getID();
                         String n_id = _data.getID();
-                        boolean et = exitGroup(o_id);// 退出上次组
-                        if (et) {
-                            Log.e("信令控制", "退出组成功");
-                        } else {
-                            Log.e("信令控制", "退出组失败");
-                        }
+                        // 退出组，关闭对讲页面群组数据
+                        activity.getActivity().sendBroadcast(new Intent(BroadcastConstants.VIEW_GROUP_CLOSE));
                         boolean cp = callPerson(n_id, _data.getACC_ID());// 呼叫好友
                         if (cp) {
                             Log.e("信令控制", "呼叫好友成功");
-                            callPersonOkData(1);
+                            personViewType = 1;
                         } else {
                             Log.e("信令控制", "呼叫好友失败");
                         }
@@ -143,7 +138,7 @@ public class ChatPresenter {
                     boolean cp = callPerson(n_id, _data.getACC_ID());// 呼叫好友
                     if (cp) {
                         Log.e("信令控制", "呼叫好友成功");
-                        callPersonOkData(3);
+                        personViewType = 3;
                     } else {
                         Log.e("信令控制", "呼叫好友失败");
                     }
@@ -155,19 +150,14 @@ public class ChatPresenter {
                     String _t = data.getTyPe().trim();
                     if (_t != null && !_t.equals("") && _t.equals("person")) {
                         // 此时的对讲状态是单对单
-                        String o_id = data.getID(); // 上次id
                         String n_id = _data.getID();// 本次id
-                        activity.dialogShow(o_id, n_id, 2);
+                        String acc_id = _data.getACC_ID();// 本次acc_id
+                        activity.dialogShow(n_id, 2,acc_id);
                     } else if (_t != null && !_t.equals("") && _t.equals("group")) {
                         // 此时的对讲状态是群组
-                        String o_id = data.getID();
+                        talkOverGroup();// 退出对讲组
+                        activity.setGroupViewClose(); // 关闭对讲页面群组数据
                         String n_id = _data.getID();
-                        boolean et = exitGroup(o_id); // 退出上次组
-                        if (et) {
-                            Log.e("信令控制", "退出组成功");
-                        } else {
-                            Log.e("信令控制", "退出组失败");
-                        }
                         boolean cp = enterGroup(n_id);// 进入组
                         if (cp) {
                             Log.e("信令控制", "进入组成功");
@@ -197,37 +187,24 @@ public class ChatPresenter {
     /**
      * 弹框按钮成功
      *
-     * @param old_id
      * @param new_id
      * @param type
      */
-    public void callOk(String old_id, String new_id, int type, String accId) {
+    public void callOk(String new_id, int type, String accId) {
         if (type == 1) {
-            // 挂断上次好友
-            boolean bp = backPerson(old_id);
-            if (bp) {
-                Log.e("信令控制", "挂断好友成功");
-            } else {
-                Log.e("信令控制", "挂断好友失败");
-            }
-            // 呼叫好友
-            boolean cp = callPerson(new_id, accId);
+            talkOver();// 挂断当前个人对讲
+            activity.setPersonViewClose();
+            boolean cp = callPerson(new_id, accId);  // 呼叫好友
             if (cp) {
                 Log.e("信令控制", "呼叫好友成功");
-                callPersonOkData(2);
+                personViewType = 2;
             } else {
                 Log.e("信令控制", "呼叫好友失败");
             }
         } else {
-            // 挂断上次好友
-            boolean bp = backPerson(old_id);
-            if (bp) {
-                Log.e("信令控制", "挂断好友成功");
-            } else {
-                Log.e("信令控制", "挂断好友失败");
-            }
-            // 进入群组
-            boolean cp = enterGroup(new_id);
+            // 挂断当前会话,关闭对讲页面好友数据
+            activity.getActivity().sendBroadcast(new Intent(BroadcastConstants.VIEW_PERSON_CLOSE));
+            boolean cp = enterGroup(new_id);// 进入群组
             if (cp) {
                 Log.e("信令控制", "进入组成功");
                 enterGroupOkData(1);
@@ -243,10 +220,22 @@ public class ChatPresenter {
         return true;
     }
 
-    // 退出当前组
-    private boolean exitGroup(String id) {
-        EventBus.getDefault().post(new MessageEvent("exitGroup&" + id));
-        return true;
+    // 挂断当前个人对讲
+    public void talkOver() {
+        if (ChatPresenter.data != null && ChatPresenter.data.getID() != null) {
+            EventBus.getDefault().post(new MessageEvent("exitPerson"));
+            InterPhoneControl.over(ChatPresenter.data.getACC_ID());// 结束通话
+        }
+    }
+
+    // 退出组对讲
+    public boolean talkOverGroup() {
+        if (ChatPresenter.data != null && ChatPresenter.data.getID() != null) {
+            EventBus.getDefault().post(new MessageEvent("exitGroup&" + ChatPresenter.data.getID()));
+            return true;
+        } else {
+            return false;
+        }
     }
 
     // 呼叫好友
@@ -257,6 +246,7 @@ public class ChatPresenter {
                 Intent intent = new Intent(activity.getActivity(), CallAlertActivity.class);
                 Bundle bundle = new Bundle();
                 bundle.putString("id", id);
+                bundle.putString("fromType", "chat");
                 bundle.putString("roomId", accId);
                 intent.putExtras(bundle);
                 activity.startActivity(intent);
@@ -265,19 +255,8 @@ public class ChatPresenter {
                 ToastUtils.show_always(activity.getActivity(), "呼叫失败，请稍后再试！");
                 return false;
             }
-        }else{
+        } else {
             ToastUtils.show_always(activity.getActivity(), "数据出错了，请稍后再试！");
-            return false;
-        }
-    }
-
-    // 挂断电话
-    private boolean backPerson(String id) {
-        // 挂断当前会话
-        if (ChatPresenter.data != null && ChatPresenter.data.getID() != null) {
-            EventBus.getDefault().post(new MessageEvent("exitPerson&" + ChatPresenter.data.getACC_ID()));
-            return true;
-        }else{
             return false;
         }
     }
@@ -398,7 +377,7 @@ public class ChatPresenter {
      * 界面跳转(此时群肯定是自己所在的群)
      * 判断该群是不是自己创建的
      */
-    public void jump() {
+    public void jumpGroup() {
         if (model.judgeGroupCreate(data.getID())) {
             GroupNewsForAddFragment fragment = new GroupNewsForAddFragment();
             Bundle bundle = new Bundle();
@@ -413,6 +392,31 @@ public class ChatPresenter {
             bundle.putString("type", "false");
             fragment.setArguments(bundle);
             InterPhoneActivity.open(fragment);
+        }
+    }
+
+    /**
+     * 界面跳转
+     * 判断是不是自己好友
+     */
+    public void jumpPerson() {
+        String id = data.getID();
+        if (id != null && !id.trim().equals("")) {
+            if (model.judgeFriends(id)) {
+                PersonMessageFragment fragment = new PersonMessageFragment();
+                Bundle bundle = new Bundle();
+                bundle.putString("type", "true");
+                bundle.putString("id", id);
+                fragment.setArguments(bundle);
+                InterPhoneActivity.open(fragment);
+            } else {
+                PersonMessageFragment fragment = new PersonMessageFragment();
+                Bundle bundle = new Bundle();
+                bundle.putString("type", "false");
+                bundle.putString("id", id);
+                fragment.setArguments(bundle);
+                InterPhoneActivity.open(fragment);
+            }
         }
     }
 
@@ -450,7 +454,11 @@ public class ChatPresenter {
             filter.addAction(BroadcastConstants.PERSON_CHANGE);// 群组或者好友信息更改后重新适配数据
             filter.addAction(BroadcastConstants.VIEW_GROUP_CLOSE);// 群组页面关闭广播
             filter.addAction(BroadcastConstants.VIEW_PERSON_CLOSE);// 好友界面关闭广播
+            filter.addAction(BroadcastConstants.PUSH_CALL_SEND);// 单对单呼叫成功
             filter.addAction(BroadcastConstants.VIEW_INTER_PHONE_CHAT_OK);// 有新的对讲连接时，对讲界面数据更改
+            filter.addAction(BroadcastConstants.PUSH_CHAT_CLOSE);// 无人在说话
+            filter.addAction(BroadcastConstants.PUSH_CHAT_OPEN);// 有人在说话
+            filter.addAction(BroadcastConstants.PUSH_CHAT_GROUP_NUM);// // 群成员
             activity.getActivity().registerReceiver(Receiver, filter);
         }
     }
@@ -459,24 +467,69 @@ public class ChatPresenter {
         @Override
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
-            if (action.equals(BroadcastConstants.CANCEL)) {
-                // 设置未登录界面
-                activity.isLoginView(3);
-            } else if (action.equals(BroadcastConstants.LOGIN)) {
-                // 登录后重新获取数据
-                getData();
-            } else if (action.equals(BroadcastConstants.PERSON_CHANGE)) {
-                // 群组或者好友信息更改后重新适配数据
-                getData();
-            } else if (action.equals(BroadcastConstants.VIEW_GROUP_CLOSE)) {
-                // 关闭群组对讲界面
-                activity.setGroupViewClose();
-            } else if (action.equals(BroadcastConstants.VIEW_PERSON_CLOSE)) {
-                // 关闭好友对讲界面
-                activity.setPersonViewClose();
-            } else if (action.equals(BroadcastConstants.VIEW_INTER_PHONE_CHAT_OK)) {
-                // 有新的对讲连接时，对讲界面数据更改
-                setViewForOK();
+            switch (action) {
+                case BroadcastConstants.CANCEL:// 设置未登录界面
+                    activity.isLoginView(3);
+                    break;
+                case BroadcastConstants.LOGIN:// 登录后重新获取数据
+                    getData();
+                    break;
+                case BroadcastConstants.PERSON_CHANGE:// 群组或者好友信息更改后重新适配数据
+                    getData();
+                    break;
+                case BroadcastConstants.VIEW_GROUP_CLOSE:// 关闭群组对讲界面
+                    talkOverGroup();// 退出对讲组
+                    activity.setGroupViewClose();
+                    break;
+                case BroadcastConstants.VIEW_PERSON_CLOSE:// 关闭好友对讲界面
+                    talkOver();// 挂断当前个人对讲
+                    activity.setPersonViewClose();
+                    break;
+                case BroadcastConstants.VIEW_INTER_PHONE_CHAT_OK:// 有新的对讲连接时，对讲界面数据更改
+                    setViewForOK();
+                    break;
+                case BroadcastConstants.PUSH_CALL_SEND:// 单对单呼叫成功
+                    String type = intent.getStringExtra("fromType");
+                    if (type != null && !type.trim().equals("") && type.trim().equals("chat")) {
+                        callPersonOkData(personViewType);
+                    }
+                    break;
+                case BroadcastConstants.PUSH_CHAT_OPEN:// 有人在说话
+                    String name = intent.getStringExtra("name");
+                    String url = intent.getStringExtra("url");
+                    setViewChatOpen(name, url);
+                    break;
+                case BroadcastConstants.PUSH_CHAT_CLOSE:// 无人在说话
+                    setViewChatClose();
+                    break;
+                case BroadcastConstants.PUSH_CHAT_GROUP_NUM:// 群成员
+                    String num = intent.getStringExtra("num");
+                    activity.setGroupViewNum(num);
+                    break;
+            }
+        }
+    }
+
+    // 更改当前说话人界面类型
+    private void setViewChatOpen(String name, String url) {
+        if (data != null) {// 此时有对讲状态
+            String _t = data.getTyPe().trim();
+            if (_t != null && !_t.equals("") && _t.equals("person")) {
+                activity.setPersonViewTalk(name, url);
+            } else if (_t != null && !_t.equals("") && _t.equals("group")) {
+                activity.setGroupViewTalk(name, url);
+            }
+        }
+    }
+
+    // 更改当前说话人界面类型
+    private void setViewChatClose() {
+        if (data != null) {// 此时有对讲状态
+            String _t = data.getTyPe().trim();
+            if (_t != null && !_t.equals("") && _t.equals("person")) {
+                activity.setPersonViewTalkClose();
+            } else if (_t != null && !_t.equals("") && _t.equals("group")) {
+                activity.setGroupViewTalkClose();
             }
         }
     }

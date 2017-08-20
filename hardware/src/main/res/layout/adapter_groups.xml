@@ -1,29 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical">
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:orientation="vertical">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:background="@color/white">
 
-        <LinearLayout
+        <RelativeLayout
             android:id="@+id/lin_img"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_centerVertical="true"
             android:layout_marginLeft="12dp"
-            android:background="@mipmap/avatar_g"
-            android:padding="1dp">
+            android:gravity="center">
 
             <ImageView
                 android:id="@+id/img_view"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:scaleType="centerCrop" />
-        </LinearLayout>
+                android:scaleType="centerCrop"/>
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/background_group"/>
+        </RelativeLayout>
 
         <TextView
             android:id="@+id/tv_name"
@@ -34,7 +38,7 @@
             android:layout_toRightOf="@+id/lin_img"
             android:text="名称"
             android:textColor="@color/black_head_word"
-            android:textSize="16sp" />
+            android:textSize="16sp"/>
 
         <ImageView
             android:id="@+id/img_chat"
@@ -43,7 +47,7 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="12dp"
-            android:src="@mipmap/chat_icon_call" />
+            android:src="@mipmap/chat_icon_call"/>
 
     </RelativeLayout>
 
@@ -52,5 +56,5 @@
         android:layout_width="match_parent"
         android:layout_height="0.7dp"
         android:background="@color/line_color"
-        android:visibility="gone" />
+        android:visibility="gone"/>
 </LinearLayout>

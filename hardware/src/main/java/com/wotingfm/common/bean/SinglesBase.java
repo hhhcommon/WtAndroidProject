@@ -44,6 +44,8 @@ public class SinglesBase implements Serializable {
     @DatabaseField
     public int count;
     @DatabaseField
+    public int postionPlayer;
+    @DatabaseField
     public double albumSize;
     @DatabaseField
     public boolean had_liked;

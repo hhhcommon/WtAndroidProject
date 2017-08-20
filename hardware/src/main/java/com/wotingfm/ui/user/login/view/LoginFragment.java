@@ -166,7 +166,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
      */
     public void setLoginBackground(boolean type) {
         if (type) {
-            tv_login.setBackgroundResource(R.drawable.background_login_tvlogin_on);
+            tv_login.setBackgroundResource(R.drawable.wt_user_register_background);
         } else {
             tv_login.setBackgroundResource(R.drawable.background_login_tvlogin_off);
         }

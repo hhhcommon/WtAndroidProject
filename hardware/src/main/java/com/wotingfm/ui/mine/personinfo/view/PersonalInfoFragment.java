@@ -1,7 +1,6 @@
 package com.wotingfm.ui.mine.personinfo.view;
 
 import android.app.Dialog;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.DisplayMetrics;
@@ -15,7 +14,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.woting.commonplat.manager.PhoneMsgManager;
-import com.woting.commonplat.utils.BitmapUtils;
 import com.wotingfm.R;
 import com.wotingfm.common.config.GlobalStateConfig;
 import com.wotingfm.common.utils.DialogUtils;
@@ -161,7 +159,7 @@ public class PersonalInfoFragment extends Fragment implements View.OnClickListen
      */
     public void setViewForImage(String url) {
         if (url != null && !url.equals("")) {
-            GlideUtils.loadImageViewRound(url, image_head, 60, 60);
+            GlideUtils.loadImageViewRound(url, image_head, 150, 150);
         } else {
             GlideUtils.loadImageViewRound(R.mipmap.icon_avatar_d, image_head, 60, 60);
         }

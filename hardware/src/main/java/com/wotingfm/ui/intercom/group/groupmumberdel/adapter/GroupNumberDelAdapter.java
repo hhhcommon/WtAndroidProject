@@ -1,10 +1,8 @@
 package com.wotingfm.ui.intercom.group.groupmumberdel.adapter;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,12 +11,10 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.woting.commonplat.utils.BitmapUtils;
 import com.wotingfm.R;
 import com.wotingfm.common.utils.GlideUtils;
 import com.wotingfm.common.view.slidingbutton.SlidingButtonView;
 import com.wotingfm.ui.intercom.main.contacts.model.Contact;
-import com.wotingfm.ui.intercom.person.newfriend.model.NewFriend;
 
 import java.util.List;
 
@@ -65,7 +61,7 @@ public class GroupNumberDelAdapter extends RecyclerView.Adapter<GroupNumberDelAd
         }
 
         if (lists.getAvatar() != null && !lists.getAvatar().equals("") && lists.getAvatar().startsWith("http")) {
-            GlideUtils.loadImageViewRound(lists.getAvatar(), holder.img_url, 60, 60);
+            GlideUtils.loadImageViewRound(lists.getAvatar(), holder.img_url, 150, 150);
         } else {
             GlideUtils.loadImageViewRound(R.mipmap.icon_avatar_d, holder.img_url, 60, 60);
         }

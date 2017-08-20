@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Color;
@@ -32,6 +33,7 @@ import android.widget.TextView;
 
 import com.woting.commonplat.manager.VoiceRecognizer;
 import com.woting.commonplat.utils.SequenceUUID;
+import com.woting.commonplat.widget.WaveLineView;
 import com.wotingfm.R;
 import com.wotingfm.common.adapter.MyAdapter;
 import com.wotingfm.common.application.BSApplication;
@@ -52,6 +54,8 @@ import org.greenrobot.eventbus.EventBus;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import butterknife.BindView;
 
@@ -94,10 +98,16 @@ public class LookListFragment extends BaseFragment implements View.OnClickListen
         etSearchlike.setFocusable(true);
         etSearchlike.setFocusableInTouchMode(true);
         etSearchlike.requestFocus();
-        //   InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-        inputMethodManager.toggleSoftInput(-30, InputMethodManager.HIDE_NOT_ALWAYS);
-        isOne = false;
         relatLable.setVisibility(View.VISIBLE);
+        Timer timer = new Timer(); //设置定时器
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() { //弹出软键盘的代码
+                InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.showSoftInput(etSearchlike, InputMethodManager.RESULT_SHOWN);
+                imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
+            }
+        }, 100);
     }
 
     // 状态栏的高度
@@ -139,7 +149,7 @@ public class LookListFragment extends BaseFragment implements View.OnClickListen
             } else {
                 // 如果软键盘是收起的状态，并且heightDiff大于状态栏高度，
                 // 说明这时软键盘已经弹出
-                if (heightDiff > statusBarHeight && isOne == false) {
+                if (heightDiff > statusBarHeight) {
                     isShowKeyboard = true;
                     relatLable.setVisibility(View.VISIBLE);
                 }
@@ -185,7 +195,6 @@ public class LookListFragment extends BaseFragment implements View.OnClickListen
                     if (!TextUtils.isEmpty(content)) {
                         closeKeyboard(etSearchlike);
                         openFragment(SerchFragment.newInstance(content, 0));
-                        //  openFragment(SerchFragment.newInstance(content, 0));
                         etSearchlike.setText("");
                     }
                 }
@@ -206,6 +215,8 @@ public class LookListFragment extends BaseFragment implements View.OnClickListen
                     public void run() {
                         if (videoDialog != null) videoDialog.dismiss();
                         etSearchlike.setText("");
+                        tvContent.setText("");
+                        tvContent.setVisibility(View.GONE);
                         closeKeyboard(etSearchlike);
                         openFragment(SerchFragment.newInstance(str.trim(), 0));
                     }
@@ -266,6 +277,7 @@ public class LookListFragment extends BaseFragment implements View.OnClickListen
 
     private TextView tvTitle, tvContent;
     private VoiceRecognizer mVoiceRecognizer;
+    private WaveLineView waveLineView;
 
     public class VideoDialog extends Dialog {
 
@@ -283,6 +295,7 @@ public class LookListFragment extends BaseFragment implements View.OnClickListen
             setCanceledOnTouchOutside(true);
 
             fragmentVideo = (FrameLayout) findViewById(R.id.fragmentVideo);
+            waveLineView = (WaveLineView) findViewById(R.id.waveLineView);
             tvTitle = (TextView) findViewById(R.id.tvTitle);
             tvContent = (TextView) findViewById(R.id.tvContent);
             audioMgr = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
@@ -295,6 +308,7 @@ public class LookListFragment extends BaseFragment implements View.OnClickListen
                     showSoftInputFromWindow();
                 }
             });
+
             fragmentVideo.setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
@@ -308,10 +322,14 @@ public class LookListFragment extends BaseFragment implements View.OnClickListen
                             audioMgr.setStreamVolume(AudioManager.STREAM_MUSIC, stepVolume, AudioManager.FLAG_PLAY_SOUND);
                             mVoiceRecognizer.startListen();
                             tvTitle.setText("识别中...");
+                            waveLineView.startAnim();
+                            tvContent.setVisibility(View.GONE);
                             EventBus.getDefault().post(new MessageEvent("pause"));
                             tvTitle.setTextColor(Color.parseColor("#cccccd"));
                             break;
+                        case MotionEvent.ACTION_CANCEL:
                         case MotionEvent.ACTION_UP:
+                            waveLineView.stopAnim();
                             audioMgr.setStreamVolume(AudioManager.STREAM_MUSIC, curVolume, AudioManager.FLAG_PLAY_SOUND);
                             mVoiceRecognizer.stopListen();
                             tvTitle.setTextColor(Color.parseColor("#16181a"));
@@ -327,15 +345,8 @@ public class LookListFragment extends BaseFragment implements View.OnClickListen
 
     }
 
-    /*    @Override
-        public void onBackPressed() {
-            super.onBackPressed();
-            GlobalStateConfig.mineFromType = 0;
-            GlobalStateConfig.activityA = "A";
-            AppManager.getAppManager().finishActivity(this);
-            EventBus.getDefault().post(new MessageEvent("one"));
-        }*/
-// 获取状态栏高度
+
+    // 获取状态栏高度
     public static int getStatusBarHeight(Context context) {
         try {
             Class<?> c = Class.forName("com.android.internal.R$dimen");
@@ -352,6 +363,8 @@ public class LookListFragment extends BaseFragment implements View.OnClickListen
     @Override
     public void onDestroy() {
         super.onDestroy();
+        if (waveLineView != null)
+            waveLineView.release();
         if (layout_main != null)
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
                 layout_main.getViewTreeObserver().removeGlobalOnLayoutListener(globalLayoutListener);

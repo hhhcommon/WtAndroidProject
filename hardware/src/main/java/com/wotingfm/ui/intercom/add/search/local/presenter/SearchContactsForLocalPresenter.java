@@ -1,6 +1,9 @@
 package com.wotingfm.ui.intercom.add.search.local.presenter;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -8,26 +11,19 @@ import com.wotingfm.common.bean.MessageEvent;
 import com.wotingfm.common.config.GlobalStateConfig;
 import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.common.service.InterPhoneControl;
-import com.wotingfm.common.utils.CommonUtils;
-import com.wotingfm.common.utils.IMManger;
 import com.wotingfm.common.utils.ToastUtils;
 import com.wotingfm.ui.intercom.add.search.local.model.SearchContactsForLocalModel;
 import com.wotingfm.ui.intercom.add.search.local.view.SearchContactsForLocalFragment;
-import com.wotingfm.ui.intercom.add.search.net.view.SearchContactsForNetFragment;
 import com.wotingfm.ui.intercom.alert.call.view.CallAlertActivity;
 import com.wotingfm.ui.intercom.group.groupnews.add.view.GroupNewsForAddFragment;
 import com.wotingfm.ui.intercom.main.chat.presenter.ChatPresenter;
 import com.wotingfm.ui.intercom.main.contacts.model.Contact;
-import com.wotingfm.ui.intercom.main.contacts.view.CharacterParser;
-import com.wotingfm.ui.intercom.main.contacts.view.PinyinComparator;
 import com.wotingfm.ui.intercom.main.view.InterPhoneActivity;
-import com.wotingfm.ui.intercom.main.view.InterPhoneFragment;
 import com.wotingfm.ui.intercom.person.personmessage.view.PersonMessageFragment;
 
 import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -38,12 +34,16 @@ public class SearchContactsForLocalPresenter {
 
     private SearchContactsForLocalFragment activity;
     private SearchContactsForLocalModel model;
+    private MessageReceiver Receiver;
     private List<Contact.group> srcList_G;// 原始群组数据
     private List<Contact.user> srcList_p;// 原始好友数据
+    private int callType = 1;// 呼叫类型 1好友，2群组
+    private Contact.user user;
 
     public SearchContactsForLocalPresenter(SearchContactsForLocalFragment activity) {
         this.activity = activity;
         this.model = new SearchContactsForLocalModel(activity);
+        setReceiver();// 广播
     }
 
     /**
@@ -186,18 +186,13 @@ public class SearchContactsForLocalPresenter {
             if (_t != null && !_t.equals("") && _t.equals("person")) {// 此时的对讲状态是单对单
                 activity.dialogShow(person.get(position), null, 1);// 弹出选择界面
             } else if (_t != null && !_t.equals("") && _t.equals("group")) {// 此时的对讲状态是群组
-                boolean to = takeOverGroup();// 退出组
-                if (to) {
-                    Log.e("信令控制", "退出组成功");
-                } else {
-                    Log.e("信令控制", "退出组失败");
-                }
-                // 关闭对讲页面群组数据
+                // 退出组,关闭对讲页面群组数据
                 activity.getActivity().sendBroadcast(new Intent(BroadcastConstants.VIEW_GROUP_CLOSE));
                 boolean tok = talkOk(id, person.get(position).getAcc_id());// 进行呼叫
                 if (tok) {
                     Log.e("信令控制", "呼叫成功");
-                    enterOkData(true, person.get(position), null);
+                    callType = 1;
+                    user = person.get(position);
                 } else {
                     Log.e("信令控制", "呼叫失败");
                 }
@@ -207,7 +202,8 @@ public class SearchContactsForLocalPresenter {
             boolean to = talkOk(id, person.get(position).getAcc_id());// 进行呼叫
             if (to) {
                 Log.e("信令控制", "呼叫成功");
-                enterOkData(true, person.get(position), null);
+                callType = 1;
+                user = person.get(position);
             } else {
                 Log.e("信令控制", "呼叫失败");
             }
@@ -230,13 +226,7 @@ public class SearchContactsForLocalPresenter {
             if (_t != null && !_t.equals("") && _t.equals("person")) {// 此时的对讲状态是单对单
                 activity.dialogShow(null, group.get(position), 2);// 弹出选择界面
             } else if (_t != null && !_t.equals("") && _t.equals("group")) {// 此时的对讲状态是群组
-                boolean to = takeOverGroup();// 退出组
-                if (to) {
-                    Log.e("信令控制", "退出组成功");
-                } else {
-                    Log.e("信令控制", "退出组失败");
-                }
-                // 关闭对讲页面群组数据
+                // 退出组,关闭对讲页面群组数据
                 activity.getActivity().sendBroadcast(new Intent(BroadcastConstants.VIEW_GROUP_CLOSE));
                 boolean et = enterGroup(id);// 进入组
                 if (et) {
@@ -263,29 +253,18 @@ public class SearchContactsForLocalPresenter {
      */
     public void callOk(Contact.user user, Contact.group group, int type) {
         if (type == 1) {
-            boolean to = talkOver();// 挂断当前会话
-            if (to) {
-                Log.e("信令控制", "挂断电话成功");
-            } else {
-                Log.e("信令控制", "挂断电话失败");
-            }
-            // 关闭对讲页面好友数据
+            // 挂断当前会话,关闭对讲页面好友数据
             activity.getActivity().sendBroadcast(new Intent(BroadcastConstants.VIEW_PERSON_CLOSE));
             boolean tok = talkOk(user.getId(), user.getAcc_id());// 进行呼叫
             if (tok) {
                 Log.e("信令控制", "呼叫成功");
-                enterOkData(true, user, null);
+                callType = 1;
+                this.user = user;
             } else {
                 Log.e("信令控制", "呼叫失败");
             }
         } else {
-            boolean to = talkOver();// 挂断当前会话
-            if (to) {
-                Log.e("信令控制", "挂断电话成功");
-            } else {
-                Log.e("信令控制", "挂断电话失败");
-            }
-            // 关闭对讲页面好友数据
+            // 挂断当前会话,关闭对讲页面好友数据
             activity.getActivity().sendBroadcast(new Intent(BroadcastConstants.VIEW_PERSON_CLOSE));
             boolean et = enterGroup(group.getId());// 进入组
             if (et) {
@@ -303,27 +282,6 @@ public class SearchContactsForLocalPresenter {
         return true;
     }
 
-    // 退出组
-    private boolean takeOverGroup() {
-        if (ChatPresenter.data != null && ChatPresenter.data.getID() != null) {
-            // 退出组
-            String id = ChatPresenter.data.getID();
-            EventBus.getDefault().post(new MessageEvent("exitGroup&" + id));
-        }
-        return true;
-    }
-
-    // 退出个人对讲
-    private boolean talkOver() {
-        // 挂断当前会话
-        if (ChatPresenter.data != null && ChatPresenter.data.getID() != null) {
-            EventBus.getDefault().post(new MessageEvent("exitPerson&" + ChatPresenter.data.getACC_ID()));
-            return true;
-        }else{
-            return false;
-        }
-    }
-
     // 开始个人对讲
     private boolean talkOk(String id, String accId) {
         if (id != null && !id.equals("")) {
@@ -332,6 +290,7 @@ public class SearchContactsForLocalPresenter {
                 Intent intent = new Intent(activity.getActivity(), CallAlertActivity.class);
                 Bundle bundle = new Bundle();
                 bundle.putString("id", id);
+                bundle.putString("fromType", "searchLocal");
                 bundle.putString("roomId", accId);
                 intent.putExtras(bundle);
                 activity.startActivity(intent);
@@ -340,7 +299,7 @@ public class SearchContactsForLocalPresenter {
                 ToastUtils.show_always(activity.getActivity(), "呼叫失败，请稍后再试！");
                 return false;
             }
-        }else{
+        } else {
             ToastUtils.show_always(activity.getActivity(), "数据出错了，请稍后再试！");
             return false;
         }
@@ -357,16 +316,44 @@ public class SearchContactsForLocalPresenter {
             model.del(group.getId());// 删除跟本次id相关的数据
             model.add(model.assemblyGroupData(group, GlobalStateConfig.ok, ""));// 把本次数据添加的数据库
         }
-
-        InterPhoneActivity.closeAll();
         activity.getActivity().sendBroadcast(new Intent(BroadcastConstants.VIEW_INTER_PHONE));// 跳转到对讲主页
         activity.getActivity().sendBroadcast(new Intent(BroadcastConstants.VIEW_INTER_PHONE_CHAT_OK));// 对讲主页界面，数据更新
+        activity.getActivity().sendBroadcast(new Intent(BroadcastConstants.VIEW_INTER_PHONE_CLOSE_ALL));
+    }
+
+    // 设置广播接收器
+    private void setReceiver() {
+        if (Receiver == null) {
+            Receiver = new MessageReceiver();
+            IntentFilter filter = new IntentFilter();
+            filter.addAction(BroadcastConstants.PUSH_CALL_SEND);// 单对单呼叫成功
+            activity.getActivity().registerReceiver(Receiver, filter);
+        }
+    }
+
+    class MessageReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            if (action.equals(BroadcastConstants.PUSH_CALL_SEND)) {// 单对单呼叫成功
+                String type = intent.getStringExtra("fromType");
+                if (type != null && !type.trim().equals("") && type.trim().equals("searchLocal")) {
+                    if (callType == 1) {
+                        enterOkData(true, user, null);
+                    }
+                }
+            }
+        }
     }
 
     /**
      * 数据销毁
      */
     public void destroy() {
+        if (Receiver != null) {
+            activity.getActivity().unregisterReceiver(Receiver);
+            Receiver = null;
+        }
         model = null;
     }
 }

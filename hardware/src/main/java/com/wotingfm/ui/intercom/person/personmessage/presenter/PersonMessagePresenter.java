@@ -12,24 +12,19 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.woting.commonplat.config.GlobalNetWorkConfig;
 import com.wotingfm.common.bean.AlbumsBean;
-import com.wotingfm.common.bean.MessageEvent;
 import com.wotingfm.common.config.GlobalStateConfig;
 import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.common.service.InterPhoneControl;
-import com.wotingfm.common.utils.CommonUtils;
-import com.wotingfm.common.utils.IMManger;
 import com.wotingfm.common.utils.ToastUtils;
 import com.wotingfm.ui.intercom.alert.call.view.CallAlertActivity;
-import com.wotingfm.ui.intercom.main.chat.model.DBTalkHistory;
 import com.wotingfm.ui.intercom.main.chat.presenter.ChatPresenter;
 import com.wotingfm.ui.intercom.main.contacts.model.Contact;
 import com.wotingfm.ui.intercom.main.view.InterPhoneActivity;
 import com.wotingfm.ui.intercom.person.personapply.view.PersonApplyFragment;
-import com.wotingfm.ui.intercom.person.personmessage.view.PersonMessageFragment;
 import com.wotingfm.ui.intercom.person.personmessage.model.PersonMessageModel;
+import com.wotingfm.ui.intercom.person.personmessage.view.PersonMessageFragment;
 import com.wotingfm.ui.intercom.person.personnote.view.EditPersonNoteFragment;
 
-import org.greenrobot.eventbus.EventBus;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
@@ -401,18 +396,11 @@ public class PersonMessagePresenter {
             if (_t != null && !_t.equals("") && _t.equals("person")) {// 此时的对讲状态是单对单
                 activity.confirmDialogShow();  // 弹出选择界面
             } else if (_t != null && !_t.equals("") && _t.equals("group")) {// 此时的对讲状态是群组
-                boolean to = talkOverGroup();  // 退出组
-                if (to) {
-                    Log.e("信令控制", "退出组成功");
-                } else {
-                    Log.e("信令控制", "退出组失败");
-                }
-                // 关闭对讲页面群组数据
+                // 退出组,关闭对讲页面群组数据
                 activity.getActivity().sendBroadcast(new Intent(BroadcastConstants.VIEW_GROUP_CLOSE));
                 boolean cp = callPerson(acc_id);// 进行呼叫
                 if (cp) {
                     Log.e("信令控制", "呼叫成功");
-                    pushCallOk();
                 } else {
                     Log.e("信令控制", "呼叫失败");
                 }
@@ -422,20 +410,9 @@ public class PersonMessagePresenter {
             boolean cp = callPerson(acc_id);// 进行呼叫
             if (cp) {
                 Log.e("信令控制", "呼叫成功");
-                pushCallOk();
             } else {
                 Log.e("信令控制", "呼叫失败");
             }
-        }
-    }
-
-    // 退出组对讲
-    private boolean talkOverGroup() {
-        if (ChatPresenter.data != null && ChatPresenter.data.getID() != null) {
-            EventBus.getDefault().post(new MessageEvent("exitGroup&" + ChatPresenter.data.getID()));
-            return true;
-        }else{
-            return false;
         }
     }
 
@@ -447,6 +424,7 @@ public class PersonMessagePresenter {
                 Intent intent = new Intent(activity.getActivity(), CallAlertActivity.class);
                 Bundle bundle = new Bundle();
                 bundle.putString("id", id);
+                bundle.putString("fromType","personMessage");
                 bundle.putString("roomId", acc_id);
                 intent.putExtras(bundle);
                 activity.startActivity(intent);
@@ -465,32 +443,13 @@ public class PersonMessagePresenter {
      * 同意挂断当前对讲后的操作
      */
     public void callOk(String acc_id) {
-        // 挂断当前会话
-        boolean to = talkOver();
-        if (to) {
-            Log.e("信令控制", "挂断电话成功");
-            pushCallOk();
-        } else {
-            Log.e("信令控制", "挂断电话失败");
-        }
-        // 关闭对讲页面好友数据
+        // 挂断当前会话,关闭对讲页面好友数据
         activity.getActivity().sendBroadcast(new Intent(BroadcastConstants.VIEW_PERSON_CLOSE));
         boolean cp = callPerson(acc_id);// 进行呼叫
         if (cp) {
             Log.e("信令控制", "呼叫成功");
-            pushCallOk();
         } else {
             Log.e("信令控制", "呼叫失败");
-        }
-    }
-
-    // 挂断当前个人对讲
-    private boolean talkOver() {
-        if (ChatPresenter.data != null && ChatPresenter.data.getID() != null) {
-            EventBus.getDefault().post(new MessageEvent("exitPerson&" + ChatPresenter.data.getACC_ID()));
-            return true;
-        }else{
-            return false;
         }
     }
 
@@ -500,6 +459,7 @@ public class PersonMessagePresenter {
         model.add(model.assemblyData(user, GlobalStateConfig.ok, ""));// 把本次数据添加的数据库
         activity.getActivity().sendBroadcast(new Intent(BroadcastConstants.VIEW_INTER_PHONE));// 跳转到对讲主页
         activity.getActivity().sendBroadcast(new Intent(BroadcastConstants.VIEW_INTER_PHONE_CHAT_OK));// 对讲主页界面，数据更新
+        activity.getActivity().sendBroadcast(new Intent(BroadcastConstants.VIEW_INTER_PHONE_CLOSE_ALL));
     }
 
     // 设置广播接收器
@@ -508,6 +468,7 @@ public class PersonMessagePresenter {
             Receiver = new MessageReceiver();
             IntentFilter filter = new IntentFilter();
             filter.addAction(BroadcastConstants.PERSON_GET);
+            filter.addAction(BroadcastConstants.PUSH_CALL_SEND);// 单对单呼叫成功
             activity.getActivity().registerReceiver(Receiver, filter);
         }
     }
@@ -518,6 +479,11 @@ public class PersonMessagePresenter {
             String action = intent.getAction();
             if (action.equals(BroadcastConstants.PERSON_GET)) {
                 getData();
+            }else if (action.equals(BroadcastConstants.PUSH_CALL_SEND)) {// 单对单呼叫成功
+                String type= intent.getStringExtra("fromType");
+                if(type!=null&&!type.trim().equals("")&&type.trim().equals("personMessage")){
+                    pushCallOk();
+                }
             }
         }
     }

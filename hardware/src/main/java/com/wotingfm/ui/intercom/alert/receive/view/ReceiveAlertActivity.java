@@ -2,7 +2,6 @@ package com.wotingfm.ui.intercom.alert.receive.view;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
@@ -12,21 +11,17 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-import com.woting.commonplat.utils.BitmapUtils;
 import com.wotingfm.R;
 import com.wotingfm.common.bean.MessageEvent;
+import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.common.service.InterPhoneControl;
 import com.wotingfm.common.utils.GlideUtils;
 import com.wotingfm.ui.base.baseactivity.BaseActivity;
 import com.wotingfm.ui.intercom.alert.receive.presenter.ReceivePresenter;
+import com.wotingfm.ui.intercom.main.chat.presenter.ChatPresenter;
 
 import org.greenrobot.eventbus.EventBus;
 
-import jp.wasabeef.glide.transformations.BlurTransformation;
-
-import static android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP;
-import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 import static android.content.Intent.FLAG_ACTIVITY_REORDER_TO_FRONT;
 
 /**
@@ -43,7 +38,7 @@ public class ReceiveAlertActivity extends BaseActivity implements OnClickListene
     public static void start(Context context, String roomId, String userId) {
         Intent intent = new Intent(context, ReceiveAlertActivity.class);
         intent.setFlags(FLAG_ACTIVITY_REORDER_TO_FRONT);
-        intent.putExtra("roomId", roomId);
+        intent.putExtra("accId", roomId);
         intent.putExtra("id", userId);
         context.startActivity(intent);
     }
@@ -76,17 +71,25 @@ public class ReceiveAlertActivity extends BaseActivity implements OnClickListene
                 /**
                  * 此处需要挂断电话等操作
                  */
-                InterPhoneControl.refuse(presenter.getRoomId(), presenter.getId());
-                EventBus.getDefault().post(new MessageEvent("over"));
+                InterPhoneControl.refuse(presenter.getAccId(), presenter.getId());
+                presenter.setCallType(0);
                 finish();
                 break;
             case R.id.img_ok:
                 /**
                  * 此处需要接收电话等操作
                  */
-                InterPhoneControl.accept(presenter.getRoomId(), presenter.getId());
-                EventBus.getDefault().post(new MessageEvent("acceptMain"));
-                presenter.pushCallOk();
+                if (ChatPresenter.data != null) {
+                    String type = ChatPresenter.data.getTyPe().trim();
+                    if (type != null && !type.equals("") && type.equals("person")) {
+                        sendBroadcast(new Intent(BroadcastConstants.VIEW_PERSON_CLOSE));// 好友界面关闭
+                    } else {
+                        sendBroadcast(new Intent(BroadcastConstants.VIEW_GROUP_CLOSE)); // 群组界面关闭
+                    }
+                }
+                InterPhoneControl.accept(presenter.getAccId(), presenter.getId());
+                EventBus.getDefault().post(new MessageEvent("enterPersonRoom"));
+                presenter.setCallType(1);
                 finish();
                 break;
         }
@@ -97,16 +100,15 @@ public class ReceiveAlertActivity extends BaseActivity implements OnClickListene
      */
     public void setViewData(String url, String name) {
         // 其中radius的取值范围是1-25，radius越大，模糊度越高。
-        // 设置高斯模糊背景
+        // 不设置高斯模糊背景
         if (url != null && !url.equals("")) {
-            Glide.with(this).load(url).bitmapTransform(new BlurTransformation(this, 15)).into(img_bg);
+            GlideUtils.loadImageViewSrc(url, img_bg, false, 20);
         } else {
-            Bitmap bmp = BitmapUtils.readBitMap(this, R.mipmap.p);
-            img_bg.setImageBitmap(bmp);
+            GlideUtils.loadImageViewSrc(R.mipmap.p, img_bg, false, 20);
         }
         // 设置好友头像
         if (url != null && !url.equals("")) {
-            GlideUtils.loadImageViewRound(url, img_url, 60, 60);
+            GlideUtils.loadImageViewRound(url, img_url, 150, 150);
         } else {
             GlideUtils.loadImageViewRound(R.mipmap.icon_avatar_d, img_url, 60, 60);
         }
@@ -124,8 +126,8 @@ public class ReceiveAlertActivity extends BaseActivity implements OnClickListene
             /**
              * 此处需要挂断电话等操作
              */
-            InterPhoneControl.refuse(presenter.getRoomId(), presenter.getId());
-            EventBus.getDefault().post(new MessageEvent("over"));
+            InterPhoneControl.refuse(presenter.getAccId(), presenter.getId());
+            presenter.setCallType(0);
             finish();
             return true;
         }

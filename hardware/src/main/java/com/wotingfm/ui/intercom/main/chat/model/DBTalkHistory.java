@@ -11,7 +11,7 @@ public class DBTalkHistory implements Serializable {
 	private String CallTypeM;   //
 	private String ACCID;
 
-	public DBTalkHistory(String bjUserId, String type, String id, String addTime, String callType, String callTypeM,String acc_ID) {
+	public DBTalkHistory(String bjUserId, String type, String id, String addTime, String callType, String callTypeM,String accId) {
 		super();
 		BJUserId = bjUserId;
 		TyPe = type;
@@ -19,7 +19,7 @@ public class DBTalkHistory implements Serializable {
 		AddTime = addTime;
 		CallType = callType;
 		CallTypeM = callTypeM;
-		ACCID = acc_ID;
+		ACCID = accId;
 	}
 
 	public void setACC_ID(String ACC_ID) {

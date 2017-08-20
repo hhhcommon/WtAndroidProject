@@ -43,7 +43,7 @@ public class GlobalStateConfig {
     /**
      * 数据库版本号
      */
-    public static final int dbVersionCode = 3;
+    public static final int dbVersionCode = 4;
 
     /**
      * 硬件对讲模块是否活跃状态

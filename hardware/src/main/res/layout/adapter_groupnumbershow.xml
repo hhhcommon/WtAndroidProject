@@ -1,29 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical">
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:orientation="vertical">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:background="@color/white">
 
-        <LinearLayout
+        <RelativeLayout
             android:id="@+id/lin_img"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="12dp"
-            android:background="@mipmap/avatar_p"
-            android:padding="1dp">
+            android:layout_marginLeft="12dp">
 
             <ImageView
                 android:id="@+id/img_view"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:scaleType="centerCrop" />
-        </LinearLayout>
+                android:scaleType="centerCrop"/>
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/background_person"/>
+        </RelativeLayout>
 
         <TextView
             android:id="@+id/tv_name"
@@ -34,7 +37,7 @@
             android:layout_toRightOf="@+id/lin_img"
             android:text="名称"
             android:textColor="@color/black_head_word"
-            android:textSize="16sp" />
+            android:textSize="16sp"/>
 
         <TextView
             android:id="@+id/tv_type"
@@ -47,10 +50,10 @@
             android:gravity="center"
             android:text="名称"
             android:textColor="@color/white"
-            android:textSize="13.3sp" />
+            android:textSize="13.3sp"/>
 
     </RelativeLayout>
 
-    <include layout="@layout/include_tv" />
+    <include layout="@layout/include_tv"/>
 
 </LinearLayout>

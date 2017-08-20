@@ -1,35 +1,24 @@
 package com.wotingfm.ui.main.presenter;
 
-import android.app.AlertDialog;
-import android.app.Notification;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.SharedPreferences;
 import android.graphics.Color;
-import android.net.Uri;
-import android.preference.PreferenceManager;
-import android.support.v4.app.NotificationCompat;
+import android.text.TextUtils;
 import android.util.Log;
-import android.view.View;
-import android.webkit.URLUtil;
 
 import com.google.gson.GsonBuilder;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.Observer;
+import com.netease.nimlib.sdk.StatusCode;
+import com.netease.nimlib.sdk.auth.AuthServiceObserver;
 import com.netease.nimlib.sdk.msg.MsgServiceObserve;
 import com.netease.nimlib.sdk.msg.model.IMMessage;
 import com.woting.commonplat.receiver.NetWorkChangeReceiver;
-import com.wotingfm.R;
-import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.bean.MessageEvent;
 import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.common.service.FloatingWindowService;
-import com.wotingfm.common.service.InterPhoneControl;
 import com.wotingfm.common.service.NotificationService;
 import com.wotingfm.common.service.WtDeviceControl;
 import com.wotingfm.common.utils.StatusBarUtil;
@@ -41,14 +30,10 @@ import com.wotingfm.ui.main.view.MainActivity;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
-
-import static com.iflytek.cloud.resource.Resource.getText;
 
 /**
  * 作者：xinLong on 2017/5/16 14:28
@@ -59,14 +44,15 @@ public class MainPresenter extends BasePresenter {
     private MainActivity activity;
     private Intent FloatingWindow;
     private Intent NS;
-    private String roomId;
 
     private NetWorkChangeReceiver netWorkChangeReceiver;
+    private String roomId;
 
     public MainPresenter(MainActivity mainActivity) {
         this.activity = mainActivity;
         this.mainModel = new MainModel(mainActivity);
         NIMClient.getService(MsgServiceObserve.class).observeReceiveMessage(incomingMessageObserver, true);
+        NIMClient.getService(AuthServiceObserver.class).observeOnlineStatus(outObserver , true);
         createService();
         registerReceiver();
         getVersion();
@@ -190,54 +176,54 @@ public class MainPresenter extends BasePresenter {
                 String title = js.getString("title");
                 String message = js.getString("message");
                 Log.e("ret", type);
-                //  activity.notifyShow(true, type, title, message);
-                setNewMessageNotification(type, title, message);
+                activity.notifyShow(true, type, title, message);
+//                setNewMessageNotification(type, title, message);
             } catch (Exception e) {
                 e.printStackTrace();
             }
         } else {
-            //  activity.notifyShow(false, "", "", "");
-            notificationCancel();
+            activity.notifyShow(false, "", "", "");
+//            notificationCancel();
         }
     }
 
-    // 设置通知消息
-    private void setNewMessageNotification(String type, String message, String title) {
-        NotificationManager mNotificationManager = (NotificationManager) activity.getSystemService(Context.NOTIFICATION_SERVICE);
-        NotificationCompat.Builder mNotifyBuilder =
-                new NotificationCompat.Builder(activity)
-                        .setContentTitle(title)
-                        .setContentText(message)
-                        .setSmallIcon(R.mipmap.logo)
-                        .setFullScreenIntent(null, false);
-        mNotificationManager.notify(1, mNotifyBuilder.build());
-
+//    // 设置通知消息
+//    private void setNewMessageNotification(String type, String message, String title) {
 //        NotificationManager mNotificationManager = (NotificationManager) activity.getSystemService(Context.NOTIFICATION_SERVICE);
-////        Intent pushIntent = new Intent(BroadcastConstants.PUSH_NOTIFICATION);
-//////        Intent pushIntent = new Intent(mContext, NotifyNewActivity.class);
-//////        PendingIntent in = PendingIntent.getActivity(mContext, 0, pushIntent, 0);
-////        PendingIntent in = PendingIntent.getBroadcast(mContext, 2, pushIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-//        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(activity);
-//        mBuilder.setContentTitle(title)  // 设置通知栏标题
-//                .setContentText(message) // 设置通知栏显示内容
-//                // .setContentIntent(in) // 设置通知栏点击意图
-//                .setWhen(System.currentTimeMillis())       // 通知产生时间
-//                .setPriority(Notification.PRIORITY_MAX)    // 设置该通知优先级
-//                .setAutoCancel(true)                       // 设置点击通知消息时通知栏的通知自动消失
-//                .setDefaults(Notification.DEFAULT_VIBRATE | Notification.DEFAULT_SOUND)// 通知声音、闪灯和振动方式为使用当前的用户默认设置
-//                //	Notification.DEFAULT_VIBRATE  // 添加默认震动提醒 需要 VIBRATE permission
-//                //	Notification.DEFAULT_SOUND    // 添加默认声音提醒
-//                //	Notification.DEFAULT_LIGHTS   // 添加默认三色灯提醒
-//                //	Notification.DEFAULT_ALL      // 添加默认以上3种全部提醒
-//                .setFullScreenIntent(null, false)
-//                .setSmallIcon(R.mipmap.logo);     // 设置通知图标
-//        mNotificationManager.notify(1, mBuilder.build());
-    }
-
-    private void notificationCancel() {
-        NotificationManager mNotificationManager = (NotificationManager) activity.getSystemService(Context.NOTIFICATION_SERVICE);
-        mNotificationManager.cancelAll();
-    }
+//        NotificationCompat.Builder mNotifyBuilder =
+//                new NotificationCompat.Builder(activity)
+//                        .setContentTitle(title)
+//                        .setContentText(message)
+//                        .setSmallIcon(R.mipmap.logo)
+//                        .setFullScreenIntent(null, false);
+//        mNotificationManager.notify(1, mNotifyBuilder.build());
+//
+////        NotificationManager mNotificationManager = (NotificationManager) activity.getSystemService(Context.NOTIFICATION_SERVICE);
+//////        Intent pushIntent = new Intent(BroadcastConstants.PUSH_NOTIFICATION);
+////////        Intent pushIntent = new Intent(mContext, NotifyNewActivity.class);
+////////        PendingIntent in = PendingIntent.getActivity(mContext, 0, pushIntent, 0);
+//////        PendingIntent in = PendingIntent.getBroadcast(mContext, 2, pushIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+////        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(activity);
+////        mBuilder.setContentTitle(title)  // 设置通知栏标题
+////                .setContentText(message) // 设置通知栏显示内容
+////                // .setContentIntent(in) // 设置通知栏点击意图
+////                .setWhen(System.currentTimeMillis())       // 通知产生时间
+////                .setPriority(Notification.PRIORITY_MAX)    // 设置该通知优先级
+////                .setAutoCancel(true)                       // 设置点击通知消息时通知栏的通知自动消失
+////                .setDefaults(Notification.DEFAULT_VIBRATE | Notification.DEFAULT_SOUND)// 通知声音、闪灯和振动方式为使用当前的用户默认设置
+////                //	Notification.DEFAULT_VIBRATE  // 添加默认震动提醒 需要 VIBRATE permission
+////                //	Notification.DEFAULT_SOUND    // 添加默认声音提醒
+////                //	Notification.DEFAULT_LIGHTS   // 添加默认三色灯提醒
+////                //	Notification.DEFAULT_ALL      // 添加默认以上3种全部提醒
+////                .setFullScreenIntent(null, false)
+////                .setSmallIcon(R.mipmap.logo);     // 设置通知图标
+////        mNotificationManager.notify(1, mBuilder.build());
+//    }
+//
+//    private void notificationCancel() {
+//        NotificationManager mNotificationManager = (NotificationManager) activity.getSystemService(Context.NOTIFICATION_SERVICE);
+//        mNotificationManager.cancelAll();
+//    }
 
     /**
      * 通知消息的点击事件处理
@@ -275,45 +261,59 @@ public class MainPresenter extends BasePresenter {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMoonEvent(MessageEvent messageEvent) {
-        Log.i("mingku", "messageEvent=" + messageEvent.getMessage());
-        if ("one".equals(messageEvent.getMessage())) {
-            activity.setViewType(1);
-        } else if ("two".equals(messageEvent.getMessage())) {
-            activity.setViewType(2);
-        } else if ("three".equals(messageEvent.getMessage())) {
-            activity.setViewType(3);
-        } else if ("four".equals(messageEvent.getMessage())) {
-            activity.setViewType(4);
-        } else if ("acceptMain".equals(messageEvent.getMessage())) {
-            WtDeviceControl.pause();
-            activity.enterRoom(roomId);
-        } else if (messageEvent.getMessage().equals("exitPerson&")) {// 退出个人对讲
-            activity.exitRoomPerson(null);
-        } else if (messageEvent.getMessage().contains("exitPerson&")) {// 退出个人对讲
-            String room_id = messageEvent.getMessage().split("exitPerson&")[1];
-            activity.exitRoomPerson(room_id);
-        } else if (messageEvent.getMessage().contains("create&Rommid")) {
-            roomId = messageEvent.getMessage().split("create&Rommid")[1];
-        } else if ("over".equals(messageEvent.getMessage())) {
-
-        } else if (messageEvent.getMessage().equals("enterGroup&")) {
-            WtDeviceControl.pause();
-            activity.enterRoom(null);
-        } else if (messageEvent.getMessage().contains("enterGroup&")) {
-            WtDeviceControl.pause();
-            String room_id = messageEvent.getMessage().split("enterGroup&")[1];
-            activity.enterRoom(room_id);
-        } else if (messageEvent.getMessage().equals("exitGroup&")) {
-            WtDeviceControl.start();
-            activity.exitRoomGroup(null);// 退出房间
-        } else if (messageEvent.getMessage().contains("exitGroup&")) {
-            WtDeviceControl.start();
-            String room_id = messageEvent.getMessage().split("exitGroup&")[1];
-            activity.exitRoomGroup(room_id);// 退出房间
-        } else if (messageEvent.getMessage().equals("onDestroy")) {
-            activity.destroyWebView();
+        String event = messageEvent.getMessage();
+        if (!TextUtils.isEmpty(event)) {
+            if ("one".equals(event)) {
+                activity.setViewType(1);
+            } else if ("two".equals(event)) {
+                activity.setViewType(2);
+            } else if ("three".equals(event)) {
+                activity.setViewType(3);
+            } else if ("four".equals(event)) {
+                activity.setViewType(4);
+            } else if (messageEvent.getType() == 10) {
+                roomId = messageEvent.getRoomid();
+                Log.e("roomId_0000000",roomId);
+            }else if (event.equals("enterPersonRoom")) {
+                WtDeviceControl.setMute();// 设置静音
+                Log.e("roomId_2222222",roomId);
+                activity.enterRoom(roomId);// 进入对讲房间
+            } else if (event.equals("exitPerson")) {
+                Log.e("roomId_3333333",roomId);
+                activity.exitRoomPerson(roomId);// 退出对讲房间
+            } else if (event.contains("enterGroup&")) {
+                WtDeviceControl.setMute();// 设置静音
+                String room_id = event.split("enterGroup&")[1];
+                activity.enterRoom(room_id);// 进入对讲房间
+            } else if (event.equals("exitGroup&")) {
+                WtDeviceControl.setMuteResume();// 设置静音恢复
+                String room_id = event.split("exitGroup&")[1];
+                activity.exitRoomGroup(room_id);// 退出对讲房间
+            } else if (event.equals("onDestroy")) {
+                activity.destroyWebView();
+            }
+        }else {
+            if (messageEvent != null && messageEvent.getType() == 10) {
+                roomId = messageEvent.getRoomid();
+                Log.e("roomId_5555555",roomId);
+            }
         }
     }
+
+    /**
+     * 消息接收观察者
+     * 被踢出、账号被禁用、密码错误等情况，自动登录失败，需要返回到登录界面进行重新登录操作
+     */
+    Observer<StatusCode> outObserver =    new Observer<StatusCode> () {
+        public void onEvent(StatusCode status) {
+            Log.i("tag", "User status changed to: " + status);
+            if (status.wontAutoLogin()) {
+                mainModel.unRegisterLogin();
+                // 发送注销登录广播通知所有界面
+                activity.sendBroadcast(new Intent(BroadcastConstants.CANCEL));
+            }
+        }
+    };
 
     /**
      * 消息接收观察者
@@ -330,12 +330,12 @@ public class MainPresenter extends BasePresenter {
                 String type = map.get("type") + "";
                 String userId = map.get("userId") + "";
                 String roomid = map.get("roomid") + "";
-
                 if (type != null && !type.trim().equals("")) {
-                    Log.e("单对单对讲收到的数据",type);
+                    Log.e("单对单对讲收到的数据", type);
                     switch (type) {
                         case "LAUNCH":// 收到别人邀请我对讲（单对单）
-                            roomId = roomid;
+                            if (!TextUtils.isEmpty(roomid))roomId = roomid;
+                            Log.e("roomId_1111111",roomId);
                             EventBus.getDefault().post(new MessageEvent("two"));
                             ReceiveAlertActivity.start(activity, im.getFromAccount(), userId);
                             WtDeviceControl.pause();
@@ -347,7 +347,6 @@ public class MainPresenter extends BasePresenter {
                         case "ACCEPT": // 我的对讲邀请被接受（单对单）
                             EventBus.getDefault().post(new MessageEvent("accept"));
                             WtDeviceControl.pause();
-                            activity.enterRoom(roomId);
                             break;
                         case "REFUSE":// 我的对讲邀请被拒绝（单对单）
                             EventBus.getDefault().post(new MessageEvent("refuse"));
@@ -355,7 +354,7 @@ public class MainPresenter extends BasePresenter {
                             break;
                         case "OVER":
                             WtDeviceControl.start();
-                            activity.exitRoomPerson(roomid);// 退出房间
+                            activity.sendBroadcast(new Intent(BroadcastConstants.VIEW_PERSON_CLOSE));// 关闭好友聊天界面（退出房间）
                             break;
                     }
                 }

@@ -8,20 +8,13 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Toast;
 
 import com.woting.commonplat.utils.SequenceUUID;
 import com.wotingfm.R;
 import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.common.utils.StatusBarUtil;
-import com.wotingfm.ui.base.baseactivity.AppManager;
-import com.wotingfm.ui.intercom.main.view.InterPhoneFragment;
-import com.wotingfm.ui.test.PlayerActivity;
-
-import org.greenrobot.eventbus.EventBus;
 
 /**
  * 个人模块主页
@@ -45,7 +38,16 @@ public class LogoActivity extends FragmentActivity {
         setContentView(R.layout.fragment_main);
         context = this;
         applyTextColor(false);
-        open(new LogoFragment());
+        openOne(new LogoFragment());
+    }
+
+    // 打开新的 Fragment
+    private void openOne(Fragment frg) {
+        context.getSupportFragmentManager().beginTransaction()
+                .add(R.id.fragment_content, frg)
+                .addToBackStack(SequenceUUID.getUUID())
+                .commitAllowingStateLoss();
+        hintKbTwo();
     }
 
     // 打开新的 Fragment

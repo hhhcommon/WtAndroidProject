@@ -11,6 +11,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
+
 import com.woting.commonplat.utils.SequenceUUID;
 import com.wotingfm.R;
 import com.wotingfm.common.bean.MessageEvent;
@@ -37,8 +38,17 @@ public class InterPhoneActivity extends BaseFragmentActivity {
         setContentView(R.layout.fragment_main);
         AppManager.getAppManager().addActivity(this);
         context = this;
-        open(new InterPhoneFragment());
+        openOne(new InterPhoneFragment());
         setReceiver();
+    }
+
+    // 打开新的 Fragment
+    private void openOne(Fragment frg) {
+        context.getSupportFragmentManager().beginTransaction()
+                .add(R.id.fragment_content, frg)
+                .addToBackStack(SequenceUUID.getUUID())
+                .commitAllowingStateLoss();
+        hintKbTwo();
     }
 
     /**
@@ -62,10 +72,8 @@ public class InterPhoneActivity extends BaseFragmentActivity {
      * 关闭已经打开的 Fragment
      */
     public static void close() {
-        if (context != null && context.getSupportFragmentManager() != null) {
-            context.getSupportFragmentManager().popBackStackImmediate();// 立即删除回退栈中的数据
-            hintKbTwo();
-        }
+        context.getSupportFragmentManager().popBackStackImmediate();// 立即删除回退栈中的数据
+        hintKbTwo();
     }
 
     /**
@@ -87,12 +95,10 @@ public class InterPhoneActivity extends BaseFragmentActivity {
 
     //此方法只是关闭软键盘
     private static void hintKbTwo() {
-        if (context != null) {
-            InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
-            if (imm.isActive() && context.getCurrentFocus() != null) {
-                if (context.getCurrentFocus().getWindowToken() != null) {
-                    imm.hideSoftInputFromWindow(context.getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
-                }
+        InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+        if (imm.isActive() && context.getCurrentFocus() != null) {
+            if (context.getCurrentFocus().getWindowToken() != null) {
+                imm.hideSoftInputFromWindow(context.getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
             }
         }
     }
@@ -132,7 +138,6 @@ public class InterPhoneActivity extends BaseFragmentActivity {
             String action = intent.getAction();
             if (action.equals(BroadcastConstants.VIEW_INTER_PHONE_CLOSE_ALL)) {
                 closeAll();
-                sendBroadcast(new Intent(BroadcastConstants.VIEW_INTER_PHONE));
             }
         }
     }
@@ -170,6 +175,15 @@ public class InterPhoneActivity extends BaseFragmentActivity {
             close();
         }
     }
+
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        if (hasFocus){
+//            waveLineView.justDrawBackground();
+        }
+    }
+
 
     @Override
     protected void onDestroy() {
