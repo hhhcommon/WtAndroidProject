@@ -16,11 +16,6 @@ public class Contact implements Serializable {
         private String id;
         private String name;
         private String gender;
-
-        public String getAcc_id() {
-            return acc_id;
-        }
-
         private String acc_id;
         private String signature;
         private boolean is_admin;
@@ -37,6 +32,10 @@ public class Contact implements Serializable {
 
         public void setAcc_id(String acc_id) {
             this.acc_id = acc_id;
+        }
+
+        public String getAcc_id() {
+            return acc_id;
         }
 
         public String getUser_number() {
