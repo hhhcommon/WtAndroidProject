@@ -124,8 +124,8 @@ public class SetManagerPresenter {
     // 处理返回的数据
     private void dealSuccess(Object o) {
         try {
-            String s = new Gson().toJson(o);
-            JSONObject js = new JSONObject(s);
+            String ss = new Gson().toJson(o);
+            JSONObject js = new JSONObject(ss);
             int ret = js.getInt("ret");
             Log.e("设置管理员==ret", String.valueOf(ret));
             if (ret == 0) {

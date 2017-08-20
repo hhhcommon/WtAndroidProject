@@ -46,6 +46,7 @@ public class TransferManagerModel {
                 _list.get(i).setIs_admin(false);
                 if (_list.get(i).is_owner()) {
                     _list.remove(i);
+                    i--;
                 }
             }
             return _list;

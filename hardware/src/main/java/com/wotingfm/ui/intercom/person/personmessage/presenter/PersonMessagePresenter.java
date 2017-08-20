@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.google.gson.Gson;
@@ -238,6 +239,7 @@ public class PersonMessagePresenter {
         String sign = "这家伙很懒~";
         try {
             sign = user.getSignature().trim();
+            if(TextUtils.isEmpty(sign)) sign = "这家伙很懒~";
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -247,9 +249,10 @@ public class PersonMessagePresenter {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        String address = "暂未填写";
+        String address = "暂未填写~";
         try {
             address = user.getArea().trim();
+            if(TextUtils.isEmpty(address)) address = "暂未填写~";
         } catch (Exception e) {
             e.printStackTrace();
         }

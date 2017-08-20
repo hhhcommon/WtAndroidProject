@@ -7,6 +7,7 @@ import android.util.Log;
 import com.google.gson.GsonBuilder;
 import com.woting.commonplat.config.GlobalNetWorkConfig;
 import com.wotingfm.common.constant.BroadcastConstants;
+import com.wotingfm.common.utils.BeanCloneUtil;
 import com.wotingfm.common.utils.ToastUtils;
 import com.wotingfm.ui.intercom.group.exitgroup.model.GroupExitModel;
 import com.wotingfm.ui.intercom.group.exitgroup.view.GroupExitFragment;
@@ -108,8 +109,9 @@ public class GroupExitPresenter {
     public void transfer() {
         if (group != null && list != null && list.size() > 0 && group.getOwner_id() != null && group.getId() != null) {
             TransferGroupFragment fragment = new TransferGroupFragment();
+            List<Contact.user> _list= BeanCloneUtil.cloneTo(list);
             Bundle bundle = new Bundle();
-            bundle.putSerializable("list", (Serializable) list);
+            bundle.putSerializable("list", (Serializable) _list);
             bundle.putString("gid", group.getId());
             fragment.setArguments(bundle);
             InterPhoneActivity.open(fragment);

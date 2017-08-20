@@ -1,11 +1,13 @@
 package com.wotingfm.ui.mine.message.notify.presenter;
 
+import android.content.Intent;
 import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.woting.commonplat.config.GlobalNetWorkConfig;
+import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.ui.mine.message.notify.model.Msg;
 import com.wotingfm.ui.mine.message.notify.model.SrcMsg;
 import com.wotingfm.ui.mine.message.notify.model.MsgNotifyModel;
@@ -255,6 +257,7 @@ public class MsgNotifyPresenter {
             if (ret == 0) {
                 msg.get(position).setStatus("1");
                 activity.updateUI(msg);
+                activity.getActivity().sendBroadcast(new Intent(BroadcastConstants.GROUP_GET));
             }
         } catch (Exception e) {
             e.printStackTrace();

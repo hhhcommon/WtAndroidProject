@@ -310,6 +310,10 @@ public class GroupManageFragment extends Fragment implements View.OnClickListene
                     }
                 }
             }
+        }else{
+            for (int i = 0; i < list.size(); i++) {
+                list.get(i).setIs_admin(false);
+            }
         }
     }
 

@@ -135,7 +135,7 @@ public class MainActivity extends TabActivity implements View.OnClickListener {
             case R.id.tv_2:
                 // 暂停，继续
                 WtDeviceControl.pushCenter();
-                NotificationService.test();
+               //  NotificationService.test();
                 break;
             case R.id.tv_3:
                 // 下一首
@@ -257,43 +257,46 @@ public class MainActivity extends TabActivity implements View.OnClickListener {
             this.type = type;
             tv_title.setText(title);
             tv_msg.setText(msg);
-            Animation mAnimation = AnimationUtils.loadAnimation(this, R.anim.wt_slide_in_from_top);
-            lin_notify.startAnimation(mAnimation);
-            mAnimation.setAnimationListener(new Animation.AnimationListener() {
-                @Override
-                public void onAnimationStart(Animation animation) {
-                }
 
-                @Override
-                public void onAnimationEnd(Animation animation) {
-                    lin_notify.clearAnimation();
-                    lin_notify.layout(lin_notify.getLeft(), 0, lin_notify.getRight(), 220);
-                }
-
-                @Override
-                public void onAnimationRepeat(Animation animation) {
-
-                }
-            });
+            lin_notify.setVisibility(View.VISIBLE);
+//            Animation mAnimation = AnimationUtils.loadAnimation(this, R.anim.wt_slide_in_from_top);
+//            lin_notify.startAnimation(mAnimation);
+//            mAnimation.setAnimationListener(new Animation.AnimationListener() {
+//                @Override
+//                public void onAnimationStart(Animation animation) {
+//                }
+//
+//                @Override
+//                public void onAnimationEnd(Animation animation) {
+//                    lin_notify.clearAnimation();
+//                    lin_notify.layout(lin_notify.getLeft(), 0, lin_notify.getRight(), 220);
+//                }
+//
+//                @Override
+//                public void onAnimationRepeat(Animation animation) {
+//
+//                }
+//            });
 
         } else {
-            Animation mAnimation = AnimationUtils.loadAnimation(this, R.anim.wt_slide_out_from_top);
-            lin_notify.startAnimation(mAnimation);
-            mAnimation.setAnimationListener(new Animation.AnimationListener() {
-                @Override
-                public void onAnimationStart(Animation animation) {
-                }
-
-                @Override
-                public void onAnimationEnd(Animation animation) {
-                    lin_notify.clearAnimation();
-                    lin_notify.layout(lin_notify.getLeft(), -220, lin_notify.getRight(), 0);
-                }
-
-                @Override
-                public void onAnimationRepeat(Animation animation) {
-                }
-            });
+            lin_notify.setVisibility(View.GONE);
+//            Animation mAnimation = AnimationUtils.loadAnimation(this, R.anim.wt_slide_out_from_top);
+//            lin_notify.startAnimation(mAnimation);
+//            mAnimation.setAnimationListener(new Animation.AnimationListener() {
+//                @Override
+//                public void onAnimationStart(Animation animation) {
+//                }
+//
+//                @Override
+//                public void onAnimationEnd(Animation animation) {
+//                    lin_notify.clearAnimation();
+//                    lin_notify.layout(lin_notify.getLeft(), -220, lin_notify.getRight(), 0);
+//                }
+//
+//                @Override
+//                public void onAnimationRepeat(Animation animation) {
+//                }
+//            });
         }
     }
 
