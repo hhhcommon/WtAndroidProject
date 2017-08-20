@@ -11,6 +11,7 @@ import com.wotingfm.R;
 import com.wotingfm.common.bean.MessageEvent;
 import com.wotingfm.common.config.GlobalStateConfig;
 import com.wotingfm.common.constant.BroadcastConstants;
+import com.wotingfm.common.service.AudioService;
 import com.wotingfm.common.utils.VibratorUtils;
 import com.wotingfm.ui.intercom.alert.receive.model.ReceiveModel;
 import com.wotingfm.ui.intercom.alert.receive.view.ReceiveAlertActivity;
@@ -28,12 +29,10 @@ public class ReceivePresenter {
 
     private ReceiveAlertActivity activity;
     private ReceiveModel model;
-    private MediaPlayer musicPlayer;
     private long[] Vibrate = {400, 800, 400, 800};
     private String id = null;
     private int callType = 0;
     private String accId;
-//    private SoundPool soundPool;
 
     public ReceivePresenter(ReceiveAlertActivity activity) {
         this.activity = activity;
@@ -117,31 +116,16 @@ public class ReceivePresenter {
      * 铃声开启
      */
     public void musicOpen() {
-        ////////////
-        musicPlayer = MediaPlayer.create(activity, R.raw.talkno);
-        musicPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-        musicPlayer.setLooping(true);
-        try {
-            musicPlayer.prepare();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        musicPlayer.start();
+        Intent intent = new Intent(activity,AudioService.class);
+        activity.startService(intent);
     }
 
     /**
      * 铃声关闭
      */
     private void musicClose() {
-        if (musicPlayer != null) {
-            musicPlayer.stop();
-            musicPlayer = null;
-        }
-    }
-
-    //获取系统默认铃声的Uri
-    private Uri getSystemDefaultRingtoneUri() {
-        return RingtoneManager.getActualDefaultRingtoneUri(activity, RingtoneManager.TYPE_RINGTONE);
+        Intent intent = new Intent(activity,AudioService.class);
+        activity.stopService(intent);
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)

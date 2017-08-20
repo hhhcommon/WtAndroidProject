@@ -222,6 +222,7 @@
         <service android:name=".common.service.FloatingWindowService" />
         <service android:name=".common.service.SimulationService" />
         <service android:name=".common.service.NotificationService" />
+        <service android:name=".common.service.AudioService"></service>
 
 
         <!-- Rich push 核心功能 since 2.0.6-->
@@ -319,7 +320,6 @@
         <meta-data
             android:name="JPUSH_APPKEY"
             android:value="eb7b95e96d6ed02ea8994074" /> <!--  </>值来自开发者平台取得的AppKey-->
-
     </application>
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
 

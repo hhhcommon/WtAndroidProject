@@ -301,7 +301,6 @@ public class WaveLineView extends RenderView {
 
     //初始化绘制参数
     private void initDraw(Canvas canvas) {
-        doDrawBackground(canvas);
         width = canvas.getWidth();
         height = canvas.getHeight();
         centerHeight = height >> 1;

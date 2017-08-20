@@ -10,6 +10,7 @@ import android.util.Log;
 import com.wotingfm.R;
 import com.wotingfm.common.bean.MessageEvent;
 import com.wotingfm.common.constant.BroadcastConstants;
+import com.wotingfm.common.service.AudioService;
 import com.wotingfm.ui.intercom.alert.call.model.CallModel;
 import com.wotingfm.ui.intercom.alert.call.view.CallAlertActivity;
 import com.wotingfm.ui.intercom.main.contacts.model.Contact;
@@ -26,7 +27,6 @@ public class CallPresenter {
 
     private CallAlertActivity activity;
     private CallModel model;
-    private MediaPlayer musicPlayer;
     private Contact.user user;
     private String id = null;
     private String roomId = null;
@@ -106,30 +106,16 @@ public class CallPresenter {
      * 铃声开启
      */
     public void musicOpen() {
-        musicPlayer = MediaPlayer.create(activity, R.raw.talkno);
-        musicPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-        musicPlayer.setLooping(true);
-        try {
-            musicPlayer.prepare();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        musicPlayer.start();
+        Intent intent = new Intent(activity,AudioService.class);
+        activity.startService(intent);
     }
 
     /**
      * 铃声关闭
      */
     public void musicClose() {
-        if (musicPlayer != null) {
-            musicPlayer.stop();
-            musicPlayer = null;
-        }
-    }
-
-    //获取系统默认铃声的Uri
-    private Uri getSystemDefaultRingtoneUri() {
-        return RingtoneManager.getActualDefaultRingtoneUri(activity, RingtoneManager.TYPE_RINGTONE);
+        Intent intent = new Intent(activity,AudioService.class);
+        activity.stopService(intent);
     }
 
     // 设置广播接收器

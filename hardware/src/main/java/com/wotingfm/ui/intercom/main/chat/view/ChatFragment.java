@@ -43,7 +43,7 @@ public class ChatFragment extends Fragment implements ChatAdapter.IonSlidingView
     private ChatAdapter mAdapter;
     private ImageView img_url_group, img_person_group,img_url_person,img_person_person;
     private RelativeLayout re_group, re_person,re_back;
-    private TextView tv_groupName, tv_groupNum, tv_person_group, tv_person_person,tv_group_talked,tv_person_name,tv_person_talked,tv_line;
+    private TextView tv_groupName, tv_groupNum, tv_person_group, tv_person_person,tv_group_talked,tv_person_name,tv_person_talked,tv_line,tv_view_bg;
     private LinearLayout lin_back,lin_group_talking,lin_person_talking;
     private TipView tip_view;
     private Dialog confirmDialog;
@@ -81,6 +81,8 @@ public class ChatFragment extends Fragment implements ChatAdapter.IonSlidingView
         re_group = (RelativeLayout) rootView.findViewById(R.id.re_group);// 组的全局界面
         re_group.setVisibility(View.GONE);
         waveLineView = (WaveLineView) rootView.findViewById(R.id.waveLineView);
+        tv_view_bg= (TextView) rootView.findViewById(R.id.tv_view_bg);//
+
         img_url_group = (ImageView) rootView.findViewById(R.id.img_url_group);// 组的头像
         img_url_group.setOnClickListener(this);// 监听，跳转到群详情
         tv_groupName = (TextView) rootView.findViewById(R.id.tv_groupName);// 组名称
@@ -215,6 +217,7 @@ public class ChatFragment extends Fragment implements ChatAdapter.IonSlidingView
             GlideUtils.loadImageViewRound(R.mipmap.icon_avatar_d, img_person_person, 60, 60);
         }
         WaveView_person.start();
+        tv_view_bg.setVisibility(View.GONE);
         waveLineView.startAnim();
     }
 
@@ -279,6 +282,7 @@ public class ChatFragment extends Fragment implements ChatAdapter.IonSlidingView
             GlideUtils.loadImageViewRound(R.mipmap.icon_avatar_d, img_person_group, 60, 60);
         }
         WaveView_group.start();
+        tv_view_bg.setVisibility(View.GONE);
         waveLineView.startAnim();
     }
 
