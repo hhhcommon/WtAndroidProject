@@ -16,15 +16,12 @@ public class SystemUtil {
      */
     public static final String getProcessName(Context context) {
         String processName = null;
-
         // ActivityManager
         ActivityManager am = ((ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE));
-
         while (true) {
             for (ActivityManager.RunningAppProcessInfo info : am.getRunningAppProcesses()) {
                 if (info.pid == android.os.Process.myPid()) {
                     processName = info.processName;
-
                     break;
                 }
             }

@@ -10,7 +10,6 @@ import com.woting.commonplat.utils.JsonEncloseUtils;
 import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.common.constant.IntegerConstant;
-import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.common.utils.ToastUtils;
 
 import org.json.JSONObject;
@@ -58,7 +57,7 @@ public class NotificationService extends Service {
     }
 
     public static void  test(){
-        ShowMsgQueue.add(assemblyData("1", "好友消息", "fafafaf"));
+        ShowMsgQueue.add(assemblyData("1", "样式测试消息", "这是一条测试消息"));
     }
 
     /**
@@ -206,7 +205,7 @@ public class NotificationService extends Service {
                         Intent it = new Intent(BroadcastConstants.VIEW_NOTIFY_SHOW);
                         it.putExtra("msg", msg);
                         sendBroadcast(it);
-                        sleep(10000);
+                        sleep(4000);
                         sendBroadcast(new Intent(BroadcastConstants.VIEW_NOTIFY_CLOSE));
                     }
                 } catch (Exception e) {

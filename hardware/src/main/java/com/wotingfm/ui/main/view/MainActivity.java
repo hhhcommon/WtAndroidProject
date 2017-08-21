@@ -3,6 +3,7 @@ package com.wotingfm.ui.main.view;
 import android.app.TabActivity;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.http.SslError;
 import android.os.Build;
 import android.os.Bundle;
@@ -10,11 +11,10 @@ import android.os.Handler;
 import android.os.Looper;
 import android.support.annotation.RequiresApi;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.webkit.JavascriptInterface;
 import android.webkit.PermissionRequest;
 import android.webkit.SslErrorHandler;
@@ -22,14 +22,15 @@ import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.TabHost;
 import android.widget.TextView;
 
+import com.woting.commonplat.manager.PhoneMsgManager;
 import com.wotingfm.R;
 import com.wotingfm.common.bean.MessageEvent;
 import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.common.service.InterPhoneControl;
-import com.wotingfm.common.service.NotificationService;
 import com.wotingfm.common.service.WtDeviceControl;
 import com.wotingfm.ui.intercom.main.chat.presenter.ChatPresenter;
 import com.wotingfm.ui.intercom.main.view.InterPhoneActivity;
@@ -45,10 +46,9 @@ public class MainActivity extends TabActivity implements View.OnClickListener {
     public static TabHost tabHost;
     private MainPresenter mainPresenter;
     public WebView mWebView;
-    private static final String TAG = MainActivity.class.getSimpleName();
-    private TextView tv_4, tv_5, tv_title, tv_msg;
-    private LinearLayout lin_notify;
+    private TextView tv_4, tv_5, tv_title, tv_msg, tv_ad;
     private String type;
+    private PopupWindow Ndialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,16 +56,15 @@ public class MainActivity extends TabActivity implements View.OnClickListener {
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);        // 透明状态栏
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);    // 透明导航栏
         setContentView(R.layout.activity_main);
-        InitTextView();
+        InitTextView();// 初始化视图
+        dialog();// 通知消息弹出框
         mainPresenter = new MainPresenter(this);
         mainPresenter.applyTextColor(false);
     }
 
     // 初始化视图,主页跳转的3个界面
     private void InitTextView() {
-        lin_notify = (LinearLayout) findViewById(R.id.lin_notify);
-        tv_title = (TextView) findViewById(R.id.tv_title);
-        tv_msg = (TextView) findViewById(R.id.tv_msg);
+        tv_ad = (TextView) findViewById(R.id.tv_ad);// 定位
         mWebView = (WebView) findViewById(R.id.mWebView);
         webViewSet(mWebView);// 设置webView的参数
         findViewById(R.id.tv_1).setOnClickListener(this);
@@ -135,7 +134,7 @@ public class MainActivity extends TabActivity implements View.OnClickListener {
             case R.id.tv_2:
                 // 暂停，继续
                 WtDeviceControl.pushCenter();
-               //  NotificationService.test();
+//                NotificationService.test();
                 break;
             case R.id.tv_3:
                 // 下一首
@@ -257,46 +256,13 @@ public class MainActivity extends TabActivity implements View.OnClickListener {
             this.type = type;
             tv_title.setText(title);
             tv_msg.setText(msg);
-
-            lin_notify.setVisibility(View.VISIBLE);
-//            Animation mAnimation = AnimationUtils.loadAnimation(this, R.anim.wt_slide_in_from_top);
-//            lin_notify.startAnimation(mAnimation);
-//            mAnimation.setAnimationListener(new Animation.AnimationListener() {
-//                @Override
-//                public void onAnimationStart(Animation animation) {
-//                }
-//
-//                @Override
-//                public void onAnimationEnd(Animation animation) {
-//                    lin_notify.clearAnimation();
-//                    lin_notify.layout(lin_notify.getLeft(), 0, lin_notify.getRight(), 220);
-//                }
-//
-//                @Override
-//                public void onAnimationRepeat(Animation animation) {
-//
-//                }
-//            });
-
+            if (Ndialog != null) {
+                Ndialog.showAsDropDown(tv_ad, 0, 40);
+            }
         } else {
-            lin_notify.setVisibility(View.GONE);
-//            Animation mAnimation = AnimationUtils.loadAnimation(this, R.anim.wt_slide_out_from_top);
-//            lin_notify.startAnimation(mAnimation);
-//            mAnimation.setAnimationListener(new Animation.AnimationListener() {
-//                @Override
-//                public void onAnimationStart(Animation animation) {
-//                }
-//
-//                @Override
-//                public void onAnimationEnd(Animation animation) {
-//                    lin_notify.clearAnimation();
-//                    lin_notify.layout(lin_notify.getLeft(), -220, lin_notify.getRight(), 0);
-//                }
-//
-//                @Override
-//                public void onAnimationRepeat(Animation animation) {
-//                }
-//            });
+            if (Ndialog != null && Ndialog.isShowing()) {
+                Ndialog.dismiss();
+            }
         }
     }
 
@@ -326,6 +292,25 @@ public class MainActivity extends TabActivity implements View.OnClickListener {
             case 5:
                 break;
         }
+    }
+
+    // "更多" 对话框
+    private void dialog() {
+        View dialog = LayoutInflater.from(this).inflate(R.layout.dialog_notify, null);
+        LinearLayout lin_notify = (LinearLayout) dialog.findViewById(R.id.lin_notify);
+        lin_notify.setOnClickListener(this);
+        tv_title = (TextView) dialog.findViewById(R.id.tv_title);
+        tv_msg = (TextView) dialog.findViewById(R.id.tv_msg);
+        Ndialog = new PopupWindow(dialog);
+        // 使其聚集
+        Ndialog.setFocusable(true);
+        Ndialog.setBackgroundDrawable(new ColorDrawable(0x00000000));
+        // 设置允许在外点击消失
+        Ndialog.setOutsideTouchable(true);
+        // 控制popupwindow的宽度和高度自适应
+        dialog.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
+        Ndialog.setWidth(PhoneMsgManager.ScreenWidth);
+        Ndialog.setHeight(dialog.getMeasuredHeight());
     }
 
     /**
@@ -396,7 +381,7 @@ public class MainActivity extends TabActivity implements View.OnClickListener {
             handler.post(new Runnable() {
                 @Override
                 public void run() {
-                    Log.e("群成员变化", "人数： "+roomNumber);
+                    Log.e("群成员变化", "人数： " + roomNumber);
                     Intent intent = new Intent(BroadcastConstants.PUSH_CHAT_GROUP_NUM);
                     try {
                         intent.putExtra("num", roomNumber);

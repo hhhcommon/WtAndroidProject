@@ -1,13 +1,8 @@
 package com.wotingfm.ui.intercom.alert.receive.presenter;
 
 import android.content.Intent;
-import android.media.AudioManager;
-import android.media.MediaPlayer;
-import android.media.RingtoneManager;
-import android.net.Uri;
 import android.util.Log;
 
-import com.wotingfm.R;
 import com.wotingfm.common.bean.MessageEvent;
 import com.wotingfm.common.config.GlobalStateConfig;
 import com.wotingfm.common.constant.BroadcastConstants;
@@ -38,7 +33,7 @@ public class ReceivePresenter {
         this.activity = activity;
         this.model = new ReceiveModel(activity);
         musicOpen();
-        VibratorUtils.Vibrate(activity, Vibrate, true);
+        VibratorUtils.Vibrate(Vibrate, true);
         getSource();
         setReceiver();
     }

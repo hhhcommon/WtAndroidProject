@@ -23,11 +23,22 @@ public class VibratorUtils {
 	public static void Vibrate(long milliseconds) {
 		Vibrator vib = (Vibrator) BSApplication.getInstance().getSystemService(Service.VIBRATOR_SERVICE);
 		vib.vibrate(milliseconds);   
-	}   
-	public static void Vibrate(final Activity activity, long[] pattern, boolean isRepeat) {
-		Vibrator vib = (Vibrator) activity.getSystemService(Service.VIBRATOR_SERVICE);
+	}
+
+    /**
+     * 自定义震动模式
+     * @param pattern
+     * @param isRepeat
+     */
+	public static void Vibrate( long[] pattern, boolean isRepeat) {
+		Vibrator vib = (Vibrator) BSApplication.getInstance().getSystemService(Service.VIBRATOR_SERVICE);
 		vib.vibrate(pattern, isRepeat ? 0: -1);
 	}
+
+    /**
+     * 取消震动
+     * @param activity
+     */
 	public static void cancel(final Activity activity) {
 		try {
 			Vibrator vib = (Vibrator) activity.getSystemService(Service.VIBRATOR_SERVICE);
