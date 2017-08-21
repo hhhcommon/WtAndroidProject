@@ -3,25 +3,13 @@ package com.wotingfm.ui.play.radio.fragment;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 
-import com.woting.commonplat.amine.LoadMoreFooterView;
-import com.woting.commonplat.widget.LoadFrameLayout;
 import com.wotingfm.R;
-import com.wotingfm.common.adapter.radioAdapter.RadioAdapter;
 import com.wotingfm.common.adapter.radioAdapter.RadioYesterdayAdapter;
-import com.wotingfm.common.bean.Radio;
 import com.wotingfm.common.bean.RadioInfo;
 import com.wotingfm.ui.base.basefragment.BaseFragment;
-import com.wotingfm.ui.test.PlayerActivity;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.Unbinder;
-
-import static com.wotingfm.R.id.loadLayout;
 
 
 /**

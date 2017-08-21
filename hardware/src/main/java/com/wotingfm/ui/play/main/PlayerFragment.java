@@ -1,6 +1,5 @@
-package com.wotingfm.ui.test;
+package com.wotingfm.ui.play.main;
 
-import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
@@ -23,7 +22,6 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.baidu.cloud.media.player.IMediaPlayer;
 import com.pili.pldroid.player.AVOptions;
@@ -42,38 +40,19 @@ import com.wotingfm.common.bean.SinglesBase;
 import com.wotingfm.common.bean.SinglesDownload;
 import com.wotingfm.common.config.GlobalStateConfig;
 import com.wotingfm.common.constant.BroadcastConstants;
-import com.wotingfm.common.database.DBUtils;
 import com.wotingfm.common.database.HistoryHelper;
 import com.wotingfm.common.net.RetrofitUtils;
-import com.wotingfm.common.utils.CommonUtils;
-import com.wotingfm.common.utils.L;
 import com.wotingfm.common.utils.ListDataSaveUtils;
 import com.wotingfm.common.utils.TimeUtil;
 import com.wotingfm.common.view.MenuDialog;
 import com.wotingfm.common.view.PlayerDialog;
 import com.wotingfm.ui.base.basefragment.BaseFragment;
-import com.wotingfm.ui.play.activity.AnchorPersonalCenterFragment;
-import com.wotingfm.ui.play.activity.albums.AlbumsInfoFragmentMain;
-import com.wotingfm.ui.play.activity.albums.AlbumsListMeFragment;
-import com.wotingfm.ui.play.look.activity.classification.fragment.MinorClassificationFragment;
-import com.wotingfm.ui.play.look.activity.classification.fragment.SubcategoryFragment;
-import com.wotingfm.ui.play.look.activity.serch.SerchFragment;
-import com.wotingfm.ui.play.look.activity.serch.fragment.AlbumsListFragment;
-import com.wotingfm.ui.play.look.activity.serch.fragment.AnchorListFragment;
-import com.wotingfm.ui.play.look.activity.serch.fragment.ProgramListFragment;
-import com.wotingfm.ui.play.look.activity.serch.fragment.RadioStationListFragment;
-import com.wotingfm.ui.play.look.fragment.ClassificationFragment;
-import com.wotingfm.ui.play.look.fragment.LiveFragment;
-import com.wotingfm.ui.play.look.fragment.RadioStationFragment;
-import com.wotingfm.ui.play.look.fragment.SelectedFragment;
-import com.wotingfm.ui.play.radio.RadioInfoFragment;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.IOException;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;

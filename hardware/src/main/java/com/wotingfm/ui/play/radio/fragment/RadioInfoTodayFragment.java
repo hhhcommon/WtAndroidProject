@@ -4,26 +4,18 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
-import com.woting.commonplat.widget.LoadFrameLayout;
 import com.wotingfm.R;
 import com.wotingfm.common.adapter.radioAdapter.RadioTodayAdapter;
-import com.wotingfm.common.adapter.radioAdapter.RadioYesterdayAdapter;
 import com.wotingfm.common.bean.ChannelsBean;
 import com.wotingfm.common.bean.RadioInfo;
-import com.wotingfm.common.bean.TrailerInfo;
 import com.wotingfm.common.net.RetrofitUtils;
 import com.wotingfm.common.utils.T;
 import com.wotingfm.ui.base.basefragment.BaseFragment;
-import com.wotingfm.ui.test.PlayerActivity;
-import com.wotingfm.ui.test.PlayerFragment;
 
 import butterknife.BindView;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.schedulers.Schedulers;
-
-import static com.wotingfm.R.id.loadLayout;
-import static com.wotingfm.R.id.tvTrailerNumber;
 
 
 /**

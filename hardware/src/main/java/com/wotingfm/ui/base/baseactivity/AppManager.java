@@ -4,8 +4,6 @@ import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.Context;
 
-import com.wotingfm.ui.test.PlayerActivity;
-
 import java.util.Stack;
 
 /**

@@ -1,45 +1,30 @@
 package com.wotingfm.ui.play.activity.albums.fragment;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.woting.commonplat.amine.ARecyclerView;
-import com.woting.commonplat.amine.LoadMoreFooterView;
-import com.woting.commonplat.amine.OnLoadMoreListener;
-import com.woting.commonplat.amine.OnRefreshListener;
 import com.woting.commonplat.widget.LoadFrameLayout;
 import com.wotingfm.R;
 import com.wotingfm.common.adapter.albumsAdapter.AlbumsInfoProgramAdapter;
 import com.wotingfm.common.bean.Player;
 import com.wotingfm.common.net.RetrofitUtils;
-import com.wotingfm.common.utils.DownloadUtils;
 import com.wotingfm.common.utils.T;
 import com.wotingfm.ui.base.basefragment.BaseFragment;
-import com.wotingfm.ui.play.activity.AnchorPersonalCenterFragment;
 import com.wotingfm.ui.play.activity.download.DownloadSelectFragment;
-import com.wotingfm.ui.test.PlayerFragment;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.Unbinder;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.schedulers.Schedulers;
-
-import static android.app.Activity.RESULT_OK;
 
 /**
  * Created by amine on 2017/6/14.

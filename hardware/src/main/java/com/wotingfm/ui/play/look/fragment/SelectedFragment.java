@@ -1,11 +1,8 @@
 package com.wotingfm.ui.play.look.fragment;
 
-import android.content.Intent;
-import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
@@ -13,30 +10,18 @@ import android.widget.AbsListView;
 import com.woting.commonplat.widget.LoadFrameLayout;
 import com.wotingfm.R;
 import com.wotingfm.common.adapter.findHome.SelectedAdapter;
-import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.bean.HomeBanners;
-import com.wotingfm.common.bean.MessageEvent;
-import com.wotingfm.common.bean.Player;
 import com.wotingfm.common.bean.Selected;
-import com.wotingfm.common.config.GlobalStateConfig;
-import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.common.net.RetrofitUtils;
 import com.wotingfm.common.view.BannerView;
 import com.wotingfm.ui.base.basefragment.BaseFragment;
-import com.wotingfm.ui.play.activity.AnchorPersonalCenterFragment;
 import com.wotingfm.ui.play.look.activity.SelectedMoreFragment;
-import com.wotingfm.ui.test.PlayerActivity;
-import com.wotingfm.ui.test.PlayerFragment;
 import com.zhy.adapter.recyclerview.wrapper.HeaderAndFooterWrapper;
-
-import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.Unbinder;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.schedulers.Schedulers;

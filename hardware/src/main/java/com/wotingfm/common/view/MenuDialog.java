@@ -3,12 +3,8 @@ package com.wotingfm.common.view;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.ContentValues;
-import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
-import android.support.v4.util.Pair;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,13 +14,10 @@ import android.widget.Toast;
 
 import com.woting.commonplat.utils.FileSizeUtil;
 import com.wotingfm.R;
-import com.wotingfm.common.adapter.PlayerListAdapter;
 import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.bean.BaseResult;
 import com.wotingfm.common.bean.ChannelsBean;
 import com.wotingfm.common.bean.MessageEvent;
-import com.wotingfm.common.bean.Player;
-import com.wotingfm.common.bean.Radio;
 import com.wotingfm.common.bean.SinglesBase;
 import com.wotingfm.common.bean.SinglesDownload;
 import com.wotingfm.common.config.DbConfig;
@@ -33,7 +26,6 @@ import com.wotingfm.common.net.RetrofitUtils;
 import com.wotingfm.common.utils.CommonUtils;
 import com.wotingfm.common.utils.L;
 import com.wotingfm.common.utils.SDCardUtils;
-import com.wotingfm.common.utils.T;
 import com.wotingfm.ui.intercom.main.view.InterPhoneActivity;
 import com.wotingfm.ui.mine.main.MineActivity;
 import com.wotingfm.ui.play.activity.AnchorPersonalCenterFragment;
@@ -43,30 +35,19 @@ import com.wotingfm.ui.play.activity.ReportsPlayerFragment;
 import com.wotingfm.ui.play.activity.albums.AlbumsInfoFragmentMain;
 import com.wotingfm.ui.play.activity.download.DownloadProgramFragment;
 import com.wotingfm.ui.play.radio.RadioInfoFragment;
-import com.wotingfm.ui.test.PlayerActivity;
-import com.wotingfm.ui.user.login.view.LoginFragment;
+import com.wotingfm.ui.play.main.PlayerActivity;
 import com.wotingfm.ui.user.logo.LogoActivity;
 
 import org.greenrobot.eventbus.EventBus;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.List;
 
 import cn.finalteam.okhttpfinal.FileDownloadCallback;
 import cn.finalteam.okhttpfinal.HttpRequest;
-import cn.finalteam.toolsfinal.io.FileUtils;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.schedulers.Schedulers;
-
-import static android.R.attr.breadCrumbShortTitle;
-import static android.R.attr.data;
-import static android.icu.lang.UCharacter.GraphemeClusterBreak.T;
-import static cn.jpush.android.api.JPushInterface.a.r;
-import static cn.jpush.android.api.JPushInterface.a.t;
-import static com.woting.commonplat.gather.GatherData.url;
-import static com.wotingfm.R.id.mRecyclerViewList;
 
 //首页菜单dialog
 public class MenuDialog extends Dialog implements View.OnClickListener {

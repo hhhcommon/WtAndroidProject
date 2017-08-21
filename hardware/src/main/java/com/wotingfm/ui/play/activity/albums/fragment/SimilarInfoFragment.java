@@ -1,44 +1,24 @@
 package com.wotingfm.ui.play.activity.albums.fragment;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
-import com.afollestad.materialdialogs.DialogAction;
-import com.afollestad.materialdialogs.MaterialDialog;
-import com.woting.commonplat.utils.FileSizeUtil;
 import com.woting.commonplat.widget.LoadFrameLayout;
 import com.wotingfm.R;
 import com.wotingfm.common.adapter.albumsAdapter.AlbumsAdapter;
-import com.wotingfm.common.adapter.downloadAdapter.AlbumsDownloadAdapter;
-import com.wotingfm.common.application.BSApplication;
-import com.wotingfm.common.bean.AlbumInfo;
 import com.wotingfm.common.bean.AlbumsBean;
-import com.wotingfm.common.bean.SinglesDownload;
-import com.wotingfm.common.bean.Subscrible;
-import com.wotingfm.common.database.DownloadHelper;
 import com.wotingfm.common.net.RetrofitUtils;
 import com.wotingfm.ui.base.basefragment.BaseFragment;
-import com.wotingfm.ui.play.activity.AnchorPersonalCenterFragment;
-import com.wotingfm.ui.test.PlayerFragment;
 
-import org.greenrobot.eventbus.EventBus;
-
-import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import butterknife.BindView;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.schedulers.Schedulers;
-
-import static android.app.Activity.RESULT_OK;
 
 /**
  * Created by amine on 2017/6/14.

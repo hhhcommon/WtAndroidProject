@@ -103,25 +103,32 @@ public class PreferenceFragment extends Fragment implements View.OnClickListener
                 presenter.postData();
                 break;
             case R.id.tv_RAWY:
-                presenter.setBackground(1);
+                presenter.setEnterBackground(1);
+                presenter.setEnterBackground();
                 break;
             case R.id.tv_XSSH:
-                presenter.setBackground(2);
+                presenter.setEnterBackground(2);
+                presenter.setEnterBackground();
                 break;
             case R.id.tv_XJ:
-                presenter.setBackground(3);
+                presenter.setEnterBackground(3);
+                presenter.setEnterBackground();
                 break;
             case R.id.tv_FYKSJ:
-                presenter.setBackground(4);
+                presenter.setEnterBackground(4);
+                presenter.setEnterBackground();
                 break;
             case R.id.tv_TGSTXS:
-                presenter.setBackground(5);
+                presenter.setEnterBackground(5);
+                presenter.setEnterBackground();
                 break;
             case R.id.tv_ZZS:
-                presenter.setBackground(6);
+                presenter.setEnterBackground(6);
+                presenter.setEnterBackground();
                 break;
             case R.id.tv_YQQ:
-                presenter.setBackground(7);
+                presenter.setEnterBackground(7);
+                presenter.setEnterBackground();
                 break;
         }
     }
@@ -226,6 +233,19 @@ public class PreferenceFragment extends Fragment implements View.OnClickListener
         } else {
             tv_XJ.setBackgroundResource(R.drawable.background_preference_red);
             tv_XJ.setTextColor(this.getResources().getColor(R.color.white));
+        }
+    }
+
+    /**
+     * 设置按钮的样式
+     *
+     * @param type true输入完成状态，false未输入完成状态
+     */
+    public void setBackground(boolean type) {
+        if (type) {
+            tv_enter.setBackgroundResource(R.drawable.wt_user_register_background);
+        } else {
+            tv_enter.setBackgroundResource(R.drawable.background_login_tvlogin_off);
         }
     }
 

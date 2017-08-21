@@ -6,30 +6,21 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.woting.commonplat.widget.LoadFrameLayout;
 import com.wotingfm.R;
 import com.wotingfm.common.adapter.findHome.RadioStationAdapter;
-import com.wotingfm.common.adapter.findHome.SelectedAdapter;
-import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.bean.ChannelsBean;
 import com.wotingfm.common.bean.HomeBanners;
-import com.wotingfm.common.bean.Radio;
-import com.wotingfm.common.bean.Radiostation;
-import com.wotingfm.common.bean.Selected;
 import com.wotingfm.common.net.RetrofitUtils;
 import com.wotingfm.common.view.BannerView;
 import com.wotingfm.ui.base.basefragment.BaseFragment;
-import com.wotingfm.ui.play.activity.AnchorPersonalCenterFragment;
 import com.wotingfm.ui.play.look.activity.RadioMoreFragment;
 import com.wotingfm.ui.play.radio.CountryRadioFragment;
 import com.wotingfm.ui.play.radio.LocalRadioFragment;
 import com.wotingfm.ui.play.radio.ProvincesAndCitiesFragment;
-import com.wotingfm.ui.test.PlayerActivity;
-import com.wotingfm.ui.test.PlayerFragment;
 import com.zhy.adapter.recyclerview.wrapper.HeaderAndFooterWrapper;
 
 import java.util.ArrayList;
@@ -39,9 +30,6 @@ import butterknife.BindView;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.schedulers.Schedulers;
-
-import static com.wotingfm.R.id.loadLayout;
-import static com.wotingfm.R.id.mRecyclerView;
 
 /**
  * Created by amine on 2017/6/14.

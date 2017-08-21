@@ -5,8 +5,9 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.RelativeLayout;
+import android.widget.ImageView;
 import android.widget.TextView;
+
 import com.wotingfm.R;
 import com.wotingfm.ui.user.login.view.LoginFragment;
 import com.wotingfm.ui.user.register.view.RegisterFragment;
@@ -18,7 +19,7 @@ import com.wotingfm.ui.user.register.view.RegisterFragment;
  */
 public class LogoFragment extends Fragment implements View.OnClickListener {
 
-    private RelativeLayout rl_close;
+    private ImageView img_close;
     private TextView tv_register, tv_login;
     private View rootView;
 
@@ -35,14 +36,14 @@ public class LogoFragment extends Fragment implements View.OnClickListener {
 
     // 设置界面
     private void inItView() {
-        rl_close = (RelativeLayout) rootView.findViewById(R.id.rl_close);  // 关闭
+        img_close = (ImageView) rootView.findViewById(R.id.img_close);  // 关闭
         tv_register = (TextView) rootView.findViewById(R.id.tv_register);  // 注册
         tv_login = (TextView) rootView.findViewById(R.id.tv_login);        // 登录
     }
 
     // 设置监听
     private void inItListener() {
-        rl_close.setOnClickListener(this);
+        img_close.setOnClickListener(this);
         tv_register.setOnClickListener(this);
         tv_login.setOnClickListener(this);
     }
@@ -51,7 +52,7 @@ public class LogoFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.rl_close:
+            case R.id.img_close:
                 LogoActivity.closeActivity();
                 break;
             case R.id.tv_register:

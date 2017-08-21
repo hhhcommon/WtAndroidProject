@@ -5,7 +5,6 @@ import android.util.Log;
 import com.google.gson.GsonBuilder;
 import com.woting.commonplat.config.GlobalNetWorkConfig;
 import com.wotingfm.common.config.GlobalStateConfig;
-import com.wotingfm.common.utils.CommonUtils;
 import com.wotingfm.common.utils.ToastUtils;
 import com.wotingfm.ui.user.preference.model.PreferenceModel;
 import com.wotingfm.ui.user.preference.view.PreferenceFragment;
@@ -138,7 +137,7 @@ public class PreferencePresenter {
      *
      * @param type
      */
-    public void setBackground(int type) {
+    public void setEnterBackground(int type) {
         switch (type) {
             case 1:
                 if (type1) {
@@ -230,8 +229,6 @@ public class PreferencePresenter {
                             activity.close();
                         }
                     });
-                } else {
-                    activity.close();
                 }
             } else {
                 ToastUtils.show_always(activity.getActivity(), "网络连接失败，请稍后再试！");
@@ -269,6 +266,17 @@ public class PreferencePresenter {
         }
 //        ToastUtils.show_always(activity.getActivity(), s);
         return s;
+    }
+
+    /**
+     * 获取当前是否有选中的兴趣爱好
+     */
+    public void setEnterBackground(){
+        if(type1||type2||type3||type4||type5||type6||type7){
+            activity.setBackground(true);
+        }else{
+            activity.setBackground(false);
+        }
     }
 
     /**

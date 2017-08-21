@@ -6,16 +6,11 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.util.TypedValue;
-import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 
 import com.woting.commonplat.widget.LoadingDialog;
-import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.utils.ProgressDialogUtils;
-import com.wotingfm.ui.test.PlayerActivity;
 
 import butterknife.ButterKnife;
 

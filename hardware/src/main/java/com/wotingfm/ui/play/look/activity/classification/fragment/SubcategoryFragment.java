@@ -1,10 +1,7 @@
 package com.wotingfm.ui.play.look.activity.classification.fragment;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import com.woting.commonplat.amine.ARecyclerView;
@@ -14,23 +11,10 @@ import com.woting.commonplat.amine.OnRefreshListener;
 import com.woting.commonplat.widget.LoadFrameLayout;
 import com.wotingfm.R;
 import com.wotingfm.common.adapter.albumsAdapter.AlbumsAdapter;
-import com.wotingfm.common.adapter.downloadAdapter.DownloadSelectAdapter;
-import com.wotingfm.common.adapter.findHome.ClassificationAdapter;
-import com.wotingfm.common.application.BSApplication;
-import com.wotingfm.common.bean.AlbumInfo;
 import com.wotingfm.common.bean.AlbumsBean;
-import com.wotingfm.common.bean.Channels;
 import com.wotingfm.common.bean.ChannelsBean;
-import com.wotingfm.common.bean.Classification;
-import com.wotingfm.common.bean.Player;
-import com.wotingfm.common.bean.Subscrible;
 import com.wotingfm.common.net.RetrofitUtils;
-import com.wotingfm.common.utils.T;
 import com.wotingfm.ui.base.basefragment.BaseFragment;
-import com.wotingfm.ui.play.activity.AnchorPersonalCenterFragment;
-import com.wotingfm.ui.play.activity.albums.fragment.AlbumsInfoFragment;
-import com.wotingfm.ui.test.PlayerActivity;
-import com.wotingfm.ui.test.PlayerFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,11 +23,6 @@ import butterknife.BindView;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.schedulers.Schedulers;
-
-import static android.app.Activity.RESULT_OK;
-import static com.wotingfm.R.id.largeLabelSelect;
-import static com.wotingfm.R.id.tvCancel;
-import static com.wotingfm.R.id.tvDownload;
 
 /**
  * Created by amine on 2017/6/14.

@@ -97,7 +97,7 @@
             android:value="GlideModule" />
         <!-- 启动页 -->
         <activity
-            android:name=".ui.user.splash.SplashActivity"
+            android:name=".ui.user.splash.view.SplashActivity"
             android:screenOrientation="portrait"
             android:theme="@style/SplashTheme">
             <intent-filter>
@@ -157,7 +157,7 @@
 
         <!--  -->
         <activity
-            android:name=".ui.test.PlayerActivity"
+            android:name=".ui.play.main.PlayerActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
 

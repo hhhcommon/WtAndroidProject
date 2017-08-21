@@ -149,7 +149,7 @@
         android:layout_marginBottom="20dp"
         android:layout_marginLeft="12dp"
         android:layout_marginRight="12dp"
-        android:background="@drawable/wt_user_register_background"
+        android:background="@drawable/background_login_tvlogin_off"
         android:gravity="center"
         android:text="进入我听"
         android:textColor="#ffffff"

@@ -31,6 +31,7 @@
         <item name="android:windowBackground">@drawable/background_splash</item>
     </style>
 
+
     <!--启动页主题-->
     <style name="GuideTheme" parent="@android:style/Theme.Light.NoTitleBar.Fullscreen">
         <item name="android:windowBackground">@drawable/background_guide</item>
@@ -54,7 +55,7 @@
         <item name="android:layout_width">44dp</item>
         <item name="android:layout_height">44dp</item>
         <item name="android:layout_marginLeft">2dp</item>
-        <item name="android:src">@mipmap/nav_icon_back_black</item>
+        <item name="android:src">@drawable/icon_back_black</item>
     </style>
 
     <!--标头中间字体 Style-->

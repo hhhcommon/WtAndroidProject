@@ -1,41 +1,28 @@
 package com.wotingfm.ui.play.activity.download.fragment;
 
-import android.content.Intent;
-import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.woting.commonplat.utils.FileSizeUtil;
 import com.woting.commonplat.widget.LoadFrameLayout;
 import com.wotingfm.R;
-import com.wotingfm.common.adapter.PlayerHistoryListAdapter;
 import com.wotingfm.common.adapter.downloadAdapter.AlbumsDownloadAdapter;
 import com.wotingfm.common.application.BSApplication;
-import com.wotingfm.common.bean.Player;
 import com.wotingfm.common.bean.SinglesDownload;
 import com.wotingfm.common.database.DownloadHelper;
-import com.wotingfm.common.database.HistoryHelper;
-import com.wotingfm.common.net.RetrofitUtils;
-import com.wotingfm.common.utils.T;
 import com.wotingfm.ui.base.basefragment.BaseFragment;
-import com.wotingfm.ui.test.PlayerFragment;
 
 import org.greenrobot.eventbus.EventBus;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.Unbinder;
 
 
 /**

@@ -118,7 +118,9 @@ public class NotificationService extends Service {
                     return 11;
                 } else if (type.equals("GROUP_ADD")) {// 12.有人邀请我入群
                     return 12;
-                } else {
+                } else if (type.equals("ADD_MEMBER")) {// 13.群组有新的成员加入，给群内所有成员发送推送
+                    return 13;
+                }else {
                     return 999;
                 }
             } else {
@@ -176,6 +178,9 @@ public class NotificationService extends Service {
                 break;
             case 12:// 12.有人邀请我入群
                 ShowMsgQueue.add(assemblyData("12", "群组消息", msg));
+                break;
+            case 13:// 13.群组有新的成员加入，给群内所有成员发送推送
+                ShowMsgQueue.add(assemblyData("13", "群组消息", msg));
                 break;
         }
     }

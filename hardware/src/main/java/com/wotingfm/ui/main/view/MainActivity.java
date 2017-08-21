@@ -37,7 +37,7 @@ import com.wotingfm.ui.intercom.main.view.InterPhoneActivity;
 import com.wotingfm.ui.main.presenter.MainPresenter;
 import com.wotingfm.ui.mine.main.MineActivity;
 import com.wotingfm.ui.play.look.activity.LookListActivity;
-import com.wotingfm.ui.test.PlayerActivity;
+import com.wotingfm.ui.play.main.PlayerActivity;
 
 import org.greenrobot.eventbus.EventBus;
 

@@ -1,6 +1,5 @@
 package com.wotingfm.ui.play.activity;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -21,26 +20,16 @@ import com.wotingfm.R;
 import com.wotingfm.common.adapter.userAdapter.AnchorPersonalCenterInfoAdapter;
 import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.bean.AnchorInfo;
-import com.wotingfm.common.bean.MessageEvent;
 import com.wotingfm.common.bean.SinglesBase;
-import com.wotingfm.common.config.GlobalStateConfig;
 import com.wotingfm.common.net.RetrofitUtils;
 import com.wotingfm.common.utils.CommonUtils;
 import com.wotingfm.common.utils.L;
 import com.wotingfm.common.utils.T;
 import com.wotingfm.common.view.ReportsDialog;
-import com.wotingfm.ui.base.baseactivity.AppManager;
-import com.wotingfm.ui.base.baseactivity.NoTitleBarBaseActivity;
 import com.wotingfm.ui.base.basefragment.BaseFragment;
 import com.wotingfm.ui.play.activity.albums.AlbumsListMeFragment;
-import com.wotingfm.ui.play.look.activity.serch.fragment.AlbumsListFragment;
-import com.wotingfm.ui.test.PlayerActivity;
-import com.wotingfm.ui.test.PlayerFragment;
-import com.wotingfm.ui.user.login.view.LoginFragment;
 import com.wotingfm.ui.user.logo.LogoActivity;
 import com.zhy.adapter.recyclerview.wrapper.HeaderAndFooterWrapper;
-
-import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;

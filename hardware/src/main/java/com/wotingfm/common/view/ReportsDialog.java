@@ -2,34 +2,17 @@ package com.wotingfm.common.view;
 
 import android.app.Activity;
 import android.app.Dialog;
-import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.wotingfm.R;
-import com.wotingfm.common.application.BSApplication;
-import com.wotingfm.common.bean.Player;
-import com.wotingfm.common.net.RetrofitUtils;
 import com.wotingfm.ui.intercom.main.view.InterPhoneActivity;
 import com.wotingfm.ui.mine.main.MineActivity;
 import com.wotingfm.ui.play.activity.ReportsPlayerFragment;
-import com.wotingfm.ui.test.PlayerActivity;
-
-import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action1;
-import rx.schedulers.Schedulers;
-
-import static com.wotingfm.R.id.tvAgo;
-import static com.wotingfm.R.id.tvAlbums;
-import static com.wotingfm.R.id.tvAnchor;
-import static com.wotingfm.R.id.tvDownload;
-import static com.wotingfm.R.id.tvLike;
-import static com.wotingfm.R.id.tvLocal;
-import static com.wotingfm.R.id.tvSubscription;
+import com.wotingfm.ui.play.main.PlayerActivity;
 
 //举报个人dialog
 public class ReportsDialog extends Dialog implements View.OnClickListener {
