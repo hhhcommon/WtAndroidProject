@@ -156,7 +156,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:background="@color/white"
+                    android:background="@drawable/wt_view_click_background"
                     android:gravity="top">
 
                     <TextView
@@ -210,7 +210,7 @@
                     android:layout_marginRight="12dp"
                     android:layout_marginTop="26dp"
                     android:layout_marginBottom="500dp"
-                    android:background="@drawable/background_circle_app"
+                    android:background="@drawable/wt_user_register_background"
                     android:gravity="center"
                     android:text="申请加入"
                     android:textColor="@color/white"

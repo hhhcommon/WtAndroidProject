@@ -14,7 +14,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="36dp"
-        android:background="@color/white"
+        android:background="@drawable/wt_view_click_background"
         android:gravity="left|center"
         android:orientation="horizontal">
 

@@ -1,7 +1,6 @@
 package com.wotingfm.ui.intercom.group.groupnews.add.view;
 
 import android.app.Dialog;
-import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -13,8 +12,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ImageView;
@@ -22,25 +19,19 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 import com.woting.commonplat.manager.PhoneMsgManager;
-import com.woting.commonplat.utils.BitmapUtils;
 import com.woting.commonplat.widget.TipView;
 import com.wotingfm.R;
 import com.wotingfm.common.utils.DialogUtils;
 import com.wotingfm.common.utils.GlideUtils;
-import com.wotingfm.common.utils.ToastUtils;
 import com.wotingfm.common.view.myscrollview.ObservableScrollView;
 import com.wotingfm.ui.base.baseinterface.ScrollViewListener;
 import com.wotingfm.ui.intercom.group.groupnews.add.adapter.GroupNewsPersonForAddAdapter;
 import com.wotingfm.ui.intercom.group.groupnews.add.presenter.GroupNewsForAddPresenter;
 import com.wotingfm.ui.intercom.main.contacts.model.Contact;
-import com.wotingfm.ui.intercom.main.simulation.view.SimulationInterPhoneFragment;
 import com.wotingfm.ui.intercom.main.view.InterPhoneActivity;
 
 import java.util.List;
-
-import jp.wasabeef.glide.transformations.BlurTransformation;
 
 /**
  * 已加入的组详情界面
@@ -99,6 +90,8 @@ public class GroupNewsForAddFragment extends Fragment implements View.OnClickLis
         tvTitle = (TextView) rootView.findViewById(R.id.tvTitle);//
         img_other = (ImageView) rootView.findViewById(R.id.img_other);// 其它按钮
         img_other.setOnClickListener(this);
+        head_left_btn.setImageResource(R.drawable.icon_mine_img_close);
+        img_other.setImageResource(R.drawable.icon_chat_other);
 
         scrollView = (ObservableScrollView) rootView.findViewById(R.id.scrollView);//
         scrollView.setScrollViewListener(this);
@@ -200,20 +193,20 @@ public class GroupNewsForAddFragment extends Fragment implements View.OnClickLis
         if (y <= 0) {   //设置标题的背景颜色
             mRelativeLayout.setBackgroundColor(Color.argb((int) 0, 255, 255, 255));
             tvTitle.setVisibility(View.GONE);
-            head_left_btn.setImageResource(R.mipmap.nav_icon_back_white);
-            img_other.setImageResource(R.mipmap.nav_icon_more_white);
+            head_left_btn.setImageResource(R.drawable.icon_mine_img_close);
+            img_other.setImageResource(R.drawable.icon_chat_other);
         } else if (y > 0 && y <= height) {
             float scale = (float) y / height;
             float alpha = (255 * scale);
             mRelativeLayout.setBackgroundColor(Color.argb((int) alpha, 255, 255, 255));
             tvTitle.setVisibility(View.GONE);
-            head_left_btn.setImageResource(R.mipmap.nav_icon_back_white);
-            img_other.setImageResource(R.mipmap.nav_icon_more_white);
+            head_left_btn.setImageResource(R.drawable.icon_mine_img_close);
+            img_other.setImageResource(R.drawable.icon_chat_other);
         } else if (y > height) {
             mRelativeLayout.setBackgroundColor(Color.argb((int) 255, 255, 255, 255));
             tvTitle.setVisibility(View.VISIBLE);
-            head_left_btn.setImageResource(R.mipmap.nav_icon_back_black);
-            img_other.setImageResource(R.mipmap.nav_icon_more_black);
+            head_left_btn.setImageResource(R.drawable.icon_back_black);
+            img_other.setImageResource(R.drawable.icon_chat_other_black);
         }
     }
 

@@ -13,7 +13,7 @@
         android:layout_marginLeft="12dp"
         android:layout_marginRight="12dp"
         android:layout_marginTop="8dp"
-        android:background="@drawable/background_intercom_search"
+        android:background="@drawable/background_search_gray"
         android:gravity="center"
         android:orientation="horizontal">
 
@@ -36,6 +36,7 @@
     <RelativeLayout
         android:id="@+id/re_newFriend"
         android:layout_width="match_parent"
+        android:background="@drawable/wt_view_click_background"
         android:layout_height="60dp">
 
         <ImageView
@@ -84,6 +85,7 @@
     <RelativeLayout
         android:id="@+id/re_newGroup"
         android:layout_width="match_parent"
+        android:background="@drawable/wt_view_click_background"
         android:layout_height="60dp">
 
         <ImageView

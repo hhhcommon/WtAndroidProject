@@ -88,7 +88,11 @@ public class PersonMessageFragment extends Fragment implements View.OnClickListe
         tvTitle = (TextView) rootView.findViewById(R.id.tvTitle);//
         img_other = (ImageView) rootView.findViewById(R.id.img_other);// 其它按钮
         img_other.setOnClickListener(this);
+        head_left_btn.setImageResource(R.drawable.icon_mine_img_close);
+        img_other.setImageResource(R.drawable.icon_chat_other);
 
+        head_left_btn.setImageResource(R.drawable.icon_mine_img_close);
+        img_other.setImageResource(R.drawable.icon_chat_other);
         scrollView = (ObservableScrollView) rootView.findViewById(R.id.scrollView);//
         scrollView.setScrollViewListener(this);
         rootView.findViewById(R.id.lin_send).setOnClickListener(this);        // 黄色按钮
@@ -96,7 +100,6 @@ public class PersonMessageFragment extends Fragment implements View.OnClickListe
         img_call = (ImageView) rootView.findViewById(R.id.img_call);          // 呼叫展示图片
         lin_note = (LinearLayout) rootView.findViewById(R.id.lin_note);       // 备注
         lin_note.setOnClickListener(this);
-
 
         img_bg = (ImageView) rootView.findViewById(R.id.img_bg);              // 背景图片
         img_url = (ImageView) rootView.findViewById(R.id.img_url);            // 头像展示图片
@@ -112,6 +115,8 @@ public class PersonMessageFragment extends Fragment implements View.OnClickListe
         tv_subNum.setOnClickListener(this);
         gridView = (GridView) rootView.findViewById(R.id.gridView);              // 订阅展示
         gridView.setSelector(new ColorDrawable(Color.TRANSPARENT));
+
+
     }
 
     @Override
@@ -166,20 +171,20 @@ public class PersonMessageFragment extends Fragment implements View.OnClickListe
         if (y <= 0) {   //设置标题的背景颜色
             mRelativeLayout.setBackgroundColor(Color.argb((int) 0, 255, 255, 255));
             tvTitle.setVisibility(View.GONE);
-            head_left_btn.setImageResource(R.mipmap.nav_icon_back_white);
-            img_other.setImageResource(R.mipmap.nav_icon_more_white);
+            head_left_btn.setImageResource(R.drawable.icon_mine_img_close);
+            img_other.setImageResource(R.drawable.icon_chat_other);
         } else if (y > 0 && y <= height) {
             float scale = (float) y / height;
             float alpha = (255 * scale);
             mRelativeLayout.setBackgroundColor(Color.argb((int) alpha, 255, 255, 255));
             tvTitle.setVisibility(View.GONE);
-            head_left_btn.setImageResource(R.mipmap.nav_icon_back_white);
-            img_other.setImageResource(R.mipmap.nav_icon_more_white);
+            head_left_btn.setImageResource(R.drawable.icon_mine_img_close);
+            img_other.setImageResource(R.drawable.icon_chat_other);
         } else if (y > height) {
             mRelativeLayout.setBackgroundColor(Color.argb((int) 255, 255, 255, 255));
             tvTitle.setVisibility(View.VISIBLE);
-            head_left_btn.setImageResource(R.mipmap.nav_icon_back_black);
-            img_other.setImageResource(R.mipmap.nav_icon_more_black);
+            head_left_btn.setImageResource(R.drawable.icon_back_black);
+            img_other.setImageResource(R.drawable.icon_chat_other_black);
         }
     }
 

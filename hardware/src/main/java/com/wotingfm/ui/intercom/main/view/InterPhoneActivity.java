@@ -44,11 +44,11 @@ public class InterPhoneActivity extends BaseFragmentActivity {
 
     // 打开新的 Fragment
     private void openOne(Fragment frg) {
+        hintKbTwo();
         context.getSupportFragmentManager().beginTransaction()
                 .add(R.id.fragment_content, frg)
                 .addToBackStack(SequenceUUID.getUUID())
                 .commitAllowingStateLoss();
-        hintKbTwo();
     }
 
     /**
@@ -57,6 +57,7 @@ public class InterPhoneActivity extends BaseFragmentActivity {
      * @param frg
      */
     public static void open(Fragment frg) {
+        hintKbTwo();
         context.getSupportFragmentManager().beginTransaction()
 //                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                 .setCustomAnimations(
@@ -65,7 +66,6 @@ public class InterPhoneActivity extends BaseFragmentActivity {
                 .add(R.id.fragment_content, frg)
                 .addToBackStack(SequenceUUID.getUUID())
                 .commitAllowingStateLoss();
-        hintKbTwo();
     }
 
     /**

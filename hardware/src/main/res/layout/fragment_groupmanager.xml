@@ -33,7 +33,7 @@
             android:layout_width="match_parent"
             android:layout_height="44dp"
             android:layout_marginTop="10dp"
-            android:background="@color/white">
+            android:background="@drawable/wt_view_click_background">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -60,7 +60,7 @@
             android:id="@+id/re_groupManager"
             android:layout_width="match_parent"
             android:layout_height="44dp"
-            android:background="@color/white">
+            android:background="@drawable/wt_view_click_background">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -84,7 +84,7 @@
             android:id="@+id/re_channel"
             android:layout_width="match_parent"
             android:layout_height="44dp"
-            android:background="@color/white">
+            android:background="@drawable/wt_view_click_background">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -109,7 +109,7 @@
             android:layout_width="match_parent"
             android:layout_height="44dp"
             android:layout_marginTop="8dp"
-            android:background="@color/white">
+            android:background="@drawable/wt_view_click_background">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -135,7 +135,7 @@
             android:id="@+id/re_changeGroup"
             android:layout_width="match_parent"
             android:layout_height="44dp"
-            android:background="@color/white">
+            android:background="@drawable/wt_view_click_background">
 
             <TextView
                 android:layout_width="wrap_content"

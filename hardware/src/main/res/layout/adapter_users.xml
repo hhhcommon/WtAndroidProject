@@ -7,7 +7,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:background="@color/white">
+        android:background="@drawable/wt_view_click_background">
 
         <RelativeLayout
             android:id="@+id/lin_img"
@@ -46,7 +46,7 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="12dp"
-            android:src="@mipmap/chat_icon_call" />
+            android:src="@drawable/icon_chat_call" />
 
     </RelativeLayout>
 
