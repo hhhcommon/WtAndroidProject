@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <com.woting.commonplat.widget.TipView
+        android:id="@+id/tip_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone" />
+
+    <com.woting.common.view.myscrollview.ObservableScrollView
+        android:id="@+id/scrollView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="220dp">
+
+                <ImageView
+                    android:id="@+id/img_url"
+                    android:layout_width="match_parent"
+                    android:scaleType="centerCrop"
+                    android:layout_height="match_parent" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="220dp"
+                    android:background="@color/transparent_40_black" />
+                <TextView
+                    android:id="@+id/tv_groupName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="12dp"
+                    android:layout_marginTop="156dp"
+                    android:gravity="center"
+                    android:text="爱车巨龙"
+                    android:textColor="@color/white"
+                    android:textSize="20sp" />
+
+
+                <TextView
+                    android:id="@+id/tv_nameNumber"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="12dp"
+                    android:layout_marginTop="192dp"
+                    android:gravity="center"
+                    android:text="群号"
+                    android:textColor="@color/white"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/tv_groupNumber"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBottom="@+id/tv_nameNumber"
+                    android:layout_marginLeft="10dp"
+                    android:layout_toRightOf="@+id/tv_nameNumber"
+                    android:text="1234567"
+                    android:textColor="@color/white"
+                    android:textSize="12sp" />
+            </RelativeLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/line_color"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="13dp"
+                        android:layout_marginLeft="12dp"
+                        android:layout_marginTop="13dp"
+                        android:gravity="center"
+                        android:text="地区"
+                        android:textColor="@color/black_head_word"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:id="@+id/tv_address"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="13dp"
+                        android:layout_marginLeft="12dp"
+                        android:layout_marginTop="13dp"
+                        android:gravity="center"
+                        android:text="北京"
+                        android:textColor="@color/black_head_word"
+                        android:textSize="14sp" />
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:background="@color/line_color" />
+
+                <RelativeLayout
+                    android:id="@+id/re_groupIntroduce"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:background="@color/white"
+
+                    android:gravity="top">
+
+                    <TextView
+                        android:id="@+id/tv_groupIntroduce_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="12dp"
+                        android:layout_marginTop="12dp"
+                        android:text="群介绍"
+                        android:textColor="@color/black_head_word" />
+
+                    <ImageView
+                        android:id="@+id/image_groupIntroduce_enter"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginRight="12dp"
+                        android:layout_marginTop="12dp"
+                        android:src="@mipmap/chat_icon_next"
+                        android:visibility="gone" />
+
+                    <TextView
+                        android:id="@+id/tv_groupIntroduce"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/tv_groupIntroduce_name"
+                        android:layout_marginBottom="16dp"
+                        android:layout_marginLeft="12dp"
+                        android:layout_marginTop="12dp"
+                        android:text="此处显示群的介绍信息"
+                        android:textColor="@color/black_head_word"
+                        android:textSize="12sp" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/re_groupNumber"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:background="@drawable/wt_view_click_background"
+                    android:gravity="top">
+
+                    <TextView
+                        android:id="@+id/tv_groupNumberName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="12dp"
+                        android:layout_marginTop="12dp"
+                        android:text="成员"
+                        android:textColor="@color/black_head_word"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:id="@+id/tv_number"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:layout_toRightOf="@+id/tv_groupNumberName"
+                        android:text="(88)"
+                        android:textColor="@color/black_head_word"
+                        android:textSize="14sp" />
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginRight="12dp"
+                        android:layout_marginTop="12dp"
+                        android:src="@mipmap/chat_icon_next" />
+
+                    <GridView
+                        android:id="@+id/gridView"
+                        android:layout_width="match_parent"
+                        android:layout_height="52dp"
+                        android:layout_below="@+id/tv_groupNumberName"
+                        android:layout_marginBottom="15dp"
+                        android:layout_marginLeft="12dp"
+                        android:layout_marginRight="12dp"
+                        android:layout_marginTop="15dp"
+                        android:numColumns="5"
+                        android:scrollbars="none"></GridView>
+
+                </RelativeLayout>
+
+                <TextView
+                    android:id="@+id/tv_send"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="12dp"
+                    android:layout_marginRight="12dp"
+                    android:layout_marginTop="26dp"
+                    android:layout_marginBottom="500dp"
+                    android:background="@drawable/wt_user_register_background"
+                    android:gravity="center"
+                    android:text="申请加入"
+                    android:textColor="@color/white"
+                    android:textSize="14.7sp" />
+            </LinearLayout>
+        </LinearLayout>
+    </com.woting.common.view.myscrollview.ObservableScrollView>
+
+    <RelativeLayout
+        android:id="@+id/mRelativeLayout"
+        android:layout_width="match_parent"
+        android:layout_height="64dp">
+
+        <ImageView
+            android:id="@+id/head_left_btn"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:layout_marginTop="20dp"
+
+            android:layout_marginLeft="2dp"
+            android:src="@mipmap/nav_icon_back_white" />
+
+        <TextView
+            android:id="@+id/tvTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="44dp"
+            android:gravity="center"
+            android:layout_centerHorizontal="true"
+            android:text="群资料"
+            android:layout_marginTop="20dp"
+            android:textColor="@color/black"
+            android:textSize="17.3sp"
+            android:visibility="gone" />
+
+        <ImageView
+            android:id="@+id/img_other"
+            android:layout_width="44dp"
+            android:layout_marginTop="20dp"
+
+            android:layout_height="44dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="2dp"
+            android:src="@mipmap/nav_icon_more_white"
+            android:visibility="gone" />
+
+    </RelativeLayout>
+</RelativeLayout>

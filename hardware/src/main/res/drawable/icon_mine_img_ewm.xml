@@ -2,7 +2,7 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item android:state_enabled="false" android:drawable="@mipmap/nav_icon_qr_code_n" />
-    <item android:state_pressed="true" android:drawable="@drawable/shape_register"  />
+    <item android:state_pressed="true" android:drawable="@mipmap/nav_icon_qr_code_s"  />
     <item android:state_focused="true" android:drawable="@mipmap/nav_icon_qr_code_n" />
 
 </selector>

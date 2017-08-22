@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+
+    <com.woting.commonplat.widget.LoadFrameLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/loadLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        app:emptyView="@layout/layout_empty_view"
+        app:errorView="@layout/layout_error_view"
+        app:loadingView="@layout/layout_loading_view">
+
+        <android.support.v7.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/mRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </com.woting.commonplat.widget.LoadFrameLayout>
+
+    <RelativeLayout
+        android:id="@+id/mRelativeLayout"
+        android:layout_width="match_parent"
+        android:layout_height="65dp"
+        android:background="#00FFFFFF">
+
+        <ImageView
+            android:id="@+id/ivBack"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:src="@mipmap/nav_icon_back_black" />
+
+        <TextView
+            android:id="@+id/tvTitle"
+            android:layout_width="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:layout_marginTop="20dp"
+            android:maxWidth="300dp"
+            android:singleLine="true"
+            android:layout_height="40dp"
+            android:text="Amine"
+            android:textColor="#0016181a" />
+
+        <ImageView
+            android:id="@+id/ivMore"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="20dp"
+            android:src="@mipmap/nav_icon_more_black" />
+    </RelativeLayout>
+</FrameLayout>

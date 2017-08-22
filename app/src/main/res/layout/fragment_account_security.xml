@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical"
+    android:paddingTop="20dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/background_color"
+        android:orientation="vertical">
+
+        <include
+            android:id="@+id/view_head"
+            layout="@layout/common_head"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <RelativeLayout
+            android:id="@+id/view_phone_number"
+            android:layout_width="match_parent"
+            android:layout_height="44dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/wt_view_click_background">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="12dp"
+                android:text="@string/phone_number"
+                android:textColor="@color/black_head_word"
+                android:textSize="16sp" />
+
+            <ImageView
+                android:id="@+id/image_right_1"
+                style="@style/MineRightImageStyle" />
+
+            <TextView
+                android:id="@+id/text_phone_number"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toLeftOf="@id/image_right_1"
+                android:text="181****9967"
+                android:textColor="@color/color_preference_word" />
+
+        </RelativeLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="0.7dp"
+            android:background="@color/line_color" />
+
+        <RelativeLayout
+            android:id="@+id/view_password"
+            android:layout_width="match_parent"
+            android:layout_height="44dp"
+            android:background="@drawable/wt_view_click_background">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="12dp"
+                android:text="@string/password"
+                android:textColor="@color/black_head_word"
+                android:textSize="16sp" />
+
+            <ImageView
+                android:id="@+id/image_right_2"
+                style="@style/MineRightImageStyle" />
+
+            <TextView
+                android:id="@+id/text_password"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toLeftOf="@id/image_right_2"
+                android:text="******"
+                android:textColor="@color/color_preference_word" />
+
+        </RelativeLayout>
+    </LinearLayout>
+</LinearLayout>

@@ -2,7 +2,7 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item android:state_enabled="false" android:drawable="@mipmap/icon_live_close_red" />
-    <item android:state_pressed="true" android:drawable="@drawable/shape_register"  />
+    <item android:state_pressed="true" android:drawable="@mipmap/icon_live_close_red_s"  />
     <item android:state_focused="true" android:drawable="@mipmap/icon_live_close_red" />
 
 </selector>

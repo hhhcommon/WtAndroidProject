@@ -54,7 +54,7 @@
     <string name="woman">女</string>
     <string name="beijing">北京</string>
 
-    <string name="current_phone_number">请输入手机号</string>
+    <string name="current_phone_number">请输入当前手机号</string>
     <string name="new_phone_number">请输入新手机号</string>
     <string name="input_phone_number">请输入手机号</string>
     <string name="verification_code">请输入验证码</string>

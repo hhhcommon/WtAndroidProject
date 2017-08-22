@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/white"
+                android:paddingTop="20dp">
+
+    <ImageView
+        android:id="@+id/img_close"
+        android:layout_width="44dp"
+        android:layout_height="44dp"
+        android:src="@drawable/icon_logo_img_close"
+        android:visibility="visible"/>
+
+    <ImageView
+        android:id="@+id/tv_logo"
+        android:layout_width="67.3dp"
+        android:layout_height="67.3dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="114dp"
+        android:src="@mipmap/logo"/>
+
+    <TextView
+        android:id="@+id/tv_register"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_below="@+id/tv_logo"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_marginTop="210dp"
+        android:background="@drawable/wt_user_register_background"
+        android:gravity="center"
+        android:text="新用户注册"
+        android:textColor="@color/white"
+        android:textSize="14sp"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_below="@+id/tv_register"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/shape_register"
+        android:padding="0.7dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/shape_login"/>
+
+        <TextView
+            android:id="@+id/tv_login"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/wt_user_login_background"
+            android:gravity="center"
+            android:text="手机登录"
+            android:textColor="@color/black"
+            android:textSize="14sp"/>
+    </RelativeLayout>
+
+</RelativeLayout>

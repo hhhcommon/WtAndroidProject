@@ -2,6 +2,8 @@ package com.wotingfm.ui.intercom.person.newfriend.presenter;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 
 import com.google.gson.Gson;
@@ -10,20 +12,18 @@ import com.google.gson.reflect.TypeToken;
 import com.woting.commonplat.config.GlobalNetWorkConfig;
 import com.wotingfm.common.config.GlobalStateConfig;
 import com.wotingfm.common.constant.BroadcastConstants;
-import com.wotingfm.common.utils.GetTestData;
 import com.wotingfm.common.utils.ToastUtils;
-import com.wotingfm.ui.intercom.main.contacts.model.Contact;
 import com.wotingfm.ui.intercom.main.view.InterPhoneActivity;
 import com.wotingfm.ui.intercom.person.newfriend.model.NewFriend;
 import com.wotingfm.ui.intercom.person.newfriend.model.NewFriendModel;
 import com.wotingfm.ui.intercom.person.newfriend.view.NewFriendFragment;
 import com.wotingfm.ui.intercom.person.personmessage.view.PersonMessageFragment;
-import com.wotingfm.ui.user.login.model.LoginModel;
 import com.wotingfm.ui.user.logo.LogoActivity;
 
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
+import java.lang.ref.WeakReference;
 import java.util.List;
 
 /**
@@ -36,11 +36,13 @@ public class NewFriendPresenter {
     private NewFriendFragment activity;
     private NewFriendModel model;
     private List<NewFriend> list;
+    private final InnerHandler mHandler;
 
     public NewFriendPresenter(NewFriendFragment activity) {
         this.activity = activity;
         this.model = new NewFriendModel();
-        getData();// 获取数据
+        mHandler = new InnerHandler(activity);
+        mHandler.sendEmptyMessageDelayed(0, 300); // 延时启动
     }
 
     // 获取数据
@@ -338,10 +340,26 @@ public class NewFriendPresenter {
         }
     }
 
+    // 防止内存泄漏
+    private class InnerHandler extends Handler {
+        private final WeakReference<NewFriendFragment> mActivity;
+        public InnerHandler(NewFriendFragment activity) {
+            mActivity = new WeakReference<NewFriendFragment>(activity);
+        }
+        public void handleMessage(Message msg) {
+            NewFriendFragment activity = mActivity.get();
+            if (activity == null) {
+                return;
+            }
+            getData();// 获取数据
+        }
+    }
+
     /**
      * 数据销毁
      */
     public void destroy() {
+        mHandler.removeCallbacksAndMessages(null);
         model = null;
     }
 }

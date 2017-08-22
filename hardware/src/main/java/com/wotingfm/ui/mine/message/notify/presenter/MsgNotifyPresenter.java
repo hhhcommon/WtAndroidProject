@@ -1,6 +1,8 @@
 package com.wotingfm.ui.mine.message.notify.presenter;
 
 import android.content.Intent;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 
 import com.google.gson.Gson;
@@ -9,12 +11,13 @@ import com.google.gson.reflect.TypeToken;
 import com.woting.commonplat.config.GlobalNetWorkConfig;
 import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.ui.mine.message.notify.model.Msg;
-import com.wotingfm.ui.mine.message.notify.model.SrcMsg;
 import com.wotingfm.ui.mine.message.notify.model.MsgNotifyModel;
+import com.wotingfm.ui.mine.message.notify.model.SrcMsg;
 import com.wotingfm.ui.mine.message.notify.view.MsgNotifyFragment;
 
 import org.json.JSONObject;
 
+import java.lang.ref.WeakReference;
 import java.util.List;
 
 /**
@@ -26,11 +29,13 @@ public class MsgNotifyPresenter {
     private MsgNotifyFragment activity;
     private MsgNotifyModel model;
     private List<Msg> msg;
+    private final InnerHandler mHandler;
 
     public MsgNotifyPresenter(MsgNotifyFragment activity) {
         this.activity = activity;
         this.model = new MsgNotifyModel();
-        send();
+        mHandler = new InnerHandler(activity);
+        mHandler.sendEmptyMessageDelayed(0, 300); // 延时启动
     }
 
     // 获取消息
@@ -198,7 +203,7 @@ public class MsgNotifyPresenter {
                     } else {
                         String mid = msg.get(position).getMsg_id();
                         activity.dialogShow();
-                        model.loadNewsForRefuseEnterGroup(mid,new MsgNotifyModel.OnLoadInterface() {
+                        model.loadNewsForRefuseEnterGroup(mid, new MsgNotifyModel.OnLoadInterface() {
                             @Override
                             public void onSuccess(Object o) {
                                 activity.dialogCancel();
@@ -316,10 +321,26 @@ public class MsgNotifyPresenter {
 
     }
 
+    // 防止内存泄漏
+    private class InnerHandler extends Handler {
+        private final WeakReference<MsgNotifyFragment> mActivity;
+        public InnerHandler(MsgNotifyFragment activity) {
+            mActivity = new WeakReference<MsgNotifyFragment>(activity);
+        }
+        public void handleMessage(Message msg) {
+            MsgNotifyFragment activity = mActivity.get();
+            if (activity == null) {
+                return;
+            }
+            send();
+        }
+    }
+
     /**
      * 数据销毁
      */
     public void destroy() {
+        mHandler.removeCallbacksAndMessages(null);
         model = null;
     }
 

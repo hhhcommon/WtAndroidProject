@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="LineEditText">
+        <attr name="lineColorEt" format="color" />
+    </declare-styleable>
+    <declare-styleable name="FlowLayout">
+        <attr name="lineSpacing" format="dimension" />
+        <attr name="maxLine" format="integer" />
+    </declare-styleable>
+
+    <declare-styleable name="ripple_imageView">
+        <attr name="show_spacing_time" format="integer"></attr>
+        <attr name="imageViewWidth" format="dimension"></attr>
+        <attr name="imageViewHeight" format="dimension"></attr>
+    </declare-styleable>
+</resources>

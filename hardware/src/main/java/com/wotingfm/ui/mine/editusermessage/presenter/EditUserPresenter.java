@@ -2,9 +2,7 @@ package com.wotingfm.ui.mine.editusermessage.presenter;
 
 import android.content.Intent;
 import android.util.Log;
-import android.view.View;
 
-import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.woting.commonplat.config.GlobalNetWorkConfig;
 import com.wotingfm.common.application.BSApplication;
@@ -12,7 +10,6 @@ import com.wotingfm.common.config.GlobalStateConfig;
 import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.common.utils.ToastUtils;
-import com.wotingfm.ui.intercom.main.view.InterPhoneActivity;
 import com.wotingfm.ui.mine.editusermessage.model.EditUserModel;
 import com.wotingfm.ui.mine.editusermessage.view.EditUserFragment;
 import com.wotingfm.ui.mine.main.MineActivity;
@@ -133,9 +130,9 @@ public class EditUserPresenter {
     public void textChange(String src) {
         if (src != null && !src.trim().equals("")) {
             int l = src.length();
-            activity.setTextViewChange(String.valueOf(90 - l));
+            activity.setTextViewChange(String.valueOf(30 - l));
         } else {
-            activity.setTextViewChange("90");
+            activity.setTextViewChange("30");
         }
     }
 

@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingTop="20dp"
+    android:background="@color/white">
+
+    <RelativeLayout
+        android:id="@+id/view_head"
+        android:layout_width="match_parent"
+        android:layout_height="44dp">
+
+        <ImageView
+            android:id="@+id/head_left_btn"
+            style="@style/LeftImageStyle" />
+
+        <TextView
+            android:id="@+id/tv_pass"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:gravity="center"
+            android:lineSpacingExtra="0sp"
+            android:paddingLeft="12dp"
+            android:paddingRight="12dp"
+            android:text="跳过"
+            android:textColor="@color/icon_text"
+            android:textSize="16sp" />
+
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/tv_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/view_head"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="27dp"
+        android:lineSpacingExtra="0sp"
+        android:text="你对什么感兴趣？"
+        android:textColor="@color/black_head_word"
+        android:textSize="20sp" />
+
+
+    <TextView
+        android:id="@+id/tv_RAWY"
+        android:layout_width="92dp"
+        android:layout_height="40dp"
+        android:layout_below="@+id/tv_name"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="43dp"
+        android:background="@drawable/background_preference_white"
+        android:gravity="center"
+        android:lineSpacingExtra="0sp"
+        android:text="热爱文艺"
+        android:textColor="@color/color_preference_word"
+        android:textSize="15sp" />
+
+    <TextView
+        android:id="@+id/tv_FYKSJ"
+        android:layout_width="105dp"
+        android:layout_height="40dp"
+        android:layout_below="@+id/tv_RAWY"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/background_preference_white"
+        android:gravity="center"
+        android:lineSpacingExtra="0sp"
+        android:text="放眼看世界"
+        android:textColor="#959698"
+        android:textSize="15sp" />
+
+    <TextView
+        android:id="@+id/tv_ZZS"
+        android:layout_width="77dp"
+        android:layout_height="40dp"
+        android:layout_below="@+id/tv_FYKSJ"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/background_preference_white"
+        android:gravity="center"
+        android:lineSpacingExtra="0sp"
+        android:text="涨知识"
+        android:textColor="#959698"
+        android:textSize="15sp" />
+
+    <TextView
+        android:id="@+id/tv_XSSH"
+        android:layout_width="92dp"
+        android:layout_height="40dp"
+        android:layout_alignBottom="@+id/tv_RAWY"
+        android:layout_marginLeft="12dp"
+        android:layout_toRightOf="@+id/tv_RAWY"
+        android:background="@drawable/background_preference_white"
+        android:gravity="center"
+        android:lineSpacingExtra="0sp"
+        android:text="享受生活"
+        android:textColor="@color/color_preference_word"
+        android:textSize="15sp" />
+
+    <TextView
+        android:id="@+id/tv_XJ"
+        android:layout_width="62dp"
+        android:layout_height="40dp"
+        android:layout_alignBottom="@+id/tv_XSSH"
+        android:layout_marginLeft="12dp"
+        android:layout_toRightOf="@+id/tv_XSSH"
+        android:background="@drawable/background_preference_white"
+        android:gravity="center"
+        android:lineSpacingExtra="0sp"
+        android:text="喜剧"
+        android:textColor="@color/color_preference_word"
+        android:textSize="15sp" />
+
+    <TextView
+        android:id="@+id/tv_TGSTXS"
+        android:layout_width="122dp"
+        android:layout_height="40dp"
+        android:layout_alignBottom="@+id/tv_FYKSJ"
+        android:layout_marginLeft="12dp"
+        android:layout_toRightOf="@+id/tv_FYKSJ"
+        android:background="@drawable/background_preference_white"
+        android:gravity="center"
+        android:lineSpacingExtra="0sp"
+        android:text="听故事听小说"
+        android:textColor="@color/color_preference_word"
+        android:textSize="15sp" />
+
+    <TextView
+        android:id="@+id/tv_YQQ"
+        android:layout_width="77dp"
+        android:layout_height="40dp"
+        android:layout_alignBottom="@+id/tv_ZZS"
+        android:layout_marginLeft="12dp"
+        android:layout_toRightOf="@+id/tv_ZZS"
+        android:background="@drawable/background_preference_white"
+        android:gravity="center"
+        android:lineSpacingExtra="0sp"
+        android:text="有情趣"
+        android:textColor="@color/color_preference_word"
+        android:textSize="15sp" />
+
+    <TextView
+        android:id="@+id/tv_enter"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="20dp"
+        android:layout_marginLeft="12dp"
+        android:layout_marginRight="12dp"
+        android:background="@drawable/background_login_tvlogin_off"
+        android:gravity="center"
+        android:text="进入我听"
+        android:textColor="#ffffff"
+        android:textSize="15sp" />
+</RelativeLayout>

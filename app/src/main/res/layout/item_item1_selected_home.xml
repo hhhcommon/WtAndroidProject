@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:gravity="center"
+    android:paddingRight="10dp"
+    android:orientation="vertical">
+
+    <ImageView
+        android:id="@+id/ivClass"
+        android:layout_width="92dp"
+        android:layout_height="92dp"
+        android:layout_gravity="center"
+        android:scaleType="centerCrop"
+        android:src="@mipmap/oval_defut_other" />
+
+    <TextView
+        android:id="@+id/tvContent"
+        android:layout_width="92dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="6dp"
+        android:ellipsize="end"
+        android:paddingLeft="4dp"
+        android:paddingRight="4dp"
+        android:gravity="center|left"
+        android:singleLine="true"
+        android:text="科技动态科技动态"
+        android:textColor="#16181a"
+        android:textSize="13sp" />
+</LinearLayout>

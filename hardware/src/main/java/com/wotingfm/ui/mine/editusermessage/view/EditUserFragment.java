@@ -13,6 +13,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.wotingfm.R;
+import com.wotingfm.common.application.BSApplication;
+import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.common.utils.DialogUtils;
 import com.wotingfm.ui.mine.editusermessage.presenter.EditUserPresenter;
 import com.wotingfm.ui.mine.main.MineActivity;
@@ -43,19 +45,12 @@ public class EditUserFragment extends Fragment implements View.OnClickListener {
             rootView.setOnClickListener(this);
             inItView();
             presenter = new EditUserPresenter(this);
+            setListener();
         }
         return rootView;
     }
 
-    // 设置界面
-    private void inItView() {
-        rootView.findViewById(R.id.head_left_btn).setOnClickListener(this);
-        rootView.findViewById(R.id.tv_send).setOnClickListener(this);
-        tv_center = (TextView) rootView.findViewById(R.id.tv_center);// 信息
-        et_name = (EditText) rootView.findViewById(R.id.et_name);// 名称
-        re_introduce = (RelativeLayout) rootView.findViewById(R.id.re_introduce);// 介绍
-        et_introduce = (EditText) rootView.findViewById(R.id.et_introduce);// 介绍
-        tv_number = (TextView) rootView.findViewById(R.id.tv_number);// 计数
+    private void setListener() {
         et_introduce.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -72,6 +67,17 @@ public class EditUserFragment extends Fragment implements View.OnClickListener {
 
             }
         });
+    }
+
+    // 设置界面
+    private void inItView() {
+        rootView.findViewById(R.id.head_left_btn).setOnClickListener(this);
+        rootView.findViewById(R.id.tv_send).setOnClickListener(this);
+        tv_center = (TextView) rootView.findViewById(R.id.tv_center);// 信息
+        et_name = (EditText) rootView.findViewById(R.id.et_name);// 名称
+        re_introduce = (RelativeLayout) rootView.findViewById(R.id.re_introduce);// 介绍
+        et_introduce = (EditText) rootView.findViewById(R.id.et_introduce);// 介绍
+        tv_number = (TextView) rootView.findViewById(R.id.tv_number);// 计数
     }
 
     @Override
@@ -96,10 +102,12 @@ public class EditUserFragment extends Fragment implements View.OnClickListener {
     public void setView(int type) {
         if (type == 1) {
             tv_center.setText("昵称");
+            et_name.setText(BSApplication.SharedPreferences.getString(StringConstant.NICK_NAME, ""));
             et_name.setVisibility(View.VISIBLE);
             re_introduce.setVisibility(View.GONE);
         } else if (type == 2) {
             tv_center.setText("简介");
+            et_introduce.setText(BSApplication.SharedPreferences.getString(StringConstant.USER_SIGN, ""));
             et_name.setVisibility(View.GONE);
             re_introduce.setVisibility(View.VISIBLE);
         }

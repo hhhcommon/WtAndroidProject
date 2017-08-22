@@ -14,11 +14,10 @@ import android.widget.TextView;
 import com.woting.commonplat.widget.TipView;
 import com.wotingfm.R;
 import com.wotingfm.common.utils.DialogUtils;
+import com.wotingfm.ui.mine.main.MineActivity;
 import com.wotingfm.ui.mine.message.notify.adapter.NotifyMsgAdapter;
 import com.wotingfm.ui.mine.message.notify.model.Msg;
-import com.wotingfm.ui.mine.message.notify.model.SrcMsg;
 import com.wotingfm.ui.mine.message.notify.presenter.MsgNotifyPresenter;
-import com.wotingfm.ui.mine.main.MineActivity;
 
 import java.util.List;
 
@@ -32,14 +31,8 @@ public class MsgNotifyFragment extends Fragment implements NotifyMsgAdapter.IonS
     private MsgNotifyPresenter presenter;
     private RecyclerView mRecyclerView;
     private TipView tip_view;
-    private int type;
     private Dialog dialog;
     private NotifyMsgAdapter mAdapter;
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -127,7 +120,6 @@ public class MsgNotifyFragment extends Fragment implements NotifyMsgAdapter.IonS
      *             IS_ERROR,加载错误 4
      */
     public void isLoginView(int type) {
-        this.type = type;
         if (type == 0) {
             // 已经登录，并且有数据
             mRecyclerView.setVisibility(View.VISIBLE);

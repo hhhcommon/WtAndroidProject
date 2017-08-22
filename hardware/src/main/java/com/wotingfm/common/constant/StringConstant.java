@@ -9,16 +9,16 @@ package com.wotingfm.common.constant;
 public class StringConstant {
     public static final String IS_LOGIN = "IS_LOGIN";                               // 是否登录
 
-    public static final String TOKEN = "TOKEN";                                     // TOKEN
-    public static final String USER_ID = "USER_ID";                                 // 用户ID
-    public static final String USER_NUM = "USER_NUM";                               // woTing号
-    public static final String NICK_NAME = "NICK_NAME";                             // 昵称
-    public static final String PORTRAIT = "PORTRAIT";                               // 头像Image地址
+    public static final String TOKEN = "TOKEN";                                      // TOKEN
+    public static final String USER_ID = "USER_ID";                                  // 用户ID
+    public static final String USER_NUM = "USER_NUM";                                // woTing号
+    public static final String NICK_NAME = "NICK_NAME";                              // 昵称
+    public static final String PORTRAIT = "PORTRAIT";                                // 头像Image地址
     public static final String USER_PHONE_NUMBER = "USER_PHONE_NUMBER";             // 用户注册手机号
-    public static final String GENDER = "GENDER";                                   // 性别
-    public static final String REGION = "REGION";                                   // 用户地区
-    public static final String USER_SIGN = "USER_SIGN";                             // 用户签名
-    public static final String AGE = "AGE";                                         // 年龄
+    public static final String GENDER = "GENDER";                                    // 性别
+    public static final String REGION = "REGION";                                    // 用户地区
+    public static final String USER_SIGN = "USER_SIGN";                              // 用户签名
+    public static final String AGE = "AGE";                                           // 年龄
 
     /*
      * 电台城市列表

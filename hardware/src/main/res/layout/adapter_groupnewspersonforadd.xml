@@ -26,12 +26,12 @@
         android:id="@+id/img_add"
         android:layout_width="52dp"
         android:layout_height="52dp"
-        android:src="@mipmap/chat_icon_add_members_n"/>
+        android:src="@drawable/icon_chat_add_mumber"/>
 
     <ImageView
         android:id="@+id/img_del"
         android:layout_width="52dp"
         android:layout_height="52dp"
-        android:src="@mipmap/chat_icon_delete_members_n"/>
+        android:src="@drawable/icon_chat_del_mumber"/>
 
 </LinearLayout>

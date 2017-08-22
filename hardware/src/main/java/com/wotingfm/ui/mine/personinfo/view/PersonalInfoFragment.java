@@ -366,8 +366,8 @@ public class PersonalInfoFragment extends Fragment implements View.OnClickListen
         // 设置字体样式
         pickYear.setTextSize(15, 17);
         pickYear.setItems(year);
-        pickYear.setInitPosition(0);
-        pYear = 0;
+        pickYear.setInitPosition(year.size()-1);
+        pYear = year.size()-1;
         pickMonth.setTextSize(15, 17);
         pickMonth.setItems(month);
         pickMonth.setInitPosition(0);
