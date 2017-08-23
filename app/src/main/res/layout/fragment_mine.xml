@@ -1,225 +1,275 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                style="@style/LinearLayoutStyle">
-
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
     <ScrollView style="@style/ScrollViewStyle">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
+            android:background="@color/line_color"
             android:orientation="vertical">
-            <!--登录状态-->
-            <RelativeLayout
+
+            <LinearLayout
+                android:id="@+id/lin_head"
                 android:layout_width="match_parent"
-                android:layout_height="220dp">
+                android:layout_height="84dp"
+                android:layout_marginTop="7dp"
+                android:background="@drawable/wt_view_click_background"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
 
-                <ImageView
-                    android:id="@+id/img_bg"
-                    android:layout_width="match_parent"
-                    android:layout_height="220dp"
-                    android:scaleType="centerCrop"/>
+                <RelativeLayout
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_marginLeft="12dp">
 
-                <TextView
-                    android:id="@+id/tv_bg_clear"
-                    android:layout_width="match_parent"
-                    android:layout_height="220dp"
-                    android:background="@color/transparent_40_black"/>
+                    <ImageView
+                        android:id="@+id/image_avatar"
+                        android:layout_width="60dp"
+                        android:layout_height="60dp"
+                        android:src="@mipmap/icon_avatar_d"/>
+
+                    <ImageView
+                        android:layout_width="60dp"
+                        android:layout_height="60dp"
+                        android:src="@drawable/background_person"/>
+                </RelativeLayout>
 
                 <LinearLayout
-                    android:id="@+id/view_login"
-                    android:layout_width="match_parent"
-                    android:layout_height="220dp"
-                    android:gravity="center_horizontal"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="10dp"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
                     android:orientation="vertical">
 
-                    <RelativeLayout
-                        android:layout_width="70dp"
-                        android:layout_height="70dp"
-                        android:layout_marginTop="74.7dp">
-
-                        <ImageView
-                            android:id="@+id/image_head"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:src="@mipmap/icon_avatar_d"/>
-
-                        <ImageView
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:src="@drawable/background_circle_person_white"/>
-                    </RelativeLayout>
-
                     <TextView
-                        android:id="@+id/text_user_name"
-                        style="@style/WrapContent"
-                        android:layout_marginTop="12.3dp"
-                        android:text="莉莉"
-                        android:textColor="@color/white"
+                        android:id="@+id/tv_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="如果我是你的爱"
+                        android:textColor="@color/black_head_word"
                         android:textSize="16sp"/>
 
                     <TextView
-                        android:id="@+id/text_user_number"
-                        style="@style/WrapContent"
-                        android:layout_below="@id/text_user_name"
-                        android:layout_marginTop="8dp"
-                        android:text="我听号：12345678"
-                        android:textColor="#ccffffff"
+                        android:id="@+id/tv_num"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:text="听号： 12345678"
+                        android:textColor="@color/gray"
+                        android:textSize="12sp"/>
+                </LinearLayout>
+
+                <ImageView style="@style/MineRightImageStyle"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="64dp"
+                android:layout_marginTop="7dp"
+                android:background="@color/white"
+                android:gravity="center_vertical">
+
+                <LinearLayout
+                    android:id="@+id/lin_follow"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/wt_view_click_background"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="关注"
+                        android:textColor="@color/gray"
                         android:textSize="12sp"/>
 
+                    <TextView
+                        android:id="@+id/tv_follow"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:text="2"
+                        android:textColor="@color/black_head_word"
+                        android:textSize="14sp"/>
                 </LinearLayout>
-            </RelativeLayout>
-
-
-            <TextView
-                style="@style/MineIdentifyingTextStyle"
-                android:text="@string/connect_car_audio_system"/>
-
-            <RelativeLayout
-                android:id="@+id/fm_set"
-                style="@style/MineRelativeStyle">
-
-                <ImageView
-                    android:id="@+id/image_fm"
-                    style="@style/MineLeftImageStyle"
-                    android:src="@mipmap/icon_fm_n"/>
 
                 <TextView
-                    style="@style/MineTextStyle"
-                    android:layout_toRightOf="@id/image_fm"
-                    android:text="@string/fm_settings"/>
+                    android:layout_width="1dp"
+                    android:layout_height="30dp"
+                    android:background="@color/line_color"/>
 
-                <ImageView style="@style/MineRightImageStyle"/>
+                <LinearLayout
+                    android:id="@+id/lin_fans"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/wt_view_click_background"
+                    android:gravity="center"
+                    android:orientation="vertical">
 
-            </RelativeLayout>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="粉丝"
+                        android:textColor="@color/gray"
+                        android:textSize="12sp"/>
 
-            <include layout="@layout/include_tv"/>
-
-            <RelativeLayout
-                android:id="@+id/bluetooth_set"
-                style="@style/MineRelativeStyle">
-
-                <ImageView
-                    android:id="@+id/image_bluetooth"
-                    style="@style/MineLeftImageStyle"
-                    android:src="@mipmap/icon_bluetooth_n"/>
-
-                <TextView
-                    style="@style/MineTextStyle"
-                    android:layout_toRightOf="@id/image_bluetooth"
-                    android:text="@string/bluetooth_settings"/>
-
-                <ImageView style="@style/MineRightImageStyle"/>
-
-            </RelativeLayout>
-
-            <include layout="@layout/include_tv"/>
-
-            <TextView
-                style="@style/MineIdentifyingTextStyle"
-                android:text="@string/connection_device"/>
-
-            <include layout="@layout/include_tv"/>
+                    <TextView
+                        android:id="@+id/tv_fans"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:text="2"
+                        android:textColor="@color/black_head_word"
+                        android:textSize="14sp"/>
+                </LinearLayout>
+            </LinearLayout>
 
             <RelativeLayout
-                android:id="@+id/wifi_set"
-                style="@style/MineRelativeStyle">
-
-                <ImageView
-                    android:id="@+id/image_wifi"
-                    style="@style/MineLeftImageStyle"
-                    android:src="@mipmap/icon_wifi_n"/>
-
-                <TextView
-                    android:id="@+id/text_wifi_set"
-                    style="@style/MineTextStyle"
-                    android:layout_toRightOf="@id/image_wifi"
-                    android:text="@string/wlan"/>
-
-                <ImageView
-                    android:id="@+id/image_wifi_set"
-                    style="@style/MineRightImageStyle"/>
-
-                <TextView
-                    android:id="@+id/text_wifi_name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_marginRight="5dp"
-                    android:layout_toLeftOf="@id/image_wifi_set"
-                    android:maxLines="1"
-                    android:text="@string/connected"
-                    android:textColor="@color/tip_color"/>
-
-            </RelativeLayout>
-
-            <include layout="@layout/include_tv"/>
-
-            <RelativeLayout
-                android:id="@+id/flow_set"
-                style="@style/MineRelativeStyle">
-
-                <ImageView
-                    android:id="@+id/image_flow"
-                    style="@style/MineLeftImageStyle"
-                    android:src="@mipmap/icon_flow_n"/>
-
-                <TextView
-                    android:id="@+id/text_flow_set"
-                    style="@style/MineTextStyle"
-                    android:layout_toRightOf="@id/image_flow"
-                    android:text="@string/flow_management"/>
-
-                <ImageView style="@style/MineRightImageStyle"/>
-
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:id="@+id/setting"
+                android:id="@+id/re_sub"
                 style="@style/MineRelativeStyle"
-                android:layout_marginTop="20dp">
+                android:layout_marginTop="7dp">
+
+                <ImageView
+                    android:id="@+id/image_sub"
+                    style="@style/MineLeftImageStyle"
+                    android:src="@mipmap/icon_mine_subscribe"/>
+
+                <TextView
+                    style="@style/MineTextStyle"
+                    android:layout_toRightOf="@id/image_sub"
+                    android:text="我的订阅"/>
+
+                <ImageView style="@style/MineRightImageStyle"/>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/re_download"
+                style="@style/MineRelativeStyle">
+
+                <ImageView
+                    android:id="@+id/image_download"
+                    style="@style/MineLeftImageStyle"
+                    android:src="@mipmap/icon_mine_download"/>
+
+                <TextView
+                    style="@style/MineTextStyle"
+                    android:layout_toRightOf="@id/image_download"
+                    android:text="我的下载"/>
+
+                <ImageView style="@style/MineRightImageStyle"/>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/re_favorite"
+                style="@style/MineRelativeStyle">
+
+                <ImageView
+                    android:id="@+id/image_favorite"
+                    style="@style/MineLeftImageStyle"
+                    android:src="@mipmap/icon_mine_like"/>
+
+                <TextView
+                    style="@style/MineTextStyle"
+                    android:layout_toRightOf="@id/image_favorite"
+                    android:text="我喜欢的"/>
+
+                <ImageView style="@style/MineRightImageStyle"/>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/re_sing"
+                style="@style/MineRelativeStyle">
+
+                <ImageView
+                    android:id="@+id/image_sing"
+                    style="@style/MineLeftImageStyle"
+                    android:src="@mipmap/icon_mine_list"/>
+
+                <TextView
+                    style="@style/MineTextStyle"
+                    android:layout_toRightOf="@id/image_sing"
+                    android:text="我的听单"/>
+
+                <ImageView style="@style/MineRightImageStyle"/>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/re_recent"
+                style="@style/MineRelativeStyle">
+
+                <ImageView
+                    android:id="@+id/image_recent"
+                    style="@style/MineLeftImageStyle"
+                    android:src="@mipmap/icon_mine_recent"/>
+
+                <TextView
+                    style="@style/MineTextStyle"
+                    android:layout_toRightOf="@id/image_recent"
+                    android:text="最近收听"/>
+
+                <ImageView style="@style/MineRightImageStyle"/>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/re_msg"
+                style="@style/MineRelativeStyle">
+
+                <ImageView
+                    android:id="@+id/image_msg"
+                    style="@style/MineLeftImageStyle"
+                    android:src="@mipmap/icon_mine_message"/>
+
+                <TextView
+                    style="@style/MineTextStyle"
+                    android:layout_toRightOf="@id/image_msg"
+                    android:text="消息中心"/>
+
+                <ImageView style="@style/MineRightImageStyle"/>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/re_anchor"
+                style="@style/MineRelativeStyle"
+                android:layout_marginTop="7dp">
+
+                <ImageView
+                    android:id="@+id/image_anchor"
+                    style="@style/MineLeftImageStyle"
+                    android:src="@mipmap/icon_mine_archer"/>
+
+                <TextView
+                    style="@style/MineTextStyle"
+                    android:layout_toRightOf="@id/image_anchor"
+                    android:text="我要当主播"/>
+
+                <ImageView style="@style/MineRightImageStyle"/>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/re_set"
+                android:layout_marginBottom="100dp"
+                style="@style/MineRelativeStyle">
 
                 <ImageView
                     android:id="@+id/image_set"
                     style="@style/MineLeftImageStyle"
-                    android:src="@mipmap/icon_set_n"/>
+                    android:src="@mipmap/icon_mine_set"/>
 
                 <TextView
                     style="@style/MineTextStyle"
                     android:layout_toRightOf="@id/image_set"
-                    android:text="@string/setting"/>
+                    android:text="设置"/>
 
                 <ImageView style="@style/MineRightImageStyle"/>
-
             </RelativeLayout>
-
         </LinearLayout>
-
     </ScrollView>
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="44dp"
-        android:layout_marginTop="20dp">
-
-        <ImageView
-            android:id="@+id/head_left_btn"
-            style="@style/LeftImageStyle"
-            android:src="@drawable/icon_mine_img_close"/>
-
-        <ImageView
-            android:id="@+id/image_info"
-            android:layout_width="44dp"
-            android:layout_height="44dp"
-            android:layout_toLeftOf="@+id/image_qr_code"
-            android:src="@drawable/icon_mine_img_msg"/>
-
-        <ImageView
-            android:id="@+id/image_qr_code"
-            android:layout_width="44dp"
-            android:layout_height="44dp"
-            android:layout_alignParentRight="true"
-            android:src="@drawable/icon_mine_img_ewm"/>
-
-    </RelativeLayout>
 </RelativeLayout>

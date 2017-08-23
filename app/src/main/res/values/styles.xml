@@ -80,22 +80,22 @@
     <!-- 个人中心 Relative -->
     <style name="MineRelativeStyle">
         <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">44dp</item>
+        <item name="android:layout_height">50dp</item>
         <item name="android:background">@drawable/wt_view_click_background</item>
         <item name="android:clickable">true</item>
     </style>
 
     <!-- 个人中心 LeftImage -->
     <style name="MineLeftImageStyle">
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_marginLeft">12dp</item>
+        <item name="android:layout_width">44dp</item>
+        <item name="android:layout_height">44dp</item>
+        <item name="android:layout_marginLeft">2dp</item>
         <item name="android:layout_centerVertical">true</item>
     </style>
 
     <!-- 个人中心 TextView -->
     <style name="MineTextStyle" parent="WrapContent">
-        <item name="android:layout_marginLeft">12dp</item>
+        <item name="android:layout_marginLeft">2dp</item>
         <item name="android:layout_centerVertical">true</item>
         <item name="android:textColor">@color/black_head_word</item>
         <item name="android:textSize">16sp</item>
@@ -103,12 +103,12 @@
 
     <!-- 个人中心 RightImage -->
     <style name="MineRightImageStyle">
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">24dp</item>
+        <item name="android:layout_height">24dp</item>
         <item name="android:layout_marginRight">8dp</item>
         <item name="android:layout_centerVertical">true</item>
         <item name="android:layout_alignParentRight">true</item>
-        <item name="android:src">@mipmap/chat_icon_next</item>
+        <item name="android:src">@mipmap/icon_right_next_n</item>
     </style>
 
     <style name="BottomDialog" parent="Theme.AppCompat.Light.NoActionBar">

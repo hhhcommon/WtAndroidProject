@@ -4,7 +4,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.net.wifi.WifiManager;
 
 import com.woting.common.application.BSApplication;
 import com.woting.common.constant.BroadcastConstants;
@@ -21,11 +20,9 @@ public class MinePresenter {
 
     private final MineFragment activity;
     private MessageReceiver Receiver;
-    private WifiManager wifiManager;
 
     public MinePresenter(MineFragment activity) {
         this.activity = activity;
-        wifiManager = (WifiManager) activity.getActivity().getSystemService(Context.WIFI_SERVICE);
         setReceiver();// 设置广播接收器
     }
 
@@ -37,8 +34,10 @@ public class MinePresenter {
         if (CommonUtils.isLogin()) {
             String url = BSApplication.SharedPreferences.getString(StringConstant.PORTRAIT, "");// 头像
             String name = BSApplication.SharedPreferences.getString(StringConstant.NICK_NAME, "我听");// 昵称
-            String num = BSApplication.SharedPreferences.getString(StringConstant.USER_NUM, "000");// id
-            activity.setViewForLogin(url, name, num);
+            String num = BSApplication.SharedPreferences.getString(StringConstant.USER_NUM, "0");// id
+            String follow = BSApplication.SharedPreferences.getString(StringConstant.FOLLOW, "0");// 关注
+            String fans = BSApplication.SharedPreferences.getString(StringConstant.FANS, "0");// 粉丝
+            activity.setViewForLogin(url, name, num,follow,fans);
         }else{
             // 设置未登录界面
             activity.setView();
