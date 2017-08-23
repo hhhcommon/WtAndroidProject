@@ -13,13 +13,13 @@
         app:errorView="@layout/layout_error_view"
         app:loadingView="@layout/layout_loading_view">
 
-        <com.wotingfm.common.view.ObservableScrollView
+        <com.wotingfm.common.view.myscrollview.ObservableScrollView
             android:id="@+id/mObservableScrollView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
             <include layout="@layout/headview_albums_info" />
-        </com.wotingfm.common.view.ObservableScrollView>
+        </com.wotingfm.common.view.myscrollview.ObservableScrollView>
         <!--
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/mRecyclerView"

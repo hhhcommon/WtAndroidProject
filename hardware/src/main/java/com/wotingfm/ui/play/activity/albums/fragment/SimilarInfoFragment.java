@@ -7,8 +7,8 @@ import android.view.View;
 
 import com.woting.commonplat.widget.LoadFrameLayout;
 import com.wotingfm.R;
-import com.wotingfm.common.adapter.albumsAdapter.AlbumsAdapter;
-import com.wotingfm.common.bean.AlbumsBean;
+import com.wotingfm.ui.adapter.albumsAdapter.AlbumsAdapter;
+import com.wotingfm.ui.bean.AlbumsBean;
 import com.wotingfm.common.net.RetrofitUtils;
 import com.wotingfm.ui.base.basefragment.BaseFragment;
 

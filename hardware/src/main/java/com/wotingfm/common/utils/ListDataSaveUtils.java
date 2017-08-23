@@ -2,15 +2,12 @@ package com.wotingfm.common.utils;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 import android.util.Base64;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
-import com.google.gson.reflect.TypeToken;
-import com.wotingfm.common.bean.SinglesBase;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -51,7 +48,6 @@ public class ListDataSaveUtils {
         editor.clear();
         editor.putString(tag, strJson);
         editor.commit();
-
     }
 
     /**
@@ -76,8 +72,7 @@ public class ListDataSaveUtils {
 
     }
 
-    public boolean setObjectToShare(Object object,
-                                    String key) {
+    public boolean setObjectToShare(Object object,String key) {
         if (object == null) {
             return editor.commit();
         }

@@ -1,25 +1,25 @@
 package com.wotingfm.common.net;
 
 
-import com.wotingfm.common.bean.AlbumInfo;
-import com.wotingfm.common.bean.AnchorInfo;
-import com.wotingfm.common.bean.BaseResult;
-import com.wotingfm.common.bean.CLive;
-import com.wotingfm.common.bean.Channels;
-import com.wotingfm.common.bean.Classification;
-import com.wotingfm.common.bean.HomeBanners;
-import com.wotingfm.common.bean.LiveBean;
-import com.wotingfm.common.bean.Player;
-import com.wotingfm.common.bean.Provinces;
-import com.wotingfm.common.bean.Radio;
-import com.wotingfm.common.bean.RadioInfo;
-import com.wotingfm.common.bean.Reports;
-import com.wotingfm.common.bean.Room;
-import com.wotingfm.common.bean.Selected;
-import com.wotingfm.common.bean.SelectedMore;
-import com.wotingfm.common.bean.SerchList;
-import com.wotingfm.common.bean.Subscrible;
-import com.wotingfm.common.bean.TrailerInfo;
+import com.wotingfm.ui.bean.AlbumInfo;
+import com.wotingfm.ui.bean.AnchorInfo;
+import com.wotingfm.ui.bean.BaseResult;
+import com.wotingfm.ui.bean.CLive;
+import com.wotingfm.ui.bean.Channels;
+import com.wotingfm.ui.bean.Classification;
+import com.wotingfm.ui.bean.HomeBanners;
+import com.wotingfm.ui.bean.LiveBean;
+import com.wotingfm.ui.bean.Player;
+import com.wotingfm.ui.bean.Provinces;
+import com.wotingfm.ui.bean.Radio;
+import com.wotingfm.ui.bean.RadioInfo;
+import com.wotingfm.ui.bean.Reports;
+import com.wotingfm.ui.bean.Room;
+import com.wotingfm.ui.bean.Selected;
+import com.wotingfm.ui.bean.SelectedMore;
+import com.wotingfm.ui.bean.SerchList;
+import com.wotingfm.ui.bean.Subscrible;
+import com.wotingfm.ui.bean.TrailerInfo;
 
 import retrofit2.http.DELETE;
 import retrofit2.http.GET;

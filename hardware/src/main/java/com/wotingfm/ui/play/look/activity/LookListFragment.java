@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Color;
@@ -32,16 +31,14 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.woting.commonplat.manager.VoiceRecognizer;
-import com.woting.commonplat.utils.SequenceUUID;
 import com.woting.commonplat.widget.WaveLineView;
 import com.wotingfm.R;
-import com.wotingfm.common.adapter.MyAdapter;
+import com.wotingfm.ui.adapter.MyAdapter;
 import com.wotingfm.common.application.BSApplication;
-import com.wotingfm.common.bean.MessageEvent;
+import com.wotingfm.ui.bean.MessageEvent;
 import com.wotingfm.common.config.GlobalStateConfig;
 import com.wotingfm.common.utils.NetUtils;
 import com.wotingfm.common.utils.T;
-import com.wotingfm.ui.base.baseactivity.NoTitleBarBaseActivity;
 import com.wotingfm.ui.base.basefragment.BaseFragment;
 import com.wotingfm.ui.play.look.activity.serch.SerchFragment;
 import com.wotingfm.ui.play.look.fragment.ClassificationFragment;
@@ -58,8 +55,6 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import butterknife.BindView;
-
-import static com.wotingfm.R.layout.activity_look_list;
 
 /**
  * Created by amine on 2017/6/21.

@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
 import com.netease.nim.uikit.common.ui.dialog.DialogMaker;
 import com.netease.nimlib.sdk.AbortableFuture;
 import com.netease.nimlib.sdk.NIMClient;
@@ -15,8 +14,8 @@ import com.google.gson.GsonBuilder;
 import com.woting.commonplat.config.GlobalNetWorkConfig;
 import com.wotingfm.common.application.BSApplication;
 import com.netease.nim.live.DemoCache;
-import com.wotingfm.common.config.preference.Preferences;
-import com.wotingfm.common.config.preference.UserPreferences;
+import com.wotingfm.common.live.preference.Preferences;
+import com.wotingfm.common.live.preference.UserPreferences;
 import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.common.net.RetrofitUtils;
 import com.wotingfm.common.utils.ToastUtils;

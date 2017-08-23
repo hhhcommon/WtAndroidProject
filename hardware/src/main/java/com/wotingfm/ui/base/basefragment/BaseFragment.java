@@ -22,10 +22,10 @@ import android.view.inputmethod.InputMethodManager;
 import com.woting.commonplat.widget.LoadingDialog;
 import com.woting.commonplat.widget.WTToolbar;
 import com.wotingfm.R;
-import com.wotingfm.common.bean.ChannelsBean;
-import com.wotingfm.common.bean.MessageEvent;
-import com.wotingfm.common.bean.SinglesBase;
-import com.wotingfm.common.bean.SinglesDownload;
+import com.wotingfm.ui.bean.ChannelsBean;
+import com.wotingfm.ui.bean.MessageEvent;
+import com.wotingfm.ui.bean.SinglesBase;
+import com.wotingfm.ui.bean.SinglesDownload;
 import com.wotingfm.common.config.GlobalStateConfig;
 import com.wotingfm.common.utils.ProgressDialogUtils;
 import com.wotingfm.ui.base.baseactivity.BaseToolBarActivity;
@@ -293,10 +293,10 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
             playerActivity = (PlayerActivity) getActivity();
         } else if (getActivity() instanceof MineActivity) {
             playerActivityMain = (MineActivity) getActivity();
-        } else if (getActivity() instanceof InterPhoneActivity)
+        } else if (getActivity() instanceof InterPhoneActivity) {
             interPhoneActivity = (InterPhoneActivity) getActivity();
-        else if (getActivity() instanceof LookListActivity)
-            lookListActivity = (LookListActivity) getActivity();
+        }else if (getActivity() instanceof LookListActivity){
+            lookListActivity = (LookListActivity) getActivity();}
         toolbar = (WTToolbar) rootView.findViewById(R.id.toolbar);
         callBack = null;
         o2Toolbar = (WTToolbar) toolbar;

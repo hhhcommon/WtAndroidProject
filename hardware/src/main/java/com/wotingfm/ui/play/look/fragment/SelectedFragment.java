@@ -9,9 +9,9 @@ import android.widget.AbsListView;
 
 import com.woting.commonplat.widget.LoadFrameLayout;
 import com.wotingfm.R;
-import com.wotingfm.common.adapter.findHome.SelectedAdapter;
-import com.wotingfm.common.bean.HomeBanners;
-import com.wotingfm.common.bean.Selected;
+import com.wotingfm.ui.adapter.findHome.SelectedAdapter;
+import com.wotingfm.ui.bean.HomeBanners;
+import com.wotingfm.ui.bean.Selected;
 import com.wotingfm.common.net.RetrofitUtils;
 import com.wotingfm.common.view.BannerView;
 import com.wotingfm.ui.base.basefragment.BaseFragment;

@@ -1,12 +1,13 @@
 package com.wotingfm.common.utils;
 
-import com.wotingfm.common.bean.AlbumsBean;
+import com.wotingfm.ui.bean.AlbumsBean;
 import com.wotingfm.ui.intercom.main.contacts.model.Contact;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * 生成组装测试数据
  * 作者：xinLong on 2017/6/12 14:39
  * 邮箱：645700751@qq.com
  */

@@ -3,7 +3,7 @@ package com.wotingfm.ui.intercom.alert.receive.presenter;
 import android.content.Intent;
 import android.util.Log;
 
-import com.wotingfm.common.bean.MessageEvent;
+import com.wotingfm.ui.bean.MessageEvent;
 import com.wotingfm.common.config.GlobalStateConfig;
 import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.common.service.AudioService;
@@ -151,7 +151,7 @@ public class ReceivePresenter {
      */
     public void destroy() {
         musicClose();
-        VibratorUtils.cancel(activity);
+        VibratorUtils.cancel();
         if (callType == 1) pushCallOk();
         EventBus.getDefault().unregister(this);
         model = null;

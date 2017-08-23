@@ -300,7 +300,7 @@
 
         <!-- User defined.  For test only  用户自定义的广播接收器-->
         <receiver
-            android:name="com.wotingfm.common.service.JPushReceiver"
+            android:name=".common.receiver.JPushReceiver"
             android:enabled="true"
             android:exported="false">
             <intent-filter>

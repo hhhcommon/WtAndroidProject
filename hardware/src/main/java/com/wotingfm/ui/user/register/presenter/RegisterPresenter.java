@@ -1,12 +1,10 @@
 package com.wotingfm.ui.user.register.presenter;
 
 import android.content.Intent;
-import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.netease.nim.live.DemoCache;
 import com.netease.nim.uikit.common.ui.dialog.DialogMaker;
@@ -17,14 +15,13 @@ import com.netease.nimlib.sdk.auth.AuthService;
 import com.netease.nimlib.sdk.auth.LoginInfo;
 import com.woting.commonplat.config.GlobalNetWorkConfig;
 import com.wotingfm.common.application.BSApplication;
-import com.wotingfm.common.config.preference.Preferences;
-import com.wotingfm.common.config.preference.UserPreferences;
+import com.wotingfm.common.live.preference.Preferences;
+import com.wotingfm.common.live.preference.UserPreferences;
 import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.common.net.RetrofitUtils;
 import com.wotingfm.common.utils.ToastUtils;
 import com.wotingfm.ui.user.information.view.InformationFragment;
 import com.wotingfm.ui.user.logo.LogoActivity;
-import com.wotingfm.ui.user.preference.view.PreferenceFragment;
 import com.wotingfm.ui.user.register.model.RegisterModel;
 import com.wotingfm.ui.user.register.view.RegisterFragment;
 

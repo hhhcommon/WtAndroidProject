@@ -10,11 +10,9 @@ import android.view.View;
 
 import com.woting.commonplat.widget.LoadFrameLayout;
 import com.wotingfm.R;
-import com.wotingfm.common.application.BSApplication;
-import com.wotingfm.common.bean.ChannelsBean;
+import com.wotingfm.ui.bean.ChannelsBean;
 import com.wotingfm.common.net.RetrofitUtils;
 import com.wotingfm.ui.base.basefragment.BaseFragment;
-import com.wotingfm.ui.play.look.fragment.ClassificationFragment;
 
 import java.util.ArrayList;
 import java.util.List;

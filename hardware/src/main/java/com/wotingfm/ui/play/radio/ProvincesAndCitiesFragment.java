@@ -1,6 +1,5 @@
 package com.wotingfm.ui.play.radio;
 
-import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -15,14 +14,12 @@ import com.woting.commonplat.config.GlobalAddressConfig;
 import com.woting.commonplat.constant.BroadcastConstants;
 import com.woting.commonplat.widget.LoadFrameLayout;
 import com.wotingfm.R;
-import com.wotingfm.common.adapter.radioAdapter.ProvincesAdapter;
+import com.wotingfm.ui.adapter.radioAdapter.ProvincesAdapter;
 import com.wotingfm.common.application.BSApplication;
-import com.wotingfm.common.bean.Provinces;
+import com.wotingfm.ui.bean.Provinces;
 import com.wotingfm.common.config.LocationInfo;
 import com.wotingfm.common.net.RetrofitUtils;
-import com.wotingfm.ui.base.baseactivity.BaseToolBarActivity;
 import com.wotingfm.ui.base.basefragment.BaseFragment;
-import com.wotingfm.ui.play.look.fragment.RadioStationFragment;
 import com.zhy.adapter.recyclerview.wrapper.HeaderAndFooterWrapper;
 
 import java.util.ArrayList;

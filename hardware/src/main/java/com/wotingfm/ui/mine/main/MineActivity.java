@@ -10,7 +10,7 @@ import android.widget.Toast;
 
 import com.woting.commonplat.utils.SequenceUUID;
 import com.wotingfm.R;
-import com.wotingfm.common.bean.MessageEvent;
+import com.wotingfm.ui.bean.MessageEvent;
 import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.ui.base.baseactivity.AppManager;
 import com.wotingfm.ui.base.baseactivity.BaseFragmentActivity;

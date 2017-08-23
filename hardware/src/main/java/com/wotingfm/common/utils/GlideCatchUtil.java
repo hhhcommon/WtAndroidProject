@@ -7,6 +7,7 @@ import com.wotingfm.common.config.GlobalStateConfig;
 import java.io.File;
 
 /**
+ * glide缓存数据
  * 作者：xinLong on 2017/7/21 16:35
  * 邮箱：645700751@qq.com
  */

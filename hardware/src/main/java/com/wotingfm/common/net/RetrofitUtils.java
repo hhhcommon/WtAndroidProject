@@ -3,29 +3,28 @@ package com.wotingfm.common.net;
 
 import android.text.TextUtils;
 
-import com.wotingfm.R;
-import com.wotingfm.common.bean.AlbumInfo;
+import com.wotingfm.ui.bean.AlbumInfo;
 import com.wotingfm.common.application.BSApplication;
-import com.wotingfm.common.bean.AlbumsBean;
-import com.wotingfm.common.bean.AnchorInfo;
-import com.wotingfm.common.bean.BaseResult;
-import com.wotingfm.common.bean.CLive;
-import com.wotingfm.common.bean.Channels;
-import com.wotingfm.common.bean.ChannelsBean;
-import com.wotingfm.common.bean.Classification;
-import com.wotingfm.common.bean.HomeBanners;
-import com.wotingfm.common.bean.LiveBean;
-import com.wotingfm.common.bean.Player;
-import com.wotingfm.common.bean.Provinces;
-import com.wotingfm.common.bean.Radio;
-import com.wotingfm.common.bean.RadioInfo;
-import com.wotingfm.common.bean.Reports;
-import com.wotingfm.common.bean.Room;
-import com.wotingfm.common.bean.Selected;
-import com.wotingfm.common.bean.SelectedMore;
-import com.wotingfm.common.bean.SerchList;
-import com.wotingfm.common.bean.Subscrible;
-import com.wotingfm.common.bean.TrailerInfo;
+import com.wotingfm.ui.bean.AlbumsBean;
+import com.wotingfm.ui.bean.AnchorInfo;
+import com.wotingfm.ui.bean.BaseResult;
+import com.wotingfm.ui.bean.CLive;
+import com.wotingfm.ui.bean.Channels;
+import com.wotingfm.ui.bean.ChannelsBean;
+import com.wotingfm.ui.bean.Classification;
+import com.wotingfm.ui.bean.HomeBanners;
+import com.wotingfm.ui.bean.LiveBean;
+import com.wotingfm.ui.bean.Player;
+import com.wotingfm.ui.bean.Provinces;
+import com.wotingfm.ui.bean.Radio;
+import com.wotingfm.ui.bean.RadioInfo;
+import com.wotingfm.ui.bean.Reports;
+import com.wotingfm.ui.bean.Room;
+import com.wotingfm.ui.bean.Selected;
+import com.wotingfm.ui.bean.SelectedMore;
+import com.wotingfm.ui.bean.SerchList;
+import com.wotingfm.ui.bean.Subscrible;
+import com.wotingfm.ui.bean.TrailerInfo;
 import com.wotingfm.common.constant.StringConstant;
 
 import java.io.IOException;
@@ -46,7 +45,6 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 
-import static android.R.attr.type;
 import static com.wotingfm.common.net.RetrofitService.BASE_URL;
 
 

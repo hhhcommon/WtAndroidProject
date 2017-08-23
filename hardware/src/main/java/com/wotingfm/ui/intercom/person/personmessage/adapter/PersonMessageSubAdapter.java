@@ -9,7 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.wotingfm.R;
-import com.wotingfm.common.bean.AlbumsBean;
+import com.wotingfm.ui.bean.AlbumsBean;
 import com.wotingfm.common.utils.GlideUtils;
 import com.wotingfm.ui.intercom.main.view.InterPhoneActivity;
 import com.wotingfm.ui.play.activity.albums.AlbumsInfoFragmentMain;

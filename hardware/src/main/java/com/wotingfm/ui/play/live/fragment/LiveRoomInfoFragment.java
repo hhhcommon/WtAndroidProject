@@ -19,16 +19,13 @@ import com.netease.nim.uikit.R;
 import com.netease.nimlib.sdk.chatroom.model.ChatRoomInfo;
 import com.netease.nimlib.sdk.chatroom.model.ChatRoomMember;
 import com.netease.nimlib.sdk.chatroom.model.ChatRoomNotificationAttachment;
-import com.woting.commonplat.widget.GlideCircleTransform;
 import com.wotingfm.common.application.BSApplication;
-import com.wotingfm.common.bean.LiveBean;
+import com.wotingfm.ui.bean.LiveBean;
 import com.wotingfm.ui.play.live.LiveRoomActivity;
 
 import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.TimeZone;
-
-import static com.wotingfm.R.id.ivPhoto;
 
 /**
  * Created by zhukkun on 1/9/17.

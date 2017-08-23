@@ -2,10 +2,8 @@ package com.wotingfm.common.view;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.PagerSnapHelper;
 import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
 import android.view.View;
@@ -13,17 +11,11 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.wotingfm.R;
-import com.wotingfm.common.adapter.PlayerAdapter;
-import com.wotingfm.common.adapter.PlayerListAdapter;
-import com.wotingfm.common.bean.Player;
-import com.wotingfm.common.bean.SinglesBase;
+import com.wotingfm.ui.adapter.PlayerListAdapter;
+import com.wotingfm.ui.bean.SinglesBase;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static android.R.attr.id;
-import static android.media.CamcorderProfile.get;
-import static com.wotingfm.R.id.mRecyclerView;
 
 //播放节目选择dialog
 public class PlayerDialog extends Dialog implements View.OnClickListener {

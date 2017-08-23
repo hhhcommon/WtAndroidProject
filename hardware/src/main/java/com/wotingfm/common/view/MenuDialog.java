@@ -15,12 +15,13 @@ import android.widget.Toast;
 import com.woting.commonplat.utils.FileSizeUtil;
 import com.wotingfm.R;
 import com.wotingfm.common.application.BSApplication;
-import com.wotingfm.common.bean.BaseResult;
-import com.wotingfm.common.bean.ChannelsBean;
-import com.wotingfm.common.bean.MessageEvent;
-import com.wotingfm.common.bean.SinglesBase;
-import com.wotingfm.common.bean.SinglesDownload;
-import com.wotingfm.common.config.DbConfig;
+import com.wotingfm.common.config.GlobalStateConfig;
+import com.wotingfm.ui.bean.BaseResult;
+import com.wotingfm.ui.bean.ChannelsBean;
+import com.wotingfm.ui.bean.MessageEvent;
+import com.wotingfm.ui.bean.SinglesBase;
+import com.wotingfm.ui.bean.SinglesDownload;
+import com.wotingfm.common.database.DbConfig;
 import com.wotingfm.common.database.DownloadHelper;
 import com.wotingfm.common.net.RetrofitUtils;
 import com.wotingfm.common.utils.CommonUtils;
@@ -238,10 +239,10 @@ public class MenuDialog extends Dialog implements View.OnClickListener {
                     dismiss();
                     interPhoneActivity.open(AnchorPersonalCenterFragment.newInstance(pdsBase.creator_id));
                 }
-                BSApplication.IS_LOOK = true;
+                GlobalStateConfig.IS_LOOK = true;
                 break;
             case R.id.tvAlbums:
-                BSApplication.IS_LOOK = true;
+                GlobalStateConfig.IS_LOOK = true;
                 if (pdsBase != null && activity != null) {
                     dismiss();
                     activity.open(AlbumsInfoFragmentMain.newInstance(pdsBase.album_id));
@@ -345,7 +346,7 @@ public class MenuDialog extends Dialog implements View.OnClickListener {
                     interPhoneActivity.open(DownloadProgramFragment.newInstance());
                 break;
             case R.id.tvRadio:
-                BSApplication.IS_LOOK = true;
+                GlobalStateConfig.IS_LOOK = true;
                 dismiss();
                 if (pdsBase != null && pdsBase.is_radio == true) {
                     channelsBean = new ChannelsBean();

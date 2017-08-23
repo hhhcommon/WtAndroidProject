@@ -1,6 +1,5 @@
 package com.wotingfm.common.utils;
 
-import android.app.Activity;
 import android.app.Service;
 import android.os.Vibrator;
 import android.util.Log;
@@ -37,11 +36,10 @@ public class VibratorUtils {
 
     /**
      * 取消震动
-     * @param activity
      */
-	public static void cancel(final Activity activity) {
+	public static void cancel() {
 		try {
-			Vibrator vib = (Vibrator) activity.getSystemService(Service.VIBRATOR_SERVICE);
+			Vibrator vib = (Vibrator) BSApplication.getInstance().getSystemService(Service.VIBRATOR_SERVICE);
 			vib.cancel();
 			Log.e("停止震动","停止震动");
 		} catch (Exception e) {

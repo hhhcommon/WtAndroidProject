@@ -16,6 +16,7 @@ import jp.wasabeef.glide.transformations.BlurTransformation;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 
 /**
+ * glide
  * 作者：xinLong on 2017/6/15 17:54
  * 邮箱：645700751@qq.com
  */

@@ -1,14 +1,10 @@
 package com.wotingfm.ui.play.look.activity.serch;
 
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.text.Editable;
-import android.text.Selection;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
@@ -17,31 +13,18 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.woting.commonplat.manager.VoiceRecognizer;
 import com.wotingfm.R;
-import com.wotingfm.common.adapter.MyAdapter;
-import com.wotingfm.common.application.BSApplication;
-import com.wotingfm.common.constant.BroadcastConstants;
-import com.wotingfm.ui.base.baseactivity.AppManager;
-import com.wotingfm.ui.base.baseactivity.NoTitleBarBaseActivity;
+import com.wotingfm.ui.adapter.MyAdapter;
 import com.wotingfm.ui.base.basefragment.BaseFragment;
 import com.wotingfm.ui.play.look.activity.serch.fragment.AlbumsListFragment;
 import com.wotingfm.ui.play.look.activity.serch.fragment.AnchorListFragment;
 import com.wotingfm.ui.play.look.activity.serch.fragment.ProgramListFragment;
 import com.wotingfm.ui.play.look.activity.serch.fragment.RadioStationListFragment;
-import com.wotingfm.ui.play.look.fragment.ClassificationFragment;
-import com.wotingfm.ui.play.look.fragment.LiveFragment;
-import com.wotingfm.ui.play.look.fragment.RadioStationFragment;
-import com.wotingfm.ui.play.look.fragment.SelectedFragment;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
-
-import static com.wotingfm.R.id.ivClose;
-import static com.wotingfm.R.id.ivVoice;
 
 /**
  * Created by amine on 2017/6/26.

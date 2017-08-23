@@ -30,6 +30,8 @@ import com.woting.ui.play.look.activity.LookListActivity;
 
 import org.greenrobot.eventbus.EventBus;
 
+import butterknife.ButterKnife;
+
 /**
  * 主页
  */
@@ -44,6 +46,7 @@ public class MainActivity extends TabActivity  {
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);        // 透明状态栏
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);    // 透明导航栏
         setContentView(R.layout.activity_main);
+        ButterKnife.bind(this);
         InitTextView();// 初始化视图
         mainPresenter = new MainPresenter(this);
         mainPresenter.applyTextColor(false);

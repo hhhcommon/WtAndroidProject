@@ -10,9 +10,9 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.woting.commonplat.utils.FileSizeUtil;
 import com.woting.commonplat.widget.LoadFrameLayout;
 import com.wotingfm.R;
-import com.wotingfm.common.adapter.downloadAdapter.AlbumsDownloadAdapter;
+import com.wotingfm.ui.adapter.downloadAdapter.AlbumsDownloadAdapter;
 import com.wotingfm.common.application.BSApplication;
-import com.wotingfm.common.bean.SinglesDownload;
+import com.wotingfm.ui.bean.SinglesDownload;
 import com.wotingfm.common.database.DownloadHelper;
 import com.wotingfm.ui.base.basefragment.BaseFragment;
 

@@ -7,9 +7,9 @@ import android.view.View;
 import com.woting.commonplat.utils.FileSizeUtil;
 import com.woting.commonplat.widget.LoadFrameLayout;
 import com.wotingfm.R;
-import com.wotingfm.common.adapter.downloadAdapter.ProgramDownloadAdapter;
+import com.wotingfm.ui.adapter.downloadAdapter.ProgramDownloadAdapter;
 import com.wotingfm.common.application.BSApplication;
-import com.wotingfm.common.bean.SinglesDownload;
+import com.wotingfm.ui.bean.SinglesDownload;
 import com.wotingfm.common.database.DownloadHelper;
 import com.wotingfm.ui.base.basefragment.BaseFragment;
 

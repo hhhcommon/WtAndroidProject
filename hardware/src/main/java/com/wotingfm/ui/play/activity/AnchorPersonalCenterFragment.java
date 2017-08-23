@@ -17,10 +17,11 @@ import com.woting.commonplat.utils.DementionUtil;
 import com.woting.commonplat.widget.GlideCircleTransform;
 import com.woting.commonplat.widget.LoadFrameLayout;
 import com.wotingfm.R;
-import com.wotingfm.common.adapter.userAdapter.AnchorPersonalCenterInfoAdapter;
+import com.wotingfm.common.config.GlobalStateConfig;
+import com.wotingfm.ui.adapter.userAdapter.AnchorPersonalCenterInfoAdapter;
 import com.wotingfm.common.application.BSApplication;
-import com.wotingfm.common.bean.AnchorInfo;
-import com.wotingfm.common.bean.SinglesBase;
+import com.wotingfm.ui.bean.AnchorInfo;
+import com.wotingfm.ui.bean.SinglesBase;
 import com.wotingfm.common.net.RetrofitUtils;
 import com.wotingfm.common.utils.CommonUtils;
 import com.wotingfm.common.utils.L;
@@ -107,8 +108,8 @@ public class AnchorPersonalCenterFragment extends BaseFragment implements View.O
 
             @Override
             public void ItmeSendClick(AnchorInfo.DataBeanXX.UserBean.DataBeanX.DataBean dataBean) {
-                BSApplication.IS_RESULT = true;
-                BSApplication.isIS_BACK = true;
+                GlobalStateConfig.IS_RESULT = true;
+                GlobalStateConfig.isIS_BACK = true;
                 SinglesBase singlesBase = new SinglesBase();
                 singlesBase.album_logo_url = dataBean.single_logo_url;
                 singlesBase.album_title = dataBean.single_title;

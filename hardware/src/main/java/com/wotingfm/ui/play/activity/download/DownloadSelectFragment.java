@@ -1,10 +1,7 @@
 package com.wotingfm.ui.play.activity.download;
 
-import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -16,17 +13,11 @@ import com.woting.commonplat.amine.OnLoadMoreListener;
 import com.woting.commonplat.amine.OnRefreshListener;
 import com.woting.commonplat.widget.LoadFrameLayout;
 import com.wotingfm.R;
-import com.wotingfm.common.adapter.albumsAdapter.AlbumsAdapter;
-import com.wotingfm.common.adapter.albumsAdapter.AlbumsInfoProgramAdapter;
-import com.wotingfm.common.adapter.downloadAdapter.DownloadSelectAdapter;
-import com.wotingfm.common.application.BSApplication;
-import com.wotingfm.common.bean.Player;
-import com.wotingfm.common.bean.Subscrible;
+import com.wotingfm.ui.adapter.downloadAdapter.DownloadSelectAdapter;
+import com.wotingfm.ui.bean.Player;
 import com.wotingfm.common.net.RetrofitUtils;
 import com.wotingfm.common.utils.DownloadUtils;
 import com.wotingfm.common.utils.T;
-import com.wotingfm.ui.base.baseactivity.AppManager;
-import com.wotingfm.ui.base.baseactivity.NoTitleBarBaseActivity;
 import com.wotingfm.ui.base.basefragment.BaseFragment;
 import com.wotingfm.ui.play.activity.ReportsPlayerFragment;
 
@@ -34,7 +25,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.schedulers.Schedulers;

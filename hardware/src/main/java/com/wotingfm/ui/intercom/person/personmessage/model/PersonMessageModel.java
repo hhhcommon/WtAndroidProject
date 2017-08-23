@@ -1,20 +1,17 @@
 package com.wotingfm.ui.intercom.person.personmessage.model;
 
 import android.util.Log;
-import com.google.gson.Gson;
+
 import com.google.gson.GsonBuilder;
 import com.wotingfm.common.application.BSApplication;
-import com.wotingfm.common.bean.AlbumsBean;
+import com.wotingfm.ui.bean.AlbumsBean;
 import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.common.net.RetrofitUtils;
 import com.wotingfm.common.utils.CommonUtils;
 import com.wotingfm.common.utils.GetTestData;
 import com.wotingfm.ui.intercom.main.chat.dao.SearchTalkHistoryDao;
 import com.wotingfm.ui.intercom.main.chat.model.DBTalkHistory;
-import com.wotingfm.ui.intercom.main.contacts.fragment.ContactsFragment;
 import com.wotingfm.ui.intercom.main.contacts.model.Contact;
-import com.wotingfm.ui.intercom.main.contacts.view.CharacterParser;
-import com.wotingfm.ui.intercom.main.contacts.view.PinyinComparator;
 import com.wotingfm.ui.intercom.person.personmessage.view.PersonMessageFragment;
 
 import java.util.List;

@@ -15,12 +15,7 @@ import com.netease.nim.live.liveplayer.NEVideoView;
 import com.netease.nim.live.liveplayer.PlayerContract;
 import com.netease.nim.live.liveplayer.VideoConstant;
 import com.netease.nim.uikit.R;
-import com.wotingfm.common.bean.AlbumInfo;
-import com.wotingfm.common.bean.LiveBean;
-import com.wotingfm.ui.play.activity.albums.fragment.AlbumsInfoFragment;
 import com.wotingfm.ui.play.live.LiveRoomActivity;
-
-import java.io.Serializable;
 
 
 /**

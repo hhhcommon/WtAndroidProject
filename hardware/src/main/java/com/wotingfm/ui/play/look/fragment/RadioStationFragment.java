@@ -11,9 +11,9 @@ import android.widget.TextView;
 
 import com.woting.commonplat.widget.LoadFrameLayout;
 import com.wotingfm.R;
-import com.wotingfm.common.adapter.findHome.RadioStationAdapter;
-import com.wotingfm.common.bean.ChannelsBean;
-import com.wotingfm.common.bean.HomeBanners;
+import com.wotingfm.ui.adapter.findHome.RadioStationAdapter;
+import com.wotingfm.ui.bean.ChannelsBean;
+import com.wotingfm.ui.bean.HomeBanners;
 import com.wotingfm.common.net.RetrofitUtils;
 import com.wotingfm.common.view.BannerView;
 import com.wotingfm.ui.base.basefragment.BaseFragment;

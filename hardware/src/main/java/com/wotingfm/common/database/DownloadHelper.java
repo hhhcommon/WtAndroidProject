@@ -5,8 +5,7 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.j256.ormlite.stmt.QueryBuilder;
-import com.wotingfm.common.bean.Player;
-import com.wotingfm.common.bean.SinglesDownload;
+import com.wotingfm.ui.bean.SinglesDownload;
 
 import java.util.List;
 

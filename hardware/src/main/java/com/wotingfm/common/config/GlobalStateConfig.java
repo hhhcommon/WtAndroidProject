@@ -1,5 +1,7 @@
 package com.wotingfm.common.config;
 
+import android.support.v4.app.Fragment;
+
 import com.wotingfm.ui.intercom.main.contacts.model.Contact;
 
 import java.util.List;
@@ -65,4 +67,10 @@ public class GlobalStateConfig {
     public static final int GLIDE_CATCH_SIZE = 1000 * 1000 * 1000;
     // 图片缓存子目录
     public static final String GLIDE_CARCH_DIR = "image_catch";
+    public static Fragment fragmentBase;
+    public static boolean isIS_BACK = false;
+    public static boolean IS_RESULT = false;
+    public static boolean IS_CREATE = false;
+    public static boolean IS_LOOK = false;
+    public static boolean IS_ONE = false;
 }

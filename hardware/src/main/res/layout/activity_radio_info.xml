@@ -13,7 +13,7 @@
         app:errorView="@layout/layout_error_view"
         app:loadingView="@layout/layout_loading_view">
 
-        <com.wotingfm.common.view.ObservableScrollView
+        <com.wotingfm.common.view.myscrollview.ObservableScrollView
             android:id="@+id/mObservableScrollView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
@@ -75,7 +75,7 @@
                     android:layout_height="match_parent"
                     android:layout_gravity="center" />
             </LinearLayout>
-        </com.wotingfm.common.view.ObservableScrollView>
+        </com.wotingfm.common.view.myscrollview.ObservableScrollView>
         <!--
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/mRecyclerView"

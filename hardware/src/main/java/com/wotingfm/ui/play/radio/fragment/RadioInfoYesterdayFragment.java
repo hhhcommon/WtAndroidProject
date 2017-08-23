@@ -5,8 +5,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
 import com.wotingfm.R;
-import com.wotingfm.common.adapter.radioAdapter.RadioYesterdayAdapter;
-import com.wotingfm.common.bean.RadioInfo;
+import com.wotingfm.ui.adapter.radioAdapter.RadioYesterdayAdapter;
+import com.wotingfm.ui.bean.RadioInfo;
 import com.wotingfm.ui.base.basefragment.BaseFragment;
 
 import butterknife.BindView;

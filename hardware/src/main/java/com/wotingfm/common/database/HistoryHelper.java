@@ -6,7 +6,7 @@ import android.database.sqlite.SQLiteDatabase;
 
 
 import com.j256.ormlite.stmt.QueryBuilder;
-import com.wotingfm.common.bean.Player;
+import com.wotingfm.ui.bean.Player;
 
 import java.util.List;
 

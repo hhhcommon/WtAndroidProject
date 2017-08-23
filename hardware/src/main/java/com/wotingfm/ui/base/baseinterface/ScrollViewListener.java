@@ -7,7 +7,5 @@ import com.wotingfm.common.view.myscrollview.ObservableScrollView;
  * 邮箱：645700751@qq.com
  */
 public interface ScrollViewListener {
-
     void onScrollChanged(ObservableScrollView scrollView, int x, int y, int oldx, int oldy);
-
 }

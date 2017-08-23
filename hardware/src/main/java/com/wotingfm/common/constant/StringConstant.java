@@ -20,18 +20,11 @@ public class StringConstant {
     public static final String USER_SIGN = "USER_SIGN";                              // 用户签名
     public static final String AGE = "AGE";                                           // 年龄
 
-    /*
-     * 电台城市列表
-     */
-    public static final String LATITUDE = "latitude";
-    public static final String LONGITUDE = "longitude";
-    public static final String CITYID = "cityid";//选中的城市id 对应导航返回的ADcode
-    public static final String CITYNAME = "cityname";//选中的城市
-
-    public static final String WIFI_SLEEP_POLICY_DEFAULT = "WIFI_SLEEP_POLICY_DEFAULT";// WiFi连接状态
-    public static final String WIFI_NAME = "WIFI_NAME";                                // WIFI_NAME
-
-    public static final String PUSH_MSG_SET = "PUSH_MSG_SET";                          // 消息推送设置
-
+    public static final String LATITUDE = "LATITUDE";
+    public static final String LONGITUDE = "LONGITUDE";
+    public static final String CITY_ID = "CITY_ID";                                   // 选中的城市id 对应导航返回的ADcode
+    public static final String CITY_NAME = "CITY_NAME";                               // 选中的城市
+    public static final String WIFI_NAME = "WIFI_NAME";                               // WIFI_NAME
+    public static final String PUSH_MSG_SET = "PUSH_MSG_SET";                         // 消息推送设置
 
 }

@@ -4,10 +4,10 @@ import android.content.ContentValues;
 
 import com.woting.commonplat.utils.FileSizeUtil;
 import com.wotingfm.common.application.BSApplication;
-import com.wotingfm.common.bean.MessageEvent;
-import com.wotingfm.common.bean.SinglesBase;
-import com.wotingfm.common.bean.SinglesDownload;
-import com.wotingfm.common.config.DbConfig;
+import com.wotingfm.ui.bean.MessageEvent;
+import com.wotingfm.ui.bean.SinglesBase;
+import com.wotingfm.ui.bean.SinglesDownload;
+import com.wotingfm.common.database.DbConfig;
 import com.wotingfm.common.database.DownloadHelper;
 
 import org.greenrobot.eventbus.EventBus;
@@ -17,8 +17,6 @@ import java.util.List;
 
 import cn.finalteam.okhttpfinal.FileDownloadCallback;
 import cn.finalteam.okhttpfinal.HttpRequest;
-
-import static com.wotingfm.R.mipmap.p;
 
 /**
  * Created by amine on 2017/6/20.

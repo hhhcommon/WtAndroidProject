@@ -28,10 +28,10 @@ import android.widget.TextView;
 
 import com.woting.commonplat.manager.PhoneMsgManager;
 import com.wotingfm.R;
-import com.wotingfm.common.bean.MessageEvent;
+import com.wotingfm.ui.bean.MessageEvent;
 import com.wotingfm.common.constant.BroadcastConstants;
-import com.wotingfm.common.service.InterPhoneControl;
-import com.wotingfm.common.service.WtDeviceControl;
+import com.wotingfm.common.manager.InterPhoneControl;
+import com.wotingfm.common.manager.WtDeviceControl;
 import com.wotingfm.ui.intercom.main.chat.presenter.ChatPresenter;
 import com.wotingfm.ui.intercom.main.view.InterPhoneActivity;
 import com.wotingfm.ui.main.presenter.MainPresenter;
@@ -40,6 +40,8 @@ import com.wotingfm.ui.play.look.activity.LookListActivity;
 import com.wotingfm.ui.play.main.PlayerActivity;
 
 import org.greenrobot.eventbus.EventBus;
+
+import butterknife.ButterKnife;
 
 
 public class MainActivity extends TabActivity implements View.OnClickListener {
@@ -56,6 +58,7 @@ public class MainActivity extends TabActivity implements View.OnClickListener {
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);        // 透明状态栏
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);    // 透明导航栏
         setContentView(R.layout.activity_main);
+        ButterKnife.bind(this);
         InitTextView();// 初始化视图
         dialog();// 通知消息弹出框
         mainPresenter = new MainPresenter(this);

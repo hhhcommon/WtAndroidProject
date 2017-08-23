@@ -11,7 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.wotingfm.R;
-import com.wotingfm.common.service.InterPhoneControl;
+import com.wotingfm.common.manager.InterPhoneControl;
 import com.wotingfm.common.utils.GlideUtils;
 import com.wotingfm.ui.intercom.alert.call.presenter.CallPresenter;
 

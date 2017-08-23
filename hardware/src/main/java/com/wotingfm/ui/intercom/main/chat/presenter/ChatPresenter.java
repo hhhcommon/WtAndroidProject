@@ -8,10 +8,10 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.woting.commonplat.config.GlobalNetWorkConfig;
-import com.wotingfm.common.bean.MessageEvent;
+import com.wotingfm.ui.bean.MessageEvent;
 import com.wotingfm.common.config.GlobalStateConfig;
 import com.wotingfm.common.constant.BroadcastConstants;
-import com.wotingfm.common.service.InterPhoneControl;
+import com.wotingfm.common.manager.InterPhoneControl;
 import com.wotingfm.common.utils.CommonUtils;
 import com.wotingfm.common.utils.ToastUtils;
 import com.wotingfm.ui.intercom.alert.call.view.CallAlertActivity;

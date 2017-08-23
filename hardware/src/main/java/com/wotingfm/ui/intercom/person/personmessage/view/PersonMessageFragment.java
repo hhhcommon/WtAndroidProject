@@ -23,7 +23,7 @@ import android.widget.TextView;
 import com.woting.commonplat.manager.PhoneMsgManager;
 import com.woting.commonplat.widget.TipView;
 import com.wotingfm.R;
-import com.wotingfm.common.bean.AlbumsBean;
+import com.wotingfm.ui.bean.AlbumsBean;
 import com.wotingfm.common.utils.DialogUtils;
 import com.wotingfm.common.utils.GlideUtils;
 import com.wotingfm.common.utils.ToastUtils;

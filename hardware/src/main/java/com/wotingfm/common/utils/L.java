@@ -9,7 +9,7 @@ import com.wotingfm.common.net.RetrofitService;
  * Created by Amine on 2015/4/30.
  */
 public class L {
-    private static final String TAG = "nanzhu";
+    private static final String TAG = "woTing:  ";
 
     /**
      * i

@@ -4,21 +4,18 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.res.Configuration;
-import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.view.WindowManager;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
 import com.woting.commonplat.utils.SequenceUUID;
 import com.wotingfm.R;
-import com.wotingfm.common.bean.MessageEvent;
 import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.ui.base.baseactivity.AppManager;
 import com.wotingfm.ui.base.baseactivity.BaseFragmentActivity;
+import com.wotingfm.ui.bean.MessageEvent;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -96,33 +93,6 @@ public class InterPhoneActivity extends BaseFragmentActivity {
         hintKbTwo();
     }
 
-    //此方法只是关闭软键盘
-    private static void hintKbTwo() {
-        InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
-        if (imm.isActive() && context.getCurrentFocus() != null) {
-            if (context.getCurrentFocus().getWindowToken() != null) {
-                imm.hideSoftInputFromWindow(context.getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
-            }
-        }
-    }
-
-    //此方法，如果显示则隐藏，如果隐藏则显示
-    private static void hintKbOne() {
-        InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE); //得到InputMethodManager的实例
-        if (imm.isActive()) {//如果开启
-            imm.toggleSoftInput(InputMethodManager.SHOW_IMPLICIT, InputMethodManager.HIDE_NOT_ALWAYS);//关闭软键盘，开启方法相同，这个方法是切换开启与关闭状态的
-        }
-    }
-
-    // 设置android app 的字体大小不受系统字体大小改变的影响
-    @Override
-    public Resources getResources() {
-        Resources res = super.getResources();
-        Configuration config = new Configuration();
-        config.setToDefaults();
-        res.updateConfiguration(config, res.getDisplayMetrics());
-        return res;
-    }
 
 
     // 设置广播接收器
@@ -178,15 +148,6 @@ public class InterPhoneActivity extends BaseFragmentActivity {
             close();
         }
     }
-
-    @Override
-    public void onWindowFocusChanged(boolean hasFocus) {
-        super.onWindowFocusChanged(hasFocus);
-        if (hasFocus){
-//            waveLineView.justDrawBackground();
-        }
-    }
-
 
     @Override
     protected void onDestroy() {

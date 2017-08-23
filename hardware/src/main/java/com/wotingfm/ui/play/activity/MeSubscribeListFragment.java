@@ -6,8 +6,8 @@ import android.view.View;
 
 import com.woting.commonplat.widget.LoadFrameLayout;
 import com.wotingfm.R;
-import com.wotingfm.common.adapter.PlayerSubscribleListAdapter;
-import com.wotingfm.common.bean.AlbumsBean;
+import com.wotingfm.ui.adapter.PlayerSubscribleListAdapter;
+import com.wotingfm.ui.bean.AlbumsBean;
 import com.wotingfm.common.net.RetrofitUtils;
 import com.wotingfm.common.utils.CommonUtils;
 import com.wotingfm.common.utils.T;

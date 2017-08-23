@@ -1,33 +1,24 @@
 package com.wotingfm.ui.base.baseactivity;
 
-import android.annotation.TargetApi;
-import android.content.Intent;
+import android.content.Context;
 import android.content.res.Configuration;
 import android.content.res.Resources;
-import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
-
-import java.util.List;
+import android.view.inputmethod.InputMethodManager;
 
 /**
  * 作者：xinlong on 2016/10/25 21:18
  * 邮箱：645700751@qq.com
  */
 public abstract class BaseFragmentActivity extends AppCompatActivity {
-    protected FragmentActivity context;
+    protected static FragmentActivity context;
 
-    @TargetApi(Build.VERSION_CODES.KITKAT)
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         context = this;
-        // getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);        // 透明状态栏
-        // getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);    // 透明导航栏
     }
 
     // 设置android app 的字体大小不受系统字体大小改变的影响
@@ -38,6 +29,24 @@ public abstract class BaseFragmentActivity extends AppCompatActivity {
         config.setToDefaults();
         res.updateConfiguration(config, res.getDisplayMetrics());
         return res;
+    }
+
+    //此方法只是关闭软键盘
+    public static void hintKbTwo() {
+        InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+        if (imm.isActive() && context.getCurrentFocus() != null) {
+            if (context.getCurrentFocus().getWindowToken() != null) {
+                imm.hideSoftInputFromWindow(context.getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+            }
+        }
+    }
+
+    //此方法，如果显示则隐藏，如果隐藏则显示
+    public static void hintKbOne() {
+        InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE); //得到InputMethodManager的实例
+        if (imm.isActive()) {//如果开启
+            imm.toggleSoftInput(InputMethodManager.SHOW_IMPLICIT, InputMethodManager.HIDE_NOT_ALWAYS);//关闭软键盘，开启方法相同，这个方法是切换开启与关闭状态的
+        }
     }
 
     @Override

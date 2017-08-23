@@ -30,14 +30,14 @@ import com.woting.commonplat.player.baidu.BDPlayer;
 import com.woting.commonplat.utils.ResourceUtil;
 import com.woting.commonplat.widget.LoadFrameLayout;
 import com.wotingfm.R;
-import com.wotingfm.common.adapter.PlayerAdapter;
+import com.wotingfm.ui.adapter.PlayerAdapter;
 import com.wotingfm.common.application.BSApplication;
-import com.wotingfm.common.bean.BaseResult;
-import com.wotingfm.common.bean.ChannelsBean;
-import com.wotingfm.common.bean.MessageEvent;
-import com.wotingfm.common.bean.Player;
-import com.wotingfm.common.bean.SinglesBase;
-import com.wotingfm.common.bean.SinglesDownload;
+import com.wotingfm.ui.bean.BaseResult;
+import com.wotingfm.ui.bean.ChannelsBean;
+import com.wotingfm.ui.bean.MessageEvent;
+import com.wotingfm.ui.bean.Player;
+import com.wotingfm.ui.bean.SinglesBase;
+import com.wotingfm.ui.bean.SinglesDownload;
 import com.wotingfm.common.config.GlobalStateConfig;
 import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.common.database.HistoryHelper;
@@ -117,10 +117,10 @@ public class PlayerFragment extends BaseFragment implements View.OnClickListener
     private boolean mIsActivityPaused = true;
     private SinglesBase singlesBase;
     private ListDataSaveUtils listDataSaveUtils;
-
+//
     @Override
     public void initView() {
-        BSApplication.IS_CREATE = true;
+        GlobalStateConfig.IS_CREATE = true;
         listDataSaveUtils = new ListDataSaveUtils(BSApplication.getInstance());
         if (mAVOptions == null)
             mAVOptions = new AVOptions();
@@ -442,7 +442,7 @@ public class PlayerFragment extends BaseFragment implements View.OnClickListener
     }
 
     private void before() {
-        if (singLesBeans.size() > postionPlayer && postionPlayer > 0 && BSApplication.IS_ONE == false && channelsBean == null) {
+        if (singLesBeans.size() > postionPlayer && postionPlayer > 0 && GlobalStateConfig.IS_ONE == false && channelsBean == null) {
             postionPlayer = postionPlayer - 1;
             mRecyclerView.smoothScrollToPosition(postionPlayer);
             bdPlayer.stopPlayback();
@@ -455,7 +455,7 @@ public class PlayerFragment extends BaseFragment implements View.OnClickListener
     }
 
     private void next() {
-        if (postionPlayer < singLesBeans.size() - 1 && BSApplication.IS_ONE == false && channelsBean == null) {
+        if (postionPlayer < singLesBeans.size() - 1 && GlobalStateConfig.IS_ONE == false && channelsBean == null) {
             postionPlayer = postionPlayer + 1;
             mRecyclerView.smoothScrollToPosition(postionPlayer);
             bdPlayer.stopPlayback();
@@ -765,7 +765,7 @@ public class PlayerFragment extends BaseFragment implements View.OnClickListener
     @Override
     public void onDestroy() {
         super.onDestroy();
-        BSApplication.IS_CREATE = false;
+        GlobalStateConfig.IS_CREATE = false;
         EventBus.getDefault().unregister(this);
         stopTelephonyListener();
         release();

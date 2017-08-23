@@ -10,9 +10,9 @@ import com.woting.commonplat.amine.OnLoadMoreListener;
 import com.woting.commonplat.amine.OnRefreshListener;
 import com.woting.commonplat.widget.LoadFrameLayout;
 import com.wotingfm.R;
-import com.wotingfm.common.adapter.serch.ProgramSerchAdapter;
-import com.wotingfm.common.bean.SerchList;
-import com.wotingfm.common.bean.SinglesBase;
+import com.wotingfm.ui.adapter.serch.ProgramSerchAdapter;
+import com.wotingfm.ui.bean.SerchList;
+import com.wotingfm.ui.bean.SinglesBase;
 import com.wotingfm.common.net.RetrofitUtils;
 import com.wotingfm.ui.base.basefragment.BaseFragment;
 

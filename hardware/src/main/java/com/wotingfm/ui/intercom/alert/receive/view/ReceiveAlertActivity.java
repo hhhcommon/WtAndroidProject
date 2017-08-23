@@ -12,9 +12,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.wotingfm.R;
-import com.wotingfm.common.bean.MessageEvent;
+import com.wotingfm.ui.bean.MessageEvent;
 import com.wotingfm.common.constant.BroadcastConstants;
-import com.wotingfm.common.service.InterPhoneControl;
+import com.wotingfm.common.manager.InterPhoneControl;
 import com.wotingfm.common.utils.GlideUtils;
 import com.wotingfm.ui.base.baseactivity.BaseActivity;
 import com.wotingfm.ui.intercom.alert.receive.presenter.ReceivePresenter;

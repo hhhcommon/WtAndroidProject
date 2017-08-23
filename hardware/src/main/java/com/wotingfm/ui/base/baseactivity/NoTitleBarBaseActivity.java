@@ -12,8 +12,6 @@ import android.view.inputmethod.InputMethodManager;
 import com.woting.commonplat.widget.LoadingDialog;
 import com.wotingfm.common.utils.ProgressDialogUtils;
 
-import butterknife.ButterKnife;
-
 /**
  * App
  * Created by Administrator on 9/6/2016.
@@ -62,7 +60,7 @@ public abstract class NoTitleBarBaseActivity extends BaseActivity {
         context = this;
         setContentView(getLayoutId());
         AppManager.getAppManager().addActivity(this);
-        ButterKnife.bind(this);
+
         this.initView();
     }
 

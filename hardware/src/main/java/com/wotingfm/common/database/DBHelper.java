@@ -6,8 +6,8 @@ import android.database.sqlite.SQLiteDatabase;
 import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
-import com.wotingfm.common.bean.Player;
-import com.wotingfm.common.bean.SinglesDownload;
+import com.wotingfm.ui.bean.Player;
+import com.wotingfm.ui.bean.SinglesDownload;
 
 import java.sql.SQLException;
 

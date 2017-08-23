@@ -1,17 +1,13 @@
 package com.wotingfm.common.view;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.graphics.drawable.GradientDrawable;
-import android.media.MediaPlayer;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PagerSnapHelper;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -20,17 +16,14 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.VideoView;
 
 import com.bumptech.glide.Glide;
 import com.woting.commonplat.utils.DementionUtil;
 import com.wotingfm.R;
-import com.wotingfm.common.bean.HomeBanners;
+import com.wotingfm.ui.bean.HomeBanners;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static com.wotingfm.R.id.index;
 
 /**
  * banner

@@ -8,7 +8,6 @@ import android.util.Log;
 
 import com.amap.api.location.AMapLocation;
 import com.woting.commonplat.config.GlobalAddressConfig;
-import com.woting.commonplat.constant.BroadcastConstants;
 import com.woting.commonplat.location.gaode.GDLocation;
 import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.constant.StringConstant;
@@ -101,8 +100,8 @@ public class LocationInfo implements GDLocation.Location {
             GlobalAddressConfig.CityName = city;
         }
         SharedPreferences.Editor et = BSApplication.SharedPreferences.edit();
-        et.putString(StringConstant.CITYNAME, city);
-        et.putString(StringConstant.CITYID, GlobalAddressConfig.AdCode);
+        et.putString(StringConstant.CITY_NAME, city);
+        et.putString(StringConstant.CITY_ID, GlobalAddressConfig.AdCode);
         et.putString(StringConstant.LATITUDE, String.valueOf(latitude));
         et.putString(StringConstant.LONGITUDE, String.valueOf(longitude));
         sendBroadcast();// 发送广播

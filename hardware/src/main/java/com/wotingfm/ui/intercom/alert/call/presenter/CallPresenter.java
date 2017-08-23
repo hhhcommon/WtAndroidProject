@@ -1,14 +1,9 @@
 package com.wotingfm.ui.intercom.alert.call.presenter;
 
 import android.content.Intent;
-import android.media.AudioManager;
-import android.media.MediaPlayer;
-import android.media.RingtoneManager;
-import android.net.Uri;
 import android.util.Log;
 
-import com.wotingfm.R;
-import com.wotingfm.common.bean.MessageEvent;
+import com.wotingfm.ui.bean.MessageEvent;
 import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.common.service.AudioService;
 import com.wotingfm.ui.intercom.alert.call.model.CallModel;

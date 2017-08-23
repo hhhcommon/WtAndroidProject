@@ -1,7 +1,5 @@
 package com.wotingfm.ui.play.live;
 
-import android.app.Activity;
-import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.SpannableString;
@@ -9,7 +7,6 @@ import android.text.Spanned;
 import android.text.style.ForegroundColorSpan;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -18,24 +15,16 @@ import com.woting.commonplat.widget.GlideCircleTransform;
 import com.woting.commonplat.widget.LoadFrameLayout;
 import com.wotingfm.R;
 import com.wotingfm.common.application.BSApplication;
-import com.wotingfm.common.bean.AnchorInfo;
-import com.wotingfm.common.bean.CLive;
-import com.wotingfm.common.bean.TrailerInfo;
-import com.wotingfm.common.config.preference.LiveManger;
+import com.wotingfm.ui.bean.TrailerInfo;
+import com.wotingfm.common.live.LiveManger;
 import com.wotingfm.common.net.RetrofitUtils;
 import com.wotingfm.common.utils.CommonUtils;
-import com.wotingfm.common.utils.L;
 import com.wotingfm.common.utils.T;
-import com.wotingfm.ui.base.baseactivity.AppManager;
-import com.wotingfm.ui.base.baseactivity.BaseToolBarActivity;
-import com.wotingfm.ui.base.baseactivity.NoTitleBarBaseActivity;
 import com.wotingfm.ui.base.basefragment.BaseFragment;
 import com.wotingfm.ui.play.activity.AnchorPersonalCenterFragment;
-import com.wotingfm.ui.play.look.activity.serch.fragment.AnchorListFragment;
 import com.wotingfm.ui.user.logo.LogoActivity;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.schedulers.Schedulers;

@@ -5,9 +5,9 @@ import android.widget.Toast;
 
 import com.woting.commonplat.utils.SequenceUUID;
 import com.wotingfm.R;
-import com.wotingfm.common.application.BSApplication;
-import com.wotingfm.common.bean.MessageEvent;
+import com.wotingfm.common.config.GlobalStateConfig;
 import com.wotingfm.ui.base.baseactivity.NoTitleBarBaseActivity;
+import com.wotingfm.ui.bean.MessageEvent;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -17,8 +17,7 @@ public class PlayerActivity extends NoTitleBarBaseActivity {
 
     @Override
     public int getLayoutId() {
-        //  AndroidBug5497Workaround.assistActivity(findViewById(android.R.id.content));
-        return R.layout.activity_player;
+        return R.layout.fragment_main;
     }
 
     public PlayerFragment playerFragment;
@@ -67,7 +66,7 @@ public class PlayerActivity extends NoTitleBarBaseActivity {
                 Toast.makeText(this, "再按一次退出", Toast.LENGTH_LONG).show();
             }
         } else {
-            if (BSApplication.IS_RESULT == true) {
+            if (GlobalStateConfig.IS_RESULT == true) {
                 long time = System.currentTimeMillis();
                 if (time - tempTime <= 2000) {
                     EventBus.getDefault().post(new MessageEvent("onDestroy"));
@@ -77,8 +76,8 @@ public class PlayerActivity extends NoTitleBarBaseActivity {
                     Toast.makeText(this, "再按一次退出", Toast.LENGTH_LONG).show();
                 }
             } else {
-                BSApplication.fragmentBase = null;
-                BSApplication.isIS_BACK = true;
+                GlobalStateConfig.fragmentBase = null;
+                GlobalStateConfig.isIS_BACK = true;
                 close();
             }
             //   backResult();

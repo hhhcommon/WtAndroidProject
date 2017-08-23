@@ -10,7 +10,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -21,11 +20,8 @@ import android.widget.LinearLayout;
 
 import com.woting.commonplat.manager.PhoneMsgManager;
 import com.wotingfm.R;
-import com.wotingfm.common.bean.MessageEvent;
 import com.wotingfm.common.config.GlobalStateConfig;
 import com.wotingfm.common.constant.BroadcastConstants;
-
-import org.greenrobot.eventbus.EventBus;
 
 /**
  * 悬浮窗服务----在主页中启动

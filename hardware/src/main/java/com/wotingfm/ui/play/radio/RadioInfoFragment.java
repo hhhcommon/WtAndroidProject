@@ -1,38 +1,26 @@
 package com.wotingfm.ui.play.radio;
 
-import android.app.Activity;
-import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.view.View;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.woting.commonplat.utils.DementionUtil;
-import com.woting.commonplat.widget.GlideCircleTransform;
 import com.woting.commonplat.widget.LoadFrameLayout;
 import com.wotingfm.R;
 import com.wotingfm.common.application.BSApplication;
-import com.wotingfm.common.bean.AlbumInfo;
-import com.wotingfm.common.bean.BaseResult;
-import com.wotingfm.common.bean.Provinces;
-import com.wotingfm.common.bean.Radio;
-import com.wotingfm.common.bean.RadioInfo;
+import com.wotingfm.ui.base.baseinterface.ScrollViewListener;
+import com.wotingfm.ui.bean.BaseResult;
+import com.wotingfm.ui.bean.RadioInfo;
 import com.wotingfm.common.net.RetrofitUtils;
 import com.wotingfm.common.utils.T;
-import com.wotingfm.common.view.ObservableScrollView;
-import com.wotingfm.ui.base.baseactivity.AppManager;
-import com.wotingfm.ui.base.baseactivity.NoTitleBarBaseActivity;
+import com.wotingfm.common.view.myscrollview.ObservableScrollView;
 import com.wotingfm.ui.base.basefragment.BaseFragment;
-import com.wotingfm.ui.play.activity.albums.fragment.AlbumsInfoFragment;
-import com.wotingfm.ui.play.activity.albums.fragment.ProgramInfoFragment;
-import com.wotingfm.ui.play.activity.albums.fragment.SimilarInfoFragment;
 import com.wotingfm.ui.play.radio.fragment.RadioInfoTodayFragment;
 import com.wotingfm.ui.play.radio.fragment.RadioInfoTomorrowFragment;
 import com.wotingfm.ui.play.radio.fragment.RadioInfoYesterdayFragment;
@@ -41,22 +29,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import jp.wasabeef.glide.transformations.BlurTransformation;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.schedulers.Schedulers;
-
-import static com.wotingfm.R.id.tvAlbumsInfo;
-import static com.wotingfm.R.id.tvProgramInfo;
-import static com.wotingfm.R.id.tvSimilarInfo;
 
 /**
  * Created by amine on 2017/7/7.
  * 电台详情
  */
 
-public class RadioInfoFragment extends BaseFragment implements View.OnClickListener {
+public class RadioInfoFragment extends BaseFragment implements View.OnClickListener ,ScrollViewListener {
     @BindView(R.id.ivPhotoBg)
     ImageView ivPhotoBg;
     @BindView(R.id.ivPhoto)
@@ -113,23 +96,7 @@ public class RadioInfoFragment extends BaseFragment implements View.OnClickListe
             tvYesterday.setOnClickListener(this);
             tvToday.setOnClickListener(this);
             tvTomorrow.setOnClickListener(this);
-            mObservableScrollView.setScrollViewListener(new ObservableScrollView.ScrollViewListener() {
-                @Override
-                public void onScrollChanged(ObservableScrollView scrollView, int x, int dy, int oldx, int oldy) {
-                    if (dy <= 0) {   //设置标题的背景颜色
-                        mRelativeLayout.setBackgroundColor(Color.argb((int) 0, 255, 255, 255));
-                        tvTitle.setTextColor(Color.argb((int) 0, 22, 24, 26));
-                    } else if (dy > 0 && dy <= height) { //滑动距离小于banner图的高度时，设置背景和字体颜色颜色透明度渐变
-                        float scale = (float) dy / height;
-                        float alpha = (255 * scale);
-                        mRelativeLayout.setBackgroundColor(Color.argb((int) alpha, 255, 255, 255));
-                        tvTitle.setTextColor(Color.argb((int) alpha, 22, 24, 26));
-                    } else {
-                        mRelativeLayout.setBackgroundColor(Color.argb((int) 255, 255, 255, 255));
-                        tvTitle.setTextColor(Color.argb((int) 255, 22, 24, 26));
-                    }
-                }
-            });
+            mObservableScrollView.setScrollViewListener(this);
             refresh();
         }
     }
@@ -344,4 +311,19 @@ public class RadioInfoFragment extends BaseFragment implements View.OnClickListe
     }
 
 
+    @Override
+    public void onScrollChanged(ObservableScrollView scrollView, int x, int dy, int oldx, int oldy) {
+        if (dy <= 0) {   //设置标题的背景颜色
+            mRelativeLayout.setBackgroundColor(Color.argb((int) 0, 255, 255, 255));
+            tvTitle.setTextColor(Color.argb((int) 0, 22, 24, 26));
+        } else if (dy > 0 && dy <= height) { //滑动距离小于banner图的高度时，设置背景和字体颜色颜色透明度渐变
+            float scale = (float) dy / height;
+            float alpha = (255 * scale);
+            mRelativeLayout.setBackgroundColor(Color.argb((int) alpha, 255, 255, 255));
+            tvTitle.setTextColor(Color.argb((int) alpha, 22, 24, 26));
+        } else {
+            mRelativeLayout.setBackgroundColor(Color.argb((int) 255, 255, 255, 255));
+            tvTitle.setTextColor(Color.argb((int) 255, 22, 24, 26));
+        }
+    }
 }
