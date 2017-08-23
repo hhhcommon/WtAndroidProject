@@ -1,5 +1,6 @@
 package com.wotingfm.ui.intercom.main.chat.model;
 
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.wotingfm.common.application.BSApplication;
@@ -139,7 +140,7 @@ public class ChatModel extends CommonModel {
         String type = s.getTyPe();
         String addTime = Long.toString(System.currentTimeMillis());
         String bjUserId = CommonUtils.getUserId();
-        DBTalkHistory h = new DBTalkHistory(bjUserId, type, id, addTime, CallType, CallTypeM,s.getACC_ID());
+        DBTalkHistory h = new DBTalkHistory(bjUserId, type, id, addTime, CallType, CallTypeM, s.getACC_ID());
         return h;
     }
 
@@ -187,7 +188,8 @@ public class ChatModel extends CommonModel {
             }
             return data;
         } else {
-            List<DBTalkHistory> list = get();// 数据库存储数据
+            List<DBTalkHistory> _list = get();// 数据库存储数据
+            List<DBTalkHistory> list = uniq(_list);// 数据库数据去重
             Log.e("222222", "list大小" + list.size());
             List<Contact.user> p_list = GlobalStateConfig.list_person;// 好友列表
             List<Contact.group> g_list = GlobalStateConfig.list_group;// 群组列表
@@ -424,5 +426,36 @@ public class ChatModel extends CommonModel {
             }
         }
         return b;
+    }
+
+    /**
+     * 去掉重复数据
+     *
+     * @param src_list
+     * @return
+     */
+    private List<DBTalkHistory> uniq(List<DBTalkHistory> src_list) {
+        List<DBTalkHistory> _list = new ArrayList<>();
+        for (int i = 0; i < src_list.size(); i++) {
+            String id = src_list.get(i).getID();
+            if (!TextUtils.isEmpty(id)) {
+                boolean have = false;
+                if (_list.size() > 0) {
+                    for (int j = 0; j < _list.size(); j++) {
+                        String _id = _list.get(j).getID();
+                        if (!TextUtils.isEmpty(_id) && id.equals(_id)) {
+                            have = true;
+                            break;
+                        }
+                    }
+                    if (!have) {
+                        _list.add(src_list.get(i));
+                    }
+                } else {
+                    _list.add(src_list.get(i));
+                }
+            }
+        }
+        return _list;
     }
 }

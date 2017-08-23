@@ -155,13 +155,12 @@ public class ChatPresenter {
                         activity.dialogShow(n_id, 2,acc_id);
                     } else if (_t != null && !_t.equals("") && _t.equals("group")) {
                         // 此时的对讲状态是群组
-                        talkOverGroup();// 退出对讲组
-                        activity.setGroupViewClose(); // 关闭对讲页面群组数据
+                        activity.getActivity().sendBroadcast(new Intent(BroadcastConstants.VIEW_GROUP_CLOSE));
                         String n_id = _data.getID();
                         boolean cp = enterGroup(n_id);// 进入组
                         if (cp) {
                             Log.e("信令控制", "进入组成功");
-                            enterGroupOkData(2);
+                            enterGroupOkData();
                         } else {
                             Log.e("信令控制", "进入组失败");
                         }
@@ -172,7 +171,7 @@ public class ChatPresenter {
                     boolean cp = enterGroup(n_id);// 进入组
                     if (cp) {
                         Log.e("信令控制", "进入组成功");
-                        enterGroupOkData(3);
+                        enterGroupOkData();
                     } else {
                         Log.e("信令控制", "进入组失败");
                     }
@@ -207,7 +206,7 @@ public class ChatPresenter {
             boolean cp = enterGroup(new_id);// 进入群组
             if (cp) {
                 Log.e("信令控制", "进入组成功");
-                enterGroupOkData(1);
+                enterGroupOkData();
             } else {
                 Log.e("信令控制", "进入组失败");
             }
@@ -288,29 +287,10 @@ public class ChatPresenter {
     }
 
     // 进入组成功后数据处理
-    private void enterGroupOkData(int type) {
-        if (type == 1) {
-            activity.setPersonViewClose();
-            TalkHistory _d = list.remove(position);
-            activity.setGroupViewShow(_d);
-            model.add(model.assemblyData(_d, GlobalStateConfig.ok, ""));
-            list.add(0, data);
-            if (list != null && list.size() > 0) activity.updateUI(list);
-            data = _d;// 替换此时对讲对象
-        } else if (type == 2) {
-            TalkHistory _d = list.remove(position);
-            activity.setGroupViewShow(_d);
-            model.add(model.assemblyData(_d, GlobalStateConfig.ok, ""));
-            list.add(0, data);
-            if (list != null && list.size() > 0) activity.updateUI(list);
-            data = _d;// 替换此时对讲对象
-        } else if (type == 3) {
-            TalkHistory _d = list.remove(position);
-            activity.setGroupViewShow(_d);
-            model.add(model.assemblyData(_d, GlobalStateConfig.ok, ""));
-            if (list != null && list.size() > 0) activity.updateUI(list);
-            data = _d;// 替换此时对讲对象
-        }
+    private void enterGroupOkData() {
+        model.del(list.get(position).getID());// 删除跟本次id相关的数据
+        model.add(model.assemblyData(list.get(position), GlobalStateConfig.ok,""));// 把本次数据添加的数据库
+        activity.getActivity().sendBroadcast(new Intent(BroadcastConstants.VIEW_INTER_PHONE_CHAT_OK));// 对讲主页界面，数据更新
     }
 
     /**
