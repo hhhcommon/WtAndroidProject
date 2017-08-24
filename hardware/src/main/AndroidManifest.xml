@@ -155,16 +155,17 @@
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar" />
 
+        <activity
+            android:name="com.wotingfm.ui.play.find.main.view.LookListActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" />
+
         <!--  -->
         <activity
             android:name=".ui.play.main.PlayerActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
 
-        <activity
-            android:name=".ui.play.look.activity.LookListActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme" />
         <!--  -->
         <activity
             android:name=".ui.mine.main.MineActivity"

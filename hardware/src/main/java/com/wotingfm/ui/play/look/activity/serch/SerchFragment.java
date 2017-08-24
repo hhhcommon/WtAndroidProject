@@ -14,7 +14,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.wotingfm.R;
-import com.wotingfm.ui.adapter.MyAdapter;
+import com.wotingfm.ui.play.find.main.adapter.MyAdapter;
 import com.wotingfm.ui.base.basefragment.BaseFragment;
 import com.wotingfm.ui.play.look.activity.serch.fragment.AlbumsListFragment;
 import com.wotingfm.ui.play.look.activity.serch.fragment.AnchorListFragment;

@@ -1,4 +1,4 @@
-package com.wotingfm.ui.adapter.findHome;
+package com.wotingfm.ui.play.find.classification.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.GridLayoutManager;
@@ -9,7 +9,7 @@ import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 import com.wotingfm.R;
 import com.wotingfm.common.application.BSApplication;
-import com.wotingfm.ui.bean.Classification;
+import com.wotingfm.ui.play.find.classification.model.Classification;
 import com.wotingfm.common.view.GridSpacingItemDecoration;
 import com.zhy.adapter.recyclerview.CommonAdapter;
 import com.zhy.adapter.recyclerview.base.ViewHolder;
@@ -17,10 +17,10 @@ import com.zhy.adapter.recyclerview.base.ViewHolder;
 import java.util.List;
 
 /**
- * Created by amine on 2017/6/7.
- * 分类的adapter
+ * 分类的adapter，包含gridView的适配器
+ * 作者：xinLong on 2017/5/16 14:28
+ * 邮箱：645700751@qq.com
  */
-
 public class ClassificationAdapter extends CommonAdapter<Classification.DataBeanX> {
     private Context context;
     private TagClickBase tagClickBase;
@@ -32,7 +32,6 @@ public class ClassificationAdapter extends CommonAdapter<Classification.DataBean
         this.tagClickBase = tagClickBase;
         gridSpacingItemDecoration = new GridSpacingItemDecoration(4, context.getResources().getDimensionPixelSize(R.dimen.padding_middle), true);
     }
-
 
     @Override
     protected void convert(ViewHolder holder, final Classification.DataBeanX s, final int position) {
@@ -54,7 +53,7 @@ public class ClassificationAdapter extends CommonAdapter<Classification.DataBean
         recyclerView.setAdapter(itemClassAdapter);
     }
 
-
+    // gridView的适配器
     public class ItemClassAdapter extends CommonAdapter<Classification.DataBeanX.DataBean> {
         private TagClick tagClick;
 
@@ -67,8 +66,7 @@ public class ClassificationAdapter extends CommonAdapter<Classification.DataBean
         protected void convert(ViewHolder holder, final Classification.DataBeanX.DataBean dataBean, int position) {
             holder.setText(R.id.tvContent, dataBean.title);
             ImageView ivClass = (ImageView) holder.itemView.findViewById(R.id.ivClass);
-            Glide.with(BSApplication.getInstance()).load(dataBean.logo)// Glide
-                    .into(ivClass);
+            Glide.with(BSApplication.getInstance()).load(dataBean.logo).into(ivClass);// Glide
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -77,7 +75,6 @@ public class ClassificationAdapter extends CommonAdapter<Classification.DataBean
                 }
             });
         }
-
     }
 
     private interface TagClick {

@@ -11,7 +11,7 @@ import com.wotingfm.ui.bean.BaseResult;
 import com.wotingfm.ui.bean.CLive;
 import com.wotingfm.ui.bean.Channels;
 import com.wotingfm.ui.bean.ChannelsBean;
-import com.wotingfm.ui.bean.Classification;
+import com.wotingfm.ui.play.find.classification.model.Classification;
 import com.wotingfm.ui.bean.HomeBanners;
 import com.wotingfm.ui.bean.LiveBean;
 import com.wotingfm.ui.bean.Player;

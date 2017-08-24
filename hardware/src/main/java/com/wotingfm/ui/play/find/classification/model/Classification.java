@@ -1,10 +1,12 @@
-package com.wotingfm.ui.bean;
+package com.wotingfm.ui.play.find.classification.model;
 
 import java.io.Serializable;
 import java.util.List;
 
 /**
- * Created by amine on 2017/6/21.
+ * 分类的对象
+ * 作者：xinLong on 2017/5/16 14:28
+ * 邮箱：645700751@qq.com
  */
 
 public class Classification implements Serializable {

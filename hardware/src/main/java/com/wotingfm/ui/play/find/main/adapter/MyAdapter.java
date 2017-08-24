@@ -1,4 +1,4 @@
-package com.wotingfm.ui.adapter;
+package com.wotingfm.ui.play.find.main.adapter;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -7,7 +7,9 @@ import android.support.v4.app.FragmentPagerAdapter;
 import java.util.List;
 
 /**
- * Created by amine on 2017/6/27.
+ * 发现fragment适配器
+ * 作者：xinLong on 2017/6/5 13:55
+ * 邮箱：645700751@qq.com
  */
 
 public class MyAdapter extends FragmentPagerAdapter {

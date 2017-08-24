@@ -27,14 +27,14 @@
             <RelativeLayout
                 android:layout_below="@+id/tvTitle"
                 android:layout_width="match_parent"
-                android:layout_height="120dp">
+                android:layout_height="100dp">
 
                 <com.woting.commonplat.widget.WaveLineView
                     android:id="@+id/waveLineView"
                     android:layout_width="match_parent"
                     android:layout_marginLeft="44dp"
                     android:layout_marginRight="44dp"
-                    android:layout_height="120dp"/>
+                    android:layout_height="100dp"/>
 
                 <LinearLayout
                     android:id="@+id/lin_line_bg"
@@ -42,6 +42,7 @@
                     android:layout_height="120dp"
                     android:background="@color/white"
                     android:gravity="center"
+                    android:visibility="gone"
                     android:orientation="horizontal">
 
                     <TextView

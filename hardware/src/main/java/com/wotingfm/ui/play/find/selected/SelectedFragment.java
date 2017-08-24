@@ -1,26 +1,21 @@
-package com.wotingfm.ui.play.look.fragment;
+package com.wotingfm.ui.play.find.selected;
 
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
-import android.widget.TextView;
+import android.widget.AbsListView;
 
 import com.woting.commonplat.widget.LoadFrameLayout;
 import com.wotingfm.R;
-import com.wotingfm.ui.adapter.findHome.RadioStationAdapter;
-import com.wotingfm.ui.bean.ChannelsBean;
-import com.wotingfm.ui.bean.HomeBanners;
 import com.wotingfm.common.net.RetrofitUtils;
 import com.wotingfm.common.view.BannerView;
+import com.wotingfm.ui.adapter.findHome.SelectedAdapter;
 import com.wotingfm.ui.base.basefragment.BaseFragment;
-import com.wotingfm.ui.play.look.activity.RadioMoreFragment;
-import com.wotingfm.ui.play.radio.CountryRadioFragment;
-import com.wotingfm.ui.play.radio.LocalRadioFragment;
-import com.wotingfm.ui.play.radio.ProvincesAndCitiesFragment;
+import com.wotingfm.ui.bean.HomeBanners;
+import com.wotingfm.ui.bean.Selected;
+import com.wotingfm.ui.play.look.activity.SelectedMoreFragment;
 import com.zhy.adapter.recyclerview.wrapper.HeaderAndFooterWrapper;
 
 import java.util.ArrayList;
@@ -33,31 +28,30 @@ import rx.schedulers.Schedulers;
 
 /**
  * Created by amine on 2017/6/14.
- * 发现电台
+ * 发现精选
  */
 
-public class RadioStationFragment extends BaseFragment implements SwipeRefreshLayout.OnRefreshListener {
+public class SelectedFragment extends BaseFragment implements SwipeRefreshLayout.OnRefreshListener {
 
 
+    @BindView(R.id.loadLayout)
+    LoadFrameLayout loadLayout;
     @BindView(R.id.mRecyclerView)
     RecyclerView mRecyclerView;
     @BindView(R.id.id_swipe_ly)
     SwipeRefreshLayout mSwipeLayout;
-    @BindView(R.id.loadLayout)
-    LoadFrameLayout loadLayout;
 
     @Override
     protected int getLayoutResource() {
         return R.layout.fragment_selected;
     }
 
-    public static RadioStationFragment newInstance() {
-        RadioStationFragment fragment = new RadioStationFragment();
+    public static SelectedFragment newInstance() {
+        SelectedFragment fragment = new SelectedFragment();
         return fragment;
     }
 
     private HeaderAndFooterWrapper mHeaderAndFooterWrapper;
-    private View headview;
 
     @Override
     protected void initView() {
@@ -65,46 +59,39 @@ public class RadioStationFragment extends BaseFragment implements SwipeRefreshLa
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         mRecyclerView.setLayoutManager(layoutManager);
         mSwipeLayout.setOnRefreshListener(this);
-        RadioStationAdapter selectedAdapter = new RadioStationAdapter(getActivity(), datas, new RadioStationAdapter.RadioStationClick() {
+        SelectedAdapter selectedAdapter = new SelectedAdapter(getActivity(), datas, new SelectedAdapter.SelectedClickBase() {
             @Override
-            public void click(ChannelsBean dataBean) {
-                startMain(dataBean);
-                // RadioInfoActivity.start(getActivity(), dataBean.title, dataBean.id);
+            public void click(Selected.DataBeanX.DataBean dataBean) {
+                startMain(dataBean.id);
+            }
+
+            @Override
+            public void clickMore(Selected.DataBeanX dataBeanX) {
+                openFragment(SelectedMoreFragment.newInstance(dataBeanX.type, dataBeanX.title));
             }
         });
-        headview = LayoutInflater.from(getActivity()).inflate(R.layout.headview_radiostation, mRecyclerView, false);
         mHeaderAndFooterWrapper = new HeaderAndFooterWrapper(selectedAdapter);
-        mHeaderAndFooterWrapper.addHeaderView(headview);
         mRecyclerView.setAdapter(mHeaderAndFooterWrapper);
         mSwipeLayout.setColorSchemeResources(R.color.app_basic, R.color.app_basic,
                 R.color.app_basic, R.color.app_basic);
-        mBannerView = (BannerView) headview.findViewById(R.id.mBannerView);
-        tvLocal = (TextView) headview.findViewById(R.id.tvLocal);
-        tvCountry = (TextView) headview.findViewById(R.id.tvCountry);
-        tvProvince = (TextView) headview.findViewById(R.id.tvProvince);
-        tvTitle = (TextView) headview.findViewById(R.id.tvTitle);
+        mBannerView = new BannerView(getActivity());
         loadLayout.showLoadingView();
         loadLayout.findViewById(R.id.btnTryAgain).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 loadLayout.showLoadingView();
-                refresh();
                 getBanners();
+                getSelecteds();
             }
         });
         getBanners();
-        refresh();
-        tvLocal.setOnClickListener(this);
-        tvCountry.setOnClickListener(this);
-        tvProvince.setOnClickListener(this);
-        tvTitle.setOnClickListener(this);
+        getSelecteds();
     }
-
-    private TextView tvLocal, tvCountry, tvProvince, tvTitle;
 
 
     @Override
     public void onResume() {
+//        setVideoResume();
         super.onResume();
         if (mBannerView != null)
             mBannerView.startTurning(5000);
@@ -131,28 +118,24 @@ public class RadioStationFragment extends BaseFragment implements SwipeRefreshLa
         super.onHiddenChanged(hidden);
     }
 
-    private List<ChannelsBean> datas = new ArrayList<>();
+    private List<Selected.DataBeanX> datas = new ArrayList<>();
     private BannerView mBannerView;
 
     private void getBanners() {
-        RetrofitUtils.getInstance().getHomeBanners("RADIO")
+        RetrofitUtils.getInstance().getHomeBanners("SELECTION")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Action1<List<HomeBanners.DataBean.BannersBean>>() {
                     @Override
                     public void call(List<HomeBanners.DataBean.BannersBean> banners) {
-                        loadLayout.showContentView();
                         if (banners != null && !banners.isEmpty()) {
                             mBannerView.setData(banners);
-                            mBannerView.setVisibility(View.VISIBLE);
                             int screenWidth = getResources().getDisplayMetrics().widthPixels;
-                            mBannerView.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                            mBannerView.setLayoutParams(new AbsListView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                                     (int) (screenWidth / 5f * 2)));
+                            mHeaderAndFooterWrapper.addHeaderView(mBannerView);
                             mBannerView.startTurning(5000);
-                        } else {
-                            mBannerView.setVisibility(View.GONE);
                         }
-                        mHeaderAndFooterWrapper.notifyDataSetChanged();
                     }
                 }, new Action1<Throwable>() {
                     @Override
@@ -162,13 +145,13 @@ public class RadioStationFragment extends BaseFragment implements SwipeRefreshLa
                 });
     }
 
-    private void refresh() {
-        RetrofitUtils.getInstance().getChannelsRadioHots("part")
+    private void getSelecteds() {
+        RetrofitUtils.getInstance().getSelecteds()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Action1<List<ChannelsBean>>() {
+                .subscribe(new Action1<List<Selected.DataBeanX>>() {
                     @Override
-                    public void call(List<ChannelsBean> dataBeanXes) {
+                    public void call(List<Selected.DataBeanX> dataBeanXes) {
                         mSwipeLayout.setRefreshing(false);
                         loadLayout.showContentView();
                         datas.clear();
@@ -185,26 +168,7 @@ public class RadioStationFragment extends BaseFragment implements SwipeRefreshLa
     }
 
     @Override
-    public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.tvLocal:
-                openFragment(LocalRadioFragment.newInstance());
-                break;
-            case R.id.tvCountry:
-                openFragment(CountryRadioFragment.newInstance());
-                break;
-            case R.id.tvProvince:
-                openFragment(ProvincesAndCitiesFragment.newInstance());
-                break;
-            case R.id.tvTitle:
-                openFragment(RadioMoreFragment.newInstance());
-                break;
-        }
-    }
-
-    @Override
     public void onRefresh() {
-        refresh();
+        getSelecteds();
     }
-
 }

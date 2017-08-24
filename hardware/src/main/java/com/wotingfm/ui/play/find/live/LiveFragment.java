@@ -1,4 +1,4 @@
-package com.wotingfm.ui.play.look.fragment;
+package com.wotingfm.ui.play.find.live;
 
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
@@ -12,14 +12,14 @@ import android.widget.TextView;
 
 import com.woting.commonplat.widget.LoadFrameLayout;
 import com.wotingfm.R;
-import com.wotingfm.ui.adapter.findHome.LiveListAdapter;
-import com.wotingfm.ui.bean.HomeBanners;
-import com.wotingfm.ui.bean.LiveBean;
 import com.wotingfm.common.net.RetrofitUtils;
 import com.wotingfm.common.utils.CommonUtils;
 import com.wotingfm.common.utils.T;
 import com.wotingfm.common.view.BannerView;
+import com.wotingfm.ui.adapter.findHome.LiveListAdapter;
 import com.wotingfm.ui.base.basefragment.BaseFragment;
+import com.wotingfm.ui.bean.HomeBanners;
+import com.wotingfm.ui.bean.LiveBean;
 import com.wotingfm.ui.play.live.LiveRoomActivity;
 import com.wotingfm.ui.play.live.TrailerInfoFragment;
 import com.wotingfm.ui.user.logo.LogoActivity;
