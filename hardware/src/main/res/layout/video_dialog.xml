@@ -1,16 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="@color/white"
-    android:orientation="vertical">
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:background="@color/white"
+              android:orientation="vertical">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="240dp"
-        android:background="@color/white"
-        android:orientation="vertical">
+        android:background="@color/white">
 
         <TextView
             android:id="@+id/tvTitle"
@@ -22,33 +21,60 @@
             android:padding="24dp"
             android:text="点击切换文字搜索"
             android:textColor="#16181a"
-            android:textSize="14sp" />
-
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true">
+            android:textSize="14sp"/>
 
 
-            <com.woting.commonplat.widget.WaveLineView
-                android:id="@+id/waveLineView"
+            <RelativeLayout
+                android:layout_below="@+id/tvTitle"
                 android:layout_width="match_parent"
-                android:layout_height="60dp"
-                app:wlvBackgroundColor="@color/white"
-                app:wlvLineColor="#16181a"
-                app:wlvMoveSpeed="290" />
+                android:layout_height="120dp">
 
-            <TextView
-                android:id="@+id/tvContent"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:lineSpacingExtra="4sp"
-                android:text="点击切换文字搜索"
-                android:textColor="#16181a"
-                android:textSize="16sp"
-                android:visibility="gone" />
-        </FrameLayout>
+                <com.woting.commonplat.widget.WaveLineView
+                    android:id="@+id/waveLineView"
+                    android:layout_width="match_parent"
+                    android:layout_marginLeft="44dp"
+                    android:layout_marginRight="44dp"
+                    android:layout_height="120dp"/>
+
+                <LinearLayout
+                    android:id="@+id/lin_line_bg"
+                    android:layout_width="match_parent"
+                    android:layout_height="120dp"
+                    android:background="@color/white"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="30dp"
+                        android:layout_height="1dp"
+                        android:layout_marginLeft="44dp"
+                        android:background="#3cdcaf"/>
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="1.5dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/background_line_green"
+                        android:layerType="software"/>
+
+                    <TextView
+                        android:layout_width="30dp"
+                        android:layout_height="1dp"
+                        android:layout_marginRight="44dp"
+                        android:background="#3cdcaf"/>
+                </LinearLayout>
+                <TextView
+                    android:id="@+id/tvContent"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:lineSpacingExtra="4sp"
+                    android:text="点击切换文字搜索"
+                    android:layout_centerInParent="true"
+                    android:textColor="#16181a"
+                    android:textSize="16sp"
+                    android:visibility="gone"/>
+            </RelativeLayout>
 
         <FrameLayout
             android:id="@+id/fragmentVideo"
@@ -64,7 +90,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:src="@mipmap/nav_icon_voice_white" />
+                android:src="@mipmap/nav_icon_voice_white"/>
         </FrameLayout>
     </RelativeLayout>
 

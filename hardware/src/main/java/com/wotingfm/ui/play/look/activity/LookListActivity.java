@@ -1,16 +1,14 @@
 package com.wotingfm.ui.play.look.activity;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
 import com.woting.commonplat.utils.SequenceUUID;
 import com.wotingfm.R;
-import com.wotingfm.ui.bean.MessageEvent;
 import com.wotingfm.ui.base.baseactivity.AppManager;
 import com.wotingfm.ui.base.baseactivity.BaseFragmentActivity;
+import com.wotingfm.ui.bean.MessageEvent;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -29,7 +27,14 @@ public class LookListActivity extends BaseFragmentActivity {
         setContentView(R.layout.fragment_look_list);
         AppManager.getAppManager().addActivity(this);
         context = this;
-        open(new LookListFragment());
+        openOne(new LookListFragment());
+    }
+    public static void openOne(Fragment frg) {
+        context.getSupportFragmentManager().beginTransaction()
+                .add(R.id.fragment_content, frg)
+                .addToBackStack(SequenceUUID.getUUID())
+                .commit();
+        hintKbTwo();
     }
 
     /**
@@ -44,18 +49,6 @@ public class LookListActivity extends BaseFragmentActivity {
                 .addToBackStack(SequenceUUID.getUUID())
                 .commit();
         hintKbTwo();
-    }
-
-    //此方法只是关闭软键盘
-    private static void hintKbTwo() {
-        if (context != null) {
-            InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
-            if (imm.isActive() && context.getCurrentFocus() != null) {
-                if (context.getCurrentFocus().getWindowToken() != null) {
-                    imm.hideSoftInputFromWindow(context.getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
-                }
-            }
-        }
     }
 
     /**
@@ -91,6 +84,5 @@ public class LookListActivity extends BaseFragmentActivity {
             }
         }
     }
-
 
 }

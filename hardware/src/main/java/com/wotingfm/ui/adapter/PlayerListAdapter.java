@@ -14,9 +14,9 @@ import com.zhy.adapter.recyclerview.base.ViewHolder;
 import java.util.List;
 
 /**
- * Created by amine on 2017/6/7.
+ * 播放器
+ * 播放列表适配器
  */
-
 public class PlayerListAdapter extends CommonAdapter<SinglesBase> {
     private PlayerClick playerClick;
 
@@ -36,7 +36,7 @@ public class PlayerListAdapter extends CommonAdapter<SinglesBase> {
             ivClose.setVisibility(View.INVISIBLE);
             textViewTitle.setTextColor(Color.parseColor("#fd8548"));
         } else {
-            ivTop.setVisibility(View.INVISIBLE);
+            ivTop.setVisibility(View.GONE);
             ivClose.setVisibility(View.VISIBLE);
             textViewTitle.setTextColor(Color.parseColor("#16181a"));
         }

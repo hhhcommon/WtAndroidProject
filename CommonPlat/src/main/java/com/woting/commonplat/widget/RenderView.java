@@ -8,16 +8,8 @@ import android.view.SurfaceView;
 
 import java.lang.ref.WeakReference;
 import java.util.List;
-/**
- * ================================================
- * 作    者：JayGoo
- * 版    本：1.0.0
- * 创建日期：2017/7/21
- * 描    述: 封装的SurfaceView
- * ================================================
- */
-public abstract class RenderView extends SurfaceView implements SurfaceHolder.Callback {
 
+public abstract class RenderView extends SurfaceView implements SurfaceHolder.Callback {
     //是否正在绘制动画
     private boolean isStartAnim = false;
     private final static Object surfaceLock = new Object();
@@ -47,7 +39,6 @@ public abstract class RenderView extends SurfaceView implements SurfaceHolder.Ca
         super(context, attrs, defStyleAttr);
         getHolder().addCallback(this);
     }
-
 
     /*回调/线程*/
     private static class RenderThread extends Thread {
@@ -115,14 +106,11 @@ public abstract class RenderView extends SurfaceView implements SurfaceHolder.Ca
 
         }
 
-
         public void setRun(boolean isRun) {
             this.running = isRun;
         }
 
     }
-
-
 
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
@@ -147,7 +135,6 @@ public abstract class RenderView extends SurfaceView implements SurfaceHolder.Ca
         }
     }
 
-
     //假暂停，并没有结束Thread
     public void onPause(){
         synchronized (surfaceLock){
@@ -156,7 +143,6 @@ public abstract class RenderView extends SurfaceView implements SurfaceHolder.Ca
             }
         }
     }
-
 
     @Override
     public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {

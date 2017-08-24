@@ -196,8 +196,8 @@
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="1px"
-        android:background="#efefef" />
+        android:layout_height="0.7dp"
+        android:background="@color/line_color" />
 
     <TextView
         android:id="@+id/tvClose"
@@ -207,6 +207,7 @@
         android:layout_gravity="center"
         android:gravity="center"
         android:text="取消"
+        android:background="@drawable/wt_view_click_background"
         android:textColor="#16181a"
         android:textSize="16sp" />
 </LinearLayout>

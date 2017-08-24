@@ -1,12 +1,10 @@
 package com.wotingfm.ui.intercom.group.groupchat.view;
 
 import android.app.Dialog;
-import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,11 +13,9 @@ import android.widget.TextView;
 
 import com.woting.commonplat.widget.TipView;
 import com.wotingfm.R;
-import com.wotingfm.common.utils.DialogUtils;
 import com.wotingfm.ui.intercom.group.groupchat.adapter.GroupChatAdapter;
 import com.wotingfm.ui.intercom.group.groupchat.model.GroupChat;
 import com.wotingfm.ui.intercom.group.groupchat.presenter.GroupChatPresenter;
-import com.wotingfm.ui.intercom.group.groupnews.noadd.view.GroupNewsForNoAddFragment;
 import com.wotingfm.ui.intercom.main.view.InterPhoneActivity;
 
 import java.util.List;
@@ -169,7 +165,7 @@ public class GroupChatFragment extends Fragment implements View.OnClickListener,
         }
     }
 
-    // 呼叫弹出框
+    // 呼弹出框
     private void Dialog() {
         final View dialog1 = LayoutInflater.from(this.getActivity()).inflate(R.layout.dialog_talk_person_del, null);
         TextView tv_cancel = (TextView) dialog1.findViewById(R.id.tv_cancle);

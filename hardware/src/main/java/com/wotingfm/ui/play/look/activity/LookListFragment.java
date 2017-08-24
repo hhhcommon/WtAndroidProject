@@ -1,6 +1,5 @@
 package com.wotingfm.ui.play.look.activity;
 
-import android.app.Activity;
 import android.app.Dialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -11,35 +10,38 @@ import android.graphics.Rect;
 import android.media.AudioManager;
 import android.os.Build;
 import android.os.Handler;
-import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
+import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.view.Window;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.woting.commonplat.manager.VoiceRecognizer;
 import com.woting.commonplat.widget.WaveLineView;
 import com.wotingfm.R;
-import com.wotingfm.ui.adapter.MyAdapter;
 import com.wotingfm.common.application.BSApplication;
-import com.wotingfm.ui.bean.MessageEvent;
 import com.wotingfm.common.config.GlobalStateConfig;
 import com.wotingfm.common.utils.NetUtils;
 import com.wotingfm.common.utils.T;
+import com.wotingfm.ui.adapter.MyAdapter;
 import com.wotingfm.ui.base.basefragment.BaseFragment;
+import com.wotingfm.ui.bean.MessageEvent;
 import com.wotingfm.ui.play.look.activity.serch.SerchFragment;
 import com.wotingfm.ui.play.look.fragment.ClassificationFragment;
 import com.wotingfm.ui.play.look.fragment.LiveFragment;
@@ -84,7 +86,7 @@ public class LookListFragment extends BaseFragment implements View.OnClickListen
 
     private List<Fragment> mFragment = new ArrayList<>();
     private MyAdapter mAdapter;
-
+    private Dialog voiceDialog;
 
     /**
      * EditText获取焦点并显示软键盘
@@ -196,6 +198,7 @@ public class LookListFragment extends BaseFragment implements View.OnClickListen
                 return false;
             }
         });
+        DDialog();
     }
 
     // 广播接收器
@@ -204,30 +207,31 @@ public class LookListFragment extends BaseFragment implements View.OnClickListen
         public void onReceive(Context context, final Intent intent) {
             if (intent.getAction().equals(com.woting.commonplat.constant.BroadcastConstants.SEARCHVOICE)) {
                 final String str = intent.getStringExtra("VoiceContent");
+                tvContent.setVisibility(View.VISIBLE);
                 tvContent.setText("正在为您查找: " + str);
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        if (videoDialog != null) videoDialog.dismiss();
+                         voiceDialog.dismiss();
                         etSearchlike.setText("");
                         tvContent.setText("");
                         tvContent.setVisibility(View.GONE);
+                        lin_line_bg.setVisibility(View.VISIBLE);
                         closeKeyboard(etSearchlike);
                         openFragment(SerchFragment.newInstance(str.trim(), 0));
                     }
-                }, 1000);
+                }, 2000);
                 if (NetUtils.isNetworkAvailable(context)) {
                     if (!str.trim().equals("")) {
                         tvContent.setText(str.trim());
                         tvContent.setVisibility(View.VISIBLE);
-
+//                        lin_line_bg.setVisibility(View.GONE);
                     }
                 }
             }
         }
     };
-    private VideoDialog videoDialog;
-
+//    private VideoDialog videoDialog;
 
     @Override
     public void onClick(View v) {
@@ -250,10 +254,7 @@ public class LookListFragment extends BaseFragment implements View.OnClickListen
                 EventBus.getDefault().post(new MessageEvent("one"));
                 break;
             case R.id.ivVoice:
-                if (videoDialog == null) {
-                    videoDialog = new VideoDialog(getActivity());
-                }
-                videoDialog.show();
+                voiceDialog.show();
                 break;
         }
     }
@@ -273,71 +274,81 @@ public class LookListFragment extends BaseFragment implements View.OnClickListen
     private TextView tvTitle, tvContent;
     private VoiceRecognizer mVoiceRecognizer;
     private WaveLineView waveLineView;
+    private  LinearLayout lin_line_bg;
+    private FrameLayout fragmentVideo;
+    private int stepVolume;
+    private AudioManager audioMgr;
+    protected int curVolume;
 
-    public class VideoDialog extends Dialog {
+    // 选择框
+    private void DDialog() {
+        final View dialog = LayoutInflater.from(this.getActivity()).inflate(R.layout.video_dialog, null);
+        fragmentVideo = (FrameLayout) dialog.findViewById(R.id.fragmentVideo);
+        lin_line_bg= (LinearLayout) dialog.findViewById(R.id.lin_line_bg);
+        waveLineView = (WaveLineView) dialog.findViewById(R.id.waveLineView);
+        waveLineView.setZOrderOnTop(true);
+        tvTitle = (TextView) dialog.findViewById(R.id.tvTitle);
+        tvContent = (TextView) dialog.findViewById(R.id.tvContent);
+        audioMgr = (AudioManager) this.getActivity().getSystemService(Context.AUDIO_SERVICE);
+        int maxVolume = audioMgr.getStreamMaxVolume(AudioManager.STREAM_MUSIC);// 获取最大音乐音量
+        stepVolume = maxVolume / 100;// 每次调整的音量大概为最大音量的1/100
+        tvTitle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                voiceDialog.dismiss();
+                showSoftInputFromWindow();
+            }
+        });
 
-        private FrameLayout fragmentVideo;
-        private int stepVolume;
-        private AudioManager audioMgr;
-        protected int curVolume;
-
-        public VideoDialog(@NonNull Activity context) {
-            super(context, R.style.BottomDialog);
-            setContentView(R.layout.video_dialog);
-            getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-            getWindow().setGravity(Gravity.BOTTOM);
-
-            setCanceledOnTouchOutside(true);
-
-            fragmentVideo = (FrameLayout) findViewById(R.id.fragmentVideo);
-            waveLineView = (WaveLineView) findViewById(R.id.waveLineView);
-            tvTitle = (TextView) findViewById(R.id.tvTitle);
-            tvContent = (TextView) findViewById(R.id.tvContent);
-            audioMgr = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
-            int maxVolume = audioMgr.getStreamMaxVolume(AudioManager.STREAM_MUSIC);// 获取最大音乐音量
-            stepVolume = maxVolume / 100;// 每次调整的音量大概为最大音量的1/100
-            tvTitle.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    dismiss();
-                    showSoftInputFromWindow();
-                }
-            });
-
-            fragmentVideo.setOnTouchListener(new View.OnTouchListener() {
-                @Override
-                public boolean onTouch(View v, MotionEvent event) {
-                    if (!NetUtils.isNetworkAvailable(BSApplication.getInstance())) {
-                        T.getInstance().showToast("网络异常");
-                        return true;
-                    }
-                    switch (event.getAction()) {
-                        case MotionEvent.ACTION_DOWN:
-                            curVolume = audioMgr.getStreamVolume(AudioManager.STREAM_MUSIC);
-                            audioMgr.setStreamVolume(AudioManager.STREAM_MUSIC, stepVolume, AudioManager.FLAG_PLAY_SOUND);
-                            mVoiceRecognizer.startListen();
-                            tvTitle.setText("识别中...");
-                            waveLineView.startAnim();
-                            tvContent.setVisibility(View.GONE);
-                            EventBus.getDefault().post(new MessageEvent("pause"));
-                            tvTitle.setTextColor(Color.parseColor("#cccccd"));
-                            break;
-                        case MotionEvent.ACTION_CANCEL:
-                        case MotionEvent.ACTION_UP:
-                            waveLineView.stopAnim();
-                            audioMgr.setStreamVolume(AudioManager.STREAM_MUSIC, curVolume, AudioManager.FLAG_PLAY_SOUND);
-                            mVoiceRecognizer.stopListen();
-                            tvTitle.setTextColor(Color.parseColor("#16181a"));
-                            tvTitle.setText("点击切换文字搜索");
-                            EventBus.getDefault().post(new MessageEvent("start"));
-                            break;
-                    }
+        fragmentVideo.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (!NetUtils.isNetworkAvailable(BSApplication.getInstance())) {
+                    T.getInstance().showToast("网络异常");
                     return true;
                 }
-            });
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        curVolume = audioMgr.getStreamVolume(AudioManager.STREAM_MUSIC);
+                        audioMgr.setStreamVolume(AudioManager.STREAM_MUSIC, stepVolume, AudioManager.FLAG_PLAY_SOUND);
+                        mVoiceRecognizer.startListen();
+                        tvTitle.setText("识别中...");
+                        waveLineView.startAnim();
+                        tvContent.setVisibility(View.GONE);
+//                        lin_line_bg.setVisibility(View.GONE);
+                        EventBus.getDefault().post(new MessageEvent("pause"));
+                        tvTitle.setTextColor(Color.parseColor("#cccccd"));
+                        break;
+                    case MotionEvent.ACTION_CANCEL:
+                    case MotionEvent.ACTION_UP:
+                        waveLineView.stopAnim();
+                        lin_line_bg.setVisibility(View.VISIBLE);
+                        audioMgr.setStreamVolume(AudioManager.STREAM_MUSIC, curVolume, AudioManager.FLAG_PLAY_SOUND);
+                        mVoiceRecognizer.stopListen();
+                        tvTitle.setTextColor(Color.parseColor("#16181a"));
+                        tvTitle.setText("点击切换文字搜索");
+                        EventBus.getDefault().post(new MessageEvent("start"));
+                        break;
+                }
+                return true;
+            }
+        });
 
-        }
+        voiceDialog = new Dialog(this.getActivity(), R.style.MyDialogs);
+        voiceDialog.setContentView(dialog);
+        voiceDialog.setCanceledOnTouchOutside(true);
 
+        DisplayMetrics dm = new DisplayMetrics();
+        this.getActivity().getWindowManager().getDefaultDisplay().getMetrics(dm);
+        int screenWidth = dm.widthPixels;
+        ViewGroup.LayoutParams params = dialog.getLayoutParams();
+        params.width = screenWidth;
+        dialog.setLayoutParams(params);
+
+        Window window = voiceDialog.getWindow();
+        window.setGravity(Gravity.BOTTOM);
+        window.setWindowAnimations(R.style.inOutStyle);
+        window.setBackgroundDrawableResource(R.color.transparent_40_black);
     }
 
 
@@ -358,8 +369,7 @@ public class LookListFragment extends BaseFragment implements View.OnClickListen
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (waveLineView != null)
-            waveLineView.release();
+        if (waveLineView != null)waveLineView.release();
         if (layout_main != null)
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
                 layout_main.getViewTreeObserver().removeGlobalOnLayoutListener(globalLayoutListener);

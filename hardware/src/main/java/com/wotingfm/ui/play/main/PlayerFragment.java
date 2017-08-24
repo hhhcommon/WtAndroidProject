@@ -27,17 +27,11 @@ import com.baidu.cloud.media.player.IMediaPlayer;
 import com.pili.pldroid.player.AVOptions;
 import com.pili.pldroid.player.PLMediaPlayer;
 import com.woting.commonplat.player.baidu.BDPlayer;
+import com.woting.commonplat.utils.DementionUtil;
 import com.woting.commonplat.utils.ResourceUtil;
 import com.woting.commonplat.widget.LoadFrameLayout;
 import com.wotingfm.R;
-import com.wotingfm.ui.adapter.PlayerAdapter;
 import com.wotingfm.common.application.BSApplication;
-import com.wotingfm.ui.bean.BaseResult;
-import com.wotingfm.ui.bean.ChannelsBean;
-import com.wotingfm.ui.bean.MessageEvent;
-import com.wotingfm.ui.bean.Player;
-import com.wotingfm.ui.bean.SinglesBase;
-import com.wotingfm.ui.bean.SinglesDownload;
 import com.wotingfm.common.config.GlobalStateConfig;
 import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.common.database.HistoryHelper;
@@ -46,7 +40,14 @@ import com.wotingfm.common.utils.ListDataSaveUtils;
 import com.wotingfm.common.utils.TimeUtil;
 import com.wotingfm.common.view.MenuDialog;
 import com.wotingfm.common.view.PlayerDialog;
+import com.wotingfm.ui.adapter.PlayerAdapter;
 import com.wotingfm.ui.base.basefragment.BaseFragment;
+import com.wotingfm.ui.bean.BaseResult;
+import com.wotingfm.ui.bean.ChannelsBean;
+import com.wotingfm.ui.bean.MessageEvent;
+import com.wotingfm.ui.bean.Player;
+import com.wotingfm.ui.bean.SinglesBase;
+import com.wotingfm.ui.bean.SinglesDownload;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -90,7 +91,11 @@ public class PlayerFragment extends BaseFragment implements View.OnClickListener
     @BindView(R.id.LoadingView)
     LinearLayout mLoadingView;
     @BindView(R.id.largeLabelSeekbar)
-    LinearLayout largeLabelSeekbar;
+    RelativeLayout largeLabelSeekbar;
+    @BindView(R.id.img_bg)
+    ImageView img_bg;
+    @BindView(R.id.re_img_bg)
+    RelativeLayout re_img_bg;
 
 
     public static PlayerFragment newInstance() {
@@ -117,7 +122,8 @@ public class PlayerFragment extends BaseFragment implements View.OnClickListener
     private boolean mIsActivityPaused = true;
     private SinglesBase singlesBase;
     private ListDataSaveUtils listDataSaveUtils;
-//
+private boolean isRadio=false;
+    //
     @Override
     public void initView() {
         GlobalStateConfig.IS_CREATE = true;
@@ -141,6 +147,7 @@ public class PlayerFragment extends BaseFragment implements View.OnClickListener
                 getPlayerList(TextUtils.isEmpty(albumsId) ? "" : albumsId);
             }
         });
+
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         mRecyclerView.setLayoutManager(layoutManager);
@@ -149,8 +156,14 @@ public class PlayerFragment extends BaseFragment implements View.OnClickListener
         snapHelper.attachToRecyclerView(mRecyclerView);
         mPlayerAdapter = new PlayerAdapter(BSApplication.getInstance(), singLesBeans);
         mRecyclerView.setAdapter(mPlayerAdapter);
-        if (bdPlayer == null)
-            bdPlayer = new BDPlayer(getActivity());
+
+        int with = DementionUtil.getScreenWidthInPx(this.getActivity()) - DementionUtil.dip2px(this.getActivity(), 80);
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(with, with);
+        params.addRule(RelativeLayout.ALIGN_PARENT_TOP);
+        params.addRule(RelativeLayout.CENTER_HORIZONTAL, RelativeLayout.TRUE);
+        img_bg.setLayoutParams(params);//将设置好的布局参数应用到控件中
+
+        if (bdPlayer == null) bdPlayer = new BDPlayer(getActivity());
         setListener();
         historyHelper = new HistoryHelper(BSApplication.getInstance());
         Bundle bundle = getArguments();
@@ -164,7 +177,7 @@ public class PlayerFragment extends BaseFragment implements View.OnClickListener
             postionPlayer = 0;
             initData(albumsId, singlesBase, channelsBean, singlesBeanList);
         } else {
-            ivPlayList.setVisibility(View.VISIBLE);
+            setivPlayListView(true);
             if (listDataSaveUtils != null) {
                 List<SinglesBase> singlesBases = listDataSaveUtils.getDataList(PREFERENCES_BASE_LIST_KEY, SinglesBase.class);
                 SinglesBase singlesBaseww = (SinglesBase) listDataSaveUtils.getObjectFromShare(PREFERENCES_BASE_OBJECT_KEY);
@@ -180,12 +193,12 @@ public class PlayerFragment extends BaseFragment implements View.OnClickListener
                     relatiBottom.setVisibility(View.VISIBLE);
                     if (is_radio == true) {
                         largeLabelSeekbar.setVisibility(View.INVISIBLE);
-                        ivPlayList.setVisibility(View.INVISIBLE);
+                        setivPlayListView(false);
                         mAudioPath = singlesBaseww.single_file_url;
                         prepare();
                     } else {
                         largeLabelSeekbar.setVisibility(View.VISIBLE);
-                        ivPlayList.setVisibility(View.VISIBLE);
+                        setivPlayListView(true);
                         bdPlayer.setVideoPath(singlesBaseww.single_file_url);
                         bdPlayer.start();
                     }
@@ -217,7 +230,7 @@ public class PlayerFragment extends BaseFragment implements View.OnClickListener
                 bdPlayer.setVideoPath(singlesBase.single_file_url);
                 bdPlayer.start();
                 largeLabelSeekbar.setVisibility(View.VISIBLE);
-                ivPlayList.setVisibility(View.VISIBLE);
+                setivPlayListView(true);
                 if (listDataSaveUtils != null)
                     listDataSaveUtils.setDataList(PREFERENCES_BASE_LIST_KEY, singLesBeans);
                 setBeforeOrNext(singlesBase);
@@ -233,7 +246,7 @@ public class PlayerFragment extends BaseFragment implements View.OnClickListener
                     listDataSaveUtils.setDataList(PREFERENCES_BASE_LIST_KEY, singLesBeans);
                 postionPlayer = 0;
                 largeLabelSeekbar.setVisibility(View.INVISIBLE);
-                ivPlayList.setVisibility(View.INVISIBLE);
+                setivPlayListView(false);
                 prepare();
                 setBeforeOrNext(singlesBase);
                 mPlayerAdapter.notifyDataSetChanged();
@@ -247,7 +260,7 @@ public class PlayerFragment extends BaseFragment implements View.OnClickListener
                 singLesBeans.addAll(singlesBeanList);
                 mPlayerAdapter.notifyDataSetChanged();
                 largeLabelSeekbar.setVisibility(View.VISIBLE);
-                ivPlayList.setVisibility(View.VISIBLE);
+                setivPlayListView(true);
                 if (singLesBeans != null && !singLesBeans.isEmpty()) {
                     postionPlayer = 0;
                     SinglesBase sb = singLesBeans.get(0);
@@ -277,13 +290,13 @@ public class PlayerFragment extends BaseFragment implements View.OnClickListener
                         listDataSaveUtils.setDataList(PREFERENCES_BASE_LIST_KEY, singLesBeans);
                     postionPlayer = 0;
                     largeLabelSeekbar.setVisibility(View.INVISIBLE);
-                    ivPlayList.setVisibility(View.INVISIBLE);
+                    setivPlayListView(false);
                     prepare();
                     setBeforeOrNext(s);
                     mPlayerAdapter.notifyDataSetChanged();
                 } else {
                     largeLabelSeekbar.setVisibility(View.VISIBLE);
-                    ivPlayList.setVisibility(View.VISIBLE);
+                    setivPlayListView(true);
                     getPlayerList(TextUtils.isEmpty(albumsId) ? "" : albumsId);
                 }
             }
@@ -400,7 +413,7 @@ public class PlayerFragment extends BaseFragment implements View.OnClickListener
             }
         });
         ivNext.setOnClickListener(this);
-        ivPlayList.setOnClickListener(this);
+        lin_PlayList.setOnClickListener(this);
         ivMore.setOnClickListener(this);
         ivPause.setOnClickListener(this);
         ivBefore.setOnClickListener(this);
@@ -420,6 +433,10 @@ public class PlayerFragment extends BaseFragment implements View.OnClickListener
     ImageView ivNext;
     @BindView(R.id.ivPlayList)
     TextView ivPlayList;
+    @BindView(R.id.img_PlayList)
+    ImageView img_PlayList;
+    @BindView(R.id.lin_PlayList)
+    LinearLayout lin_PlayList;
     @BindView(R.id.ivMore)
     ImageView ivMore;
 
@@ -438,6 +455,21 @@ public class PlayerFragment extends BaseFragment implements View.OnClickListener
                 }
             }
             ivPause.setImageResource(R.mipmap.music_play_icon_pause);
+        }
+    }
+
+    /**
+     * 设置ivPlayList样式
+     * @param b
+     */
+    private void setivPlayListView(boolean b){
+        isRadio=b;
+        if(b){
+            // 单体节目
+             img_PlayList.setImageResource(R.drawable.icon_playlists_white);
+        }else{
+            // 电台
+            img_PlayList.setImageResource(R.mipmap.icon_playlists_white_d);
         }
     }
 
@@ -512,7 +544,8 @@ public class PlayerFragment extends BaseFragment implements View.OnClickListener
             case R.id.ivNext:
                 next();
                 break;
-            case R.id.ivPlayList:
+            case R.id.lin_PlayList:
+                if(isRadio){
                 if (playerDialog == null) {
                     playerDialog = new PlayerDialog(getActivity());
                 }
@@ -538,7 +571,7 @@ public class PlayerFragment extends BaseFragment implements View.OnClickListener
                         }
                     });
                     playerDialog.show();
-                }
+                }}
                 break;
             case R.id.ivMore:
                 if (menuDialog == null) {
@@ -858,7 +891,7 @@ public class PlayerFragment extends BaseFragment implements View.OnClickListener
      * Listen the event of playing complete
      * For playing local file, it's called when reading the file EOF
      * For playing network stream, it's called when the buffered bytes played over
-     * <p>
+     * <p/>
      * If setLooping(true) is called, the player will restart automatically
      * And ｀onCompletion｀ will not be called
      */
