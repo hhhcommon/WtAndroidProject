@@ -12,7 +12,16 @@ public class Favorite {
     private String logo_url;//
     private String file_url;// http://aliod.qingting.fm/vod/00/00/0000000000000000000002808616_24.m4a
     private String album_id;// 一口气读完美国史
+    private String album_name;// 一口气读完美国史
     private String play_count;//
+
+    public String getAlbum_name() {
+        return album_name;
+    }
+
+    public void setAlbum_name(String album_name) {
+        this.album_name = album_name;
+    }
 
     public String getId() {
         return id;

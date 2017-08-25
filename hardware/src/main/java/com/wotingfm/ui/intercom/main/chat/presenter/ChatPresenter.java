@@ -42,7 +42,6 @@ public class ChatPresenter {
     public static TalkHistory data;// 此时当前的聊天对象，挂断后置为null
     private MessageReceiver Receiver;
     private int position;
-    private int personViewType = 0;
 
     public ChatPresenter(ChatFragment activity) {
         this.activity = activity;
@@ -120,14 +119,13 @@ public class ChatPresenter {
                         String acc_id = _data.getACC_ID();// 本次acc_id
                         activity.dialogShow(n_id, 1,acc_id);
                     } else if (_t != null && !_t.equals("") && _t.equals("group")) {
-                        // 此时的对讲状态是群组
-                        String n_id = _data.getID();
                         // 退出组，关闭对讲页面群组数据
                         activity.getActivity().sendBroadcast(new Intent(BroadcastConstants.VIEW_GROUP_CLOSE));
+                        // 此时的对讲状态是群组
+                        String n_id = _data.getID();
                         boolean cp = callPerson(n_id, _data.getACC_ID());// 呼叫好友
                         if (cp) {
                             Log.e("信令控制", "呼叫好友成功");
-                            personViewType = 1;
                         } else {
                             Log.e("信令控制", "呼叫好友失败");
                         }
@@ -138,7 +136,6 @@ public class ChatPresenter {
                     boolean cp = callPerson(n_id, _data.getACC_ID());// 呼叫好友
                     if (cp) {
                         Log.e("信令控制", "呼叫好友成功");
-                        personViewType = 3;
                     } else {
                         Log.e("信令控制", "呼叫好友失败");
                     }
@@ -196,7 +193,6 @@ public class ChatPresenter {
             boolean cp = callPerson(new_id, accId);  // 呼叫好友
             if (cp) {
                 Log.e("信令控制", "呼叫好友成功");
-                personViewType = 2;
             } else {
                 Log.e("信令控制", "呼叫好友失败");
             }
@@ -257,32 +253,6 @@ public class ChatPresenter {
         } else {
             ToastUtils.show_always(activity.getActivity(), "数据出错了，请稍后再试！");
             return false;
-        }
-    }
-
-    // 呼叫好友成功后数据处理
-    private void callPersonOkData(int type) {
-        if (type == 1) {
-            activity.setGroupViewClose();
-            TalkHistory _d = list.remove(position);
-            activity.setPersonViewShow(_d);
-            model.add(model.assemblyData(_d, GlobalStateConfig.ok, ""));
-            list.add(0, data);
-            if (list != null && list.size() > 0) activity.updateUI(list);
-            data = _d;// 替换此时对讲对象
-        } else if (type == 2) {
-            TalkHistory _d = list.remove(position);
-            activity.setPersonViewShow(_d);
-            model.add(model.assemblyData(_d, GlobalStateConfig.ok, ""));
-            list.add(0, data);
-            if (list != null && list.size() > 0) activity.updateUI(list);
-            data = _d;// 替换此时对讲对象
-        } else if (type == 3) {
-            TalkHistory _d = list.remove(position);
-            activity.setPersonViewShow(_d);
-            model.add(model.assemblyData(_d, GlobalStateConfig.ok, ""));
-            if (list != null && list.size() > 0) activity.updateUI(list);
-            data = _d;// 替换此时对讲对象
         }
     }
 
@@ -408,6 +378,7 @@ public class ChatPresenter {
         if (data != null) list.add(0, data);
         activity.updateUI(list);
         data = null;
+        position++;
     }
 
     /**
@@ -471,7 +442,7 @@ public class ChatPresenter {
                 case BroadcastConstants.PUSH_CALL_SEND:// 单对单呼叫成功
                     String type = intent.getStringExtra("fromType");
                     if (type != null && !type.trim().equals("") && type.trim().equals("chat")) {
-                        callPersonOkData(personViewType);
+                        enterGroupOkData();
                     }
                     break;
                 case BroadcastConstants.PUSH_CHAT_OPEN:// 有人在说话

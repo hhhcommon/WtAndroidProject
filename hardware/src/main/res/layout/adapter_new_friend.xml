@@ -65,6 +65,7 @@
                 android:layout_marginRight="12dp"
                 android:gravity="center"
                 android:lineSpacingExtra="0sp"
+                android:background="@drawable/background_new_friend_bg"
                 android:text="已通过"
                 android:textColor="#959698"
                 android:textSize="13.3sp"

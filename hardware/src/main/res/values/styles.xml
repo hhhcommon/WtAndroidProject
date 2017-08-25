@@ -148,6 +148,18 @@
         <item name="tabPaddingStart">14sp</item>
         <item name="tabPaddingEnd">14sp</item>
     </style>
+    <style name="Base.chatWidget.TabLayout" parent="Widget.Design.TabLayout">
+        <item name="tabTextAppearance">@style/TextAppearance.TabLayout.Tab</item>
+        <item name="tabMode">scrollable</item>
+        <item name="tabGravity">fill</item>
+        <item name="android:textSize">17sp</item>
+        <item name="tabIndicatorColor">#fd8548</item>
+        <item name="tabSelectedTextColor">#fd8548</item>
+        <item name="tabIndicatorHeight">2dp</item>
+        <item name="tabPaddingStart">14sp</item>
+        <item name="tabPaddingEnd">14sp</item>
+    </style>
+
 
     <style name="Base.TextAppearance.TabLayout.Tab" parent="TextAppearance.Design.Tab">
         <item name="android:textSize">14sp</item>
@@ -155,7 +167,7 @@
     </style>
 
     <style name="Widget.TabLayout" parent="Base.Widget.TabLayout" />
-
+    <style name="chatWidget.TabLayout" parent="Base.chatWidget.TabLayout" />
     <style name="TextAppearance.TabLayout.Tab" parent="Base.TextAppearance.TabLayout.Tab" />
 
     <!--等待提示-->

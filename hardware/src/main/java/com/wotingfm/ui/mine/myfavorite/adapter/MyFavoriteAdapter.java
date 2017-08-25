@@ -78,10 +78,10 @@ public class MyFavoriteAdapter extends BaseAdapter {
             holder.tv_name.setText(lists.getTitle());//名
         }
 
-        if (lists.getAlbum_id() == null || lists.getAlbum_id().equals("")) {
+        if (lists.getAlbum_name() == null || lists.getAlbum_name().equals("")) {
             holder.tv_introduce.setText("暂无专辑");//专辑
         } else {
-            holder.tv_introduce.setText(lists.getAlbum_id());//专辑
+            holder.tv_introduce.setText(lists.getAlbum_name());//专辑
         }
 
         if (lists.getPlay_count() == null || lists.getPlay_count().equals("")) {

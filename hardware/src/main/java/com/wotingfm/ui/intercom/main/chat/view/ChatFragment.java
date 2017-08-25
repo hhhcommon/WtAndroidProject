@@ -1,6 +1,7 @@
 package com.wotingfm.ui.intercom.main.chat.view;
 
 import android.app.Dialog;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Bundle;
@@ -430,8 +431,5 @@ public class ChatFragment extends Fragment implements ChatAdapter.IonSlidingView
         waveLineView.onPause();
         Log.e("聊天页面","onPause");
     }
-
-
-
 
 }

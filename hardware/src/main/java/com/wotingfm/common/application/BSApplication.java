@@ -1,6 +1,7 @@
 package com.wotingfm.common.application;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.support.multidex.MultiDexApplication;
 
 import com.iflytek.cloud.SpeechUtility;
@@ -19,7 +20,7 @@ import cn.jpush.android.api.JPushInterface;
  * 邮箱：645700751@qq.com
  */
 public class BSApplication extends MultiDexApplication {
-    public static android.content.SharedPreferences SharedPreferences;   // 配置信息
+    public static SharedPreferences SharedPreferences;   // 配置信息
     public static Context mContext;
 
     public void onCreate() {

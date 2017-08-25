@@ -28,10 +28,10 @@ import android.widget.TextView;
 
 import com.woting.commonplat.manager.PhoneMsgManager;
 import com.wotingfm.R;
-import com.wotingfm.ui.bean.MessageEvent;
 import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.common.manager.InterPhoneControl;
 import com.wotingfm.common.manager.WtDeviceControl;
+import com.wotingfm.ui.bean.MessageEvent;
 import com.wotingfm.ui.intercom.main.chat.presenter.ChatPresenter;
 import com.wotingfm.ui.intercom.main.view.InterPhoneActivity;
 import com.wotingfm.ui.main.presenter.MainPresenter;

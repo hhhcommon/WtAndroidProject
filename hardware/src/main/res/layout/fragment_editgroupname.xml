@@ -58,6 +58,7 @@
             android:lineSpacingExtra="2sp"
             android:paddingLeft="12dp"
             android:singleLine="true"
+            android:maxLength="20"
             android:paddingTop="12dp"
             android:maxLines="1"
             android:textColor="@color/black_head_word"

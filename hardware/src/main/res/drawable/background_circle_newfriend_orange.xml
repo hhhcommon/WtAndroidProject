@@ -8,8 +8,8 @@
     <!-- 描边 -->  
      
     <stroke   
-        android:width="1px"
-        android:color="#efefef" />
+        android:width="0.7dp"
+        android:color="@color/app_basic" />
     <!-- 圆角 --> 
     <corners
         android:radius="67dp"/>

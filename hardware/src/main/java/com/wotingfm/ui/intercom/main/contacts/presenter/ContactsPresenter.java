@@ -175,8 +175,8 @@ public class ContactsPresenter {
     private void getRedData() {
         int point_person = BSApplication.SharedPreferences.getInt(IntegerConstant.RED_POINT_PERSON, 0);
         activity.setRedView("person", point_person);
-        int point_group = BSApplication.SharedPreferences.getInt(IntegerConstant.RED_POINT_GROUP, 0);
-        activity.setRedView("group", point_group);
+//        int point_group = BSApplication.SharedPreferences.getInt(IntegerConstant.RED_POINT_GROUP, 0);
+//        activity.setRedView("group", point_group);
     }
 
     /**

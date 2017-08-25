@@ -81,6 +81,8 @@
         android:glEsVersion="0x00020000"
         android:required="true" />
 
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+
     <!-- supportsRtl 从左到右 -->
     <!-- android:screenOrientation="portrait" 强制竖屏 -->
     <application

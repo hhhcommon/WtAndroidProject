@@ -285,7 +285,7 @@ public class MainPresenter extends BasePresenter {
                 WtDeviceControl.setMute();// 设置静音
                 String room_id = event.split("enterGroup&")[1];
                 activity.enterRoom(room_id);// 进入对讲房间
-            } else if (event.equals("exitGroup&")) {
+            } else if (event.contains("exitGroup&")) {
                 WtDeviceControl.setMuteResume();// 设置静音恢复
                 String room_id = event.split("exitGroup&")[1];
                 activity.exitRoomGroup(room_id);// 退出对讲房间

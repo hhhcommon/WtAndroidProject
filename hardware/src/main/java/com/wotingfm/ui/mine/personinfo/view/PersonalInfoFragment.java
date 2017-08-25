@@ -233,7 +233,7 @@ public class PersonalInfoFragment extends Fragment implements View.OnClickListen
     // 城市选择框
     public void cityPickerDialog(final Map<String, List<String>> positionMap, final List<String> provinceList) {
         if (positionMap != null && positionMap.size() > 0 && provinceList != null && provinceList.size() > 0) {
-            GlobalStateConfig.LoopViewW = PhoneMsgManager.ScreenWidth / 2;
+            GlobalStateConfig.LoopViewW = PhoneMsgManager.ScreenWidth / 2-40;
             final View dialog = LayoutInflater.from(this.getActivity()).inflate(R.layout.dialog_city, null);
             final LoopView pickProvince = (LoopView) dialog.findViewById(R.id.pick_province);
             final LoopView pickCity = (LoopView) dialog.findViewById(R.id.pick_city);

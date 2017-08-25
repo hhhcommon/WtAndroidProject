@@ -1,34 +1,37 @@
 package com.wotingfm.ui.intercom.main.view;
 
 import android.content.Intent;
+import android.content.res.Resources;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.wotingfm.R;
-import com.wotingfm.ui.bean.MessageEvent;
 import com.wotingfm.common.config.GlobalStateConfig;
 import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.common.utils.CommonUtils;
-import com.wotingfm.ui.base.baseadapter.MyFragmentPagerAdapter;
+import com.wotingfm.ui.bean.MessageEvent;
 import com.wotingfm.ui.intercom.add.find.FindFragment;
 import com.wotingfm.ui.intercom.group.creat.view.CreateGroupMainFragment;
-import com.wotingfm.ui.intercom.main.chat.view.ChatFragment;
-import com.wotingfm.ui.intercom.main.contacts.fragment.ContactsFragment;
 import com.wotingfm.ui.intercom.main.simulation.view.SimulationInterPhoneFragment;
 import com.wotingfm.ui.intercom.scanning.activity.CaptureFragment;
+import com.wotingfm.ui.play.find.main.adapter.MyAdapter;
 import com.wotingfm.ui.user.logo.LogoActivity;
 
 import org.greenrobot.eventbus.EventBus;
 
-import java.util.ArrayList;
+import java.lang.reflect.Field;
+import java.util.List;
 
 /**
  * 对讲模块主页
@@ -37,19 +40,20 @@ import java.util.ArrayList;
  */
 
 public class InterPhoneFragment extends Fragment implements View.OnClickListener {
-    private TextView tv_chat, tv_linkman, line_chat, line_linkman;
+//    private TextView tv_chat, tv_linkman, line_chat, line_linkman;
     private PopupWindow addDialog;
     private ViewPager mPager;
     private ImageView img_more,img_person;
     private View rootView;
     private InterPhonePresenter presenter;
+    private TabLayout tabs;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         if (rootView == null) {
             rootView = inflater.inflate(R.layout.fragment_intercom, container, false);
             InitTextView();  // 初始化视图
-            InitViewPager(); // 初始化 ViewPager
+//            InitViewPager(); // 初始化 ViewPager
             dialog();        // 初始化功能弹出框
             presenter = new InterPhonePresenter(this);
         }
@@ -63,28 +67,48 @@ public class InterPhoneFragment extends Fragment implements View.OnClickListener
         img_person = (ImageView) rootView.findViewById(R.id.img_person);   // 个人中心
         img_person.setOnClickListener(this);
 
-        tv_chat = (TextView) rootView.findViewById(R.id.tv_chat);          // 展示条
-        line_chat = (TextView) rootView.findViewById(R.id.line_chat);      // 展示条
-        tv_linkman = (TextView) rootView.findViewById(R.id.tv_linkman);    // 展示条
-        line_linkman = (TextView) rootView.findViewById(R.id.line_linkman);// 展示条
-
-        tv_chat.setOnClickListener(new txListener(0));
-        tv_linkman.setOnClickListener(new txListener(1));
+//        tv_chat = (TextView) rootView.findViewById(R.id.tv_chat);          // 展示条
+//        line_chat = (TextView) rootView.findViewById(R.id.line_chat);      // 展示条
+//        tv_linkman = (TextView) rootView.findViewById(R.id.tv_linkman);    // 展示条
+//        line_linkman = (TextView) rootView.findViewById(R.id.line_linkman);// 展示条
+//
+//        tv_chat.setOnClickListener(new txListener(0));
+//        tv_linkman.setOnClickListener(new txListener(1));
+        mPager = (ViewPager) rootView.findViewById(R.id.viewpager);
+        mPager.setOffscreenPageLimit(1);
+        tabs=(TabLayout) rootView.findViewById(R.id.tabs);   // 个人中心
 
     }
 
-    // 初始化ViewPager
-    public void InitViewPager() {
-        mPager = (ViewPager) rootView.findViewById(R.id.viewpager);
-        mPager.setOffscreenPageLimit(1);
-        ArrayList<Fragment> fragmentList = new ArrayList<>();
-        Fragment ctFragment = new ChatFragment();   // 对讲页
-        Fragment cFragment = new ContactsFragment();// 通讯录
-        fragmentList.add(ctFragment);
-        fragmentList.add(cFragment);
-        mPager.setAdapter(new MyFragmentPagerAdapter(getChildFragmentManager(), fragmentList));
-        mPager.setOnPageChangeListener(new MyOnPageChangeListener());// 页面变化时的监听器
-        update(0);
+//    // 初始化ViewPager
+//    public void InitViewPager() {
+//        ArrayList<Fragment> fragmentList = new ArrayList<>();
+//        Fragment ctFragment = new ChatFragment();   // 对讲页
+//        Fragment cFragment = new ContactsFragment();// 通讯录
+//        fragmentList.add(ctFragment);
+//        fragmentList.add(cFragment);
+//        mPager.setAdapter(new MyFragmentPagerAdapter(getChildFragmentManager(), fragmentList));
+//        mPager.setOnPageChangeListener(new MyOnPageChangeListener());// 页面变化时的监听器
+//        update(0);
+//    }
+
+    /**
+     * 数据适配
+     *
+     * @param type
+     * @param list
+     */
+    public void setData(List<String> type, List<Fragment> list) {
+        MyAdapter mAdapter = new MyAdapter(getChildFragmentManager(), type, list);
+        mPager.setAdapter(mAdapter);
+        // viewPager.setOffscreenPageLimit(1);
+        tabs.setupWithViewPager(mPager);
+        tabs.post(new Runnable() {
+            @Override
+            public void run() {
+                setIndicator(tabs,20,20);
+            }
+        });
     }
 
     // "更多" 对话框
@@ -189,56 +213,92 @@ public class InterPhoneFragment extends Fragment implements View.OnClickListener
 
     }
 
-    // TextView 点击事件监听
-    public class txListener implements View.OnClickListener {
-        private int index = 0;
-
-        public txListener(int i) {
-            index = i;
-        }
-
-        @Override
-        public void onClick(View v) {
-            update(index);
-        }
-    }
-
-    // ViewPager 监听事件
-    public class MyOnPageChangeListener implements ViewPager.OnPageChangeListener {
-        @Override
-        public void onPageScrolled(int arg0, float arg1, int arg2) {
-        }
-
-        @Override
-        public void onPageScrollStateChanged(int arg0) {
-        }
-
-        @Override
-        public void onPageSelected(int arg0) {
-            update(arg0);
-        }
-    }
+//    // TextView 点击事件监听
+//    public class txListener implements View.OnClickListener {
+//        private int index = 0;
+//
+//        public txListener(int i) {
+//            index = i;
+//        }
+//
+//        @Override
+//        public void onClick(View v) {
+//            update(index);
+//        }
+//    }
+//
+//    // ViewPager 监听事件
+//    public class MyOnPageChangeListener implements ViewPager.OnPageChangeListener {
+//        @Override
+//        public void onPageScrolled(int arg0, float arg1, int arg2) {
+//        }
+//
+//        @Override
+//        public void onPageScrollStateChanged(int arg0) {
+//        }
+//
+//        @Override
+//        public void onPageSelected(int arg0) {
+//            update(arg0);
+//        }
+//    }
 
     // 设置头部样式
     private void update(int arg0) {
         mPager.setCurrentItem(arg0);
-        if (arg0 == 0) {
-            tv_chat.setTextColor(this.getActivity().getResources().getColor(R.color.app_basic));
-            tv_linkman.setTextColor(this.getActivity().getResources().getColor(R.color.black_head_word));
-            line_chat.setVisibility(View.VISIBLE);
-            line_linkman.setVisibility(View.INVISIBLE);
-        } else if (arg0 == 1) {
-            tv_chat.setTextColor(this.getActivity().getResources().getColor(R.color.black_head_word));
-            tv_linkman.setTextColor(this.getActivity().getResources().getColor(R.color.app_basic));
-            line_chat.setVisibility(View.INVISIBLE);
-            line_linkman.setVisibility(View.VISIBLE);
-        }
+//        if (arg0 == 0) {
+//            tv_chat.setTextColor(this.getActivity().getResources().getColor(R.color.app_basic));
+//            tv_linkman.setTextColor(this.getActivity().getResources().getColor(R.color.black_head_word));
+//            line_chat.setVisibility(View.VISIBLE);
+//            line_linkman.setVisibility(View.INVISIBLE);
+//        } else if (arg0 == 1) {
+//            tv_chat.setTextColor(this.getActivity().getResources().getColor(R.color.black_head_word));
+//            tv_linkman.setTextColor(this.getActivity().getResources().getColor(R.color.app_basic));
+//            line_chat.setVisibility(View.INVISIBLE);
+//            line_linkman.setVisibility(View.VISIBLE);
+//        }
     }
 
     /**
-     * 更改样式
-     * @param type
+     * 反射修改下划线的宽度
+     * @param tabs
+     * @param leftDip
+     * @param rightDip
      */
+    public void setIndicator (TabLayout tabs,int leftDip,int rightDip) {
+        Class<?> tabLayout = tabs.getClass();
+        Field tabStrip = null;
+        try {
+            tabStrip = tabLayout.getDeclaredField("mTabStrip");
+        } catch (NoSuchFieldException e) {
+            e.printStackTrace();
+        }
+
+        tabStrip.setAccessible(true);
+        LinearLayout llTab = null;
+        try {
+            llTab = (LinearLayout) tabStrip.get(tabs);
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+
+        int left = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, leftDip, Resources.getSystem().getDisplayMetrics());
+        int right = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, rightDip, Resources.getSystem().getDisplayMetrics());
+
+        for (int i = 0; i < llTab.getChildCount(); i++) {
+            View child = llTab.getChildAt(i);
+            child.setPadding(0, 0, 0, 0);
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 1);
+            params.leftMargin = left;
+            params.rightMargin = right;
+            child.setLayoutParams(params);
+            child.invalidate();
+        }
+    }
+        /**
+         * 更改样式
+         * @param type
+         */
     public void change(int type) {
         update(type);
     }

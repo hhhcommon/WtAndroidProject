@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.support.v4.app.Fragment;
 import android.util.Log;
 
 import com.google.gson.Gson;
@@ -14,11 +15,14 @@ import com.wotingfm.common.config.GlobalStateConfig;
 import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.common.utils.CommonUtils;
 import com.wotingfm.common.utils.GetTestData;
+import com.wotingfm.ui.intercom.main.chat.view.ChatFragment;
+import com.wotingfm.ui.intercom.main.contacts.fragment.ContactsFragment;
 import com.wotingfm.ui.intercom.main.contacts.model.Contact;
 
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -35,8 +39,23 @@ public class InterPhonePresenter {
     public InterPhonePresenter(InterPhoneFragment activity) {
         this.activity = activity;
         this.model = new InterPhoneModel();
+        getFData();
         getData();    // 获取数据，数据适配
         setReceiver();// 设置广播接收器
+    }
+
+    // 组装数据
+    private void getFData() {
+        List<String> type = new ArrayList<>();
+        type.add("聊天");
+        type.add("通讯录");
+
+        List<Fragment> mFragment = new ArrayList<>();
+        Fragment ctFragment = new ChatFragment();   // 对讲页
+        Fragment cFragment = new ContactsFragment();// 通讯录
+        mFragment.add(ctFragment);
+        mFragment.add(cFragment);
+        activity.setData(type, mFragment);// 设置数据
     }
 
     // 获取数据，数据适配

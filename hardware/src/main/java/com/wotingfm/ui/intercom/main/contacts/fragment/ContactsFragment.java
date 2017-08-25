@@ -1,11 +1,9 @@
 package com.wotingfm.ui.intercom.main.contacts.fragment;
 
 import android.app.Dialog;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,7 +18,6 @@ import com.woting.commonplat.widget.TipView;
 import com.wotingfm.R;
 import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.constant.IntegerConstant;
-import com.wotingfm.common.utils.DialogUtils;
 import com.wotingfm.ui.intercom.add.search.local.view.SearchContactsForLocalFragment;
 import com.wotingfm.ui.intercom.group.groupchat.view.GroupChatFragment;
 import com.wotingfm.ui.intercom.main.contacts.adapter.ContactsAdapter;
@@ -30,7 +27,6 @@ import com.wotingfm.ui.intercom.main.contacts.presenter.ContactsPresenter;
 import com.wotingfm.ui.intercom.main.contacts.view.SideBar;
 import com.wotingfm.ui.intercom.main.view.InterPhoneActivity;
 import com.wotingfm.ui.intercom.person.newfriend.view.NewFriendFragment;
-import com.wotingfm.ui.intercom.person.personmessage.view.PersonMessageFragment;
 
 import java.util.List;
 
@@ -100,8 +96,11 @@ public class ContactsFragment extends Fragment implements View.OnClickListener, 
                 InterPhoneActivity.open(new SearchContactsForLocalFragment());
                 break;
             case R.id.re_newFriend:// 跳转到新的朋友界面,小红点数据设置为零
-                BSApplication.SharedPreferences.edit().putInt(IntegerConstant.RED_POINT_PERSON, 0);
-                BSApplication.SharedPreferences.edit().commit();
+                SharedPreferences.Editor et = BSApplication.SharedPreferences.edit();
+                et.putInt(IntegerConstant.RED_POINT_PERSON, 0);
+                if (!et.commit()) {
+                    Log.e("commit", "数据 commit 失败!");
+                }
                 tv_newFriendNum.setVisibility(View.GONE);
                 InterPhoneActivity.open(new NewFriendFragment());
                 break;
