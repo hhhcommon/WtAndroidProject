@@ -1,4 +1,4 @@
-package com.wotingfm.ui.play.look.activity.serch.fragment;
+package com.wotingfm.ui.play.search.fragment;
 
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -10,15 +10,11 @@ import com.woting.commonplat.amine.OnLoadMoreListener;
 import com.woting.commonplat.amine.OnRefreshListener;
 import com.woting.commonplat.widget.LoadFrameLayout;
 import com.wotingfm.R;
-import com.wotingfm.ui.adapter.albumsAdapter.AlbumsAdapter;
-import com.wotingfm.ui.bean.AlbumsBean;
-import com.wotingfm.ui.bean.SerchList;
 import com.wotingfm.common.net.RetrofitUtils;
+import com.wotingfm.ui.adapter.serch.ProgramSerchAdapter;
 import com.wotingfm.ui.base.basefragment.BaseFragment;
-import com.wotingfm.ui.mine.main.MineActivity;
-import com.wotingfm.ui.play.album.view.AlbumsInfoFragmentMain;
-import com.wotingfm.ui.play.find.main.view.LookListActivity;
-import com.wotingfm.ui.play.main.PlayerActivity;
+import com.wotingfm.ui.bean.SerchList;
+import com.wotingfm.ui.bean.SinglesBase;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,7 +31,7 @@ import rx.schedulers.Schedulers;
  * 筛选的
  */
 
-public class AlbumsListFragment extends BaseFragment implements OnLoadMoreListener, OnRefreshListener {
+public class ProgramListFragment extends BaseFragment implements OnLoadMoreListener, OnRefreshListener {
     @BindView(R.id.mRecyclerView)
     ARecyclerView mRecyclerView;
     @BindView(R.id.loadLayout)
@@ -46,8 +42,8 @@ public class AlbumsListFragment extends BaseFragment implements OnLoadMoreListen
         return R.layout.fragment_albums_list;
     }
 
-    public static AlbumsListFragment newInstance(String q) {
-        AlbumsListFragment fragment = new AlbumsListFragment();
+    public static ProgramListFragment newInstance(String q) {
+        ProgramListFragment fragment = new ProgramListFragment();
         Bundle bundle = new Bundle();
         bundle.putString("q", q);
         fragment.setArguments(bundle);
@@ -73,49 +69,38 @@ public class AlbumsListFragment extends BaseFragment implements OnLoadMoreListen
                 refresh(q);
             }
         });
-        mAdapter = new AlbumsAdapter(getActivity(), albumsBeanList);
-        mAdapter.setPlayerClick(new AlbumsAdapter.PlayerClick() {
+        mAdapter = new ProgramSerchAdapter(getActivity(), albumsBeanList, new ProgramSerchAdapter.OnClick() {
             @Override
-            public void clickAlbums(AlbumsBean singlesBean) {
-                if (getActivity() instanceof PlayerActivity) {
-                    PlayerActivity.open(AlbumsInfoFragmentMain.newInstance(singlesBean.id));
-                } else if (getActivity() instanceof MineActivity) {
-                    MineActivity.open(AlbumsInfoFragmentMain.newInstance(singlesBean.id));
-                } else if (getActivity() instanceof LookListActivity) {
-                    LookListActivity.open(AlbumsInfoFragmentMain.newInstance(singlesBean.id));
-                }
-            }
-            @Override
-            public void play(AlbumsBean singlesBean) {
+            public void click(SinglesBase s) {
                 hideSoftKeyboard();
-                startMain(singlesBean.id);
+                startMain(s);
             }
         });
-        mRecyclerView.setIAdapter(mAdapter);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         mRecyclerView.setLayoutManager(layoutManager);
+        mRecyclerView.setIAdapter(mAdapter);
         refresh(q);
     }
 
     private int mPage;
-    private AlbumsAdapter mAdapter;
-    private List<AlbumsBean> albumsBeanList = new ArrayList<>();
+    private ProgramSerchAdapter mAdapter;
+    private List<SinglesBase> albumsBeanList = new ArrayList<>();
 
     public void refresh(String q) {
         mPage = 1;
-        this.q=q;
-        RetrofitUtils.getInstance().serchList("albums", q, mPage)
+        this.q = q;
+        RetrofitUtils.getInstance().serchList("singles", q, mPage)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Action1<SerchList>() {
                     @Override
                     public void call(SerchList serchList) {
                         mRecyclerView.setRefreshing(false);
-                        if (serchList != null && serchList.ret == 0 && serchList.data != null && serchList.data.albums != null && !serchList.data.albums.isEmpty()) {
+                        if (serchList != null && serchList.ret == 0 && serchList.data != null && serchList.data.singles != null && !serchList.data.singles.isEmpty()) {
                             mPage++;
                             albumsBeanList.clear();
-                            albumsBeanList.addAll(serchList.data.albums);
+                            albumsBeanList.addAll(serchList.data.singles);
                             loadLayout.showContentView();
                             mAdapter.notifyDataSetChanged();
                         } else {
@@ -133,16 +118,16 @@ public class AlbumsListFragment extends BaseFragment implements OnLoadMoreListen
     }
 
     private void loadMore() {
-        RetrofitUtils.getInstance().serchList("albums", q, mPage)
+        RetrofitUtils.getInstance().serchList("singles", q, mPage)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Action1<SerchList>() {
                     @Override
                     public void call(SerchList serchList) {
                         mRecyclerView.setRefreshing(false);
-                        if (serchList != null && serchList.ret == 0 && serchList.data != null && serchList.data.albums != null && !serchList.data.albums.isEmpty()) {
+                        if (serchList != null && serchList.ret == 0 && serchList.data != null && serchList.data.singles != null && !serchList.data.singles.isEmpty()) {
                             mPage++;
-                            albumsBeanList.addAll(serchList.data.albums);
+                            albumsBeanList.addAll(serchList.data.singles);
                             mAdapter.notifyDataSetChanged();
                             loadMoreFooterView.setStatus(LoadMoreFooterView.Status.GONE);
                         } else {

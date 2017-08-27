@@ -1,4 +1,4 @@
-package com.wotingfm.ui.play.look.activity;
+package com.wotingfm.ui.play.find.radio;
 
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
@@ -9,10 +9,10 @@ import com.woting.commonplat.amine.OnLoadMoreListener;
 import com.woting.commonplat.amine.OnRefreshListener;
 import com.woting.commonplat.widget.LoadFrameLayout;
 import com.wotingfm.R;
-import com.wotingfm.ui.adapter.findHome.RadioStationAdapter;
-import com.wotingfm.ui.bean.ChannelsBean;
 import com.wotingfm.common.net.RetrofitUtils;
+import com.wotingfm.ui.adapter.findHome.RadioStationAdapter;
 import com.wotingfm.ui.base.basefragment.BaseFragment;
+import com.wotingfm.ui.bean.ChannelsBean;
 
 import java.util.ArrayList;
 import java.util.List;

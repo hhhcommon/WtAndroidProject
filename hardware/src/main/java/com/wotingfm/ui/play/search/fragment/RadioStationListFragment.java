@@ -1,4 +1,4 @@
-package com.wotingfm.ui.play.look.activity.serch.fragment;
+package com.wotingfm.ui.play.search.fragment;
 
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -10,11 +10,11 @@ import com.woting.commonplat.amine.OnLoadMoreListener;
 import com.woting.commonplat.amine.OnRefreshListener;
 import com.woting.commonplat.widget.LoadFrameLayout;
 import com.wotingfm.R;
-import com.wotingfm.ui.adapter.serch.ProgramSerchAdapter;
-import com.wotingfm.ui.bean.SerchList;
-import com.wotingfm.ui.bean.SinglesBase;
 import com.wotingfm.common.net.RetrofitUtils;
+import com.wotingfm.ui.adapter.findHome.RadioStationAdapter;
 import com.wotingfm.ui.base.basefragment.BaseFragment;
+import com.wotingfm.ui.bean.ChannelsBean;
+import com.wotingfm.ui.bean.SerchList;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,7 +31,7 @@ import rx.schedulers.Schedulers;
  * 筛选的
  */
 
-public class ProgramListFragment extends BaseFragment implements OnLoadMoreListener, OnRefreshListener {
+public class RadioStationListFragment extends BaseFragment implements OnLoadMoreListener, OnRefreshListener {
     @BindView(R.id.mRecyclerView)
     ARecyclerView mRecyclerView;
     @BindView(R.id.loadLayout)
@@ -42,8 +42,8 @@ public class ProgramListFragment extends BaseFragment implements OnLoadMoreListe
         return R.layout.fragment_albums_list;
     }
 
-    public static ProgramListFragment newInstance(String q) {
-        ProgramListFragment fragment = new ProgramListFragment();
+    public static RadioStationListFragment newInstance(String q) {
+        RadioStationListFragment fragment = new RadioStationListFragment();
         Bundle bundle = new Bundle();
         bundle.putString("q", q);
         fragment.setArguments(bundle);
@@ -69,38 +69,39 @@ public class ProgramListFragment extends BaseFragment implements OnLoadMoreListe
                 refresh(q);
             }
         });
-        mAdapter = new ProgramSerchAdapter(getActivity(), albumsBeanList, new ProgramSerchAdapter.OnClick() {
+        mAdapter = new RadioStationAdapter(getActivity(), albumsBeanList, new RadioStationAdapter.RadioStationClick() {
             @Override
-            public void click(SinglesBase s) {
+            public void click(ChannelsBean dataBean) {
                 hideSoftKeyboard();
-                startMain(s);
+                startMain(dataBean);
+                // RadioInfoActivity.start(getActivity(), dataBean.title, dataBean.id);
             }
         });
+        mRecyclerView.setIAdapter(mAdapter);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         mRecyclerView.setLayoutManager(layoutManager);
-        mRecyclerView.setIAdapter(mAdapter);
         refresh(q);
     }
 
     private int mPage;
-    private ProgramSerchAdapter mAdapter;
-    private List<SinglesBase> albumsBeanList = new ArrayList<>();
+    private RadioStationAdapter mAdapter;
+    private List<ChannelsBean> albumsBeanList = new ArrayList<>();
 
     public void refresh(String q) {
         mPage = 1;
         this.q = q;
-        RetrofitUtils.getInstance().serchList("singles", q, mPage)
+        RetrofitUtils.getInstance().serchList("radios", q, mPage)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Action1<SerchList>() {
                     @Override
                     public void call(SerchList serchList) {
                         mRecyclerView.setRefreshing(false);
-                        if (serchList != null && serchList.ret == 0 && serchList.data != null && serchList.data.singles != null && !serchList.data.singles.isEmpty()) {
+                        if (serchList != null && serchList.ret == 0 && serchList.data != null && serchList.data.radios != null && !serchList.data.radios.isEmpty()) {
                             mPage++;
                             albumsBeanList.clear();
-                            albumsBeanList.addAll(serchList.data.singles);
+                            albumsBeanList.addAll(serchList.data.radios);
                             loadLayout.showContentView();
                             mAdapter.notifyDataSetChanged();
                         } else {
@@ -118,16 +119,16 @@ public class ProgramListFragment extends BaseFragment implements OnLoadMoreListe
     }
 
     private void loadMore() {
-        RetrofitUtils.getInstance().serchList("singles", q, mPage)
+        RetrofitUtils.getInstance().serchList("radios", q, mPage)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Action1<SerchList>() {
                     @Override
                     public void call(SerchList serchList) {
                         mRecyclerView.setRefreshing(false);
-                        if (serchList != null && serchList.ret == 0 && serchList.data != null && serchList.data.singles != null && !serchList.data.singles.isEmpty()) {
+                        if (serchList != null && serchList.ret == 0 && serchList.data != null && serchList.data.radios != null && !serchList.data.radios.isEmpty()) {
                             mPage++;
-                            albumsBeanList.addAll(serchList.data.singles);
+                            albumsBeanList.addAll(serchList.data.radios);
                             mAdapter.notifyDataSetChanged();
                             loadMoreFooterView.setStatus(LoadMoreFooterView.Status.GONE);
                         } else {

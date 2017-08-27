@@ -1,4 +1,4 @@
-package com.wotingfm.ui.play.look.activity.serch;
+package com.wotingfm.ui.play.search.main;
 
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
@@ -14,12 +14,12 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.wotingfm.R;
-import com.wotingfm.ui.play.find.main.adapter.MyAdapter;
 import com.wotingfm.ui.base.basefragment.BaseFragment;
-import com.wotingfm.ui.play.look.activity.serch.fragment.AlbumsListFragment;
-import com.wotingfm.ui.play.look.activity.serch.fragment.AnchorListFragment;
-import com.wotingfm.ui.play.look.activity.serch.fragment.ProgramListFragment;
-import com.wotingfm.ui.play.look.activity.serch.fragment.RadioStationListFragment;
+import com.wotingfm.ui.play.find.main.adapter.MyAdapter;
+import com.wotingfm.ui.play.search.fragment.AlbumsListFragment;
+import com.wotingfm.ui.play.search.fragment.AnchorListFragment;
+import com.wotingfm.ui.play.search.fragment.ProgramListFragment;
+import com.wotingfm.ui.play.search.fragment.RadioStationListFragment;
 
 import java.util.ArrayList;
 import java.util.List;

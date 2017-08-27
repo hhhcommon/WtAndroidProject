@@ -16,16 +16,11 @@ import com.wotingfm.common.config.GlobalStateConfig;
 import com.wotingfm.common.net.RetrofitUtils;
 import com.wotingfm.common.view.BannerView;
 import com.wotingfm.ui.adapter.findHome.SelectedAdapter;
-import com.wotingfm.ui.base.basefragment.BaseFragment;
 import com.wotingfm.ui.bean.HomeBanners;
 import com.wotingfm.ui.bean.MessageEvent;
 import com.wotingfm.ui.bean.Selected;
-import com.wotingfm.ui.mine.main.MineActivity;
-import com.wotingfm.ui.play.album.view.AlbumsInfoFragmentMain;
 import com.wotingfm.ui.play.find.main.view.LookListActivity;
-import com.wotingfm.ui.play.look.activity.SelectedMoreFragment;
 import com.wotingfm.ui.play.main.PlayerActivity;
-import com.wotingfm.ui.play.report.presenter.ReportPresenter;
 import com.zhy.adapter.recyclerview.wrapper.HeaderAndFooterWrapper;
 
 import org.greenrobot.eventbus.EventBus;

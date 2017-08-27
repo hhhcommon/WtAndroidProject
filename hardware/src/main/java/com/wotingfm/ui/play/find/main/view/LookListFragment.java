@@ -33,7 +33,7 @@ import com.wotingfm.ui.play.find.main.adapter.MyAdapter;
 import com.wotingfm.ui.base.basefragment.BaseFragment;
 import com.wotingfm.ui.bean.MessageEvent;
 import com.wotingfm.ui.play.find.main.presenter.LookListPresenter;
-import com.wotingfm.ui.play.look.activity.serch.SerchFragment;
+import com.wotingfm.ui.play.search.main.SerchFragment;
 
 import org.greenrobot.eventbus.EventBus;
 

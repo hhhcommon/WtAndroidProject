@@ -1,4 +1,4 @@
-package com.wotingfm.ui.play.look.activity.classification.fragment;
+package com.wotingfm.ui.play.find.classification.view;
 
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -10,11 +10,11 @@ import com.woting.commonplat.amine.OnLoadMoreListener;
 import com.woting.commonplat.amine.OnRefreshListener;
 import com.woting.commonplat.widget.LoadFrameLayout;
 import com.wotingfm.R;
+import com.wotingfm.common.net.RetrofitUtils;
 import com.wotingfm.ui.adapter.albumsAdapter.AlbumsAdapter;
+import com.wotingfm.ui.base.basefragment.BaseFragment;
 import com.wotingfm.ui.bean.AlbumsBean;
 import com.wotingfm.ui.bean.ChannelsBean;
-import com.wotingfm.common.net.RetrofitUtils;
-import com.wotingfm.ui.base.basefragment.BaseFragment;
 import com.wotingfm.ui.mine.main.MineActivity;
 import com.wotingfm.ui.play.album.view.AlbumsInfoFragmentMain;
 import com.wotingfm.ui.play.find.main.view.LookListActivity;
@@ -47,7 +47,7 @@ public class SubcategoryFragment extends BaseFragment implements OnLoadMoreListe
         return R.layout.fragment_subcategory;
     }
 
-    public static SubcategoryFragment newInstance(ChannelsBean albumInfo,String id, String title) {
+    public static SubcategoryFragment newInstance(ChannelsBean albumInfo, String id, String title) {
         SubcategoryFragment fragment = new SubcategoryFragment();
         Bundle bundle = new Bundle();
         bundle.putSerializable("albumInfo", albumInfo);

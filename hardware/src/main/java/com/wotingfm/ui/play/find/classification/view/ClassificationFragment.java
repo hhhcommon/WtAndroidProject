@@ -12,11 +12,9 @@ import android.view.ViewGroup;
 import com.woting.commonplat.widget.LoadFrameLayout;
 import com.wotingfm.R;
 import com.wotingfm.ui.play.find.classification.adapter.ClassificationAdapter;
-import com.wotingfm.ui.base.basefragment.BaseFragment;
 import com.wotingfm.ui.play.find.classification.model.Classification;
 import com.wotingfm.ui.play.find.classification.presenter.ClassificationPresenter;
 import com.wotingfm.ui.play.find.main.view.LookListActivity;
-import com.wotingfm.ui.play.look.activity.classification.fragment.MinorClassificationFragment;
 import com.wotingfm.ui.play.main.PlayerActivity;
 
 import java.util.List;

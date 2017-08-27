@@ -1,4 +1,4 @@
-package com.wotingfm.ui.play.look.activity.classification.fragment;
+package com.wotingfm.ui.play.find.classification.view;
 
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
@@ -10,9 +10,9 @@ import android.view.View;
 
 import com.woting.commonplat.widget.LoadFrameLayout;
 import com.wotingfm.R;
-import com.wotingfm.ui.bean.ChannelsBean;
 import com.wotingfm.common.net.RetrofitUtils;
 import com.wotingfm.ui.base.basefragment.BaseFragment;
+import com.wotingfm.ui.bean.ChannelsBean;
 
 import java.util.ArrayList;
 import java.util.List;
