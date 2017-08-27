@@ -11,6 +11,7 @@
             <option value="$PROJECT_DIR$/CommonPlat" />
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/hardware" />
+            <option value="$PROJECT_DIR$/uikit" />
           </set>
         </option>
         <option name="myModules">
@@ -19,6 +20,7 @@
             <option value="$PROJECT_DIR$/CommonPlat" />
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/hardware" />
+            <option value="$PROJECT_DIR$/uikit" />
           </set>
         </option>
       </GradleProjectSettings>
