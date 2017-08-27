@@ -17,7 +17,7 @@
             android:layout_height="46dp"
             android:layout_centerVertical="true"
             android:layout_gravity="center"
-            android:drawableLeft="@mipmap/discount_icon_title"
+            android:layout_marginLeft="12dp"
             android:gravity="center|left"
             android:text="每日听单"
             android:textColor="#16181a"
@@ -25,11 +25,11 @@
 
         <ImageView
             android:id="@+id/ivMore"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="24dp"
+            android:layout_marginRight="8dp"
+            android:layout_height="24dp"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:padding="8dp"
             android:src="@mipmap/discount_icon_mores" />
     </RelativeLayout>
 

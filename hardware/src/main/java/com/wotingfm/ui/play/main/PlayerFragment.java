@@ -38,9 +38,9 @@ import com.wotingfm.common.database.HistoryHelper;
 import com.wotingfm.common.net.RetrofitUtils;
 import com.wotingfm.common.utils.ListDataSaveUtils;
 import com.wotingfm.common.utils.TimeUtil;
-import com.wotingfm.common.view.MenuDialog;
-import com.wotingfm.common.view.PlayerDialog;
-import com.wotingfm.ui.adapter.PlayerAdapter;
+import com.wotingfm.ui.play.main.view.MenuDialog;
+import com.wotingfm.ui.play.main.view.PlayerDialog;
+import com.wotingfm.ui.play.main.adapter.PlayerAdapter;
 import com.wotingfm.ui.base.basefragment.BaseFragment;
 import com.wotingfm.ui.bean.BaseResult;
 import com.wotingfm.ui.bean.ChannelsBean;
@@ -550,7 +550,7 @@ private boolean isRadio=false;
                     playerDialog = new PlayerDialog(getActivity());
                 }
                 if (singLesBeans != null && !singLesBeans.isEmpty()) {
-                    playerDialog.showPlayDialo(singLesBeans, singLesBeans.get(postionPlayer).id, new PlayerDialog.PopPlayCallBack() {
+                    playerDialog.showPlayDialog(singLesBeans, singLesBeans.get(postionPlayer).id, new PlayerDialog.PopPlayCallBack() {
                         @Override
                         public void play(SinglesBase singlesBean, int postion) {
                             postionPlayer = postion;

@@ -22,6 +22,7 @@ import android.view.animation.TranslateAnimation;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.google.zxing.Result;
 import com.woting.commonplat.manager.PhoneMsgManager;
@@ -97,6 +98,8 @@ public final class CaptureFragment extends Fragment implements SurfaceHolder.Cal
 
     private void inItView() {
         rootView.findViewById(R.id.head_left_btn).setOnClickListener(this);
+        TextView name = (TextView) rootView.findViewById(R.id.tv_center);
+        name.setText("扫一扫");
         scanPreview = (SurfaceView) rootView.findViewById(R.id.capture_preview);
         scanContainer = (LinearLayout) rootView.findViewById(R.id.capture_container);
         scanCropView = (RelativeLayout) rootView.findViewById(R.id.capture_crop_view);

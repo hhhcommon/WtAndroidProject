@@ -119,7 +119,7 @@ public class LookListFragment extends BaseFragment implements View.OnClickListen
     public void setData(List<String> type, List<Fragment> list) {
         mAdapter = new MyAdapter(getChildFragmentManager(), type, list);
         viewPager.setAdapter(mAdapter);
-        // viewPager.setOffscreenPageLimit(1);
+        viewPager.setOffscreenPageLimit(1);
         tabLayout.setupWithViewPager(viewPager);
     }
 

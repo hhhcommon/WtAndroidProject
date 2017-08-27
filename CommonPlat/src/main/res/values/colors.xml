@@ -4,18 +4,27 @@
     <!-- 00%=FF（不透明）    5%=F2    10%=E5    15%=D8    20%=CC    25%=BF    30%=B2    35%=A5    40%=99    45%=8c    50%=7F
          55%=72    60%=66    65%=59    70%=4c    75%=3F    80%=33    85%=21    90%=19    95%=0c    100%=00（全透明）-->
     <color name="transparent_background">#00000000</color>
-    <color name="transparent_40_black">#99000000</color>
-    <color name="transparent_50_black">#7F000000</color>
+
+
     <color name="transparent_90_black">#19000000</color>
-    <color name="transparent_70_black">#4c000000</color>
-    <color name="transparent_30_black">#B2000000</color>
-    <color name="transparent_10_black">#E5000000</color>
     <color name="transparent_80_black">#33000000</color>
+    <color name="transparent_70_black">#4c000000</color>
+    <color name="transparent_60_black">#66000000</color>
+    <color name="transparent_50_black">#7F000000</color>
+    <color name="transparent_40_black">#99000000</color>
+    <color name="transparent_30_black">#B2000000</color>
     <color name="transparent_20_black">#CC000000</color>
+    <color name="transparent_10_black">#E5000000</color>
+
+    <color name="transparent_90_white">#19ffffff</color>
     <color name="transparent_80_white">#33ffffff</color>
+    <color name="transparent_70_white">#4cffffff</color>
+    <color name="transparent_60_white">#66ffffff</color>
+    <color name="transparent_50_white">#7fffffff</color>
+    <color name="transparent_40_white">#99ffffff</color>
+    <color name="transparent_30_white">#b2ffffff</color>
     <color name="transparent_20_white">#ccffffff</color>
     <color name="transparent_10_white">#E5ffffff</color>
-    <color name="transparent_90_white">#19ffffff</color>
     <!-- 黑色  标头字体 -->
     <color name="black_head_word">#16181a</color>
     <!-- 偏好设置字体 -->

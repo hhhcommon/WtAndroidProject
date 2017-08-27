@@ -67,6 +67,14 @@ public class EditPersonNoteFragment extends Fragment implements View.OnClickList
     }
 
     /**
+     * 设置名称
+     * @param name
+     */
+    public void setName(String name){
+        et_news.setText(name);
+    }
+
+    /**
      * 展示弹出框
      */
     public void dialogShow() {

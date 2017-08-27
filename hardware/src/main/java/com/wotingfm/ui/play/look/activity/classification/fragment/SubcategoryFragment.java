@@ -15,6 +15,10 @@ import com.wotingfm.ui.bean.AlbumsBean;
 import com.wotingfm.ui.bean.ChannelsBean;
 import com.wotingfm.common.net.RetrofitUtils;
 import com.wotingfm.ui.base.basefragment.BaseFragment;
+import com.wotingfm.ui.mine.main.MineActivity;
+import com.wotingfm.ui.play.album.view.AlbumsInfoFragmentMain;
+import com.wotingfm.ui.play.find.main.view.LookListActivity;
+import com.wotingfm.ui.play.main.PlayerActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -77,8 +81,19 @@ public class SubcategoryFragment extends BaseFragment implements OnLoadMoreListe
         mAdapter.setPlayerClick(new AlbumsAdapter.PlayerClick() {
             @Override
             public void clickAlbums(AlbumsBean singlesBean) {
+                if (getActivity() instanceof PlayerActivity) {
+                    PlayerActivity.open(AlbumsInfoFragmentMain.newInstance(singlesBean.id));
+                } else if (getActivity() instanceof MineActivity) {
+                    MineActivity.open(AlbumsInfoFragmentMain.newInstance(singlesBean.id));
+                } else if (getActivity() instanceof LookListActivity) {
+                    LookListActivity.open(AlbumsInfoFragmentMain.newInstance(singlesBean.id));
+                }
+            }
+            @Override
+            public void play(AlbumsBean singlesBean) {
                 startMain(singlesBean.id);
             }
+
         });
         mRecyclerView.setIAdapter(mAdapter);
         loadLayout.findViewById(R.id.btnTryAgain).setOnClickListener(new View.OnClickListener() {

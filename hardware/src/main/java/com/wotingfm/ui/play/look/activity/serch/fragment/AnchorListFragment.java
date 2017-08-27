@@ -15,7 +15,7 @@ import com.wotingfm.ui.bean.SerchList;
 import com.wotingfm.ui.bean.UserBean;
 import com.wotingfm.common.net.RetrofitUtils;
 import com.wotingfm.ui.base.basefragment.BaseFragment;
-import com.wotingfm.ui.play.activity.AnchorPersonalCenterFragment;
+import com.wotingfm.ui.play.anchor.view.AnchorPersonalCenterFragment;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -29,21 +29,22 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/linear"
-            android:layout_marginTop="6dp"
+            android:layout_marginTop="5dp"
+            android:gravity="center_vertical"
             android:orientation="horizontal">
 
             <ImageView
                 android:id="@+id/ivContent"
-                android:layout_width="18dp"
-                android:layout_height="18dp"
-                android:layout_gravity="center"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
                 android:src="@mipmap/icon_album_n" />
 
             <TextView
                 android:id="@+id/tvContent"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="20dp"
                 android:ellipsize="end"
                 android:lineSpacingExtra="0sp"
                 android:singleLine="true"
@@ -51,24 +52,29 @@
                 android:text="过年回家你妈和你说什么了？"
                 android:textColor="#959698"
                 android:textSize="13sp" />
+            <ImageView
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:src="@mipmap/icon_upload_n" />
             <TextView
                 android:id="@+id/tvTime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:drawableLeft="@mipmap/icon_upload_n"
+                android:layout_marginLeft="8dp"
                 android:ellipsize="end"
                 android:singleLine="true"
                 android:text="过年回家你妈和你说什么了？"
                 android:textColor="#959698"
                 android:textSize="13sp" />
+
+
         </LinearLayout>
     </LinearLayout>
 
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="1px"
+        android:layout_height="0.7dp"
         android:layout_marginLeft="12dp"
-        android:background="#efefef" />
+        android:background="@color/line_color" />
 </LinearLayout>

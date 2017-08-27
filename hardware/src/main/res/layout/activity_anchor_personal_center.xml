@@ -34,7 +34,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:src="@mipmap/nav_icon_back_black" />
+            android:src="@drawable/icon_back_black" />
 
         <TextView
             android:id="@+id/tvTitle"
@@ -43,11 +43,11 @@
             android:ellipsize="end"
             android:gravity="center"
             android:layout_marginTop="20dp"
-            android:maxWidth="300dp"
+            android:maxLength="20"
             android:singleLine="true"
-            android:layout_height="40dp"
-            android:text="Amine"
-            android:textColor="#0016181a" />
+            android:layout_height="45dp"
+            android:text="主播"
+            android:textColor="#16181a" />
 
         <ImageView
             android:id="@+id/ivMore"
@@ -55,6 +55,6 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_marginTop="20dp"
-            android:src="@mipmap/nav_icon_more_black" />
+            android:src="@drawable/icon_chat_other_black" />
     </RelativeLayout>
 </FrameLayout>

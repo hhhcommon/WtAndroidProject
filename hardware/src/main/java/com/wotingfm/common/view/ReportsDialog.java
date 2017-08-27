@@ -11,8 +11,8 @@ import android.widget.TextView;
 import com.wotingfm.R;
 import com.wotingfm.ui.intercom.main.view.InterPhoneActivity;
 import com.wotingfm.ui.mine.main.MineActivity;
-import com.wotingfm.ui.play.activity.ReportsPlayerFragment;
 import com.wotingfm.ui.play.main.PlayerActivity;
+import com.wotingfm.ui.play.report.view.ReportFragment;
 
 //举报个人dialog
 public class ReportsDialog extends Dialog implements View.OnClickListener {
@@ -58,11 +58,11 @@ public class ReportsDialog extends Dialog implements View.OnClickListener {
             case R.id.tvReport:
                 dismiss();
                 if (activity != null)
-                    activity.open(ReportsPlayerFragment.newInstance(userId, "REPORT_USER"));
+                    activity.open(ReportFragment.newInstance(userId, "REPORT_USER"));
                 else if (activityMain != null)
-                    activityMain.open(ReportsPlayerFragment.newInstance(userId, "REPORT_USER"));
+                    activityMain.open(ReportFragment.newInstance(userId, "REPORT_USER"));
                 else if (interPhoneActivity != null)
-                    interPhoneActivity.open(ReportsPlayerFragment.newInstance(userId, "REPORT_USER"));
+                    interPhoneActivity.open(ReportFragment.newInstance(userId, "REPORT_USER"));
                 break;
         }
     }

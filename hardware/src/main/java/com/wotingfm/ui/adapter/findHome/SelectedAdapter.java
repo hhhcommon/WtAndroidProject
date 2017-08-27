@@ -15,6 +15,7 @@ import com.bumptech.glide.Glide;
 import com.woting.commonplat.utils.DementionUtil;
 import com.wotingfm.R;
 import com.wotingfm.common.application.BSApplication;
+import com.wotingfm.common.utils.GlideUtils;
 import com.wotingfm.ui.bean.Selected;
 import com.zhy.adapter.recyclerview.CommonAdapter;
 import com.zhy.adapter.recyclerview.base.ViewHolder;
@@ -66,6 +67,11 @@ public class SelectedAdapter extends CommonAdapter<Selected.DataBeanX> {
                         if (selectedClickBase != null)
                             selectedClickBase.click(dataBean);
                     }
+                    @Override
+                    public void play(Selected.DataBeanX.DataBean dataBean) {
+                        if (selectedClickBase != null)
+                            selectedClickBase.play(dataBean);
+                    }
                 });
                 recyclerView.setAdapter(itemClassAdapter);
                 ivMore.setVisibility(View.VISIBLE);
@@ -93,6 +99,11 @@ public class SelectedAdapter extends CommonAdapter<Selected.DataBeanX> {
                         if (selectedClickBase != null)
                             selectedClickBase.click(dataBean);
                     }
+                    @Override
+                    public void play(Selected.DataBeanX.DataBean dataBean) {
+                        if (selectedClickBase != null)
+                            selectedClickBase.play(dataBean);
+                    }
                 });
                 ivMore.setVisibility(View.GONE);
                 recyclerView.setAdapter(itemClassAdapter);
@@ -114,11 +125,13 @@ public class SelectedAdapter extends CommonAdapter<Selected.DataBeanX> {
         protected void convert(ViewHolder holder, final Selected.DataBeanX.DataBean dataBean, int position) {
             TextView textView = (TextView) holder.itemView.findViewById(R.id.tvContent);
             ImageView ivClass = (ImageView) holder.itemView.findViewById(R.id.ivClass);
-            Glide.with(BSApplication.getInstance()).load(dataBean.logo_url)// Glide
-                    .placeholder(R.mipmap.oval_defut_other)
-                    .error(R.mipmap.oval_defut_other)
-                    .override(with, with)
-                    .into(ivClass);
+            ImageView img_play = (ImageView) holder.itemView.findViewById(R.id.img_play);
+
+            if (dataBean.logo_url!= null && !dataBean.logo_url.equals("") ) {
+                GlideUtils.loadImageViewRoundCornersMusic(dataBean.logo_url, ivClass, 150, 150);
+            } else {
+                GlideUtils.loadImageViewRoundCornersMusic(R.mipmap.oval_defut_other, ivClass, 60, 60);
+            }
             ivClass.setLayoutParams(layoutParams1);
             textView.setLayoutParams(layoutParams2);
             textView.setText(dataBean.title);
@@ -127,6 +140,13 @@ public class SelectedAdapter extends CommonAdapter<Selected.DataBeanX> {
                 public void onClick(View v) {
                     if (tagClick != null)
                         tagClick.click(dataBean);
+                }
+            });
+            img_play.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (tagClick != null)
+                        tagClick.play(dataBean);
                 }
             });
         }
@@ -147,10 +167,13 @@ public class SelectedAdapter extends CommonAdapter<Selected.DataBeanX> {
             holder.setText(R.id.tvContent, dataBean.lastest_news);
             holder.setText(R.id.tvTime, dataBean.play_count + "次播放");
             ImageView ivPhoto = (ImageView) holder.itemView.findViewById(R.id.ivPhoto);
-            Glide.with(BSApplication.getInstance()).load(dataBean.logo_url)// Glide
-                    .placeholder(R.mipmap.oval_defut_other)
-                    .error(R.mipmap.oval_defut_other)
-                    .into(ivPhoto);
+            ImageView img_play = (ImageView) holder.itemView.findViewById(R.id.img_play);
+
+            if (dataBean.logo_url!= null && !dataBean.logo_url.equals("") ) {
+                GlideUtils.loadImageViewRoundCornersMusic(dataBean.logo_url, ivPhoto, 150, 150);
+            } else {
+                GlideUtils.loadImageViewRoundCornersMusic(R.mipmap.oval_defut_other, ivPhoto, 60, 60);
+            }
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -158,17 +181,25 @@ public class SelectedAdapter extends CommonAdapter<Selected.DataBeanX> {
                         tagClick.click(dataBean);
                 }
             });
+            img_play.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (tagClick != null)
+                        tagClick.play(dataBean);
+                }
+            });
         }
 
     }
 
     private interface SelectedClick {
+        void play(Selected.DataBeanX.DataBean dataBean);
         void click(Selected.DataBeanX.DataBean dataBean);
     }
 
     public interface SelectedClickBase {
         void click(Selected.DataBeanX.DataBean dataBean);
-
+        void play(Selected.DataBeanX.DataBean dataBean);
         void clickMore(Selected.DataBeanX dataBeanX);
     }
 }

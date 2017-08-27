@@ -12,7 +12,7 @@ import com.wotingfm.R;
 import com.wotingfm.ui.bean.AlbumsBean;
 import com.wotingfm.common.utils.GlideUtils;
 import com.wotingfm.ui.intercom.main.view.InterPhoneActivity;
-import com.wotingfm.ui.play.activity.albums.AlbumsInfoFragmentMain;
+import com.wotingfm.ui.play.album.view.AlbumsInfoFragmentMain;
 
 import java.util.List;
 
@@ -74,10 +74,10 @@ public class PersonMessageSubAdapter extends BaseAdapter {
         }
         holder.tv_name.setText(name);
 
-        if (sub.logo_url != null && !sub.logo_url.equals("")) {
-            GlideUtils.loadImageViewSrc(sub.logo_url, holder.img_view, 350,350,false, 0);
+        if (sub.logo_url!= null && !sub.logo_url.equals("") && sub.logo_url.startsWith("http:")) {
+            GlideUtils.loadImageViewRoundCorners(sub.logo_url, holder.img_view, 350, 350);
         } else {
-            GlideUtils.loadImageViewSrc(R.mipmap.p, holder.img_view,350,350, false, 0);
+            GlideUtils.loadImageViewRoundCorners(R.mipmap.p, holder.img_view, 350, 350);
         }
         convertView.setOnClickListener(new View.OnClickListener() {
             @Override

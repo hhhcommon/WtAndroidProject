@@ -1,5 +1,7 @@
 package com.wotingfm.ui.play.find.live;
 
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -20,8 +22,10 @@ import com.wotingfm.ui.adapter.findHome.LiveListAdapter;
 import com.wotingfm.ui.base.basefragment.BaseFragment;
 import com.wotingfm.ui.bean.HomeBanners;
 import com.wotingfm.ui.bean.LiveBean;
+import com.wotingfm.ui.play.find.main.view.LookListActivity;
 import com.wotingfm.ui.play.live.LiveRoomActivity;
 import com.wotingfm.ui.play.live.TrailerInfoFragment;
+import com.wotingfm.ui.play.main.PlayerActivity;
 import com.wotingfm.ui.user.logo.LogoActivity;
 import com.zhy.adapter.recyclerview.wrapper.HeaderAndFooterWrapper;
 
@@ -29,6 +33,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.schedulers.Schedulers;
@@ -39,7 +44,7 @@ import rx.schedulers.Schedulers;
  * 发现直播
  */
 
-public class LiveFragment extends BaseFragment implements SwipeRefreshLayout.OnRefreshListener {
+public class LiveFragment extends Fragment implements View.OnClickListener,SwipeRefreshLayout.OnRefreshListener {
 
 
     @BindView(R.id.mRecyclerView)
@@ -48,15 +53,22 @@ public class LiveFragment extends BaseFragment implements SwipeRefreshLayout.OnR
     SwipeRefreshLayout mSwipeLayout;
     @BindView(R.id.loadLayout)
     LoadFrameLayout loadLayout;
-
-    @Override
-    protected int getLayoutResource() {
-        return R.layout.fragment_live_list;
-    }
+    private View rootView;
 
     public static LiveFragment newInstance() {
         LiveFragment fragment = new LiveFragment();
         return fragment;
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        if (rootView == null) {
+            rootView = inflater.inflate(R.layout.fragment_live_list, container, false);
+            rootView.setOnClickListener(this);
+            ButterKnife.bind(this, rootView);
+            inItView();
+        }
+        return rootView;
     }
 
 
@@ -64,8 +76,7 @@ public class LiveFragment extends BaseFragment implements SwipeRefreshLayout.OnR
     private TextView tvTitle;
     private LiveListAdapter selectedAdapter;
 
-    @Override
-    protected void initView() {
+    protected void inItView() {
         GridLayoutManager layoutManager = new GridLayoutManager(getActivity(), 2, GridLayoutManager.VERTICAL, false);
         mRecyclerView.setLayoutManager(layoutManager);
         mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -272,8 +283,21 @@ public class LiveFragment extends BaseFragment implements SwipeRefreshLayout.OnR
     private List<LiveBean.DataBean> list = new ArrayList<>();
 
 
+    private void openFragment(Fragment fragment) {
+        if (getActivity() instanceof PlayerActivity) {
+            PlayerActivity.open(fragment);
+        } else if (getActivity() instanceof LookListActivity) {
+            LookListActivity.open(fragment);
+        }
+    }
+
     @Override
     public void onRefresh() {
         refresh();
+    }
+
+    @Override
+    public void onClick(View v) {
+
     }
 }

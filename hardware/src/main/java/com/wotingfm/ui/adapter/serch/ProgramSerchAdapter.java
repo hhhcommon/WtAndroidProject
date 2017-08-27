@@ -9,6 +9,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.wotingfm.R;
 import com.wotingfm.common.application.BSApplication;
+import com.wotingfm.common.utils.GlideUtils;
 import com.wotingfm.ui.bean.SinglesBase;
 import com.zhy.adapter.recyclerview.CommonAdapter;
 import com.zhy.adapter.recyclerview.base.ViewHolder;
@@ -36,10 +37,12 @@ public class ProgramSerchAdapter extends CommonAdapter<SinglesBase> {
         TextView tvContent = (TextView) holder.itemView.findViewById(R.id.tvContent);
         TextView tvTime = (TextView) holder.itemView.findViewById(R.id.tvTime);
         LinearLayout largeLabel = (LinearLayout) holder.itemView.findViewById(R.id.largeLabel);
-        Glide.with(BSApplication.getInstance()).load(s.album_logo_url)// Glide
-                .error(R.mipmap.oval_defut_other)
-                .placeholder(R.mipmap.oval_defut_other)
-                .into(ivPhoto);
+
+        if (s.album_logo_url!= null && !s.album_logo_url.equals("") ) {
+            GlideUtils.loadImageViewRoundCornersMusic(s.album_logo_url, ivPhoto, 150, 150);
+        } else {
+            GlideUtils.loadImageViewRoundCornersMusic(R.mipmap.oval_defut_other, ivPhoto, 60, 60);
+        }
         tvTitle.setText(s.single_title + "");
         tvContent.setText(s.album_title);
         tvTime.setText(s.album_play_count + "次播放");

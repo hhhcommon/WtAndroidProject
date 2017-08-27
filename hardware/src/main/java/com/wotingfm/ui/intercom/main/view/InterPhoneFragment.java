@@ -1,5 +1,6 @@
 package com.wotingfm.ui.intercom.main.view;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.drawable.ColorDrawable;
@@ -40,7 +41,6 @@ import java.util.List;
  */
 
 public class InterPhoneFragment extends Fragment implements View.OnClickListener {
-//    private TextView tv_chat, tv_linkman, line_chat, line_linkman;
     private PopupWindow addDialog;
     private ViewPager mPager;
     private ImageView img_more,img_person;
@@ -53,7 +53,6 @@ public class InterPhoneFragment extends Fragment implements View.OnClickListener
         if (rootView == null) {
             rootView = inflater.inflate(R.layout.fragment_intercom, container, false);
             InitTextView();  // 初始化视图
-//            InitViewPager(); // 初始化 ViewPager
             dialog();        // 初始化功能弹出框
             presenter = new InterPhonePresenter(this);
         }
@@ -67,30 +66,11 @@ public class InterPhoneFragment extends Fragment implements View.OnClickListener
         img_person = (ImageView) rootView.findViewById(R.id.img_person);   // 个人中心
         img_person.setOnClickListener(this);
 
-//        tv_chat = (TextView) rootView.findViewById(R.id.tv_chat);          // 展示条
-//        line_chat = (TextView) rootView.findViewById(R.id.line_chat);      // 展示条
-//        tv_linkman = (TextView) rootView.findViewById(R.id.tv_linkman);    // 展示条
-//        line_linkman = (TextView) rootView.findViewById(R.id.line_linkman);// 展示条
-//
-//        tv_chat.setOnClickListener(new txListener(0));
-//        tv_linkman.setOnClickListener(new txListener(1));
         mPager = (ViewPager) rootView.findViewById(R.id.viewpager);
         mPager.setOffscreenPageLimit(1);
         tabs=(TabLayout) rootView.findViewById(R.id.tabs);   // 个人中心
 
     }
-
-//    // 初始化ViewPager
-//    public void InitViewPager() {
-//        ArrayList<Fragment> fragmentList = new ArrayList<>();
-//        Fragment ctFragment = new ChatFragment();   // 对讲页
-//        Fragment cFragment = new ContactsFragment();// 通讯录
-//        fragmentList.add(ctFragment);
-//        fragmentList.add(cFragment);
-//        mPager.setAdapter(new MyFragmentPagerAdapter(getChildFragmentManager(), fragmentList));
-//        mPager.setOnPageChangeListener(new MyOnPageChangeListener());// 页面变化时的监听器
-//        update(0);
-//    }
 
     /**
      * 数据适配
@@ -106,7 +86,50 @@ public class InterPhoneFragment extends Fragment implements View.OnClickListener
         tabs.post(new Runnable() {
             @Override
             public void run() {
-                setIndicator(tabs,20,20);
+                try {
+                    //拿到tabLayout的mTabStrip属性
+                    Field mTabStripField = tabs.getClass().getDeclaredField("mTabStrip");
+                    mTabStripField.setAccessible(true);
+
+                    LinearLayout mTabStrip = (LinearLayout) mTabStripField.get(tabs);
+
+                    int dp10 = dp2px(getContext(), 22);
+
+                    for (int i = 0; i < mTabStrip.getChildCount(); i++) {
+                        View tabView = mTabStrip.getChildAt(i);
+
+                        //拿到tabView的mTextView属性
+                        Field mTextViewField = tabView.getClass().getDeclaredField("mTextView");
+                        mTextViewField.setAccessible(true);
+
+                        TextView mTextView = (TextView) mTextViewField.get(tabView);
+
+                        tabView.setPadding(0, 0, 0, 0);
+
+                        //因为我想要的效果是   字多宽线就多宽，所以测量mTextView的宽度
+                        int width = 0;
+                        width = mTextView.getWidth();
+                        if (width == 0) {
+                            mTextView.measure(0, 0);
+                            width = mTextView.getMeasuredWidth();
+                        }
+
+                        //设置tab左右间距为10dp  注意这里不能使用Padding 因为源码中线的宽度是根据 tabView的宽度来设置的
+                        LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) tabView.getLayoutParams();
+                        params.width = width ;
+                        params.leftMargin = dp10;
+                        params.rightMargin = dp10;
+                        tabView.setLayoutParams(params);
+
+                        tabView.invalidate();
+                    }
+
+                } catch (NoSuchFieldException e) {
+                    e.printStackTrace();
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                }
+//                setIndicator(tabs,20,20);
             }
         });
     }
@@ -213,50 +236,10 @@ public class InterPhoneFragment extends Fragment implements View.OnClickListener
 
     }
 
-//    // TextView 点击事件监听
-//    public class txListener implements View.OnClickListener {
-//        private int index = 0;
-//
-//        public txListener(int i) {
-//            index = i;
-//        }
-//
-//        @Override
-//        public void onClick(View v) {
-//            update(index);
-//        }
-//    }
-//
-//    // ViewPager 监听事件
-//    public class MyOnPageChangeListener implements ViewPager.OnPageChangeListener {
-//        @Override
-//        public void onPageScrolled(int arg0, float arg1, int arg2) {
-//        }
-//
-//        @Override
-//        public void onPageScrollStateChanged(int arg0) {
-//        }
-//
-//        @Override
-//        public void onPageSelected(int arg0) {
-//            update(arg0);
-//        }
-//    }
 
     // 设置头部样式
     private void update(int arg0) {
         mPager.setCurrentItem(arg0);
-//        if (arg0 == 0) {
-//            tv_chat.setTextColor(this.getActivity().getResources().getColor(R.color.app_basic));
-//            tv_linkman.setTextColor(this.getActivity().getResources().getColor(R.color.black_head_word));
-//            line_chat.setVisibility(View.VISIBLE);
-//            line_linkman.setVisibility(View.INVISIBLE);
-//        } else if (arg0 == 1) {
-//            tv_chat.setTextColor(this.getActivity().getResources().getColor(R.color.black_head_word));
-//            tv_linkman.setTextColor(this.getActivity().getResources().getColor(R.color.app_basic));
-//            line_chat.setVisibility(View.INVISIBLE);
-//            line_linkman.setVisibility(View.VISIBLE);
-//        }
     }
 
     /**
@@ -295,7 +278,20 @@ public class InterPhoneFragment extends Fragment implements View.OnClickListener
             child.invalidate();
         }
     }
-        /**
+
+    /**
+     * dpתpx
+     *
+     * @param context
+     * @param dp
+     * @return
+     */
+    public static int dp2px(Context context, float dp) {
+        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
+                dp, context.getResources().getDisplayMetrics());
+    }
+
+    /**
          * 更改样式
          * @param type
          */

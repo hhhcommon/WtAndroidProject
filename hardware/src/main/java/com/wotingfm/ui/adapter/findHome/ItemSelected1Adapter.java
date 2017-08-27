@@ -11,6 +11,7 @@ import com.bumptech.glide.Glide;
 import com.woting.commonplat.utils.DementionUtil;
 import com.wotingfm.R;
 import com.wotingfm.common.application.BSApplication;
+import com.wotingfm.common.utils.GlideUtils;
 import com.wotingfm.ui.bean.AlbumsBean;
 import com.zhy.adapter.recyclerview.CommonAdapter;
 import com.zhy.adapter.recyclerview.base.ViewHolder;
@@ -38,11 +39,12 @@ public class ItemSelected1Adapter extends CommonAdapter<AlbumsBean> {
     protected void convert(ViewHolder holder, final AlbumsBean dataBean, int position) {
         TextView textView = (TextView) holder.itemView.findViewById(R.id.tvContent);
         ImageView ivClass = (ImageView) holder.itemView.findViewById(R.id.ivClass);
-        Glide.with(BSApplication.getInstance()).load(dataBean.logo_url)// Glide
-                .placeholder(R.mipmap.oval_defut_other)
-                .error(R.mipmap.oval_defut_other)
-                .override(with, with)
-                .into(ivClass);
+
+        if (dataBean.logo_url!= null && !dataBean.logo_url.equals("") ) {
+            GlideUtils.loadImageViewRoundCornersMusic(dataBean.logo_url, ivClass, 150, 150);
+        } else {
+            GlideUtils.loadImageViewRoundCornersMusic(R.mipmap.oval_defut_other, ivClass, 60, 60);
+        }
         ivClass.setLayoutParams(layoutParams1);
         textView.setLayoutParams(layoutParams2);
         textView.setText(dataBean.title);

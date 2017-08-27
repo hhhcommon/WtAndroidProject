@@ -1,11 +1,14 @@
 package com.wotingfm.ui.intercom.person.personnote.presenter;
 
+import android.content.Intent;
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.woting.commonplat.config.GlobalNetWorkConfig;
 import com.wotingfm.common.config.GlobalStateConfig;
+import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.common.utils.ToastUtils;
 import com.wotingfm.ui.intercom.main.view.InterPhoneActivity;
 import com.wotingfm.ui.intercom.person.personnote.model.EditPersonNoteModel;
@@ -19,6 +22,7 @@ import org.json.JSONObject;
  */
 public class EditPersonNotePresenter {
 
+    private String name;
     private EditPersonNoteFragment activity;
     private EditPersonNoteModel model;
     private String id;
@@ -31,7 +35,20 @@ public class EditPersonNotePresenter {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        try {
+            name = activity.getArguments().getString("alias");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        if(name!=null) setName(name);
     }
+
+    private void setName(String name){
+        if(!TextUtils.isEmpty(name)) activity.setName(name);
+    }
+
 
     /**
      * 发送申请
@@ -47,7 +64,7 @@ public class EditPersonNotePresenter {
                 ToastUtils.show_always(activity.getActivity(), "提交数据不能为空");
             }
         } else {
-            if (s != null && !s.trim().equals("")) {
+            if (s != null) {
                 if (GlobalNetWorkConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
                     activity.dialogShow();
                     model.loadNews(id, s, new EditPersonNoteModel.OnLoadInterface() {
@@ -79,6 +96,7 @@ public class EditPersonNotePresenter {
             Log.e("ret", String.valueOf(ret));
             if (ret == 0) {
                 activity.setResult(true, name);
+                activity.getActivity().sendBroadcast(new Intent(BroadcastConstants.PERSON_GET));
                 InterPhoneActivity.close();
             } else {
                 ToastUtils.show_always(activity.getActivity(), "修改失败，请稍后再试！");

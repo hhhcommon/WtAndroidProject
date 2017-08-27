@@ -46,6 +46,7 @@ public class Selected implements Serializable {
             public String logo_url;
             public int play_count;
             public String title;
+            public String mediaType;// 新加字段
 
         }
     }

@@ -11,7 +11,6 @@ import android.widget.TextView;
 import com.wotingfm.R;
 import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.constant.StringConstant;
-import com.wotingfm.ui.intercom.person.personnote.view.EditPersonNoteFragment;
 import com.wotingfm.ui.mine.security.password.view.ModifyPasswordFragment;
 import com.wotingfm.ui.mine.security.phonenumber.view.ModifyPhoneNumberFragment;
 import com.wotingfm.ui.mine.main.MineActivity;

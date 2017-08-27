@@ -10,6 +10,7 @@ import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.woting.commonplat.widget.GlideCircleTransform;
+import com.wotingfm.R;
 import com.wotingfm.common.application.BSApplication;
 
 import jp.wasabeef.glide.transformations.BlurTransformation;
@@ -113,6 +114,19 @@ public class GlideUtils {
      */
     public static void loadImageViewRoundCorners(Object path, ImageView mImageView, int width, int height) {
         Glide.with(BSApplication.mContext).load(path).crossFade(1000).bitmapTransform(new RoundedCornersTransformation(BSApplication.mContext, 16, 0, RoundedCornersTransformation.CornerType.ALL)).override(width, height).into(mImageView);
+    }
+
+    /**
+     * 原图--圆角图--指定大小
+     *
+     * @param path
+     * @param mImageView
+     * @param width
+     * @param height
+     */
+    public static void loadImageViewRoundCornersMusic(Object path, ImageView mImageView, int width, int height) {
+        Glide.with(BSApplication.mContext).load(path).error(R.mipmap.oval_defut_other)
+                .placeholder(R.mipmap.oval_defut_other).crossFade(1000).bitmapTransform(new RoundedCornersTransformation(BSApplication.mContext, 16, 0, RoundedCornersTransformation.CornerType.ALL)).override(width, height).into(mImageView);
     }
 
     /**

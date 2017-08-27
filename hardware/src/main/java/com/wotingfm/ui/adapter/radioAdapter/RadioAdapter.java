@@ -8,6 +8,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.wotingfm.R;
 import com.wotingfm.common.application.BSApplication;
+import com.wotingfm.common.utils.GlideUtils;
 import com.wotingfm.ui.bean.ChannelsBean;
 import com.zhy.adapter.recyclerview.CommonAdapter;
 import com.zhy.adapter.recyclerview.base.ViewHolder;
@@ -32,10 +33,12 @@ public class RadioAdapter extends CommonAdapter<ChannelsBean> {
         TextView tvTitle = (TextView) holder.itemView.findViewById(R.id.tvTitle);
         TextView tvContent = (TextView) holder.itemView.findViewById(R.id.tvContent);
         TextView tvTime = (TextView) holder.itemView.findViewById(R.id.tvTime);
-        Glide.with(BSApplication.getInstance()).load(s.image_url)// Glide
-                .error(R.mipmap.oval_defut_other)
-                .placeholder(R.mipmap.oval_defut_other)
-                .into(ivPhoto);
+
+        if (s.image_url!= null && !s.image_url.equals("") ) {
+            GlideUtils.loadImageViewRoundCornersMusic(s.image_url, ivPhoto, 150, 150);
+        } else {
+            GlideUtils.loadImageViewRoundCornersMusic(R.mipmap.oval_defut_other, ivPhoto, 60, 60);
+        }
         tvTitle.setText(s.title + "");
         tvContent.setText(s.desc + "");
         tvTime.setText(s.listen_count + "人听过");

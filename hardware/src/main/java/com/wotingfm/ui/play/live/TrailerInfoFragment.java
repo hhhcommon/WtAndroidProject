@@ -21,7 +21,7 @@ import com.wotingfm.common.net.RetrofitUtils;
 import com.wotingfm.common.utils.CommonUtils;
 import com.wotingfm.common.utils.T;
 import com.wotingfm.ui.base.basefragment.BaseFragment;
-import com.wotingfm.ui.play.activity.AnchorPersonalCenterFragment;
+import com.wotingfm.ui.play.anchor.view.AnchorPersonalCenterFragment;
 import com.wotingfm.ui.user.logo.LogoActivity;
 
 import butterknife.BindView;

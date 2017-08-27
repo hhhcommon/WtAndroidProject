@@ -18,7 +18,7 @@ import com.wotingfm.ui.bean.Player;
 import com.wotingfm.ui.bean.Provinces;
 import com.wotingfm.ui.bean.Radio;
 import com.wotingfm.ui.bean.RadioInfo;
-import com.wotingfm.ui.bean.Reports;
+import com.wotingfm.ui.play.report.model.Reports;
 import com.wotingfm.ui.bean.Room;
 import com.wotingfm.ui.bean.Selected;
 import com.wotingfm.ui.bean.SelectedMore;

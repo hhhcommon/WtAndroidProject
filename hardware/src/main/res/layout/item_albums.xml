@@ -16,15 +16,34 @@
         android:paddingLeft="12dp"
         android:paddingRight="12dp">
 
-        <ImageView
-            android:id="@+id/ivPhoto"
+        <RelativeLayout
+            android:id="@+id/lin_img"
             android:layout_width="60dp"
             android:layout_height="60dp"
-            android:layout_gravity="center"
+            android:layout_centerVertical="true"
             android:layout_marginBottom="12dp"
             android:layout_marginTop="12dp"
-            android:scaleType="centerCrop" />
+            android:gravity="center">
 
+            <ImageView
+                android:id="@+id/ivPhoto"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop" />
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/background_group" />
+            <ImageView
+                android:id="@+id/img_play"
+                android:layout_width="22dp"
+                android:src="@mipmap/albums_icon_play_n"
+                android:layout_marginBottom="4dp"
+                android:layout_marginLeft="4dp"
+                android:layout_alignParentBottom="true"
+                android:layout_height="22dp" />
+        </RelativeLayout>
         <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

@@ -11,8 +11,6 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.netease.nimlib.sdk.NIMClient;
-import com.netease.nimlib.sdk.auth.AuthService;
 import com.wotingfm.R;
 import com.wotingfm.common.utils.DialogUtils;
 import com.wotingfm.ui.mine.about.AboutFragment;
@@ -24,7 +22,7 @@ import com.wotingfm.ui.mine.messageset.MessageSettingFragment;
 import com.wotingfm.ui.mine.personinfo.view.PersonalInfoFragment;
 import com.wotingfm.ui.mine.main.MineActivity;
 import com.wotingfm.ui.mine.set.presenter.SettingPresenter;
-import com.wotingfm.ui.play.activity.MeSubscribeListFragment;
+import com.wotingfm.ui.play.mysubscribelist.view.MeSubscribeListFragment;
 import com.wotingfm.ui.user.preference.view.PreferenceFragment;
 
 /**

@@ -7,6 +7,7 @@ import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 import com.wotingfm.R;
 import com.wotingfm.common.application.BSApplication;
+import com.wotingfm.common.utils.GlideUtils;
 import com.wotingfm.ui.bean.ChannelsBean;
 import com.zhy.adapter.recyclerview.CommonAdapter;
 import com.zhy.adapter.recyclerview.base.ViewHolder;
@@ -33,10 +34,12 @@ public class RadioStationAdapter extends CommonAdapter<ChannelsBean> {
         holder.setText(R.id.tvContent, dataBean.desc);
         holder.setText(R.id.tvTime, dataBean.listen_count + "人听过");
         ImageView ivPhoto = (ImageView) holder.itemView.findViewById(R.id.ivPhoto);
-        Glide.with(BSApplication.getInstance()).load(dataBean.image_url)// Glide
-                .placeholder(R.mipmap.oval_defut_other)
-                .error(R.mipmap.oval_defut_other)
-                .into(ivPhoto);
+
+        if (dataBean.image_url!= null && !dataBean.image_url.equals("") ) {
+            GlideUtils.loadImageViewRoundCornersMusic(dataBean.image_url, ivPhoto, 150, 150);
+        } else {
+            GlideUtils.loadImageViewRoundCornersMusic(R.mipmap.oval_defut_other, ivPhoto, 60, 60);
+        }
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -57,7 +57,7 @@
             android:layout_marginTop="10dp"
             android:lineSpacingExtra="4sp"
             android:text="正在邀请你对讲..."
-            android:textColor="#ffffff"
+            android:textColor="@color/transparent_40_white"
             android:textSize="14.7sp"/>
 
         <LinearLayout

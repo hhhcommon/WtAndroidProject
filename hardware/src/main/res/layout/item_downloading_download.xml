@@ -19,33 +19,19 @@
 
         <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="match_parent"
-            android:layout_height="85dp"
+            android:layout_height="57.3dp"
             android:id="@+id/largeLabel"
             android:layout_gravity="center"
             android:gravity="center"
             android:orientation="horizontal"
             android:paddingLeft="12dp"
-            android:paddingRight="12dp">
-
-            <ImageView
-                android:id="@+id/ivPhoto"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:layout_gravity="center"
-                android:layout_centerVertical="true"
-                android:layout_marginBottom="12dp"
-                android:layout_marginTop="12dp"
-                android:scaleType="centerCrop" />
+            android:paddingRight="18dp">
 
             <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center|left"
-                android:layout_toRightOf="@+id/ivPhoto"
                 android:layout_centerVertical="true"
                 android:layout_toLeftOf="@+id/parentPanel"
-                android:layout_marginLeft="10dp"
-                android:gravity="center|left"
                 android:orientation="vertical"
                 android:paddingBottom="2dp"
                 android:paddingTop="2dp">
@@ -59,8 +45,9 @@
                     android:gravity="center"
                     android:singleLine="true"
                     android:text="AmineTitle"
+                    android:textSize="16sp"
                     android:textColor="#16181a"
-                    android:textSize="16sp" />
+                    android:lineSpacingExtra="0sp"/>
 
                 <TextView
                     android:id="@+id/tvContent"
@@ -72,21 +59,10 @@
                     android:ellipsize="end"
                     android:gravity="center|left"
                     android:text="发现更多节目"
-                    android:textColor="#959698"
-                    android:textSize="12sp" />
+                    android:textSize="13.3sp"
+                    android:textColor="#959698"/>
 
-                <TextView
-                    android:id="@+id/tvTime"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center|left"
-                    android:layout_marginTop="6dp"
-                    android:singleLine="true"
-                    android:ellipsize="end"
-                    android:gravity="center|left"
-                    android:text="发现更多节目"
-                    android:textColor="#959698"
-                    android:textSize="12sp" />
+
             </LinearLayout>
 
             <ProgressBar
@@ -94,14 +70,14 @@
                 style="@style/progressbar_style1"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_width="24dp"
+                android:layout_height="24dp" />
         </RelativeLayout>
 
         <TextView
             android:id="@+id/btnDelete"
             android:layout_width="66dp"
-            android:layout_height="85dp"
+            android:layout_height="57.3dp"
             android:background="#ed4a4a"
             android:gravity="center"
             android:text="删除"

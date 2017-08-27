@@ -1,6 +1,8 @@
 package com.wotingfm.ui.intercom.group.groupapply.presenter;
 
 import android.content.Intent;
+import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 
 import com.google.gson.Gson;
@@ -10,9 +12,12 @@ import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.common.utils.ToastUtils;
 import com.wotingfm.ui.intercom.group.groupapply.model.GroupApplyForPasswordModel;
 import com.wotingfm.ui.intercom.group.groupapply.view.GroupApplyForPasswordFragment;
+import com.wotingfm.ui.intercom.group.groupnews.add.view.GroupNewsForAddFragment;
 import com.wotingfm.ui.intercom.main.view.InterPhoneActivity;
 
 import org.json.JSONObject;
+
+import retrofit2.http.POST;
 
 /**
  * 作者：xinLong on 2017/6/5 13:55
@@ -74,7 +79,18 @@ public class GroupApplyForPasswordPresenter {
             if (ret == 0) {
                 activity.getActivity().sendBroadcast(new Intent(BroadcastConstants.GROUP_GET));
                 ToastUtils.show_always(activity.getActivity(), "加入成功！");
-                InterPhoneActivity.close();
+                InterPhoneActivity.closeAll();
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        GroupNewsForAddFragment fragment = new GroupNewsForAddFragment();
+                        Bundle bundle = new Bundle();
+                        bundle.putString("id", gid);
+                        bundle.putString("type", "false");
+                        fragment.setArguments(bundle);
+                        InterPhoneActivity.open(fragment);
+                    }
+                }, 300);//3秒后执行Runnable中的run方法
             } else {
                 String msg = js.getString("msg");
                 if (msg != null && !msg.trim().equals("")) {

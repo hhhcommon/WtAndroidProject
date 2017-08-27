@@ -12,6 +12,7 @@ import com.bumptech.glide.Glide;
 import com.woting.commonplat.utils.DementionUtil;
 import com.wotingfm.R;
 import com.wotingfm.common.application.BSApplication;
+import com.wotingfm.common.utils.GlideUtils;
 import com.wotingfm.ui.bean.LiveBean;
 import com.zhy.adapter.recyclerview.CommonAdapter;
 import com.zhy.adapter.recyclerview.base.ViewHolder;
@@ -53,11 +54,12 @@ public class LiveListAdapter extends CommonAdapter<LiveBean.DataBean> {
             tvType.setText("预告");
             tvType.setBackgroundResource(R.drawable.trailer_bg);
         }
-        Glide.with(BSApplication.getInstance()).load(dataBean.cover)// Glide
-                .placeholder(R.mipmap.oval_defut_other)
-                .error(R.mipmap.oval_defut_other)
-                .override(with, with)
-                .into(ivPhotoBg);
+
+        if (dataBean.cover!= null && !dataBean.cover.equals("") ) {
+            GlideUtils.loadImageViewRoundCornersMusic(dataBean.cover, ivPhotoBg, 300, 300);
+        } else {
+            GlideUtils.loadImageViewRoundCornersMusic(R.mipmap.oval_defut_other, ivPhotoBg, 300, 300);
+        }
         ivPhotoBg.setLayoutParams(layoutParams1);
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override

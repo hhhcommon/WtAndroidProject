@@ -21,6 +21,7 @@ import rx.schedulers.Schedulers;
  */
 public class EditPersonNoteModel extends UserInfo {
 
+
     /**
      * 进行数据交互
      * @param s

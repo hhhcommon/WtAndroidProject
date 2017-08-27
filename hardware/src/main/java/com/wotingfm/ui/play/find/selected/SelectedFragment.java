@@ -1,27 +1,40 @@
 package com.wotingfm.ui.play.find.selected;
 
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 
 import com.woting.commonplat.widget.LoadFrameLayout;
 import com.wotingfm.R;
+import com.wotingfm.common.config.GlobalStateConfig;
 import com.wotingfm.common.net.RetrofitUtils;
 import com.wotingfm.common.view.BannerView;
 import com.wotingfm.ui.adapter.findHome.SelectedAdapter;
 import com.wotingfm.ui.base.basefragment.BaseFragment;
 import com.wotingfm.ui.bean.HomeBanners;
+import com.wotingfm.ui.bean.MessageEvent;
 import com.wotingfm.ui.bean.Selected;
+import com.wotingfm.ui.mine.main.MineActivity;
+import com.wotingfm.ui.play.album.view.AlbumsInfoFragmentMain;
+import com.wotingfm.ui.play.find.main.view.LookListActivity;
 import com.wotingfm.ui.play.look.activity.SelectedMoreFragment;
+import com.wotingfm.ui.play.main.PlayerActivity;
+import com.wotingfm.ui.play.report.presenter.ReportPresenter;
 import com.zhy.adapter.recyclerview.wrapper.HeaderAndFooterWrapper;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.schedulers.Schedulers;
@@ -31,8 +44,7 @@ import rx.schedulers.Schedulers;
  * 发现精选
  */
 
-public class SelectedFragment extends BaseFragment implements SwipeRefreshLayout.OnRefreshListener {
-
+public class SelectedFragment extends Fragment implements View.OnClickListener,SwipeRefreshLayout.OnRefreshListener {
 
     @BindView(R.id.loadLayout)
     LoadFrameLayout loadLayout;
@@ -40,21 +52,27 @@ public class SelectedFragment extends BaseFragment implements SwipeRefreshLayout
     RecyclerView mRecyclerView;
     @BindView(R.id.id_swipe_ly)
     SwipeRefreshLayout mSwipeLayout;
+    private View rootView;
 
-    @Override
-    protected int getLayoutResource() {
-        return R.layout.fragment_selected;
-    }
+    private HeaderAndFooterWrapper mHeaderAndFooterWrapper;
 
     public static SelectedFragment newInstance() {
         SelectedFragment fragment = new SelectedFragment();
         return fragment;
     }
 
-    private HeaderAndFooterWrapper mHeaderAndFooterWrapper;
-
     @Override
-    protected void initView() {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        if (rootView == null) {
+            rootView = inflater.inflate(R.layout.fragment_selected, container, false);
+            rootView.setOnClickListener(this);
+            ButterKnife.bind(this, rootView);
+            inItView();
+        }
+        return rootView;
+    }
+
+    protected void inItView() {
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         mRecyclerView.setLayoutManager(layoutManager);
@@ -64,10 +82,18 @@ public class SelectedFragment extends BaseFragment implements SwipeRefreshLayout
             public void click(Selected.DataBeanX.DataBean dataBean) {
                 startMain(dataBean.id);
             }
-
+            @Override
+            public void play(Selected.DataBeanX.DataBean dataBean) {
+                startMain(dataBean.id);
+            }
             @Override
             public void clickMore(Selected.DataBeanX dataBeanX) {
-                openFragment(SelectedMoreFragment.newInstance(dataBeanX.type, dataBeanX.title));
+                SelectedMoreFragment  fragment= SelectedMoreFragment.newInstance(dataBeanX.type, dataBeanX.title);
+                if (getActivity() instanceof PlayerActivity) {
+                    PlayerActivity.open(fragment);
+                }else if (getActivity() instanceof LookListActivity) {
+                    LookListActivity.open(fragment);
+                }
             }
         });
         mHeaderAndFooterWrapper = new HeaderAndFooterWrapper(selectedAdapter);
@@ -88,6 +114,11 @@ public class SelectedFragment extends BaseFragment implements SwipeRefreshLayout
         getSelecteds();
     }
 
+    public void startMain(String albumsId) {
+        GlobalStateConfig.activityA = "A";
+        EventBus.getDefault().post(new MessageEvent("one"));
+        EventBus.getDefault().post(new MessageEvent("stop&" + albumsId));
+    }
 
     @Override
     public void onResume() {
@@ -170,5 +201,10 @@ public class SelectedFragment extends BaseFragment implements SwipeRefreshLayout
     @Override
     public void onRefresh() {
         getSelecteds();
+    }
+
+    @Override
+    public void onClick(View v) {
+
     }
 }

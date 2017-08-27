@@ -40,8 +40,8 @@ import java.util.List;
  */
 public class PersonMessagePresenter {
 
-    private  PersonMessageFragment activity;
-    private  PersonMessageModel model;
+    private PersonMessageFragment activity;
+    private PersonMessageModel model;
     private String type = "true";// 界面类型 未添加好友=false，已添加好友=true
     private String id;// 好友id
     private Contact.user user;
@@ -239,7 +239,7 @@ public class PersonMessagePresenter {
         String sign = "这家伙很懒~";
         try {
             sign = user.getSignature().trim();
-            if(TextUtils.isEmpty(sign)) sign = "这家伙很懒~";
+            if (TextUtils.isEmpty(sign)) sign = "这家伙很懒~";
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -252,7 +252,7 @@ public class PersonMessagePresenter {
         String address = "暂未填写~";
         try {
             address = user.getArea().trim();
-            if(TextUtils.isEmpty(address)) address = "暂未填写~";
+            if (TextUtils.isEmpty(address)) address = "暂未填写~";
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -358,6 +358,7 @@ public class PersonMessagePresenter {
             EditPersonNoteFragment fragment = new EditPersonNoteFragment();
             Bundle bundle = new Bundle();
             bundle.putString("id", id);
+            bundle.putString("alias", user.getAlias_name());
             fragment.setArguments(bundle);
             InterPhoneActivity.open(fragment);
 
@@ -369,7 +370,12 @@ public class PersonMessagePresenter {
                             // 通知上层界面进行数据修改
                             activity.setResult(true, name);
                             // 修改本级界面数据
-                            activity.setViewDataForName(name);
+                            if (!TextUtils.isEmpty(name)) {
+                                activity.setViewDataForName(name);
+                            } else {
+                                activity.setViewDataForName(user.getName());
+                            }
+
                         }
                     }
                 }
@@ -427,7 +433,7 @@ public class PersonMessagePresenter {
                 Intent intent = new Intent(activity.getActivity(), CallAlertActivity.class);
                 Bundle bundle = new Bundle();
                 bundle.putString("id", id);
-                bundle.putString("fromType","personMessage");
+                bundle.putString("fromType", "personMessage");
                 bundle.putString("roomId", acc_id);
                 intent.putExtras(bundle);
                 activity.startActivity(intent);
@@ -482,9 +488,9 @@ public class PersonMessagePresenter {
             String action = intent.getAction();
             if (action.equals(BroadcastConstants.PERSON_GET)) {
                 getData();
-            }else if (action.equals(BroadcastConstants.PUSH_CALL_SEND)) {// 单对单呼叫成功
-                String type= intent.getStringExtra("fromType");
-                if(type!=null&&!type.trim().equals("")&&type.trim().equals("personMessage")){
+            } else if (action.equals(BroadcastConstants.PUSH_CALL_SEND)) {// 单对单呼叫成功
+                String type = intent.getStringExtra("fromType");
+                if (type != null && !type.trim().equals("") && type.trim().equals("personMessage")) {
                     pushCallOk();
                 }
             }
@@ -499,6 +505,6 @@ public class PersonMessagePresenter {
             activity.getActivity().unregisterReceiver(Receiver);
             Receiver = null;
         }
-        model=null;
+        model = null;
     }
 }

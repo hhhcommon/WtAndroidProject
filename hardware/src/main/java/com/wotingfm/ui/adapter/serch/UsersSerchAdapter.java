@@ -8,6 +8,7 @@ import com.bumptech.glide.Glide;
 import com.woting.commonplat.widget.GlideCircleTransform;
 import com.wotingfm.R;
 import com.wotingfm.common.application.BSApplication;
+import com.wotingfm.common.utils.GlideUtils;
 import com.wotingfm.ui.bean.UserBean;
 import com.zhy.adapter.recyclerview.CommonAdapter;
 import com.zhy.adapter.recyclerview.base.ViewHolder;
@@ -33,10 +34,13 @@ public class UsersSerchAdapter extends CommonAdapter<UserBean> {
         ImageView ivPhoto = (ImageView) holder.itemView.findViewById(R.id.ivPhoto);
         holder.setText(R.id.tvTitle, s.nick_name);
         holder.setText(R.id.tvContent, "专辑  " + s.albums_total_count + "    " + "粉丝  " + s.fans_count);
-        Glide.with(BSApplication.getInstance()).load(s.avatar)// Glide
-                .error(R.mipmap.oval_defut_photo)
-                .placeholder(R.mipmap.oval_defut_photo).transform(new GlideCircleTransform(BSApplication.getInstance()))
-                .into(ivPhoto);
+
+        if (s.avatar!= null && !s.avatar.equals("") ) {
+            GlideUtils.loadImageViewRound(s.avatar, ivPhoto, 150, 150);
+        } else {
+            GlideUtils.loadImageViewRound(R.mipmap.oval_defut_other, ivPhoto, 60, 60);
+        }
+
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

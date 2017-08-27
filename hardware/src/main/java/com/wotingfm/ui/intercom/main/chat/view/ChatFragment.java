@@ -97,7 +97,7 @@ public class ChatFragment extends Fragment implements ChatAdapter.IonSlidingView
 
         WaveView_group.setDuration(2000);
         WaveView_group.setInitialRadius(62f);
-        WaveView_group.setMaxRadius(200f);
+        WaveView_group.setMaxRadius(180f);
         WaveView_group.setStyle(Paint.Style.FILL);
         WaveView_group.setColor(Color.parseColor("#3CDCAF"));
         WaveView_group.setInterpolator(new LinearOutSlowInInterpolator());

@@ -1,5 +1,7 @@
 package com.wotingfm.ui.play.find.radio;
 
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -11,22 +13,29 @@ import android.widget.TextView;
 
 import com.woting.commonplat.widget.LoadFrameLayout;
 import com.wotingfm.R;
+import com.wotingfm.common.config.GlobalStateConfig;
 import com.wotingfm.common.net.RetrofitUtils;
 import com.wotingfm.common.view.BannerView;
 import com.wotingfm.ui.adapter.findHome.RadioStationAdapter;
 import com.wotingfm.ui.base.basefragment.BaseFragment;
 import com.wotingfm.ui.bean.ChannelsBean;
 import com.wotingfm.ui.bean.HomeBanners;
+import com.wotingfm.ui.bean.MessageEvent;
+import com.wotingfm.ui.play.find.main.view.LookListActivity;
 import com.wotingfm.ui.play.look.activity.RadioMoreFragment;
+import com.wotingfm.ui.play.main.PlayerActivity;
 import com.wotingfm.ui.play.radio.CountryRadioFragment;
 import com.wotingfm.ui.play.radio.LocalRadioFragment;
 import com.wotingfm.ui.play.radio.ProvincesAndCitiesFragment;
 import com.zhy.adapter.recyclerview.wrapper.HeaderAndFooterWrapper;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.schedulers.Schedulers;
@@ -36,7 +45,7 @@ import rx.schedulers.Schedulers;
  * 发现电台
  */
 
-public class RadioStationFragment extends BaseFragment implements SwipeRefreshLayout.OnRefreshListener {
+public class RadioStationFragment extends Fragment implements View.OnClickListener, SwipeRefreshLayout.OnRefreshListener {
 
 
     @BindView(R.id.mRecyclerView)
@@ -45,22 +54,28 @@ public class RadioStationFragment extends BaseFragment implements SwipeRefreshLa
     SwipeRefreshLayout mSwipeLayout;
     @BindView(R.id.loadLayout)
     LoadFrameLayout loadLayout;
-
-    @Override
-    protected int getLayoutResource() {
-        return R.layout.fragment_selected;
-    }
+    private View rootView;
 
     public static RadioStationFragment newInstance() {
         RadioStationFragment fragment = new RadioStationFragment();
         return fragment;
     }
 
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        if (rootView == null) {
+            rootView = inflater.inflate(R.layout.fragment_selected, container, false);
+            rootView.setOnClickListener(this);
+            ButterKnife.bind(this, rootView);
+            inItView();
+        }
+        return rootView;
+    }
+
     private HeaderAndFooterWrapper mHeaderAndFooterWrapper;
     private View headview;
 
-    @Override
-    protected void initView() {
+    protected void inItView() {
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         mRecyclerView.setLayoutManager(layoutManager);
@@ -199,6 +214,20 @@ public class RadioStationFragment extends BaseFragment implements SwipeRefreshLa
             case R.id.tvTitle:
                 openFragment(RadioMoreFragment.newInstance());
                 break;
+        }
+    }
+
+    public void startMain(ChannelsBean channelsBean) {
+        GlobalStateConfig.activityA = "A";
+        EventBus.getDefault().post(new MessageEvent("one"));
+        EventBus.getDefault().post(new MessageEvent(channelsBean, 1));
+    }
+
+    private void openFragment(Fragment fragment) {
+        if (getActivity() instanceof PlayerActivity) {
+            PlayerActivity.open(fragment);
+        } else if (getActivity() instanceof LookListActivity) {
+            LookListActivity.open(fragment);
         }
     }
 
