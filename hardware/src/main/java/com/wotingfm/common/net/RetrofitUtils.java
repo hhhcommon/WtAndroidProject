@@ -224,15 +224,12 @@ public class RetrofitUtils {
                 });
     }
 
-    public Observable<List<Selected.DataBeanX>> getSelecteds() {
+    public Observable<Object> getSelecteds() {
         return retrofitService.getSelecteds()
-                .map(new Func1<Selected, List<Selected.DataBeanX>>() {
+                .map(new Func1<Object, Object>() {
                     @Override
-                    public List<Selected.DataBeanX> call(Selected classification) {
-                        if (classification.ret != 0) {
-                            throw new IllegalStateException(classification.msg);
-                        }
-                        return classification.data;
+                    public Object call(Object O) {
+                        return O;
                     }
                 });
     }

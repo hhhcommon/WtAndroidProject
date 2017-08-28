@@ -11,10 +11,16 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.woting.commonplat.amine.ARecyclerView;
+import com.woting.commonplat.amine.LoadMoreFooterView;
+import com.woting.commonplat.amine.OnLoadMoreListener;
+import com.woting.commonplat.amine.OnRefreshListener;
 import com.woting.commonplat.widget.LoadFrameLayout;
 import com.wotingfm.R;
+import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.config.GlobalStateConfig;
 import com.wotingfm.common.net.RetrofitUtils;
+import com.wotingfm.common.utils.ToastUtils;
 import com.wotingfm.common.view.BannerView;
 import com.wotingfm.ui.adapter.findHome.RadioStationAdapter;
 import com.wotingfm.ui.bean.ChannelsBean;
@@ -43,16 +49,22 @@ import rx.schedulers.Schedulers;
  * 发现电台
  */
 
-public class RadioStationFragment extends Fragment implements View.OnClickListener, SwipeRefreshLayout.OnRefreshListener {
+public class RadioStationFragment extends Fragment implements View.OnClickListener, OnLoadMoreListener, OnRefreshListener {
 
 
     @BindView(R.id.mRecyclerView)
-    RecyclerView mRecyclerView;
-    @BindView(R.id.id_swipe_ly)
-    SwipeRefreshLayout mSwipeLayout;
+    ARecyclerView mRecyclerView;
+
     @BindView(R.id.loadLayout)
     LoadFrameLayout loadLayout;
     private View rootView;
+
+    private TextView tvLocal, tvCountry, tvProvince, tvTitle;
+    private List<ChannelsBean> datas = new ArrayList<>();
+    private HeaderAndFooterWrapper mHeaderAndFooterWrapper;
+    private View headview;
+    private RadioStationAdapter selectedAdapter;
+    private LoadMoreFooterView loadMoreFooterView;
 
     public static RadioStationFragment newInstance() {
         RadioStationFragment fragment = new RadioStationFragment();
@@ -70,15 +82,14 @@ public class RadioStationFragment extends Fragment implements View.OnClickListen
         return rootView;
     }
 
-    private HeaderAndFooterWrapper mHeaderAndFooterWrapper;
-    private View headview;
-
     protected void inItView() {
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        loadMoreFooterView = (LoadMoreFooterView) mRecyclerView.getLoadMoreFooterView();
+        mRecyclerView.setOnLoadMoreListener(this);
+        mRecyclerView.setOnRefreshListener(this);
         mRecyclerView.setLayoutManager(layoutManager);
-        mSwipeLayout.setOnRefreshListener(this);
-        RadioStationAdapter selectedAdapter = new RadioStationAdapter(getActivity(), datas, new RadioStationAdapter.RadioStationClick() {
+        selectedAdapter = new RadioStationAdapter(getActivity(), datas, new RadioStationAdapter.RadioStationClick() {
             @Override
             public void click(ChannelsBean dataBean) {
                 startMain(dataBean);
@@ -88,10 +99,7 @@ public class RadioStationFragment extends Fragment implements View.OnClickListen
         headview = LayoutInflater.from(getActivity()).inflate(R.layout.headview_radiostation, mRecyclerView, false);
         mHeaderAndFooterWrapper = new HeaderAndFooterWrapper(selectedAdapter);
         mHeaderAndFooterWrapper.addHeaderView(headview);
-        mRecyclerView.setAdapter(mHeaderAndFooterWrapper);
-        mSwipeLayout.setColorSchemeResources(R.color.app_basic, R.color.app_basic,
-                R.color.app_basic, R.color.app_basic);
-        mBannerView = (BannerView) headview.findViewById(R.id.mBannerView);
+        mRecyclerView.setIAdapter(mHeaderAndFooterWrapper);
         tvLocal = (TextView) headview.findViewById(R.id.tvLocal);
         tvCountry = (TextView) headview.findViewById(R.id.tvCountry);
         tvProvince = (TextView) headview.findViewById(R.id.tvProvince);
@@ -102,99 +110,13 @@ public class RadioStationFragment extends Fragment implements View.OnClickListen
             public void onClick(View v) {
                 loadLayout.showLoadingView();
                 refresh();
-                getBanners();
             }
         });
-        getBanners();
         refresh();
         tvLocal.setOnClickListener(this);
         tvCountry.setOnClickListener(this);
         tvProvince.setOnClickListener(this);
         tvTitle.setOnClickListener(this);
-    }
-
-    private TextView tvLocal, tvCountry, tvProvince, tvTitle;
-
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        if (mBannerView != null)
-            mBannerView.startTurning(5000);
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        if (mBannerView != null)
-            mBannerView.stopTurning();
-    }
-
-    @Override
-    public void onHiddenChanged(boolean hidden) {
-        if (mBannerView != null)
-            //被hidden时未true 回到这个Fragment时返回false
-            if (hidden) {
-                mBannerView.stopTurning();
-            } else {
-//            setVideoResume();
-                mBannerView.startTurning(5000);
-            }
-
-        super.onHiddenChanged(hidden);
-    }
-
-    private List<ChannelsBean> datas = new ArrayList<>();
-    private BannerView mBannerView;
-
-    private void getBanners() {
-        RetrofitUtils.getInstance().getHomeBanners("RADIO")
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Action1<List<HomeBanners.DataBean.BannersBean>>() {
-                    @Override
-                    public void call(List<HomeBanners.DataBean.BannersBean> banners) {
-                        loadLayout.showContentView();
-                        if (banners != null && !banners.isEmpty()) {
-                            mBannerView.setData(banners);
-                            mBannerView.setVisibility(View.VISIBLE);
-                            int screenWidth = getResources().getDisplayMetrics().widthPixels;
-                            mBannerView.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
-                                    (int) (screenWidth / 5f * 2)));
-                            mBannerView.startTurning(5000);
-                        } else {
-                            mBannerView.setVisibility(View.GONE);
-                        }
-                        mHeaderAndFooterWrapper.notifyDataSetChanged();
-                    }
-                }, new Action1<Throwable>() {
-                    @Override
-                    public void call(Throwable throwable) {
-                        throwable.printStackTrace();
-                    }
-                });
-    }
-
-    private void refresh() {
-        RetrofitUtils.getInstance().getChannelsRadioHots("part")
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Action1<List<ChannelsBean>>() {
-                    @Override
-                    public void call(List<ChannelsBean> dataBeanXes) {
-                        mSwipeLayout.setRefreshing(false);
-                        loadLayout.showContentView();
-                        datas.clear();
-                        datas.addAll(dataBeanXes);
-                        mHeaderAndFooterWrapper.notifyDataSetChanged();
-                    }
-                }, new Action1<Throwable>() {
-                    @Override
-                    public void call(Throwable throwable) {
-                        throwable.printStackTrace();
-                        loadLayout.showErrorView();
-                    }
-                });
     }
 
     @Override
@@ -234,4 +156,84 @@ public class RadioStationFragment extends Fragment implements View.OnClickListen
         refresh();
     }
 
+
+    @Override
+    public void onLoadMore(View loadMoreView) {
+        if (loadMoreFooterView.canLoadMore() && selectedAdapter.getItemCount() > 0) {
+            loadMoreFooterView.setStatus(LoadMoreFooterView.Status.LOADING);
+            loadMore();
+        }
+    }
+
+    private void refresh() {
+        RetrofitUtils.getInstance().getChannelsRadioHots("part")
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Action1<List<ChannelsBean>>() {
+                    @Override
+                    public void call(List<ChannelsBean> dataBeanXes) {
+                        mRecyclerView.setRefreshing(false);
+                        if (dataBeanXes != null && dataBeanXes.size() > 0) {
+                            if (datas != null) {
+                                datas.addAll(0, dataBeanXes);
+                                mHeaderAndFooterWrapper.notifyDataSetChanged();
+                            } else {
+                                datas = new ArrayList<>();
+                                datas.addAll(0, dataBeanXes);
+                                mHeaderAndFooterWrapper.notifyDataSetChanged();
+                            }
+                            loadLayout.showContentView();
+                        } else {
+                            if (datas != null && datas.size() > 0) {
+                                loadLayout.showContentView();
+                                ToastUtils.show_always(BSApplication.getInstance(), "没有新的推荐了！");
+                            } else {
+                                loadLayout.showEmptyView();
+                            }
+                        }
+                    }
+                }, new Action1<Throwable>() {
+                    @Override
+                    public void call(Throwable throwable) {
+                        throwable.printStackTrace();
+                        //                        mRecyclerView.setRefreshing(false);
+                        if (datas != null && datas.size() > 0) {
+                            loadLayout.showContentView();
+                        } else {
+                            loadLayout.showErrorView();
+                        }
+                    }
+                });
+    }
+
+
+    private void loadMore() {
+        RetrofitUtils.getInstance().getChannelsRadioHots("part")
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Action1<List<ChannelsBean>>() {
+                    @Override
+                    public void call(List<ChannelsBean> dataBeanXes) {
+                        //                        mRecyclerView.setRefreshing(false);
+                        if (dataBeanXes != null && !dataBeanXes.isEmpty()) {
+                            datas.addAll(dataBeanXes);
+                            mHeaderAndFooterWrapper.notifyDataSetChanged();
+                            loadMoreFooterView.setStatus(LoadMoreFooterView.Status.GONE);
+                        } else {
+                            loadMoreFooterView.setStatus(LoadMoreFooterView.Status.THE_END);
+                        }
+                    }
+                }, new Action1<Throwable>() {
+                    @Override
+                    public void call(Throwable throwable) {
+                        throwable.printStackTrace();
+                        if (datas != null && datas.size() > 0) {
+                            loadLayout.showContentView();
+                        } else {
+                            loadLayout.showErrorView();
+                        }
+                        loadMoreFooterView.setStatus(LoadMoreFooterView.Status.GONE);
+                    }
+                });
+    }
 }

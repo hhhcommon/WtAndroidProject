@@ -11,6 +11,7 @@ public class MessageEvent {
     public String message;
     public ChannelsBean channelsBean;
     public SinglesBase singlesBase;
+    public Selected.DataBeanX.DataBean  DataBean;
     public int type;
     public String roomid;
     public List<SinglesDownload> singlesDownloads;
@@ -28,6 +29,12 @@ public class MessageEvent {
         this.singlesBase = singlesBase;
         this.type = type;
     }
+
+    public MessageEvent(Selected.DataBeanX.DataBean  DataBean, int type) {
+        this.DataBean = DataBean;
+        this.type = type;
+    }
+
     public MessageEvent(List<SinglesDownload> singlesDownloads, int type) {
         this.singlesDownloads = singlesDownloads;
         this.type = type;
@@ -46,6 +53,10 @@ public class MessageEvent {
 
     public SinglesBase getSinglesBase() {
         return singlesBase;
+    }
+
+    public Selected.DataBeanX.DataBean  getDataBean() {
+        return DataBean;
     }
 
     public List<SinglesDownload> getSinglesDownloads() {

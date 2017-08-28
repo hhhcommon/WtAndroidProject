@@ -38,6 +38,7 @@ import com.wotingfm.common.database.HistoryHelper;
 import com.wotingfm.common.net.RetrofitUtils;
 import com.wotingfm.common.utils.ListDataSaveUtils;
 import com.wotingfm.common.utils.TimeUtil;
+import com.wotingfm.ui.bean.Selected;
 import com.wotingfm.ui.play.main.view.MenuDialog;
 import com.wotingfm.ui.play.main.view.PlayerDialog;
 import com.wotingfm.ui.play.main.adapter.PlayerAdapter;
@@ -175,7 +176,7 @@ private boolean isRadio=false;
             singlesBase = (SinglesBase) bundle.getSerializable("singlesBase");
             channelsBean = (ChannelsBean) bundle.getSerializable("channelsBean");
             postionPlayer = 0;
-            initData(albumsId, singlesBase, channelsBean, singlesBeanList);
+            initData(albumsId, singlesBase, channelsBean, singlesBeanList,null);
         } else {
             setivPlayListView(true);
             if (listDataSaveUtils != null) {
@@ -216,7 +217,7 @@ private boolean isRadio=false;
     private boolean isDataSave;
     private List<SinglesDownload> singlesBeanList;
 
-    private void initData(String albumsId, SinglesBase singlesBase, ChannelsBean channelsBean, List<SinglesDownload> singlesBeanList) {
+    private void initData(String albumsId, SinglesBase singlesBase, ChannelsBean channelsBean, List<SinglesDownload> singlesBeanList, Selected.DataBeanX.DataBean DataBean) {
         relatiBottom.setVisibility(View.VISIBLE);
         postionPlayer = 0;
         if (singlesBase != null) {
@@ -295,9 +296,32 @@ private boolean isRadio=false;
                     setBeforeOrNext(s);
                     mPlayerAdapter.notifyDataSetChanged();
                 } else {
+                    if(DataBean!=null){
+                        loadLayout.showContentView();
+                        singLesBeans.clear();
+                        SinglesBase s = new SinglesBase();
+                        s.album_title = DataBean.title;
+                        s.id = DataBean.id;
+                        s.single_logo_url = DataBean.single_logo_url;
+                        s.single_file_url = DataBean.single_file_url;
+                        s.album_title = DataBean.album_title;
+                        s.is_radio = false;
+                        s.postionPlayer = 0;
+                        singLesBeans.add(s);
+                        postionPlayer = 0;
+                        bdPlayer.stopPlayback();
+                        bdPlayer.setVideoPath(s.single_file_url);
+                        bdPlayer.start();
+                        largeLabelSeekbar.setVisibility(View.VISIBLE);
+                        setivPlayListView(true);
+                        if (listDataSaveUtils != null)
+                            listDataSaveUtils.setDataList(PREFERENCES_BASE_LIST_KEY, singLesBeans);
+                        setBeforeOrNext(s);
+                        mPlayerAdapter.notifyDataSetChanged();
+                    }else{
                     largeLabelSeekbar.setVisibility(View.VISIBLE);
                     setivPlayListView(true);
-                    getPlayerList(TextUtils.isEmpty(albumsId) ? "" : albumsId);
+                    getPlayerList(TextUtils.isEmpty(albumsId) ? "" : albumsId);}
                 }
             }
         }
@@ -679,7 +703,7 @@ private boolean isRadio=false;
                         bdPlayer.stopPlayback();
                     }
                     release();
-                    initData(event.split("stop&")[1], null, null, null);
+                    initData(event.split("stop&")[1], null, null, null, null);
                 } else if (!TextUtils.isEmpty(event) && "pause".equals(event)) {
                     if (bdPlayer != null) {
                         bdPlayer.pause();
@@ -720,21 +744,28 @@ private boolean isRadio=false;
                     bdPlayer.stopPlayback();
                 }
                 release();
-                initData(null, null, messageEvent.getChannelsBean(), null);
+                initData(null, null, messageEvent.getChannelsBean(), null, null);
                 break;
             case 2:
                 if (bdPlayer != null) {
                     bdPlayer.stopPlayback();
                 }
                 release();
-                initData(null, messageEvent.getSinglesBase(), null, null);
+                initData(null, messageEvent.getSinglesBase(), null, null, null);
                 break;
             case 3:
                 if (bdPlayer != null) {
                     bdPlayer.stopPlayback();
                 }
                 release();
-                initData(null, null, null, messageEvent.getSinglesDownloads());
+                initData(null, null, null, messageEvent.getSinglesDownloads(), null);
+                break;
+            case 4:
+                if (bdPlayer != null) {
+                    bdPlayer.stopPlayback();
+                }
+                release();
+                initData(null,null , null, null,messageEvent.getDataBean());
                 break;
         }
 

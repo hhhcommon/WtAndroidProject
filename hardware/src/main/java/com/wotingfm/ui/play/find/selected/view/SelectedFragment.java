@@ -2,32 +2,29 @@ package com.wotingfm.ui.play.find.selected.view;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
-
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
+import com.woting.commonplat.amine.ARecyclerView;
+import com.woting.commonplat.amine.LoadMoreFooterView;
+import com.woting.commonplat.amine.OnLoadMoreListener;
+import com.woting.commonplat.amine.OnRefreshListener;
 import com.woting.commonplat.widget.LoadFrameLayout;
 import com.wotingfm.R;
 import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.config.GlobalStateConfig;
 import com.wotingfm.common.net.RetrofitUtils;
 import com.wotingfm.common.utils.ToastUtils;
-import com.wotingfm.common.view.BannerView;
-import com.wotingfm.ui.bean.HomeBanners;
 import com.wotingfm.ui.bean.MessageEvent;
 import com.wotingfm.ui.bean.Selected;
-import com.wotingfm.ui.play.find.main.view.LookListActivity;
 import com.wotingfm.ui.play.find.selected.adapter.SelectedAdapter;
-import com.wotingfm.ui.play.main.PlayerActivity;
-import com.zhy.adapter.recyclerview.wrapper.HeaderAndFooterWrapper;
-
 import org.greenrobot.eventbus.EventBus;
-
+import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,17 +39,17 @@ import rx.schedulers.Schedulers;
  * 发现精选
  */
 
-public class SelectedFragment extends Fragment implements View.OnClickListener,SwipeRefreshLayout.OnRefreshListener {
+public class SelectedFragment extends Fragment implements View.OnClickListener, OnLoadMoreListener, OnRefreshListener {
 
     @BindView(R.id.loadLayout)
     LoadFrameLayout loadLayout;
     @BindView(R.id.mRecyclerView)
-    RecyclerView mRecyclerView;
-    @BindView(R.id.id_swipe_ly)
-    SwipeRefreshLayout mSwipeLayout;
-    private View rootView;
+    ARecyclerView mRecyclerView;
 
-    private HeaderAndFooterWrapper mHeaderAndFooterWrapper;
+    private View rootView;
+    private SelectedAdapter selectedAdapter;
+    private LoadMoreFooterView loadMoreFooterView;
+    private List<Selected.DataBeanX.DataBean> datas = new ArrayList<>();
 
     public static SelectedFragment newInstance() {
         SelectedFragment fragment = new SelectedFragment();
@@ -73,144 +70,192 @@ public class SelectedFragment extends Fragment implements View.OnClickListener,S
     protected void inItView() {
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        loadMoreFooterView = (LoadMoreFooterView) mRecyclerView.getLoadMoreFooterView();
+        mRecyclerView.setOnLoadMoreListener(this);
+        mRecyclerView.setOnRefreshListener(this);
         mRecyclerView.setLayoutManager(layoutManager);
-        mSwipeLayout.setOnRefreshListener(this);
-        SelectedAdapter selectedAdapter = new SelectedAdapter(getActivity(), datas, new SelectedAdapter.SelectedClickBase() {
+
+        selectedAdapter = new SelectedAdapter(getActivity(), datas, new SelectedAdapter.SelectedClick() {
             @Override
             public void click(Selected.DataBeanX.DataBean dataBean) {
-                startMain(dataBean.id);
+                startMain(dataBean);
             }
-            @Override
-            public void play(Selected.DataBeanX.DataBean dataBean) {
-                startMain(dataBean.id);
-            }
-            @Override
-            public void clickMore(Selected.DataBeanX dataBeanX) {
-                SelectedMoreFragment fragment= SelectedMoreFragment.newInstance(dataBeanX.type, dataBeanX.title);
-                if (getActivity() instanceof PlayerActivity) {
-                    PlayerActivity.open(fragment);
-                }else if (getActivity() instanceof LookListActivity) {
-                    LookListActivity.open(fragment);
-                }
-            }
+
         });
-        mHeaderAndFooterWrapper = new HeaderAndFooterWrapper(selectedAdapter);
-        mRecyclerView.setAdapter(mHeaderAndFooterWrapper);
-        mSwipeLayout.setColorSchemeResources(R.color.app_basic, R.color.app_basic,
-                R.color.app_basic, R.color.app_basic);
-        mBannerView = new BannerView(getActivity());
-        mBannerView.setOnItemClickListener(new BannerView.OnItemClickListener() {
-            @Override
-            public void onItemClick(View v, int position, HomeBanners.DataBean.BannersBean banner) {
-                if(banner!=null&& !TextUtils.isEmpty(banner.jump_url)){
-                    ToastUtils.show_always(BSApplication.getInstance(),"banner.jump_url");
-                }
-            }
-        });
+        mRecyclerView.setIAdapter(selectedAdapter);
         loadLayout.showLoadingView();
         loadLayout.findViewById(R.id.btnTryAgain).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 loadLayout.showLoadingView();
-                getBanners();
-                getSelecteds();
+                refresh();
             }
         });
-        getBanners();
-        getSelecteds();
+        refresh();
     }
 
-    public void startMain(String albumsId) {
+    public void startMain(Selected.DataBeanX.DataBean  DataBean) {
         GlobalStateConfig.activityA = "A";
         EventBus.getDefault().post(new MessageEvent("one"));
-        EventBus.getDefault().post(new MessageEvent("stop&" + albumsId));
+        EventBus.getDefault().post(new MessageEvent(DataBean, 4));
     }
 
-    @Override
-    public void onResume() {
-//        setVideoResume();
-        super.onResume();
-        if (mBannerView != null)
-            mBannerView.startTurning(5000);
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        if (mBannerView != null)
-            mBannerView.stopTurning();
-    }
-
-    @Override
-    public void onHiddenChanged(boolean hidden) {
-        if (mBannerView != null)
-            //被hidden时未true 回到这个Fragment时返回false
-            if (hidden) {
-                mBannerView.stopTurning();
-            } else {
-//            setVideoResume();
-                mBannerView.startTurning(5000);
-            }
-
-        super.onHiddenChanged(hidden);
-    }
-
-    private List<Selected.DataBeanX> datas = new ArrayList<>();
-    private BannerView mBannerView;
-
-    private void getBanners() {
-        RetrofitUtils.getInstance().getHomeBanners("SELECTION")
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Action1<List<HomeBanners.DataBean.BannersBean>>() {
-                    @Override
-                    public void call(List<HomeBanners.DataBean.BannersBean> banners) {
-                        if (banners != null && !banners.isEmpty()) {
-                            mBannerView.setData(banners);
-                            int screenWidth = getResources().getDisplayMetrics().widthPixels;
-                            mBannerView.setLayoutParams(new AbsListView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
-                                    (int) (screenWidth / 5f * 2)));
-                            mHeaderAndFooterWrapper.addHeaderView(mBannerView);
-                            mBannerView.startTurning(5000);
-                        }
-                    }
-                }, new Action1<Throwable>() {
-                    @Override
-                    public void call(Throwable throwable) {
-                        throwable.printStackTrace();
-                    }
-                });
-    }
-
-    private void getSelecteds() {
-        RetrofitUtils.getInstance().getSelecteds()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Action1<List<Selected.DataBeanX>>() {
-                    @Override
-                    public void call(List<Selected.DataBeanX> dataBeanXes) {
-                        mSwipeLayout.setRefreshing(false);
-                        loadLayout.showContentView();
-                        datas.clear();
-                        datas.addAll(dataBeanXes);
-                        mHeaderAndFooterWrapper.notifyDataSetChanged();
-                    }
-                }, new Action1<Throwable>() {
-                    @Override
-                    public void call(Throwable throwable) {
-                        throwable.printStackTrace();
-                        loadLayout.showErrorView();
-                    }
-                });
-    }
-
-    @Override
-    public void onRefresh() {
-        getSelecteds();
-    }
 
     @Override
     public void onClick(View v) {
 
     }
+
+    @Override
+    public void onRefresh() {
+        refresh();
+    }
+
+
+    @Override
+    public void onLoadMore(View loadMoreView) {
+        if (loadMoreFooterView.canLoadMore() && selectedAdapter.getItemCount() > 0) {
+            loadMoreFooterView.setStatus(LoadMoreFooterView.Status.LOADING);
+            loadMore();
+        }
+    }
+
+    // 下拉刷新
+    private void refresh() {
+        RetrofitUtils.getInstance().getSelecteds()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Action1<Object>() {
+                    @Override
+                    public void call(Object O) {
+                        delRefresh(O);
+                    }
+                }, new Action1<Throwable>() {
+                    @Override
+                    public void call(Throwable throwable) {
+                        throwable.printStackTrace();
+//                        mRecyclerView.setRefreshing(false);
+                        if (datas != null && datas.size() > 0) {
+                            loadLayout.showContentView();
+                        } else {
+                            loadLayout.showErrorView();
+                        }
+                    }
+                });
+    }
+
+    // 加载更多
+    private void loadMore() {
+        RetrofitUtils.getInstance().getSelecteds()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Action1<Object>() {
+                    @Override
+                    public void call(Object O) {
+                        delLoadMore(O);
+                    }
+                }, new Action1<Throwable>() {
+                    @Override
+                    public void call(Throwable throwable) {
+                        throwable.printStackTrace();
+                        if (datas != null && datas.size() > 0) {
+                            loadLayout.showContentView();
+                        } else {
+                            loadLayout.showErrorView();
+                        }
+                        loadMoreFooterView.setStatus(LoadMoreFooterView.Status.GONE);
+                    }
+                });
+    }
+
+
+    private void delRefresh(Object o) {
+        try {
+            String s = new GsonBuilder().serializeNulls().create().toJson(o);
+            JSONObject js = new JSONObject(s);
+            int ret = js.getInt("ret");
+            Log.e("刷新精选列表==ret", String.valueOf(ret));
+            if (ret == 0) {
+                String msg = js.getString("data");
+                List<Selected.DataBeanX> data = new Gson().fromJson(msg, new TypeToken<List<Selected.DataBeanX>>() {
+                }.getType());
+                if (data != null && data.size() > 0) {
+                    List<Selected.DataBeanX.DataBean> dataBeanXes = data.get(0).data;
+                    mRecyclerView.setRefreshing(false);
+                    if (dataBeanXes != null && dataBeanXes.size() > 0) {
+                        if (datas != null) {
+                            datas.addAll(0, dataBeanXes);
+                            selectedAdapter.notifyDataSetChanged();
+                        } else {
+                            datas = new ArrayList<>();
+                            datas.addAll(0, dataBeanXes);
+                            selectedAdapter.notifyDataSetChanged();
+                        }
+                        loadLayout.showContentView();
+                    } else {
+                        if (datas != null && datas.size() > 0) {
+                            loadLayout.showContentView();
+                            ToastUtils.show_always(BSApplication.getInstance(), "没有新的推荐了！");
+                        } else {
+                            loadLayout.showEmptyView();
+                        }
+                    }
+                } else {
+                    if (datas != null && datas.size() > 0) {
+                        loadLayout.showContentView();
+                    } else {
+                        loadLayout.showErrorView();
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            if (datas != null && datas.size() > 0) {
+                loadLayout.showContentView();
+            } else {
+                loadLayout.showErrorView();
+            }
+        }
+    }
+
+    private void delLoadMore(Object o) {
+        try {
+            String s = new GsonBuilder().serializeNulls().create().toJson(o);
+            JSONObject js = new JSONObject(s);
+            int ret = js.getInt("ret");
+            Log.e("加载更多精选列表==ret", String.valueOf(ret));
+            if (ret == 0) {
+                String msg = js.getString("data");
+                List<Selected.DataBeanX> data = new Gson().fromJson(msg, new TypeToken<List<Selected.DataBeanX>>() {
+                }.getType());
+                if (data != null && data.size() > 0) {
+                    List<Selected.DataBeanX.DataBean> dataBeanXes = data.get(0).data;
+                    //                        mRecyclerView.setRefreshing(false);
+                    if (dataBeanXes != null && !dataBeanXes.isEmpty()) {
+                        datas.addAll(dataBeanXes);
+                        selectedAdapter.notifyDataSetChanged();
+                        loadMoreFooterView.setStatus(LoadMoreFooterView.Status.GONE);
+                    } else {
+                        loadMoreFooterView.setStatus(LoadMoreFooterView.Status.THE_END);
+                    }
+                }
+            } else {
+                if (datas != null && datas.size() > 0) {
+                    loadLayout.showContentView();
+                } else {
+                    loadLayout.showErrorView();
+                }
+                loadMoreFooterView.setStatus(LoadMoreFooterView.Status.GONE);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            if (datas != null && datas.size() > 0) {
+                loadLayout.showContentView();
+            } else {
+                loadLayout.showErrorView();
+            }
+            loadMoreFooterView.setStatus(LoadMoreFooterView.Status.GONE);
+        }
+    }
+
 }

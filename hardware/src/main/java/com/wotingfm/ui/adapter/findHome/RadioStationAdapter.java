@@ -25,7 +25,6 @@ public class RadioStationAdapter extends CommonAdapter<ChannelsBean> {
     public RadioStationAdapter(Context context, List<ChannelsBean> datas, RadioStationClick radioStationClick) {
         super(context, R.layout.item_radiostation, datas);
         this.radioStationClick = radioStationClick;
-
     }
 
     @Override
