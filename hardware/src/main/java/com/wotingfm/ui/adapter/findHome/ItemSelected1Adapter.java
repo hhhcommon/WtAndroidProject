@@ -5,12 +5,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 import com.woting.commonplat.utils.DementionUtil;
 import com.wotingfm.R;
-import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.utils.GlideUtils;
 import com.wotingfm.ui.bean.AlbumsBean;
 import com.zhy.adapter.recyclerview.CommonAdapter;
@@ -19,19 +18,20 @@ import com.zhy.adapter.recyclerview.base.ViewHolder;
 import java.util.List;
 
 /**
- * Created by amine on 2017/6/22.
+ * 每日听单，编辑精选列表页
  */
 
 public class ItemSelected1Adapter extends CommonAdapter<AlbumsBean> {
     private SelectedClick tagClick;
     private int with = 0;
-    private LinearLayout.LayoutParams layoutParams1, layoutParams2;
+    private LinearLayout.LayoutParams  layoutParams2;
+    private RelativeLayout.LayoutParams layoutParams1;
 
     public ItemSelected1Adapter(Context context, List<AlbumsBean> datas, SelectedClick tagClick) {
         super(context, R.layout.item_item1_selected_home, datas);
         this.tagClick = tagClick;
         with = (DementionUtil.getScreenWidthInPx(context) - DementionUtil.dip2px(context, 54)) / 3;
-        layoutParams1 = new LinearLayout.LayoutParams(with, with);
+        layoutParams1 = new RelativeLayout.LayoutParams(with, with);
         layoutParams2 = new LinearLayout.LayoutParams(with, ViewGroup.LayoutParams.WRAP_CONTENT);
     }
 

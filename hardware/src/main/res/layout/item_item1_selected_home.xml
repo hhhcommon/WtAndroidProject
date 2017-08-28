@@ -4,8 +4,7 @@
     android:layout_height="wrap_content"
     android:layout_gravity="center"
     android:gravity="center"
-    android:orientation="vertical"
-    android:paddingRight="10dp">
+    android:orientation="vertical">
 
     <RelativeLayout
         android:id="@+id/lin_img"
@@ -42,7 +41,7 @@
         android:layout_gravity="center"
         android:layout_marginTop="6dp"
         android:ellipsize="end"
-        android:gravity="center|left"
+        android:gravity="center"
         android:paddingLeft="4dp"
         android:paddingRight="4dp"
         android:singleLine="true"

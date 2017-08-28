@@ -14,7 +14,7 @@ import com.wotingfm.ui.play.find.classification.view.ClassificationFragment;
 import com.wotingfm.ui.play.find.live.LiveFragment;
 import com.wotingfm.ui.play.find.main.view.LookListFragment;
 import com.wotingfm.ui.play.find.radio.RadioStationFragment;
-import com.wotingfm.ui.play.find.selected.SelectedFragment;
+import com.wotingfm.ui.play.find.selected.view.SelectedFragment;
 
 import java.util.ArrayList;
 import java.util.List;

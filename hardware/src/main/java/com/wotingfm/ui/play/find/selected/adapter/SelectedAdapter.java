@@ -1,4 +1,4 @@
-package com.wotingfm.ui.adapter.findHome;
+package com.wotingfm.ui.play.find.selected.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.GridLayoutManager;
@@ -11,10 +11,8 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 import com.woting.commonplat.utils.DementionUtil;
 import com.wotingfm.R;
-import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.utils.GlideUtils;
 import com.wotingfm.ui.bean.Selected;
 import com.zhy.adapter.recyclerview.CommonAdapter;
@@ -23,8 +21,6 @@ import com.zhy.adapter.recyclerview.base.ViewHolder;
 import java.util.List;
 
 /**
- * Created by amine on 2017/6/7.
- * <p>
  * 发现=精选列表
  */
 
@@ -32,14 +28,17 @@ public class SelectedAdapter extends CommonAdapter<Selected.DataBeanX> {
     private Context context;
     private SelectedClickBase selectedClickBase;
     private int with = 0;
-    private LinearLayout.LayoutParams layoutParams1, layoutParams2;
+    private LinearLayout.LayoutParams  layoutParams2;
+    private RelativeLayout.LayoutParams layoutParams1;
 
     public SelectedAdapter(Context context, List<Selected.DataBeanX> datas, SelectedClickBase selectedClickBase) {
         super(context, R.layout.item_selected_home, datas);
         this.context = context;
-        with = (DementionUtil.getScreenWidthInPx(context) - DementionUtil.dip2px(context, 54)) / 3;
+//        int with = DementionUtil.getScreenWidthInPx(this.getActivity()) - DementionUtil.dip2px(this.getActivity(), 80);
+        with = (DementionUtil.getScreenWidthInPx(context) - DementionUtil.dip2px(context, 44)) / 3;
         this.selectedClickBase = selectedClickBase;
-        layoutParams1 = new LinearLayout.LayoutParams(with, with);
+//        layoutParams1 = new LinearLayout.LayoutParams(with, with);
+        layoutParams1 = new RelativeLayout.LayoutParams(with, with);
         layoutParams2 = new LinearLayout.LayoutParams(with, ViewGroup.LayoutParams.WRAP_CONTENT);
     }
 
@@ -52,7 +51,7 @@ public class SelectedAdapter extends CommonAdapter<Selected.DataBeanX> {
         RelativeLayout labelContent = (RelativeLayout) holder.itemView.findViewById(R.id.labelContentMore);
         textView.setText(s.title);
         RecyclerView recyclerView = (RecyclerView) holder.itemView.findViewById(R.id.mRecyclerView);
-        if ("DAILY_LISTENINGS".equals(s.type) || "EDITOR_SELECTIONS".equals(s.type)) {
+        if ("DAILY_LISTENINGS".equals(s.type) ) {
             if (s.data.isEmpty()) {
                 labelContent.setVisibility(View.GONE);
                 view.setVisibility(View.GONE);
@@ -84,6 +83,37 @@ public class SelectedAdapter extends CommonAdapter<Selected.DataBeanX> {
                 });
             }
 
+        }else  if ("EDITOR_SELECTIONS".equals(s.type)) {
+            if (s.data.isEmpty()) {
+                labelContent.setVisibility(View.GONE);
+                view.setVisibility(View.GONE);
+            } else {
+                labelContent.setVisibility(View.VISIBLE);
+                view.setVisibility(View.VISIBLE);
+                GridLayoutManager layoutManager = new GridLayoutManager(context, 3);
+                recyclerView.setLayoutManager(layoutManager);
+                ItemSelected1Adapter itemClassAdapter = new ItemSelected1Adapter(context, s.data, new SelectedClick() {
+                    @Override
+                    public void click(Selected.DataBeanX.DataBean dataBean) {
+                        if (selectedClickBase != null)
+                            selectedClickBase.click(dataBean);
+                    }
+                    @Override
+                    public void play(Selected.DataBeanX.DataBean dataBean) {
+                        if (selectedClickBase != null)
+                            selectedClickBase.play(dataBean);
+                    }
+                });
+                recyclerView.setAdapter(itemClassAdapter);
+                ivMore.setVisibility(View.VISIBLE);
+                ivMore.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (selectedClickBase != null)
+                            selectedClickBase.clickMore(s);
+                    }
+                });
+            }
         } else if ("HOT_ALBUMS".equals(s.type)) {
             if (s.data.isEmpty()) {
                 labelContent.setVisibility(View.GONE);
@@ -163,14 +193,25 @@ public class SelectedAdapter extends CommonAdapter<Selected.DataBeanX> {
 
         @Override
         protected void convert(ViewHolder holder, final Selected.DataBeanX.DataBean dataBean, int position) {
-            holder.setText(R.id.tvTitle, dataBean.title);
-            holder.setText(R.id.tvContent, dataBean.lastest_news);
-            holder.setText(R.id.tvTime, dataBean.play_count + "次播放");
+            try {
+                holder.setText(R.id.tvTitle, dataBean.single_title);
+            } catch (Exception e) {
+                holder.setText(R.id.tvTitle, "");
+            }
+            try {
+                holder.setText(R.id.tvContent, dataBean.album_title);
+            } catch (Exception e) {
+                holder.setText(R.id.tvContent, "");
+            }
+            try {
+                holder.setText(R.id.tvTime, dataBean.single_play_count + "次播放");
+            } catch (Exception e) {
+                holder.setText(R.id.tvTime,  "0次播放");
+            }
             ImageView ivPhoto = (ImageView) holder.itemView.findViewById(R.id.ivPhoto);
-            ImageView img_play = (ImageView) holder.itemView.findViewById(R.id.img_play);
 
-            if (dataBean.logo_url!= null && !dataBean.logo_url.equals("") ) {
-                GlideUtils.loadImageViewRoundCornersMusic(dataBean.logo_url, ivPhoto, 150, 150);
+            if (dataBean.single_logo_url!= null && !dataBean.single_logo_url.equals("") ) {
+                GlideUtils.loadImageViewRoundCornersMusic(dataBean.single_logo_url, ivPhoto, 150, 150);
             } else {
                 GlideUtils.loadImageViewRoundCornersMusic(R.mipmap.oval_defut_other, ivPhoto, 60, 60);
             }
@@ -181,13 +222,7 @@ public class SelectedAdapter extends CommonAdapter<Selected.DataBeanX> {
                         tagClick.click(dataBean);
                 }
             });
-            img_play.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (tagClick != null)
-                        tagClick.play(dataBean);
-                }
-            });
+
         }
 
     }

@@ -1,4 +1,4 @@
-package com.wotingfm.ui.play.find.selected;
+package com.wotingfm.ui.play.find.selected.view;
 
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;

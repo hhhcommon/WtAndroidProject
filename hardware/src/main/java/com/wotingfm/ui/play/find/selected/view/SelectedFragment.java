@@ -1,10 +1,11 @@
-package com.wotingfm.ui.play.find.selected;
+package com.wotingfm.ui.play.find.selected.view;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,14 +13,16 @@ import android.widget.AbsListView;
 
 import com.woting.commonplat.widget.LoadFrameLayout;
 import com.wotingfm.R;
+import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.config.GlobalStateConfig;
 import com.wotingfm.common.net.RetrofitUtils;
+import com.wotingfm.common.utils.ToastUtils;
 import com.wotingfm.common.view.BannerView;
-import com.wotingfm.ui.adapter.findHome.SelectedAdapter;
 import com.wotingfm.ui.bean.HomeBanners;
 import com.wotingfm.ui.bean.MessageEvent;
 import com.wotingfm.ui.bean.Selected;
 import com.wotingfm.ui.play.find.main.view.LookListActivity;
+import com.wotingfm.ui.play.find.selected.adapter.SelectedAdapter;
 import com.wotingfm.ui.play.main.PlayerActivity;
 import com.zhy.adapter.recyclerview.wrapper.HeaderAndFooterWrapper;
 
@@ -83,7 +86,7 @@ public class SelectedFragment extends Fragment implements View.OnClickListener,S
             }
             @Override
             public void clickMore(Selected.DataBeanX dataBeanX) {
-                SelectedMoreFragment  fragment= SelectedMoreFragment.newInstance(dataBeanX.type, dataBeanX.title);
+                SelectedMoreFragment fragment= SelectedMoreFragment.newInstance(dataBeanX.type, dataBeanX.title);
                 if (getActivity() instanceof PlayerActivity) {
                     PlayerActivity.open(fragment);
                 }else if (getActivity() instanceof LookListActivity) {
@@ -96,6 +99,14 @@ public class SelectedFragment extends Fragment implements View.OnClickListener,S
         mSwipeLayout.setColorSchemeResources(R.color.app_basic, R.color.app_basic,
                 R.color.app_basic, R.color.app_basic);
         mBannerView = new BannerView(getActivity());
+        mBannerView.setOnItemClickListener(new BannerView.OnItemClickListener() {
+            @Override
+            public void onItemClick(View v, int position, HomeBanners.DataBean.BannersBean banner) {
+                if(banner!=null&& !TextUtils.isEmpty(banner.jump_url)){
+                    ToastUtils.show_always(BSApplication.getInstance(),"banner.jump_url");
+                }
+            }
+        });
         loadLayout.showLoadingView();
         loadLayout.findViewById(R.id.btnTryAgain).setOnClickListener(new View.OnClickListener() {
             @Override

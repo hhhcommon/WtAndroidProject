@@ -13,8 +13,7 @@
         android:layout_gravity="center"
         android:gravity="center"
         android:orientation="horizontal"
-        android:paddingRight="12dp"
-        android:paddingLeft="12dp">
+        android:paddingRight="12dp">
 
         <RelativeLayout
             android:id="@+id/lin_img"
@@ -35,14 +34,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:src="@drawable/background_group" />
-            <ImageView
-                android:id="@+id/img_play"
-                android:layout_width="22dp"
-                android:src="@mipmap/albums_icon_play_n"
-                android:layout_marginBottom="4dp"
-                android:layout_marginLeft="4dp"
-                android:layout_alignParentBottom="true"
-                android:layout_height="22dp" />
+
         </RelativeLayout>
 
         <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -98,7 +90,7 @@
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="1px"
+        android:layout_height="0.7dp"
         android:layout_marginRight="2dp"
-        android:background="#efefef" />
+        android:background="@color/line_color" />
 </LinearLayout>

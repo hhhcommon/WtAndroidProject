@@ -31,23 +31,25 @@ public class Selected implements Serializable {
         public String type;
         public List<DataBean> data;
 
-
         public static class DataBean implements Serializable {
-            /**
-             * id : 2
-             * lastest_news : 暂无更新
-             * logo_url : http://lorempixel.com/640/480/?94119
-             * play_count : 0
-             * title : Ms.
-             */
 
             public String id;
+            public String single_title;
+            public String single_logo_url;
+            public String single_seconds;
+            public String single_file_url;
+            public String album_title;
+            public String album_lastest_news;
+            public String album_logo_url;
+            public String album_id;
+            public String creator_id;
+            public boolean had_liked;
+
             public String lastest_news;
             public String logo_url;
-            public int play_count;
+            public String play_count;
+            public String single_play_count;
             public String title;
-            public String mediaType;// 新加字段
-
         }
     }
 }

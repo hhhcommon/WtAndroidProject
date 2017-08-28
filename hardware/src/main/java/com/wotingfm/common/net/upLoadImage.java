@@ -20,7 +20,7 @@ public class upLoadImage {
     public static String BUCKET_NAME = "woting";
     // 这里的objectKey其实就是服务器上的路径，即目录+文件名
     //String objectKey = keyPath + "/" + carArr[times] + ".jpg";
-    public static String objectKey = "test_img/";
+    public static String objectKey = "img_avatar/";
     public static String URL = "http://woting.oss-cn-beijing.aliyuncs.com/"+objectKey;
     /**
      * 单例模式创建网络连接
