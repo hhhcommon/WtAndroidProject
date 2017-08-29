@@ -25,7 +25,7 @@ import com.wotingfm.ui.bean.ChannelsBean;
 import com.wotingfm.ui.bean.MessageEvent;
 import com.wotingfm.ui.bean.SinglesBase;
 import com.wotingfm.ui.bean.SinglesDownload;
-import com.wotingfm.ui.play.album.view.AlbumsInfoFragmentMain;
+import com.wotingfm.ui.play.album.main.view.AlbumsInfoMainFragment;
 import com.wotingfm.ui.play.anchor.view.AnchorPersonalCenterFragment;
 import com.wotingfm.ui.play.localaudio.local.view.AlbumsFragment;
 import com.wotingfm.ui.play.main.PlayerActivity;
@@ -240,7 +240,7 @@ public class MenuDialog extends Dialog implements View.OnClickListener {
                 GlobalStateConfig.IS_LOOK = true;
                 if (pdsBase != null) {
                     dismiss();
-                    activity.open(AlbumsInfoFragmentMain.newInstance(pdsBase.album_id));
+                    activity.open(AlbumsInfoMainFragment.newInstance(pdsBase.album_id));
                 }
                 break;
             case R.id.tvSubscription:

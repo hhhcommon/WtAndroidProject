@@ -1,24 +1,13 @@
 package com.wotingfm.ui.play.find.selected.adapter;
 
 import android.content.Context;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
-
-import com.woting.commonplat.utils.DementionUtil;
 import com.wotingfm.R;
 import com.wotingfm.common.utils.GlideUtils;
-import com.wotingfm.ui.bean.ChannelsBean;
 import com.wotingfm.ui.bean.Selected;
 import com.zhy.adapter.recyclerview.CommonAdapter;
 import com.zhy.adapter.recyclerview.base.ViewHolder;
-
 import java.util.List;
 
 /**

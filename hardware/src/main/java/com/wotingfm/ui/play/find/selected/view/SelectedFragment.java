@@ -238,6 +238,8 @@ public class SelectedFragment extends Fragment implements View.OnClickListener, 
                     } else {
                         loadMoreFooterView.setStatus(LoadMoreFooterView.Status.THE_END);
                     }
+                }else{
+                    loadMoreFooterView.setStatus(LoadMoreFooterView.Status.GONE);
                 }
             } else {
                 if (datas != null && datas.size() > 0) {

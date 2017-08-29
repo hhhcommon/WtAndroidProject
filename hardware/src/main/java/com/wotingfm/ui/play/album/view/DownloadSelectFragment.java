@@ -1,8 +1,11 @@
 package com.wotingfm.ui.play.album.view;
 
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -17,13 +20,17 @@ import com.wotingfm.common.net.RetrofitUtils;
 import com.wotingfm.common.utils.DownloadUtils;
 import com.wotingfm.common.utils.T;
 import com.wotingfm.ui.adapter.downloadAdapter.DownloadSelectAdapter;
-import com.wotingfm.ui.base.basefragment.BaseFragment;
 import com.wotingfm.ui.bean.Player;
+import com.wotingfm.ui.intercom.main.view.InterPhoneActivity;
+import com.wotingfm.ui.mine.main.MineActivity;
+import com.wotingfm.ui.play.find.main.view.LookListActivity;
+import com.wotingfm.ui.play.main.PlayerActivity;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.schedulers.Schedulers;
@@ -33,7 +40,7 @@ import rx.schedulers.Schedulers;
  * 节目下载选择页面
  */
 
-public class DownloadSelectFragment extends BaseFragment implements View.OnClickListener, OnLoadMoreListener, OnRefreshListener {
+public class DownloadSelectFragment extends Fragment implements View.OnClickListener, OnLoadMoreListener, OnRefreshListener {
     @BindView(R.id.tvCancel)
     TextView tvCancel;
     @BindView(R.id.tvDownload)
@@ -47,8 +54,15 @@ public class DownloadSelectFragment extends BaseFragment implements View.OnClick
     @BindView(R.id.largeLabelSelect)
     LinearLayout largeLabelSelect;
 
-
+    private LoadMoreFooterView loadMoreFooterView;
+    private String albumsID;
     private DownloadSelectAdapter downloadSelectAdapter;
+    private View rootView;
+    private int mPage;
+    private boolean isSelect = false;
+    private List<Player.DataBean.SinglesBean> singlesBeanList = new ArrayList<>();
+    //控制选择的集合
+    private List<Player.DataBean.SinglesBean> singlesBeanListSelect = new ArrayList<>();
 
     public static DownloadSelectFragment newInstance(String albumsID) {
         DownloadSelectFragment fragment = new DownloadSelectFragment();
@@ -58,12 +72,18 @@ public class DownloadSelectFragment extends BaseFragment implements View.OnClick
         return fragment;
     }
 
-
-    private LoadMoreFooterView loadMoreFooterView;
-    private String albumsID;
-
     @Override
-    public void initView() {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        if (rootView == null) {
+            rootView = inflater.inflate(R.layout.activity_download_select, container, false);
+            rootView.setOnClickListener(this);
+            ButterKnife.bind(this, rootView);
+            inItView();
+        }
+        return rootView;
+    }
+
+    public void inItView() {
         Bundle bundle = getArguments();
         if (bundle != null) {
             albumsID = bundle.getString("albumsID");
@@ -100,8 +120,6 @@ public class DownloadSelectFragment extends BaseFragment implements View.OnClick
             refresh();
         }
     }
-
-    private int mPage;
 
     private void refresh() {
         mPage = 1;
@@ -160,9 +178,6 @@ public class DownloadSelectFragment extends BaseFragment implements View.OnClick
                 });
     }
 
-
-    private List<Player.DataBean.SinglesBean> singlesBeanList = new ArrayList<>();
-
     @Override
     public void onLoadMore(View loadMoreView) {
         if (loadMoreFooterView.canLoadMore() && downloadSelectAdapter.getItemCount() > 0) {
@@ -171,15 +186,10 @@ public class DownloadSelectFragment extends BaseFragment implements View.OnClick
         }
     }
 
-    //控制选择的集合
-    private List<Player.DataBean.SinglesBean> singlesBeanListSelect = new ArrayList<>();
-
     @Override
     public void onRefresh() {
         refresh();
     }
-
-    private boolean isSelect = false;
 
     @Override
     public void onClick(View v) {
@@ -219,8 +229,19 @@ public class DownloadSelectFragment extends BaseFragment implements View.OnClick
         }
     }
 
-    @Override
-    protected int getLayoutResource() {
-        return R.layout.activity_download_select;
+    /**
+     * 关闭界面
+     */
+    public void closeFragment() {
+        if (this.getActivity() instanceof PlayerActivity) {
+            PlayerActivity.close();
+        } else if (this.getActivity() instanceof MineActivity) {
+            MineActivity.close();
+        } else if (this.getActivity() instanceof InterPhoneActivity) {
+            InterPhoneActivity.close();
+        } else if (this.getActivity() instanceof LookListActivity) {
+            LookListActivity.close();
+        }
     }
+
 }

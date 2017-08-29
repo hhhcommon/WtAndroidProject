@@ -28,15 +28,15 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:lineSpacingExtra="5dp"
-            android:text="一段因记忆移植引发的神秘悬案，当男主角走进记忆大师医疗中心接受手术，却不料手术失误记忆被错误重载。"
+            android:text="一段因记忆移植引发的神秘悬案，当男主角走进记忆大师医疗中心接受手术，却不料手术失误记忆被错误重载。一段因记忆移植引发的神秘悬案，当男主角走进记忆大师医疗中心接受手术，却不料手术失误记忆被错误重载。"
             android:textColor="#16181a"
             android:textSize="13sp" />
 
         <View
             android:layout_width="match_parent"
-            android:layout_height="1px"
+            android:layout_height="0.7dp"
             android:layout_marginTop="16dp"
-            android:background="#efefef" />
+            android:background="@color/line_color" />
     </LinearLayout>
 
     <TextView
@@ -51,21 +51,32 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="40dp">
-
-        <ImageView
-            android:id="@+id/ivPhoto"
+        <RelativeLayout
+            android:id="@+id/lin_img"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:scaleType="centerCrop"
-            android:src="@mipmap/oval_defut_photo" />
+            android:layout_centerVertical="true"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="12dp">
 
+            <ImageView
+                android:id="@+id/ivPhoto"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"/>
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/background_person"/>
+        </RelativeLayout>
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="40dp"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
             android:layout_toLeftOf="@+id/tvFollow"
-            android:layout_toRightOf="@+id/ivPhoto"
+            android:layout_toRightOf="@+id/lin_img"
             android:orientation="vertical">
 
             <TextView
@@ -105,9 +116,9 @@
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="1px"
+        android:layout_height="0.7dp"
         android:layout_marginTop="16dp"
-        android:background="#efefef" />
+        android:background="@color/line_color" />
 
     <LinearLayout
         android:visibility="gone"

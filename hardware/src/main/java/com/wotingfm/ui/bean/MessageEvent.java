@@ -13,11 +13,16 @@ public class MessageEvent {
     public SinglesBase singlesBase;
     public Selected.DataBeanX.DataBean  DataBean;
     public int type;
+    public boolean isBottom;
     public String roomid;
     public List<SinglesDownload> singlesDownloads;
 
     public MessageEvent(String message) {
         this.message = message;
+    }
+
+    public MessageEvent(boolean type) {
+        this.isBottom = type;
     }
 
     public MessageEvent(ChannelsBean channelsBean, int type) {
@@ -51,6 +56,9 @@ public class MessageEvent {
         return type;
     }
 
+    public boolean getIsBottoom() {
+        return isBottom;
+    }
     public SinglesBase getSinglesBase() {
         return singlesBase;
     }

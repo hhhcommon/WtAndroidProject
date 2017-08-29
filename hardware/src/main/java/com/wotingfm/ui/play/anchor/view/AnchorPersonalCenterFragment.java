@@ -1,13 +1,11 @@
 package com.wotingfm.ui.play.anchor.view;
 
 import android.app.Dialog;
-import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.RecyclerView.OnScrollListener;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,24 +21,18 @@ import com.woting.commonplat.widget.LoadFrameLayout;
 import com.wotingfm.R;
 import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.config.GlobalStateConfig;
-import com.wotingfm.common.net.RetrofitUtils;
 import com.wotingfm.common.utils.CommonUtils;
 import com.wotingfm.common.utils.DialogUtils;
-import com.wotingfm.common.utils.L;
-import com.wotingfm.common.utils.T;
 import com.wotingfm.common.view.ReportsDialog;
-import com.wotingfm.ui.bean.ChannelsBean;
-import com.wotingfm.ui.bean.MessageEvent;
-import com.wotingfm.ui.mine.main.MineActivity;
-import com.wotingfm.ui.play.album.view.AlbumsInfoFragmentMain;
-import com.wotingfm.ui.play.anchor.adapter.AnchorPersonalCenterInfoAdapter;
-import com.wotingfm.ui.base.basefragment.BaseFragment;
 import com.wotingfm.ui.bean.AnchorInfo;
+import com.wotingfm.ui.bean.MessageEvent;
 import com.wotingfm.ui.bean.SinglesBase;
+import com.wotingfm.ui.mine.main.MineActivity;
+import com.wotingfm.ui.play.album.main.view.AlbumsInfoMainFragment;
+import com.wotingfm.ui.play.anchor.adapter.AnchorPersonalCenterInfoAdapter;
 import com.wotingfm.ui.play.anchor.presenter.AnchorPersonalCenterPresenter;
 import com.wotingfm.ui.play.find.main.view.LookListActivity;
 import com.wotingfm.ui.play.main.PlayerActivity;
-import com.wotingfm.ui.play.report.presenter.ReportPresenter;
 import com.wotingfm.ui.user.logo.LogoActivity;
 import com.zhy.adapter.recyclerview.wrapper.HeaderAndFooterWrapper;
 
@@ -52,12 +44,6 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import jp.wasabeef.glide.transformations.BlurTransformation;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action1;
-import rx.schedulers.Schedulers;
-
-import static android.app.Activity.RESULT_OK;
-import static android.support.v7.widget.RecyclerView.*;
 
 /**
  * Created by amine on 2017/6/12.
@@ -191,11 +177,11 @@ public class AnchorPersonalCenterFragment extends Fragment implements View.OnCli
             @Override
             public void ItemClick(String albumsId) {
                 if (getActivity() instanceof PlayerActivity) {
-                    PlayerActivity.open(AlbumsInfoFragmentMain.newInstance(albumsId));
+                    PlayerActivity.open(AlbumsInfoMainFragment.newInstance(albumsId));
                 } else if (getActivity() instanceof MineActivity) {
-                    MineActivity.open(AlbumsInfoFragmentMain.newInstance(albumsId));
+                    MineActivity.open(AlbumsInfoMainFragment.newInstance(albumsId));
                 } else if (getActivity() instanceof LookListActivity) {
-                    LookListActivity.open(AlbumsInfoFragmentMain.newInstance(albumsId));
+                    LookListActivity.open(AlbumsInfoMainFragment.newInstance(albumsId));
                 }
             }
 

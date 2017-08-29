@@ -1,36 +1,49 @@
 package com.wotingfm.ui.play.album.view;
 
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.woting.commonplat.widget.LoadFrameLayout;
 import com.wotingfm.R;
+import com.wotingfm.common.config.GlobalStateConfig;
 import com.wotingfm.common.net.RetrofitUtils;
 import com.wotingfm.common.utils.T;
 import com.wotingfm.ui.adapter.albumsAdapter.AlbumsInfoProgramAdapter;
-import com.wotingfm.ui.base.basefragment.BaseFragment;
+import com.wotingfm.ui.bean.MessageEvent;
 import com.wotingfm.ui.bean.Player;
+import com.wotingfm.ui.bean.SinglesBase;
+import com.wotingfm.ui.intercom.main.view.InterPhoneActivity;
+import com.wotingfm.ui.mine.main.MineActivity;
+import com.wotingfm.ui.play.find.main.view.LookListActivity;
+import com.wotingfm.ui.play.main.PlayerActivity;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 
 /**
- * Created by amine on 2017/6/14.
  * *专辑详情。节目fragment
  */
 
-public class ProgramInfoFragment extends BaseFragment {
+public class ProgramInfoFragment extends Fragment implements View.OnClickListener {
     @BindView(R.id.mRecyclerView)
     RecyclerView mRecyclerView;
     @BindView(R.id.loadLayout)
@@ -43,11 +56,13 @@ public class ProgramInfoFragment extends BaseFragment {
     ImageView ivDownload;
     @BindView(R.id.relativeLable)
     RelativeLayout relativeLable;
+    private View rootView;
 
-    @Override
-    protected int getLayoutResource() {
-        return R.layout.fragment_program_info;
-    }
+    private int mPage;
+    private String albumsID;
+    private List<Player.DataBean.SinglesBean> singlesBeanList = new ArrayList<>();
+    private AlbumsInfoProgramAdapter albumsInfoProgramAdapter;
+    private boolean isLoadingData = false;
 
     public static ProgramInfoFragment newInstance(String albumsID) {
         ProgramInfoFragment fragment = new ProgramInfoFragment();
@@ -58,10 +73,20 @@ public class ProgramInfoFragment extends BaseFragment {
     }
 
     @Override
-    protected void initView() {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        if (rootView == null) {
+            rootView = inflater.inflate(R.layout.fragment_program_info, container, false);
+            rootView.setOnClickListener(this);
+            ButterKnife.bind(this, rootView);
+            EventBus.getDefault().register(this);
+            inItView();
+        }
+        return rootView;
+    }
+
+    protected void inItView() {
         Bundle bundle = getArguments();
-        if (bundle != null)
-            albumsID = bundle.getString("albumsID");
+        if (bundle != null) albumsID = bundle.getString("albumsID");
         loadLayout.showLoadingView();
         loadLayout.findViewById(R.id.btnTryAgain).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -82,24 +107,6 @@ public class ProgramInfoFragment extends BaseFragment {
             }
         });
         mRecyclerView.setAdapter(albumsInfoProgramAdapter);
-        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                super.onScrollStateChanged(recyclerView, newState);
-            }
-
-            @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-                //拿到最后一条的position
-                LinearLayoutManager manager = (LinearLayoutManager) recyclerView.getLayoutManager();
-                int endCompletelyPosition = manager.findLastCompletelyVisibleItemPosition();
-                if (albumsInfoProgramAdapter.getItemCount() > 10 && endCompletelyPosition == albumsInfoProgramAdapter.getItemCount() - 1) {
-                    //执行加载更多的方法，无论是用接口还是别的方式都行
-                    loadMore();
-                }
-            }
-        });
         refresh();
         ivSequence.setOnClickListener(this);
         relativeLable.setOnClickListener(this);
@@ -118,13 +125,55 @@ public class ProgramInfoFragment extends BaseFragment {
                 T.getInstance().showToast("排序成功");
                 break;
             case R.id.ivDownload:
-                openFragment(DownloadSelectFragment.newInstance(albumsID));
+                DownloadSelectFragment fragment = DownloadSelectFragment.newInstance(albumsID);
+                openFragment(fragment);
                 break;
         }
     }
 
-    private int mPage;
-    private String albumsID;
+    /**
+     * 关闭界面
+     */
+    public void closeFragment() {
+        if (this.getActivity() instanceof PlayerActivity) {
+            PlayerActivity.close();
+        } else if (this.getActivity() instanceof MineActivity) {
+            MineActivity.close();
+        } else if (this.getActivity() instanceof InterPhoneActivity) {
+            InterPhoneActivity.close();
+        } else if (this.getActivity() instanceof LookListActivity) {
+            LookListActivity.close();
+        }
+    }
+
+    /**
+     * 关闭界面
+     *
+     * @param fragment
+     */
+    public void openFragment(DownloadSelectFragment fragment) {
+        if (this.getActivity() instanceof PlayerActivity) {
+            PlayerActivity.open(fragment);
+        } else if (this.getActivity() instanceof MineActivity) {
+            MineActivity.open(fragment);
+        } else if (this.getActivity() instanceof InterPhoneActivity) {
+            InterPhoneActivity.open(fragment);
+        } else if (this.getActivity() instanceof LookListActivity) {
+            LookListActivity.open(fragment);
+        }
+    }
+
+    private void startMain(String albumsId) {
+        GlobalStateConfig.activityA = "A";
+        EventBus.getDefault().post(new MessageEvent("one"));
+        EventBus.getDefault().post(new MessageEvent("stop&" + albumsId));
+    }
+
+    private void startMain(SinglesBase singlesBase) {
+        GlobalStateConfig.activityA = "A";
+        EventBus.getDefault().post(new MessageEvent("one"));
+        EventBus.getDefault().post(new MessageEvent(singlesBase, 2));
+    }
 
     private void refresh() {
         mPage = 1;
@@ -170,17 +219,36 @@ public class ProgramInfoFragment extends BaseFragment {
                         } else {
                             T.getInstance().showToast("没有更多数据");
                         }
+                        isLoadingData = false;
                     }
                 }, new Action1<Throwable>() {
                     @Override
                     public void call(Throwable throwable) {
-                        loadLayout.showErrorView();
+                        if (singlesBeanList != null && singlesBeanList.size() > 0) {
+                            loadLayout.showContentView();
+                        } else {
+                            loadLayout.showErrorView();
+                        }
                         throwable.printStackTrace();
+                        isLoadingData = false;
                     }
                 });
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMoonEventBase(MessageEvent messageEvent) {
+        boolean type = messageEvent.getIsBottoom();
+        if (type) {
+            if (!isLoadingData) {
+                isLoadingData = true;
+                loadMore();
+            }
+        }
+    }
 
-    private List<Player.DataBean.SinglesBean> singlesBeanList = new ArrayList<>();
-    private AlbumsInfoProgramAdapter albumsInfoProgramAdapter;
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
 }

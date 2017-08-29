@@ -9,7 +9,6 @@ import java.util.List;
 
 public class AlbumInfo implements Serializable {
 
-
     public DataBean data;
     public String msg;
     public int ret;

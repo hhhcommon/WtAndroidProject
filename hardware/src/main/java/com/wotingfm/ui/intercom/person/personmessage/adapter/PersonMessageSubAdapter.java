@@ -9,10 +9,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.wotingfm.R;
-import com.wotingfm.ui.bean.AlbumsBean;
 import com.wotingfm.common.utils.GlideUtils;
+import com.wotingfm.ui.bean.AlbumsBean;
 import com.wotingfm.ui.intercom.main.view.InterPhoneActivity;
-import com.wotingfm.ui.play.album.view.AlbumsInfoFragmentMain;
+import com.wotingfm.ui.play.album.main.view.AlbumsInfoMainFragment;
 
 import java.util.List;
 
@@ -83,7 +83,7 @@ public class PersonMessageSubAdapter extends BaseAdapter {
             @Override
             public void onClick(View v) {
                 if (activity != null)
-                    activity.open(AlbumsInfoFragmentMain.newInstance(sub.id));
+                    activity.open(AlbumsInfoMainFragment.newInstance(sub.id));
             }
         });
         return convertView;

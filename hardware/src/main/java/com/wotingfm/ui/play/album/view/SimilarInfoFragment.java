@@ -12,6 +12,7 @@ import com.wotingfm.ui.adapter.albumsAdapter.AlbumsAdapter;
 import com.wotingfm.ui.base.basefragment.BaseFragment;
 import com.wotingfm.ui.bean.AlbumsBean;
 import com.wotingfm.ui.mine.main.MineActivity;
+import com.wotingfm.ui.play.album.main.view.AlbumsInfoMainFragment;
 import com.wotingfm.ui.play.find.main.view.LookListActivity;
 import com.wotingfm.ui.play.main.PlayerActivity;
 
@@ -70,11 +71,11 @@ public class SimilarInfoFragment extends BaseFragment {
             @Override
             public void clickAlbums(AlbumsBean singlesBean) {
                 if (getActivity() instanceof PlayerActivity) {
-                    PlayerActivity.open(AlbumsInfoFragmentMain.newInstance(singlesBean.id));
+                    PlayerActivity.open(AlbumsInfoMainFragment.newInstance(singlesBean.id));
                 } else if (getActivity() instanceof MineActivity) {
-                    MineActivity.open(AlbumsInfoFragmentMain.newInstance(singlesBean.id));
+                    MineActivity.open(AlbumsInfoMainFragment.newInstance(singlesBean.id));
                 } else if (getActivity() instanceof LookListActivity) {
-                    LookListActivity.open(AlbumsInfoFragmentMain.newInstance(singlesBean.id));
+                    LookListActivity.open(AlbumsInfoMainFragment.newInstance(singlesBean.id));
                 }
             }
             @Override

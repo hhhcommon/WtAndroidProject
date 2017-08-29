@@ -1,27 +1,29 @@
 package com.wotingfm.ui.play.album.view;
 
+import android.app.Dialog;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-import com.woting.commonplat.widget.GlideCircleTransform;
 import com.wotingfm.R;
-import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.net.RetrofitUtils;
 import com.wotingfm.common.utils.CommonUtils;
+import com.wotingfm.common.utils.DialogUtils;
+import com.wotingfm.common.utils.GlideUtils;
 import com.wotingfm.common.utils.T;
 import com.wotingfm.common.view.FlowLayout;
-import com.wotingfm.ui.base.basefragment.BaseFragment;
 import com.wotingfm.ui.bean.AlbumInfo;
 import com.wotingfm.ui.bean.BaseResult;
 import com.wotingfm.ui.user.logo.LogoActivity;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.schedulers.Schedulers;
@@ -32,7 +34,7 @@ import rx.schedulers.Schedulers;
  * 专辑详情。，详情fragment
  */
 
-public class AlbumsInfoFragment extends BaseFragment {
+public class AlbumsInfoFragment extends Fragment implements View.OnClickListener{
 
     @BindView(R.id.labelContent)
     LinearLayout labelContent;
@@ -51,10 +53,9 @@ public class AlbumsInfoFragment extends BaseFragment {
     @BindView(R.id.tvFens)
     TextView tvFens;
 
-    @Override
-    protected int getLayoutResource() {
-        return R.layout.fragment_albums_info;
-    }
+    private AlbumInfo albumInfo;
+    private View rootView;
+    private Dialog dialog;
 
     public static AlbumsInfoFragment newInstance(AlbumInfo albumInfo) {
         AlbumsInfoFragment fragment = new AlbumsInfoFragment();
@@ -64,42 +65,65 @@ public class AlbumsInfoFragment extends BaseFragment {
         return fragment;
     }
 
-    private AlbumInfo albumInfo;
-
-    private String userId;
-
     @Override
-    protected void initView() {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        if (rootView == null) {
+            rootView = inflater.inflate(R.layout.fragment_albums_info, container, false);
+            rootView.setOnClickListener(this);
+            ButterKnife.bind(this, rootView);
+            inItView();
+        }
+        return rootView;
+    }
+
+    private void inItView() {
+        tvFollow.setOnClickListener(this);
         Bundle bundle = getArguments();
         if (bundle != null)
             albumInfo = (AlbumInfo) bundle.getSerializable("albumInfo");
         if (albumInfo != null) {
             setResultData(albumInfo);
         }
-        userId = CommonUtils.getUserId();
-
     }
 
     private void setResultData(final AlbumInfo albumInfo) {
-        Glide.with(BSApplication.getInstance()).load(albumInfo.data.album.owner.avatar)// Glide
-                .transform(new GlideCircleTransform(BSApplication.getInstance()))
-                .error(R.mipmap.oval_defut_photo)
-                .placeholder(R.mipmap.oval_defut_photo)
-                .into(ivPhoto);
-        tvName.setText(albumInfo.data.album.owner.nick_name);
-        tvFens.setText("粉丝 " + albumInfo.data.album.owner.fans_count);
+        String url=null;
+        try {
+            url=albumInfo.data.album.owner.avatar;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        if (url != null && !url.equals("") && url.startsWith("http")) {
+            GlideUtils.loadImageViewRound(url, ivPhoto, 150, 150);
+        } else {
+            GlideUtils.loadImageViewRound(R.mipmap.icon_avatar_d, ivPhoto, 60, 60);
+        }
+        try {
+            tvName.setText(albumInfo.data.album.owner.nick_name);
+        } catch (Exception e) {
+            e.printStackTrace();
+            tvName.setText("主播");
+        }
+        try {
+            tvFens.setText("粉丝 " + albumInfo.data.album.owner.fans_count);
+        } catch (Exception e) {
+            e.printStackTrace();
+            tvFens.setText("粉丝 0" );
+        }
         if (TextUtils.isEmpty(albumInfo.data.album.introduction)) {
             labelContent.setVisibility(View.GONE);
         } else {
             labelContent.setVisibility(View.VISIBLE);
             tvContent.setText(albumInfo.data.album.introduction);
         }
-        final boolean had_followed = albumInfo.data.album.owner.had_followed;
+         boolean had_followed = albumInfo.data.album.owner.had_followed;
         if (had_followed == true) {
             tvFollow.setText("已关注");
         } else {
             tvFollow.setText("关注");
         }
+
+        // 设置标签
         if (albumInfo.data.album.channels != null && !albumInfo.data.album.channels.isEmpty()) {
             labelTagContent.setVisibility(View.VISIBLE);
             flowLayout.removeAllViews();
@@ -112,26 +136,11 @@ public class AlbumsInfoFragment extends BaseFragment {
         } else {
             labelTagContent.setVisibility(View.GONE);
         }
-        tvFollow.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                boolean isLogin = CommonUtils.isLogin();
-                if (isLogin == false) {
-                    LogoActivity.start(getActivity());
-                    return;
-                }
-                if (had_followed == true) {
-                    submitNoFans(albumInfo.data.album.owner.id);
-                } else {
-                    submitFans(albumInfo.data.album.owner.id);
-                }
-            }
-        });
     }
 
     private void submitFans(String idol_id) {
-        showLodingDialog();
-        RetrofitUtils.getInstance().submitFans(idol_id, userId)
+        dialogShow();
+        RetrofitUtils.getInstance().submitFans(idol_id, CommonUtils.getUserId())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Action1<BaseResult>() {
@@ -149,20 +158,20 @@ public class AlbumsInfoFragment extends BaseFragment {
                             else
                                 T.getInstance().showToast("关注失败");
                         }
-                        dissmisDialog();
+                        dialogCancel();
                     }
                 }, new Action1<Throwable>() {
                     @Override
                     public void call(Throwable throwable) {
                         T.getInstance().showToast("关注失败");
-                        dissmisDialog();
+                        dialogCancel();
                     }
                 });
     }
 
     private void submitNoFans(String idol_id) {
-        showLodingDialog();
-        RetrofitUtils.getInstance().submitNoFans(idol_id, userId)
+        dialogShow();
+        RetrofitUtils.getInstance().submitNoFans(idol_id, CommonUtils.getUserId())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Action1<BaseResult>() {
@@ -180,15 +189,52 @@ public class AlbumsInfoFragment extends BaseFragment {
                             else
                                 T.getInstance().showToast("取消关注失败");
                         }
-                        dissmisDialog();
+                        dialogCancel();
                     }
                 }, new Action1<Throwable>() {
                     @Override
                     public void call(Throwable throwable) {
                         T.getInstance().showToast("取消关注失败");
-                        dissmisDialog();
+                        dialogCancel();
                     }
                 });
     }
 
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.tvFollow:
+                boolean isLogin = CommonUtils.isLogin();
+                if (isLogin == false) {
+                    LogoActivity.start(getActivity());
+                    return;
+                }
+                 boolean had_followed=false;
+                try {
+                    had_followed = albumInfo.data.album.owner.had_followed;
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                if (had_followed) {
+                    submitNoFans(albumInfo.data.album.owner.id);
+                } else {
+                    submitFans(albumInfo.data.album.owner.id);
+                }
+                break;
+        }
+    }
+
+    /**
+     * 展示弹出框
+     */
+    public void dialogShow() {
+        dialog = DialogUtils.Dialog(this.getActivity());
+    }
+
+    /**
+     * 取消弹出框
+     */
+    public void dialogCancel() {
+        if (dialog != null) dialog.dismiss();
+    }
 }

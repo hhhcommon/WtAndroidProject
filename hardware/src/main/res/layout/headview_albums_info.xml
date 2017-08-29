@@ -19,7 +19,7 @@
             android:gravity="center"
             android:text="详情"
             android:textColor="#fd8548"
-            android:textSize="14sp" />
+            android:textSize="14.7sp" />
 
         <TextView
             android:id="@+id/tvProgramInfo"
@@ -30,7 +30,7 @@
             android:gravity="center"
             android:text="节目"
             android:textColor="#16181a"
-            android:textSize="14sp" />
+            android:textSize="14.7sp" />
 
         <TextView
             android:id="@+id/tvSimilarInfo"
@@ -41,17 +41,24 @@
             android:gravity="center"
             android:text="相似"
             android:textColor="#16181a"
-            android:textSize="14sp" />
+            android:textSize="14.7sp" />
     </LinearLayout>
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="1px"
-        android:background="#efefef" />
-
-    <FrameLayout
-        android:layout_gravity="center"
-        android:id="@+id/fl_body"
+        android:layout_height="0.7dp"
+        android:background="@color/line_color" />
+    <com.wotingfm.common.view.viewpager.CustomViewPager
+        android:id="@+id/viewpager"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:flipInterval="30"
+        android:persistentDrawingCache="animation" />
+    <!--<FrameLayout-->
+        <!--android:layout_gravity="center"-->
+        <!--android:id="@+id/fl_body"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent" />-->
+    <!---->
 </LinearLayout>
