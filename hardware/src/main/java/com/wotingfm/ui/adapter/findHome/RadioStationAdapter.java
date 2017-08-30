@@ -4,9 +4,7 @@ import android.content.Context;
 import android.view.View;
 import android.widget.ImageView;
 
-import com.bumptech.glide.Glide;
 import com.wotingfm.R;
-import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.utils.GlideUtils;
 import com.wotingfm.ui.bean.ChannelsBean;
 import com.zhy.adapter.recyclerview.CommonAdapter;
@@ -51,6 +49,5 @@ public class RadioStationAdapter extends CommonAdapter<ChannelsBean> {
     public interface RadioStationClick {
         void click(ChannelsBean dataBean);
     }
-
 
 }

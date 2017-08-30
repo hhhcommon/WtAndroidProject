@@ -4,13 +4,8 @@ import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.database.HistoryHelper;
 import com.wotingfm.common.utils.T;
 import com.wotingfm.ui.bean.Player;
-import com.wotingfm.ui.play.find.classification.model.Classification;
-import com.wotingfm.ui.play.find.classification.model.ClassificationModel;
-import com.wotingfm.ui.play.find.classification.view.ClassificationFragment;
-import com.wotingfm.ui.play.playhistory.adapter.PlayerHistoryListAdapter;
 import com.wotingfm.ui.play.playhistory.view.PlayerHistoryFragment;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**

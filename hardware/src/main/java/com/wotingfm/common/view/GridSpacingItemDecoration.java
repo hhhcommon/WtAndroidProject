@@ -20,8 +20,6 @@ public class GridSpacingItemDecoration extends RecyclerView.ItemDecoration {
         this.includeEdge = includeEdge;
     }
 
-
-
     @Override
     public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
         int position = parent.getChildAdapterPosition(view); // item position

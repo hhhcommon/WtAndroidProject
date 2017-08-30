@@ -1,8 +1,11 @@
 package com.wotingfm.ui.play.search.fragment;
 
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 
 import com.woting.commonplat.amine.ARecyclerView;
 import com.woting.commonplat.amine.LoadMoreFooterView;
@@ -11,37 +14,40 @@ import com.woting.commonplat.amine.OnRefreshListener;
 import com.woting.commonplat.widget.LoadFrameLayout;
 import com.wotingfm.R;
 import com.wotingfm.common.net.RetrofitUtils;
-import com.wotingfm.ui.adapter.serch.UsersSerchAdapter;
-import com.wotingfm.ui.base.basefragment.BaseFragment;
 import com.wotingfm.ui.bean.SerchList;
 import com.wotingfm.ui.bean.UserBean;
+import com.wotingfm.ui.intercom.main.view.InterPhoneActivity;
+import com.wotingfm.ui.mine.main.MineActivity;
 import com.wotingfm.ui.play.anchor.view.AnchorPersonalCenterFragment;
+import com.wotingfm.ui.play.find.main.view.LookListActivity;
+import com.wotingfm.ui.play.main.PlayerActivity;
+import com.wotingfm.ui.play.search.adapter.UsersSearchAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 
 /**
- * Created by amine on 2017/6/14.
- * 专辑列表
- * <p>
- * 筛选的
+ * 主播列表
  */
 
-public class AnchorListFragment extends BaseFragment implements OnLoadMoreListener, OnRefreshListener {
+public class AnchorListFragment extends Fragment implements View.OnClickListener, OnLoadMoreListener, OnRefreshListener {
     @BindView(R.id.mRecyclerView)
     ARecyclerView mRecyclerView;
     @BindView(R.id.loadLayout)
     LoadFrameLayout loadLayout;
 
-    @Override
-    protected int getLayoutResource() {
-        return R.layout.fragment_albums_list;
-    }
+    private View rootView;
+    private LoadMoreFooterView loadMoreFooterView;
+    private String q;
+    private int mPage;
+    private UsersSearchAdapter mAdapter;
+    private List<UserBean> albumsBeanList = new ArrayList<>();
 
     public static AnchorListFragment newInstance(String q) {
         AnchorListFragment fragment = new AnchorListFragment();
@@ -51,11 +57,18 @@ public class AnchorListFragment extends BaseFragment implements OnLoadMoreListen
         return fragment;
     }
 
-    private LoadMoreFooterView loadMoreFooterView;
-    private String q;
-
     @Override
-    protected void initView() {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        if (rootView == null) {
+            rootView = inflater.inflate(R.layout.fragment_albums_list, container, false);
+            rootView.setOnClickListener(this);
+            ButterKnife.bind(this, rootView);
+            inItView();
+        }
+        return rootView;
+    }
+
+    private void inItView() {
         Bundle bundle = getArguments();
         if (bundle != null)
             q = bundle.getString("q");
@@ -63,6 +76,9 @@ public class AnchorListFragment extends BaseFragment implements OnLoadMoreListen
         loadMoreFooterView = (LoadMoreFooterView) mRecyclerView.getLoadMoreFooterView();
         mRecyclerView.setOnLoadMoreListener(this);
         mRecyclerView.setOnRefreshListener(this);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
+        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        mRecyclerView.setLayoutManager(layoutManager);
         loadLayout.findViewById(R.id.btnTryAgain).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -70,23 +86,17 @@ public class AnchorListFragment extends BaseFragment implements OnLoadMoreListen
                 refresh(q);
             }
         });
-        mAdapter = new UsersSerchAdapter(getActivity(), albumsBeanList, new UsersSerchAdapter.OnClick() {
+        mAdapter = new UsersSearchAdapter(getActivity(), albumsBeanList, new UsersSearchAdapter.OnClick() {
             @Override
             public void click(UserBean s) {
-                hideSoftKeyboard();
-                openFragment(AnchorPersonalCenterFragment.newInstance(s.id));
+//                hideSoftKeyboard();
+                Fragment fragment = AnchorPersonalCenterFragment.newInstance(s.id);
+                openFragment(fragment);
             }
         });
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
-        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        mRecyclerView.setLayoutManager(layoutManager);
         mRecyclerView.setIAdapter(mAdapter);
         refresh(q);
     }
-
-    private int mPage;
-    private UsersSerchAdapter mAdapter;
-    private List<UserBean> albumsBeanList = new ArrayList<>();
 
     public void refresh(String q) {
         mPage = 1;
@@ -105,13 +115,21 @@ public class AnchorListFragment extends BaseFragment implements OnLoadMoreListen
                             loadLayout.showContentView();
                             mAdapter.notifyDataSetChanged();
                         } else {
-                            loadLayout.showEmptyView();
+                            if(albumsBeanList!=null&&albumsBeanList.size()>0){
+                                loadLayout.showContentView();
+                            }else{
+                                loadLayout.showEmptyView();
+                            }
                         }
                     }
                 }, new Action1<Throwable>() {
                     @Override
                     public void call(Throwable throwable) {
-                        loadLayout.showErrorView();
+                        if(albumsBeanList!=null&&albumsBeanList.size()>0){
+                            loadLayout.showContentView();
+                        }else{
+                            loadLayout.showEmptyView();
+                        }
                         throwable.printStackTrace();
                     }
                 });
@@ -132,13 +150,23 @@ public class AnchorListFragment extends BaseFragment implements OnLoadMoreListen
                             mAdapter.notifyDataSetChanged();
                             loadMoreFooterView.setStatus(LoadMoreFooterView.Status.GONE);
                         } else {
+                            if(albumsBeanList!=null&&albumsBeanList.size()>0){
+                                loadLayout.showContentView();
+                            }else{
+                                loadLayout.showEmptyView();
+                            }
                             loadMoreFooterView.setStatus(LoadMoreFooterView.Status.THE_END);
                         }
                     }
                 }, new Action1<Throwable>() {
                     @Override
                     public void call(Throwable throwable) {
-                        loadLayout.showErrorView();
+                        if(albumsBeanList!=null&&albumsBeanList.size()>0){
+                            loadLayout.showContentView();
+                        }else{
+                            loadLayout.showEmptyView();
+                        }
+                        loadMoreFooterView.setStatus(LoadMoreFooterView.Status.THE_END);
                         throwable.printStackTrace();
                     }
                 });
@@ -155,5 +183,27 @@ public class AnchorListFragment extends BaseFragment implements OnLoadMoreListen
     @Override
     public void onRefresh() {
         refresh(q);
+    }
+
+    @Override
+    public void onClick(View v) {
+
+    }
+
+    /**
+     * 界面
+     *
+     * @param fragment
+     */
+    public void openFragment(Fragment fragment) {
+        if (this.getActivity() instanceof PlayerActivity) {
+            PlayerActivity.open(fragment);
+        } else if (this.getActivity() instanceof MineActivity) {
+            MineActivity.open(fragment);
+        } else if (this.getActivity() instanceof InterPhoneActivity) {
+            InterPhoneActivity.open(fragment);
+        } else if (this.getActivity() instanceof LookListActivity) {
+            LookListActivity.open(fragment);
+        }
     }
 }

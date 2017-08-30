@@ -10,9 +10,6 @@ import com.wotingfm.ui.play.album.main.model.AlbumsInfoMainModel;
 import com.wotingfm.ui.play.album.main.view.AlbumMenuDialog;
 import com.wotingfm.ui.play.album.main.view.AlbumsInfoMainFragment;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * 作者：xinLong on 2017/6/5 13:55
  * 邮箱：645700751@qq.com
@@ -69,10 +66,10 @@ public class AlbumsInfoMainPresenter {
     private void delGet(Object o) {
         s = (AlbumInfo) o;
         if (s != null) {
-            List<String> type = new ArrayList<>();
-            type.add("详情");
-            type.add("节目");
-            type.add("相似");
+//            List<String> type = new ArrayList<>();
+//            type.add("详情");
+//            type.add("节目");
+//            type.add("相似");
             activity.initFragment(s);
             // mFragment.add(newInstance(s));
     /*                    String albumsID = s.data.album.id;

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/white"
-    android:orientation="vertical"
-    android:paddingTop="20dp">
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@color/white"
+              android:orientation="vertical"
+              android:paddingTop="20dp">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -17,7 +17,7 @@
             android:layout_width="44dp"
             android:layout_height="44dp"
             android:layout_marginLeft="2dp"
-            android:src="@drawable/icon_chat_center" />
+            android:src="@drawable/icon_chat_center"/>
 
         <android.support.design.widget.TabLayout
             android:id="@+id/tabs"
@@ -31,8 +31,7 @@
             app:tabIndicatorHeight="2dp"
             app:tabMode="fixed"
             app:tabSelectedTextColor="#fd8548"
-            android:textColor="#16181a"
-            android:textSize="17sp" />
+            app:tabTextAppearance="@style/TextAppearance.TabLayout.Tab"/>
 
 
         <ImageView
@@ -42,10 +41,10 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="2dp"
-            android:src="@drawable/icon_chat_add_more" />
+            android:src="@drawable/icon_chat_add_more"/>
     </RelativeLayout>
 
-    <include layout="@layout/include_tv" />
+    <include layout="@layout/include_tv"/>
 
     <android.support.v4.view.ViewPager
         android:id="@+id/viewpager"
@@ -53,6 +52,6 @@
         android:layout_height="match_parent"
         android:background="@color/white"
         android:flipInterval="30"
-        android:persistentDrawingCache="animation" />
+        android:persistentDrawingCache="animation"/>
 
 </LinearLayout>

@@ -147,7 +147,7 @@ public class ProgramInfoFragment extends Fragment implements View.OnClickListene
     }
 
     /**
-     * 关闭界面
+     * 界面
      *
      * @param fragment
      */

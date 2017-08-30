@@ -1,8 +1,11 @@
 package com.wotingfm.ui.play.search.fragment;
 
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 
 import com.woting.commonplat.amine.ARecyclerView;
 import com.woting.commonplat.amine.LoadMoreFooterView;
@@ -10,37 +13,40 @@ import com.woting.commonplat.amine.OnLoadMoreListener;
 import com.woting.commonplat.amine.OnRefreshListener;
 import com.woting.commonplat.widget.LoadFrameLayout;
 import com.wotingfm.R;
+import com.wotingfm.common.config.GlobalStateConfig;
 import com.wotingfm.common.net.RetrofitUtils;
-import com.wotingfm.ui.adapter.serch.ProgramSerchAdapter;
-import com.wotingfm.ui.base.basefragment.BaseFragment;
+import com.wotingfm.ui.play.search.adapter.ProgramSearchAdapter;
+import com.wotingfm.ui.bean.MessageEvent;
 import com.wotingfm.ui.bean.SerchList;
 import com.wotingfm.ui.bean.SinglesBase;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 
 /**
- * Created by amine on 2017/6/14.
- * 专辑列表
- * <p>
- * 筛选的
+ * 节目列表
  */
 
-public class ProgramListFragment extends BaseFragment implements OnLoadMoreListener, OnRefreshListener {
+public class ProgramListFragment extends Fragment implements View.OnClickListener,OnLoadMoreListener, OnRefreshListener {
     @BindView(R.id.mRecyclerView)
     ARecyclerView mRecyclerView;
     @BindView(R.id.loadLayout)
     LoadFrameLayout loadLayout;
+    private View rootView;
 
-    @Override
-    protected int getLayoutResource() {
-        return R.layout.fragment_albums_list;
-    }
+    private LoadMoreFooterView loadMoreFooterView;
+    private String q;
+    private int mPage;
+    private ProgramSearchAdapter mAdapter;
+    private List<SinglesBase> albumsBeanList = new ArrayList<>();
 
     public static ProgramListFragment newInstance(String q) {
         ProgramListFragment fragment = new ProgramListFragment();
@@ -50,11 +56,18 @@ public class ProgramListFragment extends BaseFragment implements OnLoadMoreListe
         return fragment;
     }
 
-    private LoadMoreFooterView loadMoreFooterView;
-    private String q;
-
     @Override
-    protected void initView() {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        if (rootView == null) {
+            rootView = inflater.inflate(R.layout.fragment_albums_list, container, false);
+            rootView.setOnClickListener(this);
+            ButterKnife.bind(this, rootView);
+            inItView();
+        }
+        return rootView;
+    }
+
+    private void inItView() {
         Bundle bundle = getArguments();
         if (bundle != null)
             q = bundle.getString("q");
@@ -62,6 +75,9 @@ public class ProgramListFragment extends BaseFragment implements OnLoadMoreListe
         loadMoreFooterView = (LoadMoreFooterView) mRecyclerView.getLoadMoreFooterView();
         mRecyclerView.setOnLoadMoreListener(this);
         mRecyclerView.setOnRefreshListener(this);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
+        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        mRecyclerView.setLayoutManager(layoutManager);
         loadLayout.findViewById(R.id.btnTryAgain).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -69,23 +85,17 @@ public class ProgramListFragment extends BaseFragment implements OnLoadMoreListe
                 refresh(q);
             }
         });
-        mAdapter = new ProgramSerchAdapter(getActivity(), albumsBeanList, new ProgramSerchAdapter.OnClick() {
+        mAdapter = new ProgramSearchAdapter(getActivity(), albumsBeanList, new ProgramSearchAdapter.OnClick() {
             @Override
             public void click(SinglesBase s) {
-                hideSoftKeyboard();
+//                hideSoftKeyboard();
                 startMain(s);
             }
         });
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
-        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        mRecyclerView.setLayoutManager(layoutManager);
+
         mRecyclerView.setIAdapter(mAdapter);
         refresh(q);
     }
-
-    private int mPage;
-    private ProgramSerchAdapter mAdapter;
-    private List<SinglesBase> albumsBeanList = new ArrayList<>();
 
     public void refresh(String q) {
         mPage = 1;
@@ -104,17 +114,24 @@ public class ProgramListFragment extends BaseFragment implements OnLoadMoreListe
                             loadLayout.showContentView();
                             mAdapter.notifyDataSetChanged();
                         } else {
-                            loadLayout.showEmptyView();
+                            if(albumsBeanList!=null&&albumsBeanList.size()>0){
+                                loadLayout.showContentView();
+                            }else{
+                                loadLayout.showEmptyView();
+                            }
                         }
                     }
                 }, new Action1<Throwable>() {
                     @Override
                     public void call(Throwable throwable) {
-                        loadLayout.showErrorView();
+                        if(albumsBeanList!=null&&albumsBeanList.size()>0){
+                            loadLayout.showContentView();
+                        }else{
+                            loadLayout.showEmptyView();
+                        }
                         throwable.printStackTrace();
                     }
                 });
-
     }
 
     private void loadMore() {
@@ -131,13 +148,22 @@ public class ProgramListFragment extends BaseFragment implements OnLoadMoreListe
                             mAdapter.notifyDataSetChanged();
                             loadMoreFooterView.setStatus(LoadMoreFooterView.Status.GONE);
                         } else {
+                            if(albumsBeanList!=null&&albumsBeanList.size()>0){
+                                loadLayout.showContentView();
+                            }else{
+                                loadLayout.showEmptyView();
+                            }
                             loadMoreFooterView.setStatus(LoadMoreFooterView.Status.THE_END);
                         }
                     }
                 }, new Action1<Throwable>() {
                     @Override
                     public void call(Throwable throwable) {
-                        loadLayout.showErrorView();
+                        if(albumsBeanList!=null&&albumsBeanList.size()>0){
+                            loadLayout.showContentView();
+                        }else{
+                            loadLayout.showEmptyView();
+                        }
                         throwable.printStackTrace();
                     }
                 });
@@ -154,5 +180,16 @@ public class ProgramListFragment extends BaseFragment implements OnLoadMoreListe
     @Override
     public void onRefresh() {
         refresh(q);
+    }
+
+    @Override
+    public void onClick(View v) {
+
+    }
+
+    public void startMain(SinglesBase singlesBase) {
+        GlobalStateConfig.activityA = "A";
+        EventBus.getDefault().post(new MessageEvent("one"));
+        EventBus.getDefault().post(new MessageEvent(singlesBase, 2));
     }
 }

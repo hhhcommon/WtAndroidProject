@@ -1,8 +1,11 @@
 package com.wotingfm.ui.play.search.fragment;
 
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 
 import com.woting.commonplat.amine.ARecyclerView;
 import com.woting.commonplat.amine.LoadMoreFooterView;
@@ -10,41 +13,41 @@ import com.woting.commonplat.amine.OnLoadMoreListener;
 import com.woting.commonplat.amine.OnRefreshListener;
 import com.woting.commonplat.widget.LoadFrameLayout;
 import com.wotingfm.R;
+import com.wotingfm.common.config.GlobalStateConfig;
 import com.wotingfm.common.net.RetrofitUtils;
 import com.wotingfm.ui.adapter.albumsAdapter.AlbumsAdapter;
-import com.wotingfm.ui.base.basefragment.BaseFragment;
 import com.wotingfm.ui.bean.AlbumsBean;
+import com.wotingfm.ui.bean.MessageEvent;
 import com.wotingfm.ui.bean.SerchList;
 import com.wotingfm.ui.mine.main.MineActivity;
 import com.wotingfm.ui.play.album.main.view.AlbumsInfoMainFragment;
 import com.wotingfm.ui.play.find.main.view.LookListActivity;
 import com.wotingfm.ui.play.main.PlayerActivity;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 
 /**
- * Created by amine on 2017/6/14.
  * 专辑列表
- * <p>
- * 筛选的
  */
 
-public class AlbumsListFragment extends BaseFragment implements OnLoadMoreListener, OnRefreshListener {
+public class AlbumsListFragment extends Fragment implements View.OnClickListener, OnLoadMoreListener, OnRefreshListener {
     @BindView(R.id.mRecyclerView)
     ARecyclerView mRecyclerView;
     @BindView(R.id.loadLayout)
     LoadFrameLayout loadLayout;
+    private View rootView;
 
-    @Override
-    protected int getLayoutResource() {
-        return R.layout.fragment_albums_list;
-    }
+    private LoadMoreFooterView loadMoreFooterView;
+    private String q;
 
     public static AlbumsListFragment newInstance(String q) {
         AlbumsListFragment fragment = new AlbumsListFragment();
@@ -54,18 +57,28 @@ public class AlbumsListFragment extends BaseFragment implements OnLoadMoreListen
         return fragment;
     }
 
-    private LoadMoreFooterView loadMoreFooterView;
-    private String q;
-
     @Override
-    protected void initView() {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        if (rootView == null) {
+            rootView = inflater.inflate(R.layout.fragment_albums_list, container, false);
+            rootView.setOnClickListener(this);
+            ButterKnife.bind(this, rootView);
+            inItView();
+        }
+        return rootView;
+    }
+
+    protected void inItView() {
         Bundle bundle = getArguments();
         if (bundle != null)
             q = bundle.getString("q");
         loadLayout.showLoadingView();
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
+        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         loadMoreFooterView = (LoadMoreFooterView) mRecyclerView.getLoadMoreFooterView();
         mRecyclerView.setOnLoadMoreListener(this);
         mRecyclerView.setOnRefreshListener(this);
+        mRecyclerView.setLayoutManager(layoutManager);
         loadLayout.findViewById(R.id.btnTryAgain).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -87,14 +100,12 @@ public class AlbumsListFragment extends BaseFragment implements OnLoadMoreListen
             }
             @Override
             public void play(AlbumsBean singlesBean) {
-                hideSoftKeyboard();
+//                hideSoftKeyboard();
                 startMain(singlesBean.id);
             }
         });
         mRecyclerView.setIAdapter(mAdapter);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
-        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        mRecyclerView.setLayoutManager(layoutManager);
+
         refresh(q);
     }
 
@@ -119,17 +130,24 @@ public class AlbumsListFragment extends BaseFragment implements OnLoadMoreListen
                             loadLayout.showContentView();
                             mAdapter.notifyDataSetChanged();
                         } else {
-                            loadLayout.showEmptyView();
+                            if(albumsBeanList!=null&&albumsBeanList.size()>0){
+                                loadLayout.showContentView();
+                            }else{
+                                loadLayout.showEmptyView();
+                            }
                         }
                     }
                 }, new Action1<Throwable>() {
                     @Override
                     public void call(Throwable throwable) {
-                        loadLayout.showErrorView();
+                        if(albumsBeanList!=null&&albumsBeanList.size()>0){
+                            loadLayout.showContentView();
+                        }else{
+                            loadLayout.showEmptyView();
+                        }
                         throwable.printStackTrace();
                     }
                 });
-
     }
 
     private void loadMore() {
@@ -146,13 +164,23 @@ public class AlbumsListFragment extends BaseFragment implements OnLoadMoreListen
                             mAdapter.notifyDataSetChanged();
                             loadMoreFooterView.setStatus(LoadMoreFooterView.Status.GONE);
                         } else {
-                            loadMoreFooterView.setStatus(LoadMoreFooterView.Status.THE_END);
+                            if(albumsBeanList!=null&&albumsBeanList.size()>0){
+                                loadLayout.showContentView();
+                            }else{
+                                loadLayout.showEmptyView();
+                            }
+                            loadMoreFooterView.setStatus(LoadMoreFooterView.Status.GONE);
                         }
                     }
                 }, new Action1<Throwable>() {
                     @Override
                     public void call(Throwable throwable) {
-                        loadLayout.showErrorView();
+                        if(albumsBeanList!=null&&albumsBeanList.size()>0){
+                            loadLayout.showContentView();
+                        }else{
+                            loadLayout.showEmptyView();
+                        }
+                        loadMoreFooterView.setStatus(LoadMoreFooterView.Status.GONE);
                         throwable.printStackTrace();
                     }
                 });
@@ -166,8 +194,19 @@ public class AlbumsListFragment extends BaseFragment implements OnLoadMoreListen
         }
     }
 
+    public void startMain(String albumsId) {
+        GlobalStateConfig.activityA = "A";
+        EventBus.getDefault().post(new MessageEvent("one"));
+        EventBus.getDefault().post(new MessageEvent("stop&" + albumsId));
+    }
+
     @Override
     public void onRefresh() {
         refresh(q);
+    }
+
+    @Override
+    public void onClick(View v) {
+
     }
 }

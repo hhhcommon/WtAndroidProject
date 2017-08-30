@@ -1,6 +1,7 @@
 package com.wotingfm.ui.play.find.main.view;
 
 import android.app.Dialog;
+import android.content.Context;
 import android.graphics.Color;
 import android.os.Handler;
 import android.support.design.widget.TabLayout;
@@ -8,6 +9,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -29,14 +31,15 @@ import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.config.GlobalStateConfig;
 import com.wotingfm.common.utils.NetUtils;
 import com.wotingfm.common.utils.T;
-import com.wotingfm.ui.play.find.main.adapter.MyAdapter;
 import com.wotingfm.ui.base.basefragment.BaseFragment;
 import com.wotingfm.ui.bean.MessageEvent;
+import com.wotingfm.ui.play.find.main.adapter.MyAdapter;
 import com.wotingfm.ui.play.find.main.presenter.LookListPresenter;
-import com.wotingfm.ui.play.search.main.SerchFragment;
+import com.wotingfm.ui.play.search.main.view.SearchFragment;
 
 import org.greenrobot.eventbus.EventBus;
 
+import java.lang.reflect.Field;
 import java.util.List;
 
 import butterknife.BindView;
@@ -101,7 +104,7 @@ public class LookListFragment extends BaseFragment implements View.OnClickListen
                     String content = etSearchlike.getText().toString().trim();
                     if (!TextUtils.isEmpty(content)) {
                         presenter.closeKeyboard(etSearchlike);
-                        openFragment(SerchFragment.newInstance(content, 0));
+                        openFragment(SearchFragment.newInstance(content, 0));
                         etSearchlike.setText("");
                     }
                 }
@@ -121,6 +124,55 @@ public class LookListFragment extends BaseFragment implements View.OnClickListen
         viewPager.setAdapter(mAdapter);
         viewPager.setOffscreenPageLimit(1);
         tabLayout.setupWithViewPager(viewPager);
+        tabLayout.post(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    //拿到tabLayout的mTabStrip属性
+                    Field mTabStripField = tabLayout.getClass().getDeclaredField("mTabStrip");
+                    mTabStripField.setAccessible(true);
+
+                    LinearLayout mTabStrip = (LinearLayout) mTabStripField.get(tabLayout);
+
+                    int dp10 = dp2px(getContext(), 15);
+
+                    for (int i = 0; i < mTabStrip.getChildCount(); i++) {
+                        View tabView = mTabStrip.getChildAt(i);
+
+                        //拿到tabView的mTextView属性
+                        Field mTextViewField = tabView.getClass().getDeclaredField("mTextView");
+                        mTextViewField.setAccessible(true);
+
+                        TextView mTextView = (TextView) mTextViewField.get(tabView);
+
+                        tabView.setPadding(0, 0, 0, 0);
+
+                        //因为我想要的效果是   字多宽线就多宽，所以测量mTextView的宽度
+                        int width = 0;
+                        width = mTextView.getWidth();
+                        if (width == 0) {
+                            mTextView.measure(0, 0);
+                            width = mTextView.getMeasuredWidth();
+                        }
+
+                        //设置tab左右间距为10dp  注意这里不能使用Padding 因为源码中线的宽度是根据 tabView的宽度来设置的
+                        LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) tabView.getLayoutParams();
+                        params.width = width ;
+                        params.leftMargin = dp10;
+                        params.rightMargin = dp10;
+                        tabView.setLayoutParams(params);
+
+                        tabView.invalidate();
+                    }
+
+                } catch (NoSuchFieldException e) {
+                    e.printStackTrace();
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                }
+//                setIndicator(tabs,20,20);
+            }
+        });
     }
 
     @Override
@@ -133,7 +185,7 @@ public class LookListFragment extends BaseFragment implements View.OnClickListen
                     return;
                 }
                 presenter.closeKeyboard(etSearchlike);
-                openFragment(SerchFragment.newInstance(content, 0));
+                openFragment(SearchFragment.newInstance(content, 0));
                 etSearchlike.setText("");
                 break;
             case R.id.ivBack:
@@ -253,9 +305,21 @@ public class LookListFragment extends BaseFragment implements View.OnClickListen
                 tvContent.setVisibility(View.GONE);
                 lin_line_bg.setVisibility(View.VISIBLE);
                 presenter.closeKeyboard(etSearchlike);
-                openFragment(SerchFragment.newInstance(str.trim(), 0));
+                openFragment(SearchFragment.newInstance(str.trim(), 0));
             }
         }, 1000);
+    }
+
+    /**
+     * dpתpx
+     *
+     * @param context
+     * @param dp
+     * @return
+     */
+    public static int dp2px(Context context, float dp) {
+        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
+                dp, context.getResources().getDisplayMetrics());
     }
 
     @Override

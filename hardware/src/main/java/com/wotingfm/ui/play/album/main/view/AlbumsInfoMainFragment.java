@@ -125,14 +125,9 @@ public class AlbumsInfoMainFragment extends Fragment implements View.OnClickList
         lin_follow.setOnClickListener(this);
         ivMore.setOnClickListener(this);
         mObservableScrollView.setScrollViewListener(this);
-
-
-        // 初始化ViewPager
-//            mPager.setOffscreenPageLimit(1);
     }
 
     public void initFragment(AlbumInfo s) {
-
         ArrayList<Fragment> fragmentList = new ArrayList<>();
         AlbumsInfoFragment  albumsFragment = AlbumsInfoFragment.newInstance(s);
         ProgramInfoFragment  programFragment = ProgramInfoFragment.newInstance(s.data.album.id);
@@ -143,45 +138,8 @@ public class AlbumsInfoMainFragment extends Fragment implements View.OnClickList
         fragmentList.add(similarInfoFragment);
         mPager.setAdapter(new MyFragmentPagerAdapter(getChildFragmentManager(), fragmentList));
         mPager.setOnPageChangeListener(new MyOnPageChangeListener());// 页面变化时的监听器
-        setTextColor(0);
-
-//        FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-//        albumsFragment = AlbumsInfoFragment.newInstance(s);
-//        programFragment = ProgramInfoFragment.newInstance(s.data.album.id);
-//        similarInfoFragment = SimilarInfoFragment.newInstance(s.data.album.id);
-//        transaction.add(R.id.fl_body, albumsFragment, "albumsFragment");
-//        transaction.add(R.id.fl_body, programFragment, "programFragment");
-//        transaction.add(R.id.fl_body, similarInfoFragment, "similarInfoFragment");
-//        transaction.commit();
-//        SwitchTo(0);
+        setTextColor(1);
     }
-
-//    private void SwitchTo(int position) {
-//        FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-//        switch (position) {
-//            case 0:
-//                transaction.hide(programFragment);
-//                transaction.hide(similarInfoFragment);
-//                transaction.show(albumsFragment);
-//                transaction.commitAllowingStateLoss();
-//                break;
-//
-//            case 1:
-//                transaction.hide(albumsFragment);
-//                transaction.hide(similarInfoFragment);
-//                transaction.show(programFragment);
-//                transaction.commitAllowingStateLoss();
-//                break;
-//            case 2:
-//                transaction.hide(albumsFragment);
-//                transaction.hide(programFragment);
-//                transaction.show(similarInfoFragment);
-//                transaction.commitAllowingStateLoss();
-//                break;
-//            default:
-//                break;
-//        }
-//    }
 
     /**
      * 根据返回数据设置页面信息

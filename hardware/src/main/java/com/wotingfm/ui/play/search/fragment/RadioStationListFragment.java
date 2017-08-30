@@ -1,8 +1,11 @@
 package com.wotingfm.ui.play.search.fragment;
 
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 
 import com.woting.commonplat.amine.ARecyclerView;
 import com.woting.commonplat.amine.LoadMoreFooterView;
@@ -10,37 +13,41 @@ import com.woting.commonplat.amine.OnLoadMoreListener;
 import com.woting.commonplat.amine.OnRefreshListener;
 import com.woting.commonplat.widget.LoadFrameLayout;
 import com.wotingfm.R;
+import com.wotingfm.common.config.GlobalStateConfig;
 import com.wotingfm.common.net.RetrofitUtils;
 import com.wotingfm.ui.adapter.findHome.RadioStationAdapter;
-import com.wotingfm.ui.base.basefragment.BaseFragment;
 import com.wotingfm.ui.bean.ChannelsBean;
+import com.wotingfm.ui.bean.MessageEvent;
 import com.wotingfm.ui.bean.SerchList;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 
 /**
- * Created by amine on 2017/6/14.
- * 专辑列表
- * <p>
- * 筛选的
+ * 电台
  */
 
-public class RadioStationListFragment extends BaseFragment implements OnLoadMoreListener, OnRefreshListener {
+public class RadioStationListFragment extends Fragment implements View.OnClickListener, OnLoadMoreListener, OnRefreshListener {
+
     @BindView(R.id.mRecyclerView)
     ARecyclerView mRecyclerView;
     @BindView(R.id.loadLayout)
     LoadFrameLayout loadLayout;
 
-    @Override
-    protected int getLayoutResource() {
-        return R.layout.fragment_albums_list;
-    }
+    private LoadMoreFooterView loadMoreFooterView;
+    private String q;
+    private View rootView;
+    private int mPage;
+    private RadioStationAdapter mAdapter;
+    private List<ChannelsBean> albumsBeanList = new ArrayList<>();
 
     public static RadioStationListFragment newInstance(String q) {
         RadioStationListFragment fragment = new RadioStationListFragment();
@@ -50,11 +57,18 @@ public class RadioStationListFragment extends BaseFragment implements OnLoadMore
         return fragment;
     }
 
-    private LoadMoreFooterView loadMoreFooterView;
-    private String q;
-
     @Override
-    protected void initView() {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        if (rootView == null) {
+            rootView = inflater.inflate(R.layout.fragment_albums_list, container, false);
+            rootView.setOnClickListener(this);
+            ButterKnife.bind(this, rootView);
+            inItView();
+        }
+        return rootView;
+    }
+
+    protected void inItView() {
         Bundle bundle = getArguments();
         if (bundle != null)
             q = bundle.getString("q");
@@ -62,6 +76,9 @@ public class RadioStationListFragment extends BaseFragment implements OnLoadMore
         loadMoreFooterView = (LoadMoreFooterView) mRecyclerView.getLoadMoreFooterView();
         mRecyclerView.setOnLoadMoreListener(this);
         mRecyclerView.setOnRefreshListener(this);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
+        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        mRecyclerView.setLayoutManager(layoutManager);
         loadLayout.findViewById(R.id.btnTryAgain).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -72,21 +89,14 @@ public class RadioStationListFragment extends BaseFragment implements OnLoadMore
         mAdapter = new RadioStationAdapter(getActivity(), albumsBeanList, new RadioStationAdapter.RadioStationClick() {
             @Override
             public void click(ChannelsBean dataBean) {
-                hideSoftKeyboard();
+//                hideSoftKeyboard();
                 startMain(dataBean);
                 // RadioInfoActivity.start(getActivity(), dataBean.title, dataBean.id);
             }
         });
         mRecyclerView.setIAdapter(mAdapter);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
-        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        mRecyclerView.setLayoutManager(layoutManager);
         refresh(q);
     }
-
-    private int mPage;
-    private RadioStationAdapter mAdapter;
-    private List<ChannelsBean> albumsBeanList = new ArrayList<>();
 
     public void refresh(String q) {
         mPage = 1;
@@ -105,13 +115,21 @@ public class RadioStationListFragment extends BaseFragment implements OnLoadMore
                             loadLayout.showContentView();
                             mAdapter.notifyDataSetChanged();
                         } else {
-                            loadLayout.showEmptyView();
+                            if (albumsBeanList != null && albumsBeanList.size() > 0) {
+                                loadLayout.showContentView();
+                            } else {
+                                loadLayout.showEmptyView();
+                            }
                         }
                     }
                 }, new Action1<Throwable>() {
                     @Override
                     public void call(Throwable throwable) {
-                        loadLayout.showErrorView();
+                        if (albumsBeanList != null && albumsBeanList.size() > 0) {
+                            loadLayout.showContentView();
+                        } else {
+                            loadLayout.showEmptyView();
+                        }
                         throwable.printStackTrace();
                     }
                 });
@@ -132,13 +150,23 @@ public class RadioStationListFragment extends BaseFragment implements OnLoadMore
                             mAdapter.notifyDataSetChanged();
                             loadMoreFooterView.setStatus(LoadMoreFooterView.Status.GONE);
                         } else {
+                            if (albumsBeanList != null && albumsBeanList.size() > 0) {
+                                loadLayout.showContentView();
+                            } else {
+                                loadLayout.showEmptyView();
+                            }
                             loadMoreFooterView.setStatus(LoadMoreFooterView.Status.THE_END);
                         }
                     }
                 }, new Action1<Throwable>() {
                     @Override
                     public void call(Throwable throwable) {
-                        loadLayout.showErrorView();
+                        if (albumsBeanList != null && albumsBeanList.size() > 0) {
+                            loadLayout.showContentView();
+                        } else {
+                            loadLayout.showEmptyView();
+                        }
+                        loadMoreFooterView.setStatus(LoadMoreFooterView.Status.THE_END);
                         throwable.printStackTrace();
                     }
                 });
@@ -155,5 +183,16 @@ public class RadioStationListFragment extends BaseFragment implements OnLoadMore
     @Override
     public void onRefresh() {
         refresh(q);
+    }
+
+    @Override
+    public void onClick(View v) {
+
+    }
+
+    private void startMain(ChannelsBean channelsBean) {
+        GlobalStateConfig.activityA = "A";
+        EventBus.getDefault().post(new MessageEvent("one"));
+        EventBus.getDefault().post(new MessageEvent(channelsBean, 1));
     }
 }

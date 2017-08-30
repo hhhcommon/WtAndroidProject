@@ -6,20 +6,20 @@ import com.wotingfm.ui.bean.AnchorInfo;
 import com.wotingfm.ui.bean.BaseResult;
 import com.wotingfm.ui.bean.CLive;
 import com.wotingfm.ui.bean.Channels;
-import com.wotingfm.ui.play.find.classification.model.Classification;
 import com.wotingfm.ui.bean.HomeBanners;
 import com.wotingfm.ui.bean.LiveBean;
 import com.wotingfm.ui.bean.Player;
 import com.wotingfm.ui.bean.Provinces;
 import com.wotingfm.ui.bean.Radio;
 import com.wotingfm.ui.bean.RadioInfo;
-import com.wotingfm.ui.play.report.model.Reports;
 import com.wotingfm.ui.bean.Room;
 import com.wotingfm.ui.bean.Selected;
 import com.wotingfm.ui.bean.SelectedMore;
 import com.wotingfm.ui.bean.SerchList;
 import com.wotingfm.ui.bean.Subscrible;
 import com.wotingfm.ui.bean.TrailerInfo;
+import com.wotingfm.ui.play.find.classification.main.model.Classification;
+import com.wotingfm.ui.play.report.model.Reports;
 
 import retrofit2.http.DELETE;
 import retrofit2.http.GET;
@@ -227,7 +227,7 @@ public interface RetrofitService {
     @GET("/api/listenings/radios/channels/provinces")
     Observable<Provinces> getProvinces();
 
-    //获取省市列表
+    //获取电台详情
     @GET("api/listenings/radios/channels/{id}")
     Observable<RadioInfo> getRadioInfo(@Path("id") String id);
 

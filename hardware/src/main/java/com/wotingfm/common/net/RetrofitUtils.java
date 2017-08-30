@@ -3,29 +3,28 @@ package com.wotingfm.common.net;
 
 import android.text.TextUtils;
 
-import com.wotingfm.ui.bean.AlbumInfo;
 import com.wotingfm.common.application.BSApplication;
+import com.wotingfm.common.constant.StringConstant;
+import com.wotingfm.ui.bean.AlbumInfo;
 import com.wotingfm.ui.bean.AlbumsBean;
 import com.wotingfm.ui.bean.AnchorInfo;
 import com.wotingfm.ui.bean.BaseResult;
 import com.wotingfm.ui.bean.CLive;
 import com.wotingfm.ui.bean.Channels;
 import com.wotingfm.ui.bean.ChannelsBean;
-import com.wotingfm.ui.play.find.classification.model.Classification;
 import com.wotingfm.ui.bean.HomeBanners;
 import com.wotingfm.ui.bean.LiveBean;
 import com.wotingfm.ui.bean.Player;
 import com.wotingfm.ui.bean.Provinces;
 import com.wotingfm.ui.bean.Radio;
 import com.wotingfm.ui.bean.RadioInfo;
-import com.wotingfm.ui.play.report.model.Reports;
 import com.wotingfm.ui.bean.Room;
-import com.wotingfm.ui.bean.Selected;
 import com.wotingfm.ui.bean.SelectedMore;
 import com.wotingfm.ui.bean.SerchList;
 import com.wotingfm.ui.bean.Subscrible;
 import com.wotingfm.ui.bean.TrailerInfo;
-import com.wotingfm.common.constant.StringConstant;
+import com.wotingfm.ui.play.find.classification.main.model.Classification;
+import com.wotingfm.ui.play.report.model.Reports;
 
 import java.io.IOException;
 import java.util.List;
