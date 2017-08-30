@@ -2,8 +2,6 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_gravity="center|top"
-    android:gravity="center"
     android:orientation="vertical">
 
     <com.mcxtzhang.swipemenulib.SwipeMenuLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -20,8 +18,7 @@
         <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="match_parent"
             android:layout_height="85dp"
-            android:layout_gravity="center"
-            android:gravity="center"
+            android:gravity="center_vertical"
             android:id="@+id/largeLabel"
             android:orientation="horizontal"
             android:paddingLeft="12dp"
@@ -31,10 +28,8 @@
                 android:id="@+id/lin_img"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
-                android:layout_centerVertical="true"
                 android:layout_marginBottom="12dp"
-                android:layout_marginTop="12dp"
-                android:gravity="center">
+                android:layout_marginTop="12dp">
 
                 <ImageView
                     android:id="@+id/ivPhoto"
@@ -59,22 +54,18 @@
             <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center|left"
                 android:layout_marginLeft="10dp"
-                android:gravity="center|left"
-                android:orientation="vertical"
-                android:paddingBottom="2dp"
-                android:paddingTop="2dp">
+                android:paddingTop="2dp"
+                android:paddingBottom="3dp"
+                android:orientation="vertical">
 
                 <TextView
                     android:id="@+id/tvTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center|left"
                     android:ellipsize="end"
                     android:singleLine="true"
                     android:text="AmineTitle"
-                    android:gravity="center|left"
                     android:textColor="#16181a"
                     android:textSize="16sp" />
 
@@ -82,11 +73,9 @@
                     android:id="@+id/tvContent"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center|left"
                     android:layout_marginTop="2dp"
                     android:singleLine="true"
                     android:ellipsize="end"
-                    android:gravity="center|left"
                     android:text="发现更多节目"
                     android:textColor="#959698"
                     android:textSize="12sp" />
@@ -95,12 +84,10 @@
                     android:id="@+id/tvTime"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center|left"
                     android:layout_marginTop="6dp"
                     android:text="发现更多节目"
                     android:singleLine="true"
                     android:ellipsize="end"
-                    android:gravity="center|left"
                     android:textColor="#959698"
                     android:textSize="12sp" />
             </LinearLayout>

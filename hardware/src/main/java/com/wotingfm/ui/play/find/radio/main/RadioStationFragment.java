@@ -92,9 +92,9 @@ public class RadioStationFragment extends Fragment implements View.OnClickListen
         mHeaderAndFooterWrapper = new HeaderAndFooterWrapper(selectedAdapter);
         mHeaderAndFooterWrapper.addHeaderView(headview);
         mRecyclerView.setIAdapter(mHeaderAndFooterWrapper);
-     headview.findViewById(R.id.lin_Local).setOnClickListener(this);
-         headview.findViewById(R.id.lin_Country).setOnClickListener(this);
-         headview.findViewById(R.id.lin_Province).setOnClickListener(this);
+        headview.findViewById(R.id.lin_Local).setOnClickListener(this);
+        headview.findViewById(R.id.lin_Country).setOnClickListener(this);
+        headview.findViewById(R.id.lin_Province).setOnClickListener(this);
         loadLayout.showLoadingView();
         loadLayout.findViewById(R.id.btnTryAgain).setOnClickListener(new View.OnClickListener() {
             @Override

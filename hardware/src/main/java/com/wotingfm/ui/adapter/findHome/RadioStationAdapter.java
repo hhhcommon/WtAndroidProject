@@ -27,8 +27,8 @@ public class RadioStationAdapter extends CommonAdapter<ChannelsBean> {
 
     @Override
     protected void convert(ViewHolder holder, final ChannelsBean dataBean, int position) {
-        holder.setText(R.id.tvTitle, dataBean.title);
-        holder.setText(R.id.tvContent, dataBean.desc);
+        holder.setText(R.id.tvTitle, dataBean.title.trim());
+        holder.setText(R.id.tvContent, dataBean.desc.trim());
         holder.setText(R.id.tvTime, dataBean.listen_count + "人听过");
         ImageView ivPhoto = (ImageView) holder.itemView.findViewById(R.id.ivPhoto);
 

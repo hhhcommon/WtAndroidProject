@@ -1,7 +1,11 @@
 package com.wotingfm.ui.play.find.radio.view;
 
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 
 import com.woting.commonplat.amine.ARecyclerView;
 import com.woting.commonplat.amine.LoadMoreFooterView;
@@ -9,47 +13,61 @@ import com.woting.commonplat.amine.OnLoadMoreListener;
 import com.woting.commonplat.amine.OnRefreshListener;
 import com.woting.commonplat.widget.LoadFrameLayout;
 import com.wotingfm.R;
+import com.wotingfm.common.config.GlobalStateConfig;
 import com.wotingfm.common.net.RetrofitUtils;
 import com.wotingfm.ui.adapter.radioAdapter.RadioAdapter;
-import com.wotingfm.ui.base.basefragment.BaseFragment;
 import com.wotingfm.ui.bean.ChannelsBean;
+import com.wotingfm.ui.bean.MessageEvent;
+import com.wotingfm.ui.intercom.main.view.InterPhoneActivity;
+import com.wotingfm.ui.mine.main.MineActivity;
+import com.wotingfm.ui.play.find.main.view.LookListActivity;
+import com.wotingfm.ui.play.main.PlayerActivity;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 
 /**
- * Created by amine on 2017/7/6.
  * 国家台
  */
 
-public class CountryRadioFragment extends BaseFragment implements OnLoadMoreListener, OnRefreshListener {
+public class CountryRadioFragment extends Fragment implements View.OnClickListener, OnLoadMoreListener, OnRefreshListener {
     @BindView(R.id.mRecyclerView)
     ARecyclerView mRecyclerView;
     @BindView(R.id.loadLayout)
     LoadFrameLayout loadLayout;
+
+    private LoadMoreFooterView loadMoreFooterView;
+    private RadioAdapter mAdapter;
+    private int mPage;
+    private List<ChannelsBean> albumsBeanList = new ArrayList<>();
+    private View rootView;
 
     public static CountryRadioFragment newInstance() {
         CountryRadioFragment fragment = new CountryRadioFragment();
         return fragment;
     }
 
-    private LoadMoreFooterView loadMoreFooterView;
-    private RadioAdapter mAdapter;
-    private List<ChannelsBean> albumsBeanList = new ArrayList<>();
-
     @Override
-    protected int getLayoutResource() {
-        return R.layout.activity_country_radio;
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        if (rootView == null) {
+            rootView = inflater.inflate(R.layout.activity_country_radio, container, false);
+            rootView.setOnClickListener(this);
+            ButterKnife.bind(this, rootView);
+            inItView();
+        }
+        return rootView;
     }
 
-    @Override
-    public void initView() {
-        setTitle("国家台");
+    public void inItView() {
+        rootView.findViewById(R.id.head_left_btn).setOnClickListener(this);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         loadMoreFooterView = (LoadMoreFooterView) mRecyclerView.getLoadMoreFooterView();
@@ -74,9 +92,6 @@ public class CountryRadioFragment extends BaseFragment implements OnLoadMoreList
         loadLayout.showLoadingView();
         refresh();
     }
-
-    private int mPage;
-
 
     private void refresh() {
         mPage = 1;
@@ -144,5 +159,33 @@ public class CountryRadioFragment extends BaseFragment implements OnLoadMoreList
     @Override
     public void onRefresh() {
         refresh();
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.head_left_btn:
+                closeFragment();
+                break;
+        }
+    }
+
+    private void startMain(ChannelsBean channelsBean) {
+        GlobalStateConfig.activityA = "A";
+        EventBus.getDefault().post(new MessageEvent("one"));
+        EventBus.getDefault().post(new MessageEvent(channelsBean, 1));
+    }
+
+    // 关闭页面
+    private void closeFragment() {
+        if (getActivity() instanceof PlayerActivity) {
+            PlayerActivity.close();
+        } else if (getActivity() instanceof MineActivity) {
+            MineActivity.close();
+        } else if (getActivity() instanceof LookListActivity) {
+            LookListActivity.close();
+        } else if (getActivity() instanceof InterPhoneActivity) {
+            InterPhoneActivity.close();
+        }
     }
 }

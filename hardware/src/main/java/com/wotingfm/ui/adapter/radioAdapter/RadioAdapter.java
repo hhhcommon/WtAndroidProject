@@ -39,8 +39,8 @@ public class RadioAdapter extends CommonAdapter<ChannelsBean> {
         } else {
             GlideUtils.loadImageViewRoundCornersMusic(R.mipmap.oval_defut_other, ivPhoto, 60, 60);
         }
-        tvTitle.setText(s.title + "");
-        tvContent.setText(s.desc + "");
+        tvTitle.setText(s.title.trim() + "");
+        tvContent.setText(s.desc.trim() + "");
         tvTime.setText(s.listen_count + "人听过");
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override

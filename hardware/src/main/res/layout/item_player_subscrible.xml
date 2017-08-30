@@ -2,7 +2,6 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_gravity="center"
     android:gravity="center"
     android:orientation="vertical">
 
@@ -21,8 +20,7 @@
             android:layout_width="match_parent"
             android:layout_height="85dp"
             android:id="@+id/largeLabel"
-            android:layout_gravity="center"
-            android:gravity="center"
+            android:gravity="center_vertical"
             android:orientation="horizontal"
             android:paddingRight="12dp"
             android:paddingLeft="12dp">
@@ -31,10 +29,8 @@
                 android:id="@+id/lin_img"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
-                android:layout_centerVertical="true"
                 android:layout_marginBottom="12dp"
-                android:layout_marginTop="12dp"
-                android:gravity="center">
+                android:layout_marginTop="12dp">
 
                 <ImageView
                     android:id="@+id/ivPhoto"
@@ -59,19 +55,16 @@
             <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center|left"
                 android:layout_marginLeft="10dp"
-                android:gravity="center|left"
-                android:orientation="vertical"
-                android:paddingBottom="2dp"
-                android:paddingTop="2dp">
+                android:gravity="center_vertical"
+                android:paddingTop="2dp"
+                android:paddingBottom="3dp"
+                android:orientation="vertical">
 
                 <TextView
                     android:id="@+id/tvTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center|left"
-                    android:gravity="center|left"
                     android:ellipsize="end"
                     android:singleLine="true"
                     android:text="AmineTitle"
@@ -82,11 +75,9 @@
                     android:id="@+id/tvContent"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center|left"
-                    android:layout_marginTop="2dp"
+                    android:layout_marginTop="3dp"
                     android:singleLine="true"
                     android:ellipsize="end"
-                    android:gravity="center|left"
                     android:text="发现更多节目"
                     android:textColor="#959698"
                     android:textSize="12sp" />
@@ -95,13 +86,11 @@
                     android:id="@+id/tvTime"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center|left"
-                    android:layout_marginTop="4dp"
+                    android:layout_marginTop="5dp"
                     android:text="发现更多节目"
                     android:textColor="#959698"
                     android:singleLine="true"
                     android:ellipsize="end"
-                    android:gravity="center|left"
                     android:textSize="12sp" />
             </LinearLayout>
         </LinearLayout>
@@ -121,6 +110,5 @@
         android:layout_width="match_parent"
         android:layout_height="0.7px"
         android:layout_marginLeft="12dp"
-        android:layout_marginRight="12dp"
         android:background="@color/line_color" />
 </LinearLayout>

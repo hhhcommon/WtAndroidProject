@@ -4,9 +4,12 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.woting.commonplat.amine.ARecyclerView;
@@ -18,36 +21,40 @@ import com.woting.commonplat.constant.BroadcastConstants;
 import com.woting.commonplat.widget.LoadFrameLayout;
 import com.wotingfm.R;
 import com.wotingfm.common.application.BSApplication;
+import com.wotingfm.common.config.GlobalStateConfig;
 import com.wotingfm.common.config.LocationInfo;
 import com.wotingfm.common.net.RetrofitUtils;
 import com.wotingfm.ui.adapter.radioAdapter.RadioAdapter;
 import com.wotingfm.ui.base.basefragment.BaseFragment;
 import com.wotingfm.ui.bean.ChannelsBean;
+import com.wotingfm.ui.bean.MessageEvent;
+import com.wotingfm.ui.intercom.main.view.InterPhoneActivity;
+import com.wotingfm.ui.mine.main.MineActivity;
+import com.wotingfm.ui.play.anchor.view.AlbumsListMeFragment;
+import com.wotingfm.ui.play.find.main.view.LookListActivity;
+import com.wotingfm.ui.play.main.PlayerActivity;
 import com.zhy.adapter.recyclerview.wrapper.HeaderAndFooterWrapper;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 
 /**
- * Created by amine on 2017/7/6.
  * 本地台
  */
 
-public class LocalRadioFragment extends BaseFragment implements OnLoadMoreListener, OnRefreshListener {
+public class LocalRadioFragment extends Fragment implements View.OnClickListener, OnLoadMoreListener, OnRefreshListener {
     @BindView(R.id.mRecyclerView)
     ARecyclerView mRecyclerView;
     @BindView(R.id.loadLayout)
     LoadFrameLayout loadLayout;
-
-    public static LocalRadioFragment newInstance() {
-        LocalRadioFragment fragment = new LocalRadioFragment();
-        return fragment;
-    }
 
     private LocationInfo locationInfo;
     private LoadMoreFooterView loadMoreFooterView;
@@ -56,15 +63,28 @@ public class LocalRadioFragment extends BaseFragment implements OnLoadMoreListen
     private List<ChannelsBean> albumsBeanList = new ArrayList<>();
     private View headview;
     private TextView tvLocal;
+    private View rootView;
+    private MessageReceiver messageReceiver;
+    private int mPage;
 
-    @Override
-    protected int getLayoutResource() {
-        return R.layout.activity_local_radio;
+    public static LocalRadioFragment newInstance() {
+        LocalRadioFragment fragment = new LocalRadioFragment();
+        return fragment;
     }
 
     @Override
-    public void initView() {
-        setTitle("本地台");
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        if (rootView == null) {
+            rootView = inflater.inflate(R.layout.activity_local_radio, container, false);
+            rootView.setOnClickListener(this);
+            ButterKnife.bind(this, rootView);
+            inItView();
+        }
+        return rootView;
+    }
+
+    public void inItView() {
+        rootView.findViewById(R.id.head_left_btn).setOnClickListener(this);
         locationInfo = new LocationInfo(BSApplication.getInstance());
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
@@ -101,8 +121,6 @@ public class LocalRadioFragment extends BaseFragment implements OnLoadMoreListen
 
     }
 
-    private MessageReceiver messageReceiver;
-
     @Override
     public void onDestroy() {
         super.onDestroy();
@@ -111,9 +129,6 @@ public class LocalRadioFragment extends BaseFragment implements OnLoadMoreListen
         if (messageReceiver != null && getActivity() != null)
             getActivity().unregisterReceiver(messageReceiver);
     }
-
-    private int mPage;
-
 
     class MessageReceiver extends BroadcastReceiver {
         @Override
@@ -125,14 +140,14 @@ public class LocalRadioFragment extends BaseFragment implements OnLoadMoreListen
                     tvLocal.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            openFragment(ProvincesAndCitiesListRadioFragment.newInstance(GlobalAddressConfig.CityName, GlobalAddressConfig.AdCode));
+                            Fragment fragment=ProvincesAndCitiesListRadioFragment.newInstance(GlobalAddressConfig.CityName, GlobalAddressConfig.AdCode);
+                            openFragment(fragment);
                         }
                     });
                     refresh();
                 }
             }
         }
-
     }
 
     private void refresh() {
@@ -161,7 +176,6 @@ public class LocalRadioFragment extends BaseFragment implements OnLoadMoreListen
                         throwable.printStackTrace();
                     }
                 });
-
     }
 
     private void loadMore() {
@@ -201,5 +215,49 @@ public class LocalRadioFragment extends BaseFragment implements OnLoadMoreListen
     @Override
     public void onRefresh() {
         refresh();
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.head_left_btn:
+                closeFragment();
+                break;
+        }
+    }
+
+    private void startMain(ChannelsBean channelsBean) {
+        GlobalStateConfig.activityA = "A";
+        EventBus.getDefault().post(new MessageEvent("one"));
+        EventBus.getDefault().post(new MessageEvent(channelsBean, 1));
+    }
+
+    // 关闭页面
+    private void closeFragment() {
+        if (getActivity() instanceof PlayerActivity) {
+            PlayerActivity.close();
+        } else if (getActivity() instanceof MineActivity) {
+            MineActivity.close();
+        } else if (getActivity() instanceof LookListActivity) {
+            LookListActivity.close();
+        } else if (getActivity() instanceof InterPhoneActivity) {
+            InterPhoneActivity.close();
+        }
+    }
+
+    /**
+     * 关闭界面
+     * @param fragment
+     */
+    public void openFragment(Fragment fragment) {
+        if (getActivity() instanceof PlayerActivity) {
+            PlayerActivity.open(fragment);
+        } else if (getActivity() instanceof MineActivity) {
+            MineActivity.open(fragment);
+        } else if (getActivity() instanceof InterPhoneActivity) {
+            InterPhoneActivity.open(fragment);
+        } else if (getActivity() instanceof LookListActivity) {
+            LookListActivity.open(fragment);
+        }
     }
 }
