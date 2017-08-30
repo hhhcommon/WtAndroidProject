@@ -103,6 +103,7 @@ public class MinorClassificationFragment extends Fragment implements View.OnClic
                     @Override
                     public void call(List<ChannelsBean> albumsBeen) {
                         if (albumsBeen != null && !albumsBeen.isEmpty()) {
+                            loadLayout.showContentView();
                             mFragment.clear();
                             for (int i = 0; i < albumsBeen.size(); i++) {
                                 SubcategoryFragment fragment = SubcategoryFragment.newInstance(albumsBeen.get(i), albumId, title);
@@ -110,11 +111,11 @@ public class MinorClassificationFragment extends Fragment implements View.OnClic
                             }
                             mAdapter = new MinorClassificationAdapter(getChildFragmentManager(), albumsBeen, mFragment);
                             viewPager.setAdapter(mAdapter);
-                            if (albumsBeen.size() > 6) {
+//                            if (albumsBeen.size() > 6) {
                                 tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
-                            } else {
-                                tabLayout.setTabMode(TabLayout.MODE_FIXED);
-                            }
+//                            } else {
+//                                tabLayout.setTabMode(TabLayout.MODE_FIXED);
+//                            }
                            /* if (albumsBeen.size() > 1)
                                 viewPager.setOffscreenPageLimit(albumsBeen.size() - 1);*/
                             tabLayout.setupWithViewPager(viewPager);
@@ -167,7 +168,7 @@ public class MinorClassificationFragment extends Fragment implements View.OnClic
 //                setIndicator(tabs,20,20);
                                 }
                             });
-                            loadLayout.showContentView();
+
                         } else {
                             loadLayout.showEmptyView();
                         }

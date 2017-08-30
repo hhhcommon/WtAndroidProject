@@ -74,6 +74,7 @@
     <declare-styleable name="LoadFrameLayout">
         <attr name="emptyView" format="reference" />
         <attr name="errorView" format="reference" />
+        <attr name="trView" format="reference" />
         <attr name="loadingView" format="reference" />
         <attr name="errorbase" format="reference" />
         <attr name="nowifiView" format="reference" />

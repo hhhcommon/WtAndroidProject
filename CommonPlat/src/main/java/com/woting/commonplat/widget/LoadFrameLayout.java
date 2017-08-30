@@ -24,6 +24,8 @@ public class LoadFrameLayout extends FrameLayout {
     @LayoutRes
     private int mNoWifiData;
     @LayoutRes
+    private int trData;
+    @LayoutRes
     private int mNoOrderData;
 
     private int mContentViewId;
@@ -35,6 +37,8 @@ public class LoadFrameLayout extends FrameLayout {
     private View loadingView;
 
     private View contentView;
+
+    private View trView;
 
     private View noWifiDataView;
 
@@ -57,6 +61,8 @@ public class LoadFrameLayout extends FrameLayout {
             mErrorViewLayoutResId = a.getResourceId(R.styleable.LoadFrameLayout_errorView, -1);
             mLoadingViewLayoutResId = a.getResourceId(R.styleable.LoadFrameLayout_loadingView, -1);
             mNoWifiData = a.getResourceId(R.styleable.LoadFrameLayout_nowifiView, -1);
+            trData = a.getResourceId(R.styleable.LoadFrameLayout_trView, -1);
+
         } finally {
             a.recycle();
         }
@@ -76,6 +82,9 @@ public class LoadFrameLayout extends FrameLayout {
         }
         if (mLoadingViewLayoutResId != -1) {
             setLoadingView(mLoadingViewLayoutResId);
+        }
+        if (trData != -1) {
+            setTrView(trData);
         }
     }
 
@@ -110,6 +119,17 @@ public class LoadFrameLayout extends FrameLayout {
             this.noWifiDataView = noWifiDataView;
             addView(noWifiDataView);
             this.noWifiDataView.setVisibility(GONE);
+        }
+    }
+
+    public void setTrView(View trDataView) {
+        if (this.trView != null) {
+            removeView(this.trView);
+        }
+        if (this.trView != trDataView) {
+            this.trView = trDataView;
+            addView(trDataView);
+            this.trView.setVisibility(GONE);
         }
     }
 
@@ -155,6 +175,10 @@ public class LoadFrameLayout extends FrameLayout {
         View view = LayoutInflater.from(getContext()).inflate(contentViewResId, this, false);
         setContentView(view);
     }
+    public void setTrView(@LayoutRes int contentViewResId) {
+        View view = LayoutInflater.from(getContext()).inflate(contentViewResId, this, false);
+        setTrView(view);
+    }
 
     public void showEmptyView() {
         showSingleView(this.emptyView);
@@ -177,6 +201,10 @@ public class LoadFrameLayout extends FrameLayout {
 
     public void showContentView() {
         showSingleView(this.contentView);
+    }
+
+    public void showTronstView() {
+        showSingleView(this.trView);
     }
 
     private void showSingleView(View specialView) {

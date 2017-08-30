@@ -1,13 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.woting.commonplat.widget.LoadFrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/loadLayout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_gravity="center"
-    app:emptyView="@layout/layout_empty_view"
-    app:errorView="@layout/layout_error_view"
-    app:loadingView="@layout/layout_loading_view">
+    android:layout_height="match_parent">
 
     <com.woting.commonplat.amine.ARecyclerView
         android:id="@+id/mRecyclerView"
@@ -18,5 +13,46 @@
         app:loadMoreFooterLayout="@layout/layout_irecyclerview_load_more_footer"
         app:refreshEnabled="true"
         app:refreshHeaderLayout="@layout/layout_irecyclerview_refresh_header" />
-</com.woting.commonplat.widget.LoadFrameLayout>
+
+    <LinearLayout
+        android:id="@+id/lin_bg"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:visibility="gone"
+        android:background="@color/white"
+        android:orientation="vertical">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@mipmap/wt_image_tip_no_data" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="暂无数据"
+            android:textColor="@color/app_basic"
+            android:textSize="13sp" />
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/lin_load"
+        android:layout_width="match_parent"
+        android:background="@color/white"
+        android:gravity="center"
+        android:visibility="gone"
+        android:layout_height="match_parent">
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:indeterminateTint="@color/app_basic"
+            android:indeterminateTintMode="src_atop"/>
+    </LinearLayout>
+</RelativeLayout>
 

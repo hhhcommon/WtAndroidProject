@@ -6,6 +6,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import com.woting.commonplat.amine.ARecyclerView;
 import com.woting.commonplat.amine.LoadMoreFooterView;
@@ -44,9 +45,10 @@ public class SubcategoryFragment extends Fragment implements View.OnClickListene
 
     @BindView(R.id.mRecyclerView)
     ARecyclerView mRecyclerView;
-    @BindView(R.id.loadLayout)
-    LoadFrameLayout loadLayout;
-
+    @BindView(R.id.lin_bg)
+    LinearLayout lin_bg;
+    @BindView(R.id.lin_load)
+    LinearLayout lin_load;
     private View rootView;
     private LoadMoreFooterView loadMoreFooterView;
     private List<AlbumsBean> albumsBeanList = new ArrayList<>();
@@ -87,6 +89,15 @@ public class SubcategoryFragment extends Fragment implements View.OnClickListene
         loadMoreFooterView = (LoadMoreFooterView) mRecyclerView.getLoadMoreFooterView();
         mRecyclerView.setOnLoadMoreListener(this);
         mRecyclerView.setOnRefreshListener(this);
+        lin_bg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                lin_bg.setVisibility(View.GONE);
+                lin_load.setVisibility(View.VISIBLE);
+                refresh();
+            }
+        });
+
         mRecyclerView.setLayoutManager(layoutManager);
         mAdapter = new AlbumsAdapter(getActivity(), albumsBeanList);
         mAdapter.setPlayerClick(new AlbumsAdapter.PlayerClick() {
@@ -108,13 +119,6 @@ public class SubcategoryFragment extends Fragment implements View.OnClickListene
 
         });
         mRecyclerView.setIAdapter(mAdapter);
-        loadLayout.findViewById(R.id.btnTryAgain).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                loadLayout.showLoadingView();
-                refresh();
-            }
-        });
         refresh();
     }
 
@@ -131,17 +135,29 @@ public class SubcategoryFragment extends Fragment implements View.OnClickListene
                             mPage++;
                             albumsBeanList.clear();
                             albumsBeanList.addAll(albumsBeen);
-                            loadLayout.showContentView();
                             mAdapter.notifyDataSetChanged();
+                            lin_bg.setVisibility(View.GONE);
+                            lin_load.setVisibility(View.GONE);
                         } else {
-                            loadLayout.showEmptyView();
+                            if (albumsBeanList != null && albumsBeanList.size() > 0) {
+                                lin_bg.setVisibility(View.GONE);
+                                lin_load.setVisibility(View.VISIBLE);
+                            }else{
+                                lin_bg.setVisibility(View.VISIBLE);
+                                lin_load.setVisibility(View.GONE);
+                            }
                         }
                     }
                 }, new Action1<Throwable>() {
                     @Override
                     public void call(Throwable throwable) {
-                        loadLayout.showErrorView();
-                        throwable.printStackTrace();
+                        if (albumsBeanList != null && albumsBeanList.size() > 0) {
+                            lin_bg.setVisibility(View.GONE);
+                            lin_load.setVisibility(View.VISIBLE);
+                        }else{
+                            lin_bg.setVisibility(View.VISIBLE);
+                            lin_load.setVisibility(View.GONE);
+                        }                        throwable.printStackTrace();
                     }
                 });
 
@@ -167,8 +183,13 @@ public class SubcategoryFragment extends Fragment implements View.OnClickListene
                 }, new Action1<Throwable>() {
                     @Override
                     public void call(Throwable throwable) {
-                        loadLayout.showErrorView();
-                        throwable.printStackTrace();
+                        if (albumsBeanList != null && albumsBeanList.size() > 0) {
+                            lin_bg.setVisibility(View.GONE);
+                            lin_load.setVisibility(View.VISIBLE);
+                        }else{
+                            lin_bg.setVisibility(View.VISIBLE);
+                            lin_load.setVisibility(View.GONE);
+                        }                        throwable.printStackTrace();
                     }
                 });
     }
