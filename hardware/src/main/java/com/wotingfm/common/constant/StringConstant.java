@@ -24,6 +24,8 @@ public class StringConstant {
     public static final String LONGITUDE = "LONGITUDE";
     public static final String CITY_ID = "CITY_ID";                                   // 选中的城市id 对应导航返回的ADcode
     public static final String CITY_NAME = "CITY_NAME";                               // 选中的城市
+    public static final String IS_LOCATION = "IS_LOCATION";                           // 定位成功与否
+
     public static final String WIFI_NAME = "WIFI_NAME";                               // WIFI_NAME
     public static final String PUSH_MSG_SET = "PUSH_MSG_SET";                         // 消息推送设置
 

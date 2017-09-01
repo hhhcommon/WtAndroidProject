@@ -7,7 +7,6 @@ import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
 import com.wotingfm.ui.bean.Player;
-import com.wotingfm.ui.bean.SinglesDownload;
 
 import java.sql.SQLException;
 
@@ -23,7 +22,7 @@ public class DBHelper extends OrmLiteSqliteOpenHelper {
 
             TableUtils.createTable(connectionSource, Player.DataBean.SinglesBean.class);
 
-            TableUtils.createTable(connectionSource, SinglesDownload.class);
+//            TableUtils.createTable(connectionSource, SinglesDownload.class);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -35,7 +34,7 @@ public class DBHelper extends OrmLiteSqliteOpenHelper {
             if (oldVersion == 1) {
                 try {
                     TableUtils.createTable(connectionSource, Player.DataBean.SinglesBean.class);
-                    TableUtils.createTable(connectionSource, SinglesDownload.class);
+//                    TableUtils.createTable(connectionSource, SinglesDownload.class);
                 } catch (SQLException e) {
                     throw new RuntimeException(e);
                 }

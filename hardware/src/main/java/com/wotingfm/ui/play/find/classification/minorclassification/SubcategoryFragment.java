@@ -12,7 +12,6 @@ import com.woting.commonplat.amine.ARecyclerView;
 import com.woting.commonplat.amine.LoadMoreFooterView;
 import com.woting.commonplat.amine.OnLoadMoreListener;
 import com.woting.commonplat.amine.OnRefreshListener;
-import com.woting.commonplat.widget.LoadFrameLayout;
 import com.wotingfm.R;
 import com.wotingfm.common.config.GlobalStateConfig;
 import com.wotingfm.common.net.RetrofitUtils;
@@ -141,8 +140,8 @@ public class SubcategoryFragment extends Fragment implements View.OnClickListene
                         } else {
                             if (albumsBeanList != null && albumsBeanList.size() > 0) {
                                 lin_bg.setVisibility(View.GONE);
-                                lin_load.setVisibility(View.VISIBLE);
-                            }else{
+                                lin_load.setVisibility(View.GONE);
+                            } else {
                                 lin_bg.setVisibility(View.VISIBLE);
                                 lin_load.setVisibility(View.GONE);
                             }
@@ -153,11 +152,12 @@ public class SubcategoryFragment extends Fragment implements View.OnClickListene
                     public void call(Throwable throwable) {
                         if (albumsBeanList != null && albumsBeanList.size() > 0) {
                             lin_bg.setVisibility(View.GONE);
-                            lin_load.setVisibility(View.VISIBLE);
-                        }else{
+                            lin_load.setVisibility(View.GONE);
+                        } else {
                             lin_bg.setVisibility(View.VISIBLE);
                             lin_load.setVisibility(View.GONE);
-                        }                        throwable.printStackTrace();
+                        }
+                        throwable.printStackTrace();
                     }
                 });
 
@@ -185,11 +185,12 @@ public class SubcategoryFragment extends Fragment implements View.OnClickListene
                     public void call(Throwable throwable) {
                         if (albumsBeanList != null && albumsBeanList.size() > 0) {
                             lin_bg.setVisibility(View.GONE);
-                            lin_load.setVisibility(View.VISIBLE);
-                        }else{
+                            lin_load.setVisibility(View.GONE);
+                        } else {
                             lin_bg.setVisibility(View.VISIBLE);
                             lin_load.setVisibility(View.GONE);
-                        }                        throwable.printStackTrace();
+                        }
+                        throwable.printStackTrace();
                     }
                 });
     }

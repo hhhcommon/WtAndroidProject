@@ -100,10 +100,12 @@ public class LocationInfo implements GDLocation.Location {
             GlobalAddressConfig.CityName = city;
         }
         SharedPreferences.Editor et = BSApplication.SharedPreferences.edit();
+        et.putString(StringConstant.IS_LOCATION, "true");
         et.putString(StringConstant.CITY_NAME, city);
         et.putString(StringConstant.CITY_ID, GlobalAddressConfig.AdCode);
         et.putString(StringConstant.LATITUDE, String.valueOf(latitude));
         et.putString(StringConstant.LONGITUDE, String.valueOf(longitude));
+        et.commit();
         sendBroadcast();// 发送广播
     }
 
@@ -117,6 +119,10 @@ public class LocationInfo implements GDLocation.Location {
     @Override
     public void locationFail(AMapLocation amapLocation) {
         Log.e("TAG", "定位失败");
+        SharedPreferences.Editor et = BSApplication.SharedPreferences.edit();
+        et.putString(StringConstant.IS_LOCATION, "false");
+        et.commit();
+        sendBroadcast();// 发送广播
     }
 
     public void stopLocation() {

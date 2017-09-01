@@ -78,4 +78,9 @@ public class BroadcastConstants {
     public static final String PUSH_CHAT_GROUP_NUM = "PUSH_CHAT_GROUP_NUM";
 
     public static final String PUSH_NOTIFICATION = "PUSH_NOTIFICATION";
+
+    // 下载任务类
+    public static final String ACTION_UPDATE = "ACTION_UPDATE";
+    public static final String ACTION_FINISHED = "ACTION_FINISHED";
+    public static final String ACTION_FINISHED_NO_DOWNLOADVIEW = "ACTION_FINISHED_NO_DOWNLOADVIEW";
 }

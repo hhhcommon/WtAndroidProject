@@ -2,16 +2,10 @@ package com.wotingfm.ui.play.localaudio.locallist.presenter;
 
 import android.os.Bundle;
 import android.text.TextUtils;
-
-import com.woting.commonplat.utils.FileSizeUtil;
-import com.wotingfm.common.application.BSApplication;
-import com.wotingfm.common.database.DownloadHelper;
-import com.wotingfm.common.database.HistoryHelper;
-import com.wotingfm.common.utils.T;
-import com.wotingfm.ui.bean.Player;
-import com.wotingfm.ui.bean.SinglesDownload;
+import com.wotingfm.common.utils.CommonUtils;
+import com.wotingfm.ui.play.localaudio.dao.FileInfoDao;
 import com.wotingfm.ui.play.localaudio.locallist.view.LocalListFragment;
-import com.wotingfm.ui.play.playhistory.view.PlayerHistoryFragment;
+import com.wotingfm.ui.play.localaudio.model.FileInfo;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -23,20 +17,21 @@ import java.util.List;
  */
 public class LocalListPresenter {
 
-    private  DownloadHelper downloadHelper;
+    private FileInfoDao FID;
     private LocalListFragment activity;
-    private List<SinglesDownload> list;
+    private List<FileInfo> list;
 
     public LocalListPresenter(LocalListFragment activity) {
         this.activity = activity;
-        downloadHelper = new DownloadHelper(BSApplication.getInstance());
+        FID = new FileInfoDao(activity.getActivity());
         getData();
     }
 
     private void getData() {
         Bundle bundle = activity.getArguments();
         if (bundle != null) {
-             list = (List<SinglesDownload>)bundle.getSerializable("list");
+            FileInfo  album = (FileInfo)bundle.getSerializable("album");
+            list = FID.queryAlbumInfo(album.album_id, CommonUtils.getUserId());
             if (list != null && !list.isEmpty()) {
                 activity.setData(list);
                 activity.showContentView();
@@ -55,12 +50,10 @@ public class LocalListPresenter {
         }
     }
 
-    public void del(SinglesDownload s){
+    public void del(FileInfo s){
         activity.dialogShow();
-        downloadHelper.deleteTable(s.id);
-        FileSizeUtil.delFile(s.single_file_url);
+        FID.deleteFileInfo(s.id, CommonUtils.getUserId());
         list.remove(s);
-
         if (list.isEmpty()) {
             activity.showEmptyView();
         }else{
@@ -75,7 +68,8 @@ public class LocalListPresenter {
      * 数据销毁
      */
     public void destroy() {
-        downloadHelper = null;
+        FID.closeDB();
+        FID = null;
     }
 
 }

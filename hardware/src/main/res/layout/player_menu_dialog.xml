@@ -31,7 +31,19 @@
                 android:text="喜欢"
                 android:textColor="#16181a"
                 android:textSize="13.3sp" />
-
+            <TextView
+                android:id="@+id/tvRadio"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="1.0"
+                android:drawablePadding="12dp"
+                android:drawableTop="@mipmap/music_play_icon_anchor"
+                android:gravity="center"
+                android:text="电台"
+                android:visibility="gone"
+                android:textColor="#16181a"
+                android:textSize="13.3sp" />
 
             <TextView
                 android:id="@+id/tvAlbums"
@@ -78,19 +90,7 @@
             android:layout_marginTop="16dp"
             android:layout_weight="1.0"
             android:orientation="horizontal">
-            <TextView
-                android:id="@+id/tvRadio"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_weight="1.0"
-                android:drawablePadding="12dp"
-                android:drawableTop="@mipmap/music_play_icon_anchor"
-                android:gravity="center"
-                android:text="电台"
-                android:visibility="gone"
-                android:textColor="#16181a"
-                android:textSize="13.3sp" />
+
             <TextView
                 android:id="@+id/tvDownload"
                 android:layout_width="0dp"

@@ -14,21 +14,17 @@ import android.widget.TextView;
 import com.woting.commonplat.widget.LoadFrameLayout;
 import com.wotingfm.R;
 import com.wotingfm.common.config.GlobalStateConfig;
-import com.wotingfm.common.utils.BeanCloneUtil;
 import com.wotingfm.common.utils.DialogUtils;
-import com.wotingfm.ui.intercom.main.contacts.model.Contact;
+import com.wotingfm.ui.bean.MessageEvent;
 import com.wotingfm.ui.play.localaudio.download.view.DownloadingFragment;
 import com.wotingfm.ui.play.localaudio.local.adapter.AlbumsDownloadAdapter;
-import com.wotingfm.ui.bean.MessageEvent;
-import com.wotingfm.ui.bean.SinglesDownload;
 import com.wotingfm.ui.play.localaudio.local.presenter.AlbumsPresenter;
 import com.wotingfm.ui.play.localaudio.locallist.view.LocalListFragment;
+import com.wotingfm.ui.play.localaudio.model.FileInfo;
 import com.wotingfm.ui.play.main.PlayerActivity;
 
 import org.greenrobot.eventbus.EventBus;
 
-import java.io.Serializable;
-import java.util.HashMap;
 import java.util.List;
 
 import butterknife.BindView;
@@ -58,8 +54,7 @@ public class AlbumsFragment extends Fragment implements View.OnClickListener {
     private AlbumsDownloadAdapter albumsDownloadAdapter;
     private Dialog LDialog;
     private Dialog dialog;
-    private List<SinglesDownload> singlesDownloads;
-    private SinglesDownload s;
+    private FileInfo s;
 
     public static AlbumsFragment newInstance() {
         AlbumsFragment fragment = new AlbumsFragment();
@@ -99,30 +94,26 @@ public class AlbumsFragment extends Fragment implements View.OnClickListener {
      * 数据适配
      *
      * @param listResult
-     * @param hashMap
-     * @param hashMapList
      */
-    public void setData(List<SinglesDownload> listResult, HashMap<String, SinglesDownload> hashMap, HashMap<String, List<SinglesDownload>> hashMapList) {
+    public void setData(List<FileInfo> listResult) {
         if (albumsDownloadAdapter == null) {
-            albumsDownloadAdapter = new AlbumsDownloadAdapter(getActivity(), listResult, hashMap, hashMapList, new AlbumsDownloadAdapter.DeleteClick() {
+            albumsDownloadAdapter = new AlbumsDownloadAdapter(getActivity(), listResult, new AlbumsDownloadAdapter.DeleteClick() {
                 @Override
-                public void clickDelete(List<SinglesDownload> singlesDownloadss, SinglesDownload ss) {
-                    singlesDownloads = singlesDownloadss;
+                public void clickDelete(FileInfo ss) {
                     s = ss;
                     LDialog.show();
                 }
 
                 @Override
-                public void play(List<SinglesDownload> singlesDownloads) {
-                    startMain(singlesDownloads);
+                public void play(FileInfo s) {
+                    startMain(s.id);
                 }
 
                 @Override
-                public void click(List<SinglesDownload> singlesDownloads, String name) {
+                public void click(FileInfo s) {
                     LocalListFragment fragment = new LocalListFragment();
                     Bundle bundle = new Bundle();
-                    bundle.putSerializable("list", (Serializable) singlesDownloads);
-                    bundle.putString("name", name);
+                    bundle.putSerializable("album", s);
                     fragment.setArguments(bundle);
                     PlayerActivity.open(fragment);
                     fragment.setResultListener(new LocalListFragment.ResultListener() {
@@ -150,7 +141,7 @@ public class AlbumsFragment extends Fragment implements View.OnClickListener {
             @Override
             public void onClick(View v) {
                 LDialog.dismiss();
-                presenter.del(s, singlesDownloads);
+                presenter.del(s);
 
             }
         }); // 确定
@@ -182,11 +173,10 @@ public class AlbumsFragment extends Fragment implements View.OnClickListener {
         }
     }
 
-    // 开始播放
-    public void startMain(List<SinglesDownload> s) {
+    public void startMain(String albumsId) {
         GlobalStateConfig.activityA = "A";
         EventBus.getDefault().post(new MessageEvent("one"));
-        EventBus.getDefault().post(new MessageEvent(s, 3));
+        EventBus.getDefault().post(new MessageEvent("stop&" + albumsId));
     }
 
     public void showContentView() {

@@ -29,11 +29,38 @@ public class SQLiteHelper extends SQLiteOpenHelper {
                 + "bjUserId varchar(50),msgId varchar(50),msgType varchar(50),dealType varchar(50),"
                 + "linkUrl varchar(100),applyAvatar varchar(100),applyId varchar(50),applyName varchar(50),"
                 + "applyMessage varchar(100),groupAvatar varchar(100),groupId varchar(50),groupName varchar(50),showTime varchar(50),addTime varchar(50))");
+
+        // 线程表
+        db.execSQL("create table IF NOT EXISTS thread_info(_id integer primary key autoincrement,"
+                + "thread_id varchar(100), url varchar(100), start integer, end integer, finished integer)");
+
+        // 文件数据
+        db.execSQL("create table IF NOT EXISTS file_info(_id integer primary key autoincrement," +
+                "start varchar(50)," +
+                "end varchar(50)," +
+                "user_id varchar(50)," +
+                "download_type varchar(10)," +
+                "finished varchar(10)," +
+                "length varchar(50)," +
+                "id varchar(50)," +
+                "single_title varchar(200)," +
+                "single_logo_url varchar(200)," +
+                "single_file_url varchar(200)," +
+                "album_title varchar(200)," +
+                "file_name varchar(200)," +
+                "album_logo_url varchar(200)," +
+                "had_liked varchar(50)," +
+                "album_id varchar(50)," +
+                "creator_id varchar(10)," +
+                "albumSize varchar(20))");
+
     }
 
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS talkHistory");
         db.execSQL("DROP TABLE IF EXISTS Notify");
+        db.execSQL("DROP TABLE IF EXISTS thread_info");
+        db.execSQL("DROP TABLE IF EXISTS file_info");
         onCreate(db);
     }
 }

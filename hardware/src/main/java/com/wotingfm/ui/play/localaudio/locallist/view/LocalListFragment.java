@@ -18,6 +18,7 @@ import com.wotingfm.ui.bean.MessageEvent;
 import com.wotingfm.ui.bean.SinglesDownload;
 import com.wotingfm.ui.play.localaudio.locallist.adapter.LocalListAdapter;
 import com.wotingfm.ui.play.localaudio.locallist.presenter.LocalListPresenter;
+import com.wotingfm.ui.play.localaudio.model.FileInfo;
 import com.wotingfm.ui.play.main.PlayerActivity;
 import org.greenrobot.eventbus.EventBus;
 import java.io.Serializable;
@@ -103,20 +104,20 @@ public class LocalListFragment extends Fragment implements View.OnClickListener 
      *
      * @param list
      */
-    public void setData(List<SinglesDownload> list) {
+    public void setData(List<FileInfo>  list) {
         if (localListAdapter == null) {
             localListAdapter = new LocalListAdapter(getActivity(), list, new LocalListAdapter.localListClick() {
                 @Override
-                public void play(SinglesDownload singlesDownload) {
+                public void play(FileInfo singlesDownload) {
                     if (singlesDownload != null) {
-                        List<SinglesDownload> singlesDownloads = new ArrayList<>();
-                        singlesDownloads.add(singlesDownload);
-                        startMain(singlesDownloads);
+//                        List<SinglesDownload> singlesDownloads = new ArrayList<>();
+//                        singlesDownloads.add(singlesDownload);
+//                        startMain(singlesDownloads);
                     }
                 }
 
                 @Override
-                public void delete(SinglesDownload s) {
+                public void delete(FileInfo s) {
                     if (s != null) presenter.del(s);
                 }
             });

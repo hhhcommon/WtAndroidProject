@@ -9,23 +9,19 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.woting.commonplat.utils.FileSizeUtil;
 import com.woting.commonplat.widget.LoadFrameLayout;
 import com.wotingfm.R;
-import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.config.GlobalStateConfig;
-import com.wotingfm.common.database.DownloadHelper;
 import com.wotingfm.common.utils.DialogUtils;
-import com.wotingfm.ui.play.localaudio.download.adapter.DownloadingDownloadAdapter;
 import com.wotingfm.ui.bean.MessageEvent;
 import com.wotingfm.ui.bean.SinglesDownload;
+import com.wotingfm.ui.play.localaudio.download.adapter.DownloadingDownloadAdapter;
 import com.wotingfm.ui.play.localaudio.download.presenter.DownloadingPresenter;
-import com.wotingfm.ui.play.localaudio.locallist.presenter.LocalListPresenter;
+import com.wotingfm.ui.play.localaudio.model.FileInfo;
 import com.wotingfm.ui.play.main.PlayerActivity;
 
 import org.greenrobot.eventbus.EventBus;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -85,20 +81,20 @@ public class DownloadingFragment extends Fragment implements View.OnClickListene
      *
      * @param list
      */
-    public void setData(List<SinglesDownload> list) {
+    public void setData(List<FileInfo> list) {
         if(downloadingDownloadAdapter==null){
             downloadingDownloadAdapter = new DownloadingDownloadAdapter(getActivity(), list, new DownloadingDownloadAdapter.DeleteClick() {
                 @Override
-                public void clickDelete(final SinglesDownload s) {
+                public void clickDelete(final FileInfo s) {
                   if(s!=null)  presenter.del(s);
                 }
 
                 @Override
-                public void click(SinglesDownload singlesDownload) {
+                public void click(FileInfo singlesDownload) {
                     if (getActivity() != null) {
-                        List<SinglesDownload> singlesDownloads = new ArrayList<>();
-                        singlesDownloads.add(singlesDownload);
-                        startMain(singlesDownloads);
+//                        List<SinglesDownload> singlesDownloads = new ArrayList<>();
+//                        singlesDownloads.add(singlesDownload);
+//                        startMain(singlesDownloads);
                     }
                 }
             });

@@ -2,16 +2,12 @@ package com.wotingfm.ui.play.localaudio.locallist.adapter;
 
 import android.content.Context;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.mcxtzhang.swipemenulib.SwipeMenuLayout;
 import com.wotingfm.R;
-import com.wotingfm.common.utils.GlideUtils;
-import com.wotingfm.common.utils.TimeUtil;
-import com.wotingfm.ui.bean.Player;
-import com.wotingfm.ui.bean.SinglesDownload;
+import com.wotingfm.ui.play.localaudio.model.FileInfo;
 import com.zhy.adapter.recyclerview.CommonAdapter;
 import com.zhy.adapter.recyclerview.base.ViewHolder;
 
@@ -22,16 +18,16 @@ import java.util.List;
  * 播放历史
  */
 
-public class LocalListAdapter extends CommonAdapter<SinglesDownload> {
+public class LocalListAdapter extends CommonAdapter<FileInfo> {
     private localListClick localListClick;
 
-    public LocalListAdapter(Context context, List<SinglesDownload> datas, localListClick localListClick) {
+    public LocalListAdapter(Context context, List<FileInfo>  datas, localListClick localListClick) {
         super(context, R.layout.item_local_list, datas);
         this.localListClick = localListClick;
     }
 
     @Override
-    protected void convert(ViewHolder holder, final SinglesDownload s, final int position) {
+    protected void convert(ViewHolder holder, final FileInfo s, final int position) {
 
         LinearLayout labelContent = (LinearLayout) holder.itemView.findViewById(R.id.largeLabel);
         final SwipeMenuLayout swipeable_container = (SwipeMenuLayout) holder.itemView.findViewById(R.id.swipeable_container);
@@ -63,9 +59,9 @@ public class LocalListAdapter extends CommonAdapter<SinglesDownload> {
 
 
     public interface localListClick {
-        void play(SinglesDownload s);
+        void play(FileInfo s);
 
-        void delete(SinglesDownload s);
+        void delete(FileInfo s);
     }
 
 }

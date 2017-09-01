@@ -4,11 +4,8 @@ import com.j256.ormlite.field.DatabaseField;
 
 import java.io.Serializable;
 
-/**
- * Created by amine on 2017/6/14.
- */
-
 public class SinglesBase implements Serializable {
+
     @DatabaseField(generatedId = true)
     public int _id;
     @DatabaseField
@@ -54,4 +51,6 @@ public class SinglesBase implements Serializable {
     public boolean isDownloadOver;
     @DatabaseField
     public boolean isSelect;
+
+
 }

@@ -2,7 +2,6 @@ package com.wotingfm.ui.play.main.view;
 
 import android.app.Activity;
 import android.app.Dialog;
-import android.content.ContentValues;
 import android.graphics.drawable.Drawable;
 import android.view.Gravity;
 import android.view.View;
@@ -10,24 +9,21 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.woting.commonplat.utils.FileSizeUtil;
 import com.wotingfm.R;
 import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.config.GlobalStateConfig;
-import com.wotingfm.common.database.DbConfig;
-import com.wotingfm.common.database.DownloadHelper;
 import com.wotingfm.common.net.RetrofitUtils;
+import com.wotingfm.common.utils.BeanCloneUtil;
 import com.wotingfm.common.utils.CommonUtils;
-import com.wotingfm.common.utils.L;
-import com.wotingfm.common.utils.SDCardUtils;
-import com.wotingfm.ui.bean.BaseResult;
+import com.wotingfm.common.utils.ToastUtils;
 import com.wotingfm.ui.bean.ChannelsBean;
-import com.wotingfm.ui.bean.MessageEvent;
 import com.wotingfm.ui.bean.SinglesBase;
-import com.wotingfm.ui.bean.SinglesDownload;
 import com.wotingfm.ui.play.album.main.view.AlbumsInfoMainFragment;
 import com.wotingfm.ui.play.anchor.view.AnchorPersonalCenterFragment;
+import com.wotingfm.ui.play.localaudio.dao.FileInfoDao;
 import com.wotingfm.ui.play.localaudio.local.view.AlbumsFragment;
+import com.wotingfm.ui.play.localaudio.model.FileInfo;
+import com.wotingfm.ui.play.localaudio.service.DownloadClient;
 import com.wotingfm.ui.play.main.PlayerActivity;
 import com.wotingfm.ui.play.mysubscribelist.view.MeSubscribeListFragment;
 import com.wotingfm.ui.play.playhistory.view.PlayerHistoryFragment;
@@ -35,13 +31,9 @@ import com.wotingfm.ui.play.radio.radioinfo.view.RadioInfoFragment;
 import com.wotingfm.ui.play.report.view.ReportFragment;
 import com.wotingfm.ui.user.logo.LogoActivity;
 
-import org.greenrobot.eventbus.EventBus;
-
-import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
-import cn.finalteam.okhttpfinal.FileDownloadCallback;
-import cn.finalteam.okhttpfinal.HttpRequest;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.schedulers.Schedulers;
@@ -55,6 +47,7 @@ public class MenuDialog extends Dialog implements View.OnClickListener {
     private SinglesBase pdsBase;
     private FollowCallBack followCallBack;
     private ChannelsBean channelsBean;
+    private FileInfoDao mFileDao;// 文件相关数据库
 
     public MenuDialog(Activity context) {
         super(context, R.style.BottomDialog);
@@ -66,6 +59,7 @@ public class MenuDialog extends Dialog implements View.OnClickListener {
 
         inItView();
         inItListener();
+        mFileDao = new FileInfoDao(context);
     }
 
     private void inItView() {
@@ -104,14 +98,16 @@ public class MenuDialog extends Dialog implements View.OnClickListener {
                 tvRadio.setVisibility(View.VISIBLE);
                 tvAlbums.setVisibility(View.INVISIBLE);
                 tvAnchor.setVisibility(View.INVISIBLE);
-                tvReport.setVisibility(View.INVISIBLE);
-                tvDownload.setVisibility(View.GONE);
+                tvReport.setVisibility(View.GONE);
+                Drawable top = activity.getResources().getDrawable(R.mipmap.music_play_icon_download);
+                tvDownload.setCompoundDrawablesWithIntrinsicBounds(null, top, null, null);
             } else {
                 tvAlbums.setVisibility(View.VISIBLE);
                 tvAnchor.setVisibility(View.VISIBLE);
                 tvReport.setVisibility(View.VISIBLE);
                 tvRadio.setVisibility(View.GONE);
-                tvDownload.setVisibility(View.VISIBLE);
+                Drawable top = activity.getResources().getDrawable(R.mipmap.music_play_icon_download);
+                tvDownload.setCompoundDrawablesWithIntrinsicBounds(null, top, null, null);
             }
         }
     }
@@ -134,99 +130,9 @@ public class MenuDialog extends Dialog implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.tvDownload:
-                if (pdsBase != null) {
-                    final DownloadHelper downloadHelper = new DownloadHelper(BSApplication.getInstance());
-                    if (downloadHelper != null) {
-                        dismiss();
-                        List<SinglesDownload> singlesBeens = downloadHelper.findPlayHistoryList();
-                        if (singlesBeens != null && !singlesBeens.isEmpty()) {
-                            for (SinglesDownload s : singlesBeens) {
-                                if (s.id.equals(pdsBase.id)) {
-                                    com.wotingfm.common.utils.T.getInstance().showToast("已下载");
-                                    return;
-                                }
-                            }
-                        }
-                        RetrofitUtils.getInstance().downloadSingle(pdsBase.id)
-                                .subscribeOn(Schedulers.io())
-                                .observeOn(AndroidSchedulers.mainThread())
-                                .subscribe(new Action1<BaseResult>() {
-                                    @Override
-                                    public void call(BaseResult baseResult) {
-                                    }
-                                }, new Action1<Throwable>() {
-                                    @Override
-                                    public void call(Throwable throwable) {
-                                    }
-                                });
-                        final File saveFile = new File(SDCardUtils.getSDPath() + DbConfig.ALBUMS + "/" + pdsBase.single_file_url);
-                        HttpRequest.download(pdsBase.single_file_url, saveFile, new FileDownloadCallback() {
-                            //开始下载
-                            @Override
-                            public void onStart() {
-                                super.onStart();
-                                L.i("mingku", "downloadStart");
-                                if (pdsBase != null && downloadHelper != null) {
-                                    com.wotingfm.common.utils.T.getInstance().showToast("开始下载");
-                                    ContentValues contentValues = new ContentValues();
-                                    contentValues.put("id", pdsBase.id);
-                                    contentValues.put("single_title", pdsBase.single_title);
-                                    contentValues.put("single_logo_url", pdsBase.single_logo_url);
-                                    contentValues.put("single_file_url", saveFile.getAbsolutePath());
-                                    contentValues.put("album_title", pdsBase.album_title);
-                                    contentValues.put("album_logo_url", pdsBase.album_logo_url);
-                                    contentValues.put("had_liked", pdsBase.had_liked);
-                                    contentValues.put("album_id", pdsBase.album_id);
-                                    contentValues.put("creator_id", pdsBase.creator_id);
-                                    contentValues.put("single_seconds", pdsBase.single_seconds);
-                                    contentValues.put("isDownloadOver", false);
-                                    downloadHelper.insertTotable(pdsBase.id, contentValues);
-                                }
-
-                            }
-
-                            //下载进度
-                            @Override
-                            public void onProgress(int progress, long networkSpeed) {
-                                super.onProgress(progress, networkSpeed);
-                                //String speed = FileUtils.generateFileSize(networkSpeed);
-                            }
-
-                            //下载失败
-                            @Override
-                            public void onFailure() {
-                                super.onFailure();
-                                L.i("mingku", "downloadFailure");
-                                if (pdsBase != null && downloadHelper != null)
-                                    downloadHelper.deleteTable(pdsBase.id);
-                            }
-
-                            //下载完成（下载成功）
-                            @Override
-                            public void onDone() {
-                                super.onDone();
-                                L.i("mingku", "downloadDone");
-                                if (pdsBase != null && downloadHelper != null) {
-                                    ContentValues contentValues = new ContentValues();
-                                    contentValues.put("id", pdsBase.id);
-                                    contentValues.put("single_title", pdsBase.single_title);
-                                    contentValues.put("single_logo_url", pdsBase.single_logo_url);
-                                    contentValues.put("single_file_url", saveFile.getAbsolutePath());
-                                    contentValues.put("album_title", pdsBase.album_title);
-                                    contentValues.put("album_logo_url", pdsBase.album_logo_url);
-                                    contentValues.put("had_liked", pdsBase.had_liked);
-                                    contentValues.put("album_id", pdsBase.album_id);
-                                    contentValues.put("creator_id", pdsBase.creator_id);
-                                    contentValues.put("single_seconds", pdsBase.single_seconds);
-                                    contentValues.put("isDownloadOver", true);
-                                    contentValues.put("albumSize", FileSizeUtil.getFileOrFilesSize(saveFile.getAbsolutePath(), FileSizeUtil.SIZETYPE_MB));
-                                    downloadHelper.insertTotable(pdsBase.id, contentValues);
-                                    //下载完成发送消息
-                                    EventBus.getDefault().post(new MessageEvent(pdsBase.id));
-                                }
-                            }
-                        });
-                    }
+                if (pdsBase != null && pdsBase.is_radio == false) {
+                    dismiss();
+                    download(pdsBase);
                 }
                 break;
             case R.id.tvAnchor:
@@ -349,8 +255,97 @@ public class MenuDialog extends Dialog implements View.OnClickListener {
                 });
     }
 
+    // 内容的下载
+    private void download(SinglesBase pdsBase) {
+        List<FileInfo> fileDataList = mFileDao.queryFileInfoAll(CommonUtils.getUserId());
+        if (fileDataList.size() != 0) {
+            // 此时有下载数据
+            if (!getDownload(pdsBase)) {
+                List<FileInfo>  dataList= getList(pdsBase);
+                List<FileInfo> list= BeanCloneUtil.cloneTo(dataList);
+                mFileDao.insertFileInfo(list);
+                ToastUtils.show_always(activity, "开始下载");
+                List<FileInfo> fileUnDownLoadList = mFileDao.queryFileInfo("false", CommonUtils.getUserId());// 未下载列表
+                for (int kk = 0; kk < fileUnDownLoadList.size(); kk++) {
+                    if (fileUnDownLoadList.get(kk).download_type.trim().equals("1")) {
+                        DownloadClient.workStop(fileUnDownLoadList.get(kk));
+                        mFileDao.upDataDownloadStatus(fileUnDownLoadList.get(kk).id, "2");
+                    }
+                }
+                for (int k = 0; k < fileUnDownLoadList.size(); k++) {
+                    if (fileUnDownLoadList.get(k).id.equals(dataList.get(0).id)) {
+                        FileInfo file = fileUnDownLoadList.get(k);
+                        mFileDao.upDataDownloadStatus(dataList.get(0).id, "1");
+                        DownloadClient.workStart(file);
+                        break;
+                    }
+                }
+            }else{
+                ToastUtils.show_always(activity, "已经下载过");
+            }
+        }else {// 此时库里没数据
+            List<FileInfo>  dataList= getList(pdsBase);
+            List<FileInfo> list= BeanCloneUtil.cloneTo(dataList);
+            mFileDao.insertFileInfo(list);
+            ToastUtils.show_always(activity, "已经加入下载列表");
+            List<FileInfo> fileUnDownloadList = mFileDao.queryFileInfo("false", CommonUtils.getUserId());// 未下载列表
+            for (int k = 0; k < fileUnDownloadList.size(); k++) {
+                if (fileUnDownloadList.get(k).id.equals(dataList.get(0).id)) {
+                    FileInfo file = fileUnDownloadList.get(k);
+                    mFileDao.upDataDownloadStatus(dataList.get(0).id, "1");
+                    DownloadClient.workStart(file);
+                    break;
+                }
+            }
+        }
+    }
+
+    // 判断当前节目是否下载过
+    private boolean getDownload(SinglesBase pdsBase) {
+        boolean t = false;
+        // 检查是否重复,如果不重复插入数据库，并且开始下载，重复了提示
+        List<FileInfo> fileDataList = mFileDao.queryFileInfoAll(CommonUtils.getUserId());
+        if (fileDataList.size() != 0) {// 此时有下载数据
+            for (int j = 0; j < fileDataList.size(); j++) {
+                if (fileDataList.get(j).id.equals(pdsBase.id)) {
+                    if (fileDataList.get(j).single_file_url != null) {
+                        t = true;
+                        break;
+                    }
+                }
+            }
+        }
+        return t;
+    }
+
+    private List<FileInfo> getList(SinglesBase pdsBase) {
+        // 对数据进行转换
+        List<FileInfo> dataList = new ArrayList<>();
+        FileInfo m = new FileInfo();
+        m.id = pdsBase.id;
+        m.play_time = String.valueOf(pdsBase.play_time);
+        m.single_title = pdsBase.single_title;
+        m.creator_id = pdsBase.creator_id;
+        m.single_logo_url = pdsBase.single_logo_url;
+        m.single_seconds = pdsBase.single_seconds;
+        m.single_file_url = pdsBase.single_file_url;
+        m.single_file_url_base = pdsBase.single_file_url;
+        m.album_title = pdsBase.album_title;
+        m.album_lastest_news = pdsBase.album_lastest_news;
+        m.album_logo_url = pdsBase.album_logo_url;
+        m.album_id = pdsBase.album_id;
+        m.albumSize = String.valueOf(pdsBase.albumSize);
+        m.user_id = CommonUtils.getUserId();
+        m.download_type = "0";
+        m.start = "0";
+        m.end = "0";
+        m.length = "0";
+        m.finished = "false";
+        dataList.add(m);
+        return dataList;
+    }
+
     public interface FollowCallBack {
         void followPlayer(SinglesBase psb);
     }
-
 }

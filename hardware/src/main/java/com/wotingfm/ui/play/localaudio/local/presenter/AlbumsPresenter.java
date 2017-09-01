@@ -1,20 +1,12 @@
 package com.wotingfm.ui.play.localaudio.local.presenter;
 
-import com.woting.commonplat.utils.FileSizeUtil;
-import com.wotingfm.common.application.BSApplication;
-import com.wotingfm.common.database.DownloadHelper;
-import com.wotingfm.common.database.HistoryHelper;
-import com.wotingfm.common.utils.T;
-import com.wotingfm.ui.bean.Player;
-import com.wotingfm.ui.bean.SinglesDownload;
-import com.wotingfm.ui.play.localaudio.local.model.AlbumsModel;
+import com.wotingfm.common.utils.CommonUtils;
+import com.wotingfm.ui.play.localaudio.dao.FileInfoDao;
 import com.wotingfm.ui.play.localaudio.local.view.AlbumsFragment;
-import com.wotingfm.ui.play.playhistory.view.PlayerHistoryFragment;
+import com.wotingfm.ui.play.localaudio.model.FileInfo;
 
 import org.greenrobot.eventbus.EventBus;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -23,48 +15,22 @@ import java.util.List;
  */
 public class AlbumsPresenter {
 
-    private AlbumsModel model;
+    private FileInfoDao FID;
     private AlbumsFragment activity;
-    private DownloadHelper downloadHelper;
-    private List<SinglesDownload> listResult;
+    private List<FileInfo> listResult;
 
     public AlbumsPresenter(AlbumsFragment activity) {
         this.activity = activity;
-        this.model = new AlbumsModel();
+        FID = new FileInfoDao(activity.getActivity());
         getData();
     }
 
     public void getData() {
-        downloadHelper = new DownloadHelper(BSApplication.getInstance());
-        if (downloadHelper != null) {
-             List<SinglesDownload> list = downloadHelper.findPlayHistoryList();
-            if (list != null && !list.isEmpty()) {
-                listResult = new ArrayList<>();
-                for (int i = 0, size = list.size(); i < size; i++) {
-                    SinglesDownload s = list.get(i);
-                    if (s.isDownloadOver) {
-                        SinglesDownload so = model.getMapContent(s.album_id);
-                        List<SinglesDownload> sos = model.getMapContentList(s.album_id);
-                        if (so != null && so.album_id != null && so.album_id.equals(s.album_id)) {
-                            so.count = s.count + 1;
-                            so.albumSize = so.albumSize + s.albumSize;
-                            model.mapPut(s.album_id, so);
-                            sos.add(so);
-                            model.mapListPut(s.album_id, sos);
-
-                        } else {
-                            listResult.add(s);
-                            model.mapPut(s.album_id, s);
-                            sos.add(s);
-                            model.mapListPut(s.album_id, sos);
-                        }
-                    }
-                }
-                if (listResult != null && !listResult.isEmpty()) {
-                    activity.setData(listResult, model.getMap(), model.getMapList());
-                } else {
-                    activity.showEmptyView();
-                }
+        List<FileInfo> f = FID.queryFileInfo("true", CommonUtils.getUserId());
+        if (f.size() > 0) {
+            listResult = FID.GroupFileInfoAll(CommonUtils.getUserId());
+            if (listResult != null && !listResult.isEmpty()) {
+                activity.setData(listResult);
             } else {
                 activity.showEmptyView();
             }
@@ -73,19 +39,16 @@ public class AlbumsPresenter {
         }
     }
 
-    public void del(SinglesDownload s,List<SinglesDownload> singlesDownloads){
+    public void del(FileInfo s) {
         activity.dialogShow();
-        downloadHelper.deleteTable(s.id);
-        for (int i = 0; i < singlesDownloads.size(); i++) {
-            FileSizeUtil.delFile(singlesDownloads.get(i).single_file_url);
-        }
+        FID.deleteSequ(s.id, CommonUtils.getUserId());
         listResult.remove(s);
         if (listResult.isEmpty()) {
             activity.showEmptyView();
-        }else{
-            activity.setData(listResult, model.getMap(), model.getMapList());
+        } else {
+            activity.setData(listResult);
         }
-        activity. dialogCancel();
+        activity.dialogCancel();
         EventBus.getDefault().postSticky(s.id);
     }
 
@@ -93,8 +56,8 @@ public class AlbumsPresenter {
      * 数据销毁
      */
     public void destroy() {
-        downloadHelper = null;
-        model=null;
+        FID.closeDB();
+        FID = null;
     }
 
 }

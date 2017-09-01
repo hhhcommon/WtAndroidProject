@@ -116,7 +116,7 @@ public class RadioStationFragment extends Fragment implements View.OnClickListen
                 openFragment(CountryRadioFragment.newInstance());
                 break;
             case R.id.lin_Province:
-                openFragment(ProvincesAndCitiesFragment.newInstance());
+                openFragment(ProvincesAndCitiesFragment.newInstance(2));
                 break;
 //            case R.id.tvTitle:
 //                openFragment(RadioMoreFragment.newInstance());

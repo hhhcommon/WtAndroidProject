@@ -1,12 +1,12 @@
 package com.wotingfm.ui.play.localaudio.download.presenter;
 
-import com.woting.commonplat.utils.FileSizeUtil;
-import com.wotingfm.common.application.BSApplication;
-import com.wotingfm.common.database.DownloadHelper;
-import com.wotingfm.ui.bean.SinglesDownload;
+import com.wotingfm.common.utils.CommonUtils;
+import com.wotingfm.ui.play.localaudio.dao.FileInfoDao;
 import com.wotingfm.ui.play.localaudio.download.view.DownloadingFragment;
+import com.wotingfm.ui.play.localaudio.model.FileInfo;
+
 import org.greenrobot.eventbus.EventBus;
-import java.util.ArrayList;
+
 import java.util.List;
 
 /**
@@ -15,43 +15,29 @@ import java.util.List;
  */
 public class DownloadingPresenter {
 
-    private DownloadHelper downloadHelper;
     private DownloadingFragment activity;
-    private List<SinglesDownload> listResult = new ArrayList<>();
+    private List<FileInfo> listResult ;
+    private FileInfoDao FID;
 
     public DownloadingPresenter(DownloadingFragment activity) {
         this.activity = activity;
-        downloadHelper = new DownloadHelper(BSApplication.getInstance());
+        FID = new FileInfoDao(activity.getActivity());
         getData();
     }
 
     private void getData() {
-        downloadHelper = new DownloadHelper(BSApplication.getInstance());
-        if (downloadHelper != null) {
-            final List<SinglesDownload> list = downloadHelper.findPlayHistoryList();
-            if (list != null && !list.isEmpty()) {
-                for (int i = 0, size = list.size(); i < size; i++) {
-                    if (list.get(i).isDownloadOver == false)
-                        listResult.add(list.get(i));
-                }
-                if (listResult.isEmpty()) {
-                    activity.showEmptyView();
-                } else {
-                    activity.setData(listResult);
-                    activity.showContentView();
-                }
-            } else {
-                activity.showEmptyView();
-            }
-        } else {
+        listResult = FID.queryFileInfo("false", CommonUtils.getUserId());// 查询表中未完成的任务
+        if (listResult != null && !listResult.isEmpty()) {
+            activity.setData(listResult);
+            activity.showContentView();
+        }else{
             activity.showEmptyView();
         }
     }
 
-    public void del(SinglesDownload s) {
+    public void del(FileInfo s) {
         activity.dialogShow();
-        downloadHelper.deleteTable(s.id);
-        FileSizeUtil.delFile(s.single_file_url);
+        FID.deleteFileInfo(s.id, CommonUtils.getUserId());
         listResult.remove(s);
         if (listResult.isEmpty()) {
             activity.showEmptyView();
@@ -66,7 +52,8 @@ public class DownloadingPresenter {
      * 数据销毁
      */
     public void destroy() {
-        downloadHelper = null;
+        FID.closeDB();
+        FID = null;
     }
 
 }
