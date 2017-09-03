@@ -9,6 +9,7 @@ import com.woting.commonplat.manager.NetWorkManager;
 import com.woting.commonplat.manager.PhoneMsgManager;
 import com.wotingfm.common.manager.NIMManager;
 import com.wotingfm.common.net.RetrofitUtils;
+import com.wotingfm.ui.play.localaudio.service.DownloadClient;
 
 import cn.finalteam.okhttpfinal.OkHttpFinal;
 import cn.finalteam.okhttpfinal.OkHttpFinalConfiguration;

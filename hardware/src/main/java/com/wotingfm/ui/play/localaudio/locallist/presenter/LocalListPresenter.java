@@ -2,6 +2,7 @@ package com.wotingfm.ui.play.localaudio.locallist.presenter;
 
 import android.os.Bundle;
 import android.text.TextUtils;
+
 import com.wotingfm.common.utils.CommonUtils;
 import com.wotingfm.ui.play.localaudio.dao.FileInfoDao;
 import com.wotingfm.ui.play.localaudio.locallist.view.LocalListFragment;
@@ -17,6 +18,7 @@ import java.util.List;
  */
 public class LocalListPresenter {
 
+    private FileInfo album;
     private FileInfoDao FID;
     private LocalListFragment activity;
     private List<FileInfo> list;
@@ -24,43 +26,42 @@ public class LocalListPresenter {
     public LocalListPresenter(LocalListFragment activity) {
         this.activity = activity;
         FID = new FileInfoDao(activity.getActivity());
-        getData();
-    }
-
-    private void getData() {
         Bundle bundle = activity.getArguments();
         if (bundle != null) {
-            FileInfo  album = (FileInfo)bundle.getSerializable("album");
-            list = FID.queryAlbumInfo(album.album_id, CommonUtils.getUserId());
-            if (list != null && !list.isEmpty()) {
-                activity.setData(list);
-                activity.showContentView();
-            } else {
-                activity.showEmptyView();
-            }
-
-            String name=bundle.getString("name");
-            if(!TextUtils.isEmpty(name)){
+            album = (FileInfo) bundle.getSerializable("album");
+            getData();
+            String name = bundle.getString("name");
+            if (!TextUtils.isEmpty(name)) {
                 activity.setName(name);
-            }else{
+            } else {
                 activity.setName("列表");
             }
-        }else{
+        } else {
             activity.showEmptyView();
         }
     }
 
-    public void del(FileInfo s){
+    public void getData() {
+        list = FID.queryAlbumInfo(album.album_id, CommonUtils.getUserId());
+        if (list != null && !list.isEmpty()) {
+            activity.setData(list);
+            activity.showContentView();
+        } else {
+            activity.showEmptyView();
+        }
+    }
+
+    public void del(FileInfo s) {
         activity.dialogShow();
         FID.deleteFileInfo(s.id, CommonUtils.getUserId());
         list.remove(s);
         if (list.isEmpty()) {
             activity.showEmptyView();
-        }else{
+        } else {
             activity.setData(list);
         }
         EventBus.getDefault().postSticky(s.id);
-        activity. dialogCancel();
+        activity.dialogCancel();
         activity.setResult(true);
     }
 

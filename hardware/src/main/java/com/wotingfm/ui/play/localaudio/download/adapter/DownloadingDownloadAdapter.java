@@ -2,7 +2,9 @@ package com.wotingfm.ui.play.localaudio.download.adapter;
 
 import android.content.Context;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -46,6 +48,7 @@ public class DownloadingDownloadAdapter extends CommonAdapter<FileInfo> {
         RoundProgressBar  mRoundProgressBar = (RoundProgressBar) holder.itemView.findViewById(R.id.roundProgressBar);
         TextView textStart = (TextView) holder.itemView.findViewById(R.id.download_start);// 已下载文件大小
         TextView textEnd = (TextView) holder.itemView.findViewById(R.id.download_end);// 文件总大小
+        ImageView img_type = (ImageView) holder.itemView.findViewById(R.id.img_type);//
 
 
         tvTitle.setText(s.single_title + "");
@@ -53,16 +56,18 @@ public class DownloadingDownloadAdapter extends CommonAdapter<FileInfo> {
         //  0为未下载 1为下载中,2暂停状态
         String downLoadType = s.download_type;
         if (!TextUtils.isEmpty(downLoadType) && downLoadType.trim().equals("1")) {
-
+            img_type.setVisibility(View.VISIBLE);
+            img_type.setImageResource(R.mipmap.create_group_icon_selected_s);
         } else if (!TextUtils.isEmpty(downLoadType) && downLoadType.trim().equals("2")) {
-
+            img_type.setVisibility(View.VISIBLE);
+            img_type.setImageResource(R.mipmap.create_group_icon_selected_n);
         } else {// 未下载
-
+            img_type.setVisibility(View.GONE);
         }
 
         // 文件总大小
         String endString;
-        int end = Integer.parseInt(s.end);
+        int end = s.end;
         if (end >= 0) {
             endString = df.format(end / 1000.0 / 1000.0) + "MB";
         } else {
@@ -71,17 +76,17 @@ public class DownloadingDownloadAdapter extends CommonAdapter<FileInfo> {
         textEnd.setText(endString);
 
         // 已下载文件大小
-        int start = Integer.parseInt(s.start);
+        int start = s.start;
         if (start >= 0) {
+            mRoundProgressBar.setMax(100);
             float a = (float) start;
             float b = (float) end;
             String c = df.format(a / b);
             int d = (int) (Float.parseFloat(c) * 100);
-            mRoundProgressBar.setMax(1);
             mRoundProgressBar.setProgress(d);
             textStart.setText(df.format(start / 1000.0 / 1000.0) + "MB/");
         } else {
-            mRoundProgressBar.setMax(1);
+            mRoundProgressBar.setMax(100);
             mRoundProgressBar.setProgress(0);
             textStart.setText(df.format(0 / 1000.0 / 1000.0) + "MB/");
         }
@@ -116,8 +121,11 @@ public class DownloadingDownloadAdapter extends CommonAdapter<FileInfo> {
         if (list != null && list.size() != 0) {
             FileInfo fileInfo = list.get(_id);
             fileInfo.finished = String.valueOf((start / end));
-            fileInfo.start = String.valueOf(start);
-            fileInfo.end = String.valueOf(end);
+            fileInfo.start = start;
+            fileInfo.end = end;
+            Log.e("adapter===",""+start);
+            Log.e("adapter===",""+end);
+
             notifyDataSetChanged();
         }
     }

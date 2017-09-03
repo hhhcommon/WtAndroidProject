@@ -33,22 +33,29 @@ public class DownloadClient {
     private static Context context;
     private static DownloadTask mTask;
     private static FileInfo fileTemp = null;
-    private static FileInfoDao FID;
-    private static int downloadStatus = -1;
+    private FileInfoDao FID;
+    private MessageReceiver Receiver;
 
     public DownloadClient(Context context) {
         DownloadClient.context = context;
-        IntentFilter filter = new IntentFilter();
-        filter.addAction(BroadcastConstants.ACTION_FINISHED_NO_DOWNLOADVIEW);
-        context.registerReceiver(mReceiver, filter);
-    }
-
-    public static void workStart(FileInfo fileInfo) {
-        new InitThread(fileInfo).start();// http://audio.xmcdn.com/group13/M05/02/9E/wKgDXVbBJY3QZQkmABblyjUSkbI912.m4a
-        downloadStatus = 1;
         if (FID == null) {
             FID = new FileInfoDao(context);
         }
+        if (Receiver == null) {
+            Receiver = new MessageReceiver();
+            IntentFilter filter = new IntentFilter();
+            filter.addAction(BroadcastConstants.ACTION_FINISHED_NO_DOWNLOADVIEW);
+            context.registerReceiver(Receiver, filter);
+        }
+    }
+
+    /**
+     * 开始下载
+     *
+     * @param fileInfo
+     */
+    public static void workStart(FileInfo fileInfo) {
+        new InitThread(fileInfo).start();// 开启一个下载线程
     }
 
     public static void workStop(FileInfo fileInfo) {
@@ -57,46 +64,20 @@ public class DownloadClient {
         }
     }
 
-    private static Handler mHandler = new Handler() {
-        public void handleMessage(android.os.Message msg) {
-            switch (msg.what) {
-                case MSG_INIT:
-                    FileInfo fileInfo = (FileInfo) msg.obj;
-                    Log.e("TAG", "Init:" + fileInfo);
-                    // 启动下载任务
-                    DownloadTask.isPause = false;
-                    if (fileTemp == null) {
-                        fileTemp = fileInfo;
-                        mTask = new DownloadTask(context, fileInfo);
-                        mTask.downLoad();
-                    } else {
-                        if (!fileTemp.single_file_url.equals(fileInfo.single_file_url)) {
-                            mTask = new DownloadTask(context, fileInfo);
-                            DownloadTask.isPause = false;
-                            mTask.downLoad();
-                        }
-                    }
-                    break;
-            }
-        }
 
-        ;
-    };
-
+    // 下载线程
     private static class InitThread extends Thread {
         private FileInfo mFileInfo = null;
-
         public InitThread(FileInfo mFileInfos) {
             mFileInfo = mFileInfos;
         }
-
         @Override
         public void run() {
             HttpURLConnection connection = null;
             RandomAccessFile raf = null;
             try {
                 // 连接网络文件
-                Log.e("mFileInfo.getUrl()====", mFileInfo.single_file_url + "");
+                Log.e("获取文件长度====", mFileInfo.single_file_url + "");
                 URL url = new URL(mFileInfo.single_file_url);
                 connection = (HttpURLConnection) url.openConnection();
                 connection.setConnectTimeout(5000);
@@ -106,9 +87,10 @@ public class DownloadClient {
                     // 获得文件的长度
                     length = connection.getContentLength();
                 }
-                if (length <= 0) {
-                    return;
-                }
+//                if (length <= 0) {
+//                    Log.e("获取文件长度====",  "失败");
+//                    return;
+//                }
                 File dir = new File(DOWNLOAD_PATH);
                 if (!dir.exists()) {
                     dir.mkdir();
@@ -134,7 +116,8 @@ public class DownloadClient {
                 raf = new RandomAccessFile(file, "rwd");
                 // 设置文件长度
                 raf.setLength(length);
-                mFileInfo.length = String.valueOf(length);
+                mFileInfo.length = length;
+                Log.e("length====",""+length);
                 mHandler.obtainMessage(MSG_INIT, mFileInfo).sendToTarget();
             } catch (Exception e) {
                 e.printStackTrace();
@@ -153,26 +136,55 @@ public class DownloadClient {
         }
     }
 
-    private static List<FileInfo> fileInfoList;
-    private static BroadcastReceiver mReceiver = new BroadcastReceiver() {
+    //
+    private static Handler mHandler = new Handler() {
+        public void handleMessage(android.os.Message msg) {
+            switch (msg.what) {
+                case MSG_INIT:
+                    FileInfo fileInfo = (FileInfo) msg.obj;
+                    // 启动下载任务
+                    Log.e("开启下载事务====", fileInfo.single_file_url + "");
+                    DownloadTask.isPause = false;
+                    if (fileTemp == null) {
+                        fileTemp = fileInfo;
+                        mTask = new DownloadTask(context, fileInfo);
+                        mTask.downLoad();
+                    } else {
+                        if (!fileTemp.single_file_url.equals(fileInfo.single_file_url)) {
+                            mTask = new DownloadTask(context, fileInfo);
+                            DownloadTask.isPause = false;
+                            mTask.downLoad();
+                        }
+                    }
+                    break;
+            }
+        }
+
+        ;
+    };
+
+    class MessageReceiver extends BroadcastReceiver {
         @Override
-        public void onReceive(Context contexts, Intent intent) {
-            if (BroadcastConstants.ACTION_FINISHED_NO_DOWNLOADVIEW.equals(intent.getAction())) {
-//                FileInfo fileInfo = (FileInfo) intent.getSerializableExtra("fileInfo");
-//                FID.updataFileInfo(fileInfo.getFileName());
-                fileInfoList = FID.queryFileInfo("false", CommonUtils.getUserId());
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            if (action.equals(BroadcastConstants.ACTION_FINISHED_NO_DOWNLOADVIEW)) {
+                Log.e("下载完毕=====", "下载完毕后继续下载");
+                context.sendBroadcast(new Intent(BroadcastConstants.ACTION_FINISHED));
+
+                List<FileInfo> fileInfoList = FID.queryFileInfo("false", CommonUtils.getUserId());
                 if (fileInfoList != null && fileInfoList.size() > 0) {
                     fileInfoList.get(0).download_type = "1";
-                    FID.upDataDownloadStatus(fileInfoList.get(0).single_file_url, "1");
+                    FID.upDataDownloadStatus(fileInfoList.get(0).id, "1");
                     workStart(fileInfoList.get(0));
                 }
             }
         }
-    };
+    }
 
+    /**
+     * 注销广播
+     */
     public void unregister() {
-        if (downloadStatus == 1) {
-            context.unregisterReceiver(mReceiver);
-        }
+        context.unregisterReceiver(Receiver);
     }
 }

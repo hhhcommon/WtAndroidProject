@@ -79,6 +79,7 @@
                         android:src="@mipmap/icon_select_n"/>
 
                     <TextView
+                        android:id="@+id/tv_news"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"

@@ -45,11 +45,11 @@ public class FileInfoDao {
             }
             db.execSQL("insert into file_info(" +
                     "file_name,start,end,user_id,download_type,finished," +
-                    "length,id,single_title,single_logo_url,single_file_url," +
-                    "album_title,album_logo_url,album_id,creator_id,albumSize) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",new Object[] {
+                    "id,single_title,single_logo_url,single_file_url," +
+                    "album_title,album_logo_url,album_id,creator_id,single_seconds,albumSize) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",new Object[] {
                     fileName,content.start,content.end,content.user_id,content.download_type,content.finished,
-                    content.length,content.id,content.single_title,content.single_logo_url,content.single_file_url,
-                    content.album_title,content.album_logo_url,content.album_id,content.creator_id,content.albumSize});// sql语句
+                    content.id,content.single_title,content.single_logo_url,content.single_file_url,
+                    content.album_title,content.album_logo_url,content.album_id,content.creator_id,content.single_seconds,content.albumSize});// sql语句
         }
         db.close();// 关闭数据库对象据库对象
     }
@@ -67,12 +67,11 @@ public class FileInfoDao {
             // 循环遍历cursor中储存的键值对
             while (cursor.moveToNext()) {
                 FileInfo h = new FileInfo();
-                h.start = cursor.getString(cursor.getColumnIndex("start"));
-                h.end = cursor.getString(cursor.getColumnIndex("end"));
+                h.start=cursor.getInt(1);
+                h.end=cursor.getInt(2);
                 h.user_id = cursor.getString(cursor.getColumnIndex("user_id"));
                 h.download_type = cursor.getString(cursor.getColumnIndex("download_type"));
                 h.finished = cursor.getString(cursor.getColumnIndex("finished"));
-                h.length = cursor.getString(cursor.getColumnIndex("length"));
                 h.id = cursor.getString(cursor.getColumnIndex("id"));
                 h.single_title = cursor.getString(cursor.getColumnIndex("single_title"));
                 h.single_logo_url = cursor.getString(cursor.getColumnIndex("single_logo_url"));
@@ -83,7 +82,7 @@ public class FileInfoDao {
                 h.creator_id = cursor.getString(cursor.getColumnIndex("creator_id"));
                 h.albumSize = cursor.getString(cursor.getColumnIndex("albumSize"));
                 h.fileName = cursor.getString(cursor.getColumnIndex("file_name"));
-
+                h.single_seconds = cursor.getString(cursor.getColumnIndex("single_seconds"));
                 // 往m里储存每个history对象
                 m.add(h);
             }
@@ -124,12 +123,11 @@ public class FileInfoDao {
 			// 循环遍历cursor中储存的键值对
 			while (cursor.moveToNext()) {
                 FileInfo h = new FileInfo();
-                h.start = cursor.getString(cursor.getColumnIndex("start"));
-                h.end = cursor.getString(cursor.getColumnIndex("end"));
+                h.start=cursor.getInt(1);
+                h.end=cursor.getInt(2);
                 h.user_id = cursor.getString(cursor.getColumnIndex("user_id"));
                 h.download_type = cursor.getString(cursor.getColumnIndex("download_type"));
                 h.finished = cursor.getString(cursor.getColumnIndex("finished"));
-                h.length = cursor.getString(cursor.getColumnIndex("length"));
                 h.id = cursor.getString(cursor.getColumnIndex("id"));
                 h.single_title = cursor.getString(cursor.getColumnIndex("single_title"));
                 h.single_logo_url = cursor.getString(cursor.getColumnIndex("single_logo_url"));
@@ -140,6 +138,7 @@ public class FileInfoDao {
                 h.creator_id = cursor.getString(cursor.getColumnIndex("creator_id"));
                 h.albumSize = cursor.getString(cursor.getColumnIndex("albumSize"));
                 h.fileName = cursor.getString(cursor.getColumnIndex("file_name"));
+                h.single_seconds = cursor.getString(cursor.getColumnIndex("single_seconds"));
 				// 网m里储存每个history对象
 				m.add(h);
 			}
@@ -210,12 +209,11 @@ public class FileInfoDao {
             // 循环遍历cursor中储存的键值对
             while (cursor.moveToNext()) {
                 FileInfo h = new FileInfo();
-                h.start = cursor.getString(cursor.getColumnIndex("start"));
-                h.end = cursor.getString(cursor.getColumnIndex("end"));
+                h.start=cursor.getInt(1);
+                h.end=cursor.getInt(2);
                 h.user_id = cursor.getString(cursor.getColumnIndex("user_id"));
                 h.download_type = cursor.getString(cursor.getColumnIndex("download_type"));
                 h.finished = cursor.getString(cursor.getColumnIndex("finished"));
-                h.length = cursor.getString(cursor.getColumnIndex("length"));
                 h.id = cursor.getString(cursor.getColumnIndex("id"));
                 h.single_title = cursor.getString(cursor.getColumnIndex("single_title"));
                 h.single_logo_url = cursor.getString(cursor.getColumnIndex("single_logo_url"));
@@ -226,6 +224,7 @@ public class FileInfoDao {
                 h.creator_id = cursor.getString(cursor.getColumnIndex("creator_id"));
                 h.albumSize = cursor.getString(cursor.getColumnIndex("albumSize"));
                 h.fileName = cursor.getString(cursor.getColumnIndex("file_name"));
+                h.single_seconds = cursor.getString(cursor.getColumnIndex("single_seconds"));
                 // 储存每个history对象
                 m.add(h);
             }
@@ -241,6 +240,7 @@ public class FileInfoDao {
         }
         return m;
     }
+
 	// 改
 	public void updataFileInfo(String id) {
 		SQLiteDatabase db = helper.getWritableDatabase();
@@ -265,7 +265,6 @@ public class FileInfoDao {
     //删除专辑信息
     public void deleteSequ(String album_id, String user_id) {
         SQLiteDatabase db = helper.getWritableDatabase();
-	/*	db.execSQL("delete from fileinfo where finished='true' and sequname=? and userid=?",new Object[]{sequname,userid});*/
         db.execSQL("delete from file_info where album_id=? and user_id=?",new Object[]{album_id,user_id});
         db.close();
     }
@@ -288,7 +287,7 @@ public class FileInfoDao {
      */
 	public void deleteFileInfo(String id, String user_id) {
 		SQLiteDatabase db = helper.getWritableDatabase();
-		db.execSQL("delete from file_info where finished='true' and id=? and user_id=?",new Object[]{id,user_id});
+		db.execSQL("delete from file_info where id=? and user_id=?",new Object[]{id,user_id});
 		db.close();
 	}
 

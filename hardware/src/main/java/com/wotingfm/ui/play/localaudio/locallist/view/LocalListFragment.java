@@ -1,6 +1,10 @@
 package com.wotingfm.ui.play.localaudio.locallist.view;
 
 import android.app.Dialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -13,6 +17,7 @@ import android.widget.TextView;
 import com.woting.commonplat.widget.LoadFrameLayout;
 import com.wotingfm.R;
 import com.wotingfm.common.config.GlobalStateConfig;
+import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.common.utils.DialogUtils;
 import com.wotingfm.ui.bean.MessageEvent;
 import com.wotingfm.ui.bean.SinglesDownload;
@@ -49,7 +54,8 @@ public class LocalListFragment extends Fragment implements View.OnClickListener 
     private LocalListAdapter localListAdapter;
     private Dialog dialog;
     private ResultListener Listener;
-
+    private MessageReceivers receiver;
+    private List<FileInfo> src_list=new ArrayList<>();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -59,6 +65,12 @@ public class LocalListFragment extends Fragment implements View.OnClickListener 
             ButterKnife.bind(this, rootView);
             inItView();
             presenter = new LocalListPresenter(this);
+            if (receiver == null) {
+                receiver = new MessageReceivers();
+                IntentFilter filters = new IntentFilter();
+                filters.addAction(BroadcastConstants.ACTION_FINISHED);
+                getActivity().registerReceiver(receiver, filters);
+            }
         }
         return rootView;
     }
@@ -105,8 +117,10 @@ public class LocalListFragment extends Fragment implements View.OnClickListener 
      * @param list
      */
     public void setData(List<FileInfo>  list) {
+        src_list.clear();
+        src_list.addAll(list);
         if (localListAdapter == null) {
-            localListAdapter = new LocalListAdapter(getActivity(), list, new LocalListAdapter.localListClick() {
+            localListAdapter = new LocalListAdapter(getActivity(), src_list, new LocalListAdapter.localListClick() {
                 @Override
                 public void play(FileInfo singlesDownload) {
                     if (singlesDownload != null) {
@@ -186,9 +200,22 @@ public class LocalListFragment extends Fragment implements View.OnClickListener 
         void resultListener(boolean b);
     }
 
+    class MessageReceivers extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+         if(BroadcastConstants.ACTION_FINISHED.equals(intent.getAction())){
+                presenter.getData();
+            }
+        }
+    }
+
     @Override
     public void onDestroy() {
         super.onDestroy();
+        if (receiver != null) {
+            getActivity().unregisterReceiver(receiver);
+            receiver = null;
+        }
         presenter.destroy();
         presenter = null;
     }

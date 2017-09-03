@@ -1,6 +1,10 @@
 package com.wotingfm.ui.play.localaudio.local.view;
 
 import android.app.Dialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -14,6 +18,7 @@ import android.widget.TextView;
 import com.woting.commonplat.widget.LoadFrameLayout;
 import com.wotingfm.R;
 import com.wotingfm.common.config.GlobalStateConfig;
+import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.common.utils.DialogUtils;
 import com.wotingfm.ui.bean.MessageEvent;
 import com.wotingfm.ui.play.localaudio.download.view.DownloadingFragment;
@@ -25,6 +30,7 @@ import com.wotingfm.ui.play.main.PlayerActivity;
 
 import org.greenrobot.eventbus.EventBus;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -55,6 +61,8 @@ public class AlbumsFragment extends Fragment implements View.OnClickListener {
     private Dialog LDialog;
     private Dialog dialog;
     private FileInfo s;
+    private MessageReceivers receiver;
+    private List<FileInfo> src_list=new ArrayList<>();
 
     public static AlbumsFragment newInstance() {
         AlbumsFragment fragment = new AlbumsFragment();
@@ -70,6 +78,12 @@ public class AlbumsFragment extends Fragment implements View.OnClickListener {
             inItView();
             presenter = new AlbumsPresenter(this);
             initDialogL();
+            if (receiver == null) {
+                receiver = new MessageReceivers();
+                IntentFilter filters = new IntentFilter();
+                filters.addAction(BroadcastConstants.ACTION_FINISHED);
+                getActivity().registerReceiver(receiver, filters);
+            }
         }
         return rootView;
     }
@@ -96,8 +110,10 @@ public class AlbumsFragment extends Fragment implements View.OnClickListener {
      * @param listResult
      */
     public void setData(List<FileInfo> listResult) {
+        src_list.clear();
+        src_list.addAll(listResult);
         if (albumsDownloadAdapter == null) {
-            albumsDownloadAdapter = new AlbumsDownloadAdapter(getActivity(), listResult, new AlbumsDownloadAdapter.DeleteClick() {
+            albumsDownloadAdapter = new AlbumsDownloadAdapter(getActivity(), src_list, new AlbumsDownloadAdapter.DeleteClick() {
                 @Override
                 public void clickDelete(FileInfo ss) {
                     s = ss;
@@ -209,9 +225,22 @@ public class AlbumsFragment extends Fragment implements View.OnClickListener {
         if (dialog != null) dialog.dismiss();
     }
 
+    class MessageReceivers extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if(BroadcastConstants.ACTION_FINISHED.equals(intent.getAction())){
+                presenter.getData();
+            }
+        }
+    }
+    
     @Override
     public void onDestroy() {
         super.onDestroy();
+        if (receiver != null) {
+            getActivity().unregisterReceiver(receiver);
+            receiver = null;
+        }
         presenter.destroy();
         presenter = null;
     }

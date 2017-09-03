@@ -1,6 +1,10 @@
 package com.wotingfm.ui.play.localaudio.download.view;
 
 import android.app.Dialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -12,6 +16,7 @@ import android.view.ViewGroup;
 import com.woting.commonplat.widget.LoadFrameLayout;
 import com.wotingfm.R;
 import com.wotingfm.common.config.GlobalStateConfig;
+import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.common.utils.DialogUtils;
 import com.wotingfm.ui.bean.MessageEvent;
 import com.wotingfm.ui.bean.SinglesDownload;
@@ -22,6 +27,7 @@ import com.wotingfm.ui.play.main.PlayerActivity;
 
 import org.greenrobot.eventbus.EventBus;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -44,11 +50,15 @@ public class DownloadingFragment extends Fragment implements View.OnClickListene
     private DownloadingDownloadAdapter downloadingDownloadAdapter;
     private Dialog dialog;
     private DownloadingPresenter presenter;
+    private MessageReceivers receiver;
+
+    private List<FileInfo> src_list=new ArrayList<>();
 
     public static DownloadingFragment newInstance() {
         DownloadingFragment fragment = new DownloadingFragment();
         return fragment;
     }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -58,6 +68,13 @@ public class DownloadingFragment extends Fragment implements View.OnClickListene
             ButterKnife.bind(this, rootView);
             inItView();
             presenter = new DownloadingPresenter(this);
+            if (receiver == null) {
+                receiver = new MessageReceivers();
+                IntentFilter filters = new IntentFilter();
+                filters.addAction(BroadcastConstants.ACTION_UPDATE);
+                filters.addAction(BroadcastConstants.ACTION_FINISHED);
+                getActivity().registerReceiver(receiver, filters);
+            }
         }
         return rootView;
     }
@@ -82,24 +99,24 @@ public class DownloadingFragment extends Fragment implements View.OnClickListene
      * @param list
      */
     public void setData(List<FileInfo> list) {
-        if(downloadingDownloadAdapter==null){
-            downloadingDownloadAdapter = new DownloadingDownloadAdapter(getActivity(), list, new DownloadingDownloadAdapter.DeleteClick() {
+        src_list.clear();
+        src_list.addAll(list);
+        if (downloadingDownloadAdapter == null) {
+            downloadingDownloadAdapter = new DownloadingDownloadAdapter(getActivity(), src_list, new DownloadingDownloadAdapter.DeleteClick() {
                 @Override
                 public void clickDelete(final FileInfo s) {
-                  if(s!=null)  presenter.del(s);
+                    if (s != null) presenter.del(s);
                 }
 
                 @Override
                 public void click(FileInfo singlesDownload) {
                     if (getActivity() != null) {
-//                        List<SinglesDownload> singlesDownloads = new ArrayList<>();
-//                        singlesDownloads.add(singlesDownload);
-//                        startMain(singlesDownloads);
+                        presenter.itemClick(singlesDownload);
                     }
                 }
             });
             mRecyclerView.setAdapter(downloadingDownloadAdapter);
-        }else{
+        } else {
             downloadingDownloadAdapter.notifyDataSetChanged();
         }
     }
@@ -149,10 +166,30 @@ public class DownloadingFragment extends Fragment implements View.OnClickListene
         if (dialog != null) dialog.dismiss();
     }
 
+    class MessageReceivers extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (BroadcastConstants.ACTION_UPDATE.equals(intent.getAction())) {
+                int start = intent.getIntExtra("start", 0);
+                int end = intent.getIntExtra("end", 0);
+                String id = intent.getStringExtra("id");
+                if (downloadingDownloadAdapter != null) {
+                    downloadingDownloadAdapter.updateProgress(id, start, end);
+                }
+            } else if (BroadcastConstants.ACTION_FINISHED.equals(intent.getAction())) {
+                presenter.getData();
+            }
+        }
+    }
+
     @Override
     public void onDestroy() {
         super.onDestroy();
+        if (receiver != null) {
+            getActivity().unregisterReceiver(receiver);
+            receiver = null;
+        }
         presenter.destroy();
-        presenter=null;
+        presenter = null;
     }
 }

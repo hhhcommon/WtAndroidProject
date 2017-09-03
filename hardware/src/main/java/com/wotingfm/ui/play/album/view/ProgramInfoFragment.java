@@ -22,6 +22,7 @@ import com.wotingfm.ui.bean.Player;
 import com.wotingfm.ui.bean.SinglesBase;
 import com.wotingfm.ui.intercom.main.view.InterPhoneActivity;
 import com.wotingfm.ui.mine.main.MineActivity;
+import com.wotingfm.ui.play.album.view.download.view.DownloadSelectFragment;
 import com.wotingfm.ui.play.find.main.view.LookListActivity;
 import com.wotingfm.ui.play.main.PlayerActivity;
 

@@ -15,47 +15,66 @@
             android:layout_height="24dp"
             android:layout_gravity="center"
             android:layout_margin="8dp"
-            android:src="@mipmap/icon_select_s" />
+            android:src="@mipmap/icon_select_n" />
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="57.3dp"
             android:layout_gravity="center|left"
+            android:layout_weight="1"
             android:gravity="center|left"
             android:orientation="vertical">
 
-
-            <TextView
-                android:id="@+id/tvTitle"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_marginRight="9.3dp"
                 android:layout_height="wrap_content"
-                android:ellipsize="end"
-                android:singleLine="true"
-                android:text="过年回家你妈和你说什么了？"
-                android:textColor="#16181a"
-                android:textSize="16sp" />
-<LinearLayout
-    android:layout_width="match_parent"
-    android:orientation="horizontal"
-    android:layout_marginTop="6dp"
-    android:layout_height="16dp">
-    <ImageView
-        android:layout_width="16dp"
-        android:src="@mipmap/icon_time_n"
-        android:layout_height="16dp"/>
-    <TextView
-        android:id="@+id/tvTime"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="8dp"
-        android:ellipsize="end"
-        android:gravity="center|left"
-        android:singleLine="true"
-        android:text="05:20"
-        android:textColor="#959698"
-        android:textSize="13.3sp" />
+                android:orientation="horizontal">
 
-</LinearLayout>
+                <TextView
+                    android:id="@+id/tvTitle"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:singleLine="true"
+                    android:text="过年回家你妈和你说什么了？"
+                    android:textColor="#16181a"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/tv_odl"
+                    android:layout_width="wrap_content"
+                    android:text="已下载"
+                    android:textColor="#cccccd"
+                    android:textSize="16sp"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="16dp"
+                android:layout_marginTop="6dp"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:src="@mipmap/icon_time_n" />
+
+                <TextView
+                    android:id="@+id/tvTime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="8dp"
+                    android:ellipsize="end"
+                    android:gravity="center|left"
+                    android:singleLine="true"
+                    android:text="05:20"
+                    android:textColor="#959698"
+                    android:textSize="13.3sp" />
+
+            </LinearLayout>
 
         </LinearLayout>
 
@@ -63,7 +82,7 @@
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="1px"
-        android:layout_marginLeft="45dp"
-        android:background="#efefef" />
+        android:layout_height="0.7dp"
+        android:layout_marginLeft="12dp"
+        android:background="@color/line_color" />
 </LinearLayout>

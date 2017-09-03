@@ -1,6 +1,7 @@
 package com.wotingfm.ui.play.album.main.presenter;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.TextUtils;
 
 import com.wotingfm.common.utils.T;
@@ -24,7 +25,13 @@ public class AlbumsInfoMainPresenter {
     public AlbumsInfoMainPresenter(AlbumsInfoMainFragment activity) {
         this.activity = activity;
         this.model = new AlbumsInfoMainModel();
-        getData();
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                getData();
+            }
+        },300);
+
     }
 
     // 获取传递数据

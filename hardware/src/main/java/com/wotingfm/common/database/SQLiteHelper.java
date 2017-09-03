@@ -36,12 +36,11 @@ public class SQLiteHelper extends SQLiteOpenHelper {
 
         // 文件数据
         db.execSQL("create table IF NOT EXISTS file_info(_id integer primary key autoincrement," +
-                "start varchar(50)," +
-                "end varchar(50)," +
+                "start integer," +
+                "end integer," +
                 "user_id varchar(50)," +
                 "download_type varchar(10)," +
                 "finished varchar(10)," +
-                "length varchar(50)," +
                 "id varchar(50)," +
                 "single_title varchar(200)," +
                 "single_logo_url varchar(200)," +
@@ -52,6 +51,7 @@ public class SQLiteHelper extends SQLiteOpenHelper {
                 "had_liked varchar(50)," +
                 "album_id varchar(50)," +
                 "creator_id varchar(10)," +
+                "single_seconds varchar(50)," +
                 "albumSize varchar(20))");
 
     }

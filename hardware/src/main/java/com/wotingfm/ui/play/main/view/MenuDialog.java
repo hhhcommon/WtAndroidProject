@@ -337,9 +337,8 @@ public class MenuDialog extends Dialog implements View.OnClickListener {
         m.albumSize = String.valueOf(pdsBase.albumSize);
         m.user_id = CommonUtils.getUserId();
         m.download_type = "0";
-        m.start = "0";
-        m.end = "0";
-        m.length = "0";
+        m.start = 0;
+        m.end = 0;
         m.finished = "false";
         dataList.add(m);
         return dataList;

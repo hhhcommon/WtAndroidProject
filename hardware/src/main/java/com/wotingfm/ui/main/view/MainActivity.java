@@ -37,6 +37,7 @@ import com.wotingfm.ui.intercom.main.view.InterPhoneActivity;
 import com.wotingfm.ui.main.presenter.MainPresenter;
 import com.wotingfm.ui.mine.main.MineActivity;
 import com.wotingfm.ui.play.find.main.view.LookListActivity;
+import com.wotingfm.ui.play.localaudio.service.DownloadClient;
 import com.wotingfm.ui.play.main.PlayerActivity;
 
 import org.greenrobot.eventbus.EventBus;
@@ -51,6 +52,7 @@ public class MainActivity extends TabActivity implements View.OnClickListener {
     private TextView tv_4, tv_5, tv_title, tv_msg, tv_ad;
     private String type;
     private PopupWindow Ndialog;
+    private DownloadClient downloadClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +65,7 @@ public class MainActivity extends TabActivity implements View.OnClickListener {
         dialog();// 通知消息弹出框
         mainPresenter = new MainPresenter(this);
         mainPresenter.applyTextColor(false);
+        downloadClient = new DownloadClient(this);
     }
 
     // 初始化视图,主页跳转的3个界面
@@ -416,6 +419,7 @@ public class MainActivity extends TabActivity implements View.OnClickListener {
     protected void onDestroy() {
         super.onDestroy();
         destroyWebView();
+        downloadClient.unregister();
         mainPresenter.stop();
         mainPresenter = null;
     }

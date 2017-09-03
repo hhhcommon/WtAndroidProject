@@ -30,10 +30,10 @@ public class ThreadDao {
 		db.close();
 	}
 
-	public void deleteThread(String url, String thread_id) {
+	public void deleteThread(String thread_id) {
 		SQLiteDatabase db = helper.getWritableDatabase();
-		db.execSQL("delete from thread_info where url = ? and thread_id = ?",
-				new Object[] { url, thread_id });
+		db.execSQL("delete from thread_info where  thread_id = ?",
+				new Object[] { thread_id });
 		db.close();
 	}
 

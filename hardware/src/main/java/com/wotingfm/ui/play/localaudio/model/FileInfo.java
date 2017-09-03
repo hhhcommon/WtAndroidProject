@@ -19,9 +19,9 @@ public class FileInfo implements Serializable {
 
     public String user_id;
     public String download_type;// 0为未下载 1为下载中,2暂停状态
-    public String start;
-    public String end;
-    public String length;
+    public int start=-1;
+    public int end=-1;
+    public int length;
     public String finished;
     public String fileName;
 

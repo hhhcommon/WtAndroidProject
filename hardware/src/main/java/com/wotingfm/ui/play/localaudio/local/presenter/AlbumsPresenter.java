@@ -41,7 +41,7 @@ public class AlbumsPresenter {
 
     public void del(FileInfo s) {
         activity.dialogShow();
-        FID.deleteSequ(s.id, CommonUtils.getUserId());
+        FID.deleteSequ(s.album_id, CommonUtils.getUserId());
         listResult.remove(s);
         if (listResult.isEmpty()) {
             activity.showEmptyView();
@@ -49,7 +49,6 @@ public class AlbumsPresenter {
             activity.setData(listResult);
         }
         activity.dialogCancel();
-        EventBus.getDefault().postSticky(s.id);
     }
 
     /**
