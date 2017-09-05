@@ -8,24 +8,19 @@ import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.wotingfm.R;
-import com.wotingfm.ui.play.main.adapter.PlayerListAdapter;
 import com.wotingfm.ui.bean.SinglesBase;
-
-import java.util.ArrayList;
-import java.util.List;
+import com.wotingfm.ui.play.main.PlayerFragment;
+import com.wotingfm.ui.play.main.adapter.PlayerListAdapter;
 
 //播放节目选择dialog
 public class PlayerDialog extends Dialog implements View.OnClickListener {
 
     private RecyclerView mRecyclerViewList;
     private TextView tvClose;
-
     private PlayerListAdapter playerListAdapter;
-    private List<SinglesBase> singLesBeans = new ArrayList<>();
 
     public PlayerDialog(@NonNull Context context) {
         super(context, R.style.BottomDialog);
@@ -52,55 +47,53 @@ public class PlayerDialog extends Dialog implements View.OnClickListener {
     }
 
     private void setData() {
-        playerListAdapter = new PlayerListAdapter(getContext(), singLesBeans);
+        playerListAdapter = new PlayerListAdapter(getContext(), PlayerFragment.singLesBeans);
         mRecyclerViewList.setAdapter(playerListAdapter);
     }
 
     /**
      * 展示dialog
      *
-     * @param singLesBeansBase
-     * @param pid
      * @param popPlay
      */
-    public void showPlayDialog(final List<SinglesBase> singLesBeansBase, String pid, final PopPlayCallBack popPlay) {
-        singLesBeans.clear();
-        if (singLesBeansBase != null) {
-            singLesBeans.addAll(singLesBeansBase);
+    public void showPlayDialog(final PopPlayCallBack popPlay) {
+        if (PlayerFragment.singLesBeans != null) {
             playerListAdapter.setPlayerClick(new PlayerListAdapter.PlayerClick() {
                 @Override
-                public void player(SinglesBase singlesBean, int position) {
-                    if (popPlay != null) {
-                        for (int i = 0, size = singLesBeans.size(); i < size; i++) {
-                            SinglesBase p = singLesBeans.get(i);
-                            p.isPlay = false;
-                            singLesBeans.set(i, p);
-                        }
-                        playerListAdapter.setPlayId(singlesBean.id);
-                        popPlay.play(singlesBean, position);
-                        singlesBean.isPlay = true;
-                        singLesBeans.set(position, singlesBean);
-                        playerListAdapter.notifyDataSetChanged();
-                    }
+                public void player(int position) {
+                    setIsPlay(PlayerFragment.singLesBeans.get(position));
+                    playerListAdapter.notifyDataSetChanged();
+                    if (popPlay != null) popPlay.play(position);
                 }
 
                 @Override
-                public void close(SinglesBase singlesBean) {
-                    if (singlesBean.isPlay == false) {
-                        singLesBeans.remove(singlesBean);
-                        if (popPlay != null)
-                            popPlay.close(singlesBean);
-                        playerListAdapter.notifyDataSetChanged();
-                    }
+                public void close(int position) {
+                    SinglesBase singlesBean = PlayerFragment.singLesBeans.get(position);
+                    PlayerFragment.singLesBeans.remove(singlesBean);
+                    playerListAdapter.notifyDataSetChanged();
+                    if (popPlay != null) popPlay.close(singlesBean);
                 }
-            }, pid);
+
+                @Override
+                public void getList(int position) {
+                    if (popPlay != null) popPlay.getList(position);
+                    dismiss();
+                }
+            });
             playerListAdapter.notifyDataSetChanged();
         }
     }
 
-    public interface PopPlayCallBack {
-        void play(SinglesBase singlesBean, int position);
+    private void setIsPlay(SinglesBase singlesBase) {
+        for (int i = 0; i < PlayerFragment.singLesBeans.size(); i++) {
+            PlayerFragment.singLesBeans.get(i).isPlay = false;
+        }
+        singlesBase.isPlay = true;
+    }
 
+    public interface PopPlayCallBack {
+        void play(int position);
+        void getList(int position);
         void close(SinglesBase singlesBean);
     }
 

@@ -51,6 +51,6 @@ public class SinglesBase implements Serializable {
     public boolean isDownloadOver;
     @DatabaseField
     public boolean isSelect;
-
-
+    @DatabaseField
+    public boolean isAlbumList;
 }

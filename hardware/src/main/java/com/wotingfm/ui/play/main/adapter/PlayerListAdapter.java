@@ -19,8 +19,6 @@ import java.util.List;
  */
 public class PlayerListAdapter extends CommonAdapter<SinglesBase> {
     private PlayerClick playerClick;
-    private String playId;
-
     public PlayerListAdapter(Context context, List<SinglesBase> datas) {
         super(context, R.layout.item_pop_player, datas);
     }
@@ -29,14 +27,21 @@ public class PlayerListAdapter extends CommonAdapter<SinglesBase> {
     protected void convert(ViewHolder holder, final SinglesBase s, final int position) {
         holder.setText(R.id.tvContent, s.album_title);
         TextView textViewTitle = (TextView) holder.itemView.findViewById(R.id.tvTitle);
+        TextView tv_playList = (TextView) holder.itemView.findViewById(R.id.tv_playList);
         textViewTitle.setText(s.single_title);
         ImageView ivTop = (ImageView) holder.itemView.findViewById(R.id.ivTop);
         ImageView ivClose = (ImageView) holder.itemView.findViewById(R.id.ivClose);
-        if (s.isPlay == true || s.id.equals(playId)) {
-            ivTop.setVisibility(View.VISIBLE);
+        if (s.isPlay == true) {
+            if (s.isAlbumList) {
+                tv_playList.setVisibility(View.GONE);
+            } else {
+                tv_playList.setVisibility(View.VISIBLE);
+            }
+                ivTop.setVisibility(View.VISIBLE);
             ivClose.setVisibility(View.INVISIBLE);
             textViewTitle.setTextColor(Color.parseColor("#fd8548"));
         } else {
+            tv_playList.setVisibility(View.GONE);
             ivTop.setVisibility(View.GONE);
             ivClose.setVisibility(View.VISIBLE);
             textViewTitle.setTextColor(Color.parseColor("#16181a"));
@@ -45,7 +50,7 @@ public class PlayerListAdapter extends CommonAdapter<SinglesBase> {
             @Override
             public void onClick(View v) {
                 if (playerClick != null) {
-                    playerClick.player(s, position);
+                    playerClick.player(position);
                 }
             }
         });
@@ -53,25 +58,30 @@ public class PlayerListAdapter extends CommonAdapter<SinglesBase> {
             @Override
             public void onClick(View v) {
                 if (playerClick != null) {
-                    playerClick.close(s);
+                    playerClick.close(position);
+                }
+            }
+        });
+        tv_playList.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (playerClick != null) {
+                    playerClick.getList(position);
                 }
             }
         });
     }
 
-    public void setPlayId(String playId) {
-        this.playId = playId;
-    }
-
-    public void setPlayerClick(PlayerClick playerClick, String playId) {
-        this.playId = playId;
+    public void setPlayerClick( PlayerClick playerClick) {
         this.playerClick = playerClick;
     }
 
     public interface PlayerClick {
-        void player(SinglesBase singlesBean, int postion);
+        void player(int position);
 
-        void close(SinglesBase singlesBean);
+        void getList(int position);
+
+        void close(int position);
     }
 
 }

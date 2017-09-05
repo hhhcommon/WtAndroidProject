@@ -82,9 +82,25 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:layout_marginRight="8dp"
             android:layout_centerVertical="true"
+            android:layout_marginRight="8dp"
             android:src="@mipmap/icon_playlists_delete"/>
+
+        <TextView
+            android:id="@+id/tv_playList"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:layout_marginBottom="10dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/wt_view_click_play_album"
+            android:gravity="center"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:text="播放专辑"
+            android:textColor="#ff7e42"
+            android:textSize="16sp"/>
     </RelativeLayout>
 
     <View

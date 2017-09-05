@@ -46,7 +46,6 @@ public class MenuDialog extends Dialog implements View.OnClickListener {
 
     private SinglesBase pdsBase;
     private FollowCallBack followCallBack;
-    private ChannelsBean channelsBean;
     private FileInfoDao mFileDao;// 文件相关数据库
 
     public MenuDialog(Activity context) {
@@ -88,13 +87,12 @@ public class MenuDialog extends Dialog implements View.OnClickListener {
         tvLocal.setOnClickListener(this);
     }
 
-    public void setMenuData(SinglesBase pds, FollowCallBack followCallBack, ChannelsBean channelsBean) {
+    public void setMenuData(SinglesBase pds, FollowCallBack followCallBack ) {
         this.followCallBack = followCallBack;
-        this.channelsBean = channelsBean;
         if (pds != null) {
             pdsBase = pds;
             setLikeImg(pds.had_liked);
-            if (channelsBean != null || pds.is_radio == true) {
+            if (pds.is_radio == true) {
                 tvRadio.setVisibility(View.VISIBLE);
                 tvAlbums.setVisibility(View.INVISIBLE);
                 tvAnchor.setVisibility(View.INVISIBLE);
@@ -199,12 +197,11 @@ public class MenuDialog extends Dialog implements View.OnClickListener {
                 GlobalStateConfig.IS_LOOK = true;
                 dismiss();
                 if (pdsBase != null && pdsBase.is_radio == true) {
-                    channelsBean = new ChannelsBean();
+                    ChannelsBean  channelsBean = new ChannelsBean();
                     channelsBean.id = pdsBase.id;
                     channelsBean.title = pdsBase.album_title;
-                }
-                if (channelsBean != null)
                     activity.open(RadioInfoFragment.newInstance(channelsBean.id, channelsBean.title));
+                }
                 break;
         }
     }

@@ -1,24 +1,24 @@
 package com.wotingfm.ui.main.view;
 
+import android.annotation.TargetApi;
 import android.app.TabActivity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.net.http.SslError;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.support.annotation.RequiresApi;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
+import android.webkit.CookieManager;
 import android.webkit.JavascriptInterface;
 import android.webkit.PermissionRequest;
-import android.webkit.SslErrorHandler;
 import android.webkit.WebChromeClient;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.LinearLayout;
@@ -53,6 +53,7 @@ public class MainActivity extends TabActivity implements View.OnClickListener {
     private String type;
     private PopupWindow Ndialog;
     private DownloadClient downloadClient;
+    private MainActivity context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,7 +61,21 @@ public class MainActivity extends TabActivity implements View.OnClickListener {
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);        // 透明状态栏
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);    // 透明导航栏
         setContentView(R.layout.activity_main);
+        context=this;
         ButterKnife.bind(this);
+//        if(Build.VERSION.SDK_INT>=23){
+//            //①checkSelfPermission 检查当前应用的权限
+//            if(ActivityCompat.checkSelfPermission(this,Manifest.permission.RECORD_AUDIO)== PermissionChecker.PERMISSION_DENIED){
+//                //②PERMISSION_DENIED说明没有权限需要手动申请
+////                requestPermissions 请求权限的方法
+//                //第一个参数 activity
+//                //第二个参数 需要请求的权限的 权限String数组
+//                //第三个参数 请求码 用来区分不同的权限请求
+//                //需要注意 最后一个参数 requestCode需要>0
+//                ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.RECORD_AUDIO},1);
+//                return;
+//            }
+//        }
         InitTextView();// 初始化视图
         dialog();// 通知消息弹出框
         mainPresenter = new MainPresenter(this);
@@ -94,26 +109,27 @@ public class MainActivity extends TabActivity implements View.OnClickListener {
 
     // 设置webView的参数
     private void webViewSet(WebView mWebView) {
-        mWebView.getSettings().setJavaScriptEnabled(true);// 启用javascript
-        // 从assets目录下面的加载html
+        setUpWebViewDefaults(mWebView);
         // mWebView.loadUrl("https://rtcmulticonnection.herokuapp.com/demos/Audio-Conferencing.html?roomid=123456789");
         mWebView.loadUrl("https://apprtc.wotingfm.com/demos/Audio-Conferencing.html?simple=true");
         mWebView.addJavascriptInterface(this, "android");
-        mWebView.setWebViewClient(new WebViewClient() {
-            @Override
-            public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
-                handler.proceed();
-            }
-        });
         mWebView.setWebChromeClient(new WebChromeClient() {
-                                        @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-                                        @Override
-                                        public void onPermissionRequest(PermissionRequest request) {
-                                            request.grant(request.getResources());
-                                        }
-                                    }
-        );
-        mWebView.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);// 设置允许JS弹窗
+            @Override
+            public void onPermissionRequest(final PermissionRequest request) {
+                context.runOnUiThread(new Runnable() {
+                    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+                    @Override
+                    public void run() {
+                        if(request.getOrigin().toString().equals("https://apprtc.wotingfm.com/demos/Audio-Conferencing.html?simple=true")) {
+                            request.grant(request.getResources());
+                        } else {
+                            request.deny();
+                        }
+                    }
+                });
+            }
+
+        });
     }
 
     @Override
@@ -414,6 +430,61 @@ public class MainActivity extends TabActivity implements View.OnClickListener {
             }
         }
     }
+
+    /**
+     * Convenience method to set some generic defaults for a
+     * given WebView
+     *
+     * @param webView
+     */
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    private void setUpWebViewDefaults(WebView webView) {
+        WebSettings settings = webView.getSettings();
+
+        // Enable Javascript
+        settings.setJavaScriptEnabled(true);
+
+        // Use WideViewport and Zoom out if there is no viewport defined
+        settings.setUseWideViewPort(true);
+        settings.setLoadWithOverviewMode(true);
+
+        // Enable pinch to zoom without the zoom buttons
+        settings.setBuiltInZoomControls(true);
+
+        // Allow use of Local Storage
+        settings.setDomStorageEnabled(true);
+
+        if(Build.VERSION.SDK_INT > Build.VERSION_CODES.HONEYCOMB) {
+            // Hide the zoom controls for HONEYCOMB+
+            settings.setDisplayZoomControls(false);
+        }
+
+        // Enable remote debugging via chrome://inspect
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            WebView.setWebContentsDebuggingEnabled(true);
+        }
+
+        webView.setWebViewClient(new WebViewClient());
+
+        // AppRTC requires third party cookies to work
+        CookieManager cookieManager = CookieManager.getInstance();
+        cookieManager.setAcceptThirdPartyCookies(webView, true);
+    }
+
+//    @Override
+//    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults){
+//
+//        if (requestCode == MY_PERMISSIONS_REQUEST_CALL_PHONE){
+//            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+//                callPhone();
+//            } else{
+//                // Permission Denied
+//                Toast.makeText(MainActivity.this, "Permission Denied", Toast.LENGTH_SHORT).show();
+//            }
+//            return;
+//        }
+//        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+//    }
 
     @Override
     protected void onDestroy() {
