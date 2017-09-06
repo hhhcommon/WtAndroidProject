@@ -3,10 +3,12 @@ package com.wotingfm.ui.play.search.fragment;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.gson.GsonBuilder;
 import com.woting.commonplat.amine.ARecyclerView;
 import com.woting.commonplat.amine.LoadMoreFooterView;
 import com.woting.commonplat.amine.OnLoadMoreListener;
@@ -98,6 +100,7 @@ public class ProgramListFragment extends Fragment implements View.OnClickListene
     }
 
     public void refresh(String q) {
+        Log.e("执行搜索：", "节目" + q);
         mPage = 1;
         this.q = q;
         RetrofitUtils.getInstance().serchList("singles", q, mPage)
@@ -106,6 +109,11 @@ public class ProgramListFragment extends Fragment implements View.OnClickListene
                 .subscribe(new Action1<SerchList>() {
                     @Override
                     public void call(SerchList serchList) {
+                        try {
+                            Log.e("搜索节目返回数据", new GsonBuilder().serializeNulls().create().toJson(serchList));
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                         mRecyclerView.setRefreshing(false);
                         if (serchList != null && serchList.ret == 0 && serchList.data != null && serchList.data.singles != null && !serchList.data.singles.isEmpty()) {
                             mPage++;

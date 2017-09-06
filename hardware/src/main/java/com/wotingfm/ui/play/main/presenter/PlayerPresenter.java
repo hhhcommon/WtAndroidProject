@@ -37,7 +37,7 @@ public class PlayerPresenter {
     private HistoryHelper historyHelper;
     private BDPlayer bdPlayer;
     private QNPlayer QNPlayer;
-    private int playerType = 2;
+    public static int playerType = 1; //1 百度播放器，2 大牛播放器
 
     public PlayerPresenter(PlayerFragment activity) {
         this.activity = activity;
@@ -48,45 +48,40 @@ public class PlayerPresenter {
 
     private void create() {
         listDataSaveUtils = new ListDataSaveUtils(BSApplication.getInstance());// 本地数据
-        if (playerType == 1) {
-            if (bdPlayer == null) bdPlayer = new BDPlayer(activity.getActivity());
-        } else {
-            if (QNPlayer == null) QNPlayer = new QNPlayer(activity.getActivity());
-        }
+        if (bdPlayer == null) bdPlayer = new BDPlayer(activity.getActivity());
+        if (QNPlayer == null) QNPlayer = new QNPlayer(activity.getActivity());
         historyHelper = new HistoryHelper(BSApplication.getInstance());
     }
 
     private void setListener() {
-        if (playerType == 1) {
             bdPlayer.setOnPreparedListener(new IMediaPlayer.OnPreparedListener() {
                 @Override
                 public void onPrepared(IMediaPlayer iMediaPlayer) {
+                    Log.e("百度监听", "播放准备好");
                     activity.playerOnPrepared();
                 }
             });
             bdPlayer.setOnCompletionListener(new IMediaPlayer.OnCompletionListener() {
                 @Override
                 public void onCompletion(IMediaPlayer iMediaPlayer) {
+                    Log.e("百度监听", "播放完成");
                     activity.playerOnCompletion();
                 }
             });
-        } else {
             QNPlayer.setOnPreparedListener(new PLMediaPlayer.OnPreparedListener() {
                 @Override
                 public void onPrepared(PLMediaPlayer mp, int preparedTime) {
-                    Log.e("大牛监听","播放准备好");
+                    Log.e("大牛监听", "播放准备好");
                     activity.playerOnPrepared();
                 }
             });
             QNPlayer.setOnCompletionListener(new PLMediaPlayer.OnCompletionListener() {
                 @Override
                 public void onCompletion(PLMediaPlayer mp) {
-                    Log.e("大牛监听","播放完成");
+                    Log.e("大牛监听", "播放完成");
                     activity.playerOnCompletion();
                 }
             });
-        }
-
     }
 
     public SinglesBase getData() {
@@ -243,11 +238,8 @@ public class PlayerPresenter {
     }
 
     public void playPause() {
-        if (playerType == 1) {
             bdPlayer.pause();
-        } else {
             QNPlayer.onClickPause();
-        }
     }
 
     public void start() {
@@ -257,14 +249,6 @@ public class PlayerPresenter {
             QNPlayer.onClickResume();
         }
     }
-
-//    public BDPlayer.PlayerState getCurrentPlayerState() {
-//        return bdPlayer.getCurrentPlayerState();
-//    }
-
-//    public boolean getCurrentPlayerState() {
-//        return QNPlayer.getCurrentPlayerState();
-//    }
 
     public Object getCurrentPlayerState() {
         if (playerType == 1) {

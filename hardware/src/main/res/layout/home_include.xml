@@ -92,7 +92,7 @@
                 android:layout_width="wrap_content"
                 android:layout_marginLeft="60.7dp"
                 android:layout_height="wrap_content"
-                android:src="@mipmap/music_play_icon_before_gray"/>
+                android:src="@drawable/icon_play_before"/>
 
             <ImageView
                 android:id="@+id/ivPause"
@@ -107,7 +107,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_marginRight="60.7dp"
-                android:src="@mipmap/music_play_icon_next"/>
+                android:src="@drawable/icon_play_next"/>
         </RelativeLayout>
     </LinearLayout>
 </com.woting.commonplat.widget.LoadFrameLayout>

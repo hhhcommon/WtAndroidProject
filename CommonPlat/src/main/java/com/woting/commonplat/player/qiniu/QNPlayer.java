@@ -63,8 +63,8 @@ public class QNPlayer {
             mMediaPlayer.setOnPreparedListener(mOnPreparedListener);
             mMediaPlayer.setOnCompletionListener(mOnCompletionListener);
             mMediaPlayer.setOnErrorListener(mOnErrorListener);
-//            mMediaPlayer.setOnInfoListener(mOnInfoListener);
-//            mMediaPlayer.setOnBufferingUpdateListener(mOnBufferingUpdateListener);
+            mMediaPlayer.setOnInfoListener(mOnInfoListener);
+            mMediaPlayer.setOnBufferingUpdateListener(mOnBufferingUpdateListener);
             mMediaPlayer.setWakeMode(context, PowerManager.PARTIAL_WAKE_LOCK);
         }
     }
@@ -91,7 +91,6 @@ public class QNPlayer {
         @Override
         public void onPrepared(PLMediaPlayer mp, int preparedTime) {
             Log.e(TAG, "On Prepared !");
-
             if (OnPreparedListener != null) {
                 OnPreparedListener.onPrepared(mp,preparedTime);
             }
@@ -99,31 +98,33 @@ public class QNPlayer {
         }
     };
 
-//    private PLMediaPlayer.OnInfoListener mOnInfoListener = new PLMediaPlayer.OnInfoListener() {
-//        @Override
-//        public boolean onInfo(PLMediaPlayer mp, int what, int extra) {
-//            Log.i(TAG, "OnInfo, what = " + what + ", extra = " + extra);
-//            switch (what) {
-//                case PLMediaPlayer.MEDIA_INFO_BUFFERING_START:
-//                    Log.e(TAG, "加载中");
-//                    break;
-//                case PLMediaPlayer.MEDIA_INFO_BUFFERING_END:
-//                case PLMediaPlayer.MEDIA_INFO_AUDIO_RENDERING_START:
-//                    Log.e(TAG, "加载完成");
-//                    break;
-//                default:
-//                    break;
-//            }
-//            return true;
-//        }
-//    };
+    private PLMediaPlayer.OnInfoListener mOnInfoListener = new PLMediaPlayer.OnInfoListener() {
+        @Override
+        public boolean onInfo(PLMediaPlayer mp, int what, int extra) {
+            Log.i(TAG, "OnInfo, what = " + what + ", extra = " + extra);
+            switch (what) {
+                case PLMediaPlayer.MEDIA_INFO_BUFFERING_START:
+                    Log.e(TAG, "加载中");
+                    break;
+                case PLMediaPlayer.MEDIA_INFO_BUFFERING_END:
+                    Log.e(TAG, "加载完成");
+                    break;
+                case PLMediaPlayer.MEDIA_INFO_AUDIO_RENDERING_START:
+                    Log.e(TAG, "RENDERING_START");
+                    break;
+                default:
+                    break;
+            }
+            return true;
+        }
+    };
 
-//    private PLMediaPlayer.OnBufferingUpdateListener mOnBufferingUpdateListener = new PLMediaPlayer.OnBufferingUpdateListener() {
-//        @Override
-//        public void onBufferingUpdate(PLMediaPlayer mp, int percent) {
-//            Log.e(TAG, "onBufferingUpdate: " + percent + "%");
-//        }
-//    };
+    private PLMediaPlayer.OnBufferingUpdateListener mOnBufferingUpdateListener = new PLMediaPlayer.OnBufferingUpdateListener() {
+        @Override
+        public void onBufferingUpdate(PLMediaPlayer mp, int percent) {
+            Log.e(TAG, "onBufferingUpdate: " + percent + "%");
+        }
+    };
 
     private PLMediaPlayer.OnErrorListener mOnErrorListener = new PLMediaPlayer.OnErrorListener() {
         @Override

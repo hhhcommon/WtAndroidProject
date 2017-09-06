@@ -7,6 +7,7 @@ import android.support.v4.view.ViewPager;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -87,9 +88,11 @@ public class SearchFragment extends Fragment implements View.OnClickListener {
             q = bundle.getString("q");
             int code = bundle.getInt("code", 0);
             etSearchlike.setText(q);
-            if (!TextUtils.isEmpty(q)) etSearchlike.setSelection(q.length());
             inItViewPager(code);
             inItListener();
+            if (!TextUtils.isEmpty(q)) {
+                etSearchlike.setSelection(q.length());
+            }
         }
     }
 
@@ -140,11 +143,11 @@ public class SearchFragment extends Fragment implements View.OnClickListener {
                                                        return false;
                                                    }
                                                }
-
         );
     }
 
     private void search(String content) {
+        Log.e("执行搜索：", "内容" + content);
         if (!TextUtils.isEmpty(content)) {
             if (albumsListFragment != null)
                 albumsListFragment.refresh(content);

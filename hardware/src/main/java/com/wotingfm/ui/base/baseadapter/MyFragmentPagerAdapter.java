@@ -29,9 +29,7 @@ public class MyFragmentPagerAdapter extends FragmentPagerAdapter {
 //    			return fragment;
 //    		}
 //    	}
-    	Log.e("===", "选择"+arg0+"listzong"+list.size());
-    	
-        return list.get(arg0);  
+        return list.get(arg0);
     }
 }  
 

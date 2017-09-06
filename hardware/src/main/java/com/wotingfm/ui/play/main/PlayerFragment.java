@@ -16,7 +16,9 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
+
 import com.pili.pldroid.player.PlayerState;
+import com.woting.commonplat.player.baidu.BDPlayer;
 import com.woting.commonplat.utils.DementionUtil;
 import com.woting.commonplat.widget.LoadFrameLayout;
 import com.wotingfm.R;
@@ -24,6 +26,7 @@ import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.config.GlobalStateConfig;
 import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.common.utils.TimeUtil;
+import com.wotingfm.common.utils.ToastUtils;
 import com.wotingfm.ui.bean.ChannelsBean;
 import com.wotingfm.ui.bean.MessageEvent;
 import com.wotingfm.ui.bean.Selected;
@@ -91,6 +94,7 @@ public class PlayerFragment extends Fragment implements View.OnClickListener {
     private SinglesBase singlesBase;
     public static List<SinglesBase> singLesBeans = new ArrayList<>();
     private int positionPlayer = 0; //控制播放下标
+    private boolean isChanging = false;//互斥变量，防止定时器与SeekBar拖动时进度冲突
 
     private View rootView;
     private PlayerPresenter presenter;
@@ -128,46 +132,48 @@ public class PlayerFragment extends Fragment implements View.OnClickListener {
             mPlayerAdapter.notifyDataSetChanged();
 
             if (s != null) {
-                String id=s.id;
-                if(!TextUtils.isEmpty(id)){
-                    for(int i=0;i<singLesBeans.size();i++){
-                        if(!TextUtils.isEmpty(singLesBeans.get(i).id)&&singLesBeans.get(i).id.equals(id)){
-                            singLesBeans.get(i).isPlay=true;
+                String id = s.id;
+                if (!TextUtils.isEmpty(id)) {
+                    for (int i = 0; i < singLesBeans.size(); i++) {
+                        if (!TextUtils.isEmpty(singLesBeans.get(i).id) && singLesBeans.get(i).id.equals(id)) {
+                            singLesBeans.get(i).isPlay = true;
                             singlesBase = singLesBeans.get(i);
                         }
                     }
                 }
                 positionPlayer = s.postionPlayer;
-                smoothMoveToPosition(mRecyclerView, positionPlayer);
+                setPlayer();
                 presenter.play(s.single_file_url);
+                smoothMoveToPosition(mRecyclerView, positionPlayer);
+                setDataView();
             } else {
                 singlesBase = list.get(0);
                 positionPlayer = 0;
-                smoothMoveToPosition(mRecyclerView, positionPlayer);
+                setPlayer();
                 presenter.play(singlesBase.single_file_url);
+                smoothMoveToPosition(mRecyclerView, positionPlayer);
+                setDataView();
             }
-            setDataView();
-            setDataListView();
         } else {
             if (s != null) {
                 showContentView();
                 singLesBeans.clear();
                 singLesBeans.add(s);
                 mPlayerAdapter.notifyDataSetChanged();
-                String id=s.id;
-                if(!TextUtils.isEmpty(id)){
-                    for(int i=0;i<singLesBeans.size();i++){
-                        if(!TextUtils.isEmpty(singLesBeans.get(i).id)&&singLesBeans.get(i).id.equals(id)){
-                            singLesBeans.get(i).isPlay=true;
+                String id = s.id;
+                if (!TextUtils.isEmpty(id)) {
+                    for (int i = 0; i < singLesBeans.size(); i++) {
+                        if (!TextUtils.isEmpty(singLesBeans.get(i).id) && singLesBeans.get(i).id.equals(id)) {
+                            singLesBeans.get(i).isPlay = true;
                             singlesBase = singLesBeans.get(i);
                         }
                     }
                 }
                 positionPlayer = s.postionPlayer;
-                smoothMoveToPosition(mRecyclerView, positionPlayer);
+                setPlayer();
                 presenter.play(s.single_file_url);
+                smoothMoveToPosition(mRecyclerView, positionPlayer);
                 setDataView();
-                setDataListView();
             } else {
                 // 获取网络推荐数据
                 showLoadingView();
@@ -226,10 +232,7 @@ public class PlayerFragment extends Fragment implements View.OnClickListener {
                 showContentView();
                 singlesBase = singLesBeans.get(0);
                 positionPlayer = 0;
-                setIsPlay();
-                smoothMoveToPosition(mRecyclerView, positionPlayer);
-                setDataView();
-                setDataListView();
+                playMusic();
             } else {
                 if (singLesBeans != null && singLesBeans.size() > 0) {
                     showContentView();
@@ -247,10 +250,7 @@ public class PlayerFragment extends Fragment implements View.OnClickListener {
                 showContentView();
                 singlesBase = singLesBeans.get(0);
                 positionPlayer = 0;
-                setIsPlay();
-                smoothMoveToPosition(mRecyclerView, positionPlayer);
-                setDataView();
-                setDataListView();
+                playMusic();
             } else {
                 if (singLesBeans != null && singLesBeans.size() > 0) {
                     showContentView();
@@ -261,90 +261,33 @@ public class PlayerFragment extends Fragment implements View.OnClickListener {
         }
     }
 
+    // 设置按钮样式
     private void setDataView() {
-        if (singlesBase != null) {
-
-        }
-    }
-
-    private void setDataListView() {
-    }
-
-    private void initData(String albumsId, SinglesBase _singlesBase, ChannelsBean channelsBean, List<SinglesDownload> singlesBeanList, Selected.DataBeanX.DataBean DataBean) {
-        if (_singlesBase != null) {
-            loadLayout.showContentView();
-            singLesBeans.clear();
-            singLesBeans.add(_singlesBase);
-            presenter.saveUtilList(singLesBeans);
-            positionPlayer = 0;
-            singlesBase = _singlesBase;
-            singlesBase.postionPlayer = 0;
-            mPlayerAdapter.notifyDataSetChanged();
-            smoothMoveToPosition(mRecyclerView, positionPlayer);
-            presenter.playPause();
-            presenter.play(singlesBase.single_file_url);
-            presenter.getRecommendedList(singlesBase.single_title);
-        } else {
-            if (singlesBeanList != null) {
-                presenter.playPause();
-                singLesBeans.clear();
-                singLesBeans.addAll(singlesBeanList);
-                presenter.saveUtilList(singLesBeans);
-                mPlayerAdapter.notifyDataSetChanged();
-                positionPlayer = 0;
-                singlesBase = singLesBeans.get(0);
-                smoothMoveToPosition(mRecyclerView, positionPlayer);
-                presenter.playPause();
-                presenter.play(singlesBase.single_file_url);
+        if (singLesBeans != null && singLesBeans.size() > 0) {
+            // 此时有数据
+            if (singLesBeans.size() == 1) {
+                // 只有一条数据
+                ivBefore.setImageResource(R.mipmap.music_play_icon_before_d);
+                ivNext.setImageResource(R.mipmap.music_play_icon_next_d);
             } else {
-                if (channelsBean != null) {
-
-                    SinglesBase s = new SinglesBase();
-                    s.single_title = channelsBean.title;
-                    s.id = channelsBean.id;
-                    s.single_logo_url = channelsBean.image_url;
-                    s.single_file_url = channelsBean.radio_url;
-                    s.album_title = channelsBean.desc;
-                    s.is_radio = true;
-                    s.postionPlayer = 0;
-                    singLesBeans.clear();
-                    singLesBeans.add(s);
-                    presenter.saveUtilList(singLesBeans);
-                    positionPlayer = 0;
-                    singlesBase = singLesBeans.get(0);
-                    mPlayerAdapter.notifyDataSetChanged();
-                    smoothMoveToPosition(mRecyclerView, positionPlayer);
-                    presenter.playPause();
-                    presenter.play(singlesBase.single_file_url);
-                    presenter.getRecommendedList(singlesBase.single_title);
+                if (positionPlayer == 0) {
+                    // 第一条数据
+                    ivBefore.setImageResource(R.mipmap.music_play_icon_before_d);
+                    ivNext.setImageResource(R.drawable.icon_play_next);
                 } else {
-                    if (DataBean != null) {
-                        singLesBeans.clear();
-                        SinglesBase s = new SinglesBase();
-                        s.single_title = DataBean.single_title;
-                        s.id = DataBean.id;
-                        s.album_id = DataBean.album_id;
-                        s.single_logo_url = DataBean.single_logo_url;
-                        s.single_file_url = DataBean.single_file_url;
-                        s.album_title = DataBean.album_title;
-                        s.creator_id = DataBean.creator_id;
-                        s.is_radio = false;
-                        s.postionPlayer = 0;
-                        singLesBeans.add(s);
-                        presenter.saveUtilList(singLesBeans);
-                        mPlayerAdapter.notifyDataSetChanged();
-                        positionPlayer = 0;
-                        singlesBase = singLesBeans.get(0);
-                        smoothMoveToPosition(mRecyclerView, positionPlayer);
-                        presenter.playPause();
-                        presenter.play(singlesBase.single_file_url);
-                        presenter.getRecommendedList(singlesBase.single_title);
+                    if (positionPlayer == singLesBeans.size() - 1) {
+                        // 最后一条数据
+                        ivBefore.setImageResource(R.drawable.icon_play_before);
+                        ivNext.setImageResource(R.mipmap.music_play_icon_next_d);
                     } else {
-                        showLoadingView();
-                        presenter.getPlayerList(albumsId);
+                        ivBefore.setImageResource(R.drawable.icon_play_before);
+                        ivNext.setImageResource(R.drawable.icon_play_next);
                     }
                 }
             }
+        } else {
+            ivBefore.setImageResource(R.mipmap.music_play_icon_before_d);
+            ivNext.setImageResource(R.mipmap.music_play_icon_next_d);
         }
     }
 
@@ -358,14 +301,9 @@ public class PlayerFragment extends Fragment implements View.OnClickListener {
                 int position = manager.findLastCompletelyVisibleItemPosition();
                 if (newState == RecyclerView.SCROLL_STATE_IDLE && position != positionPlayer && position >= 0) {
                     Log.e("mRecyclerView", "滚动");
-                    seekbarVideo.setProgress(0);
                     positionPlayer = position;
                     singlesBase = singLesBeans.get(positionPlayer);
-                    setIsPlay();
-                    smoothMoveToPosition(mRecyclerView, positionPlayer);
-                    presenter.playPause();
-                    presenter.play(singlesBase.single_file_url);
-                    ivPause.setImageResource(R.mipmap.music_play_icon_pause);
+                    playMusic();
                 }
             }
         });
@@ -394,13 +332,6 @@ public class PlayerFragment extends Fragment implements View.OnClickListener {
         ivBefore.setOnClickListener(this);
         ivPlayerCenter.setOnClickListener(this);
         ivPlayerFind.setOnClickListener(this);
-    }
-
-    private void setIsPlay() {
-        for (int i = 0; i < singLesBeans.size(); i++) {
-            singLesBeans.get(i).isPlay = false;
-        }
-        singlesBase.isPlay = true;
     }
 
     @Override
@@ -438,77 +369,59 @@ public class PlayerFragment extends Fragment implements View.OnClickListener {
                 next();
                 break;
             case R.id.lin_PlayList:
-                if (playerDialog == null) {
-                    playerDialog = new PlayerDialog(getActivity());
-                }
-                if (singLesBeans != null && !singLesBeans.isEmpty()) {
-                    playerDialog.showPlayDialog( new PlayerDialog.PopPlayCallBack() {
-                        @Override
-                        public void play(int position) {
-                            positionPlayer = position;
-                            mPlayerAdapter.notifyDataSetChanged();
-                            smoothMoveToPosition(mRecyclerView, positionPlayer);
-                            singlesBase = singLesBeans.get(positionPlayer);
-                            presenter.playPause();
-                            presenter.play(singlesBase.single_file_url);
-                            ivPause.setImageResource(R.mipmap.music_play_icon_pause);
-                            seekbarVideo.setProgress(0);
-                        }
-
-                        @Override
-                        public void close(SinglesBase singlesBean) {
-                            singLesBeans.remove(singlesBean);
-                            mPlayerAdapter.notifyDataSetChanged();
-                        }
-
-                        @Override
-                        public void getList(int position) {
-                            showLoadingView();
-                            presenter.getPlayerList(singLesBeans.get(position).album_id);
-                        }
-                    });
-                    playerDialog.show();
-                }
+                setPlayerListDialog();
                 break;
             case R.id.ivMore:
-                if (menuDialog == null) {
-                    menuDialog = new MenuDialog(getActivity());
-                }
-                if (singlesBase != null)
-                    menuDialog.setMenuData(singlesBase, new MenuDialog.FollowCallBack() {
-                        @Override
-                        public void followPlayer(SinglesBase psb) {
-                            singLesBeans.set(positionPlayer, psb);
-                            mPlayerAdapter.notifyDataSetChanged();
-                        }
-                    });
-                menuDialog.show();
+                setMenuDialog();
                 break;
         }
     }
 
+    // 设置播放列表
+    private void setPlayerListDialog() {
+        if (playerDialog == null) {
+            playerDialog = new PlayerDialog(getActivity());
+        }
+        if (singLesBeans != null && !singLesBeans.isEmpty()) {
+            playerDialog.showPlayDialog(new PlayerDialog.PopPlayCallBack() {
+                @Override
+                public void play(int position) {
+                    positionPlayer = position;
+                    singlesBase = singLesBeans.get(positionPlayer);
+                    mPlayerAdapter.notifyDataSetChanged();
+                    playMusic();
+                }
 
-    private boolean isChanging = false;//互斥变量，防止定时器与SeekBar拖动时进度冲突
+                @Override
+                public void close(SinglesBase singlesBean) {
+                    singLesBeans.remove(singlesBean);
+                    mPlayerAdapter.notifyDataSetChanged();
+                }
 
-    public void setBarProgress() {
-        Observable.interval(1, 1, TimeUnit.SECONDS)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Action1<Long>() {
-                    @Override
-                    public void call(Long aLong) {
-                        if (isChanging == true) {
-                            return;
-                        }
-//                        if (singlesBase != null) {
-//                            singlesBase.play_time = presenter.getCurrentPosition();
-//                            singlesBase.postionPlayer = positionPlayer;
-//                            presenter.saveUtil(singlesBase);
-//                        }
-//                        seekbarVideo.setProgress(presenter.getCurrentPosition());
-//                        txtVideoStarttime.setText(TimeUtil.formatterTime(presenter.getCurrentPosition()) + "");
-                    }
-                });//每隔一秒发送数据
+                @Override
+                public void getList(int position) {
+                    showLoadingView();
+                    presenter.getPlayerList(singLesBeans.get(position).album_id);
+                }
+            });
+            playerDialog.show();
+        }
+    }
+
+    // 功能按钮
+    private void setMenuDialog() {
+        if (menuDialog == null) {
+            menuDialog = new MenuDialog(getActivity());
+        }
+        if (singlesBase != null)
+            menuDialog.setMenuData(singlesBase, new MenuDialog.FollowCallBack() {
+                @Override
+                public void followPlayer(SinglesBase psb) {
+                    singLesBeans.set(positionPlayer, psb);
+                    mPlayerAdapter.notifyDataSetChanged();
+                }
+            });
+        menuDialog.show();
     }
 
     /**
@@ -573,24 +486,7 @@ public class PlayerFragment extends Fragment implements View.OnClickListener {
                 } else if (!TextUtils.isEmpty(event) && "next".equals(event)) {
                     next();
                 } else if (!TextUtils.isEmpty(event) && "stop_or_star".equals(event)) {
-//                    BDPlayer.PlayerState isPause = presenter.getCurrentPlayerState();
-//                    if (isPause == isPause.STATE_PLAYING) {
-//                        presenter.playPause();
-//                        ivPause.setImageResource(R.mipmap.music_play_icon_play);
-//                    } else if (isPause == isPause.STATE_PAUSED) {
-//                        presenter.start();
-//                        ivPause.setImageResource(R.mipmap.music_play_icon_pause);
-//                    }
-
-                    PlayerState isPause = (PlayerState) presenter.getCurrentPlayerState();
-                    if (isPause == isPause.PLAYING) {
-                        presenter.playPause();
-                        ivPause.setImageResource(R.mipmap.music_play_icon_play);
-                    } else if (isPause ==isPause.PAUSED) {
-                        presenter.start();
-                        ivPause.setImageResource(R.mipmap.music_play_icon_pause);
-                    }
-
+                    pause();
                 }
                 break;
             case 1:
@@ -608,49 +504,151 @@ public class PlayerFragment extends Fragment implements View.OnClickListener {
         }
     }
 
-    public void before() {
+    // 别的界面的跳转数据处理
+    private void initData(String albumsId, SinglesBase _singlesBase, ChannelsBean channelsBean, List<SinglesDownload> singlesBeanList, Selected.DataBeanX.DataBean DataBean) {
+        if (_singlesBase != null) {
+            loadLayout.showContentView();
+            singLesBeans.clear();
+            singLesBeans.add(_singlesBase);
+            presenter.saveUtilList(singLesBeans);
+            positionPlayer = 0;
+            singlesBase = _singlesBase;
+            singlesBase.postionPlayer = 0;
+            mPlayerAdapter.notifyDataSetChanged();
+            playMusic();
+            presenter.getRecommendedList(singlesBase.single_title);
+        } else {
+            if (singlesBeanList != null) {
+                presenter.playPause();
+                singLesBeans.clear();
+                singLesBeans.addAll(singlesBeanList);
+                presenter.saveUtilList(singLesBeans);
+                mPlayerAdapter.notifyDataSetChanged();
+                positionPlayer = 0;
+                singlesBase = singLesBeans.get(0);
+                playMusic();
+            } else {
+                if (channelsBean != null) {
+
+                    SinglesBase s = new SinglesBase();
+                    s.single_title = channelsBean.title;
+                    s.id = channelsBean.id;
+                    s.single_logo_url = channelsBean.image_url;
+                    s.single_file_url = channelsBean.radio_url;
+                    s.album_title = channelsBean.desc;
+                    s.is_radio = true;
+                    s.postionPlayer = 0;
+                    singLesBeans.clear();
+                    singLesBeans.add(s);
+                    presenter.saveUtilList(singLesBeans);
+                    positionPlayer = 0;
+                    singlesBase = singLesBeans.get(0);
+                    mPlayerAdapter.notifyDataSetChanged();
+                    playMusic();
+                    presenter.getRecommendedList(singlesBase.single_title);
+                } else {
+                    if (DataBean != null) {
+                        singLesBeans.clear();
+                        SinglesBase s = new SinglesBase();
+                        s.single_title = DataBean.single_title;
+                        s.id = DataBean.id;
+                        s.album_id = DataBean.album_id;
+                        s.single_logo_url = DataBean.single_logo_url;
+                        s.single_file_url = DataBean.single_file_url;
+                        s.album_title = DataBean.album_title;
+                        s.creator_id = DataBean.creator_id;
+                        s.is_radio = false;
+                        s.postionPlayer = 0;
+                        singLesBeans.add(s);
+                        presenter.saveUtilList(singLesBeans);
+                        mPlayerAdapter.notifyDataSetChanged();
+                        positionPlayer = 0;
+                        singlesBase = singLesBeans.get(0);
+                        playMusic();
+                        presenter.getRecommendedList(singlesBase.single_title);
+                    } else {
+                        showLoadingView();
+                        presenter.getPlayerList(albumsId);
+                    }
+                }
+            }
+        }
+    }
+
+    // 设置播放器类型
+    private void setPlayer() {
+        if (singlesBase != null) {
+            if (singlesBase.is_radio) {
+                presenter.playerType = 2;
+            } else {
+                presenter.playerType = 1;
+            }
+        } else {
+            presenter.playerType = 1;
+        }
+    }
+
+    // 设置当前的播放数据
+    private void setIsPlay() {
+        for (int i = 0; i < singLesBeans.size(); i++) {
+            singLesBeans.get(i).isPlay = false;
+        }
+        singlesBase.isPlay = true;
+    }
+
+    // 执行播放
+    private void playMusic() {
+        setPlayer();
+        setIsPlay();
+        smoothMoveToPosition(mRecyclerView, positionPlayer);
+        presenter.playPause();
+        presenter.play(singlesBase.single_file_url);
+        seekbarVideo.setProgress(0);
+        ivPause.setImageResource(R.mipmap.music_play_icon_pause);
+        setDataView();
+    }
+
+    // 播放上一首
+    private void before() {
         if (singLesBeans.size() > positionPlayer && positionPlayer > 0) {
             positionPlayer = positionPlayer - 1;
             singlesBase = singLesBeans.get(positionPlayer);
-            setIsPlay();
-            smoothMoveToPosition(mRecyclerView,positionPlayer);
-            presenter.playPause();
-            presenter.play(singlesBase.single_file_url);
-            seekbarVideo.setProgress(0);
-            ivPause.setImageResource(R.mipmap.music_play_icon_pause);
+            playMusic();
         }
     }
 
-    public void pause() {
-//        BDPlayer.PlayerState isPause = presenter.getCurrentPlayerState();
-//        if (isPause == isPause.STATE_PLAYING) {
-//            presenter.playPause();
-//            ivPause.setImageResource(R.mipmap.music_play_icon_play);
-//        } else if (isPause == isPause.STATE_PAUSED) {
-//            presenter.start();
-//            ivPause.setImageResource(R.mipmap.music_play_icon_pause);
-//        }
-
-        PlayerState isPause = (PlayerState) presenter.getCurrentPlayerState();
-        if (isPause == isPause.PLAYING) {
-            presenter.playPause();
-            ivPause.setImageResource(R.mipmap.music_play_icon_play);
-        } else if (isPause ==isPause.PAUSED) {
-            presenter.start();
-            ivPause.setImageResource(R.mipmap.music_play_icon_pause);
+    // 暂停播放
+    private void pause() {
+        if (singlesBase != null && singlesBase.is_radio) {
+            PlayerState isPause = (PlayerState) presenter.getCurrentPlayerState();
+            if (isPause == isPause.PLAYING) {
+                presenter.playPause();
+                ivPause.setImageResource(R.mipmap.music_play_icon_play);
+            } else if (isPause == isPause.PAUSED) {
+                presenter.start();
+                ivPause.setImageResource(R.mipmap.music_play_icon_pause);
+            }
+        } else {
+            BDPlayer.PlayerState isPause = (BDPlayer.PlayerState) presenter.getCurrentPlayerState();
+            if (isPause == isPause.STATE_PLAYING) {
+                presenter.playPause();
+                ivPause.setImageResource(R.mipmap.music_play_icon_play);
+            } else if (isPause == isPause.STATE_PAUSED) {
+                presenter.start();
+                ivPause.setImageResource(R.mipmap.music_play_icon_pause);
+            }
         }
     }
 
-    public void next() {
+    // 播放下一首
+    private void next() {
         if (positionPlayer < singLesBeans.size() - 1) {
             positionPlayer = positionPlayer + 1;
             singlesBase = singLesBeans.get(positionPlayer);
-            setIsPlay();
-            smoothMoveToPosition(mRecyclerView,positionPlayer);
-            presenter.playPause();
-            presenter.play(singlesBase.single_file_url);
-            ivPause.setImageResource(R.mipmap.music_play_icon_pause);
-            seekbarVideo.setProgress(0);
+            playMusic();
+        } else {
+            // 播放完成推荐逻辑，待实现
+            ToastUtils.show_always(this.getActivity(), "播放完成推荐逻辑，待实现");
         }
     }
 
@@ -668,14 +666,33 @@ public class PlayerFragment extends Fragment implements View.OnClickListener {
         setBarProgress();
     }
 
-    public void playerOnCompletion() {
-        next();
+    // 设置进度条以及数据保存
+    private void setBarProgress() {
+        Observable.interval(1, 1, TimeUnit.SECONDS)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Action1<Long>() {
+                    @Override
+                    public void call(Long aLong) {
+                        if (isChanging == true) {
+                            return;
+                        }
+                        if (singlesBase != null) {
+                            singlesBase.play_time = presenter.getCurrentPosition();
+                            singlesBase.postionPlayer = positionPlayer;
+                            presenter.saveUtil(singlesBase);
+                        }
+                        seekbarVideo.setProgress(presenter.getCurrentPosition());
+                        txtVideoStarttime.setText(TimeUtil.formatterTime(presenter.getCurrentPosition()) + "");
+                    }
+                });//每隔一秒发送数据
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        EventBus.getDefault().unregister(this);
+    /**
+     * 播放完成，播放下一首
+     */
+    public void playerOnCompletion() {
+        next();
     }
 
     public void showContentView() {
@@ -693,4 +710,12 @@ public class PlayerFragment extends Fragment implements View.OnClickListener {
     public void showErrorView() {
         loadLayout.showErrorView();
     }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
+
+
 }
