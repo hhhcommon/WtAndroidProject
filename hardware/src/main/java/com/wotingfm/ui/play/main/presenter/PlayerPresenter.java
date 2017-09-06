@@ -1,8 +1,11 @@
 package com.wotingfm.ui.play.main.presenter;
 
 import android.content.ContentValues;
+import android.util.Log;
 
+import com.baidu.cloud.media.player.IMediaPlayer;
 import com.pili.pldroid.player.PLMediaPlayer;
+import com.woting.commonplat.player.baidu.BDPlayer;
 import com.woting.commonplat.player.qiniu.QNPlayer;
 import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.database.HistoryHelper;
@@ -32,8 +35,9 @@ public class PlayerPresenter {
     private PlayerFragment activity;
     private ListDataSaveUtils listDataSaveUtils;
     private HistoryHelper historyHelper;
-    //    private BDPlayer bdPlayer;
+    private BDPlayer bdPlayer;
     private QNPlayer QNPlayer;
+    private int playerType = 2;
 
     public PlayerPresenter(PlayerFragment activity) {
         this.activity = activity;
@@ -44,37 +48,45 @@ public class PlayerPresenter {
 
     private void create() {
         listDataSaveUtils = new ListDataSaveUtils(BSApplication.getInstance());// 本地数据
-//        if (bdPlayer == null) bdPlayer = new BDPlayer(activity.getActivity());
-        if (QNPlayer == null) QNPlayer = new QNPlayer(activity.getActivity());
+        if (playerType == 1) {
+            if (bdPlayer == null) bdPlayer = new BDPlayer(activity.getActivity());
+        } else {
+            if (QNPlayer == null) QNPlayer = new QNPlayer(activity.getActivity());
+        }
         historyHelper = new HistoryHelper(BSApplication.getInstance());
     }
 
     private void setListener() {
-//        bdPlayer.setOnPreparedListener(new IMediaPlayer.OnPreparedListener() {
-//            @Override
-//            public void onPrepared(IMediaPlayer iMediaPlayer) {
-//                activity.playerOnPrepared();
-//            }
-//        });
-//        bdPlayer.setOnCompletionListener(new IMediaPlayer.OnCompletionListener() {
-//            @Override
-//            public void onCompletion(IMediaPlayer iMediaPlayer) {
-//                activity.playerOnCompletion();
-//            }
-//        });
+        if (playerType == 1) {
+            bdPlayer.setOnPreparedListener(new IMediaPlayer.OnPreparedListener() {
+                @Override
+                public void onPrepared(IMediaPlayer iMediaPlayer) {
+                    activity.playerOnPrepared();
+                }
+            });
+            bdPlayer.setOnCompletionListener(new IMediaPlayer.OnCompletionListener() {
+                @Override
+                public void onCompletion(IMediaPlayer iMediaPlayer) {
+                    activity.playerOnCompletion();
+                }
+            });
+        } else {
+            QNPlayer.setOnPreparedListener(new PLMediaPlayer.OnPreparedListener() {
+                @Override
+                public void onPrepared(PLMediaPlayer mp, int preparedTime) {
+                    Log.e("大牛监听","播放准备好");
+                    activity.playerOnPrepared();
+                }
+            });
+            QNPlayer.setOnCompletionListener(new PLMediaPlayer.OnCompletionListener() {
+                @Override
+                public void onCompletion(PLMediaPlayer mp) {
+                    Log.e("大牛监听","播放完成");
+                    activity.playerOnCompletion();
+                }
+            });
+        }
 
-        QNPlayer.setOnPreparedListener(new PLMediaPlayer.OnPreparedListener() {
-            @Override
-            public void onPrepared(PLMediaPlayer mp, int preparedTime) {
-                activity.playerOnPrepared();
-            }
-        });
-        QNPlayer.setOnCompletionListener(new PLMediaPlayer.OnCompletionListener() {
-            @Override
-            public void onCompletion(PLMediaPlayer mp) {
-                activity.playerOnCompletion();
-            }
-        });
     }
 
     public SinglesBase getData() {
@@ -222,54 +234,86 @@ public class PlayerPresenter {
     }
 
     public void play(String url) {
-//        bdPlayer.setVideoPath(url);
-//        bdPlayer.start();
-        QNPlayer.onClickPlay(url);
+        if (playerType == 1) {
+            bdPlayer.setVideoPath(url);
+            bdPlayer.start();
+        } else {
+            QNPlayer.onClickPlay(url);
+        }
     }
 
     public void playPause() {
-//        bdPlayer.pause();
-        QNPlayer.onClickPause();
+        if (playerType == 1) {
+            bdPlayer.pause();
+        } else {
+            QNPlayer.onClickPause();
+        }
     }
 
     public void start() {
-//        bdPlayer.start();
-        QNPlayer.onClickResume();
+        if (playerType == 1) {
+            bdPlayer.start();
+        } else {
+            QNPlayer.onClickResume();
+        }
     }
 
 //    public BDPlayer.PlayerState getCurrentPlayerState() {
 //        return bdPlayer.getCurrentPlayerState();
 //    }
 
-    public boolean getCurrentPlayerState() {
-        return QNPlayer.getCurrentPlayerState();
+//    public boolean getCurrentPlayerState() {
+//        return QNPlayer.getCurrentPlayerState();
+//    }
+
+    public Object getCurrentPlayerState() {
+        if (playerType == 1) {
+            return bdPlayer.getCurrentPlayerState();
+        } else {
+            return QNPlayer.getCurrentPlayerState();
+        }
     }
 
     public int getCurrentPosition() {
-//        return bdPlayer.getCurrentPosition();
-        return QNPlayer.getCurrentPosition();
+        if (playerType == 1) {
+            return bdPlayer.getCurrentPosition();
+        } else {
+            return QNPlayer.getCurrentPosition();
+        }
     }
 
     public int getDuration() {
-//        return bdPlayer.getDuration();
-        return QNPlayer.getDuration();
+        if (playerType == 1) {
+            return bdPlayer.getDuration();
+        } else {
+            return QNPlayer.getDuration();
+        }
     }
 
-    public void stopPlayback() {
-//        bdPlayer.stopPlayback();
-        QNPlayer.onClickStop();
-    }
+//    public void stopPlayback() {
+//        if (playerType == 1) {
+//            bdPlayer.stopPlayback();
+//        } else {
+//            QNPlayer.onClickStop();
+//        }
+//    }
 
     public void seekTo(int progress) {
-//        bdPlayer.seekTo(progress);
-        QNPlayer.seekTo(progress);
+        if (playerType == 1) {
+            bdPlayer.seekTo(progress);
+        } else {
+            QNPlayer.seekTo(progress);
+        }
     }
 
     /**
      * 数据销毁
      */
     public void destroy() {
+
+        QNPlayer.destroy();
         model = null;
+
     }
 
 }

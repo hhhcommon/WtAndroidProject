@@ -1,8 +1,6 @@
 package com.wotingfm.ui.play.main;
 
-import android.content.Context;
 import android.content.Intent;
-import android.media.AudioManager;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -18,7 +16,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
-
+import com.pili.pldroid.player.PlayerState;
 import com.woting.commonplat.utils.DementionUtil;
 import com.woting.commonplat.widget.LoadFrameLayout;
 import com.wotingfm.R;
@@ -140,7 +138,7 @@ public class PlayerFragment extends Fragment implements View.OnClickListener {
                     }
                 }
                 positionPlayer = s.postionPlayer;
-                scrollToPosition(mRecyclerView, positionPlayer);
+                smoothMoveToPosition(mRecyclerView, positionPlayer);
                 presenter.play(s.single_file_url);
             } else {
                 singlesBase = list.get(0);
@@ -166,7 +164,7 @@ public class PlayerFragment extends Fragment implements View.OnClickListener {
                     }
                 }
                 positionPlayer = s.postionPlayer;
-                scrollToPosition(mRecyclerView, positionPlayer);
+                smoothMoveToPosition(mRecyclerView, positionPlayer);
                 presenter.play(s.single_file_url);
                 setDataView();
                 setDataListView();
@@ -283,12 +281,12 @@ public class PlayerFragment extends Fragment implements View.OnClickListener {
             singlesBase.postionPlayer = 0;
             mPlayerAdapter.notifyDataSetChanged();
             smoothMoveToPosition(mRecyclerView, positionPlayer);
-            presenter.stopPlayback();
+            presenter.playPause();
             presenter.play(singlesBase.single_file_url);
             presenter.getRecommendedList(singlesBase.single_title);
         } else {
             if (singlesBeanList != null) {
-                presenter.stopPlayback();
+                presenter.playPause();
                 singLesBeans.clear();
                 singLesBeans.addAll(singlesBeanList);
                 presenter.saveUtilList(singLesBeans);
@@ -296,13 +294,13 @@ public class PlayerFragment extends Fragment implements View.OnClickListener {
                 positionPlayer = 0;
                 singlesBase = singLesBeans.get(0);
                 smoothMoveToPosition(mRecyclerView, positionPlayer);
-                presenter.stopPlayback();
+                presenter.playPause();
                 presenter.play(singlesBase.single_file_url);
             } else {
                 if (channelsBean != null) {
 
                     SinglesBase s = new SinglesBase();
-                    s.album_title = channelsBean.title;
+                    s.single_title = channelsBean.title;
                     s.id = channelsBean.id;
                     s.single_logo_url = channelsBean.image_url;
                     s.single_file_url = channelsBean.radio_url;
@@ -316,7 +314,7 @@ public class PlayerFragment extends Fragment implements View.OnClickListener {
                     singlesBase = singLesBeans.get(0);
                     mPlayerAdapter.notifyDataSetChanged();
                     smoothMoveToPosition(mRecyclerView, positionPlayer);
-                    presenter.stopPlayback();
+                    presenter.playPause();
                     presenter.play(singlesBase.single_file_url);
                     presenter.getRecommendedList(singlesBase.single_title);
                 } else {
@@ -338,7 +336,7 @@ public class PlayerFragment extends Fragment implements View.OnClickListener {
                         positionPlayer = 0;
                         singlesBase = singLesBeans.get(0);
                         smoothMoveToPosition(mRecyclerView, positionPlayer);
-                        presenter.stopPlayback();
+                        presenter.playPause();
                         presenter.play(singlesBase.single_file_url);
                         presenter.getRecommendedList(singlesBase.single_title);
                     } else {
@@ -365,7 +363,7 @@ public class PlayerFragment extends Fragment implements View.OnClickListener {
                     singlesBase = singLesBeans.get(positionPlayer);
                     setIsPlay();
                     smoothMoveToPosition(mRecyclerView, positionPlayer);
-                    presenter.stopPlayback();
+                    presenter.playPause();
                     presenter.play(singlesBase.single_file_url);
                     ivPause.setImageResource(R.mipmap.music_play_icon_pause);
                 }
@@ -449,9 +447,9 @@ public class PlayerFragment extends Fragment implements View.OnClickListener {
                         public void play(int position) {
                             positionPlayer = position;
                             mPlayerAdapter.notifyDataSetChanged();
-                            scrollToPosition(mRecyclerView, positionPlayer);
+                            smoothMoveToPosition(mRecyclerView, positionPlayer);
                             singlesBase = singLesBeans.get(positionPlayer);
-                            presenter.stopPlayback();
+                            presenter.playPause();
                             presenter.play(singlesBase.single_file_url);
                             ivPause.setImageResource(R.mipmap.music_play_icon_pause);
                             seekbarVideo.setProgress(0);
@@ -502,13 +500,13 @@ public class PlayerFragment extends Fragment implements View.OnClickListener {
                         if (isChanging == true) {
                             return;
                         }
-                        if (singlesBase != null) {
-                            singlesBase.play_time = presenter.getCurrentPosition();
-                            singlesBase.postionPlayer = positionPlayer;
-                            presenter.saveUtil(singlesBase);
-                        }
-                        seekbarVideo.setProgress(presenter.getCurrentPosition());
-                        txtVideoStarttime.setText(TimeUtil.formatterTime(presenter.getCurrentPosition()) + "");
+//                        if (singlesBase != null) {
+//                            singlesBase.play_time = presenter.getCurrentPosition();
+//                            singlesBase.postionPlayer = positionPlayer;
+//                            presenter.saveUtil(singlesBase);
+//                        }
+//                        seekbarVideo.setProgress(presenter.getCurrentPosition());
+//                        txtVideoStarttime.setText(TimeUtil.formatterTime(presenter.getCurrentPosition()) + "");
                     }
                 });//每隔一秒发送数据
     }
@@ -520,53 +518,38 @@ public class PlayerFragment extends Fragment implements View.OnClickListener {
      * @param position
      */
     private void smoothMoveToPosition(RecyclerView mRecyclerView, int position) {
-        // 第一个可见位置
-        int firstItem = mRecyclerView.getChildLayoutPosition(mRecyclerView.getChildAt(0));
-        // 最后一个可见位置
-        int lastItem = mRecyclerView.getChildLayoutPosition(mRecyclerView.getChildAt(mRecyclerView.getChildCount() - 1));
-
-        if (position < firstItem) {
-            // 如果跳转位置在第一个可见位置之前，就smoothScrollToPosition可以直接跳转
-            mRecyclerView.smoothScrollToPosition(position);
-        } else if (position <= lastItem) {
-            // 跳转位置在第一个可见项之后，最后一个可见项之前
-            // smoothScrollToPosition根本不会动，此时调用smoothScrollBy来滑动到指定位置
-            int movePosition = position - firstItem;
-            if (movePosition >= 0 && movePosition < mRecyclerView.getChildCount()) {
-                int top = mRecyclerView.getChildAt(movePosition).getTop();
-                mRecyclerView.smoothScrollBy(0, top);
-            }
-        } else {
-            // 如果要跳转的位置在最后可见项之后，则先调用smoothScrollToPosition将要跳转的位置滚动到可见位置
-            // 再通过onScrollStateChanged控制再次调用smoothMoveToPosition，执行上一个判断中的方法
-            mRecyclerView.smoothScrollToPosition(position);
-        }
+//        // 第一个可见位置
+//        int firstItem = mRecyclerView.getChildLayoutPosition(mRecyclerView.getChildAt(0));
+//        // 最后一个可见位置
+//        int lastItem = mRecyclerView.getChildLayoutPosition(mRecyclerView.getChildAt(mRecyclerView.getChildCount() - 1));
+//
+//        Log.e("位置：","开始执行移动命令");
+//        Log.e("位置：","firstItem=="+firstItem);
+//        Log.e("位置：","lastItem=="+lastItem);
+//        Log.e("位置：","position=="+position);
+//
+//        if (position < firstItem) {
+//            // 如果跳转位置在第一个可见位置之前，就smoothScrollToPosition可以直接跳转
+//            mRecyclerView.smoothScrollToPosition(position);
+//            Log.e("位置：","移动命令《1》");
+//        } else if (position <= lastItem) {
+//            // 跳转位置在第一个可见项之后，最后一个可见项之前
+//            // smoothScrollToPosition根本不会动，此时调用smoothScrollBy来滑动到指定位置
+//            int movePosition = position - firstItem;
+//            if (movePosition >= 0 && movePosition < mRecyclerView.getChildCount()) {
+//                int top = mRecyclerView.getChildAt(movePosition).getTop();
+//                mRecyclerView.smoothScrollBy(0, top);
+//            }
+//            Log.e("位置：","移动命令《2》");
+//        } else {
+//            // 如果要跳转的位置在最后可见项之后，则先调用smoothScrollToPosition将要跳转的位置滚动到可见位置
+//            // 再通过onScrollStateChanged控制再次调用smoothMoveToPosition，执行上一个判断中的方法
+//            mRecyclerView.smoothScrollToPosition(position);
+//            Log.e("位置：","移动命令《3》");
+//        }
+//        Log.e("位置：","移动命令结束");
+        mRecyclerView.smoothScrollToPosition(position);
     }
-
-    // 没有动画
-    private void scrollToPosition(RecyclerView mRecyclerView, int position) {
-        // 第一个可见位置
-        int firstItem = mRecyclerView.getChildLayoutPosition(mRecyclerView.getChildAt(0));
-        // 最后一个可见位置
-        int lastItem = mRecyclerView.getChildLayoutPosition(mRecyclerView.getChildAt(mRecyclerView.getChildCount() - 1));
-        if (position < firstItem) {
-            // 如果跳转位置在第一个可见位置之前，就smoothScrollToPosition可以直接跳转
-            mRecyclerView.smoothScrollToPosition(position);
-        } else if (position <= lastItem) {
-            // 跳转位置在第一个可见项之后，最后一个可见项之前
-            // smoothScrollToPosition根本不会动，此时调用smoothScrollBy来滑动到指定位置
-            int movePosition = position - firstItem;
-            if (movePosition >= 0 && movePosition < mRecyclerView.getChildCount()) {
-                int top = mRecyclerView.getChildAt(movePosition).getTop();
-                mRecyclerView.smoothScrollBy(0, top);
-            }
-        } else {
-            // 如果要跳转的位置在最后可见项之后，则先调用smoothScrollToPosition将要跳转的位置滚动到可见位置
-            // 再通过onScrollStateChangeds控制再次调用smoothMoveToPosition，执行上一个判断中的方法
-            mRecyclerView.smoothScrollToPosition(position);
-        }
-    }
-
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMoonEventBase(MessageEvent messageEvent) {
@@ -575,9 +558,9 @@ public class PlayerFragment extends Fragment implements View.OnClickListener {
         switch (type) {
             case 0:
                 if (!TextUtils.isEmpty(event) && "stop".equals(event)) {
-                    presenter.stopPlayback();
+                    presenter.playPause();
                 } else if (!TextUtils.isEmpty(event) && event.contains("stop&")) {
-                    presenter.stopPlayback();
+                    presenter.playPause();
                     initData(event.split("stop&")[1], null, null, null, null);
                 } else if (!TextUtils.isEmpty(event) && "pause".equals(event)) {
                     presenter.playPause();
@@ -599,11 +582,11 @@ public class PlayerFragment extends Fragment implements View.OnClickListener {
 //                        ivPause.setImageResource(R.mipmap.music_play_icon_pause);
 //                    }
 
-                    boolean isPause = presenter.getCurrentPlayerState();
-                    if (isPause == false) {
+                    PlayerState isPause = (PlayerState) presenter.getCurrentPlayerState();
+                    if (isPause == isPause.PLAYING) {
                         presenter.playPause();
                         ivPause.setImageResource(R.mipmap.music_play_icon_play);
-                    } else if (isPause == true) {
+                    } else if (isPause ==isPause.PAUSED) {
                         presenter.start();
                         ivPause.setImageResource(R.mipmap.music_play_icon_pause);
                     }
@@ -611,19 +594,15 @@ public class PlayerFragment extends Fragment implements View.OnClickListener {
                 }
                 break;
             case 1:
-                presenter.stopPlayback();
                 initData(null, null, messageEvent.getChannelsBean(), null, null);
                 break;
             case 2:
-                presenter.stopPlayback();
                 initData(null, messageEvent.getSinglesBase(), null, null, null);
                 break;
             case 3:
-                presenter.stopPlayback();
                 initData(null, null, null, messageEvent.getSinglesDownloads(), null);
                 break;
             case 4:
-                presenter.stopPlayback();
                 initData(null, null, null, null, messageEvent.getDataBean());
                 break;
         }
@@ -635,7 +614,7 @@ public class PlayerFragment extends Fragment implements View.OnClickListener {
             singlesBase = singLesBeans.get(positionPlayer);
             setIsPlay();
             smoothMoveToPosition(mRecyclerView,positionPlayer);
-            presenter.stopPlayback();
+            presenter.playPause();
             presenter.play(singlesBase.single_file_url);
             seekbarVideo.setProgress(0);
             ivPause.setImageResource(R.mipmap.music_play_icon_pause);
@@ -652,11 +631,11 @@ public class PlayerFragment extends Fragment implements View.OnClickListener {
 //            ivPause.setImageResource(R.mipmap.music_play_icon_pause);
 //        }
 
-        boolean isPause = presenter.getCurrentPlayerState();
-        if (isPause == false) {
+        PlayerState isPause = (PlayerState) presenter.getCurrentPlayerState();
+        if (isPause == isPause.PLAYING) {
             presenter.playPause();
             ivPause.setImageResource(R.mipmap.music_play_icon_play);
-        } else if (isPause == true) {
+        } else if (isPause ==isPause.PAUSED) {
             presenter.start();
             ivPause.setImageResource(R.mipmap.music_play_icon_pause);
         }
@@ -668,7 +647,7 @@ public class PlayerFragment extends Fragment implements View.OnClickListener {
             singlesBase = singLesBeans.get(positionPlayer);
             setIsPlay();
             smoothMoveToPosition(mRecyclerView,positionPlayer);
-            presenter.stopPlayback();
+            presenter.playPause();
             presenter.play(singlesBase.single_file_url);
             ivPause.setImageResource(R.mipmap.music_play_icon_pause);
             seekbarVideo.setProgress(0);
@@ -690,24 +669,13 @@ public class PlayerFragment extends Fragment implements View.OnClickListener {
     }
 
     public void playerOnCompletion() {
-        if (positionPlayer < singLesBeans.size() - 1) {
-            positionPlayer = positionPlayer + 1;
-            singlesBase = singLesBeans.get(positionPlayer);
-            setIsPlay();
-            smoothMoveToPosition(mRecyclerView, positionPlayer);
-            presenter.stopPlayback();
-            presenter.play(singlesBase.single_file_url);
-            ivPause.setImageResource(R.mipmap.music_play_icon_pause);
-            seekbarVideo.setProgress(0);
-        }
+        next();
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
-        AudioManager audioManager = (AudioManager) getActivity().getSystemService(Context.AUDIO_SERVICE);
-        audioManager.abandonAudioFocus(null);
     }
 
     public void showContentView() {

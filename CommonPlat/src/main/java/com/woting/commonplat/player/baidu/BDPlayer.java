@@ -193,7 +193,7 @@ public class BDPlayer extends FrameLayout {
             Log.e(TAG, "onPrepared");
             setCurrentState(PlayerState.STATE_PREPARED);
             if (mOnPreparedListener != null) {
-                mOnPreparedListener.onPrepared(mMediaPlayerBase);
+                mOnPreparedListener.onPrepared(mp);
             }
             if (isTryToPlaying) {
                 start();
@@ -208,7 +208,7 @@ public class BDPlayer extends FrameLayout {
                     setCurrentState(PlayerState.STATE_PLAYBACK_COMPLETED);
                     isTryToPlaying = false;
                     if (mOnCompletionListener != null) {
-                        mOnCompletionListener.onCompletion(mMediaPlayerBase);
+                        mOnCompletionListener.onCompletion(mp);
                     }
                 }
             };
