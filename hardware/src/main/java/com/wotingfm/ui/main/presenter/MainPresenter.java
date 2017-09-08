@@ -16,13 +16,13 @@ import com.netease.nimlib.sdk.auth.AuthServiceObserver;
 import com.netease.nimlib.sdk.msg.MsgServiceObserve;
 import com.netease.nimlib.sdk.msg.model.IMMessage;
 import com.woting.commonplat.receiver.NetWorkChangeReceiver;
-import com.wotingfm.ui.bean.MessageEvent;
 import com.wotingfm.common.constant.BroadcastConstants;
+import com.wotingfm.common.manager.WtDeviceControl;
 import com.wotingfm.common.service.FloatingWindowService;
 import com.wotingfm.common.service.NotificationService;
-import com.wotingfm.common.manager.WtDeviceControl;
 import com.wotingfm.common.utils.StatusBarUtil;
 import com.wotingfm.ui.base.basepresenter.BasePresenter;
+import com.wotingfm.ui.bean.MessageEvent;
 import com.wotingfm.ui.intercom.alert.receive.view.ReceiveAlertActivity;
 import com.wotingfm.ui.main.model.MainModel;
 import com.wotingfm.ui.main.view.MainActivity;
@@ -52,7 +52,7 @@ public class MainPresenter extends BasePresenter {
         this.activity = mainActivity;
         this.mainModel = new MainModel(mainActivity);
         NIMClient.getService(MsgServiceObserve.class).observeReceiveMessage(incomingMessageObserver, true);
-        NIMClient.getService(AuthServiceObserver.class).observeOnlineStatus(outObserver , true);
+        NIMClient.getService(AuthServiceObserver.class).observeOnlineStatus(outObserver, true);
         createService();
         registerReceiver();
         getVersion();
@@ -63,6 +63,7 @@ public class MainPresenter extends BasePresenter {
         activity.startService(FloatingWindow);
         NS = new Intent(activity, NotificationService.class);//启动推送消息处理服务
         activity.startService(NS);
+
     }
 
     //注册广播
@@ -273,13 +274,13 @@ public class MainPresenter extends BasePresenter {
                 activity.setViewType(4);
             } else if (messageEvent.getType() == 10) {
                 roomId = messageEvent.getRoomid();
-                Log.e("roomId_0000000",roomId);
-            }else if (event.equals("enterPersonRoom")) {
+                Log.e("roomId_0000000", roomId);
+            } else if (event.equals("enterPersonRoom")) {
                 WtDeviceControl.setMute();// 设置静音
-                Log.e("roomId_2222222",roomId);
+                Log.e("roomId_2222222", roomId);
                 activity.enterRoom(roomId);// 进入对讲房间
             } else if (event.equals("exitPerson")) {
-                Log.e("roomId_3333333",roomId);
+                Log.e("roomId_3333333", roomId);
                 activity.exitRoomPerson(roomId);// 退出对讲房间
             } else if (event.contains("enterGroup&")) {
                 WtDeviceControl.setMute();// 设置静音
@@ -292,10 +293,10 @@ public class MainPresenter extends BasePresenter {
             } else if (event.equals("onDestroy")) {
                 activity.destroyWebView();
             }
-        }else {
+        } else {
             if (messageEvent != null && messageEvent.getType() == 10) {
                 roomId = messageEvent.getRoomid();
-                Log.e("roomId_5555555",roomId);
+                Log.e("roomId_5555555", roomId);
             }
         }
     }
@@ -304,7 +305,7 @@ public class MainPresenter extends BasePresenter {
      * 消息接收观察者
      * 被踢出、账号被禁用、密码错误等情况，自动登录失败，需要返回到登录界面进行重新登录操作
      */
-    Observer<StatusCode> outObserver =    new Observer<StatusCode> () {
+    Observer<StatusCode> outObserver = new Observer<StatusCode>() {
         public void onEvent(StatusCode status) {
             Log.i("tag", "User status changed to: " + status);
             if (status.wontAutoLogin()) {
@@ -334,8 +335,8 @@ public class MainPresenter extends BasePresenter {
                     Log.e("单对单对讲收到的数据", type);
                     switch (type) {
                         case "LAUNCH":// 收到别人邀请我对讲（单对单）
-                            if (!TextUtils.isEmpty(roomid))roomId = roomid;
-                            Log.e("roomId_1111111",roomId);
+                            if (!TextUtils.isEmpty(roomid)) roomId = roomid;
+                            Log.e("roomId_1111111", roomId);
                             EventBus.getDefault().post(new MessageEvent("two"));
                             ReceiveAlertActivity.start(activity, im.getFromAccount(), userId);
                             WtDeviceControl.pause();

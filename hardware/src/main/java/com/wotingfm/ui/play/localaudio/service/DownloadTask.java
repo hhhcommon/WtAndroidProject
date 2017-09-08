@@ -104,7 +104,7 @@ public class DownloadTask {
                         raf.write(buf, 0, len);
                         // 把下载进度发送广播给Activity
                         mFinished += len;
-                        if (System.currentTimeMillis() - time > 500) {
+                        if (System.currentTimeMillis() - time > 100) {
                             time = System.currentTimeMillis();
                             Intent intent = new Intent();
                             intent.setAction(BroadcastConstants.ACTION_UPDATE);

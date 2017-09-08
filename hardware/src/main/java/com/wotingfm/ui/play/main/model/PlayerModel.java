@@ -1,5 +1,6 @@
 package com.wotingfm.ui.play.main.model;
 
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.google.gson.GsonBuilder;
@@ -7,6 +8,8 @@ import com.wotingfm.common.net.RetrofitUtils;
 import com.wotingfm.ui.bean.Player;
 import com.wotingfm.ui.bean.SerchList;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import rx.android.schedulers.AndroidSchedulers;
@@ -25,9 +28,8 @@ public class PlayerModel {
      */
     public void getRecommendedList(String s, final OnLoadInterface listener) {
         try {
-            Log.e("查询数据",""+s);
-            Log.e("实际查询数据","郭德纲");
-            RetrofitUtils.getInstance().serchList("singles", "郭德纲", 1)
+            Log.e("查询数据", "" + s);
+            RetrofitUtils.getInstance().serchList("singles", s, 1)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(new Action1<SerchList>() {
@@ -112,6 +114,53 @@ public class PlayerModel {
             e.printStackTrace();
             listener.onFailure("");
         }
+    }
+
+    /**
+     * start_time: 15:00:00
+     * end_time: 16:30:00
+     * <p/>
+     * 1.获取时间差，根据时间差来设置max_pos
+     * 2.获取当前时间 ing_time: 15:45:36
+     * 3.当前时间减去开始时间为此时pos
+     */
+    public int getMax(String startTime, String endTime) {
+        int start = getTime(startTime);
+        int end = getTime(endTime);
+        return end - start;
+    }
+
+    public int getIng(String startTime) {
+        int start = getTime(startTime);
+        int end = getIngTime();
+        return end - start;
+    }
+
+    private int getTime(String s) {
+        if (!TextUtils.isEmpty(s)) {
+            if (s.contains(":")) {
+                String[] strArray = s.split(":");
+                String hh = strArray[0];
+                String mm = strArray[1];
+                String ss = strArray[2];
+                int time = Integer.parseInt(hh) * 60 * 60 + Integer.parseInt(mm) * 60 * +Integer.parseInt(ss);
+                return time;
+            } else {
+                return 0;
+            }
+        } else {
+            return 0;
+        }
+    }
+
+    /**
+     * 获取当前时间
+     */
+    private int getIngTime() {
+        SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss");
+        String s = format.format(new Date(System.currentTimeMillis()));
+        int ing = getTime(s);
+        return ing;
     }
 
     public interface OnLoadInterface {

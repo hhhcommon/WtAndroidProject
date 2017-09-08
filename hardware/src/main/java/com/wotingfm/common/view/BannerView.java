@@ -104,11 +104,11 @@ public class BannerView extends FrameLayout {
 
 
         mDefault = new GradientDrawable();
-        mDefault.setSize(size, size);
+        mDefault.setSize(80, 5);
         mDefault.setColor(0x7bffffff);
         mDefault.setCornerRadius(size);
         mSelected = new GradientDrawable();
-        mSelected.setSize(size, size);
+        mSelected.setSize(80, 5);
         mSelected.setColor(0xffffffff);
         mSelected.setCornerRadius(size);
 

@@ -1645,4 +1645,16 @@ public class RetrofitUtils {
                 });
     }
 
+    /**
+     * 获取当前电台播放的节目
+     */
+    public Observable<Object> getSeek(String id) throws Exception {
+        return retrofitService.getSeek(id)
+                .map(new Func1<Object, Object>() {
+                    @Override
+                    public Object call(Object O) {
+                        return O;
+                    }
+                });
+    }
 }

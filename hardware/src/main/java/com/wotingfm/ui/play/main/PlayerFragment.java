@@ -17,10 +17,10 @@ import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.pili.pldroid.player.PlayerState;
 import com.woting.commonplat.player.baidu.BDPlayer;
 import com.woting.commonplat.utils.DementionUtil;
-import com.woting.commonplat.widget.LoadFrameLayout;
 import com.wotingfm.R;
 import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.config.GlobalStateConfig;
@@ -78,7 +78,7 @@ public class PlayerFragment extends Fragment implements View.OnClickListener {
             TextView txtVideoTotaltime;
 
     @BindView(R.id.loadLayout)
-    LoadFrameLayout loadLayout;
+    RelativeLayout loadLayout;
     @BindView(R.id.mRecyclerView)
     RecyclerView mRecyclerView;
     @BindView(R.id.LoadingView)
@@ -90,11 +90,15 @@ public class PlayerFragment extends Fragment implements View.OnClickListener {
             ImageView ivPause;
     @BindView(R.id.ivNext)// 下一首
             ImageView ivNext;
+    @BindView(R.id.img_bg_head)// 下一首
+            ImageView img_bg_head;
+
 
     private SinglesBase singlesBase;
     public static List<SinglesBase> singLesBeans = new ArrayList<>();
     private int positionPlayer = 0; //控制播放下标
     private boolean isChanging = false;//互斥变量，防止定时器与SeekBar拖动时进度冲突
+    private boolean isFirst = false;//第一次进入
 
     private View rootView;
     private PlayerPresenter presenter;
@@ -142,17 +146,11 @@ public class PlayerFragment extends Fragment implements View.OnClickListener {
                     }
                 }
                 positionPlayer = s.postionPlayer;
-                setPlayer();
-                presenter.play(s.single_file_url);
-                smoothMoveToPosition(mRecyclerView, positionPlayer);
-                setDataView();
+                playMusic();
             } else {
                 singlesBase = list.get(0);
                 positionPlayer = 0;
-                setPlayer();
-                presenter.play(singlesBase.single_file_url);
-                smoothMoveToPosition(mRecyclerView, positionPlayer);
-                setDataView();
+                playMusic();
             }
         } else {
             if (s != null) {
@@ -170,13 +168,11 @@ public class PlayerFragment extends Fragment implements View.OnClickListener {
                     }
                 }
                 positionPlayer = s.postionPlayer;
-                setPlayer();
-                presenter.play(s.single_file_url);
-                smoothMoveToPosition(mRecyclerView, positionPlayer);
-                setDataView();
+                playMusic();
             } else {
                 // 获取网络推荐数据
                 showLoadingView();
+                isFirst = true;
                 presenter.getRecommendedList("郭德纲");
             }
         }
@@ -184,13 +180,13 @@ public class PlayerFragment extends Fragment implements View.OnClickListener {
 
     public void inItView() {
         // 重新获取数据
-        loadLayout.findViewById(R.id.btnTryAgain).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                loadLayout.showLoadingView();
-                presenter.getRecommendedList("郭德纲");
-            }
-        });
+//        loadLayout.findViewById(R.id.btnTryAgain).setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                showLoadingView();
+//                presenter.getRecommendedList("郭德纲");
+//            }
+//        });
 
         // 设置list界面
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
@@ -232,7 +228,10 @@ public class PlayerFragment extends Fragment implements View.OnClickListener {
                 showContentView();
                 singlesBase = singLesBeans.get(0);
                 positionPlayer = 0;
-                playMusic();
+                if (isFirst) {
+                    playMusic();
+                    isFirst = false;
+                }
             } else {
                 if (singLesBeans != null && singLesBeans.size() > 0) {
                     showContentView();
@@ -400,7 +399,6 @@ public class PlayerFragment extends Fragment implements View.OnClickListener {
 
                 @Override
                 public void getList(int position) {
-                    showLoadingView();
                     presenter.getPlayerList(singLesBeans.get(position).album_id);
                 }
             });
@@ -501,13 +499,25 @@ public class PlayerFragment extends Fragment implements View.OnClickListener {
             case 4:
                 initData(null, null, null, null, messageEvent.getDataBean());
                 break;
+            case 1001:// 百度监听==播放准备好
+                playerOnPrepared();
+                break;
+            case 1002:// 百度监听==播放完成
+                playerOnCompletion();
+                break;
+            case 2001:// 大牛监听==播放准备好
+                playerOnPrepared();
+                break;
+            case 2002:// 大牛监听==播放完成
+                playerOnCompletion();
+                break;
         }
     }
 
     // 别的界面的跳转数据处理
     private void initData(String albumsId, SinglesBase _singlesBase, ChannelsBean channelsBean, List<SinglesDownload> singlesBeanList, Selected.DataBeanX.DataBean DataBean) {
         if (_singlesBase != null) {
-            loadLayout.showContentView();
+            showContentView();
             singLesBeans.clear();
             singLesBeans.add(_singlesBase);
             presenter.saveUtilList(singLesBeans);
@@ -535,7 +545,13 @@ public class PlayerFragment extends Fragment implements View.OnClickListener {
                     s.id = channelsBean.id;
                     s.single_logo_url = channelsBean.image_url;
                     s.single_file_url = channelsBean.radio_url;
-                    s.album_title = channelsBean.desc;
+                    try {
+                        s.album_title = channelsBean.play_bill.title;
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        s.album_title = "直播中";
+                    }
+
                     s.is_radio = true;
                     s.postionPlayer = 0;
                     singLesBeans.clear();
@@ -598,6 +614,10 @@ public class PlayerFragment extends Fragment implements View.OnClickListener {
 
     // 执行播放
     private void playMusic() {
+        Glide.with(BSApplication.mContext).load(singlesBase.single_logo_url).crossFade(300).into(img_bg_head);
+        if(singlesBase.is_radio){
+            presenter.getSeek(singlesBase.id);
+        }
         setPlayer();
         setIsPlay();
         smoothMoveToPosition(mRecyclerView, positionPlayer);
@@ -605,7 +625,9 @@ public class PlayerFragment extends Fragment implements View.OnClickListener {
         presenter.play(singlesBase.single_file_url);
         seekbarVideo.setProgress(0);
         ivPause.setImageResource(R.mipmap.music_play_icon_pause);
+
         setDataView();
+        presenter.saveHistory(singlesBase);
     }
 
     // 播放上一首
@@ -656,14 +678,23 @@ public class PlayerFragment extends Fragment implements View.OnClickListener {
      * 播放器准备好
      */
     public void playerOnPrepared() {
-        if (singlesBase != null) {
-            presenter.seekTo((int) singlesBase.play_time);
-        } else {
-            presenter.seekTo(0);
+        if (presenter.playerType == 1) {
+            if (singlesBase != null) {
+                presenter.seekTo(singlesBase.play_time);
+//                Log.e("播放时间点",singlesBase.play_time+"");
+            } else {
+                presenter.seekTo(0);
+//                Log.e("播放时间点","000000000");
+            }
+            seekbarVideo.setMax(presenter.getDuration());
+            txtVideoTotaltime.setText(TimeUtil.formatterTime((presenter.getDuration())) + "");
         }
-        seekbarVideo.setMax(presenter.getDuration());
-        txtVideoTotaltime.setText(TimeUtil.formatterTime((presenter.getDuration())) + "");
         setBarProgress();
+    }
+
+    public void setMax(int max,String end){
+        seekbarVideo.setMax(max);
+        txtVideoTotaltime.setText(end + "");
     }
 
     // 设置进度条以及数据保存
@@ -678,12 +709,18 @@ public class PlayerFragment extends Fragment implements View.OnClickListener {
                             return;
                         }
                         if (singlesBase != null) {
-                            singlesBase.play_time = presenter.getCurrentPosition();
-                            singlesBase.postionPlayer = positionPlayer;
-                            presenter.saveUtil(singlesBase);
+                            if(singlesBase.is_radio){
+                                singlesBase.play_time = 0;
+                                presenter.saveUtil(singlesBase);
+                                seekbarVideo.setProgress(presenter.getIng());
+                                txtVideoStarttime.setText(TimeUtil.formatterTime(presenter.getIng()) + "");
+                            }else{
+                                singlesBase.play_time = presenter.getCurrentPosition();
+                                presenter.saveUtil(singlesBase);
+                                seekbarVideo.setProgress(presenter.getCurrentPosition());
+                                txtVideoStarttime.setText(TimeUtil.formatterTime(presenter.getCurrentPosition()) + "");
+                            }
                         }
-                        seekbarVideo.setProgress(presenter.getCurrentPosition());
-                        txtVideoStarttime.setText(TimeUtil.formatterTime(presenter.getCurrentPosition()) + "");
                     }
                 });//每隔一秒发送数据
     }
@@ -696,19 +733,19 @@ public class PlayerFragment extends Fragment implements View.OnClickListener {
     }
 
     public void showContentView() {
-        loadLayout.showContentView();
+//        loadLayout.showContentView();
     }
 
     public void showEmptyView() {
-        loadLayout.showEmptyView();
+//        loadLayout.showEmptyView();
     }
 
     public void showLoadingView() {
-        loadLayout.showLoadingView();
+//        loadLayout.showLoadingView();
     }
 
     public void showErrorView() {
-        loadLayout.showErrorView();
+//        loadLayout.showErrorView();
     }
 
     @Override

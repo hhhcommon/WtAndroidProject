@@ -528,6 +528,11 @@ public interface RetrofitService {
     // 删除加入群组后的展示消息
     @DELETE(Api.URL_DEL_INVITEE_MSG)
     Observable<Object> delEnterGroup(@Path("id") String id);
+
+    // 获取某个电台下面正在播的节目
+    @GET(Api.URL_GET_RADIOING)
+    Observable<Object> getSeek(@Path("id") String id);
+
 }
 
 

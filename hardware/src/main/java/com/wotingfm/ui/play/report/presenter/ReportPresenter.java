@@ -1,15 +1,16 @@
 package com.wotingfm.ui.play.report.presenter;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.TextUtils;
 
 import com.wotingfm.common.utils.T;
-import com.wotingfm.ui.play.report.model.Reports;
 import com.wotingfm.ui.intercom.main.view.InterPhoneActivity;
 import com.wotingfm.ui.mine.main.MineActivity;
 import com.wotingfm.ui.play.find.main.view.LookListActivity;
 import com.wotingfm.ui.play.main.PlayerActivity;
 import com.wotingfm.ui.play.report.model.ReportModel;
+import com.wotingfm.ui.play.report.model.Reports;
 import com.wotingfm.ui.play.report.view.ReportFragment;
 
 import java.util.List;
@@ -30,7 +31,13 @@ public class ReportPresenter {
     public ReportPresenter(ReportFragment activity) {
         this.activity = activity;
         this.model = new ReportModel();
-        getData();
+        activity.showLoadingView();
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                getData();
+            }
+        },300);
     }
 
     private void getData() {
@@ -38,7 +45,6 @@ public class ReportPresenter {
         if (bundle != null) {
             type = bundle.getString("type");
             playerId = bundle.getString("playerId");
-            activity.showLoadingView();
             getReport();
         } else {
             activity.showErrorView();
@@ -72,13 +78,14 @@ public class ReportPresenter {
      */
     public void send(String news) {
         String report_reason = null;
-        if (reasonsBase != null)
+        if (reasonsBase != null){
             report_reason = reasonsBase.title;
+        }
         if (TextUtils.isEmpty(report_reason) && TextUtils.isEmpty(news)) {
             T.getInstance().showToast("请选择举报原因");
             return;
         }
-        if ("REPORT_SINGLE".equals(type)) {
+        if ("REPORT_ALBUM".equals(type)) {
             reportsPlayer(report_reason, news);
         } else if ("REPORT_USER".equals(type)) {
             reportsPersonal(report_reason, news);

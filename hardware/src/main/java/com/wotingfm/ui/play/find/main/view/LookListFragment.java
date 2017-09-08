@@ -3,6 +3,7 @@ package com.wotingfm.ui.play.find.main.view;
 import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Color;
+import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -11,14 +12,11 @@ import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.Gravity;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
-import android.view.inputmethod.EditorInfo;
-import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -31,7 +29,6 @@ import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.config.GlobalStateConfig;
 import com.wotingfm.common.utils.NetUtils;
 import com.wotingfm.common.utils.T;
-import com.wotingfm.ui.base.basefragment.BaseFragment;
 import com.wotingfm.ui.bean.MessageEvent;
 import com.wotingfm.ui.play.find.main.adapter.MyAdapter;
 import com.wotingfm.ui.play.find.main.presenter.LookListPresenter;
@@ -43,13 +40,14 @@ import java.lang.reflect.Field;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 
 /**
  * 发现功能界面
  * 作者：xinLong on 2017/6/5 13:55
  * 邮箱：645700751@qq.com
  */
-public class LookListFragment extends BaseFragment implements View.OnClickListener {
+public class LookListFragment extends Fragment implements View.OnClickListener {
     @BindView(R.id.ivClose)// 界面关闭
             ImageView ivClose;
     @BindView(R.id.tabs)// 分类栏目
@@ -58,17 +56,8 @@ public class LookListFragment extends BaseFragment implements View.OnClickListen
             ImageView ivVoice;
     @BindView(R.id.viewPager)// fragment适配器
             ViewPager viewPager;
-    @BindView(R.id.ivBack)// 语音搜索返回
-            ImageView ivBack;
-    @BindView(R.id.et_searchlike)// 语音搜索输入框
-            EditText etSearchlike;
-    @BindView(R.id.relatLable)// 语音搜索框
-            RelativeLayout relatLable;
     @BindView(R.id.layout_main)
     RelativeLayout layout_main;
-    @BindView(R.id.tvSubmitSerch)// 开始搜索按钮
-            TextView tvSubmitSerch;
-
 
     private MyAdapter mAdapter;
     private Dialog voiceDialog;
@@ -77,40 +66,26 @@ public class LookListFragment extends BaseFragment implements View.OnClickListen
     private WaveLineView waveLineView;
     private LinearLayout lin_line_bg;
     private FrameLayout fragmentVideo;
+    private View rootView;
 
     @Override
-    protected int getLayoutResource() {
-        return R.layout.activity_look_list;
-    }
-
-    @Override
-    public void initView() {
-        setListener();
-        presenter = new LookListPresenter(this);
-        DDialog();
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        if (rootView == null) {
+            rootView = inflater.inflate(R.layout.activity_look_list, container, false);
+            rootView.setOnClickListener(this);
+            ButterKnife.bind(this, rootView);
+            setListener();
+            presenter = new LookListPresenter(this);
+            DDialog();
+            EDialog();
+        }
+        return rootView;
     }
 
     // 设置监听
     private void setListener() {
         ivClose.setOnClickListener(this);
-        tvSubmitSerch.setOnClickListener(this);
         ivVoice.setOnClickListener(this);
-        ivBack.setOnClickListener(this);
-        // 不是在我们点击EditText的时候触发，也不是在我们对EditText进行编辑时触发，而是在我们编辑完之后点击软键盘上的回车键才会触发
-        etSearchlike.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int arg1, KeyEvent event) {
-                if (arg1 == EditorInfo.IME_ACTION_SEARCH) {
-                    String content = etSearchlike.getText().toString().trim();
-                    if (!TextUtils.isEmpty(content)) {
-                        presenter.closeKeyboard(etSearchlike);
-                        openFragment(SearchFragment.newInstance(content, 0));
-                        etSearchlike.setText("");
-                    }
-                }
-                return false;
-            }
-        });
     }
 
     /**
@@ -157,7 +132,7 @@ public class LookListFragment extends BaseFragment implements View.OnClickListen
 
                         //设置tab左右间距为10dp  注意这里不能使用Padding 因为源码中线的宽度是根据 tabView的宽度来设置的
                         LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) tabView.getLayoutParams();
-                        params.width = width ;
+                        params.width = width;
                         params.leftMargin = dp10;
                         params.rightMargin = dp10;
                         tabView.setLayoutParams(params);
@@ -178,22 +153,7 @@ public class LookListFragment extends BaseFragment implements View.OnClickListen
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.tvSubmitSerch:// 开始搜索
-                String content = etSearchlike.getText().toString().trim();
-                if (TextUtils.isEmpty(content)) {
-                    T.getInstance().showToast("请输入搜索内容");
-                    return;
-                }
-                presenter.closeKeyboard(etSearchlike);
-                openFragment(SearchFragment.newInstance(content, 0));
-                etSearchlike.setText("");
-                break;
-            case R.id.ivBack:
-                relatLable.setVisibility(View.GONE);
-                presenter.closeKeyboard(etSearchlike);
-                break;
             case R.id.ivClose:
-                presenter.closeKeyboard(etSearchlike);
                 GlobalStateConfig.mineFromType = 0;
                 GlobalStateConfig.activityA = "A";
                 EventBus.getDefault().post(new MessageEvent("one"));
@@ -207,14 +167,13 @@ public class LookListFragment extends BaseFragment implements View.OnClickListen
                         lin_line_bg.setVisibility(View.VISIBLE);
                     }
                 }, 100);
-
                 break;
         }
     }
 
     // 选择框
     private void DDialog() {
-        final View dialog = LayoutInflater.from(this.getActivity()).inflate(R.layout.video_dialog, null);
+        final View dialog = LayoutInflater.from(this.getActivity()).inflate(R.layout.dialog_video, null);
         fragmentVideo = (FrameLayout) dialog.findViewById(R.id.fragmentVideo);
         lin_line_bg = (LinearLayout) dialog.findViewById(R.id.lin_line_bg);
         waveLineView = (WaveLineView) dialog.findViewById(R.id.waveLineView);
@@ -225,7 +184,12 @@ public class LookListFragment extends BaseFragment implements View.OnClickListen
             @Override
             public void onClick(View v) {
                 voiceDialog.dismiss();
-                showSoftInputFromWindow();
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        EditDialog.dialogShow();
+                    }
+                }, 300);
             }
         });
 
@@ -281,15 +245,30 @@ public class LookListFragment extends BaseFragment implements View.OnClickListen
         window.setBackgroundDrawableResource(R.color.transparent_40_black);
     }
 
-    /**
-     * EditText获取焦点并显示软键盘
-     */
-    public void showSoftInputFromWindow() {
-        etSearchlike.setFocusable(true);
-        etSearchlike.setFocusableInTouchMode(true);
-        etSearchlike.requestFocus();
-        relatLable.setVisibility(View.VISIBLE);
-        presenter.openKeyboard(etSearchlike);
+    // 输入框选择框
+    private void EDialog() {
+        EditDialog.showSecurityCodeInputDialog(this.getActivity(), new EditDialog.DialogOnClickListener() {
+
+            @Override
+            public void searchClick(String str) {
+                if (TextUtils.isEmpty(str)) {
+                    T.getInstance().showToast("请输入搜索内容");
+                    return;
+                }
+                openFragment(SearchFragment.newInstance(str, 0));
+            }
+
+            @Override
+            public void backClick() {
+                EditDialog.dialogDismiss();
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        voiceDialog.show();
+                    }
+                }, 300);
+            }
+        });
     }
 
     public void search(final String str) {
@@ -300,14 +279,16 @@ public class LookListFragment extends BaseFragment implements View.OnClickListen
             @Override
             public void run() {
                 voiceDialog.dismiss();
-                etSearchlike.setText("");
                 tvContent.setText("");
                 tvContent.setVisibility(View.GONE);
                 lin_line_bg.setVisibility(View.VISIBLE);
-                presenter.closeKeyboard(etSearchlike);
                 openFragment(SearchFragment.newInstance(str.trim(), 0));
             }
         }, 1000);
+    }
+
+    private void openFragment(Fragment fragment) {
+        LookListActivity.open(fragment);
     }
 
     /**

@@ -1,10 +1,13 @@
 package com.wotingfm.ui.play.mysubscribelist.presenter;
 
+import android.os.Handler;
+
 import com.wotingfm.common.utils.CommonUtils;
 import com.wotingfm.common.utils.T;
 import com.wotingfm.ui.bean.AlbumsBean;
 import com.wotingfm.ui.play.mysubscribelist.model.MySubscribeListModel;
 import com.wotingfm.ui.play.mysubscribelist.view.MeSubscribeListFragment;
+
 import java.util.List;
 
 /**
@@ -21,7 +24,13 @@ public class MySubscribeListPresenter {
         this.activity = activity;
         this.model = new MySubscribeListModel();
         activity.showLoadingView();
-        getPlayerList(CommonUtils.getUserId());
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                getPlayerList(CommonUtils.getUserId());
+            }
+        },300);
+
     }
 
     /**

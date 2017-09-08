@@ -2,6 +2,7 @@ package com.wotingfm.ui.play.album.main.view;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.support.v4.app.Fragment;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,7 +10,10 @@ import android.widget.TextView;
 import com.wotingfm.R;
 import com.wotingfm.common.utils.CommonUtils;
 import com.wotingfm.ui.bean.AlbumInfo;
+import com.wotingfm.ui.intercom.main.view.InterPhoneActivity;
+import com.wotingfm.ui.mine.main.MineActivity;
 import com.wotingfm.ui.play.anchor.view.AnchorPersonalCenterFragment;
+import com.wotingfm.ui.play.find.main.view.LookListActivity;
 import com.wotingfm.ui.play.main.PlayerActivity;
 import com.wotingfm.ui.play.report.view.ReportFragment;
 import com.wotingfm.ui.user.logo.LogoActivity;
@@ -17,13 +21,13 @@ import com.wotingfm.ui.user.logo.LogoActivity;
 // 专辑首页菜单dialog
 public class AlbumMenuDialog extends Dialog implements View.OnClickListener {
 
+    private  Activity activity;
     private TextView tvClose,  tvAnchor, tvReport;
-    private PlayerActivity activity;
     private AlbumInfo info;
 
     public AlbumMenuDialog(Activity context) {
         super(context, R.style.BottomDialog);
-        this.activity = (PlayerActivity) context;
+        this.activity =  context;
         setContentView(R.layout.album_menu_dialog);
         getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         getWindow().setGravity(Gravity.BOTTOM);
@@ -62,7 +66,7 @@ public class AlbumMenuDialog extends Dialog implements View.OnClickListener {
                 }
                 if (id != null && activity != null) {
                     dismiss();
-                    activity.open(AnchorPersonalCenterFragment.newInstance(info.data.album.owner.id));
+                    open(AnchorPersonalCenterFragment.newInstance(info.data.album.owner.id));
                 }
                 break;
             case R.id.tvReport:
@@ -79,12 +83,24 @@ public class AlbumMenuDialog extends Dialog implements View.OnClickListener {
                         LogoActivity.start(activity);
                         return;
                     }
-                    activity.open(ReportFragment.newInstance(album_id, "REPORT_ALBUM"));
+                    open(ReportFragment.newInstance(album_id, "REPORT_ALBUM"));
                 }
                 break;
             case R.id.tvClose:
                 dismiss();
                 break;
+        }
+    }
+
+    public void open(Fragment f){
+        if (activity instanceof PlayerActivity) {
+            PlayerActivity.open(f);
+        } else if (activity instanceof MineActivity) {
+            MineActivity.open(f);
+        } else if (activity instanceof LookListActivity) {
+            LookListActivity.open(f);
+        } else if (activity instanceof InterPhoneActivity) {
+            InterPhoneActivity.open(f);
         }
     }
 

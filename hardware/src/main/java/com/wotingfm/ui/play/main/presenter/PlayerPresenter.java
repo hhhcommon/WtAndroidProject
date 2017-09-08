@@ -3,15 +3,14 @@ package com.wotingfm.ui.play.main.presenter;
 import android.content.ContentValues;
 import android.util.Log;
 
-import com.baidu.cloud.media.player.IMediaPlayer;
-import com.pili.pldroid.player.PLMediaPlayer;
-import com.woting.commonplat.player.baidu.BDPlayer;
-import com.woting.commonplat.player.qiniu.QNPlayer;
+import com.google.gson.GsonBuilder;
 import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.database.HistoryHelper;
 import com.wotingfm.common.net.RetrofitUtils;
+import com.wotingfm.common.service.PlayerService;
 import com.wotingfm.common.utils.ListDataSaveUtils;
 import com.wotingfm.ui.bean.BaseResult;
+import com.wotingfm.ui.bean.PlayBill;
 import com.wotingfm.ui.bean.SinglesBase;
 import com.wotingfm.ui.play.main.PlayerFragment;
 import com.wotingfm.ui.play.main.model.PlayerModel;
@@ -35,53 +34,20 @@ public class PlayerPresenter {
     private PlayerFragment activity;
     private ListDataSaveUtils listDataSaveUtils;
     private HistoryHelper historyHelper;
-    private BDPlayer bdPlayer;
-    private QNPlayer QNPlayer;
     public static int playerType = 1; //1 百度播放器，2 大牛播放器
+    private PlayBill data;
+    private String endTime;
+    private String startTime;
 
     public PlayerPresenter(PlayerFragment activity) {
         this.activity = activity;
         this.model = new PlayerModel();
         create();
-        setListener();
     }
 
     private void create() {
         listDataSaveUtils = new ListDataSaveUtils(BSApplication.getInstance());// 本地数据
-        if (bdPlayer == null) bdPlayer = new BDPlayer(activity.getActivity());
-        if (QNPlayer == null) QNPlayer = new QNPlayer(activity.getActivity());
         historyHelper = new HistoryHelper(BSApplication.getInstance());
-    }
-
-    private void setListener() {
-            bdPlayer.setOnPreparedListener(new IMediaPlayer.OnPreparedListener() {
-                @Override
-                public void onPrepared(IMediaPlayer iMediaPlayer) {
-                    Log.e("百度监听", "播放准备好");
-                    activity.playerOnPrepared();
-                }
-            });
-            bdPlayer.setOnCompletionListener(new IMediaPlayer.OnCompletionListener() {
-                @Override
-                public void onCompletion(IMediaPlayer iMediaPlayer) {
-                    Log.e("百度监听", "播放完成");
-                    activity.playerOnCompletion();
-                }
-            });
-            QNPlayer.setOnPreparedListener(new PLMediaPlayer.OnPreparedListener() {
-                @Override
-                public void onPrepared(PLMediaPlayer mp, int preparedTime) {
-                    Log.e("大牛监听", "播放准备好");
-                    activity.playerOnPrepared();
-                }
-            });
-            QNPlayer.setOnCompletionListener(new PLMediaPlayer.OnCompletionListener() {
-                @Override
-                public void onCompletion(PLMediaPlayer mp) {
-                    Log.e("大牛监听", "播放完成");
-                    activity.playerOnCompletion();
-                }
-            });
     }
 
     public SinglesBase getData() {
@@ -133,7 +99,31 @@ public class PlayerPresenter {
                 activity.setData(null, 1);
             }
         });
+    }
 
+    /**
+     * 获取语音搜索数据
+     */
+    public void getVoiceSearchList(String s) {
+        model.getRecommendedList(s, new PlayerModel.OnLoadInterface() {
+            @Override
+            public void onSuccess(Object o) {
+                List<SinglesBase> singLesBeans = (List<SinglesBase>) o;
+                if (singLesBeans != null && singLesBeans.size() > 0) {
+                    for (int i = 0; i < singLesBeans.size(); i++) {
+                        singLesBeans.get(i).isAlbumList = false;
+                    }
+                    activity.setData(singLesBeans, 1);
+                } else {
+                    activity.setData(null, 1);
+                }
+            }
+
+            @Override
+            public void onFailure(String msg) {
+                activity.setData(null, 1);
+            }
+        });
     }
 
     /**
@@ -228,76 +218,117 @@ public class PlayerPresenter {
                 });
     }
 
+    /**
+     * 播放
+     *
+     * @param url
+     */
     public void play(String url) {
-        if (playerType == 1) {
-            bdPlayer.setVideoPath(url);
-            bdPlayer.start();
-        } else {
-            QNPlayer.onClickPlay(url);
-        }
+        PlayerService.play(playerType, url);
     }
 
+    /**
+     * 暂停
+     */
     public void playPause() {
-            bdPlayer.pause();
-            QNPlayer.onClickPause();
+        PlayerService.playPause();
     }
 
+    /**
+     * 继续播放
+     */
     public void start() {
-        if (playerType == 1) {
-            bdPlayer.start();
-        } else {
-            QNPlayer.onClickResume();
-        }
+        PlayerService.start(playerType);
     }
 
+    /**
+     * @return
+     */
     public Object getCurrentPlayerState() {
-        if (playerType == 1) {
-            return bdPlayer.getCurrentPlayerState();
-        } else {
-            return QNPlayer.getCurrentPlayerState();
-        }
+        return PlayerService.getCurrentPlayerState(playerType);
     }
 
+    /**
+     * @return
+     */
     public int getCurrentPosition() {
-        if (playerType == 1) {
-            return bdPlayer.getCurrentPosition();
-        } else {
-            return QNPlayer.getCurrentPosition();
-        }
+        return PlayerService.getCurrentPosition(playerType);
     }
 
+    /**
+     * @return
+     */
     public int getDuration() {
-        if (playerType == 1) {
-            return bdPlayer.getDuration();
-        } else {
-            return QNPlayer.getDuration();
-        }
+        return PlayerService.getDuration(playerType);
     }
 
-//    public void stopPlayback() {
-//        if (playerType == 1) {
-//            bdPlayer.stopPlayback();
-//        } else {
-//            QNPlayer.onClickStop();
-//        }
-//    }
+    /**
+     * 设置播放进度
+     *
+     * @param progress
+     */
+    public void seekTo(long progress) {
+        PlayerService.seekTo(playerType, progress);
+    }
 
-    public void seekTo(int progress) {
-        if (playerType == 1) {
-            bdPlayer.seekTo(progress);
-        } else {
-            QNPlayer.seekTo(progress);
-        }
+    /**
+     * 获取最大进度值
+     *
+     * @param startTime
+     * @param endTime
+     * @return
+     */
+    public int getMax(String startTime, String endTime) {
+        return model.getMax(startTime, endTime);
+    }
+
+    public int getIng() {
+        return model.getIng(startTime);
     }
 
     /**
      * 数据销毁
      */
     public void destroy() {
-
-        QNPlayer.destroy();
         model = null;
+    }
 
+    public void getSeek(String id) {
+        try {
+            RetrofitUtils.getInstance().getSeek(id)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new Action1<Object>() {
+                        @Override
+                        public void call(Object o) {
+                            try {
+                                Log.e("电台直播返回数据", new GsonBuilder().serializeNulls().create().toJson(o));
+                                //填充UI
+                                data = (PlayBill) o;
+                                endTime = data.end_time;
+                                startTime = data.start_time;
+                                activity.setMax(getMax(startTime,endTime),endTime);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }, new Action1<Throwable>() {
+                        @Override
+                        public void call(Throwable throwable) {
+                            throwable.printStackTrace();
+                        }
+                    });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public String getEndTime(){
+        return endTime;
+    }
+
+    public String getStartTime(){
+        return startTime;
     }
 
 }

@@ -5,19 +5,13 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 import com.wotingfm.R;
-import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.utils.GlideUtils;
 import com.wotingfm.ui.bean.ChannelsBean;
 import com.zhy.adapter.recyclerview.CommonAdapter;
 import com.zhy.adapter.recyclerview.base.ViewHolder;
 
 import java.util.List;
-
-/**
- * Created by amine on 2017/6/7.
- */
 
 public class RadioAdapter extends CommonAdapter<ChannelsBean> {
     private RadioClick playerClick;
@@ -40,8 +34,13 @@ public class RadioAdapter extends CommonAdapter<ChannelsBean> {
             GlideUtils.loadImageViewRoundCornersMusic(R.mipmap.oval_defut_other, ivPhoto, 60, 60);
         }
         tvTitle.setText(s.title.trim() + "");
-        tvContent.setText(s.desc.trim() + "");
-        tvTime.setText(s.listen_count + "人听过");
+        try {
+            holder.setText(R.id.tvContent, s.play_bill.title);
+        } catch (Exception e) {
+            e.printStackTrace();
+            holder.setText(R.id.tvContent, "直播中");
+        }
+        tvTime.setText(s.listen_count + "次播放");
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

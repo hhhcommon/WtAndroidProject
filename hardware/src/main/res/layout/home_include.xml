@@ -1,21 +1,16 @@
-<com.woting.commonplat.widget.LoadFrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                                              xmlns:app="http://schemas.android.com/apk/res-auto"
-                                              android:id="@+id/loadLayout"
-                                              android:layout_width="match_parent"
-                                              android:layout_height="match_parent"
-                                              android:layout_above="@+id/view"
-                                              android:layout_below="@+id/relatTop"
-                                              app:emptyView="@layout/layout_empty_black_view"
-                                              app:errorView="@layout/layout_error_black_view"
-                                              app:loadingView="@layout/layout_loading_black_view"
-    >
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/loadLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_above="@+id/view"
+    android:layout_below="@+id/relatTop">
     <!--app:emptyView="@layout/layout_empty_black_view"
        app:errorView="@layout/layout_error_black_view"
        app:loadingView="@layout/layout_loading_black_view"-->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#f016181a"
         android:orientation="vertical">
 
         <RelativeLayout
@@ -32,9 +27,9 @@
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/mRecyclerView"
                 android:layout_width="match_parent"
-                android:paddingTop="10dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:paddingTop="10dp"
                 android:scrollbars="none"/>
         </RelativeLayout>
 
@@ -42,8 +37,8 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="20dp"
-            android:gravity="center"
             android:layout_marginTop="20dp"
+            android:gravity="center"
             android:orientation="horizontal">
 
             <TextView
@@ -61,8 +56,8 @@
                 android:id="@+id/seekbar_video"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="50.3dp"
                 android:layout_marginLeft="50.3dp"
+                android:layout_marginRight="50.3dp"
                 android:maxHeight="2dp"
                 android:minHeight="2dp"
                 android:progressDrawable="@drawable/seebar_style"
@@ -72,9 +67,9 @@
                 android:id="@+id/txt_video_totaltime"
                 android:layout_width="45dp"
                 android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
                 android:layout_gravity="center"
                 android:layout_marginRight="10dp"
-                android:layout_alignParentRight="true"
                 android:gravity="center"
                 android:text="00:00:00"
                 android:textColor="#40ffffff"
@@ -90,8 +85,8 @@
             <ImageView
                 android:id="@+id/ivBefore"
                 android:layout_width="wrap_content"
-                android:layout_marginLeft="60.7dp"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="60.7dp"
                 android:src="@drawable/icon_play_before"/>
 
             <ImageView
@@ -110,4 +105,4 @@
                 android:src="@drawable/icon_play_next"/>
         </RelativeLayout>
     </LinearLayout>
-</com.woting.commonplat.widget.LoadFrameLayout>
+</RelativeLayout>

@@ -11,7 +11,6 @@ import android.widget.Toast;
 
 import com.wotingfm.R;
 import com.wotingfm.common.application.BSApplication;
-import com.wotingfm.common.config.GlobalStateConfig;
 import com.wotingfm.common.net.RetrofitUtils;
 import com.wotingfm.common.utils.BeanCloneUtil;
 import com.wotingfm.common.utils.CommonUtils;
@@ -138,10 +137,8 @@ public class MenuDialog extends Dialog implements View.OnClickListener {
                     dismiss();
                     activity.open(AnchorPersonalCenterFragment.newInstance(pdsBase.creator_id));
                 }
-                GlobalStateConfig.IS_LOOK = true;
                 break;
             case R.id.tvAlbums:
-                GlobalStateConfig.IS_LOOK = true;
                 if (pdsBase != null) {
                     dismiss();
                     activity.open(AlbumsInfoMainFragment.newInstance(pdsBase.album_id));
@@ -194,7 +191,6 @@ public class MenuDialog extends Dialog implements View.OnClickListener {
                 activity.open(AlbumsFragment.newInstance());
                 break;
             case R.id.tvRadio:
-                GlobalStateConfig.IS_LOOK = true;
                 dismiss();
                 if (pdsBase != null && pdsBase.is_radio == true) {
                     ChannelsBean  channelsBean = new ChannelsBean();

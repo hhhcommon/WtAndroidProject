@@ -54,6 +54,7 @@ public class ReportModel {
      * 举报节目
      */
     public void reportsPlayer(String playerId,String report_reason,String content, final OnLoadInterface listener) {
+        Log.e("举报节目","执行");
         try {
             RetrofitUtils.getInstance().reportsPlayer(playerId, report_reason, content)
                     .subscribeOn(Schedulers.io())

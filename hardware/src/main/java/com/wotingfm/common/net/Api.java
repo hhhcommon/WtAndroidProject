@@ -1,10 +1,6 @@
 package com.wotingfm.common.net;
 
 
-import retrofit2.http.POST;
-import retrofit2.http.Path;
-import rx.Observable;
-
 public class Api {
     //请求实例  banner
     public static final String URL_BANNER = "api/home/banners";
@@ -104,5 +100,7 @@ public class Api {
     public static final String URL_REFUSE_INVITEE_MSG = "api/chat-groups/invitee/{id}/deny";
     // 好友同意加入群组
     public static final String URL_AGREE_INVITEE_MSG = "api/chat-groups/invitee/{id}/approve";
+    // 获取某个电台下面正在播的节目
+    public static final String URL_GET_RADIOING = "api/listenings/radios/{id}";
 
 }

@@ -8,14 +8,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.woting.commonplat.widget.LoadFrameLayout;
 import com.wotingfm.R;
 import com.wotingfm.common.config.GlobalStateConfig;
 import com.wotingfm.common.net.RetrofitUtils;
-import com.wotingfm.common.utils.T;
 import com.wotingfm.ui.adapter.albumsAdapter.AlbumsInfoProgramAdapter;
 import com.wotingfm.ui.bean.MessageEvent;
 import com.wotingfm.ui.bean.Player;
@@ -56,7 +55,7 @@ public class ProgramInfoFragment extends Fragment implements View.OnClickListene
     @BindView(R.id.ivDownload)
     ImageView ivDownload;
     @BindView(R.id.relativeLable)
-    RelativeLayout relativeLable;
+    LinearLayout relativeLable;
     private View rootView;
 
     private int mPage;
@@ -64,6 +63,7 @@ public class ProgramInfoFragment extends Fragment implements View.OnClickListene
     private List<Player.DataBean.SinglesBean> singlesBeanList = new ArrayList<>();
     private AlbumsInfoProgramAdapter albumsInfoProgramAdapter;
     private boolean isLoadingData = false;
+    private boolean isCo=false;// 排序按钮标志
 
     public static ProgramInfoFragment newInstance(String albumsID) {
         ProgramInfoFragment fragment = new ProgramInfoFragment();
@@ -110,20 +110,26 @@ public class ProgramInfoFragment extends Fragment implements View.OnClickListene
         mRecyclerView.setAdapter(albumsInfoProgramAdapter);
         refresh();
         ivSequence.setOnClickListener(this);
-        relativeLable.setOnClickListener(this);
+        tvTotal.setOnClickListener(this);
         ivDownload.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.relativeLable:
+            case R.id.tvTotal:
                 startMain(albumsID);
                 break;
             case R.id.ivSequence:
                 Collections.reverse(singlesBeanList);
                 albumsInfoProgramAdapter.notifyDataSetChanged();
-                T.getInstance().showToast("排序成功");
+                if(isCo){
+                    ivSequence.setImageResource(R.mipmap.detail_icon_sequence);
+                    isCo=false;
+                }else{
+                    ivSequence.setImageResource(R.mipmap.detail_icon_reverse);
+                    isCo=true;
+                }
                 break;
             case R.id.ivDownload:
                 DownloadSelectFragment fragment = DownloadSelectFragment.newInstance(albumsID);
@@ -185,7 +191,7 @@ public class ProgramInfoFragment extends Fragment implements View.OnClickListene
                     @Override
                     public void call(Player albumsBeen) {
                         relativeLable.setVisibility(View.VISIBLE);
-                        tvTotal.setText("(全部播放共" + albumsBeen.data.total_count + "集)");
+                        tvTotal.setText("全部播放(共" + albumsBeen.data.total_count + "集)");
                         if (albumsBeen != null && albumsBeen.data != null && albumsBeen.data.singles != null && !albumsBeen.data.singles.isEmpty()) {
                             mPage++;
                             singlesBeanList.clear();
@@ -217,8 +223,6 @@ public class ProgramInfoFragment extends Fragment implements View.OnClickListene
                             mPage++;
                             singlesBeanList.addAll(albumsBeen.data.singles);
                             albumsInfoProgramAdapter.notifyDataSetChanged();
-                        } else {
-                            T.getInstance().showToast("没有更多数据");
                         }
                         isLoadingData = false;
                     }

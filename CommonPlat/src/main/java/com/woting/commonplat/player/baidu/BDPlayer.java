@@ -729,4 +729,8 @@ public class BDPlayer extends FrameLayout {
             mMediaPlayerBase.setDecodeMode(mDecodeMode);
         }
     }
+
+    public void destroy(){
+        release();
+    }
 }

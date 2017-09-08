@@ -34,7 +34,7 @@ import rx.schedulers.Schedulers;
  * 专辑详情。，详情fragment
  */
 
-public class AlbumsInfoFragment extends Fragment implements View.OnClickListener{
+public class AlbumsInfoFragment extends Fragment implements View.OnClickListener {
 
     @BindView(R.id.labelContent)
     LinearLayout labelContent;
@@ -87,9 +87,9 @@ public class AlbumsInfoFragment extends Fragment implements View.OnClickListener
     }
 
     private void setResultData(final AlbumInfo albumInfo) {
-        String url=null;
+        String url = null;
         try {
-            url=albumInfo.data.album.owner.avatar;
+            url = albumInfo.data.album.owner.avatar;
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -108,7 +108,7 @@ public class AlbumsInfoFragment extends Fragment implements View.OnClickListener
             tvFens.setText("粉丝 " + albumInfo.data.album.owner.fans_count);
         } catch (Exception e) {
             e.printStackTrace();
-            tvFens.setText("粉丝 0" );
+            tvFens.setText("粉丝 0");
         }
         if (TextUtils.isEmpty(albumInfo.data.album.introduction)) {
             labelContent.setVisibility(View.GONE);
@@ -116,7 +116,7 @@ public class AlbumsInfoFragment extends Fragment implements View.OnClickListener
             labelContent.setVisibility(View.VISIBLE);
             tvContent.setText(albumInfo.data.album.introduction);
         }
-         boolean had_followed = albumInfo.data.album.owner.had_followed;
+        boolean had_followed = albumInfo.data.album.owner.had_followed;
         if (had_followed == true) {
             tvFollow.setText("已关注");
         } else {
@@ -151,6 +151,7 @@ public class AlbumsInfoFragment extends Fragment implements View.OnClickListener
                                 albumInfo.data.album.owner.had_followed = true;
                                 albumInfo.data.album.owner.fans_count = albumInfo.data.album.owner.fans_count + 1;
                             }
+                            tvFollow.setText("已关注");
                             T.getInstance().showToast("关注成功");
                         } else {
                             if (baseResult != null)
@@ -179,9 +180,10 @@ public class AlbumsInfoFragment extends Fragment implements View.OnClickListener
                     public void call(BaseResult baseResult) {
                         if (baseResult != null && baseResult.ret == 0) {
                             if (albumInfo != null && albumInfo.data != null && albumInfo.data.album != null && albumInfo.data.album.owner != null) {
-                                albumInfo.data.album.owner.had_followed = true;
-                                albumInfo.data.album.owner.fans_count = albumInfo.data.album.owner.fans_count + 1;
+                                albumInfo.data.album.owner.had_followed = false;
+                                albumInfo.data.album.owner.fans_count = albumInfo.data.album.owner.fans_count - 1;
                             }
+                            tvFollow.setText("关注");
                             T.getInstance().showToast("取消关注成功");
                         } else {
                             if (baseResult != null)
@@ -202,14 +204,14 @@ public class AlbumsInfoFragment extends Fragment implements View.OnClickListener
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.tvFollow:
                 boolean isLogin = CommonUtils.isLogin();
                 if (isLogin == false) {
                     LogoActivity.start(getActivity());
                     return;
                 }
-                 boolean had_followed=false;
+                boolean had_followed = false;
                 try {
                     had_followed = albumInfo.data.album.owner.had_followed;
                 } catch (Exception e) {

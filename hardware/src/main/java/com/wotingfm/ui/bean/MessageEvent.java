@@ -21,6 +21,10 @@ public class MessageEvent {
         this.message = message;
     }
 
+    public MessageEvent(int type) {
+        this.type = type;
+    }
+
     public MessageEvent(boolean type) {
         this.isBottom = type;
     }

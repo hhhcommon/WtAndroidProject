@@ -19,6 +19,7 @@ import java.util.List;
  */
 public class PlayerListAdapter extends CommonAdapter<SinglesBase> {
     private PlayerClick playerClick;
+
     public PlayerListAdapter(Context context, List<SinglesBase> datas) {
         super(context, R.layout.item_pop_player, datas);
     }
@@ -35,9 +36,13 @@ public class PlayerListAdapter extends CommonAdapter<SinglesBase> {
             if (s.isAlbumList) {
                 tv_playList.setVisibility(View.GONE);
             } else {
-                tv_playList.setVisibility(View.VISIBLE);
+                if (s.is_radio) {
+                    tv_playList.setVisibility(View.GONE);
+                } else {
+                    tv_playList.setVisibility(View.VISIBLE);
+                }
             }
-                ivTop.setVisibility(View.VISIBLE);
+            ivTop.setVisibility(View.VISIBLE);
             ivClose.setVisibility(View.INVISIBLE);
             textViewTitle.setTextColor(Color.parseColor("#fd8548"));
         } else {
@@ -72,7 +77,7 @@ public class PlayerListAdapter extends CommonAdapter<SinglesBase> {
         });
     }
 
-    public void setPlayerClick( PlayerClick playerClick) {
+    public void setPlayerClick(PlayerClick playerClick) {
         this.playerClick = playerClick;
     }
 

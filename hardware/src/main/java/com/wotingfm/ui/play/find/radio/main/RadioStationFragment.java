@@ -3,10 +3,12 @@ package com.wotingfm.ui.play.find.radio.main;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.gson.GsonBuilder;
 import com.woting.commonplat.amine.ARecyclerView;
 import com.woting.commonplat.amine.LoadMoreFooterView;
 import com.woting.commonplat.amine.OnLoadMoreListener;
@@ -159,6 +161,7 @@ public class RadioStationFragment extends Fragment implements View.OnClickListen
                 .subscribe(new Action1<List<ChannelsBean>>() {
                     @Override
                     public void call(List<ChannelsBean> dataBeanXes) {
+                        Log.e("获取电台返回数据",new GsonBuilder().serializeNulls().create().toJson(dataBeanXes));
                         mRecyclerView.setRefreshing(false);
                         if (dataBeanXes != null && dataBeanXes.size() > 0) {
                             if (datas != null) {

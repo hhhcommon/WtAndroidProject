@@ -1,9 +1,8 @@
 package com.wotingfm.ui.play.album.view.download.presenter;
 
 import android.os.Bundle;
-import android.text.TextUtils;
+import android.os.Handler;
 
-import com.wotingfm.common.net.RetrofitUtils;
 import com.wotingfm.common.utils.BeanCloneUtil;
 import com.wotingfm.common.utils.CommonUtils;
 import com.wotingfm.common.utils.T;
@@ -17,10 +16,6 @@ import com.wotingfm.ui.play.localaudio.service.DownloadClient;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action1;
-import rx.schedulers.Schedulers;
 
 /**
  * 作者：xinLong on 2017/6/5 13:55
@@ -40,7 +35,12 @@ public class DownloadSelectPresenter {
     public DownloadSelectPresenter(DownloadSelectFragment activity) {
         this.activity = activity;
         mFileDao = new FileInfoDao(activity.getActivity());
-        getData();
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                getData();
+            }
+        },300);
     }
 
     private void getData() {
@@ -61,7 +61,8 @@ public class DownloadSelectPresenter {
         return albumsID;
     }
 
-    public void downLoad(List<Player.DataBean.SinglesBean> singlesBeanList) {
+    public boolean downLoad(List<Player.DataBean.SinglesBean> singlesBeanList) {
+        boolean b=true;
         List<Player.DataBean.SinglesBean>  singlesBeanListSelect= new ArrayList<>();
 
         if(singlesBeanList!=null&&singlesBeanList.size()>0){
@@ -74,14 +75,14 @@ public class DownloadSelectPresenter {
 
         if (singlesBeanListSelect.isEmpty()) {
             T.getInstance().showToast("请选择要下载的节目");
-            return;
+            return false;
         }
-
 
         for (int w = 0;w <singlesBeanListSelect.size();  w++) {
             addList(singlesBeanListSelect.get(w));
         }
         downloadStart();
+        return b;
     }
 
     // 内容的下载

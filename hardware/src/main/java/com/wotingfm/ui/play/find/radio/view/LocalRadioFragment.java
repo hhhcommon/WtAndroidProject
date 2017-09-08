@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.text.TextUtils;
@@ -233,7 +234,13 @@ public class LocalRadioFragment extends Fragment implements View.OnClickListener
                             refreshType="provinces";
                             tvLocal.setText(GlobalAddressConfig.CityName);
                             if (locationInfo != null) locationInfo.stopLocation();
-                            refresh();
+                            new Handler().postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    refresh();
+                                }
+                            },300);
+
                         }
                     }
                 });

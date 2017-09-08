@@ -47,6 +47,7 @@
             android:singleLine="true"
             android:layout_height="45dp"
             android:text="主播"
+            android:textSize="16sp"
             android:textColor="#16181a" />
 
         <ImageView

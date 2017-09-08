@@ -82,9 +82,9 @@ public class TimeUtils {
             long a = time / 3600;
             if (a > 24) {
                 // 超过一天展示原先数据
-                if(showTime!=null&&!showTime.trim().equals("")){
+                if (showTime != null && !showTime.trim().equals("")) {
                     return showTime;
-                }else{
+                } else {
                     return "直播中";
                 }
             } else {
@@ -225,4 +225,5 @@ public class TimeUtils {
 //        }
         return d;
     }
+
 }

@@ -64,7 +64,7 @@ public class DownloadSelectFragment extends Fragment implements View.OnClickList
     private Dialog dialog;
     private int mPage;
     private DownloadSelectPresenter presenter;
-    private boolean isSelect=false;
+    private boolean isSelect = false;
     private List<Player.DataBean.SinglesBean> singlesBeanList = new ArrayList<>();
     private List<Player.DataBean.SinglesBean> list;
 
@@ -105,10 +105,10 @@ public class DownloadSelectFragment extends Fragment implements View.OnClickList
         downloadSelectAdapter.setPlayerClick(new DownloadSelectAdapter.AlbumsInfoClick() {
             @Override
             public void itemClick(int position) {
-                if(singlesBeanList.get(position-2).isSelect){
-                    singlesBeanList.get(position-2).isSelect = false;
-                }else{
-                    singlesBeanList.get(position-2).isSelect = true;
+                if (singlesBeanList.get(position - 2).isSelect) {
+                    singlesBeanList.get(position - 2).isSelect = false;
+                } else {
+                    singlesBeanList.get(position - 2).isSelect = true;
                 }
 
                 downloadSelectAdapter.notifyDataSetChanged();
@@ -137,7 +137,7 @@ public class DownloadSelectFragment extends Fragment implements View.OnClickList
                         if (albumsBeen != null && albumsBeen.data != null && albumsBeen.data.singles != null && !albumsBeen.data.singles.isEmpty()) {
                             mPage++;
                             singlesBeanList.clear();
-                           list= albumsBeen.data.singles;
+                            list = albumsBeen.data.singles;
                             singlesBeanList.addAll(list);
                             assembleData();
                             setData();
@@ -198,7 +198,7 @@ public class DownloadSelectFragment extends Fragment implements View.OnClickList
                         showRecycleView(1);
                         if (albumsBeen != null && albumsBeen.data != null && albumsBeen.data.singles != null && !albumsBeen.data.singles.isEmpty()) {
                             mPage++;
-                            list=albumsBeen.data.singles;
+                            list = albumsBeen.data.singles;
                             singlesBeanList.addAll(list);
                             assembleData();
                             setData();
@@ -246,8 +246,8 @@ public class DownloadSelectFragment extends Fragment implements View.OnClickList
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.tvDownload:
-                presenter.downLoad(singlesBeanList);
-                closeFragment();
+                boolean b = presenter.downLoad(singlesBeanList);
+                if (b) closeFragment();
                 break;
             case R.id.tvCancel:
                 closeFragment();
@@ -259,21 +259,21 @@ public class DownloadSelectFragment extends Fragment implements View.OnClickList
         }
     }
 
-    private void select(){
-        if(isSelect){
+    private void select() {
+        if (isSelect) {
             // 当前是全选状态
-            isSelect=false;
-            for (int i=0;i<singlesBeanList.size();i++){
-                singlesBeanList.get(i).isSelect=false;
+            isSelect = false;
+            for (int i = 0; i < singlesBeanList.size(); i++) {
+                singlesBeanList.get(i).isSelect = false;
             }
             setData();
             ivSelect.setImageResource(R.mipmap.icon_select_n);
             tv_news.setText("取消全选");
-        }else{
+        } else {
             // 当前不是全选状态
-            isSelect=true;
-            for (int i=0;i<singlesBeanList.size();i++){
-                singlesBeanList.get(i).isSelect=true;
+            isSelect = true;
+            for (int i = 0; i < singlesBeanList.size(); i++) {
+                singlesBeanList.get(i).isSelect = true;
             }
             setData();
             ivSelect.setImageResource(R.mipmap.icon_select_s);

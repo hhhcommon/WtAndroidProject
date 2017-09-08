@@ -192,12 +192,10 @@ public class AnchorPersonalCenterFragment extends Fragment implements View.OnCli
 
             @Override
             public void ItemSendClick(AnchorInfo.DataBeanXX.UserBean.DataBeanX.DataBean dataBean) {
-                GlobalStateConfig.IS_RESULT = true;
-                GlobalStateConfig.isIS_BACK = true;
                 SinglesBase singlesBase = new SinglesBase();
-                singlesBase.album_logo_url = dataBean.single_logo_url;
-                singlesBase.album_title = dataBean.single_title;
-                singlesBase.album_lastest_news = dataBean.album_title;
+                singlesBase.single_logo_url = dataBean.single_logo_url;
+                singlesBase.single_title = dataBean.single_title;
+                singlesBase.album_title = dataBean.album_title;
                 singlesBase.album_id = dataBean.album_id;
                 singlesBase.creator_id = uid;
                 singlesBase.single_file_url = dataBean.single_file_url;
