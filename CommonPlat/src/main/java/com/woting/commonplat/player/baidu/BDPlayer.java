@@ -114,22 +114,24 @@ public class BDPlayer extends FrameLayout {
         AudioManager am = (AudioManager) mAppContext.getSystemService(Context.AUDIO_SERVICE);
         am.requestAudioFocus(null, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN);
         try {
-            mMediaPlayerBase = createPlayer();
-            mMediaPlayerBase.setOnPreparedListener(mPreparedListener);
-            mMediaPlayerBase.setOnCompletionListener(mCompletionListener);
-            mMediaPlayerBase.setOnErrorListener(mErrorListener);
-            mMediaPlayerBase.setOnInfoListener(mInfoListener);
-            mMediaPlayerBase.setOnBufferingUpdateListener(mBufferingUpdateListener);
-            mMediaPlayerBase.setOnSeekCompleteListener(mSeekCompleteListener);
-            mMediaPlayerBase.setDataSource(mAppContext, mUri);
-            mMediaPlayerBase.setAudioStreamType(AudioManager.STREAM_MUSIC);
-            mMediaPlayerBase.setScreenOnWhilePlaying(true);
-            mMediaPlayerBase.prepareAsync();
+            if(mMediaPlayerBase==null) {
+                mMediaPlayerBase = createPlayer();
+                mMediaPlayerBase.setOnPreparedListener(mPreparedListener);
+                mMediaPlayerBase.setOnCompletionListener(mCompletionListener);
+                mMediaPlayerBase.setOnErrorListener(mErrorListener);
+                mMediaPlayerBase.setOnInfoListener(mInfoListener);
+                mMediaPlayerBase.setOnBufferingUpdateListener(mBufferingUpdateListener);
+                mMediaPlayerBase.setOnSeekCompleteListener(mSeekCompleteListener);
+                mMediaPlayerBase.setDataSource(mAppContext, mUri);
+                mMediaPlayerBase.setAudioStreamType(AudioManager.STREAM_MUSIC);
+                mMediaPlayerBase.setScreenOnWhilePlaying(true);
+                mMediaPlayerBase.prepareAsync();
 
-            // we don't set the target state here either, but preserve the
-            // target state that was there before.
-            setCurrentState(PlayerState.STATE_PREPARING);
-            // attachMediaController();
+                // we don't set the target state here either, but preserve the
+                // target state that was there before.
+                setCurrentState(PlayerState.STATE_PREPARING);
+                // attachMediaController();
+            }
         } catch (IOException ex) {
             Log.e(TAG, "Unable to open content: " + mUri, ex);
             setCurrentState(PlayerState.STATE_ERROR);

@@ -127,13 +127,13 @@ public class PlayerService extends Service {
         }
     }
 
-//    public void stopPlayback() {
-//        if (playerType == 1) {
-//            bdPlayer.stopPlayback();
-//        } else {
-//            QNPlayer.onClickStop();
-//        }
-//    }
+    public static void release(int playerType) {
+        if (playerType == 1) {
+            bdPlayer.stopPlayback();
+        } else {
+            nnPlayer.onClickStop();
+        }
+    }
 
     public static void seekTo(int playerType,long progress) {
         if (playerType == 1) {

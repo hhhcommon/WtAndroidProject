@@ -622,6 +622,7 @@ public class PlayerFragment extends Fragment implements View.OnClickListener {
         setIsPlay();
         smoothMoveToPosition(mRecyclerView, positionPlayer);
         presenter.playPause();
+//        presenter.release();
         presenter.play(singlesBase.single_file_url);
         seekbarVideo.setProgress(0);
         ivPause.setImageResource(R.mipmap.music_play_icon_pause);
@@ -649,6 +650,8 @@ public class PlayerFragment extends Fragment implements View.OnClickListener {
             } else if (isPause == isPause.PAUSED) {
                 presenter.start();
                 ivPause.setImageResource(R.mipmap.music_play_icon_pause);
+            }else{
+                playMusic();
             }
         } else {
             BDPlayer.PlayerState isPause = (BDPlayer.PlayerState) presenter.getCurrentPlayerState();
@@ -658,6 +661,8 @@ public class PlayerFragment extends Fragment implements View.OnClickListener {
             } else if (isPause == isPause.STATE_PAUSED) {
                 presenter.start();
                 ivPause.setImageResource(R.mipmap.music_play_icon_pause);
+            }else{
+                playMusic();
             }
         }
     }

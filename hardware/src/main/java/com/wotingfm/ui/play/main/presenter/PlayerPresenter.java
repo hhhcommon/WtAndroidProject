@@ -235,11 +235,19 @@ public class PlayerPresenter {
     }
 
     /**
+     * 停止播放
+     */
+    public void release() {
+        PlayerService.release(playerType);
+    }
+
+    /**
      * 继续播放
      */
     public void start() {
         PlayerService.start(playerType);
     }
+
 
     /**
      * @return
