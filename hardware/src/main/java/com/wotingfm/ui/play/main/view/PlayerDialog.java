@@ -3,7 +3,9 @@ package com.wotingfm.ui.play.main.view;
 import android.app.Dialog;
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -11,8 +13,6 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.woting.commonplat.amine.ARecyclerView;
-import com.woting.commonplat.amine.OnRefreshListener;
 import com.woting.commonplat.manager.PhoneMsgManager;
 import com.wotingfm.R;
 import com.wotingfm.ui.bean.MessageEvent;
@@ -25,12 +25,12 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 //播放节目选择dialog
-public class PlayerDialog extends Dialog implements View.OnClickListener, OnRefreshListener {
+public class PlayerDialog extends Dialog implements View.OnClickListener, SwipeRefreshLayout.OnRefreshListener {
 
-    private ARecyclerView mRecyclerViewList;
+    private RecyclerView mRecyclerViewList;
     private TextView tvClose;
     private PlayerListAdapter playerListAdapter;
-
+    private SwipeRefreshLayout mSwipeLayout;
     public PlayerDialog(@NonNull Context context) {
         super(context, R.style.BottomDialog);
         setContentView(R.layout.player_dialog);
@@ -44,14 +44,17 @@ public class PlayerDialog extends Dialog implements View.OnClickListener, OnRefr
     }
 
     private void inItView() {
-        mRecyclerViewList = (ARecyclerView) findViewById(R.id.mRecyclerViewList);
+        mSwipeLayout = (SwipeRefreshLayout) findViewById(R.id.id_swipe_ly);
+        mSwipeLayout.setColorSchemeResources(R.color.app_basic, R.color.app_basic, R.color.app_basic, R.color.app_basic);
+        mSwipeLayout.setOnRefreshListener(this);
 
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(PhoneMsgManager.ScreenHeight/2, PhoneMsgManager.ScreenWidth);
-        mRecyclerViewList.setLayoutParams(params);//将设置好的布局参数应用到控件中
-
+        LinearLayout.LayoutParams params =(LinearLayout.LayoutParams) mSwipeLayout.getLayoutParams();
+        params.height=PhoneMsgManager.ScreenHeight/2;
+        mSwipeLayout.setLayoutParams(params);//将设置好的布局参数应用到控件中
+        mRecyclerViewList = (RecyclerView) findViewById(R.id.mRecyclerViewList);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        mRecyclerViewList.setOnRefreshListener(this);
+
         mRecyclerViewList.setLayoutManager(layoutManager);
         tvClose = (TextView) findViewById(R.id.tvClose);
     }
@@ -62,7 +65,7 @@ public class PlayerDialog extends Dialog implements View.OnClickListener, OnRefr
 
     private void setData() {
         playerListAdapter = new PlayerListAdapter(getContext(), PlayerFragment.singLesBeans);
-        mRecyclerViewList.setIAdapter(playerListAdapter);
+        mRecyclerViewList.setAdapter(playerListAdapter);
     }
 
     /**
@@ -75,14 +78,14 @@ public class PlayerDialog extends Dialog implements View.OnClickListener, OnRefr
             playerListAdapter.setPlayerClick(new PlayerListAdapter.PlayerClick() {
                 @Override
                 public void player(int position) {
-                    setIsPlay(PlayerFragment.singLesBeans.get(position-2));
+                    setIsPlay(PlayerFragment.singLesBeans.get(position));
                     playerListAdapter.notifyDataSetChanged();
-                    if (popPlay != null) popPlay.play(position-2);
+                    if (popPlay != null) popPlay.play(position);
                 }
 
                 @Override
                 public void close(int position) {
-                    SinglesBase singlesBean = PlayerFragment.singLesBeans.get(position-2);
+                    SinglesBase singlesBean = PlayerFragment.singLesBeans.get(position);
                     PlayerFragment.singLesBeans.remove(singlesBean);
                     playerListAdapter.notifyDataSetChanged();
                     if (popPlay != null) popPlay.close(singlesBean);
@@ -90,7 +93,7 @@ public class PlayerDialog extends Dialog implements View.OnClickListener, OnRefr
 
                 @Override
                 public void getList(int position) {
-                    if (popPlay != null) popPlay.getList(position-2);
+                    if (popPlay != null) popPlay.getList(position);
                     dismiss();
                 }
             });
@@ -126,13 +129,17 @@ public class PlayerDialog extends Dialog implements View.OnClickListener, OnRefr
         if( PlayerFragment.singLesBeans!=null&&PlayerFragment.singLesBeans.get(0)!=null){
             Log.e("执行操作","刷新");
            if(PlayerFragment.singLesBeans.get(0).isAlbumList) {
-               mRecyclerViewList.setRefreshing(false);
+               refreshCancel();
            }else{
                EventBus.getDefault().post(new MessageEvent(2005));
            }
         }else{
-            mRecyclerViewList.setRefreshing(false);
+            refreshCancel();
         }
+    }
+
+    private void refreshCancel() {
+        mSwipeLayout.setRefreshing(false);
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -140,12 +147,11 @@ public class PlayerDialog extends Dialog implements View.OnClickListener, OnRefr
         int type = messageEvent.getType();
         switch (type) {
             case 1100:
-                mRecyclerViewList.setRefreshing(false);
+                refreshCancel();
                 playerListAdapter.notifyDataSetChanged();
                 break;
         }
     }
-
 
     public void destroy(){
         EventBus.getDefault().unregister(this);
