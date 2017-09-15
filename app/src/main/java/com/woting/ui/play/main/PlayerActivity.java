@@ -21,12 +21,12 @@ public class PlayerActivity extends NoTitleBarBaseActivity {
         return R.layout.activity_player;
     }
 
-    public PlayerFragment playerFragment;
+//    public PlayerFragment playerFragment;
 
     @Override
     public void initView() {
-        playerFragment = PlayerFragment.newInstance();
-        openMain(playerFragment);
+//        playerFragment = PlayerFragment.newInstance();
+//        openMain(playerFragment);
     }
 
 

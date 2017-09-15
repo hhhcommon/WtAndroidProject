@@ -6,7 +6,6 @@ import android.util.Log;
 import com.google.gson.GsonBuilder;
 import com.wotingfm.common.net.RetrofitUtils;
 import com.wotingfm.ui.bean.Player;
-import com.wotingfm.ui.bean.SerchList;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -26,25 +25,21 @@ public class PlayerModel {
     /**
      * 获取推荐数据
      */
-    public void getRecommendedList(String s, final OnLoadInterface listener) {
+    public void getRecommendedList(final OnLoadInterface listener) {
         try {
-            Log.e("查询数据", "" + s);
-            RetrofitUtils.getInstance().serchList("singles", s, 1)
+            Log.e("执行操作", "获取推荐数据");
+            RetrofitUtils.getInstance().getPlayerList()
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(new Action1<SerchList>() {
+                    .subscribe(new Action1<List<Player.DataBean.SinglesBean>>() {
                         @Override
-                        public void call(SerchList o) {
-                            if (o != null && o.ret == 0 && o.data != null && o.data.singles != null && !o.data.singles.isEmpty()) {
-                                try {
-                                    Log.e("获取推荐返回数据", new GsonBuilder().serializeNulls().create().toJson(o));
-                                    //填充UI
-                                    listener.onSuccess(o.data.singles);
-                                } catch (Exception e) {
-                                    e.printStackTrace();
-                                    listener.onFailure("");
-                                }
-                            } else {
+                        public void call(List<Player.DataBean.SinglesBean> o) {
+                            try {
+                                Log.e("获取推荐返回数据", new GsonBuilder().serializeNulls().create().toJson(o));
+                                //填充UI
+                                listener.onSuccess(o);
+                            } catch (Exception e) {
+                                e.printStackTrace();
                                 listener.onFailure("");
                             }
                         }
@@ -55,30 +50,6 @@ public class PlayerModel {
                             throwable.printStackTrace();
                         }
                     });
-
-
-//            RetrofitUtils.getInstance().getPlayerList(id)
-//                    .subscribeOn(Schedulers.io())
-//                    .observeOn(AndroidSchedulers.mainThread())
-//                    .subscribe(new Action1<List<Player.DataBean.SinglesBean>>() {
-//                        @Override
-//                        public void call(List<Player.DataBean.SinglesBean> o) {
-//                            try {
-//                                Log.e("获取推荐返回数据", new GsonBuilder().serializeNulls().create().toJson(o));
-//                                //填充UI
-//                                listener.onSuccess(o);
-//                            } catch (Exception e) {
-//                                e.printStackTrace();
-//                                listener.onFailure("");
-//                            }
-//                        }
-//                    }, new Action1<Throwable>() {
-//                        @Override
-//                        public void call(Throwable throwable) {
-//                            listener.onFailure("");
-//                            throwable.printStackTrace();
-//                        }
-//                    });
         } catch (Exception e) {
             e.printStackTrace();
             listener.onFailure("");
@@ -87,7 +58,6 @@ public class PlayerModel {
 
     public void getAlbumList(String id, final OnLoadInterface listener) {
         try {
-
             RetrofitUtils.getInstance().getPlayerList(id)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
@@ -96,6 +66,41 @@ public class PlayerModel {
                         public void call(List<Player.DataBean.SinglesBean> o) {
                             try {
                                 Log.e("获取专辑返回数据", new GsonBuilder().serializeNulls().create().toJson(o));
+                                //填充UI
+                                listener.onSuccess(o);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                                listener.onFailure("");
+                            }
+                        }
+                    }, new Action1<Throwable>() {
+                        @Override
+                        public void call(Throwable throwable) {
+                            listener.onFailure("");
+                            throwable.printStackTrace();
+                        }
+                    });
+        } catch (Exception e) {
+            e.printStackTrace();
+            listener.onFailure("");
+        }
+    }
+
+    /**
+     * 获取续播返回数据
+     * @param listener
+     */
+    public void getOnPlay( final OnLoadInterface listener) {
+        try {
+            Log.e("执行操作","获取续播返回数据");
+            RetrofitUtils.getInstance().getOnPlay()
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new Action1<Object>() {
+                        @Override
+                        public void call(Object o) {
+                            try {
+                                Log.e("获取续播返回数据", new GsonBuilder().serializeNulls().create().toJson(o));
                                 //填充UI
                                 listener.onSuccess(o);
                             } catch (Exception e) {

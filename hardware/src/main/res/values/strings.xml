@@ -62,6 +62,8 @@
     <string name="send_verification_code">发送验证码</string>
     <string name="new_password">请输入新密码</string>
 
+    <!-- VLC -->
+    <string name="invalid_location">指定位置 %1$s 无法播放</string>
 
     <!-- 云信SDK所需文案 -->
     <string name="nim_status_bar_multi_messages_incoming">%1$d位联系人有新消息</string>

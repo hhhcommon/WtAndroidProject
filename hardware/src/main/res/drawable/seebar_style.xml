@@ -5,7 +5,7 @@
                 
         <shape>
                         
-            <solid android:color="#1effffff"/>
+            <solid android:color="#33ffffff"/>
                     
         </shape>
             
@@ -17,7 +17,7 @@
                         
             <shape>
                                 
-                <solid android:color="#32ffffff"/>
+                <solid android:color="#4dffffff"/>
                             
             </shape>
                     

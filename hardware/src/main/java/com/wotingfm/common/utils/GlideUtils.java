@@ -73,7 +73,7 @@ public class GlideUtils {
     }
 
     /**
-     * 原图--圆图
+     * 原图
      *
      * @param path
      * @param mImageView

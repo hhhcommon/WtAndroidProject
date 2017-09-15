@@ -7,12 +7,9 @@ import android.widget.Toast;
 
 import com.woting.commonplat.utils.SequenceUUID;
 import com.wotingfm.R;
-import com.wotingfm.common.config.GlobalStateConfig;
 import com.wotingfm.ui.base.baseactivity.AppManager;
 import com.wotingfm.ui.base.baseactivity.BaseFragmentActivity;
-import com.wotingfm.ui.base.baseactivity.NoTitleBarBaseActivity;
 import com.wotingfm.ui.bean.MessageEvent;
-import com.wotingfm.ui.intercom.main.view.InterPhoneFragment;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -34,7 +31,7 @@ public class PlayerActivity extends BaseFragmentActivity {
         setContentView(R.layout.fragment_main);
         AppManager.getAppManager().addActivity(this);
         context=this;
-        openMain(PlayerFragment.newInstance());
+        openMain(new PlayerFragment());
     }
 
     public static void open(Fragment frg) {

@@ -2,17 +2,13 @@ package com.wotingfm.ui.bean;
 
 import java.util.List;
 
-/**
- * Created by amine on 2017/7/7.
- */
-
-
 public class MessageEvent {
     public String message;
     public ChannelsBean channelsBean;
     public SinglesBase singlesBase;
     public Selected.DataBeanX.DataBean  DataBean;
     public int type;
+    public int percentsAvailable;
     public boolean isBottom;
     public String roomid;
     public List<SinglesDownload> singlesDownloads;
@@ -52,6 +48,13 @@ public class MessageEvent {
         this.roomid = roomid;
         this.type = type;
     }
+
+    public MessageEvent(int type,int percentsAvailable) {
+        this.type = type;
+        this.percentsAvailable = percentsAvailable;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////////////////////
     public ChannelsBean getChannelsBean() {
         return channelsBean;
     }
@@ -60,7 +63,11 @@ public class MessageEvent {
         return type;
     }
 
-    public boolean getIsBottoom() {
+    public int getPercentsAvailable() {
+        return percentsAvailable;
+    }
+
+    public boolean getIsBottom() {
         return isBottom;
     }
     public SinglesBase getSinglesBase() {
@@ -82,5 +89,8 @@ public class MessageEvent {
     public String getRoomid() {
         return roomid;
     }
+
+
+
 
 }

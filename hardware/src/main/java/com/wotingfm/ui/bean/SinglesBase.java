@@ -52,5 +52,5 @@ public class SinglesBase implements Serializable {
     @DatabaseField
     public boolean isSelect;
     @DatabaseField
-    public boolean isAlbumList;
+    public boolean isAlbumList=false;
 }
