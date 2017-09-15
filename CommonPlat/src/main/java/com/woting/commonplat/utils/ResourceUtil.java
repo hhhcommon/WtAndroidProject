@@ -100,7 +100,7 @@ public class ResourceUtil {
      * 得到 sdcard 的路径
      * @return 返回一个字符串数组   下标 0:内置 sdcard   下标 1:外置 sdcard
      */
-    private static String[] getSDCardPath() {
+    public static String[] getSDCardPath() {
         String[] sdCardPath = new String[2];
         File sdFile = Environment.getExternalStorageDirectory();
         File[] files = sdFile.getParentFile().listFiles();

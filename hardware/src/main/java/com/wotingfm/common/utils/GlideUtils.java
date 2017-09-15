@@ -47,9 +47,9 @@ public class GlideUtils {
      */
     public static void loadImageViewSrc(Object path, ImageView mImageView, boolean b, int radius) {
         if (b) {
-            Glide.with(BSApplication.mContext).load(path).crossFade(1000).bitmapTransform(new BlurTransformation(BSApplication.mContext, radius)).into(mImageView);
+            Glide.with(BSApplication.mContext).load(path).crossFade(500).bitmapTransform(new BlurTransformation(BSApplication.mContext, radius)).into(mImageView);
         } else {
-            Glide.with(BSApplication.mContext).load(path).crossFade(1000).into(mImageView);
+            Glide.with(BSApplication.mContext).load(path).crossFade(500).into(mImageView);
         }
     }
 
@@ -66,9 +66,9 @@ public class GlideUtils {
      */
     public static void loadImageViewSrc(Object path, ImageView mImageView, int width, int height, boolean b, int radius) {
         if (b) {
-            Glide.with(BSApplication.mContext).load(path).crossFade(1000).bitmapTransform(new BlurTransformation(BSApplication.mContext, radius)).override(width, height).into(mImageView);
+            Glide.with(BSApplication.mContext).load(path).crossFade(500).bitmapTransform(new BlurTransformation(BSApplication.mContext, radius)).override(width, height).into(mImageView);
         } else {
-            Glide.with(BSApplication.mContext).load(path).crossFade(1000).override(width, height).into(mImageView);
+            Glide.with(BSApplication.mContext).load(path).crossFade(500).override(width, height).into(mImageView);
         }
     }
 
@@ -79,7 +79,7 @@ public class GlideUtils {
      * @param mImageView
      */
     public static void loadImageViewRound(Object path, ImageView mImageView) {
-        Glide.with(BSApplication.mContext).load(path).crossFade(1000).transform(new GlideCircleTransform(BSApplication.mContext)).into(mImageView);
+        Glide.with(BSApplication.mContext).load(path).error(R.mipmap.oval_defut_other).crossFade(500).transform(new GlideCircleTransform(BSApplication.mContext)).into(mImageView);
     }
 
     /**
@@ -91,7 +91,7 @@ public class GlideUtils {
      * @param height
      */
     public static void loadImageViewRound(Object path, ImageView mImageView, int width, int height) {
-        Glide.with(BSApplication.mContext).load(path).crossFade(1000).transform(new GlideCircleTransform(BSApplication.mContext)).override(width, height).into(mImageView);
+        Glide.with(BSApplication.mContext).load(path).crossFade(500).transform(new GlideCircleTransform(BSApplication.mContext)).override(width, height).into(mImageView);
     }
 
     /**
@@ -101,7 +101,7 @@ public class GlideUtils {
      * @param mImageView
      */
     public static void loadImageViewRoundCorners(Object path, ImageView mImageView) {
-        Glide.with(BSApplication.mContext).load(path).crossFade(1000).bitmapTransform(new RoundedCornersTransformation(BSApplication.mContext, 4, 0, RoundedCornersTransformation.CornerType.ALL)).into(mImageView);
+        Glide.with(BSApplication.mContext).load(path).crossFade(500).bitmapTransform(new RoundedCornersTransformation(BSApplication.mContext, 4, 0, RoundedCornersTransformation.CornerType.ALL)).into(mImageView);
     }
 
     /**
@@ -113,7 +113,7 @@ public class GlideUtils {
      * @param height
      */
     public static void loadImageViewRoundCorners(Object path, ImageView mImageView, int width, int height) {
-        Glide.with(BSApplication.mContext).load(path).crossFade(1000).bitmapTransform(new RoundedCornersTransformation(BSApplication.mContext, 16, 0, RoundedCornersTransformation.CornerType.ALL)).override(width, height).into(mImageView);
+        Glide.with(BSApplication.mContext).load(path).crossFade(500).bitmapTransform(new RoundedCornersTransformation(BSApplication.mContext, 16, 0, RoundedCornersTransformation.CornerType.ALL)).override(width, height).into(mImageView);
     }
 
     /**
@@ -126,7 +126,7 @@ public class GlideUtils {
      */
     public static void loadImageViewRoundCornersMusic(Object path, ImageView mImageView, int width, int height) {
         Glide.with(BSApplication.mContext).load(path).error(R.mipmap.oval_defut_other)
-                .placeholder(R.mipmap.oval_defut_other).crossFade(1000).bitmapTransform(new RoundedCornersTransformation(BSApplication.mContext, 16, 0, RoundedCornersTransformation.CornerType.ALL)).override(width, height).into(mImageView);
+                .placeholder(R.drawable.background_group).crossFade(500).bitmapTransform(new RoundedCornersTransformation(BSApplication.mContext, 20, 0, RoundedCornersTransformation.CornerType.ALL)).override(width, height).into(mImageView);
     }
 
     /**

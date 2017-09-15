@@ -214,10 +214,11 @@ public class CacheManager {
      * @param file
      * @return
      */
-    public static String getCacheSize(File file,File file1) {
+    public static String getCacheSize(File file,File file1,File file2) {
         try {
             cache = getFolderSize(file);// 缓存文件路径
             cache += getFolderSize(file1);// glide缓存
+            cache += getFolderSize(file2);// 金山云缓存
         } catch (Exception e) {
             e.printStackTrace();
         }

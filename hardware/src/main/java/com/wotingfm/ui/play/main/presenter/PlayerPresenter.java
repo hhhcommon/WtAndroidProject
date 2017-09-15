@@ -61,25 +61,25 @@ public class PlayerPresenter {
 
     // 获取数据
     public void getData() {
-        if(CommonUtils.isLogin()){
+        if (CommonUtils.isLogin()) {
             getOnPlay();// 获取保存的续播对象数据
-        }else{
+        } else {
             // 获取本地数据
-            SinglesBase s=  getSingle();
-            if(s!=null){
-               if(s.isAlbumList) {
-                   activity.setDataForLocal(s,2);// 获取专辑列表
-               }else{
-                   activity.setDataForLocal(s,1);// 获取推荐列表
-               }
-            }else{
-                activity.setDataForLocal(null,1);// 此时没有对象，1不起作用
+            SinglesBase s = getSingle();
+            if (s != null) {
+                if (s.isAlbumList) {
+                    activity.setDataForLocal(s, 2);// 获取专辑列表
+                } else {
+                    activity.setDataForLocal(s, 1);// 获取推荐列表
+                }
+            } else {
+                activity.setDataForLocal(null, 1);// 此时没有对象，1不起作用
             }
         }
     }
 
     // 获取播放对象
-    private SinglesBase getSingle(){
+    private SinglesBase getSingle() {
         if (listDataSaveUtils != null) {
             SinglesBase s = (SinglesBase) listDataSaveUtils.getObjectFromShare(PREFERENCES_BASE_OBJECT_KEY);
             if (s != null) {
@@ -148,10 +148,10 @@ public class PlayerPresenter {
      * @param url
      */
     public void play(String url) {
-        if(!TextUtils.isEmpty(url)&&!url.contains("duotin")){
+        if (!TextUtils.isEmpty(url) && !url.contains("duotin")) {
             PlayerService.play(playerType, url);
-        }else{
-            ToastUtils.show_always(activity.getActivity(),"当前节目播放地址出错");
+        } else {
+            ToastUtils.show_always(activity.getActivity(), "当前节目播放地址出错");
         }
 
     }
@@ -160,14 +160,14 @@ public class PlayerPresenter {
      * 暂停
      */
     public void playPause() {
-        if(PlayerService.isPlaying(playerType))PlayerService.playPause();
+        if (PlayerService.isPlaying(playerType)) PlayerService.playPause();
     }
 
     /**
      * 继续播放
      */
     public void start() {
-        if(!PlayerService.isPlaying(playerType)) PlayerService.start(playerType);
+        if (!PlayerService.isPlaying(playerType)) PlayerService.start(playerType);
     }
 
     /**
@@ -215,6 +215,10 @@ public class PlayerPresenter {
         return model.getIng(startTime);
     }
 
+    public String getIngTime() {
+        return model.getIngTime();
+    }
+
     public String getEndTime() {
         return endTime;
     }
@@ -241,6 +245,7 @@ public class PlayerPresenter {
 
     /**
      * 保存续播数据
+     *
      * @param singlesBase
      */
     public void save(SinglesBase singlesBase) {
@@ -254,8 +259,8 @@ public class PlayerPresenter {
     /**
      * 获取续播数据
      */
-    public void getOnPlay( ) {
-        model.getOnPlay( new PlayerModel.OnLoadInterface() {
+    public void getOnPlay() {
+        model.getOnPlay(new PlayerModel.OnLoadInterface() {
             @Override
             public void onSuccess(Object o) {
                 dealShoot(o);
@@ -263,7 +268,7 @@ public class PlayerPresenter {
 
             @Override
             public void onFailure(String msg) {
-                activity.setDataForLocal(null,0);// 获取推荐数据
+                activity.setDataForLocal(null, 0);// 获取推荐数据
             }
         });
     }
@@ -281,14 +286,16 @@ public class PlayerPresenter {
                 JSONObject arg1 = (JSONObject) jsonParser.nextValue();
                 String onPlay = arg1.getString("onplay");
                 // 续播提交的数据
-                shoot _s = new Gson().fromJson(onPlay, new TypeToken<shoot>() {}.getType());
+                shoot _s = new Gson().fromJson(onPlay, new TypeToken<shoot>() {
+                }.getType());
 
-                if(_s!=null){
-                    if(_s.playingType.equals("2")){
+                if (_s != null) {
+                    if (_s.playingType.equals("2")) {
                         // 电台
                         String radio = arg1.getString("radio");
-                        ChannelsBean _channel= new Gson().fromJson(radio, new TypeToken<ChannelsBean>() {}.getType());
-                        if(_channel!=null){
+                        ChannelsBean _channel = new Gson().fromJson(radio, new TypeToken<ChannelsBean>() {
+                        }.getType());
+                        if (_channel != null) {
                             SinglesBase s = new SinglesBase();
                             s.single_title = _channel.title;
                             s.id = _channel.id;
@@ -296,57 +303,63 @@ public class PlayerPresenter {
                             s.single_file_url = _channel.radio_url;
                             s.album_title = "直播中";
                             s.is_radio = true;
-                            if(!TextUtils.isEmpty(_s.currentTime)){
+                            if (!TextUtils.isEmpty(_s.currentTime)) {
                                 s.play_time = Integer.valueOf(_s.currentTime);
-                            }else{
+                            } else {
                                 s.play_time = 0;
                             }
                             s.postionPlayer = 0;
-                            if(!TextUtils.isEmpty(_s.listType)){
-                                if(_s.listType.equals("1")){
-                                    activity.setDataForLocal(s,1);// 获取推荐数据
-                                }else{
-                                    activity.setDataForLocal(s,2);// 获取专辑数据
+                            if (!TextUtils.isEmpty(_s.listType)) {
+                                if (_s.listType.equals("1")) {
+                                    activity.setDataForLocal(s, 1);// 获取推荐数据
+                                } else {
+                                    activity.setDataForLocal(s, 2);// 获取专辑数据
                                 }
-                            }else{
-                                activity.setDataForLocal(s,1);// 获取推荐数据
+                            } else {
+                                activity.setDataForLocal(s, 1);// 获取推荐数据
                             }
-                        }else{
-                            activity.setDataForLocal(null,0);// 获取推荐数据
+                        } else {
+                            activity.setDataForLocal(null, 0);// 获取推荐数据
                         }
-                    }else{
+                    } else {
                         // 节目
                         String single = arg1.getString("single");
-                        SinglesBase _single = new Gson().fromJson(single, new TypeToken<SinglesBase>() {}.getType());
-                        if(!TextUtils.isEmpty(_s.currentTime)){
+                        SinglesBase _single = new Gson().fromJson(single, new TypeToken<SinglesBase>() {
+                        }.getType());
+                        if (!TextUtils.isEmpty(_s.currentTime)) {
                             _single.play_time = Integer.valueOf(_s.currentTime);
-                        }else{
+                        } else {
                             _single.play_time = 0;
                         }
                         _single.postionPlayer = 0;
 
-                        if(!TextUtils.isEmpty(_s.listType)){
-                            if(_s.listType.equals("1")){
-                                activity.setDataForLocal(_single,1);// 获取推荐数据
-                            }else{
-                                activity.setDataForLocal(_single,2);// 获取专辑数据
+                        if (!TextUtils.isEmpty(_s.listType)) {
+                            if (_s.listType.equals("1")) {
+                                activity.setDataForLocal(_single, 1);// 获取推荐数据
+                            } else {
+                                activity.setDataForLocal(_single, 2);// 获取专辑数据
                             }
-                        }else{
-                            activity.setDataForLocal(_single,1);// 获取推荐数据
+                        } else {
+                            activity.setDataForLocal(_single, 1);// 获取推荐数据
                         }
                     }
-                }else{
-                    activity.setDataForLocal(null,0);// 获取推荐数据
+                } else {
+                    activity.setDataForLocal(null, 0);// 获取推荐数据
                 }
-            }else{
-                activity.setDataForLocal(null,0);// 获取推荐数据
+            } else {
+                activity.setDataForLocal(null, 0);// 获取推荐数据
             }
         } catch (Exception e) {
             e.printStackTrace();
-            activity.setDataForLocal(null,0);// 获取推荐数据
+            activity.setDataForLocal(null, 0);// 获取推荐数据
         }
     }
 
+    /**
+     * 获取电台节目单
+     *
+     * @param id
+     */
     public void getSeek(String id) {
         try {
             RetrofitUtils.getInstance().getSeek(id)
@@ -360,9 +373,26 @@ public class PlayerPresenter {
                                 Log.e("电台直播返回数据", s);
                                 //填充UI
                                 JSONObject js = new JSONObject(s);
-                                endTime = js.getString("end_time");
-                                startTime = js.getString("start_time");
-                                activity.setMax(getMax(startTime, endTime), endTime);
+                                try {
+                                    endTime = js.getString("end_time");
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                    endTime = "24:00:00";
+                                }
+                                try {
+                                    startTime = js.getString("start_time");
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                    startTime = "00:00:00";
+                                }
+                                String title = "直播中";
+                                try {
+                                    title = js.getString("title");
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+
+                                activity.setMaxForRadio(title, startTime, endTime);
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
@@ -383,7 +413,7 @@ public class PlayerPresenter {
      * type 0,列表刷新
      */
     public void getRecommendedList(final int type) {
-        model.getRecommendedList( new PlayerModel.OnLoadInterface() {
+        model.getRecommendedList(new PlayerModel.OnLoadInterface() {
             @Override
             public void onSuccess(Object o) {
                 List<SinglesBase> singLesBeans = (List<SinglesBase>) o;
@@ -408,25 +438,25 @@ public class PlayerPresenter {
      * 获取语音搜索数据
      */
     public void getVoiceSearchList(String s) {
-//        model.getRecommendedList(s, new PlayerModel.OnLoadInterface() {
-//            @Override
-//            public void onSuccess(Object o) {
-//                List<SinglesBase> singLesBeans = (List<SinglesBase>) o;
-//                if (singLesBeans != null && singLesBeans.size() > 0) {
-//                    for (int i = 0; i < singLesBeans.size(); i++) {
-//                        singLesBeans.get(i).isAlbumList = false;
-//                    }
-//                    activity.setData(singLesBeans, 1);
-//                } else {
-//                    activity.setData(null, 1);
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(String msg) {
-//                activity.setData(null, 1);
-//            }
-//        });
+        model.getVoiceSearchList(s, new PlayerModel.OnLoadInterface() {
+            @Override
+            public void onSuccess(Object o) {
+                List<SinglesBase> singLesBeans = (List<SinglesBase>) o;
+                if (singLesBeans != null && singLesBeans.size() > 0) {
+                    for (int i = 0; i < singLesBeans.size(); i++) {
+                        singLesBeans.get(i).isAlbumList = false;
+                    }
+                    activity.setData(singLesBeans, 1);
+                } else {
+                    ToastUtils.show_always(activity.getActivity(), "抱歉，没有查询到您想要的内容");
+                }
+            }
+
+            @Override
+            public void onFailure(String msg) {
+                ToastUtils.show_always(activity.getActivity(), "抱歉，没有查询到您想要的内容");
+            }
+        });
     }
 
     /**
@@ -457,7 +487,7 @@ public class PlayerPresenter {
     }
 
     // 提交到后台当前播放内容
-    private void sendPlay(String id) {
+    public void sendPlay(String id) {
         RetrofitUtils.getInstance().playSingles(id)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

@@ -90,7 +90,7 @@ public class PlayerFragment extends Fragment implements View.OnClickListener {
     public static SinglesBase singlesBase;
     public static List<SinglesBase> singLesBeans = new ArrayList<>();
     private int positionPlayer = 0; //控制播放下标
-    private boolean isFirst = false;//第一次进入
+    private boolean isFirst = true;//第一次进入
 
     private View rootView;
     private PlayerPresenter presenter;
@@ -157,6 +157,7 @@ public class PlayerFragment extends Fragment implements View.OnClickListener {
                 }
             }
             positionPlayer = s.postionPlayer;
+            setDataView();
             playMusic();
             if (type == 1) {
                 presenter.getRecommendedList(1);
@@ -192,6 +193,7 @@ public class PlayerFragment extends Fragment implements View.OnClickListener {
                     }
                 }
                 mPlayerAdapter.notifyDataSetChanged();
+                setDataView();
                 smoothMoveToPosition(mRecyclerView, positionPlayer);
                 EventBus.getDefault().post(new MessageEvent(1100));
             }
@@ -201,9 +203,11 @@ public class PlayerFragment extends Fragment implements View.OnClickListener {
                 singLesBeans.addAll(list);
                 mPlayerAdapter.notifyDataSetChanged();
                 showContentView();
+                setDataView();
                 if (isFirst) {
                     singlesBase = singLesBeans.get(0);
                     positionPlayer = 0;
+                    setDataView();
                     playMusic();
                     isFirst = false;
                 }
@@ -232,9 +236,11 @@ public class PlayerFragment extends Fragment implements View.OnClickListener {
                 mPlayerAdapter.notifyDataSetChanged();
                 smoothMoveToPosition(mRecyclerView, positionPlayer);
                 showContentView();
+                setDataView();
                 if (isFirst) {
                     singlesBase = singLesBeans.get(0);
                     positionPlayer = 0;
+                    setDataView();
                     playMusic();
                     isFirst = false;
                 }
@@ -289,6 +295,7 @@ public class PlayerFragment extends Fragment implements View.OnClickListener {
                 if (newState == RecyclerView.SCROLL_STATE_IDLE && position != positionPlayer && position >= 0) {
                     Log.e("mRecyclerView", "滚动");
                     positionPlayer = position;
+                    setDataView();
                     singlesBase = singLesBeans.get(positionPlayer);
                     playMusic();
                 }
@@ -306,7 +313,9 @@ public class PlayerFragment extends Fragment implements View.OnClickListener {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                presenter.seekTo(seekBar.getProgress());
+                if (singlesBase != null && !singlesBase.is_radio) {
+                    presenter.seekTo(seekBar.getProgress());
+                }
             }
         });
 
@@ -372,6 +381,7 @@ public class PlayerFragment extends Fragment implements View.OnClickListener {
                 @Override
                 public void play(int position) {
                     positionPlayer = position;
+                    setDataView();
                     singlesBase = singLesBeans.get(positionPlayer);
                     mPlayerAdapter.notifyDataSetChanged();
                     playMusic();
@@ -502,7 +512,6 @@ public class PlayerFragment extends Fragment implements View.OnClickListener {
             case 2005:// 下拉刷新
                 presenter.getRecommendedList(0);
                 break;
-
         }
     }
 
@@ -513,6 +522,7 @@ public class PlayerFragment extends Fragment implements View.OnClickListener {
             singLesBeans.clear();
             singLesBeans.add(_singlesBase);
             positionPlayer = 0;
+            setDataView();
             singlesBase = _singlesBase;
             singlesBase.postionPlayer = 0;
             mPlayerAdapter.notifyDataSetChanged();
@@ -525,6 +535,7 @@ public class PlayerFragment extends Fragment implements View.OnClickListener {
                 singLesBeans.addAll(singlesBeanList);
                 mPlayerAdapter.notifyDataSetChanged();
                 positionPlayer = 0;
+                setDataView();
                 singlesBase = singLesBeans.get(0);
                 playMusic();
             } else {
@@ -547,6 +558,7 @@ public class PlayerFragment extends Fragment implements View.OnClickListener {
                     singLesBeans.clear();
                     singLesBeans.add(s);
                     positionPlayer = 0;
+                    setDataView();
                     singlesBase = singLesBeans.get(0);
                     mPlayerAdapter.notifyDataSetChanged();
                     playMusic();
@@ -567,6 +579,7 @@ public class PlayerFragment extends Fragment implements View.OnClickListener {
                         singLesBeans.add(s);
                         mPlayerAdapter.notifyDataSetChanged();
                         positionPlayer = 0;
+                        setDataView();
                         singlesBase = singLesBeans.get(0);
                         playMusic();
                         presenter.getRecommendedList(1);
@@ -585,11 +598,14 @@ public class PlayerFragment extends Fragment implements View.OnClickListener {
         if (singlesBase != null) {
             if (singlesBase.is_radio) {
                 presenter.playerType = 2;
+                seekbarVideo.setEnabled(false);
             } else {
                 presenter.playerType = 1;
+                seekbarVideo.setEnabled(true);
             }
         } else {
             presenter.playerType = 1;
+            seekbarVideo.setEnabled(true);
         }
     }
 
@@ -603,10 +619,11 @@ public class PlayerFragment extends Fragment implements View.OnClickListener {
 
     // 执行播放
     private void playMusic() {
-        Glide.with(BSApplication.mContext).load(singlesBase.single_logo_url).crossFade(300).into(img_bg_head);
+        Glide.with(BSApplication.mContext).load(singlesBase.single_logo_url).error(R.mipmap.oval_defut_photo).crossFade(300).into(img_bg_head);
         if (singlesBase.is_radio) {
             presenter.getSeek(singlesBase.id);// 获取节目单
         }
+
         setPlayer();
         setIsPlay();
         smoothMoveToPosition(mRecyclerView, positionPlayer);
@@ -614,15 +631,15 @@ public class PlayerFragment extends Fragment implements View.OnClickListener {
         presenter.play(singlesBase.single_file_url);
         seekbarVideo.setProgress(0);
         ivPause.setImageResource(R.mipmap.music_play_icon_pause);
-
-        setDataView();
         presenter.saveHistory(singlesBase);
+        presenter.sendPlay(singlesBase.id);
     }
 
     // 播放上一首
     private void before() {
         if (singLesBeans.size() > positionPlayer && positionPlayer > 0) {
             positionPlayer = positionPlayer - 1;
+            setDataView();
             singlesBase = singLesBeans.get(positionPlayer);
             playMusic();
         }
@@ -643,6 +660,7 @@ public class PlayerFragment extends Fragment implements View.OnClickListener {
     private void next() {
         if (positionPlayer < singLesBeans.size() - 1) {
             positionPlayer = positionPlayer + 1;
+            setDataView();
             singlesBase = singLesBeans.get(positionPlayer);
             playMusic();
         } else {
@@ -655,55 +673,74 @@ public class PlayerFragment extends Fragment implements View.OnClickListener {
      * 播放器准备好
      */
     public void playerOnPrepared() {
-        if (presenter.playerType == 1) {
-            if (singlesBase != null) {
-                presenter.seekTo(singlesBase.play_time);
-//                Log.e("播放时间点",singlesBase.play_time+"");
-            } else {
-                presenter.seekTo(0);
-//                Log.e("播放时间点","000000000");
-            }
-            seekbarVideo.setMax(presenter.getDuration());
-            txtVideoTotaltime.setText(TimeUtil.formatterTime((presenter.getDuration())) + "");
+        // 设置内容部分进度条
+        if (singlesBase != null && !singlesBase.is_radio) {
+            presenter.seekTo(singlesBase.play_time);
+            setMaxForSingle(presenter.getDuration(), TimeUtil.formatterTime(presenter.getCurrentPosition()), TimeUtil.formatterTime((presenter.getDuration())));
+            setBarProgress();
         }
-        setBarProgress();
     }
 
-    public void setMax(int max, String end) {
+    // 设置内容进度条展示数据
+    public void setMaxForSingle(int max, String start, String end) {
         seekbarVideo.setMax(max);
+        Log.e("设置内容进度条最大值", "" + max);
+        txtVideoStarttime.setText(start + "");
+        txtVideoTotaltime.setText(end + "");
+    }
+
+    // 设置电台进度条展示数据
+    public void setMaxForRadio( String title,  String start, String end) {
+        seekbarVideo.setMax(seekbarVideo.getMax());
+        Log.e("设置电台进度条最大值", "" + seekbarVideo.getMax());
+        txtVideoStarttime.setText(start + "");
         txtVideoTotaltime.setText(end + "");
     }
 
     // 设置进度条以及数据保存
     private void setBarProgress() {
-        if (singlesBase != null) {
-            if (singlesBase.is_radio) {
-                singlesBase.play_time = 0;
-                presenter.save(singlesBase);
-                seekbarVideo.setProgress(presenter.getIng());
-                txtVideoStarttime.setText(TimeUtil.formatterTime(presenter.getIng()) + "");
-            } else {
-                singlesBase.play_time = presenter.getCurrentPosition();
-                presenter.save(singlesBase);
-                seekbarVideo.setProgress(presenter.getCurrentPosition());
-                txtVideoStarttime.setText(TimeUtil.formatterTime(presenter.getCurrentPosition()) + "");
-            }
+        if (singlesBase != null && !singlesBase.is_radio) {
+            setBarProgressForSingle();
+        } else if (singlesBase != null && singlesBase.is_radio) {
+            setBarProgressForRadio();
         }
     }
 
-    // 进度条缓存进度
+    // 内容进度条缓存进度
     private void setBarCacheProgress(int percentsAvailable) {
         if (percentsAvailable == -1) {
             seekbarVideo.setSecondaryProgress(seekbarVideo.getMax());
         } else if (percentsAvailable == -100) {
             seekbarVideo.setSecondaryProgress(seekbarVideo.getMax());
         } else {
-//            double a=percentsAvailable/100;
-//            Log.e("设置缓存进度","已设置： "+a);
             double i = percentsAvailable * seekbarVideo.getMax() / 100;
             int b = (int) i;
             seekbarVideo.setSecondaryProgress(b);
             Log.e("设置缓存进度", "已设置： " + b);
+        }
+    }
+
+    // 设置电台进度条
+    private void setBarProgressForRadio() {
+        if (singlesBase != null && singlesBase.is_radio) {
+            singlesBase.play_time = 0;
+            presenter.save(singlesBase);
+            int pro = presenter.getIng() * seekbarVideo.getMax() / presenter.getMax(presenter.getStartTime(), presenter.getEndTime());
+            if(pro==100) presenter.getSeek(singlesBase.id);
+            seekbarVideo.setProgress(pro);
+            txtVideoStarttime.setText(presenter.getIngTime() + "");
+            Log.e("电台播放进度", "" + pro);
+        }
+    }
+
+    // 设置内容进度条
+    private void setBarProgressForSingle() {
+        if (singlesBase != null && !singlesBase.is_radio) {
+            singlesBase.play_time = presenter.getCurrentPosition();
+            presenter.save(singlesBase);
+            seekbarVideo.setProgress(presenter.getCurrentPosition());
+            txtVideoStarttime.setText(TimeUtil.formatterTime(presenter.getCurrentPosition()) + "");
+            Log.e("内容播放进度", "" + presenter.getCurrentPosition());
         }
     }
 

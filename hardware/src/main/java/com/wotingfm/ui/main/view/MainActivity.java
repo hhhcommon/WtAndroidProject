@@ -1,6 +1,7 @@
 package com.wotingfm.ui.main.view;
 
 import android.annotation.TargetApi;
+import android.app.Dialog;
 import android.app.TabActivity;
 import android.content.Intent;
 import android.graphics.Color;
@@ -37,6 +38,7 @@ import com.wotingfm.ui.main.presenter.MainPresenter;
 import com.wotingfm.ui.mine.main.MineActivity;
 import com.wotingfm.ui.play.find.main.view.LookListActivity;
 import com.wotingfm.ui.play.main.PlayerActivity;
+import com.wotingfm.ui.user.logo.LogoActivity;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -51,6 +53,7 @@ public class MainActivity extends TabActivity implements View.OnClickListener {
     private String type;
     private PopupWindow Ndialog;
     private MainActivity context;
+    private Dialog exitDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,6 +78,7 @@ public class MainActivity extends TabActivity implements View.OnClickListener {
 //        }
         InitTextView();// 初始化视图
         dialog();// 通知消息弹出框
+        initDialog();// 账户通知消息弹出框
         mainPresenter = new MainPresenter(this);
         mainPresenter.applyTextColor(false);
     }
@@ -310,6 +314,35 @@ public class MainActivity extends TabActivity implements View.OnClickListener {
             case 5:
                 break;
         }
+    }
+
+    // 初始化对话框
+    private void initDialog() {
+        // 解散群组对话框
+        View dialog1 = LayoutInflater.from(this).inflate(R.layout.dialog_talk_person_del, null);
+        dialog1.findViewById(R.id.tv_confirm).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(context, LogoActivity.class));
+            }
+        }); // 清空
+        dialog1.findViewById(R.id.tv_cancle).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                exitDialog.dismiss();
+            }
+        });  // 取消
+        TextView textTitle = (TextView) dialog1.findViewById(R.id.tv_title);
+        textTitle.setText("您的账号在其他设备上登录，是否重新登录？？");
+
+        exitDialog = new Dialog(this, R.style.MyDialogs);
+        exitDialog.setContentView(dialog1);
+        exitDialog.setCanceledOnTouchOutside(false);
+        exitDialog.getWindow().setBackgroundDrawableResource(R.color.transparent_background);
+    }
+
+    public void showExitDialog(){
+        exitDialog.show();
     }
 
     // "更多" 对话框

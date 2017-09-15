@@ -30,7 +30,7 @@ public class ClassificationAdapter extends CommonAdapter<Classification.DataBean
         holder.setText(R.id.tvContent, s.title);
         ImageView ivClass = (ImageView) holder.itemView.findViewById(R.id.ivClass);
         if (s.logo != null && !s.logo.equals("")) {
-            GlideUtils.loadImageViewRound(s.logo, ivClass);
+            GlideUtils.loadImageViewRound(s.logo.trim(), ivClass);
         } else {
             GlideUtils.loadImageViewRound(R.mipmap.oval_defut_other, ivClass, 60, 60);
         }

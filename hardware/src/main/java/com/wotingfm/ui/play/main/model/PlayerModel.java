@@ -6,6 +6,7 @@ import android.util.Log;
 import com.google.gson.GsonBuilder;
 import com.wotingfm.common.net.RetrofitUtils;
 import com.wotingfm.ui.bean.Player;
+import com.wotingfm.ui.bean.SerchList;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -122,6 +123,46 @@ public class PlayerModel {
     }
 
     /**
+     * 获取语音搜索数据
+     * @param s
+     * @param listener
+     */
+    public void getVoiceSearchList(String s,final OnLoadInterface listener) {
+        try {
+            Log.e("查询数据", "" + s);
+            RetrofitUtils.getInstance().serchList("singles", s, 1)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new Action1<SerchList>() {
+                        @Override
+                        public void call(SerchList o) {
+                            if (o != null && o.ret == 0 && o.data != null && o.data.singles != null && !o.data.singles.isEmpty()) {
+                                try {
+                                    Log.e("获取语音搜索返回数据", new GsonBuilder().serializeNulls().create().toJson(o));
+                                    //填充UI
+                                    listener.onSuccess(o.data.singles);
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                    listener.onFailure("");
+                                }
+                            } else {
+                                listener.onFailure("");
+                            }
+                        }
+                    }, new Action1<Throwable>() {
+                        @Override
+                        public void call(Throwable throwable) {
+                            listener.onFailure("");
+                            throwable.printStackTrace();
+                        }
+                    });
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            listener.onFailure("");
+        }
+    }
+    /**
      * start_time: 15:00:00
      * end_time: 16:30:00
      * <p/>
@@ -137,18 +178,28 @@ public class PlayerModel {
 
     public int getIng(String startTime) {
         int start = getTime(startTime);
-        int end = getIngTime();
+        int end = getIngTimes();
+        Log.e("start", "" + start);
+        Log.e("end", "" + end);
         return end - start;
     }
 
+    public String getIngTime() {
+        SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss");
+        String s = format.format(new Date(System.currentTimeMillis()));
+        return s;
+    }
+
     private int getTime(String s) {
+        Log.e("当前时间", "" + s);
         if (!TextUtils.isEmpty(s)) {
             if (s.contains(":")) {
                 String[] strArray = s.split(":");
                 String hh = strArray[0];
                 String mm = strArray[1];
                 String ss = strArray[2];
-                int time = Integer.parseInt(hh) * 60 * 60 + Integer.parseInt(mm) * 60 * +Integer.parseInt(ss);
+                int time = Integer.parseInt(hh) * 60 * 60 + Integer.parseInt(mm) * 60  +Integer.parseInt(ss);
+                Log.e("当前时间结果", "" + time);
                 return time;
             } else {
                 return 0;
@@ -161,12 +212,14 @@ public class PlayerModel {
     /**
      * 获取当前时间
      */
-    private int getIngTime() {
+    private int getIngTimes() {
         SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss");
         String s = format.format(new Date(System.currentTimeMillis()));
         int ing = getTime(s);
         return ing;
     }
+
+
 
     public interface OnLoadInterface {
         void onSuccess(Object o);
