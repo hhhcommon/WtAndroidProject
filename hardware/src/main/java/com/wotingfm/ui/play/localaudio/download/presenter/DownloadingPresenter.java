@@ -1,5 +1,7 @@
 package com.wotingfm.ui.play.localaudio.download.presenter;
 
+import android.util.Log;
+
 import com.wotingfm.common.utils.CommonUtils;
 import com.wotingfm.ui.play.localaudio.dao.FileInfoDao;
 import com.wotingfm.ui.play.localaudio.download.view.DownloadingFragment;
@@ -28,11 +30,13 @@ public class DownloadingPresenter {
     public void getData() {
         List<FileInfo>  listResult = FID.queryFileInfo("false", CommonUtils.getUserId());// 查询表中未完成的任务
         list.clear();
-        list.addAll(listResult);
+        if(listResult!=null)list.addAll(listResult);
         if (list != null && !list.isEmpty()) {
+            Log.e("未完成数据",""+list.size());
             activity.setData(list);
             activity.showContentView();
         }else{
+            Log.e("未完成数据","0");
             activity.showEmptyView();
         }
     }

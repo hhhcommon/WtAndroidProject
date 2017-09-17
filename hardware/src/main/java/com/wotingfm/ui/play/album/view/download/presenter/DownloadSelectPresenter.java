@@ -2,6 +2,7 @@ package com.wotingfm.ui.play.album.view.download.presenter;
 
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 
 import com.wotingfm.common.utils.BeanCloneUtil;
 import com.wotingfm.common.utils.CommonUtils;
@@ -40,7 +41,7 @@ public class DownloadSelectPresenter {
             public void run() {
                 getData();
             }
-        },300);
+        }, 300);
     }
 
     private void getData() {
@@ -53,21 +54,21 @@ public class DownloadSelectPresenter {
         }
     }
 
-    public List<FileInfo> getDList(){
+    public List<FileInfo> getDList() {
         return download_list;
     }
 
-    public String getId(){
+    public String getId() {
         return albumsID;
     }
 
     public boolean downLoad(List<Player.DataBean.SinglesBean> singlesBeanList) {
-        boolean b=true;
-        List<Player.DataBean.SinglesBean>  singlesBeanListSelect= new ArrayList<>();
+        boolean b = true;
+        List<Player.DataBean.SinglesBean> singlesBeanListSelect = new ArrayList<>();
 
-        if(singlesBeanList!=null&&singlesBeanList.size()>0){
-            for(int i=0;i<singlesBeanList.size();i++){
-                if(singlesBeanList.get(i).isSelect){
+        if (singlesBeanList != null && singlesBeanList.size() > 0) {
+            for (int i = 0; i < singlesBeanList.size(); i++) {
+                if (singlesBeanList.get(i).isSelect) {
                     singlesBeanListSelect.add(singlesBeanList.get(i));
                 }
             }
@@ -78,7 +79,7 @@ public class DownloadSelectPresenter {
             return false;
         }
 
-        for (int w = 0;w <singlesBeanListSelect.size();  w++) {
+        for (int w = 0; w < singlesBeanListSelect.size(); w++) {
             addList(singlesBeanListSelect.get(w));
         }
         downloadStart();
@@ -89,40 +90,38 @@ public class DownloadSelectPresenter {
     private void downloadStart() {
         List<FileInfo> fileDataList = mFileDao.queryFileInfoAll(CommonUtils.getUserId());
         if (fileDataList.size() != 0) {
-                List<FileInfo>  dataList= getList();
-                List<FileInfo> list= BeanCloneUtil.cloneTo(dataList);
-                mFileDao.insertFileInfo(list);
-                ToastUtils.show_always(activity.getActivity(), "开始下载");
-                List<FileInfo> fileUnDownLoadList = mFileDao.queryFileInfo("false", CommonUtils.getUserId());// 未下载列表
-                for (int kk = 0; kk < fileUnDownLoadList.size(); kk++) {
-                    if (fileUnDownLoadList.get(kk).download_type.trim().equals("1")) {
-                        DownloadClient.workStop(fileUnDownLoadList.get(kk));
-                        mFileDao.upDataDownloadStatus(fileUnDownLoadList.get(kk).id, "2");
-                    }
-                }
-                for (int k = 0; k < fileUnDownLoadList.size(); k++) {
-                    if (fileUnDownLoadList.get(k).id.equals(dataList.get(0).id)) {
-                        FileInfo file = fileUnDownLoadList.get(k);
-                        mFileDao.upDataDownloadStatus(dataList.get(0).id, "1");
-                        DownloadClient.workStart(file);
-                        break;
-                    }
-                }
-
-        }else {// 此时库里没数据
-            List<FileInfo>  dataList= getList();
+            List<FileInfo> dataList = getList();
             List<FileInfo> list= BeanCloneUtil.cloneTo(dataList);
             mFileDao.insertFileInfo(list);
-            ToastUtils.show_always(activity.getActivity(), "已经加入下载列表");
-            List<FileInfo> fileUnDownloadList = mFileDao.queryFileInfo("false", CommonUtils.getUserId());// 未下载列表
-            for (int k = 0; k < fileUnDownloadList.size(); k++) {
-                if (fileUnDownloadList.get(k).id.equals(dataList.get(0).id)) {
-                    FileInfo file = fileUnDownloadList.get(k);
+
+            ToastUtils.show_always(activity.getActivity(), "开始下载");
+            List<FileInfo> fileUnDownLoadList = mFileDao.queryFileInfo("false", CommonUtils.getUserId());// 未下载列表
+            Log.e("未下载列表", "" + fileUnDownLoadList.size());
+            for (int kk = 0; kk < fileUnDownLoadList.size(); kk++) {
+                if (fileUnDownLoadList.get(kk).download_type.trim().equals("1")) {
+                    DownloadClient.workStop(fileUnDownLoadList.get(kk));
+                    mFileDao.upDataDownloadStatus(fileUnDownLoadList.get(kk).id, "2");
+                }
+            }
+            for (int k = 0; k < fileUnDownLoadList.size(); k++) {
+                if (fileUnDownLoadList.get(k).id.equals(dataList.get(0).id)) {
+                    FileInfo file = fileUnDownLoadList.get(k);
                     mFileDao.upDataDownloadStatus(dataList.get(0).id, "1");
                     DownloadClient.workStart(file);
                     break;
                 }
             }
+
+        } else {// 此时库里没数据
+            List<FileInfo> dataList = getList();
+            List<FileInfo> list= BeanCloneUtil.cloneTo(dataList);
+            mFileDao.insertFileInfo(list);
+            ToastUtils.show_always(activity.getActivity(), "已经加入下载列表");
+            List<FileInfo> fileUnDownloadList = mFileDao.queryFileInfo("false", CommonUtils.getUserId());// 未下载列表
+            Log.e("未下载列表", "" + fileUnDownloadList.size());
+            FileInfo file = fileUnDownloadList.get(0);
+            mFileDao.upDataDownloadStatus(file.id, "1");
+            DownloadClient.workStart(file);
         }
     }
 
@@ -177,7 +176,7 @@ public class DownloadSelectPresenter {
      */
     public void destroy() {
         mFileDao.closeDB();
-        mFileDao=null;
+        mFileDao = null;
     }
 
     public void select() {

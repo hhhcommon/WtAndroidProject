@@ -7,11 +7,11 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 
 import com.woting.commonplat.widget.LoadFrameLayout;
 import com.wotingfm.R;
@@ -20,7 +20,7 @@ import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.common.utils.DialogUtils;
 import com.wotingfm.ui.bean.MessageEvent;
 import com.wotingfm.ui.bean.SinglesDownload;
-import com.wotingfm.ui.play.localaudio.download.adapter.DownloadingDownloadAdapter;
+import com.wotingfm.ui.play.localaudio.download.adapter.DownloadAdapter;
 import com.wotingfm.ui.play.localaudio.download.presenter.DownloadingPresenter;
 import com.wotingfm.ui.play.localaudio.model.FileInfo;
 import com.wotingfm.ui.play.main.PlayerActivity;
@@ -42,17 +42,17 @@ import butterknife.ButterKnife;
 public class DownloadingFragment extends Fragment implements View.OnClickListener {
 
     @BindView(R.id.mRecyclerView)
-    RecyclerView mRecyclerView;
+    ListView mRecyclerView;
     @BindView(R.id.loadLayout)
     LoadFrameLayout loadLayout;
 
     private View rootView;
-    private DownloadingDownloadAdapter downloadingDownloadAdapter;
+    private DownloadAdapter downloadingDownloadAdapter;
     private Dialog dialog;
     private DownloadingPresenter presenter;
     private MessageReceivers receiver;
 
-    private List<FileInfo> src_list=new ArrayList<>();
+    private List<FileInfo> src_list = new ArrayList<>();
 
     public static DownloadingFragment newInstance() {
         DownloadingFragment fragment = new DownloadingFragment();
@@ -88,9 +88,6 @@ public class DownloadingFragment extends Fragment implements View.OnClickListene
                 loadLayout.showLoadingView();
             }
         });
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
-        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        mRecyclerView.setLayoutManager(layoutManager);
     }
 
     /**
@@ -100,25 +97,29 @@ public class DownloadingFragment extends Fragment implements View.OnClickListene
      */
     public void setData(List<FileInfo> list) {
         src_list.clear();
-        src_list.addAll(list);
+        if(src_list!=null)src_list.addAll(list);
         if (downloadingDownloadAdapter == null) {
-            downloadingDownloadAdapter = new DownloadingDownloadAdapter(getActivity(), src_list, new DownloadingDownloadAdapter.DeleteClick() {
-                @Override
-                public void clickDelete(final FileInfo s) {
-                    if (s != null) presenter.del(s);
-                }
-
-                @Override
-                public void click(FileInfo singlesDownload) {
-                    if (getActivity() != null) {
-                        presenter.itemClick(singlesDownload);
-                    }
-                }
-            });
+            downloadingDownloadAdapter = new DownloadAdapter(getActivity(), src_list);
             mRecyclerView.setAdapter(downloadingDownloadAdapter);
         } else {
             downloadingDownloadAdapter.notifyDataSetChanged();
         }
+        setAdapterListener();
+    }
+
+    private void setAdapterListener() {
+        downloadingDownloadAdapter.setOnListener(new DownloadAdapter.DeleteClick() {
+            @Override
+            public void clickDelete(FileInfo s) {
+                if (s != null) presenter.del(s);
+
+            }
+
+            @Override
+            public void click(FileInfo s) {
+                presenter.itemClick(s);
+            }
+        });
     }
 
     private void startMain(List<SinglesDownload> singlesDownloadsd) {
@@ -173,12 +174,43 @@ public class DownloadingFragment extends Fragment implements View.OnClickListene
                 int start = intent.getIntExtra("start", 0);
                 int end = intent.getIntExtra("end", 0);
                 String id = intent.getStringExtra("id");
-                if (downloadingDownloadAdapter != null) {
-                    downloadingDownloadAdapter.updateProgress(id, start, end);
+//                if (downloadingDownloadAdapter != null) {
+//                    downloadingDownloadAdapter.updateProgress(id, start, end);
+//                }
+
+                int _id = 0;
+                for (int i = 0; i < src_list.size(); i++) {
+                    if (src_list.get(i).id.trim().equals(id)) {
+                        _id = i;
+                        break;
+                    }
                 }
+                Log.e("_id",""+_id);
+
+                if (src_list != null && src_list.size() != 0) {
+                    FileInfo fileInfo = src_list.get(_id);
+                    fileInfo.finished = String.valueOf((start / end));
+                    fileInfo.start = start;
+                    fileInfo.end = end;
+                    Log.e("adapter===", "" + start);
+                    Log.e("adapter===", "" + end);
+                }
+                updateView(_id);
             } else if (BroadcastConstants.ACTION_FINISHED.equals(intent.getAction())) {
                 presenter.getData();
             }
+        }
+    }
+
+    private void updateView(int itemIndex) {
+        //得到第一个可显示控件的位置，
+        int visiblePosition = mRecyclerView.getFirstVisiblePosition();
+        //只有当要更新的view在可见的位置时才更新，不可见时，跳过不更新
+        if (itemIndex - visiblePosition >= 0) {
+            //得到要更新的item的view
+            View view = mRecyclerView.getChildAt(itemIndex - visiblePosition);
+            //调用adapter更新界面
+            downloadingDownloadAdapter.updateView(view, itemIndex);
         }
     }
 

@@ -44,6 +44,7 @@ public class DownloadClient {
             Receiver = new MessageReceiver();
             IntentFilter filter = new IntentFilter();
             filter.addAction(BroadcastConstants.ACTION_FINISHED_NO_DOWNLOADVIEW);
+            filter.addAction(BroadcastConstants.ACTION_PAUSE);
             context.registerReceiver(Receiver, filter);
         }
     }
@@ -175,13 +176,21 @@ public class DownloadClient {
             if (action.equals(BroadcastConstants.ACTION_FINISHED_NO_DOWNLOADVIEW)) {
                 Log.e("执行操作", "下载完毕后继续下载");
                 context.sendBroadcast(new Intent(BroadcastConstants.ACTION_FINISHED));
-
+                if(mTask!=null){
+                    mTask.destroy();
+                    mTask=null;
+                }
                 // 开始下载新的节目
                 List<FileInfo> fileInfoList = FID.queryFileInfo("false", CommonUtils.getUserId());
                 if (fileInfoList != null && fileInfoList.size() > 0) {
                     fileInfoList.get(0).download_type = "1";
                     FID.upDataDownloadStatus(fileInfoList.get(0).id, "1");
                     workStart(fileInfoList.get(0));
+                }
+            }else if (action.equals(BroadcastConstants.ACTION_PAUSE)) {
+                if(mTask!=null){
+                    mTask.destroy();
+                    mTask=null;
                 }
             }
         }

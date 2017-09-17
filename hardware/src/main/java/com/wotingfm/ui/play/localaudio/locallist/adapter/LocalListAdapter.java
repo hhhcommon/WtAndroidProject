@@ -1,6 +1,7 @@
 package com.wotingfm.ui.play.localaudio.locallist.adapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -37,7 +38,7 @@ public class LocalListAdapter extends CommonAdapter<FileInfo> {
 
         tv_name.setText(s.single_title);
         tv_time.setText(s.single_seconds+ "");
-
+        Log.e(""+s.single_title,"数据大小"+s.end);
         labelContent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

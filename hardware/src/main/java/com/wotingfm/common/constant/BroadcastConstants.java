@@ -86,4 +86,5 @@ public class BroadcastConstants {
     public static final String ACTION_UPDATE = "ACTION_UPDATE";
     public static final String ACTION_FINISHED = "ACTION_FINISHED";
     public static final String ACTION_FINISHED_NO_DOWNLOADVIEW = "ACTION_FINISHED_NO_DOWNLOADVIEW";
+    public static final String ACTION_PAUSE = "ACTION_PAUSE";
 }
