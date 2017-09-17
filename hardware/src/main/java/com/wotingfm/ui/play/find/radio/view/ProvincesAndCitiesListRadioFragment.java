@@ -17,7 +17,6 @@ import com.wotingfm.R;
 import com.wotingfm.common.config.GlobalStateConfig;
 import com.wotingfm.common.net.RetrofitUtils;
 import com.wotingfm.ui.adapter.radioAdapter.RadioAdapter;
-import com.wotingfm.ui.base.basefragment.BaseFragment;
 import com.wotingfm.ui.bean.ChannelsBean;
 import com.wotingfm.ui.bean.MessageEvent;
 import com.wotingfm.ui.intercom.main.view.InterPhoneActivity;
@@ -155,7 +154,7 @@ public class ProvincesAndCitiesListRadioFragment extends Fragment implements Vie
                             mAdapter.notifyDataSetChanged();
                             loadMoreFooterView.setStatus(LoadMoreFooterView.Status.GONE);
                         } else {
-                            loadMoreFooterView.setStatus(LoadMoreFooterView.Status.THE_END);
+                            loadMoreFooterView.setStatus(LoadMoreFooterView.Status.GONE);
                         }
                     }
                 }, new Action1<Throwable>() {

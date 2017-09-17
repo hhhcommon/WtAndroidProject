@@ -7,14 +7,13 @@ import android.util.Log;
 
 import com.woting.commonplat.config.GlobalNetWorkConfig;
 import com.woting.commonplat.manager.CacheManager;
+import com.woting.commonplat.utils.ResourceUtil;
 import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.config.GlobalStateConfig;
 import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.common.utils.CommonUtils;
-import com.wotingfm.common.utils.DialogUtils;
 import com.wotingfm.common.utils.GlideCatchUtil;
 import com.wotingfm.common.utils.ToastUtils;
-import com.wotingfm.ui.intercom.main.view.InterPhoneActivity;
 import com.wotingfm.ui.mine.main.MineActivity;
 import com.wotingfm.ui.mine.set.model.SettingModel;
 import com.wotingfm.ui.mine.set.view.SettingFragment;
@@ -99,8 +98,15 @@ public class SettingPresenter {
             public void run() {
                 File file = new File(cachePath);
                 File file1 = new File(BSApplication.getInstance().getCacheDir() + "/" + GlobalStateConfig.GLIDE_CARCH_DIR);
+                String fileUrl;
+                if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
+                    fileUrl = com.woting.commonplat.config.GlobalUrlConfig.playCacheDirO + com.woting.commonplat.config.GlobalUrlConfig.ksyPlayCache;
+                } else {
+                    fileUrl = ResourceUtil.getSDCardPath()[0] + com.woting.commonplat.config.GlobalUrlConfig.ksyPlayCache;
+                }
+                File file2 = new File(fileUrl);
                 try {
-                    cache = CacheManager.getCacheSize(file, file1);
+                    cache = CacheManager.getCacheSize(file, file1, file2);
                     activity.getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -134,6 +140,13 @@ public class SettingPresenter {
         protected Void doInBackground(Void... params) {
             GlideCatchUtil.getInstance().clearCacheMemory();
             GlideCatchUtil.getInstance().clearCacheDiskSelf();
+            String fileUrl;
+            if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
+                fileUrl = com.woting.commonplat.config.GlobalUrlConfig.playCacheDirO + com.woting.commonplat.config.GlobalUrlConfig.ksyPlayCache;
+            } else {
+                fileUrl = ResourceUtil.getSDCardPath()[0] + com.woting.commonplat.config.GlobalUrlConfig.ksyPlayCache;
+            }
+            CacheManager.delAllFile(fileUrl);
             clearResult = CacheManager.delAllFile(cachePath);
             return null;
         }

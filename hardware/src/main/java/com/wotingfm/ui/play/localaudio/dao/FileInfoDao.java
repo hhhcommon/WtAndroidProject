@@ -104,8 +104,7 @@ public class FileInfoDao {
      */
     public void upDataDownloadStatus(String id, String download_type) {
         SQLiteDatabase db = helper.getWritableDatabase();
-        db.execSQL("update file_info set download_type=? where id=?",
-                new Object[] {download_type,id});
+        db.execSQL("update file_info set download_type=? where id=?",new Object[] {download_type,id});
         db.close();
     }
 
@@ -256,10 +255,10 @@ public class FileInfoDao {
 	 * @param end
 	 */
 	public void upDataFileProgress(String id, int start, int end){
-		SQLiteDatabase db = helper.getWritableDatabase();
+        SQLiteDatabase db = helper.getWritableDatabase();
 		db.execSQL("update file_info set start=?,end =? where id=?",
 				new Object[] { start,end,id});
-		db.close();
+        db.close();
 	}
 
     //删除专辑信息

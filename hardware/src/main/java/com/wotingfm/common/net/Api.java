@@ -102,5 +102,6 @@ public class Api {
     public static final String URL_AGREE_INVITEE_MSG = "api/chat-groups/invitee/{id}/approve";
     // 获取某个电台下面正在播的节目
     public static final String URL_GET_RADIOING = "api/listenings/radios/{id}";
-
+    // 续播上传
+    public static final String URL_UP_PLAY_MSG = "api/onPlaying";
 }

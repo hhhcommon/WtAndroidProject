@@ -237,6 +237,8 @@
         <service android:name=".common.service.NotificationService" />
         <service android:name=".common.service.AudioService"></service>
         <service android:name=".common.service.PlayerService"></service>
+        <!--<service android:name=".common.service.AudioPlayerService"></service>-->
+
         <!-- Rich push 核心功能 since 2.0.6-->
         <activity
             android:name="cn.jpush.android.ui.PopWinActivity"

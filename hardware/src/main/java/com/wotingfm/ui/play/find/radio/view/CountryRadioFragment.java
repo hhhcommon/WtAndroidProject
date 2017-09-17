@@ -136,7 +136,7 @@ public class CountryRadioFragment extends Fragment implements View.OnClickListen
                             mAdapter.notifyDataSetChanged();
                             loadMoreFooterView.setStatus(LoadMoreFooterView.Status.GONE);
                         } else {
-                            loadMoreFooterView.setStatus(LoadMoreFooterView.Status.THE_END);
+                            loadMoreFooterView.setStatus(LoadMoreFooterView.Status.GONE);
                         }
                     }
                 }, new Action1<Throwable>() {

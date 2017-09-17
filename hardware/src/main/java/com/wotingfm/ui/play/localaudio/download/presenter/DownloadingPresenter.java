@@ -6,8 +6,7 @@ import com.wotingfm.ui.play.localaudio.download.view.DownloadingFragment;
 import com.wotingfm.ui.play.localaudio.model.FileInfo;
 import com.wotingfm.ui.play.localaudio.service.DownloadClient;
 
-import org.greenrobot.eventbus.EventBus;
-
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -17,8 +16,8 @@ import java.util.List;
 public class DownloadingPresenter {
 
     private DownloadingFragment activity;
-    private List<FileInfo> listResult ;
     private FileInfoDao FID;
+    private List<FileInfo> list =new ArrayList<>();
 
     public DownloadingPresenter(DownloadingFragment activity) {
         this.activity = activity;
@@ -27,9 +26,11 @@ public class DownloadingPresenter {
     }
 
     public void getData() {
-        listResult = FID.queryFileInfo("false", CommonUtils.getUserId());// 查询表中未完成的任务
-        if (listResult != null && !listResult.isEmpty()) {
-            activity.setData(listResult);
+        List<FileInfo>  listResult = FID.queryFileInfo("false", CommonUtils.getUserId());// 查询表中未完成的任务
+        list.clear();
+        list.addAll(listResult);
+        if (list != null && !list.isEmpty()) {
+            activity.setData(list);
             activity.showContentView();
         }else{
             activity.showEmptyView();
@@ -39,11 +40,11 @@ public class DownloadingPresenter {
     public void del(FileInfo s) {
         activity.dialogShow();
         FID.deleteFileInfo(s.id, CommonUtils.getUserId());
-        listResult.remove(s);
-        if (listResult.isEmpty()) {
+        list.remove(s);
+        if (list.isEmpty()) {
             activity.showEmptyView();
         } else {
-            activity.setData(listResult);
+            activity.setData(list);
         }
         activity.dialogCancel();
     }
@@ -54,11 +55,11 @@ public class DownloadingPresenter {
 					 * 点击该项目时，此时是未下载状态需要把下载中状态的数据变为暂停状态暂停状态的数据不需要改变
 					 * 最后把该数据状态变为开始下载中状态
 					 */
-            for (int i = 0; i < listResult.size(); i++) {
-                if (listResult.get(i).download_type.trim().equals("1")) {
-                    listResult.get(i).download_type="2";
-                    FID.upDataDownloadStatus(listResult.get(i).id, "2");
-                    DownloadClient.workStop(listResult.get(i));
+            for (int i = 0; i < list.size(); i++) {
+                if (list.get(i).download_type.trim().equals("1")) {
+                    list.get(i).download_type="2";
+                    FID.upDataDownloadStatus(list.get(i).id, "2");
+                    DownloadClient.workStop(list.get(i));
                 }
             }
             getFileInfo(singlesDownload);
@@ -67,15 +68,15 @@ public class DownloadingPresenter {
             singlesDownload.download_type="2";
             FID.upDataDownloadStatus(singlesDownload.id, "2");
             DownloadClient.workStop(singlesDownload);
-            activity.setData(listResult);
+            activity.setData(list);
 
         } else {
             // 点击该项目时，该项目为暂停状态 把其它的播放状态变为暂停状态 最后把自己状态变为下载中状态
-            for (int i = 0; i < listResult.size(); i++) {
-                if (listResult.get(i).download_type.trim().equals("1")) {
-                    listResult.get(i).download_type="2";
-                    FID.upDataDownloadStatus(listResult.get(i).id, "2");
-                    DownloadClient.workStop(listResult.get(i));
+            for (int i = 0; i < list.size(); i++) {
+                if (list.get(i).download_type.trim().equals("1")) {
+                    list.get(i).download_type="2";
+                    FID.upDataDownloadStatus(list.get(i).id, "2");
+                    DownloadClient.workStop(list.get(i));
                 }
             }
             getFileInfo(singlesDownload);

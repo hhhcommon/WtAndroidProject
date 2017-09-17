@@ -242,7 +242,7 @@ public class ProgramInfoFragment extends Fragment implements View.OnClickListene
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMoonEventBase(MessageEvent messageEvent) {
-        boolean type = messageEvent.getIsBottoom();
+        boolean type = messageEvent.getIsBottom();
         if (type) {
             if (!isLoadingData) {
                 isLoadingData = true;

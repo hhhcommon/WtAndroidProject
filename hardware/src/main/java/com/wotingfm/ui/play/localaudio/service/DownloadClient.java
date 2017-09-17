@@ -4,10 +4,10 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.os.Environment;
 import android.os.Handler;
 import android.util.Log;
 
+import com.woting.commonplat.config.GlobalUrlConfig;
 import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.common.utils.CommonUtils;
 import com.wotingfm.ui.play.localaudio.dao.FileInfoDao;
@@ -26,14 +26,13 @@ import java.util.List;
  * 类注释
  */
 public class DownloadClient {
-    public static final String DOWNLOAD_PATH = Environment.getExternalStorageDirectory() + "/woting/";
-    public static final String DOWNLOAD_PATH1 = Environment.getExternalStorageDirectory() + "/woting/download/";
+
 
     public static final int MSG_INIT = 0;
     private static Context context;
     private static DownloadTask mTask;
     private static FileInfo fileTemp = null;
-    private FileInfoDao FID;
+    private static FileInfoDao FID;
     private MessageReceiver Receiver;
 
     public DownloadClient(Context context) {
@@ -64,20 +63,21 @@ public class DownloadClient {
         }
     }
 
-
     // 下载线程
     private static class InitThread extends Thread {
         private FileInfo mFileInfo = null;
+
         public InitThread(FileInfo mFileInfos) {
             mFileInfo = mFileInfos;
         }
+
         @Override
         public void run() {
             HttpURLConnection connection = null;
             RandomAccessFile raf = null;
             try {
                 // 连接网络文件
-                Log.e("获取文件长度====", mFileInfo.single_file_url + "");
+                Log.e("当前下载文件名称：", mFileInfo.single_file_url + "");
                 URL url = new URL(mFileInfo.single_file_url);
                 connection = (HttpURLConnection) url.openConnection();
                 connection.setConnectTimeout(5000);
@@ -87,18 +87,22 @@ public class DownloadClient {
                     // 获得文件的长度
                     length = connection.getContentLength();
                 }
-//                if (length <= 0) {
-//                    Log.e("获取文件长度====",  "失败");
-//                    return;
-//                }
-                File dir = new File(DOWNLOAD_PATH);
+                if (length <= 0) {
+                    Log.e("获取文件长度====", "失败");
+                    Log.e("执行操作", "删除该文件");
+                    FID.deleteFileInfo(mFileInfo.id, CommonUtils.getUserId());
+                    Log.e("执行操作", "继续下载另外文件");
+                    context.sendBroadcast(new Intent(BroadcastConstants.ACTION_FINISHED_NO_DOWNLOADVIEW));
+                    return;
+                }
+                File dir = new File(GlobalUrlConfig.DOWNLOAD_PATH);
                 if (!dir.exists()) {
                     dir.mkdir();
                 }
                 String dir_path = dir.getPath();
                 Log.e("dir_path", "" + dir_path);
 
-                File dir1 = new File(DOWNLOAD_PATH1);
+                File dir1 = new File(GlobalUrlConfig.DOWNLOAD_PATH1);
                 if (!dir1.exists()) {
                     dir1.mkdir();
                 }
@@ -106,7 +110,7 @@ public class DownloadClient {
                 Log.e("dir1_path", "" + dir1_path);
 
                 // 在本地创建文件
-                String name = DOWNLOAD_PATH1 + mFileInfo.fileName;
+                String name = GlobalUrlConfig.DOWNLOAD_PATH1 + mFileInfo.fileName;
                 File file = new File(name);
                 if (!file.exists()) {
                     file.createNewFile();
@@ -117,7 +121,7 @@ public class DownloadClient {
                 // 设置文件长度
                 raf.setLength(length);
                 mFileInfo.length = length;
-                Log.e("length====",""+length);
+                Log.e("length====", "" + length);
                 mHandler.obtainMessage(MSG_INIT, mFileInfo).sendToTarget();
             } catch (Exception e) {
                 e.printStackTrace();
@@ -132,6 +136,7 @@ public class DownloadClient {
                         e.printStackTrace();
                     }
                 }
+                Log.e("执行操作", "获取文件长度数据流关闭");
             }
         }
     }
@@ -168,9 +173,10 @@ public class DownloadClient {
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
             if (action.equals(BroadcastConstants.ACTION_FINISHED_NO_DOWNLOADVIEW)) {
-                Log.e("下载完毕=====", "下载完毕后继续下载");
+                Log.e("执行操作", "下载完毕后继续下载");
                 context.sendBroadcast(new Intent(BroadcastConstants.ACTION_FINISHED));
 
+                // 开始下载新的节目
                 List<FileInfo> fileInfoList = FID.queryFileInfo("false", CommonUtils.getUserId());
                 if (fileInfoList != null && fileInfoList.size() > 0) {
                     fileInfoList.get(0).download_type = "1";

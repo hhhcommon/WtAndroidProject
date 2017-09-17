@@ -21,23 +21,19 @@
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="1px"
-        android:background="#efefef" />
-
-    <com.wotingfm.common.view.MaxHeightView
-        android:id="@+id/share_dialog_row1"
+        android:layout_height="0.7dp"
+        android:background="@color/line_color" />
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/id_swipe_ly"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:mhv_HeightRatio="0.7">
-
+        android:layout_height="wrap_content">
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/mRecyclerViewList"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scrollbars="none" />
-    </com.wotingfm.common.view.MaxHeightView>
+            android:layout_height="wrap_content"
+            android:background="@color/white" />
+    </android.support.v4.widget.SwipeRefreshLayout>
 
     <View
         android:layout_width="match_parent"

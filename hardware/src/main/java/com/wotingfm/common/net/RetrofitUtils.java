@@ -173,8 +173,6 @@ public class RetrofitUtils {
     }
 
     /**
-     * banner
-     *
      * @return
      */
     public Observable<Player> getProgramList(String albums, int page) {
@@ -1657,4 +1655,44 @@ public class RetrofitUtils {
                     }
                 });
     }
+
+    /**
+     * 续播上传
+     */
+    public Observable<Object> upDataPlayMsg(String playingId, String playingType, String listType, String currentTime) throws Exception {
+        return retrofitService.upDataPlayMsg(playingId, playingType, listType, currentTime)
+                .map(new Func1<Object, Object>() {
+                    @Override
+                    public Object call(Object O) {
+                        return O;
+                    }
+                });
+    }
+
+    /**
+     * 获取续播
+     */
+    public Observable<Object> getOnPlay() throws Exception {
+        return retrofitService.getOnPlay()
+                .map(new Func1<Object, Object>() {
+                    @Override
+                    public Object call(Object O) {
+                        return O;
+                    }
+                });
+    }
+
+    public Observable<List<Player.DataBean.SinglesBean>> getPlayerList() {
+        return retrofitService.getPlayerList()
+                .map(new Func1<Player, List<Player.DataBean.SinglesBean>>() {
+                    @Override
+                    public List<Player.DataBean.SinglesBean> call(Player player) {
+                        if (player.ret != 0) {
+                            throw new IllegalStateException(player.msg);
+                        }
+                        return player.data.singles;
+                    }
+                });
+    }
+
 }

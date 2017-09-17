@@ -184,7 +184,7 @@ public class LocalRadioFragment extends Fragment implements View.OnClickListener
                             mHeaderAndFooterWrapper.notifyDataSetChanged();
                             loadMoreFooterView.setStatus(LoadMoreFooterView.Status.GONE);
                         } else {
-                            loadMoreFooterView.setStatus(LoadMoreFooterView.Status.THE_END);
+                            loadMoreFooterView.setStatus(LoadMoreFooterView.Status.GONE);
                         }
                     }
                 }, new Action1<Throwable>() {

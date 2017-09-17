@@ -20,6 +20,7 @@ import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.common.manager.WtDeviceControl;
 import com.wotingfm.common.service.FloatingWindowService;
 import com.wotingfm.common.service.NotificationService;
+import com.wotingfm.common.utils.CommonUtils;
 import com.wotingfm.common.utils.StatusBarUtil;
 import com.wotingfm.ui.base.basepresenter.BasePresenter;
 import com.wotingfm.ui.bean.MessageEvent;
@@ -309,9 +310,12 @@ public class MainPresenter extends BasePresenter {
         public void onEvent(StatusCode status) {
             Log.i("tag", "User status changed to: " + status);
             if (status.wontAutoLogin()) {
-                mainModel.unRegisterLogin();
-                // 发送注销登录广播通知所有界面
-                activity.sendBroadcast(new Intent(BroadcastConstants.CANCEL));
+                if(CommonUtils.isLogin()){
+                    mainModel.unRegisterLogin();
+                    // 发送注销登录广播通知所有界面
+                    activity.sendBroadcast(new Intent(BroadcastConstants.CANCEL));
+                    showQuitPerson();// 展示账号被顶替的弹出框
+                }
             }
         }
     };
@@ -362,6 +366,11 @@ public class MainPresenter extends BasePresenter {
             }
         }
     };
+
+    // 展示账号被顶替的弹出框
+    private void showQuitPerson() {
+        activity.showExitDialog();
+    }
 
     /**
      * app退出时执行该操作

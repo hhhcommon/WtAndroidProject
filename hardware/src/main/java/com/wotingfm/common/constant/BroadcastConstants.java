@@ -79,6 +79,9 @@ public class BroadcastConstants {
 
     public static final String PUSH_NOTIFICATION = "PUSH_NOTIFICATION";
 
+    // 播放页进度条
+    public static final String PLAY_TIME_CHANGE = "PLAY_TIME_CHANGE";
+
     // 下载任务类
     public static final String ACTION_UPDATE = "ACTION_UPDATE";
     public static final String ACTION_FINISHED = "ACTION_FINISHED";

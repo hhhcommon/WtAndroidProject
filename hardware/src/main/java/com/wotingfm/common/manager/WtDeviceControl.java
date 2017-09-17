@@ -2,10 +2,10 @@ package com.wotingfm.common.manager;
 
 import android.webkit.WebView;
 
-import com.wotingfm.common.service.SimulationService;
-import com.wotingfm.ui.bean.MessageEvent;
 import com.wotingfm.common.config.GlobalStateConfig;
+import com.wotingfm.common.service.SimulationService;
 import com.wotingfm.common.utils.VibratorUtils;
+import com.wotingfm.ui.bean.MessageEvent;
 import com.wotingfm.ui.intercom.main.chat.presenter.ChatPresenter;
 
 import org.greenrobot.eventbus.EventBus;

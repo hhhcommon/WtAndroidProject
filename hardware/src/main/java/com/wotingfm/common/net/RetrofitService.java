@@ -49,7 +49,9 @@ public interface RetrofitService {
     //首页播放fm列表
     @GET("api/listenings/player")
     Observable<Player> getPlayerList(@Query("album_id") String album_id);
-
+    //首页推荐逻辑
+    @GET("api/listenings/player")
+    Observable<Player> getPlayerList();
     //播放节目
     @GET("api/listenings/singles/{singleId}/plays")
     Observable<BaseResult> playSingles(@Path("singleId") String singleId);
@@ -532,6 +534,18 @@ public interface RetrofitService {
     // 获取某个电台下面正在播的节目
     @GET(Api.URL_GET_RADIOING)
     Observable<Object> getSeek(@Path("id") String id);
+
+    // 续播上传
+    @POST(Api.URL_UP_PLAY_MSG)
+    Observable<Object> upDataPlayMsg(@Query("playingId") String playingId,
+                                     @Query("playingType") String playingType,
+                                     @Query("listType") String listType,
+                                     @Query("currentTime") String currentTime);
+
+    // 获取续播
+    @GET(Api.URL_UP_PLAY_MSG)
+    Observable<Object> getOnPlay();
+
 
 }
 

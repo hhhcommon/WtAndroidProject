@@ -78,19 +78,18 @@ public class DownloadingDownloadAdapter extends CommonAdapter<FileInfo> {
         // 已下载文件大小
         int start = s.start;
         if (start >= 0) {
-            mRoundProgressBar.setMax(100);
             float a = (float) start;
             float b = (float) end;
             String c = df.format(a / b);
             int d = (int) (Float.parseFloat(c) * 100);
+            Log.e("当前进度",""+d);
             mRoundProgressBar.setProgress(d);
             textStart.setText(df.format(start / 1000.0 / 1000.0) + "MB/");
         } else {
-            mRoundProgressBar.setMax(100);
             mRoundProgressBar.setProgress(0);
             textStart.setText(df.format(0 / 1000.0 / 1000.0) + "MB/");
         }
-
+        mRoundProgressBar.setMax(100);
         btnDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
