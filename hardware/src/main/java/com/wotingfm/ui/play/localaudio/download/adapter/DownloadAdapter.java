@@ -27,7 +27,7 @@ public class DownloadAdapter extends BaseAdapter {
     public DownloadAdapter(Context context, List<FileInfo> list) {
         this.context = context;
         this.list = list;
-        df = new DecimalFormat("0.00");
+        df = new DecimalFormat("0.0");
     }
 
     public void setOnListener(DeleteClick downloadCheck) {
@@ -87,10 +87,10 @@ public class DownloadAdapter extends BaseAdapter {
         String downLoadType = s.download_type;
         if (!TextUtils.isEmpty(downLoadType) && downLoadType.trim().equals("1")) {
             holder.img_type.setVisibility(View.VISIBLE);
-            holder.img_type.setImageResource(R.mipmap.create_group_icon_selected_s);
+            holder.img_type.setImageResource(R.mipmap.icon_loading_start);
         } else if (!TextUtils.isEmpty(downLoadType) && downLoadType.trim().equals("2")) {
             holder.img_type.setVisibility(View.VISIBLE);
-            holder.img_type.setImageResource(R.mipmap.create_group_icon_selected_n);
+            holder.img_type.setImageResource(R.mipmap.icon_loading_stop);
         } else {// 未下载
             holder.img_type.setVisibility(View.GONE);
         }

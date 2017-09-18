@@ -1,6 +1,8 @@
 package com.wotingfm.ui.play.main.presenter;
 
 import android.content.ContentValues;
+import android.os.Handler;
+import android.os.Message;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -22,9 +24,12 @@ import com.wotingfm.ui.play.main.PlayerFragment;
 import com.wotingfm.ui.play.main.model.PlayerModel;
 import com.wotingfm.ui.play.main.model.shoot;
 
+import org.apache.http.HttpStatus;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.List;
 
 import rx.android.schedulers.AndroidSchedulers;
@@ -147,13 +152,68 @@ public class PlayerPresenter {
      *
      * @param url
      */
-    public void play(String url) {
-        if (!TextUtils.isEmpty(url) && !url.contains("duotin")) {
-            PlayerService.play(playerType, url);
-        } else {
-            ToastUtils.show_always(activity.getActivity(), "当前节目播放地址出错");
-        }
+    public void play(final String url) {
+        new Thread() {
+            @Override
+            public void run() {
+                // 需要执行的方法
+                // 执行完毕后给handler发送一个空消息
+                if (judgeUrl(url)) {
+                    Message msg = new Message();
+                    msg.obj = url;
+                    msg.what = 1;
+                    handler.sendMessage(msg);
+                } else {
+                    Message msg = new Message();
+                    msg.obj = url;
+                    msg.what = 0;
+                    handler.sendMessage(msg);
+                }
+            }
+        }.start();
+    }
 
+
+    //定义Handler对象
+    private Handler handler = new Handler() {
+        //当有消息发送出来的时候就执行Handler的这个方法来处理消息分发
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            String url = (String) msg.obj;
+            //处理UI
+            if (msg.what == 1) {
+                PlayerService.play(playerType, url);
+            } else {
+                ToastUtils.show_always(activity.getActivity(), "当前节目播放地址出错");
+            }
+        }
+    };
+
+    // 判断当前地址能否播放
+    private boolean judgeUrl(String _url) {
+        if (TextUtils.isEmpty(_url)) {
+            return false;
+        }
+        try {
+            URL url = new URL(_url);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setConnectTimeout(1000);
+            connection.setRequestMethod("GET");
+            int length = -1;
+            if (connection.getResponseCode() == HttpStatus.SC_OK) {
+                // 获得文件的长度
+                length = connection.getContentLength();
+            }
+            if (length <= 0) {
+                return false;
+            } else {
+                return true;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     /**

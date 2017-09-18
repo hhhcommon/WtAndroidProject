@@ -2,7 +2,6 @@ package com.wotingfm.ui.play.localaudio.service;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.Handler;
 import android.util.Log;
 
 import com.google.gson.GsonBuilder;
@@ -106,7 +105,7 @@ public class DownloadTask {
                         raf.write(buf, 0, len);
                         // 把下载进度发送广播给Activity
                         mFinished += len;
-                        if (System.currentTimeMillis() - time > 500){
+                        if (System.currentTimeMillis() - time > 300){
                             time = System.currentTimeMillis();
                             Log.e("执行操作", "数据发送");
                             Intent intent = new Intent();
@@ -129,7 +128,7 @@ public class DownloadTask {
                     // 删除线程信息
                     mDao.deleteThread(mThreadInfo.getId());
                     Log.e("下载完毕=====", "下载完毕对象"+mThreadInfo.getId());
-                    FID.upDataFileProgress(mThreadInfo.getUrl(), mFinished, mThreadInfo.getEnd());
+                    FID.upDataFileProgress(mThreadInfo.getId(), mFinished, mThreadInfo.getEnd());
                     FID.updataFileInfo(mFileInfo.id);
                 }
             } catch (Exception e) {

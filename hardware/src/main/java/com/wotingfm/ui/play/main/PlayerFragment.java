@@ -748,7 +748,9 @@ public class PlayerFragment extends Fragment implements View.OnClickListener {
      * 播放完成，播放下一首
      */
     public void playerOnCompletion() {
-        next();
+        if(singlesBase!=null&&!singlesBase.is_radio){
+            next();
+        }
     }
 
     public void showContentView() {
