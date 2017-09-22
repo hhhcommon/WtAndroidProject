@@ -2,6 +2,7 @@ package com.wotingfm.ui.intercom.group.creat.presenter;
 
 import android.app.Activity;
 import android.content.BroadcastReceiver;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -22,12 +23,16 @@ import com.alibaba.sdk.android.oss.model.ObjectMetadata;
 import com.alibaba.sdk.android.oss.model.PutObjectRequest;
 import com.alibaba.sdk.android.oss.model.PutObjectResult;
 import com.google.gson.GsonBuilder;
+import com.netease.nimlib.sdk.avchat.AVChatCallback;
+import com.netease.nimlib.sdk.avchat.AVChatManager;
+import com.netease.nimlib.sdk.avchat.model.AVChatChannelInfo;
 import com.woting.commonplat.config.GlobalNetWorkConfig;
 import com.woting.commonplat.manager.FileManager;
 import com.woting.commonplat.utils.SequenceUUID;
 import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.config.GlobalStateConfig;
 import com.wotingfm.common.constant.BroadcastConstants;
+import com.wotingfm.common.manager.InterPhoneControl;
 import com.wotingfm.common.net.upLoadImage;
 import com.wotingfm.common.utils.ToastUtils;
 import com.wotingfm.ui.intercom.group.creat.model.CreateGroupMainModel;
@@ -165,6 +170,7 @@ public class CreateGroupMainPresenter {
         });
     }
 
+
     // 处理返回数据
     private void dealSuccess(Object o) {
         try {
@@ -180,9 +186,18 @@ public class CreateGroupMainPresenter {
                 JSONTokener jsonParser = new JSONTokener(msg);
                 JSONObject arg1 = (JSONObject) jsonParser.nextValue();
                 try {
-                    String gid  = arg1.getString("id");
+                   final String gid  = arg1.getString("id");
                     if (gid != null && !gid.trim().equals("")) {
-                        jumpChannel(gid);
+                        InterPhoneControl.nimCreate(gid, new InterPhoneControl.Listener() {
+                            @Override
+                            public void type(boolean b) {
+                                if(b){
+                                    jumpChannel(gid);
+                                }else{
+                                    ToastUtils.show_always(activity.getActivity(), "创建失败，请稍后再试！");
+                                }
+                            }
+                        });
                     }else{
                         InterPhoneActivity.close();
                     }
@@ -215,18 +230,26 @@ public class CreateGroupMainPresenter {
      * 拍照
      */
     public void camera() {
+        Intent intents = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        Uri outputFileUri;
         String savePath = FileManager.getImageSaveFilePath(BSApplication.mContext);
         FileManager.createDirectory(savePath);
         String fileName = System.currentTimeMillis() + ".jpg";
-        File file = new File(savePath, fileName);
-        Uri outputFileUri = Uri.fromFile(file);
-        outputFilePath = file.getAbsolutePath();
-        Intent intents = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {//如果是7.0android系统
+            ContentValues contentValues = new ContentValues(1);
+            File file = new File(savePath, fileName);
+            outputFilePath = file.getAbsolutePath();
+            contentValues.put(MediaStore.Images.Media.DATA,outputFilePath);
+            outputFileUri=  activity.getActivity().getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,contentValues);
+        }else{
+            File file = new File(savePath, fileName);
+            outputFileUri = Uri.fromFile(file);
+        }
         intents.putExtra(MediaStore.EXTRA_OUTPUT, outputFileUri);
         Code = TO_CAMERA;
         activity.getActivity().startActivityForResult(intents, TO_CAMERA);
-
     }
+
 
     /**
      * 调用图库

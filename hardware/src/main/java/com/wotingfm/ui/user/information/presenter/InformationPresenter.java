@@ -2,6 +2,7 @@ package com.wotingfm.ui.user.information.presenter;
 
 import android.app.Activity;
 import android.content.BroadcastReceiver;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -135,17 +136,26 @@ public class InformationPresenter {
      * 拍照
      */
     public void camera() {
+        Intent intents = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        Uri outputFileUri;
         String savePath = FileManager.getImageSaveFilePath(BSApplication.mContext);
         FileManager.createDirectory(savePath);
         String fileName = System.currentTimeMillis() + ".jpg";
-        File file = new File(savePath, fileName);
-        Uri outputFileUri = Uri.fromFile(file);
-        outputFilePath = file.getAbsolutePath();
-        Intent intents = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {//如果是7.0android系统
+            ContentValues contentValues = new ContentValues(1);
+            File file = new File(savePath, fileName);
+            outputFilePath = file.getAbsolutePath();
+            contentValues.put(MediaStore.Images.Media.DATA,outputFilePath);
+            outputFileUri=  activity.getActivity().getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,contentValues);
+        }else{
+            File file = new File(savePath, fileName);
+            outputFileUri = Uri.fromFile(file);
+        }
         intents.putExtra(MediaStore.EXTRA_OUTPUT, outputFileUri);
         Code = TO_CAMERA;
         activity.getActivity().startActivityForResult(intents, TO_CAMERA);
     }
+
 
     /**
      * 调用图库

@@ -7,6 +7,7 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.netease.nimlib.sdk.avchat.AVChatManager;
 import com.woting.commonplat.config.GlobalNetWorkConfig;
 import com.wotingfm.ui.bean.MessageEvent;
 import com.wotingfm.common.config.GlobalStateConfig;
@@ -123,22 +124,12 @@ public class ChatPresenter {
                         activity.getActivity().sendBroadcast(new Intent(BroadcastConstants.VIEW_GROUP_CLOSE));
                         // 此时的对讲状态是群组
                         String n_id = _data.getID();
-                        boolean cp = callPerson(n_id, _data.getACC_ID());// 呼叫好友
-                        if (cp) {
-                            Log.e("信令控制", "呼叫好友成功");
-                        } else {
-                            Log.e("信令控制", "呼叫好友失败");
-                        }
+                        callPerson(n_id, _data.getACC_ID());// 呼叫好友
                     }
                 } else {
                     // 此时没有对讲状态
                     String n_id = _data.getID();
-                    boolean cp = callPerson(n_id, _data.getACC_ID());// 呼叫好友
-                    if (cp) {
-                        Log.e("信令控制", "呼叫好友成功");
-                    } else {
-                        Log.e("信令控制", "呼叫好友失败");
-                    }
+                     callPerson(n_id, _data.getACC_ID());// 呼叫好友
                 }
             } else if (type != null && !type.equals("") && type.equals("group")) {
                 // 组对讲
@@ -190,12 +181,7 @@ public class ChatPresenter {
         if (type == 1) {
             talkOver();// 挂断当前个人对讲
             activity.setPersonViewClose();
-            boolean cp = callPerson(new_id, accId);  // 呼叫好友
-            if (cp) {
-                Log.e("信令控制", "呼叫好友成功");
-            } else {
-                Log.e("信令控制", "呼叫好友失败");
-            }
+            callPerson(new_id, accId);  // 呼叫好友
         } else {
             // 挂断当前会话,关闭对讲页面好友数据
             activity.getActivity().sendBroadcast(new Intent(BroadcastConstants.VIEW_PERSON_CLOSE));
@@ -218,41 +204,50 @@ public class ChatPresenter {
     // 挂断当前个人对讲
     public void talkOver() {
         if (ChatPresenter.data != null && ChatPresenter.data.getID() != null) {
-            EventBus.getDefault().post(new MessageEvent("exitPerson"));
-            InterPhoneControl.over(ChatPresenter.data.getACC_ID());// 结束通话
+            InterPhoneControl.over();// 结束通话
         }
     }
 
     // 退出组对讲
-    public boolean talkOverGroup() {
+    public void talkOverGroup() {
         if (ChatPresenter.data != null && ChatPresenter.data.getID() != null) {
-            EventBus.getDefault().post(new MessageEvent("exitGroup&" + ChatPresenter.data.getID()));
-            return true;
-        } else {
-            return false;
+            InterPhoneControl.quitRoomGroup(ChatPresenter.data.getID(), new InterPhoneControl.Listener() {
+                @Override
+                public void type(boolean b) {
+                    if(b){
+                        Log.e("退出组对讲","退出组成功");
+                    }else{
+                        Log.e("退出组对讲","退出组失败");
+                    }
+
+                }
+            });
         }
     }
 
     // 呼叫好友
-    private boolean callPerson(String id, String accId) {
+    private void callPerson(final String id,final String accId) {
         if (id != null && !id.equals("")) {
-            boolean b = InterPhoneControl.call(accId);// 发送呼叫请求
-            if (b) {
-                Intent intent = new Intent(activity.getActivity(), CallAlertActivity.class);
-                Bundle bundle = new Bundle();
-                bundle.putString("id", id);
-                bundle.putString("fromType", "chat");
-                bundle.putString("roomId", accId);
-                intent.putExtras(bundle);
-                activity.startActivity(intent);
-                return true;
-            } else {
-                ToastUtils.show_always(activity.getActivity(), "呼叫失败，请稍后再试！");
-                return false;
-            }
+            InterPhoneControl.call(accId, new InterPhoneControl.Listener() {
+                @Override
+                public void type(boolean b) {
+                    if (b) {
+                        Intent intent = new Intent(activity.getActivity(), CallAlertActivity.class);
+                        Bundle bundle = new Bundle();
+                        bundle.putString("id", id);
+                        bundle.putString("fromType", "chat");
+                        bundle.putString("roomId", accId);
+                        intent.putExtras(bundle);
+                        activity.startActivity(intent);
+
+                    } else {
+                        ToastUtils.show_always(activity.getActivity(), "呼叫失败，请稍后再试！");
+                    }
+                }
+            });
+            // 发送呼叫请求
         } else {
             ToastUtils.show_always(activity.getActivity(), "数据出错了，请稍后再试！");
-            return false;
         }
     }
 
@@ -437,6 +432,8 @@ public class ChatPresenter {
                     activity.setPersonViewClose();
                     break;
                 case BroadcastConstants.VIEW_INTER_PHONE_CHAT_OK:// 有新的对讲连接时，对讲界面数据更改
+                    AVChatManager.getInstance().muteLocalAudio(true);// 关闭音频
+                    toggleSpeaker(true);
                     setViewForOK();
                     break;
                 case BroadcastConstants.PUSH_CALL_SEND:// 单对单呼叫成功
@@ -508,6 +505,7 @@ public class ChatPresenter {
 
                 String id = f.getID().trim();
                 if (id != null && !id.equals("")) {
+                    model.getGroupPerson(id);
                     Contact.group u = model.getGroup(id);// 根据库表的第一条数据的id得到对应的通讯录里边的群组数据
                     TalkHistory _d = model.assemblyDataForGroup(u, f);// 根据两条对应数据组装展示数据
                     activity.setGroupViewShow(_d);
@@ -519,6 +517,21 @@ public class ChatPresenter {
                 }
             } else {
                 Log.e("setViewForOK", "type类型为空");
+            }
+        }
+    }
+
+    /**
+     * 设置扬声器的开关
+     *
+     * @param b
+     */
+    public void toggleSpeaker(boolean b) {
+        boolean type = AVChatManager.getInstance().speakerEnabled();
+        ToastUtils.show_always(activity.getActivity(), "此时扬声器的开关" + type);
+        if (b) {
+            if (!type) {
+                AVChatManager.getInstance().setSpeaker(!AVChatManager.getInstance().speakerEnabled());// 设置扬声器是否开启
             }
         }
     }

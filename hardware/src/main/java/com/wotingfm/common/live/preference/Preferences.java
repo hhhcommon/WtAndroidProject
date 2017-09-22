@@ -3,7 +3,7 @@ package com.wotingfm.common.live.preference;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import com.netease.nim.live.DemoCache;
+import com.woting.commonplat.nim.DemoCache;
 
 
 /**

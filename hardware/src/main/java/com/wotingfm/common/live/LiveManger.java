@@ -1,7 +1,5 @@
 package com.wotingfm.common.live;
-import com.netease.nim.live.DemoCache;
-import com.netease.nim.live.liveStreaming.PublishParam;
-import com.netease.nim.live.model.RoomInfoEntity;
+import com.woting.commonplat.nim.DemoCache;
 import com.wotingfm.ui.bean.CLive;
 import com.wotingfm.ui.bean.TrailerInfo;
 import com.wotingfm.common.net.RetrofitUtils;
@@ -53,36 +51,36 @@ public class LiveManger {
                 .subscribe(new Action1<CLive.DataBean.VoiceLiveBean>() {
                     @Override
                     public void call(CLive.DataBean.VoiceLiveBean cLive) {
-                        if (cLive != null && cLive.rtmp_push_pull_url_json != null) {
-                            RoomInfoEntity roomInfoEntity = new RoomInfoEntity();
-                            roomInfoEntity.cid = cLive.rtmp_push_pull_url_json.cid;
-                            push_url = cLive.rtmp_push_pull_url_json.pushUrl;
-                            roomInfoEntity.hlsPullUrl = cLive.rtmp_push_pull_url_json.hlsPullUrl;
-                            roomInfoEntity.pushUrl = cLive.rtmp_push_pull_url_json.pushUrl;
-                            roomInfoEntity.roomid = cLive.live_number;
-                            roomInfoEntity.httpPullUrl = cLive.rtmp_push_pull_url_json.httpPullUrl;
-                            roomInfoEntity.rtmpPullUrl = cLive.rtmp_push_pull_url_json.rtmpPullUrl;
-                            roomInfoEntity.owner = cLive.rtmp_push_pull_url_json.name;
-
-                            DemoCache.setRoomInfoEntity(roomInfoEntity);
-
-                            PublishParam publishParam = new PublishParam();
-                            publishParam.pushUrl = push_url;
-                            publishParam.definition = quality;
-                            publishParam.openVideo = open_video;
-                            publishParam.openAudio = open_audio;
-                            publishParam.useFilter = useFilter;
-                            publishParam.faceBeauty = faceBeauty;
-                            if (callBack != null)
-                                callBack.liveStatus(true, publishParam, cLive.live_number);
-                        }
+//                        if (cLive != null && cLive.rtmp_push_pull_url_json != null) {
+//                            RoomInfoEntity roomInfoEntity = new RoomInfoEntity();
+//                            roomInfoEntity.cid = cLive.rtmp_push_pull_url_json.cid;
+//                            push_url = cLive.rtmp_push_pull_url_json.pushUrl;
+//                            roomInfoEntity.hlsPullUrl = cLive.rtmp_push_pull_url_json.hlsPullUrl;
+//                            roomInfoEntity.pushUrl = cLive.rtmp_push_pull_url_json.pushUrl;
+//                            roomInfoEntity.roomid = cLive.live_number;
+//                            roomInfoEntity.httpPullUrl = cLive.rtmp_push_pull_url_json.httpPullUrl;
+//                            roomInfoEntity.rtmpPullUrl = cLive.rtmp_push_pull_url_json.rtmpPullUrl;
+//                            roomInfoEntity.owner = cLive.rtmp_push_pull_url_json.name;
+//
+//                            DemoCache.setRoomInfoEntity(roomInfoEntity);
+//
+//                            PublishParam publishParam = new PublishParam();
+//                            publishParam.pushUrl = push_url;
+//                            publishParam.definition = quality;
+//                            publishParam.openVideo = open_video;
+//                            publishParam.openAudio = open_audio;
+//                            publishParam.useFilter = useFilter;
+//                            publishParam.faceBeauty = faceBeauty;
+//                            if (callBack != null)
+//                                callBack.liveStatus(true, publishParam, cLive.live_number);
+//                        }
                     }
                 }, new Action1<Throwable>() {
                     @Override
                     public void call(Throwable throwable) {
                         T.getInstance().showToast("创建失败");
-                        if (callBack != null)
-                            callBack.liveStatus(false, null, 0);
+//                        if (callBack != null)
+//                            callBack.liveStatus(false, null, 0);
                     }
                 });
     }
@@ -115,7 +113,7 @@ public class LiveManger {
      * 进入直播间返回监听
      */
     public interface LiveCallBack {
-        void liveStatus(boolean status, PublishParam publishParam, int roomId);
+//        void liveStatus(boolean status, PublishParam publishParam, int roomId);
     }
 
     /**

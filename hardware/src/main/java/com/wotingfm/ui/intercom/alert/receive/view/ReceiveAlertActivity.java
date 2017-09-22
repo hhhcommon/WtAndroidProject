@@ -71,9 +71,16 @@ public class ReceiveAlertActivity extends BaseActivity implements OnClickListene
                 /**
                  * 此处需要挂断电话等操作
                  */
-                InterPhoneControl.refuse(presenter.getAccId(), presenter.getId());
-                presenter.setCallType(0);
-                finish();
+                InterPhoneControl.refuse( new InterPhoneControl.Listener() {
+                    @Override
+                    public void type(boolean b) {
+                        if(b){
+                            presenter.setCallType(0);
+                            finish();
+                        }
+                    }
+                });
+
                 break;
             case R.id.img_ok:
                 /**
@@ -87,10 +94,16 @@ public class ReceiveAlertActivity extends BaseActivity implements OnClickListene
                         sendBroadcast(new Intent(BroadcastConstants.VIEW_GROUP_CLOSE)); // 群组界面关闭
                     }
                 }
-                InterPhoneControl.accept(presenter.getAccId(), presenter.getId());
-                EventBus.getDefault().post(new MessageEvent("enterPersonRoom"));
-                presenter.setCallType(1);
-                finish();
+                InterPhoneControl.accept( new InterPhoneControl.Listener() {
+                    @Override
+                    public void type(boolean b) {
+                        if(b){
+                            presenter.setCallType(1);
+                            finish();
+                        }
+                    }
+                });
+
                 break;
         }
     }
@@ -126,9 +139,16 @@ public class ReceiveAlertActivity extends BaseActivity implements OnClickListene
             /**
              * 此处需要挂断电话等操作
              */
-            InterPhoneControl.refuse(presenter.getAccId(), presenter.getId());
-            presenter.setCallType(0);
-            finish();
+            InterPhoneControl.refuse( new InterPhoneControl.Listener() {
+                @Override
+                public void type(boolean b) {
+                    if(b){
+                        presenter.setCallType(0);
+                        finish();
+                    }
+                }
+            });
+
             return true;
         }
         return super.onKeyDown(keyCode, event);

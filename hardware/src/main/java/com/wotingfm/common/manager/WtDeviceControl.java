@@ -1,14 +1,24 @@
 package com.wotingfm.common.manager;
 
+import android.content.Intent;
+import android.util.Log;
 import android.webkit.WebView;
 
+import com.google.gson.GsonBuilder;
+import com.netease.nimlib.sdk.avchat.AVChatManager;
+import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.config.GlobalStateConfig;
+import com.wotingfm.common.constant.BroadcastConstants;
+import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.common.service.SimulationService;
 import com.wotingfm.common.utils.VibratorUtils;
 import com.wotingfm.ui.bean.MessageEvent;
 import com.wotingfm.ui.intercom.main.chat.presenter.ChatPresenter;
+import com.wotingfm.ui.intercom.main.contacts.model.Contact;
 
 import org.greenrobot.eventbus.EventBus;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 /**
  * 控制接口的实现类
@@ -89,14 +99,15 @@ public class WtDeviceControl {
     /**
      * 按下语音通话
      */
-    public static void pushPTT(WebView view) {
+    public static void pushPTT() {
         if (GlobalStateConfig.isActive) {
             SimulationService.talk();
         } else {
+            // 测试代码
             if (ChatPresenter.data != null) {
-                boolean b = InterPhoneControl.beginSpeak(view, "");
-                if (b) {
-
+                if (GlobalStateConfig.canSpeak) {
+                    AVChatManager.getInstance().muteLocalAudio(false);  // 打开音频
+                    sendPersonSpeakNews(true);
                 } else {
                     VibratorUtils.Vibrate(100);
                 }
@@ -109,13 +120,29 @@ public class WtDeviceControl {
     /**
      * 抬起语音通话
      */
-    public static void releasePTT(WebView view) {
+    public static void releasePTT() {
         if (GlobalStateConfig.isActive) {
             SimulationService.openDevice();
         } else {
-            if (ChatPresenter.data != null) {
-                boolean b = InterPhoneControl.stopSpeak(view, "");
+            if (ChatPresenter.data != null&&GlobalStateConfig.canSpeak) {
+                AVChatManager.getInstance().muteLocalAudio(true);// 关闭音频
+                sendPersonSpeakNews(false);
             }
+        }
+    }
+
+    // 发送当前说话人
+    private static void sendPersonSpeakNews(boolean b) {
+        if (b) {
+            String username = BSApplication.SharedPreferences.getString(StringConstant.NICK_NAME, "我");
+            String avatar = BSApplication.SharedPreferences.getString(StringConstant.PORTRAIT, "");
+            Log.e("说话人数据", "userId=" + "我" + ":" + username + ":" + avatar);
+            Intent intent = new Intent(BroadcastConstants.PUSH_CHAT_OPEN);
+            intent.putExtra("name", username);
+            intent.putExtra("url", avatar);
+            BSApplication.getInstance().sendBroadcast(intent);
+        } else {
+            BSApplication.getInstance().sendBroadcast(new Intent(BroadcastConstants.PUSH_CHAT_CLOSE));
         }
     }
 

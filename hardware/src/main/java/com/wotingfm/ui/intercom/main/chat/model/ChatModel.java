@@ -3,9 +3,13 @@ package com.wotingfm.ui.intercom.main.chat.model;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.config.GlobalStateConfig;
 import com.wotingfm.common.constant.StringConstant;
+import com.wotingfm.common.net.RetrofitUtils;
 import com.wotingfm.common.utils.CommonUtils;
 import com.wotingfm.common.utils.GetTestData;
 import com.wotingfm.ui.base.model.CommonModel;
@@ -13,8 +17,15 @@ import com.wotingfm.ui.intercom.main.chat.dao.SearchTalkHistoryDao;
 import com.wotingfm.ui.intercom.main.chat.view.ChatFragment;
 import com.wotingfm.ui.intercom.main.contacts.model.Contact;
 
+import org.json.JSONObject;
+import org.json.JSONTokener;
+
 import java.util.ArrayList;
 import java.util.List;
+
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
+import rx.schedulers.Schedulers;
 
 /**
  * 作者：xinLong on 2017/5/16 14:28
@@ -457,5 +468,58 @@ public class ChatModel extends CommonModel {
             }
         }
         return _list;
+    }
+
+    /**
+     * 获取群成员
+     *
+     * @param id 群id
+     */
+    public void getGroupPerson(String id) {
+        try {
+            RetrofitUtils.getInstance().getGroupPerson(id)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new Action1<Object>() {
+                        @Override
+                        public void call(Object o) {
+                            try {
+                                Log.e("获取群成员返回数据", new GsonBuilder().serializeNulls().create().toJson(o));
+                                dealGroupPersonSuccess(o);
+                                //填充UI
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+
+                        }
+                    }, new Action1<Throwable>() {
+                        @Override
+                        public void call(Throwable throwable) {
+                            throwable.printStackTrace();
+                        }
+                    });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    // 处理群成员返回的数据
+    private void dealGroupPersonSuccess(Object o) {
+        try {
+            String s = new GsonBuilder().serializeNulls().create().toJson(o);
+            JSONObject js = new JSONObject(s);
+            int ret = js.getInt("ret");
+            if (ret == 0) {
+                String msg = js.getString("data");
+                JSONTokener jsonParser = new JSONTokener(msg);
+                JSONObject arg1 = (JSONObject) jsonParser.nextValue();
+                String group = arg1.getString("users");
+                // 群成员
+                GlobalStateConfig.list_group_user = new Gson().fromJson(group, new TypeToken<List<Contact.user>>() {
+                }.getType());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

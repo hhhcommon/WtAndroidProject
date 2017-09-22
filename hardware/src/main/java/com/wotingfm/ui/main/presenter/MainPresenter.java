@@ -7,31 +7,47 @@ import android.content.IntentFilter;
 import android.graphics.Color;
 import android.text.TextUtils;
 import android.util.Log;
+import android.webkit.JavascriptInterface;
+import android.widget.Toast;
 
 import com.google.gson.GsonBuilder;
-import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.Observer;
 import com.netease.nimlib.sdk.StatusCode;
-import com.netease.nimlib.sdk.auth.AuthServiceObserver;
-import com.netease.nimlib.sdk.msg.MsgServiceObserve;
-import com.netease.nimlib.sdk.msg.model.IMMessage;
+import com.netease.nimlib.sdk.avchat.AVChatManager;
+import com.netease.nimlib.sdk.avchat.AVChatStateObserver;
+import com.netease.nimlib.sdk.avchat.constant.AVChatEventType;
+import com.netease.nimlib.sdk.avchat.model.AVChatAudioFrame;
+import com.netease.nimlib.sdk.avchat.model.AVChatCalleeAckEvent;
+import com.netease.nimlib.sdk.avchat.model.AVChatCommonEvent;
+import com.netease.nimlib.sdk.avchat.model.AVChatControlEvent;
+import com.netease.nimlib.sdk.avchat.model.AVChatData;
+import com.netease.nimlib.sdk.avchat.model.AVChatNetworkStats;
+import com.netease.nimlib.sdk.avchat.model.AVChatSessionStats;
+import com.netease.nimlib.sdk.avchat.model.AVChatVideoFrame;
 import com.woting.commonplat.receiver.NetWorkChangeReceiver;
+import com.wotingfm.common.application.BSApplication;
+import com.wotingfm.common.config.GlobalStateConfig;
 import com.wotingfm.common.constant.BroadcastConstants;
-import com.wotingfm.common.manager.WtDeviceControl;
+import com.wotingfm.common.manager.InterPhoneControl;
 import com.wotingfm.common.service.FloatingWindowService;
 import com.wotingfm.common.service.NotificationService;
 import com.wotingfm.common.utils.CommonUtils;
 import com.wotingfm.common.utils.StatusBarUtil;
+import com.wotingfm.common.utils.ToastUtils;
 import com.wotingfm.ui.base.basepresenter.BasePresenter;
 import com.wotingfm.ui.bean.MessageEvent;
 import com.wotingfm.ui.intercom.alert.receive.view.ReceiveAlertActivity;
+import com.wotingfm.ui.intercom.main.chat.presenter.ChatPresenter;
+import com.wotingfm.ui.intercom.main.contacts.model.Contact;
 import com.wotingfm.ui.main.model.MainModel;
 import com.wotingfm.ui.main.view.MainActivity;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+import org.json.JSONException;
 import org.json.JSONObject;
+import org.json.JSONTokener;
 
 import java.util.List;
 import java.util.Map;
@@ -40,23 +56,25 @@ import java.util.Map;
  * 作者：xinLong on 2017/5/16 14:28
  * 邮箱：645700751@qq.com
  */
-public class MainPresenter extends BasePresenter {
+public class MainPresenter extends BasePresenter implements AVChatStateObserver {
     private MainModel mainModel;
     private MainActivity activity;
     private Intent FloatingWindow;
     private Intent NS;
 
     private NetWorkChangeReceiver netWorkChangeReceiver;
-    private String roomId;
 
     public MainPresenter(MainActivity mainActivity) {
         this.activity = mainActivity;
         this.mainModel = new MainModel(mainActivity);
-        NIMClient.getService(MsgServiceObserve.class).observeReceiveMessage(incomingMessageObserver, true);
-        NIMClient.getService(AuthServiceObserver.class).observeOnlineStatus(outObserver, true);
         createService();
         registerReceiver();
         getVersion();
+        AVChatManager.getInstance().observeAVChatState(this, true);
+        registerAVChatIncomingCallObserver(true);// 注册网络通话来电
+        registerHangUpCallObserver(true);// 主叫方挂断的监听
+        registerCalleeAckObserver(true);// 被叫方的监听（接听、拒绝、忙）
+        registerControlObserver(true);// 单对单是否可以说话的监听
     }
 
     private void createService() {
@@ -64,7 +82,6 @@ public class MainPresenter extends BasePresenter {
         activity.startService(FloatingWindow);
         NS = new Intent(activity, NotificationService.class);//启动推送消息处理服务
         activity.startService(NS);
-
     }
 
     //注册广播
@@ -273,31 +290,12 @@ public class MainPresenter extends BasePresenter {
                 activity.setViewType(3);
             } else if ("four".equals(event)) {
                 activity.setViewType(4);
-            } else if (messageEvent.getType() == 10) {
-                roomId = messageEvent.getRoomid();
-                Log.e("roomId_0000000", roomId);
-            } else if (event.equals("enterPersonRoom")) {
-                WtDeviceControl.setMute();// 设置静音
-                Log.e("roomId_2222222", roomId);
-                activity.enterRoom(roomId);// 进入对讲房间
-            } else if (event.equals("exitPerson")) {
-                Log.e("roomId_3333333", roomId);
-                activity.exitRoomPerson(roomId);// 退出对讲房间
             } else if (event.contains("enterGroup&")) {
-                WtDeviceControl.setMute();// 设置静音
                 String room_id = event.split("enterGroup&")[1];
-                activity.enterRoom(room_id);// 进入对讲房间
-            } else if (event.contains("exitGroup&")) {
-                WtDeviceControl.setMuteResume();// 设置静音恢复
-                String room_id = event.split("exitGroup&")[1];
-                activity.exitRoomGroup(room_id);// 退出对讲房间
+                enterRoom(room_id);// 进入对讲房间
+                toggleSpeaker(true);
             } else if (event.equals("onDestroy")) {
-                activity.destroyWebView();
-            }
-        } else {
-            if (messageEvent != null && messageEvent.getType() == 10) {
-                roomId = messageEvent.getRoomid();
-                Log.e("roomId_5555555", roomId);
+                exitRoom();
             }
         }
     }
@@ -310,58 +308,11 @@ public class MainPresenter extends BasePresenter {
         public void onEvent(StatusCode status) {
             Log.i("tag", "User status changed to: " + status);
             if (status.wontAutoLogin()) {
-                if(CommonUtils.isLogin()){
+                if (CommonUtils.isLogin()) {
                     mainModel.unRegisterLogin();
                     // 发送注销登录广播通知所有界面
                     activity.sendBroadcast(new Intent(BroadcastConstants.CANCEL));
                     showQuitPerson();// 展示账号被顶替的弹出框
-                }
-            }
-        }
-    };
-
-    /**
-     * 消息接收观察者
-     */
-    Observer<List<IMMessage>> incomingMessageObserver = new Observer<List<IMMessage>>() {
-        @Override
-        public void onEvent(List<IMMessage> messages) {
-            if (messages == null || messages.isEmpty()) {
-                return;
-            }
-            final IMMessage im = messages.get(messages.size() - 1);
-            if (im != null) {
-                Map<String, Object> map = im.getPushPayload();
-                String type = map.get("type") + "";
-                String userId = map.get("userId") + "";
-                String roomid = map.get("roomid") + "";
-                if (type != null && !type.trim().equals("")) {
-                    Log.e("单对单对讲收到的数据", type);
-                    switch (type) {
-                        case "LAUNCH":// 收到别人邀请我对讲（单对单）
-                            if (!TextUtils.isEmpty(roomid)) roomId = roomid;
-                            Log.e("roomId_1111111", roomId);
-                            EventBus.getDefault().post(new MessageEvent("two"));
-                            ReceiveAlertActivity.start(activity, im.getFromAccount(), userId);
-                            WtDeviceControl.pause();
-                            break;
-                        case "CANCEL":// 取消呼叫别人
-                            EventBus.getDefault().post(new MessageEvent("cancel"));
-                            WtDeviceControl.start();
-                            break;
-                        case "ACCEPT": // 我的对讲邀请被接受（单对单）
-                            EventBus.getDefault().post(new MessageEvent("accept"));
-                            WtDeviceControl.pause();
-                            break;
-                        case "REFUSE":// 我的对讲邀请被拒绝（单对单）
-                            EventBus.getDefault().post(new MessageEvent("refuse"));
-                            WtDeviceControl.start();
-                            break;
-                        case "OVER":
-                            WtDeviceControl.start();
-                            activity.sendBroadcast(new Intent(BroadcastConstants.VIEW_PERSON_CLOSE));// 关闭好友聊天界面（退出房间）
-                            break;
-                    }
                 }
             }
         }
@@ -372,10 +323,254 @@ public class MainPresenter extends BasePresenter {
         activity.showExitDialog();
     }
 
+    private void registerAVChatIncomingCallObserver(boolean register) {
+        AVChatManager.getInstance().observeIncomingCall(new Observer<AVChatData>() {
+            @Override
+            public void onEvent(AVChatData data) {
+                GlobalStateConfig.avChatData = data;
+                Log.e("来电话数据", new GsonBuilder().serializeNulls().create().toJson(data));
+                ToastUtils.show_always(BSApplication.getInstance(), "来电话了");
+                try {
+                    String s = new GsonBuilder().serializeNulls().create().toJson(data);
+                    JSONObject js = new JSONObject(s);
+                    String acc_id = js.getString("b");
+                    String user_id = acc_id.substring(6);
+                    Log.e("user_id", "" + user_id);
+                    ReceiveAlertActivity.start(activity, acc_id, user_id);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        }, register);
+    }
+
+    private void registerHangUpCallObserver(boolean register) {
+        AVChatManager.getInstance().observeHangUpNotification(new Observer<AVChatCommonEvent>() {
+            @Override
+            public void onEvent(AVChatCommonEvent avChatHangUpInfo) {
+                Log.e("对方挂断电话数据", new GsonBuilder().serializeNulls().create().toJson(avChatHangUpInfo));
+                EventBus.getDefault().post(new MessageEvent("cancel"));
+                activity.sendBroadcast(new Intent(BroadcastConstants.VIEW_PERSON_CLOSE));
+                AVChatManager.getInstance().disableRtc();
+
+            }
+        }, register);
+    }
+
+    private void registerCalleeAckObserver(boolean register) {
+        AVChatManager.getInstance().observeCalleeAckNotification(new Observer<AVChatCalleeAckEvent>() {
+            @Override
+            public void onEvent(AVChatCalleeAckEvent ackInfo) {
+                if (ackInfo.getEvent() == AVChatEventType.CALLEE_ACK_BUSY) {
+                    // 对方忙
+                    EventBus.getDefault().post(new MessageEvent("cancel"));
+                    AVChatManager.getInstance().disableRtc();
+                    ToastUtils.show_always(activity, "对方忙");
+                } else if (ackInfo.getEvent() == AVChatEventType.CALLEE_ACK_REJECT) {
+                    // 对方拒绝
+                    EventBus.getDefault().post(new MessageEvent("cancel"));
+                    AVChatManager.getInstance().disableRtc();
+                    ToastUtils.show_always(activity, "对方拒绝");
+                } else if (ackInfo.getEvent() == AVChatEventType.CALLEE_ACK_AGREE) {
+                    // 对方接受
+                    EventBus.getDefault().post(new MessageEvent("accept"));
+                    toggleSpeaker(true);
+                    ToastUtils.show_always(activity, "对方接受");
+                }
+            }
+        }, register);
+    }
+
+    /**
+     * 注册/注销网络通话控制消息（音视频模式切换通知）
+     */
+    private void registerControlObserver(boolean register) {
+        AVChatManager.getInstance().observeControlNotification(new Observer<AVChatControlEvent>() {
+            @Override
+            public void onEvent(AVChatControlEvent netCallControlNotification) {
+                Log.e("对方发来指令值", new GsonBuilder().serializeNulls().create().toJson(netCallControlNotification));
+                if (netCallControlNotification.getControlCommand() == 1) {
+                    toggleSpeaker(true);
+                    GlobalStateConfig.canSpeak = false;
+                    sendPersonSpeakNews(true, netCallControlNotification);
+                } else {
+                    GlobalStateConfig.canSpeak = true;
+                    sendPersonSpeakNews(false, null);
+                }
+                Toast.makeText(activity, "对方发来指令值：" + netCallControlNotification.getControlCommand(), Toast.LENGTH_SHORT).show();
+            }
+        }, register);
+    }
+
+    // 发送当前说话人
+    private void sendPersonSpeakNews(boolean b, AVChatControlEvent netCallControlNotification) {
+        if (b) {
+            if (netCallControlNotification != null) {
+                try {
+                    String s = new GsonBuilder().serializeNulls().create().toJson(netCallControlNotification);
+                    JSONObject js = new JSONObject(s);
+                    String msg = js.getString("data");
+                    JSONTokener jsonParser = new JSONTokener(msg);
+                    JSONObject arg1 = (JSONObject) jsonParser.nextValue();
+                    String acc_id = arg1.getString("b");
+                    String user_id = acc_id.substring(6);
+
+                    Contact.user u = getUser(user_id);
+                    if (u != null) {
+                        String username = u.getName();
+                        String avatar = u.getAvatar();
+                        Log.e("说话人数据", "userId=" + user_id + ":" + username + ":" + avatar);
+                        Intent intent = new Intent(BroadcastConstants.PUSH_CHAT_OPEN);
+                        intent.putExtra("name", username);
+                        intent.putExtra("url", avatar);
+                        activity.sendBroadcast(intent);
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        } else {
+            activity.sendBroadcast(new Intent(BroadcastConstants.PUSH_CHAT_CLOSE));
+        }
+    }
+
+    private Contact.user getUser(String id) {
+        if (id != null && !id.trim().equals("")) {
+            if (ChatPresenter.data != null) {
+                // 此时有对讲状态
+                String _t = ChatPresenter.data.getTyPe().trim();
+                if (_t != null && !_t.equals("") && _t.equals("person")) {
+                    // 此时的对讲状态是单对单
+                    List<Contact.user> list = GlobalStateConfig.list_person;
+                    if (list != null && list.size() > 0) {
+                        Contact.user u = getU(list, id);
+                        return u;
+                    } else {
+                        return null;
+                    }
+                } else if (_t != null && !_t.equals("") && _t.equals("group")) {
+                    // 此时的对讲状态是群组
+                    List<Contact.user> list = GlobalStateConfig.list_group_user;
+                    if (list != null && list.size() > 0) {
+                        Contact.user u = getU(list, id);
+                        return u;
+                    } else {
+                        return null;
+                    }
+                } else {
+                    return null;
+                }
+            } else {
+                return null;
+            }
+        } else {
+            return null;
+        }
+    }
+
+    // 判断是否有好友数据
+    private Contact.user getU(List<Contact.user> list, String id) {
+        boolean t = false;
+        int j = 0;
+        for (int i = 0; i < list.size(); i++) {
+            String _id = list.get(i).getId();
+            if (_id != null && !_id.equals("")) {
+                if (_id.equals(id)) {
+                    t = true;
+                    j = i;
+                }
+            }
+        }
+        if (t) {
+            return list.get(j);
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * 设置扬声器的开关
+     *
+     * @param b
+     */
+    public void toggleSpeaker(boolean b) {
+        ToastUtils.show_always(activity, "此时状态" + b);
+        boolean type = AVChatManager.getInstance().speakerEnabled();
+        ToastUtils.show_always(activity, "扬声器的开关" + type);
+        if (b) {
+            if (!type) {
+                AVChatManager.getInstance().setSpeaker(!AVChatManager.getInstance().speakerEnabled());// 设置扬声器是否开启
+            }
+        }
+    }
+
+    private void set() {
+//        mManager = (SensorManager)getSystemService(Context.SENSOR_SERVICE);
+    }
+
+    /**
+     * 退出房间=群组
+     */
+    public void exitRoomGroup(String id) {
+        InterPhoneControl.quitRoomGroup(id, new InterPhoneControl.Listener() {
+            @Override
+            public void type(boolean b) {
+                if (b) {
+                    Log.e("退出组对讲", "退出组成功");
+                } else {
+                    Log.e("退出组对讲", "退出组失败");
+                }
+
+            }
+        });
+    }
+
+    /**
+     * 退出房间=个人
+     */
+    public void exitRoomPerson(String id) {
+        InterPhoneControl.quitRoomPerson();
+    }
+
+    /**
+     * 进入房间
+     *
+     * @param roomId
+     */
+    public void enterRoom(String roomId) {
+        InterPhoneControl.enterRoom(roomId, new InterPhoneControl.Listener() {
+            @Override
+            public void type(boolean b) {
+                if (b) {
+                    AVChatManager.getInstance().muteLocalAudio(true);// 关闭音频
+                    toggleSpeaker(true);
+                }
+            }
+        });
+    }
+
+    /**
+     * 退出房间
+     */
+    private void exitRoom() {
+        if (ChatPresenter.data != null) {
+            // 此时有对讲状态
+            String _t = ChatPresenter.data.getTyPe().trim();
+            if (_t != null && !_t.equals("") && _t.equals("person")) {// 此时的对讲状态是单对单
+                exitRoomPerson(ChatPresenter.data.getACC_ID());
+            } else if (_t != null && !_t.equals("") && _t.equals("group")) {// 此时的对讲状态是群组
+                exitRoomGroup(ChatPresenter.data.getACC_ID());
+            }
+        }
+    }
+
     /**
      * app退出时执行该操作
      */
     public void stop() {
+        exitRoom();
         mainModel = null;
         activity.stopService(FloatingWindow);
         activity.stopService(NS);
@@ -384,5 +579,168 @@ public class MainPresenter extends BasePresenter {
         Thread.setDefaultUncaughtExceptionHandler(null);
         EventBus.getDefault().unregister(this);
         Log.e("app退出", "app退出");
+    }
+
+    /**
+     * Java方法，人数监听
+     */
+    @JavascriptInterface
+    public void roomNumberListen(final String roomNumber) {
+        Log.e("群成员变化", "人数： " + roomNumber);
+        Intent intent = new Intent(BroadcastConstants.PUSH_CHAT_GROUP_NUM);
+        try {
+            intent.putExtra("num", roomNumber);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        activity.sendBroadcast(intent);
+    }
+
+    /////////////////////////////////////////////////////////////////////////////////////////
+    @Override
+    public void onJoinedChannel(int code, String filePath, String fileName, int elapsed) {
+        // code 返回加入频道是否成功
+        Log.e("服务器连接是否成功的回调 ", "code:" + code);
+    }
+
+    @Override
+    public void onUserJoined(String account) {
+        // 其他用户音视频服务器连接成功后 可以获取当前通话的用户帐号。
+        Log.e("其他用户音视频服务器连接成功 ", "account:" + account);
+    }
+
+    @Override
+    public void onUserLeave(String account, int event) {
+        // 通话过程中，若有用户离开
+        //  event   －1,用户超时离开  0,正常退出
+        Log.e("通话过程中，有用户离开 ", "account:" + account + "   event:" + event);
+    }
+
+    @Override
+    public void onLeaveChannel() {
+        // 自己成功离开频道回调
+        Log.e("自己成功离开频道回调 ", "自己成功离开频道回调");
+    }
+
+    @Override
+    public void onProtocolIncompatible(int status) {
+        // @param status 0 自己版本过低  1 对方版本过低
+        Log.e("通话双方软件版本不兼容 ", "status:" + status);
+    }
+
+    @Override
+    public void onDisconnectServer() {
+        // 通话过程中，从服务器断开连接, 当自己断网超时后，会回调 onDisconnectServer
+        Log.e("服务器断开连接 ", "自己断网超时");
+    }
+
+    @Override
+    public void onNetworkQuality(String account, int value, AVChatNetworkStats stats) {
+        // @param value 0~3 ,the less the better; 0 : best; 3 : worst
+        Log.e("通话网络状况 ", "account:" + account + "   value:" + value);
+    }
+
+    @Override
+    public void onCallEstablished() {
+        // 音视频连接成功建立
+        Log.e("音视频连接成功建立 ", "音视频连接成功建立");
+    }
+
+    @Override
+    public void onDeviceEvent(int code, String desc) {
+        // 音视频设备状态发生改变
+        Log.e("音视频设备状态发生改变 ", "code:" + code + "     desc:" + desc);
+    }
+
+    @Override
+    public void onTakeSnapshotResult(String s, boolean b, String s1) {
+        // 执行截图
+        Log.e("执行截图 ", "执行截图");
+    }
+
+    @Override
+    public void onConnectionTypeChanged(int netType) {
+        // 本地网络类型发生改变
+        Log.e("本地网络类型发生改变 ", "netType:" + netType);
+    }
+
+    @Override
+    public void onAVRecordingCompletion(String account, String filePath) {
+        // 当用户录制音视频结束时回调，会通知录制的用户id和录制文件路径。
+    }
+
+    @Override
+    public void onAudioRecordingCompletion(String filePath) {
+        // 当用户录制语音结束时回调，会通知录制文件路径。
+    }
+
+    @Override
+    public void onLowStorageSpaceWarning(long l) {
+        // 存储空间不足时的警告
+    }
+
+    @Override
+    public void onFirstVideoFrameAvailable(String s) {
+        // 当用户第一帧视频画面绘制前通知
+    }
+
+    @Override
+    public void onFirstVideoFrameRendered(String s) {
+        // 当用户视频画面的分辨率改变时通知
+    }
+
+    @Override
+    public void onVideoFrameResolutionChanged(String s, int i, int i1, int i2) {
+        // 用户视频画面的分辨率改变时
+    }
+
+    @Override
+    public void onVideoFpsReported(String s, int i) {
+        // 实时汇报用户的视频绘制帧率
+    }
+
+    @Override
+    public boolean onVideoFrameFilter(AVChatVideoFrame avChatVideoFrame, boolean b) {
+        // 当用户开始外部视频处理后,采集到的视频数据通过次回调通知。
+        // 用户可以对视频数据做相应的美颜等不同的处理。 需要通过setParameters开启视频数据处理。
+        return false;
+    }
+
+    @Override
+    public boolean onAudioFrameFilter(AVChatAudioFrame avChatAudioFrame) {
+        // 当用户开始外部语音处理后,采集到的语音数据通过次回调通知。
+        // 用户可以对语音数据做相应的变声等不同的处理。需要通过setParameters开启语音数据处理。
+        return false;
+    }
+
+    @Override
+    public void onAudioDeviceChanged(int device) {
+        // 当用户切换扬声器或者耳机的插拔等操作时, 语音的播放设备都会发生变化通知
+        Log.e("语音的播放设备 ", "device:" + device);
+    }
+
+    @Override
+    public void onReportSpeaker(Map<String, Integer> map, int i) {
+        // 正在说话用户的语音强度回调，包括自己和其他用户的声音强度。
+        // 如果一个用户没有说话,或者说话声音小没有被参加到混音,那么这个用户的信息不会在回调中出现。
+        Log.e("语音强度 ", "map:" + new GsonBuilder().serializeNulls().create().toJson(map));
+
+    }
+
+    @Override
+    public void onAudioMixingEvent(int i) {
+        // 当伴音出错或者结束时，通过此回调进行通知
+    }
+
+    @Override
+    public void onSessionStats(AVChatSessionStats avChatSessionStats) {
+        // 通知实时统计信息
+        Log.e("通知实时统计信息 ", "avChatSessionStats:" + new GsonBuilder().serializeNulls().create().toJson(avChatSessionStats));
+    }
+
+    @Override
+    public void onLiveEvent(int liveEvent) {
+        // 通知互动直播事件
+        Log.e("通知互动直播事件 ", "liveEvent:" + liveEvent);
     }
 }

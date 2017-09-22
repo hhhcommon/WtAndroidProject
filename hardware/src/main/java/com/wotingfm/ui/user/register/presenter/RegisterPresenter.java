@@ -6,14 +6,14 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.google.gson.GsonBuilder;
-import com.netease.nim.live.DemoCache;
-import com.netease.nim.uikit.common.ui.dialog.DialogMaker;
 import com.netease.nimlib.sdk.AbortableFuture;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.RequestCallback;
 import com.netease.nimlib.sdk.auth.AuthService;
 import com.netease.nimlib.sdk.auth.LoginInfo;
 import com.woting.commonplat.config.GlobalNetWorkConfig;
+import com.woting.commonplat.nim.DemoCache;
+import com.woting.commonplat.nim.im.ui.dialog.DialogMaker;
 import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.live.preference.Preferences;
 import com.wotingfm.common.live.preference.UserPreferences;

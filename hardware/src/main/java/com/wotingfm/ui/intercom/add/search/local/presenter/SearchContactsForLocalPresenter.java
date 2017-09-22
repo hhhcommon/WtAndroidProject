@@ -283,22 +283,25 @@ public class SearchContactsForLocalPresenter {
     }
 
     // 开始个人对讲
-    private boolean talkOk(String id, String accId) {
+    private boolean talkOk(final String id,final String accId) {
         if (id != null && !id.equals("")) {
-            boolean b = InterPhoneControl.call(accId);// 发送呼叫请求
-            if (b) {
-                Intent intent = new Intent(activity.getActivity(), CallAlertActivity.class);
-                Bundle bundle = new Bundle();
-                bundle.putString("id", id);
-                bundle.putString("fromType", "searchLocal");
-                bundle.putString("roomId", accId);
-                intent.putExtras(bundle);
-                activity.startActivity(intent);
-                return true;
-            } else {
-                ToastUtils.show_always(activity.getActivity(), "呼叫失败，请稍后再试！");
-                return false;
-            }
+             InterPhoneControl.call(accId, new InterPhoneControl.Listener() {
+                @Override
+                public void type(boolean b) {
+                    if (b) {
+                        Intent intent = new Intent(activity.getActivity(), CallAlertActivity.class);
+                        Bundle bundle = new Bundle();
+                        bundle.putString("id", id);
+                        bundle.putString("fromType", "searchLocal");
+                        bundle.putString("roomId", accId);
+                        intent.putExtras(bundle);
+                        activity.startActivity(intent);
+                    } else {
+                        ToastUtils.show_always(activity.getActivity(), "呼叫失败，请稍后再试！");
+                    }
+                }
+            });// 发送呼叫请求
+            return true;
         } else {
             ToastUtils.show_always(activity.getActivity(), "数据出错了，请稍后再试！");
             return false;

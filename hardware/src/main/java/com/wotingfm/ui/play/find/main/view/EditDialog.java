@@ -20,7 +20,6 @@ import com.wotingfm.R;
 
 /**
  * Dialog提示框
- * Created by yangle on 2017/2/4.
  */
 public class EditDialog {
 

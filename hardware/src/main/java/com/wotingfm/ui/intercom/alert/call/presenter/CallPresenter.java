@@ -3,6 +3,7 @@ package com.wotingfm.ui.intercom.alert.call.presenter;
 import android.content.Intent;
 import android.util.Log;
 
+import com.netease.nimlib.sdk.avchat.AVChatManager;
 import com.wotingfm.ui.bean.MessageEvent;
 import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.common.service.AudioService;
@@ -24,7 +25,6 @@ public class CallPresenter {
     private CallModel model;
     private Contact.user user;
     private String id = null;
-    private String roomId = null;
     private String fromType = "";// 界面来源
     private int callType = 0;
 
@@ -48,11 +48,7 @@ public class CallPresenter {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        try {
-            roomId = activity.getIntent().getStringExtra("roomId");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+
 
         if (id != null && !id.equals("")) {
             user = model.getUser(id);
@@ -79,14 +75,6 @@ public class CallPresenter {
         }
     }
 
-    /**
-     * 获取roomId
-     *
-     * @return
-     */
-    public String getRoomId() {
-        return roomId;
-    }
 
     /**
      * 获取用户Id
@@ -101,7 +89,7 @@ public class CallPresenter {
      * 铃声开启
      */
     public void musicOpen() {
-        Intent intent = new Intent(activity,AudioService.class);
+        Intent intent = new Intent(activity, AudioService.class);
         activity.startService(intent);
     }
 
@@ -109,7 +97,7 @@ public class CallPresenter {
      * 铃声关闭
      */
     public void musicClose() {
-        Intent intent = new Intent(activity,AudioService.class);
+        Intent intent = new Intent(activity, AudioService.class);
         activity.stopService(intent);
     }
 
@@ -132,7 +120,6 @@ public class CallPresenter {
             } else if ("cancel".equals(msg)) {
                 activity.finish();
             } else if ("accept".equals(msg)) {
-                EventBus.getDefault().post(new MessageEvent("enterPersonRoom"));
                 callType = 1;
                 activity.finish();
             }
@@ -151,7 +138,11 @@ public class CallPresenter {
      */
     public void destroy() {
         musicClose();
-        if (callType == 1) dealPushCall();
+        if (callType == 1) {
+            dealPushCall();
+        } else {
+            AVChatManager.getInstance().disableRtc();
+        }
         EventBus.getDefault().unregister(this);
         model = null;
     }

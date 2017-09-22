@@ -1,5 +1,11 @@
 apply plugin: 'com.android.library'
-
+def getGitVersion() {
+    try {
+        return 'git rev-parse --short HEAD'.execute().text.trim()
+    } catch (Throwable th) {
+        return "";
+    }
+}
 android {
     compileSdkVersion 25
     buildToolsVersion = '25.0.3'
@@ -39,10 +45,18 @@ android {
         abortOnError false
     }
 
+
+    packagingOptions {
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/NOTICE.txt'
+    }
+
 }
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
+    compile 'com.android.support:appcompat-v7:25+'
+    compile 'com.android.support:design:25+'
     compile 'jp.wasabeef:glide-transformations:2.0.2'
     // glide
     compile 'com.squareup.retrofit2:retrofit:2.1.0'
@@ -58,5 +72,5 @@ dependencies {
     // view的adapter
     compile 'org.greenrobot:eventbus:3.0.0'
     // 数据传递。广播
-    compile project(':uikit')
+
 }

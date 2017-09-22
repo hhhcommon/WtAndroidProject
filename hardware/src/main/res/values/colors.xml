@@ -15,7 +15,7 @@
     <color name="black_head_word">#16181a</color>
     <!-- 偏好设置字体 -->
     <color name="color_preference_word">#959698</color>
-
+    <color name="gray7">#c5c4c4</color>
     <!-- 输入框默认提示字体 -->
     <color name="gray_edit_hint_word">#cccccd</color>
 

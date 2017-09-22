@@ -9,7 +9,6 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.wotingfm.R;
 import com.wotingfm.common.manager.InterPhoneControl;
 import com.wotingfm.common.utils.GlideUtils;
@@ -25,6 +24,7 @@ public class CallAlertActivity extends Activity implements OnClickListener {
     private ImageView img_bg, img_url, img_close;
     private TextView tv_name;
     private CallPresenter presenter;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -52,7 +52,12 @@ public class CallAlertActivity extends Activity implements OnClickListener {
                 /**
                  * 此处需要挂断电话等操作
                  */
-                InterPhoneControl.hangUp(presenter.getRoomId(), presenter.getId());
+                InterPhoneControl.hangUp(new InterPhoneControl.Listener() {
+                    @Override
+                    public void type(boolean b) {
+
+                    }
+                });
                 finish();
                 break;
         }
@@ -89,7 +94,12 @@ public class CallAlertActivity extends Activity implements OnClickListener {
             /**
              * 此处需要挂断电话等操作
              */
-            InterPhoneControl.hangUp(presenter.getRoomId(), presenter.getId());
+            InterPhoneControl.hangUp(new InterPhoneControl.Listener() {
+                @Override
+                public void type(boolean b) {
+
+                }
+            });
             presenter.musicClose();
             finish();
             return true;

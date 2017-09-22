@@ -1,15 +1,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="com.woting.commonplat">
 
-    <!--<application-->
-        <!--android:allowBackup="true"-->
-        <!--android:label="@string/app_name"-->
-        <!--android:supportsRtl="true">-->
-    <!--</application>-->
 
-    <uses-permission android:name="android.permission.FLASHLIGHT"/>
     <!-- 蓝牙管理 -->
-    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
     <uses-permission android:name="android.permission.BAIDU_LOCATION_SERVICE"/>
     <uses-permission android:name="com.android.launcher.permission.READ_SETTINGS"/>
     <!-- 改变WiFi状态 -->
@@ -33,8 +26,6 @@
     <uses-permission android:name="android.permission.CAMERA"/>
     <!-- 录音 -->
     <uses-permission android:name="android.permission.RECORD_AUDIO"/>
-    <!-- 写入外部存储 -->
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <!-- 允许程序向外部存储设备写数据 -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <!-- 外置存储存取权限 -->
@@ -65,7 +56,6 @@
     <uses-permission android:name="android.permission.KILL_BACKGROUND_PROCESSES"/>
     <uses-permission android:name="android.permission.VIBRATE"/>
     <uses-permission android:name="android.permission.WAKE_LOCK"/>
-    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
     <!-- Push service 运行需要的权限 -->
     <uses-permission android:name="android.permission.ACCESS_DOWNLOAD_MANAGER"/>
     <uses-permission android:name="android.permission.DOWNLOAD_WITHOUT_NOTIFICATION"/>
@@ -85,4 +75,35 @@
     <!-- Needed to use our own Contact editor -->
     <uses-permission android:name="android.permission.WRITE_CONTACTS"/>
     <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE"/>
+
+    <!-- 声明程序使用camera和自动对焦功能 -->
+    <uses-feature android:name="android.hardware.camera" />
+    <uses-feature android:name="android.hardware.camera.autofocus" />
+    <!-- 声明程序使用OpenGL ES 2.0 -->
+    <uses-feature
+        android:glEsVersion="0x00020000"
+        android:required="true" />
+
+    <!-- Required -->
+    <permission
+        android:name="com.wotingfm.permission.JPUSH_MESSAGE"
+        android:protectionLevel="signature" />
+
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+    <!-- Required  一些系统要求的权限，如访问网络等-->
+    <uses-permission android:name="android.permission.RECEIVE_USER_PRESENT" />
+    <!-- 允许程序创建显示在其他程序之上，并且类型为TYPE_SYSTEM_ALERT的窗体 -->
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <uses-permission android:name="android.permission.FLASHLIGHT" />
+    <!-- 云信SDK 权限申明, 第三方 APP 接入时，请将 com.netease.vcloud.live 替换为自己的包名 -->
+    <!-- 和下面的 uses-permission 一起加入到你的 AndroidManifest 文件中。 -->
+    <permission
+        android:name="com.wotingfm.permission.RECEIVE_MSG"
+        android:protectionLevel="signature" />
+
+    <uses-permission android:name="android.permission.CAPTURE_SECURE_VIDEO_OUTPUT" />
+    <uses-permission android:name="android.permission.CAPTURE_VIDEO_OUTPUT" />
+    <uses-permission android:name="android.permission.CAPTURE_AUDIO_OUTPUT" />
+
+
 </manifest>

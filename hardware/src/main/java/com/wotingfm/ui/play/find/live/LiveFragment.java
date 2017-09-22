@@ -1,17 +1,27 @@
 package com.wotingfm.ui.play.find.live;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.gson.GsonBuilder;
+import com.netease.nimlib.sdk.AbortableFuture;
+import com.netease.nimlib.sdk.NIMClient;
+import com.netease.nimlib.sdk.RequestCallback;
+import com.netease.nimlib.sdk.auth.AuthService;
+import com.netease.nimlib.sdk.auth.LoginInfo;
+import com.woting.commonplat.nim.base.util.string.MD5;
 import com.woting.commonplat.widget.LoadFrameLayout;
 import com.wotingfm.R;
 import com.wotingfm.common.net.RetrofitUtils;
@@ -19,7 +29,6 @@ import com.wotingfm.common.utils.CommonUtils;
 import com.wotingfm.common.utils.T;
 import com.wotingfm.common.view.BannerView;
 import com.wotingfm.ui.adapter.findHome.LiveListAdapter;
-import com.wotingfm.ui.base.basefragment.BaseFragment;
 import com.wotingfm.ui.bean.HomeBanners;
 import com.wotingfm.ui.bean.LiveBean;
 import com.wotingfm.ui.play.find.main.view.LookListActivity;
@@ -40,8 +49,7 @@ import rx.schedulers.Schedulers;
 
 
 /**
- * Created by amine on 2017/6/14.
- * 发现直播
+ *直播
  */
 
 public class LiveFragment extends Fragment implements View.OnClickListener,SwipeRefreshLayout.OnRefreshListener {
@@ -55,6 +63,14 @@ public class LiveFragment extends Fragment implements View.OnClickListener,Swipe
     LoadFrameLayout loadLayout;
     private View rootView;
 
+    private View headview;
+    private TextView tvTitle;
+    private LiveListAdapter selectedAdapter;
+    private HeaderAndFooterWrapper mHeaderAndFooterWrapper;
+    private BannerView mBannerView;
+    private List<LiveBean.DataBean> list = new ArrayList<>();
+
+
     public static LiveFragment newInstance() {
         LiveFragment fragment = new LiveFragment();
         return fragment;
@@ -67,14 +83,37 @@ public class LiveFragment extends Fragment implements View.OnClickListener,Swipe
             rootView.setOnClickListener(this);
             ButterKnife.bind(this, rootView);
             inItView();
+            //////////////////////////////////////////////////////////////////////////////////////// 测试代码
+            final String account = "13200000008";
+            final String token = tokenFromPassword("123456");
+            // 登录
+            AbortableFuture<LoginInfo> loginRequest = NIMClient.getService(AuthService.class).login(new LoginInfo(account, token));
+            loginRequest.setCallback(new RequestCallback<LoginInfo>() {
+                @Override
+                public void onSuccess(LoginInfo param) {
+                    T.getInstance().showToast("login success");
+                }
+
+                @Override
+                public void onFailed(int code) {
+                    T.getInstance().showToast("登录失败");
+                }
+
+                @Override
+                public void onException(Throwable exception) {
+                    T.getInstance().showToast("登录出异常");
+                }
+            });
+            ////////////////////////////////////////////////////////////////////////////////////////
         }
         return rootView;
     }
 
-
-    private View headview;
-    private TextView tvTitle;
-    private LiveListAdapter selectedAdapter;
+    //DEMO中使用 username 作为 NIM 的account ，md5(password) 作为 token
+    //开发者需要根据自己的实际情况配置自身用户系统和 NIM 用户系统的关系
+    private String tokenFromPassword(String password) {
+        return MD5.getStringMD5(password);
+    }
 
     protected void inItView() {
         GridLayoutManager layoutManager = new GridLayoutManager(getActivity(), 2, GridLayoutManager.VERTICAL, false);
@@ -103,42 +142,13 @@ public class LiveFragment extends Fragment implements View.OnClickListener,Swipe
             public void click(LiveBean.DataBean dataBean) {
                 if ("living".equals(dataBean.type)) {
                     //   LiveActivity.start(getActivity(), false, true);
-                    if (CommonUtils.isLogin() == false) {
-                        LogoActivity.start(getActivity());
-                        return;
-                    }
-                    LiveRoomActivity.startAudience(getActivity(), dataBean.live_number, dataBean.rtmp_push_pull_url_json.rtmpPullUrl, true, dataBean);
-                   /* DialogMaker.showProgressDialog(getActivity(), null, "请稍等...", true, new DialogInterface.OnCancelListener() {
-                        @Override
-                        public void onCancel(DialogInterface dialog) {
-                        }
-                    }).setCanceledOnTouchOutside(false);
-                    LiveManger.getInstance().startLive( CommonUtils.getUserId(), new LiveManger.LiveCallBack() {
-                        @Override
-                        public void liveStatus(boolean status, PublishParam publishParam, int roomId) {
-                            DialogMaker.dismissProgressDialog();
-                            if (status == true)
-                                LiveRoomActivity.startLive(getActivity(), roomId+"", publishParam);
-                        }
-                    });*/
-
+//                    if (CommonUtils.isLogin() == false) {
+//                        LogoActivity.start(getActivity());
+//                        return;
+//                    }
+                    LiveRoomActivity.startAudience(getActivity(), dataBean);
                 } else {
                     openFragment(TrailerInfoFragment.newInstance(dataBean.id));
-                   /* T.getInstance().showToast("预告");
-                    DialogMaker.showProgressDialog(getActivity(), null, "请稍等...", true, new DialogInterface.OnCancelListener() {
-                        @Override
-                        public void onCancel(DialogInterface dialog) {
-                        }
-                    }).setCanceledOnTouchOutside(false);
-                    LiveManger.getInstance().startLive(CommonUtils.getUserId(), new LiveManger.LiveCallBack() {
-                        @Override
-                        public void liveStatus(boolean status, PublishParam publishParam, int roomId) {
-                            DialogMaker.dismissProgressDialog();
-                            if (status == true)
-                                LiveRoomActivity.startLive(getActivity(), roomId + "", publishParam);
-                        }
-                    });*/
-
                 }
             }
         });
@@ -163,12 +173,8 @@ public class LiveFragment extends Fragment implements View.OnClickListener,Swipe
         refresh();
     }
 
-    private HeaderAndFooterWrapper mHeaderAndFooterWrapper;
-    private BannerView mBannerView;
-
     @Override
     public void onResume() {
-//        setVideoResume();
         super.onResume();
         if (mBannerView != null)
             mBannerView.startTurning(5000);
@@ -232,6 +238,7 @@ public class LiveFragment extends Fragment implements View.OnClickListener,Swipe
                 .subscribe(new Action1<List<LiveBean.DataBean>>() {
                     @Override
                     public void call(List<LiveBean.DataBean> albumsBeen) {
+                        Log.e("直播列表返回数据", new GsonBuilder().serializeNulls().create().toJson(albumsBeen));
                         mSwipeLayout.setRefreshing(false);
                         if (albumsBeen != null && !albumsBeen.isEmpty()) {
                             mPage++;
@@ -279,8 +286,6 @@ public class LiveFragment extends Fragment implements View.OnClickListener,Swipe
                     }
                 });
     }
-
-    private List<LiveBean.DataBean> list = new ArrayList<>();
 
 
     private void openFragment(Fragment fragment) {

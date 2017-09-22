@@ -3,97 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.wotingfm">
 
-    <!-- Required -->
-    <permission
-        android:name="com.wotingfm.permission.JPUSH_MESSAGE"
-        android:protectionLevel="signature" />
 
-    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
-    <uses-permission android:name="android.permission.BLUETOOTH" />
-
-    <!-- 以下是使用wifi访问网络所需的权限 -->
-    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
-
-    <!-- Required  一些系统要求的权限，如访问网络等-->
-    <uses-permission android:name="com.wotingfm.permission.JPUSH_MESSAGE" />
-    <uses-permission android:name="android.permission.RECEIVE_USER_PRESENT" />
-    <uses-permission android:name="android.permission.WRITE_SETTINGS" />
-
-    <!-- 权限声明 -->
-    <!-- 访问网络状态-->
-    <uses-permission android:name="android.permission.INTERNET" />
-    <!-- 控制呼吸灯，振动器等，用于新消息提醒 -->
-    <uses-permission android:name="android.permission.FLASHLIGHT" />
-    <uses-permission android:name="android.permission.VIBRATE" />
-    <!-- 外置存储存取权限 -->
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-
-    <!-- 允许挂载和反挂载文件系统 -->
-    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
-    <!-- 允许程序创建显示在其他程序之上，并且类型为TYPE_SYSTEM_ALERT的窗体 -->
-    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
-    <!-- 允许程序向外部存储设备写数据 -->
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <!-- 外置存储存取权限 -->
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <!-- 允许程序获取网络相关信息 -->
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <!-- 允许程序写音频数据 -->
-    <uses-permission android:name="android.permission.RECORD_AUDIO" />
-    <!-- 允许程序使用PowerManager WakeLocks以防止处理器休眠或者屏幕锁屏 -->
-    <uses-permission android:name="android.permission.WAKE_LOCK" />
-    <!-- 允许程序获取Wifi网络状态信息 -->
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-    <!-- 允许程序使用设备的camera -->
-    <uses-permission android:name="android.permission.CAMERA" />
-    <!-- 允许程序使用闪光灯 -->
-    <uses-permission android:name="android.permission.FLASHLIGHT" />
-    <!-- 允许程序获得设备信息 -->
-    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-    <!-- 配置一个程序用于调试 -->
-    <uses-permission android:name="android.permission.SET_DEBUG_APP" />
-
-    <!-- 云信SDK 权限申明, 第三方 APP 接入时，请将 com.netease.vcloud.live 替换为自己的包名 -->
-    <!-- 和下面的 uses-permission 一起加入到你的 AndroidManifest 文件中。 -->
-    <permission
-        android:name="com.wotingfm.permission.RECEIVE_MSG"
-        android:protectionLevel="signature" />
-    <!-- 接收 SDK 消息广播权限， 第三方 APP 接入时，请将 com.netease.vcloud.live 替换为自己的包名 -->
-    <uses-permission android:name="com.wotingfm.permission.RECEIVE_MSG" />
-    <!-- 定位包、导航包需要的额外权限（注：基础权限也需要） -->
-    <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS" />
-    <!-- <uses-permission android:name="android.permission.ACCESS_MOCK_LOCATION" /> -->
-    <!-- 用于进行网络定位 -->
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <!-- 用于访问GPS定位 -->
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
-    <!-- Needed to use our own Contact editor -->
-    <uses-permission android:name="android.permission.WRITE_CONTACTS" />
-    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
-
-    <!-- 声明程序使用camera和自动对焦功能 -->
-    <uses-feature android:name="android.hardware.camera" />
-    <uses-feature android:name="android.hardware.camera.autofocus" />
-    <!-- 声明程序使用OpenGL ES 2.0 -->
-    <uses-feature
-        android:glEsVersion="0x00020000"
-        android:required="true" />
-
-
-    <uses-permission android:name="android.permission.CAPTURE_SECURE_VIDEO_OUTPUT" />
-    <uses-permission android:name="android.permission.CAPTURE_VIDEO_OUTPUT" />
-
-    <uses-permission android:name="android.permission.CAPTURE_AUDIO_OUTPUT" />
-
-    <uses-permission android:name="android.permission.MANAGE_ACCOUNTS"/>
-    <uses-permission android:name="android.permission.GET_ACCOUNTS"/>
-    <uses-permission android:name="android.permission.READ_LOGS"/>
-    <uses-permission android:name="android.permission.KILL_BACKGROUND_PROCESSES"/>
-
-    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
-    <!-- supportsRtl 从左到右 -->
     <!-- android:screenOrientation="portrait" 强制竖屏 -->
     <application
         android:name="com.wotingfm.common.application.BSApplication"
@@ -104,9 +14,7 @@
         android:supportsRtl="false"
         android:theme="@style/AppBlackTheme"
         tools:replace="icon,label,supportsRtl">
-        <meta-data
-            android:name="com.wotingfm.common.glide.GlideConfiguration"
-            android:value="GlideModule" />
+
         <!-- 启动页 -->
         <activity
             android:name=".ui.user.splash.view.SplashActivity"
@@ -140,11 +48,12 @@
 
         <!-- 直播页面  主播 -->
         <activity
-            android:name=".ui.play.live.LiveRoomActivity"
+            android:name="com.wotingfm.ui.play.live.LiveRoomActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
+
         <activity
-            android:name="com.netease.nim.live.activity.InputActivity"
+            android:name="com.woting.commonplat.nim.entertainment.activity.InputActivity"
             android:theme="@style/InputActivityTheme"
             android:windowSoftInputMode="stateUnspecified|adjustResize" />
 
@@ -183,43 +92,7 @@
             android:name=".ui.mine.main.MineActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
-        <!-- APP key, 可以在这里设置，也可以在 SDKOptions 中提供。
-                    如果 SDKOptions 中提供了，取 SDKOptions 中的值。 -->
-        <meta-data
-            android:name="com.netease.nim.appKey"
-            android:value="14fb7ad37a6489960435071dd1b0c837" />
 
-        <!-- 声明云信后台服务，如需保持后台推送，使用独立进程效果会更好。 -->
-        <service
-            android:name="com.netease.nimlib.service.NimService"
-            android:process=":core" />l
-
-        <service
-            android:name="com.netease.nimlib.service.NimService$Aux"
-            android:process=":core" />
-
-        <!-- 云信SDK的监视系统启动和网络变化的广播接收器，用户开机自启动以及网络变化时候重新登录，
-            保持和 NimService 同一进程 -->
-        <receiver
-            android:name="com.netease.nimlib.service.NimReceiver"
-            android:exported="false"
-            android:process=":core">
-            <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
-                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
-            </intent-filter>
-        </receiver>
-
-        <!-- 云信进程间通信 Receiver -->
-        <receiver android:name="com.netease.nimlib.service.ResponseReceiver" />
-        <!-- 云信SDK相关 结束                                                              -->
-
-
-        <!-- 高德地图用户Key -->
-        <meta-data
-            android:name="com.amap.api.v2.apikey"
-            android:value="d799e19bdab96fa46566397bab5437c7" />
-        <service android:name="com.amap.api.location.APSService" />
         <!--  -->
         <activity
             android:name=".ui.intercom.alert.receive.view.ReceiveAlertActivity"
@@ -231,13 +104,6 @@
             android:name=".ui.intercom.alert.call.view.CallAlertActivity"
             android:screenOrientation="portrait"
             android:theme="@style/MyAppTheme" />
-
-        <service android:name=".common.service.FloatingWindowService" />
-        <service android:name=".common.service.SimulationService" />
-        <service android:name=".common.service.NotificationService" />
-        <service android:name=".common.service.AudioService"></service>
-        <service android:name=".common.service.PlayerService"></service>
-        <!--<service android:name=".common.service.AudioPlayerService"></service>-->
 
         <!-- Rich push 核心功能 since 2.0.6-->
         <activity
@@ -272,6 +138,13 @@
             </intent-filter>
         </service>
 
+        <!-- 声明网易云通信后台辅助服务 -->
+        <service
+            android:name="com.netease.nimlib.job.NIMJobService"
+            android:exported="true"
+            android:permission="android.permission.BIND_JOB_SERVICE"
+            android:process=":core"/>
+
         <!-- since 1.8.0 option 可选项。用于同一设备中不同应用的JPush服务相互拉起的功能。 -->
         <!-- 若不启用该功能可删除该组件，将不拉起其他应用也不能被其他应用拉起 -->
         <service
@@ -284,6 +157,32 @@
             </intent-filter>
 
         </service>
+
+        <service android:name=".common.service.FloatingWindowService" />
+        <service android:name=".common.service.SimulationService" />
+        <service android:name=".common.service.NotificationService" />
+        <service android:name=".common.service.AudioService"></service>
+        <service android:name=".common.service.PlayerService"></service>
+        <!--<service android:name=".common.service.AudioPlayerService"></service>-->
+        <service android:name="com.amap.api.location.APSService" />
+        <!-- 声明云信后台服务 -->
+        <service
+            android:name="com.netease.nimlib.service.NimService$Aux"
+            android:process=":core" />
+        <!-- 云信进程间通信service -->
+        <service android:name="com.netease.nimlib.service.ResponseService" />
+        <!-- 声明云信后台服务，如需保持后台推送，使用独立进程效果会更好。 -->
+        <service
+            android:name="com.netease.nimlib.service.NimService"
+            android:process=":core" />l
+
+
+        <!-- 在Demo的示例代码中是在Application进行了网络通话与本地电话的互斥处理 -->
+        <receiver android:name="com.wotingfm.common.receiver.IncomingCallReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.PHONE_STATE" />
+            </intent-filter>
+        </receiver>
 
         <!-- Required SDK核心功能-->
         <receiver
@@ -326,16 +225,66 @@
                 <category android:name="com.wotingfm" />
             </intent-filter>
         </receiver>
+        <!-- 云信进程间通信 Receiver -->
+        <receiver android:name="com.netease.nimlib.service.ResponseReceiver" />
+        <!-- 云信SDK相关 结束                                                              -->
+        <receiver
+            android:name="com.netease.nimlib.service.NimReceiver"
+            android:exported="false"
+            android:process=":core">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+            </intent-filter>
+        </receiver>
 
-        <!-- Required  . Enable it you can get statistics data with channel -->
+        <meta-data
+            android:name="com.wotingfm.common.glide.GlideConfiguration"
+            android:value="GlideModule" />
+        <!-- 高德地图用户Key -->
+        <meta-data
+            android:name="com.amap.api.v2.apikey"
+            android:value="d799e19bdab96fa46566397bab5437c7" />
+
         <meta-data
             android:name="JPUSH_CHANNEL"
             android:value="developer-default" />
+
         <meta-data
             android:name="JPUSH_APPKEY"
             android:value="eb7b95e96d6ed02ea8994074" /> <!--  </>值来自开发者平台取得的AppKey-->
+        <!-- Required  . Enable it you can get statistics data with channel -->
+
+        <!-- 我听-->
+        <!--<meta-data-->
+            <!--android:name="com.netease.nim.appKey"-->
+            <!--android:value="14fb7ad37a6489960435071dd1b0c837" />-->
+
+        <!-- 互动直播-->
+        <meta-data
+            android:name="com.netease.nim.appKey"
+            android:value="6f49e3f759ccd47810b445444eebc090" />
+
+        <!-- 即时通讯-->
+        <!--<meta-data-->
+            <!--android:name="com.netease.nim.appKey"-->
+            <!--android:value="45c6af3c98409b18a84451215d0bdd6e" />-->
+
+        <!-- 最新-->
+        <!--<meta-data-->
+            <!--android:name="com.netease.nim.appKey"-->
+            <!--android:value="8de5b697f835b3f8908278042ee05a19" />-->
+
+        <uses-library
+            android:name="com.google.android.maps"
+            android:required="false" />
+
     </application>
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <!-- Required 一些系统要求的权限，如访问网络等-->
 
-
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="com.wotingfm.permission.JPUSH_MESSAGE"/>
+    <uses-permission android:name="android.permission.RECEIVE_USER_PRESENT"/>
+    <uses-permission android:name="android.permission.WRITE_SETTINGS"/>
 </manifest>

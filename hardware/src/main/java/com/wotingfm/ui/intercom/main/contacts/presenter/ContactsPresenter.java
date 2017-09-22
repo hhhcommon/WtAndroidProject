@@ -101,48 +101,39 @@ public class ContactsPresenter {
             } else if (_t != null && !_t.equals("") && _t.equals("group")) {// 此时的对讲状态是群组
                 // 退出组，关闭对讲页面群组数据
                 activity.getActivity().sendBroadcast(new Intent(BroadcastConstants.VIEW_GROUP_CLOSE));
-                boolean cp = callPerson(position);// 进行呼叫
-                if (cp) {
-                    Log.e("信令控制", "呼叫成功");
-                } else {
-                    Log.e("信令控制", "呼叫失败");
-                }
+                callPerson(position);// 进行呼叫
+
             }
         } else {
             // 此时没有对讲状态
-            boolean cp = callPerson(position);// 进行呼叫
-            if (cp) {
-                Log.e("信令控制", "呼叫成功");
-            } else {
-                Log.e("信令控制", "呼叫失败");
-            }
+             callPerson(position);// 进行呼叫
+
         }
     }
 
     // 进行呼叫
-    private boolean callPerson(int position) {
-        String id = list.get(position).getId();
-        String acc_id = list.get(position).getAcc_id();
+    private void callPerson(int position) {
+        final String id = list.get(position).getId();
+        final String acc_id = list.get(position).getAcc_id();
         if (id != null && !id.equals("")) {
-            boolean b = InterPhoneControl.call(acc_id);// 发送呼叫请求
-            if (b) {
-                Intent intent = new Intent(activity.getActivity(), CallAlertActivity.class);
-                Bundle bundle = new Bundle();
-                bundle.putString("id", id);
-                bundle.putString("fromType", "contacts");
-                bundle.putString("roomId", acc_id);
-                intent.putExtras(bundle);
-                activity.startActivity(intent);
-                return true;
-            } else {
-                ToastUtils.show_always(activity.getActivity(), "呼叫失败，请稍后再试！");
-                return false;
-            }
+             InterPhoneControl.call(acc_id, new InterPhoneControl.Listener() {
+                @Override
+                public void type(boolean b) {
+                    if (b) {
+                        Intent intent = new Intent(activity.getActivity(), CallAlertActivity.class);
+                        Bundle bundle = new Bundle();
+                        bundle.putString("id", id);
+                        bundle.putString("fromType", "contacts");
+                        intent.putExtras(bundle);
+                        activity.startActivity(intent);
+                    } else {
+                        ToastUtils.show_always(activity.getActivity(), "呼叫失败，请稍后再试！");
+                    }
+                }
+            });// 发送呼叫请求
         } else {
             ToastUtils.show_always(activity.getActivity(), "数据出错了，请稍后再试！");
-            return false;
         }
-
     }
 
     /**
@@ -153,12 +144,8 @@ public class ContactsPresenter {
     public void callOk(int position) {
         // 挂断当前会话,关闭对讲页面好友数据
         activity.getActivity().sendBroadcast(new Intent(BroadcastConstants.VIEW_PERSON_CLOSE));
-        boolean cp = callPerson(position);// 进行呼叫
-        if (cp) {
-            Log.e("信令控制", "呼叫成功");
-        } else {
-            Log.e("信令控制", "呼叫失败");
-        }
+       callPerson(position);// 进行呼叫
+
     }
 
     // 呼叫成功后操作

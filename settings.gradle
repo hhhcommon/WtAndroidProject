@@ -1,1 +1,1 @@
-include ':app', ':CommonPlat', ':hardware', ':uikit'
+include ':CommonPlat', ':hardware'
