@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.wotingfm.R;
+import com.wotingfm.ui.base.basefragment.BaseFragment;
 import com.wotingfm.ui.intercom.add.search.net.view.SearchContactsForNetFragment;
 import com.wotingfm.ui.intercom.main.view.InterPhoneActivity;
 import com.wotingfm.ui.intercom.scanning.activity.CaptureFragment;
@@ -17,7 +18,7 @@ import com.wotingfm.ui.intercom.scanning.activity.CaptureFragment;
  * 作者：xinLong on 2017/6/5 01:30
  * 邮箱：645700751@qq.com
  */
-public class FindFragment extends Fragment implements View.OnClickListener {
+public class FindFragment extends BaseFragment implements View.OnClickListener {
     private View rootView;
     private String fromType = "group";// 界面跳转来源 添加群组=group，添加好友=friend
 

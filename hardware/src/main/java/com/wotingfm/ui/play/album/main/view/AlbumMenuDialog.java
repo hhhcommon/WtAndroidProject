@@ -14,6 +14,7 @@ import com.wotingfm.ui.intercom.main.view.InterPhoneActivity;
 import com.wotingfm.ui.mine.main.MineActivity;
 import com.wotingfm.ui.play.anchor.view.AnchorPersonalCenterFragment;
 import com.wotingfm.ui.play.find.main.view.LookListActivity;
+import com.wotingfm.ui.play.live.LiveRoomActivity;
 import com.wotingfm.ui.play.main.PlayerActivity;
 import com.wotingfm.ui.play.report.view.ReportFragment;
 import com.wotingfm.ui.user.logo.LogoActivity;
@@ -66,7 +67,7 @@ public class AlbumMenuDialog extends Dialog implements View.OnClickListener {
                 }
                 if (id != null && activity != null) {
                     dismiss();
-                    open(AnchorPersonalCenterFragment.newInstance(info.data.album.owner.id));
+                    openFragment(AnchorPersonalCenterFragment.newInstance(info.data.album.owner.id));
                 }
                 break;
             case R.id.tvReport:
@@ -83,7 +84,7 @@ public class AlbumMenuDialog extends Dialog implements View.OnClickListener {
                         LogoActivity.start(activity);
                         return;
                     }
-                    open(ReportFragment.newInstance(album_id, "REPORT_ALBUM"));
+                    openFragment(ReportFragment.newInstance(album_id, "REPORT_ALBUM"));
                 }
                 break;
             case R.id.tvClose:
@@ -92,16 +93,22 @@ public class AlbumMenuDialog extends Dialog implements View.OnClickListener {
         }
     }
 
-    public void open(Fragment f){
+    public void openFragment(Fragment fragment) {
         if (activity instanceof PlayerActivity) {
-            PlayerActivity.open(f);
+            PlayerActivity playerActivity = (PlayerActivity) activity;
+            playerActivity.open(fragment);
         } else if (activity instanceof MineActivity) {
-            MineActivity.open(f);
-        } else if (activity instanceof LookListActivity) {
-            LookListActivity.open(f);
+            MineActivity mineActivity = (MineActivity) activity;
+            mineActivity.open(fragment);
         } else if (activity instanceof InterPhoneActivity) {
-            InterPhoneActivity.open(f);
+            InterPhoneActivity interPhoneActivity = (InterPhoneActivity) activity;
+            interPhoneActivity.open(fragment);
+        } else if (activity instanceof LookListActivity) {
+            LookListActivity lookListActivity = (LookListActivity) activity;
+            lookListActivity.open(fragment);
+        }else if (activity instanceof LiveRoomActivity) {
+            LiveRoomActivity liveRoomActivity = (LiveRoomActivity) activity;
+            liveRoomActivity.open(fragment);
         }
     }
-
 }

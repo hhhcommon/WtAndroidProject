@@ -28,6 +28,7 @@ import com.wotingfm.common.config.LocationInfo;
 import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.common.net.RetrofitUtils;
 import com.wotingfm.ui.adapter.radioAdapter.RadioAdapter;
+import com.wotingfm.ui.base.basefragment.BaseFragment;
 import com.wotingfm.ui.bean.ChannelsBean;
 import com.wotingfm.ui.bean.MessageEvent;
 import com.wotingfm.ui.intercom.main.view.InterPhoneActivity;
@@ -51,7 +52,7 @@ import rx.schedulers.Schedulers;
  * 本地台
  */
 
-public class LocalRadioFragment extends Fragment implements View.OnClickListener, OnLoadMoreListener, OnRefreshListener {
+public class LocalRadioFragment extends BaseFragment implements View.OnClickListener, OnLoadMoreListener, OnRefreshListener {
     @BindView(R.id.mRecyclerView)
     ARecyclerView mRecyclerView;
     @BindView(R.id.lin_bg)
@@ -252,36 +253,6 @@ public class LocalRadioFragment extends Fragment implements View.OnClickListener
         GlobalStateConfig.activityA = "A";
         EventBus.getDefault().post(new MessageEvent("one"));
         EventBus.getDefault().post(new MessageEvent(channelsBean, 1));
-    }
-
-    // 关闭页面
-    private void closeFragment() {
-        if (getActivity() instanceof PlayerActivity) {
-            PlayerActivity.close();
-        } else if (getActivity() instanceof MineActivity) {
-            MineActivity.close();
-        } else if (getActivity() instanceof LookListActivity) {
-            LookListActivity.close();
-        } else if (getActivity() instanceof InterPhoneActivity) {
-            InterPhoneActivity.close();
-        }
-    }
-
-    /**
-     * 关闭界面
-     *
-     * @param fragment
-     */
-    public void openFragment(Fragment fragment) {
-        if (getActivity() instanceof PlayerActivity) {
-            PlayerActivity.open(fragment);
-        } else if (getActivity() instanceof MineActivity) {
-            MineActivity.open(fragment);
-        } else if (getActivity() instanceof InterPhoneActivity) {
-            InterPhoneActivity.open(fragment);
-        } else if (getActivity() instanceof LookListActivity) {
-            LookListActivity.open(fragment);
-        }
     }
 
     class MessageReceiver extends BroadcastReceiver {

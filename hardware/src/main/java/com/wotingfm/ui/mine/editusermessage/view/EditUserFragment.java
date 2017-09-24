@@ -16,6 +16,7 @@ import com.wotingfm.R;
 import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.common.utils.DialogUtils;
+import com.wotingfm.ui.base.basefragment.BaseFragment;
 import com.wotingfm.ui.mine.editusermessage.presenter.EditUserPresenter;
 import com.wotingfm.ui.mine.main.MineActivity;
 
@@ -24,7 +25,7 @@ import com.wotingfm.ui.mine.main.MineActivity;
  * 作者：xinLong on 2017/6/5 01:30
  * 邮箱：645700751@qq.com
  */
-public class EditUserFragment extends Fragment implements View.OnClickListener {
+public class EditUserFragment extends BaseFragment implements View.OnClickListener {
     private View rootView;
     private EditUserPresenter presenter;
     private Dialog dialog;
@@ -84,7 +85,7 @@ public class EditUserFragment extends Fragment implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.head_left_btn:
-                MineActivity.close();
+                closeFragment();
                 break;
             case R.id.tv_send:
                 String s1 = et_name.getText().toString().trim();// 名称

@@ -45,7 +45,7 @@ public class FeedbackPresenter {
             if (GlobalNetWorkConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
                 if (GlobalStateConfig.test) {
                     ToastUtils.show_always(activity.getActivity(), "感谢您的反馈！");
-                    MineActivity.close();
+                    activity.closeFragment();
                 } else {
                     activity.dialogShow();
                     model.loadNews(information, feedback, new FeedbackModel.OnLoadInterface() {
@@ -59,7 +59,7 @@ public class FeedbackPresenter {
                         public void onFailure(String msg) {
                             activity.dialogCancel();
                             ToastUtils.show_always(activity.getActivity(), "感谢您的反馈！");
-                            MineActivity.close();
+                            activity.closeFragment();
                         }
                     });
                 }
@@ -78,7 +78,7 @@ public class FeedbackPresenter {
             int ret = js.getInt("ret");
             Log.e("ret", String.valueOf(ret));
             if (ret == 0) {
-                MineActivity.close();
+                activity.closeFragment();
                 ToastUtils.show_always(activity.getActivity(), "感谢您的反馈！");
             } else {
                 ToastUtils.show_always(activity.getActivity(), "感谢您的反馈！");

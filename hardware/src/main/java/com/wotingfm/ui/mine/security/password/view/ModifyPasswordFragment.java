@@ -12,6 +12,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import com.wotingfm.R;
 import com.wotingfm.common.utils.DialogUtils;
+import com.wotingfm.ui.base.basefragment.BaseFragment;
 import com.wotingfm.ui.mine.main.MineActivity;
 import com.wotingfm.ui.mine.security.password.presenter.ModifyPasswordPresenter;
 import com.wotingfm.ui.user.logo.LogoActivity;
@@ -21,7 +22,7 @@ import com.wotingfm.ui.user.logo.LogoActivity;
  * 作者：xinLong on 2017/6/5 13:55
  * 邮箱：645700751@qq.com
  */
-public class ModifyPasswordFragment extends Fragment implements View.OnClickListener {
+public class ModifyPasswordFragment extends BaseFragment implements View.OnClickListener {
     private View rootView;
     private TextView textSendVerificationCode;// 发送验证码
     private EditText editPhoneNumber;// 手机号
@@ -69,7 +70,7 @@ public class ModifyPasswordFragment extends Fragment implements View.OnClickList
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.head_left_btn:
-                MineActivity.close();
+                closeFragment();
                 break;
             case R.id.text_send_verification_code:
                 String userName = editPhoneNumber.getText().toString().trim();

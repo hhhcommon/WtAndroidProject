@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 import com.wotingfm.R;
 import com.wotingfm.common.utils.ToastUtils;
+import com.wotingfm.ui.base.basefragment.BaseFragment;
 import com.wotingfm.ui.intercom.main.contacts.adapter.NoAdapter;
 import com.wotingfm.ui.mine.main.MineActivity;
 import com.wotingfm.ui.mine.wifi.adapter.WiFiListAdapter;
@@ -29,7 +30,7 @@ import java.util.List;
  * 作者：xinLong on 2017/5/16 14:28
  * 邮箱：645700751@qq.com
  */
-public class WIFIFragment extends Fragment implements View.OnClickListener {
+public class WIFIFragment extends BaseFragment implements View.OnClickListener {
     private WiFiListAdapter adapter;
 
     private ListView wifiListView;
@@ -90,7 +91,7 @@ public class WIFIFragment extends Fragment implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.head_left_btn:// 返回
-                MineActivity.close();
+                closeFragment();
                 break;
             case R.id.wifi_set:     // WiFi 开关
                 presenter.WIFISet();

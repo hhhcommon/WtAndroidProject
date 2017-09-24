@@ -15,6 +15,7 @@ import com.woting.commonplat.manager.PhoneMsgManager;
 import com.woting.commonplat.utils.BitmapUtils;
 import com.wotingfm.R;
 import com.wotingfm.common.utils.GlideUtils;
+import com.wotingfm.ui.base.basefragment.BaseFragment;
 import com.wotingfm.ui.intercom.main.view.InterPhoneActivity;
 import com.wotingfm.ui.mine.main.MineActivity;
 
@@ -23,7 +24,7 @@ import com.wotingfm.ui.mine.main.MineActivity;
  * 作者：xinlong on 2017/7/18 17:18
  * 邮箱：645700751@qq.com
  */
-public class EWMShowFragment extends Fragment implements OnClickListener {
+public class EWMShowFragment extends BaseFragment implements OnClickListener {
     private ImageView imageEwm;
     private ImageView imageHead;
     private TextView textName, tv_news;
@@ -113,11 +114,7 @@ public class EWMShowFragment extends Fragment implements OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.head_left_btn:// 返回
-                if (from.equals("person")) {
-                    MineActivity.close();
-                } else if (from.equals("interPhone")) {
-                    InterPhoneActivity.close();
-                }
+              closeFragment();
                 break;
         }
     }

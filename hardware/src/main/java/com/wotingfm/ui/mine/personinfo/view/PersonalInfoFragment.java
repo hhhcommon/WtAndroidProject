@@ -20,6 +20,7 @@ import com.wotingfm.common.utils.DialogUtils;
 import com.wotingfm.common.utils.GlideUtils;
 import com.wotingfm.common.view.pickview.LoopView;
 import com.wotingfm.common.view.pickview.OnItemSelectedListener;
+import com.wotingfm.ui.base.basefragment.BaseFragment;
 import com.wotingfm.ui.mine.main.MineActivity;
 import com.wotingfm.ui.mine.personinfo.presenter.PersonInfoPresenter;
 
@@ -31,7 +32,7 @@ import java.util.Map;
  * 作者：xinLong on 2017/6/5 13:55
  * 邮箱：645700751@qq.com
  */
-public class PersonalInfoFragment extends Fragment implements View.OnClickListener {
+public class PersonalInfoFragment extends BaseFragment implements View.OnClickListener {
     private View rootView;
     private ImageView image_head;
     private PersonInfoPresenter presenter;
@@ -86,7 +87,7 @@ public class PersonalInfoFragment extends Fragment implements View.OnClickListen
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.head_left_btn:// 返回
-                MineActivity.close();
+                closeFragment();
                 break;
             case R.id.view_head_portrait:// 头像按钮
                 if (imgDialog != null) {

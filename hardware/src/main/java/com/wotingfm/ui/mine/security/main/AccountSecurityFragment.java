@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.wotingfm.R;
 import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.constant.StringConstant;
+import com.wotingfm.ui.base.basefragment.BaseFragment;
 import com.wotingfm.ui.mine.security.password.view.ModifyPasswordFragment;
 import com.wotingfm.ui.mine.security.phonenumber.view.ModifyPhoneNumberFragment;
 import com.wotingfm.ui.mine.main.MineActivity;
@@ -20,7 +21,7 @@ import com.wotingfm.ui.mine.main.MineActivity;
  * 作者：xinLong on 2017/5/16 14:28
  * 邮箱：645700751@qq.com
  */
-public class AccountSecurityFragment extends Fragment implements View.OnClickListener {
+public class AccountSecurityFragment extends BaseFragment implements View.OnClickListener {
     private View rootView;
     private TextView text_phone_number;
 
@@ -61,11 +62,11 @@ public class AccountSecurityFragment extends Fragment implements View.OnClickLis
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.head_left_btn:// 返回
-                MineActivity.close();
+                closeFragment();
                 break;
             case R.id.view_phone_number:// 修改手机号
                 ModifyPhoneNumberFragment fragment= new ModifyPhoneNumberFragment();
-                MineActivity.open(fragment);
+                openFragment(fragment);
                 fragment.setResultListener(new ModifyPhoneNumberFragment.ResultListener() {
                     @Override
                     public void resultListener(boolean type) {
@@ -81,7 +82,7 @@ public class AccountSecurityFragment extends Fragment implements View.OnClickLis
                 });
                 break;
             case R.id.view_password:// 修改密码
-                MineActivity.open(new ModifyPasswordFragment());
+                openFragment(new ModifyPasswordFragment());
                 break;
         }
     }

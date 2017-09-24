@@ -39,7 +39,7 @@ public class EditBlueToothPresenter {
             boolean b = BluetoothAdapter.getDefaultAdapter().setName(s);//设置蓝牙名称
             if (b) {
                 activity.setResult(true, s);
-                MineActivity.close();
+                activity.closeFragment();
             } else {
                 ToastUtils.show_always(activity.getActivity(), "修改失败，请稍后再试！");
             }

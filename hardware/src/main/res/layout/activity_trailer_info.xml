@@ -1,44 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#000000"
-    android:paddingTop="20dp"
-    android:orientation="vertical">
+    android:layout_height="match_parent">
 
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/toolbar_height">
-
-        <ImageView
-            android:id="@+id/ivBack"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@mipmap/nav_icon_back_white" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:text="预告详情"
-            android:textColor="#ffffff"
-            android:textSize="17sp" />
-    </RelativeLayout>
-
-    <com.woting.commonplat.widget.LoadFrameLayout xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/loadLayout"
+    <ImageView
+        android:id="@+id/img_bg"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_gravity="center"
-        app:emptyView="@layout/layout_empty_black_view"
-        app:errorView="@layout/layout_error_black_view"
-        app:loadingView="@layout/layout_loading_black_view">
+        android:scaleType="centerCrop"/>
 
-        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/transparent_10_black"
+        android:orientation="vertical"
+        android:paddingTop="20dp">
+
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="#000000">
+            android:layout_height="@dimen/toolbar_height">
+
+            <ImageView
+                android:id="@+id/ivBack"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/nav_icon_back_white" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="预告详情"
+                android:textColor="#ffffff"
+                android:textSize="17sp" />
+        </RelativeLayout>
+
+
+        <RelativeLayout
+            android:id="@+id/re_body"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
             <LinearLayout
                 android:id="@+id/largeLabel"
@@ -188,5 +189,5 @@
                 </RelativeLayout>
             </LinearLayout>
         </RelativeLayout>
-    </com.woting.commonplat.widget.LoadFrameLayout>
-</LinearLayout>
+    </LinearLayout>
+</RelativeLayout>

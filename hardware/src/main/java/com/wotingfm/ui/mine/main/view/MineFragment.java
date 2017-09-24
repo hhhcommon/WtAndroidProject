@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.woting.commonplat.utils.JsonEncloseUtils;
 import com.wotingfm.R;
 import com.wotingfm.common.application.BSApplication;
+import com.wotingfm.ui.base.basefragment.BaseFragment;
 import com.wotingfm.ui.bean.MessageEvent;
 import com.wotingfm.common.config.GlobalStateConfig;
 import com.wotingfm.common.constant.BroadcastConstants;
@@ -42,7 +43,7 @@ import java.util.Map;
  * 作者：xinLong on 2017/5/16 14:28
  * 邮箱：645700751@qq.com
  */
-public class MineFragment extends Fragment implements View.OnClickListener {
+public class MineFragment extends BaseFragment implements View.OnClickListener {
 
     private View rootView;
     private FragmentActivity context;
@@ -154,17 +155,17 @@ public class MineFragment extends Fragment implements View.OnClickListener {
                 }
                 break;
             case R.id.fm_set:// FM 设置
-                MineActivity.open(new FMSetFragment());
+                openFragment(new FMSetFragment());
                 break;
             case R.id.setting:// 设置
-                MineActivity.open(new SettingFragment());
+                openFragment(new SettingFragment());
                 break;
             case R.id.bluetooth_set:// 蓝牙设置
-                MineActivity.open(new BluetoothFragment());
+                openFragment(new BluetoothFragment());
                 break;
             case R.id.wifi_set:// 无线局域网
                 WIFIFragment f = new WIFIFragment();
-                MineActivity.open(f);
+                openFragment(f);
                 f.setResultListener(new WIFIFragment.ResultListener() {
                     @Override
                     public void resultListener(boolean type) {
@@ -178,7 +179,7 @@ public class MineFragment extends Fragment implements View.OnClickListener {
 
                 break;
             case R.id.image_info:// 消息中心
-                if (CommonUtils.isLogin()) MineActivity.open(new MsgNotifyFragment());
+                if (CommonUtils.isLogin()) openFragment(new MsgNotifyFragment());
                 break;
             case R.id.image_qr_code:// 二维码
                 if (CommonUtils.isLogin()) {
@@ -196,14 +197,14 @@ public class MineFragment extends Fragment implements View.OnClickListener {
 
                     bundle.putString("uri", url);// 内容路径
                     fragment.setArguments(bundle);
-                    MineActivity.open(fragment);
+                    openFragment(fragment);
                 }
                 break;
             case R.id.image_head:// 登录
                 if (!CommonUtils.isLogin()) {
                     startActivity(new Intent(this.getActivity(), LogoActivity.class));
                 } else {
-                    MineActivity.open(new PersonalInfoFragment());
+                   openFragment(new PersonalInfoFragment());
                 }
                 break;
         }

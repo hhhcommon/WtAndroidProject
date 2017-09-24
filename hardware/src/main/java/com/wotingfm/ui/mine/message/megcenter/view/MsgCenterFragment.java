@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import com.wotingfm.R;
+import com.wotingfm.ui.base.basefragment.BaseFragment;
 import com.wotingfm.ui.mine.message.megcenter.presenter.MsgCenterPresenter;
 import com.wotingfm.ui.mine.message.notify.view.MsgNotifyFragment;
 import com.wotingfm.ui.mine.main.MineActivity;
@@ -16,7 +17,7 @@ import com.wotingfm.ui.mine.main.MineActivity;
  * 作者：xinLong on 2017/6/5 01:30
  * 邮箱：645700751@qq.com
  */
-public class MsgCenterFragment extends Fragment implements View.OnClickListener {
+public class MsgCenterFragment extends BaseFragment implements View.OnClickListener {
     private View rootView;
     private MsgCenterPresenter presenter;
     private TextView tv_title_notify, tv_time_notify, tv_news_notify, tv_title_group, tv_time_group, tv_news_group;
@@ -58,10 +59,10 @@ public class MsgCenterFragment extends Fragment implements View.OnClickListener 
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.head_left_btn:
-                MineActivity.close();
+                closeFragment();
                 break;
             case R.id.re_notify:
-                MineActivity.open(new MsgNotifyFragment());
+                openFragment(new MsgNotifyFragment());
                 break;
             case R.id.re_group:
                 break;

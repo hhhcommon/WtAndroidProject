@@ -14,6 +14,7 @@ import com.woting.commonplat.widget.LoadFrameLayout;
 import com.wotingfm.R;
 import com.wotingfm.common.config.GlobalStateConfig;
 import com.wotingfm.common.utils.DialogUtils;
+import com.wotingfm.ui.base.basefragment.BaseFragment;
 import com.wotingfm.ui.bean.AlbumsBean;
 import com.wotingfm.ui.bean.MessageEvent;
 import com.wotingfm.ui.mine.main.MineActivity;
@@ -37,7 +38,7 @@ import butterknife.ButterKnife;
  * 邮箱：645700751@qq.com
  */
 
-public class MeSubscribeListFragment extends Fragment implements View.OnClickListener {
+public class MeSubscribeListFragment extends BaseFragment implements View.OnClickListener {
 
     @BindView(R.id.mRecyclerView)
     RecyclerView mRecyclerView;
@@ -86,11 +87,7 @@ public class MeSubscribeListFragment extends Fragment implements View.OnClickLis
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.head_left_btn:
-                if (getActivity() instanceof PlayerActivity) {
-                    PlayerActivity.close();
-                } else if (getActivity() instanceof MineActivity) {
-                    MineActivity.close();
-                }
+              closeFragment();
                 break;
         }
     }
@@ -106,13 +103,7 @@ public class MeSubscribeListFragment extends Fragment implements View.OnClickLis
                 @Override
                 public void click(AlbumsBean singlesBean) {
                     if (singlesBean != null && singlesBean.id != null) {
-                        if (getActivity() instanceof PlayerActivity) {
-                            PlayerActivity.open(AlbumsInfoMainFragment.newInstance(singlesBean.id));
-                        } else if (getActivity() instanceof MineActivity) {
-                            MineActivity.open(AlbumsInfoMainFragment.newInstance(singlesBean.id));
-                        } else if (getActivity() instanceof LookListActivity) {
-                            LookListActivity.open(AlbumsInfoMainFragment.newInstance(singlesBean.id));
-                        }
+                        openFragment(AlbumsInfoMainFragment.newInstance(singlesBean.id));
                     }
 
                 }

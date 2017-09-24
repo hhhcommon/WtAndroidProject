@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import com.wotingfm.R;
+import com.wotingfm.ui.base.basefragment.BaseFragment;
 import com.wotingfm.ui.mine.bluetooth.presenter.EditBlueToothPresenter;
 import com.wotingfm.ui.mine.main.MineActivity;
 
@@ -16,7 +17,7 @@ import com.wotingfm.ui.mine.main.MineActivity;
  * 作者：xinLong on 2017/6/5 01:30
  * 邮箱：645700751@qq.com
  */
-public class EditBlueToothNameFragment extends Fragment implements View.OnClickListener {
+public class EditBlueToothNameFragment extends BaseFragment implements View.OnClickListener {
     private View rootView;
     private EditBlueToothPresenter presenter;
     private EditText et_news;
@@ -49,7 +50,7 @@ public class EditBlueToothNameFragment extends Fragment implements View.OnClickL
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.head_left_btn:
-                MineActivity.close();
+                closeFragment();
                 break;
             case R.id.tv_send:
                 String s = et_news.getText().toString().trim();

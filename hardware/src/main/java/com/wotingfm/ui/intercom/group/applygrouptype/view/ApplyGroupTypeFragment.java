@@ -13,6 +13,7 @@ import android.widget.ImageView;
 
 import com.wotingfm.R;
 import com.wotingfm.common.utils.DialogUtils;
+import com.wotingfm.ui.base.basefragment.BaseFragment;
 import com.wotingfm.ui.intercom.group.applygrouptype.presenter.ApplyGroupTypePresenter;
 import com.wotingfm.ui.intercom.main.view.InterPhoneActivity;
 
@@ -21,7 +22,7 @@ import com.wotingfm.ui.intercom.main.view.InterPhoneActivity;
  * 作者：xinLong on 2017/6/5 01:30
  * 邮箱：645700751@qq.com
  */
-public class ApplyGroupTypeFragment extends Fragment implements View.OnClickListener {
+public class ApplyGroupTypeFragment extends BaseFragment implements View.OnClickListener {
     private View rootView;
     private ApplyGroupTypePresenter presenter;
     private ImageView img_password, img_shen;

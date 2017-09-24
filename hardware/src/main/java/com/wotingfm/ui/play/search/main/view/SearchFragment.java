@@ -18,6 +18,7 @@ import android.widget.TextView;
 
 import com.wotingfm.R;
 import com.wotingfm.ui.base.baseadapter.MyFragmentPagerAdapter;
+import com.wotingfm.ui.base.basefragment.BaseFragment;
 import com.wotingfm.ui.intercom.main.view.InterPhoneActivity;
 import com.wotingfm.ui.mine.main.MineActivity;
 import com.wotingfm.ui.play.find.main.view.LookListActivity;
@@ -36,7 +37,7 @@ import butterknife.ButterKnife;
  * 搜索主页
  */
 
-public class SearchFragment extends Fragment implements View.OnClickListener {
+public class SearchFragment extends BaseFragment implements View.OnClickListener {
 
     @BindView(R.id.et_searchlike)
     EditText etSearchlike;
@@ -183,21 +184,6 @@ public class SearchFragment extends Fragment implements View.OnClickListener {
         }
     }
 
-    /**
-     * 关闭界面
-     */
-    public void closeFragment() {
-        if (this.getActivity() instanceof PlayerActivity) {
-            PlayerActivity.close();
-        } else if (this.getActivity() instanceof MineActivity) {
-            MineActivity.close();
-        } else if (this.getActivity() instanceof InterPhoneActivity) {
-            InterPhoneActivity.close();
-        } else if (this.getActivity() instanceof LookListActivity) {
-            LookListActivity.close();
-        }
-    }
-
     // ViewPager 监听事件
     public class MyOnPageChangeListener implements ViewPager.OnPageChangeListener {
         @Override
@@ -229,19 +215,19 @@ public class SearchFragment extends Fragment implements View.OnClickListener {
         switch (code) {
             case 0:
                 tv_search_album.setTextColor(Color.parseColor("#ffffff"));
-                tv_search_album.setBackground(getResources().getDrawable(R.drawable.background_circle_orange));
+                tv_search_album.setBackgroundResource(R.drawable.background_circle_orange);
                 break;
             case 1:
                 tv_search_program.setTextColor(Color.parseColor("#ffffff"));
-                tv_search_program.setBackground(getResources().getDrawable(R.drawable.background_circle_orange));
+                tv_search_program.setBackgroundResource(R.drawable.background_circle_orange);
                 break;
             case 2:
                 tv_search_audio.setTextColor(Color.parseColor("#ffffff"));
-                tv_search_audio.setBackground(getResources().getDrawable(R.drawable.background_circle_orange));
+                tv_search_audio.setBackgroundResource(R.drawable.background_circle_orange);
                 break;
             case 3:
                 tv_search_anchor.setTextColor(Color.parseColor("#ffffff"));
-                tv_search_anchor.setBackground(getResources().getDrawable(R.drawable.background_circle_orange));
+                tv_search_anchor.setBackgroundResource(R.drawable.background_circle_orange);
                 break;
         }
         viewPager.setCurrentItem(code);

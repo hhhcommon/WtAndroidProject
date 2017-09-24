@@ -15,6 +15,7 @@ import com.wotingfm.R;
 import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.common.utils.StatusBarUtil;
+import com.wotingfm.ui.base.basefragment.BaseFragment;
 import com.wotingfm.ui.mine.main.MineActivity;
 
 /**
@@ -22,7 +23,7 @@ import com.wotingfm.ui.mine.main.MineActivity;
  * 作者：xinLong on 2017/5/16 14:28
  * 邮箱：645700751@qq.com
  */
-public class MessageSettingFragment extends Fragment implements View.OnClickListener {
+public class MessageSettingFragment extends BaseFragment implements View.OnClickListener {
     private View rootView;
     private ImageView image_msg_set;
     private boolean b = true;
@@ -71,7 +72,7 @@ public class MessageSettingFragment extends Fragment implements View.OnClickList
                 msgSet();
                 break;
             case R.id.head_left_btn:
-                MineActivity.close();
+                closeFragment();
                 break;
 
         }

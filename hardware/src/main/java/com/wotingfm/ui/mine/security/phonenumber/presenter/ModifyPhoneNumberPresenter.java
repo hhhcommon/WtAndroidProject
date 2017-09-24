@@ -135,7 +135,7 @@ public class ModifyPhoneNumberPresenter {
                 model.savePhoneNumber(num);
                 // 修改上层界面数据
                 activity.setResult(true);
-                MineActivity.close();
+                activity.closeFragment();
                 ToastUtils.show_always(activity.getActivity(), "手机号修改成功");
             } else {
                 String msg = js.getString("msg");

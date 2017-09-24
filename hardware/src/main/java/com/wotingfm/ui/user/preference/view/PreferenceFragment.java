@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.wotingfm.R;
 import com.wotingfm.common.utils.DialogUtils;
+import com.wotingfm.ui.base.basefragment.BaseFragment;
 import com.wotingfm.ui.mine.main.MineActivity;
 import com.wotingfm.ui.user.logo.LogoActivity;
 import com.wotingfm.ui.user.preference.presenter.PreferencePresenter;
@@ -20,7 +21,7 @@ import com.wotingfm.ui.user.preference.presenter.PreferencePresenter;
  * 作者：xinLong on 2017/6/4 22:16
  * 邮箱：645700751@qq.com
  */
-public class PreferenceFragment extends Fragment implements View.OnClickListener {
+public class PreferenceFragment extends BaseFragment implements View.OnClickListener {
 
     private TextView tv_pass, tv_enter, tv_RAWY, tv_FYKSJ, tv_ZZS, tv_XSSH, tv_TGSTXS, tv_YQQ, tv_XJ;
     private ImageView left;
@@ -138,9 +139,9 @@ public class PreferenceFragment extends Fragment implements View.OnClickListener
      */
     public void close() {
         if (fromType.equals("person")) {
-            MineActivity.close();
+            closeFragment();
         } else if (fromType.equals("login")) {
-            LogoActivity.close();
+            closeFragment();
             LogoActivity.closeActivity();
         }
     }

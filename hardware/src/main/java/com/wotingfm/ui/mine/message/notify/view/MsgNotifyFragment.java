@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.woting.commonplat.widget.TipView;
 import com.wotingfm.R;
 import com.wotingfm.common.utils.DialogUtils;
+import com.wotingfm.ui.base.basefragment.BaseFragment;
 import com.wotingfm.ui.mine.main.MineActivity;
 import com.wotingfm.ui.mine.message.notify.adapter.NotifyMsgAdapter;
 import com.wotingfm.ui.mine.message.notify.model.Msg;
@@ -26,7 +27,7 @@ import java.util.List;
  * 作者：xinLong on 2017/6/5 01:30
  * 邮箱：645700751@qq.com
  */
-public class MsgNotifyFragment extends Fragment implements NotifyMsgAdapter.IonSlidingViewClickListener, View.OnClickListener {
+public class MsgNotifyFragment extends BaseFragment implements NotifyMsgAdapter.IonSlidingViewClickListener, View.OnClickListener {
     private View rootView;
     private MsgNotifyPresenter presenter;
     private RecyclerView mRecyclerView;
@@ -59,7 +60,7 @@ public class MsgNotifyFragment extends Fragment implements NotifyMsgAdapter.IonS
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.head_left_btn:
-                MineActivity.close();
+                closeFragment();
                 break;
         }
     }

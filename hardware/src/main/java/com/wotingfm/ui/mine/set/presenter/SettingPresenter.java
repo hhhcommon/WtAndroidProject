@@ -88,7 +88,7 @@ public class SettingPresenter {
         activity.setCloseView(false);
         // 发送注销登录广播通知所有界面
         activity.getActivity().sendBroadcast(new Intent(BroadcastConstants.CANCEL));
-        MineActivity.close();
+        activity.closeFragment();
     }
 
     // 启动统计缓存的线程

@@ -20,6 +20,7 @@ import com.wotingfm.R;
 import com.wotingfm.common.utils.DialogUtils;
 import com.wotingfm.common.utils.GlideUtils;
 import com.wotingfm.common.view.myscrollview.ObservableScrollView;
+import com.wotingfm.ui.base.basefragment.BaseFragment;
 import com.wotingfm.ui.base.baseinterface.ScrollViewListener;
 import com.wotingfm.ui.intercom.group.groupnews.noadd.adapter.GroupNewsPersonForNoAddAdapter;
 import com.wotingfm.ui.intercom.group.groupnews.noadd.presenter.GroupNewsForNoAddPresenter;
@@ -33,7 +34,7 @@ import java.util.List;
  * 作者：xinLong on 2017/6/5 01:30
  * 邮箱：645700751@qq.com
  */
-public class GroupNewsForNoAddFragment extends Fragment implements View.OnClickListener, TipView.TipViewClick, ScrollViewListener {
+public class GroupNewsForNoAddFragment extends BaseFragment implements View.OnClickListener, TipView.TipViewClick, ScrollViewListener {
     private View rootView;
     private TextView tv_groupName, tv_groupNumber, tv_address, tv_groupIntroduce, tv_number, tv_send, tvTitle;
     private RelativeLayout re_groupIntroduce, re_groupNumber;

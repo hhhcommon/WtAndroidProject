@@ -17,6 +17,7 @@ import com.wotingfm.R;
 import com.wotingfm.common.config.GlobalStateConfig;
 import com.wotingfm.common.net.RetrofitUtils;
 import com.wotingfm.ui.adapter.radioAdapter.RadioAdapter;
+import com.wotingfm.ui.base.basefragment.BaseFragment;
 import com.wotingfm.ui.bean.ChannelsBean;
 import com.wotingfm.ui.bean.MessageEvent;
 import com.wotingfm.ui.intercom.main.view.InterPhoneActivity;
@@ -39,7 +40,7 @@ import rx.schedulers.Schedulers;
  * Created by amine on 2017/7/6.
  */
 
-public class ProvincesAndCitiesListRadioFragment extends Fragment implements View.OnClickListener,OnLoadMoreListener, OnRefreshListener {
+public class ProvincesAndCitiesListRadioFragment extends BaseFragment implements View.OnClickListener,OnLoadMoreListener, OnRefreshListener {
 
     @BindView(R.id.mRecyclerView)
     ARecyclerView mRecyclerView;
@@ -192,18 +193,5 @@ public class ProvincesAndCitiesListRadioFragment extends Fragment implements Vie
         GlobalStateConfig.activityA = "A";
         EventBus.getDefault().post(new MessageEvent("one"));
         EventBus.getDefault().post(new MessageEvent(channelsBean, 1));
-    }
-
-    // 关闭页面
-    private void closeFragment() {
-        if (getActivity() instanceof PlayerActivity) {
-            PlayerActivity.close();
-        } else if (getActivity() instanceof MineActivity) {
-            MineActivity.close();
-        } else if (getActivity() instanceof LookListActivity) {
-            LookListActivity.close();
-        } else if (getActivity() instanceof InterPhoneActivity) {
-            InterPhoneActivity.close();
-        }
     }
 }

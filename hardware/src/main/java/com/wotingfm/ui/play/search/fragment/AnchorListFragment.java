@@ -16,6 +16,7 @@ import com.woting.commonplat.amine.OnRefreshListener;
 import com.woting.commonplat.widget.LoadFrameLayout;
 import com.wotingfm.R;
 import com.wotingfm.common.net.RetrofitUtils;
+import com.wotingfm.ui.base.basefragment.BaseFragment;
 import com.wotingfm.ui.bean.SerchList;
 import com.wotingfm.ui.bean.UserBean;
 import com.wotingfm.ui.intercom.main.view.InterPhoneActivity;
@@ -38,7 +39,7 @@ import rx.schedulers.Schedulers;
  * 主播列表
  */
 
-public class AnchorListFragment extends Fragment implements View.OnClickListener, OnLoadMoreListener, OnRefreshListener {
+public class AnchorListFragment extends BaseFragment implements View.OnClickListener, OnLoadMoreListener, OnRefreshListener {
     @BindView(R.id.mRecyclerView)
     ARecyclerView mRecyclerView;
     @BindView(R.id.loadLayout)
@@ -198,20 +199,4 @@ public class AnchorListFragment extends Fragment implements View.OnClickListener
 
     }
 
-    /**
-     * 界面
-     *
-     * @param fragment
-     */
-    public void openFragment(Fragment fragment) {
-        if (this.getActivity() instanceof PlayerActivity) {
-            PlayerActivity.open(fragment);
-        } else if (this.getActivity() instanceof MineActivity) {
-            MineActivity.open(fragment);
-        } else if (this.getActivity() instanceof InterPhoneActivity) {
-            InterPhoneActivity.open(fragment);
-        } else if (this.getActivity() instanceof LookListActivity) {
-            LookListActivity.open(fragment);
-        }
-    }
 }

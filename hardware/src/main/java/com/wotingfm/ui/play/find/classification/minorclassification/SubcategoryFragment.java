@@ -16,6 +16,7 @@ import com.wotingfm.R;
 import com.wotingfm.common.config.GlobalStateConfig;
 import com.wotingfm.common.net.RetrofitUtils;
 import com.wotingfm.ui.adapter.albumsAdapter.AlbumsAdapter;
+import com.wotingfm.ui.base.basefragment.BaseFragment;
 import com.wotingfm.ui.bean.AlbumsBean;
 import com.wotingfm.ui.bean.ChannelsBean;
 import com.wotingfm.ui.bean.MessageEvent;
@@ -40,7 +41,7 @@ import rx.schedulers.Schedulers;
  * 子分类
  */
 
-public class SubcategoryFragment extends Fragment implements View.OnClickListener, OnLoadMoreListener, OnRefreshListener {
+public class SubcategoryFragment extends BaseFragment implements View.OnClickListener, OnLoadMoreListener, OnRefreshListener {
 
     @BindView(R.id.mRecyclerView)
     ARecyclerView mRecyclerView;
@@ -102,13 +103,7 @@ public class SubcategoryFragment extends Fragment implements View.OnClickListene
         mAdapter.setPlayerClick(new AlbumsAdapter.PlayerClick() {
             @Override
             public void clickAlbums(AlbumsBean singlesBean) {
-                if (getActivity() instanceof PlayerActivity) {
-                    PlayerActivity.open(AlbumsInfoMainFragment.newInstance(singlesBean.id));
-                } else if (getActivity() instanceof MineActivity) {
-                    MineActivity.open(AlbumsInfoMainFragment.newInstance(singlesBean.id));
-                } else if (getActivity() instanceof LookListActivity) {
-                    LookListActivity.open(AlbumsInfoMainFragment.newInstance(singlesBean.id));
-                }
+                openFragment(AlbumsInfoMainFragment.newInstance(singlesBean.id));
             }
 
             @Override

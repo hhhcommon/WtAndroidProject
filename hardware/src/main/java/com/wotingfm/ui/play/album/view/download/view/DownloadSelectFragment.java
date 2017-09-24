@@ -20,6 +20,7 @@ import com.woting.commonplat.widget.LoadFrameLayout;
 import com.wotingfm.R;
 import com.wotingfm.common.net.RetrofitUtils;
 import com.wotingfm.common.utils.DialogUtils;
+import com.wotingfm.ui.base.basefragment.BaseFragment;
 import com.wotingfm.ui.play.album.view.download.adapter.DownloadSelectAdapter;
 import com.wotingfm.ui.bean.Player;
 import com.wotingfm.ui.intercom.main.view.InterPhoneActivity;
@@ -42,7 +43,7 @@ import rx.schedulers.Schedulers;
  * 节目下载选择页面
  */
 
-public class DownloadSelectFragment extends Fragment implements View.OnClickListener, OnLoadMoreListener, OnRefreshListener {
+public class DownloadSelectFragment extends BaseFragment implements View.OnClickListener, OnLoadMoreListener, OnRefreshListener {
     @BindView(R.id.tvCancel)
     TextView tvCancel;
     @BindView(R.id.tvDownload)
@@ -281,20 +282,7 @@ public class DownloadSelectFragment extends Fragment implements View.OnClickList
         }
     }
 
-    /**
-     * 关闭界面
-     */
-    public void closeFragment() {
-        if (this.getActivity() instanceof PlayerActivity) {
-            PlayerActivity.close();
-        } else if (this.getActivity() instanceof MineActivity) {
-            MineActivity.close();
-        } else if (this.getActivity() instanceof InterPhoneActivity) {
-            InterPhoneActivity.close();
-        } else if (this.getActivity() instanceof LookListActivity) {
-            LookListActivity.close();
-        }
-    }
+
 
     public void showContentView() {
         loadLayout.showContentView();

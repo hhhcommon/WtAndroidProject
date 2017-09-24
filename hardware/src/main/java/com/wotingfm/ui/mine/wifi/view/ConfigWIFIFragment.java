@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
 import com.wotingfm.R;
+import com.wotingfm.ui.base.basefragment.BaseFragment;
 import com.wotingfm.ui.mine.main.MineActivity;
 import com.wotingfm.ui.mine.wifi.presenter.ConfigWIFIPresenter;
 
@@ -17,7 +18,7 @@ import com.wotingfm.ui.mine.wifi.presenter.ConfigWIFIPresenter;
  * 作者：xinLong on 2017/5/16 14:28
  * 邮箱：645700751@qq.com
  */
-public class ConfigWIFIFragment extends Fragment implements View.OnClickListener {
+public class ConfigWIFIFragment extends BaseFragment implements View.OnClickListener {
     private View rootView;
     private EditText editPsw;
     private ConfigWIFIPresenter presenter;
@@ -50,10 +51,10 @@ public class ConfigWIFIFragment extends Fragment implements View.OnClickListener
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.head_left_btn:// 返回
-                MineActivity.close();
+                closeFragment();
                 break;
             case R.id.btn_cancel:// 取消连接
-                MineActivity.close();
+                closeFragment();
                 break;
             case R.id.btn_confirm:// 连接
                 String res = editPsw.getText().toString().trim();

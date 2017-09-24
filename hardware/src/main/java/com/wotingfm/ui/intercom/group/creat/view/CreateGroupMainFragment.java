@@ -16,6 +16,7 @@ import android.widget.TextView;
 import com.wotingfm.R;
 import com.wotingfm.common.utils.DialogUtils;
 import com.wotingfm.common.utils.GlideUtils;
+import com.wotingfm.ui.base.basefragment.BaseFragment;
 import com.wotingfm.ui.intercom.group.creat.presenter.CreateGroupMainPresenter;
 import com.wotingfm.ui.intercom.main.view.InterPhoneActivity;
 
@@ -24,7 +25,7 @@ import com.wotingfm.ui.intercom.main.view.InterPhoneActivity;
  * 作者：xinLong on 2017/6/5 01:30
  * 邮箱：645700751@qq.com
  */
-public class CreateGroupMainFragment extends Fragment implements View.OnClickListener {
+public class CreateGroupMainFragment extends BaseFragment implements View.OnClickListener {
     private View rootView;
     private ImageView img_url, img_password, img_shen;
     private EditText et_phoneNumber, et_password;

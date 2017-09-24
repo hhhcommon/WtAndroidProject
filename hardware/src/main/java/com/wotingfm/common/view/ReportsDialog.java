@@ -3,6 +3,7 @@ package com.wotingfm.common.view;
 import android.app.Activity;
 import android.app.Dialog;
 import android.support.annotation.NonNull;
+import android.support.v4.app.Fragment;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,25 +12,20 @@ import android.widget.TextView;
 import com.wotingfm.R;
 import com.wotingfm.ui.intercom.main.view.InterPhoneActivity;
 import com.wotingfm.ui.mine.main.MineActivity;
+import com.wotingfm.ui.play.find.main.view.LookListActivity;
+import com.wotingfm.ui.play.live.LiveRoomActivity;
 import com.wotingfm.ui.play.main.PlayerActivity;
 import com.wotingfm.ui.play.report.view.ReportFragment;
 
 //举报个人dialog
 public class ReportsDialog extends Dialog implements View.OnClickListener {
 
+    private Activity context;
     private TextView tvClose, tvReport;
-    private PlayerActivity activity;
-    private InterPhoneActivity interPhoneActivity;
-    private MineActivity activityMain;
 
-    public ReportsDialog(@NonNull Activity context) {
-        super(context, R.style.BottomDialog);
-        if (context instanceof PlayerActivity)
-            activity = (PlayerActivity) context;
-        else if (context instanceof MineActivity)
-            this.activityMain = (MineActivity) context;
-        else if (context instanceof InterPhoneActivity)
-            this.interPhoneActivity = (InterPhoneActivity) context;
+    public ReportsDialog(@NonNull Activity contexts) {
+        super(contexts, R.style.BottomDialog);
+        context=contexts;
         setContentView(R.layout.reports_dialog);
         getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         getWindow().setGravity(Gravity.BOTTOM);
@@ -57,13 +53,28 @@ public class ReportsDialog extends Dialog implements View.OnClickListener {
                 break;
             case R.id.tvReport:
                 dismiss();
-                if (activity != null)
-                    activity.open(ReportFragment.newInstance(userId, "REPORT_USER"));
-                else if (activityMain != null)
-                    activityMain.open(ReportFragment.newInstance(userId, "REPORT_USER"));
-                else if (interPhoneActivity != null)
-                    interPhoneActivity.open(ReportFragment.newInstance(userId, "REPORT_USER"));
+                openFragment(ReportFragment.newInstance(userId, "REPORT_USER"));
                 break;
+        }
+    }
+
+
+    public void openFragment(Fragment fragment) {
+        if (context instanceof PlayerActivity) {
+            PlayerActivity playerActivity = (PlayerActivity) context;
+            playerActivity.open(fragment);
+        } else if (context instanceof MineActivity) {
+            MineActivity mineActivity = (MineActivity) context;
+            mineActivity.open(fragment);
+        } else if (context instanceof InterPhoneActivity) {
+            InterPhoneActivity interPhoneActivity = (InterPhoneActivity) context;
+            interPhoneActivity.open(fragment);
+        } else if (context instanceof LookListActivity) {
+            LookListActivity lookListActivity = (LookListActivity) context;
+            lookListActivity.open(fragment);
+        }else if (context instanceof LiveRoomActivity) {
+            LiveRoomActivity liveRoomActivity = (LiveRoomActivity) context;
+            liveRoomActivity.open(fragment);
         }
     }
 }

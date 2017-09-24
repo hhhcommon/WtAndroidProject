@@ -23,6 +23,7 @@ import com.wotingfm.common.utils.GlideUtils;
 import com.wotingfm.common.view.myscrollview.ObservableNestedScrollView;
 import com.wotingfm.common.view.viewpager.CustomViewPager;
 import com.wotingfm.ui.base.baseadapter.MyFragmentPagerAdapter;
+import com.wotingfm.ui.base.basefragment.BaseFragment;
 import com.wotingfm.ui.base.baseinterface.NestedScrollViewListener;
 import com.wotingfm.ui.bean.AlbumInfo;
 import com.wotingfm.ui.bean.MessageEvent;
@@ -47,7 +48,7 @@ import jp.wasabeef.glide.transformations.BlurTransformation;
  * 专辑详情
  */
 
-public class AlbumsInfoMainFragment extends Fragment implements View.OnClickListener, NestedScrollViewListener {
+public class AlbumsInfoMainFragment extends BaseFragment implements View.OnClickListener, NestedScrollViewListener {
 
 
     @BindView(R.id.loadLayout)
@@ -170,12 +171,12 @@ public class AlbumsInfoMainFragment extends Fragment implements View.OnClickList
             tvFollow.setText("已订阅(" + s.data.album.subscriptions_count + ")");
             tvFollow.setTextColor(Color.parseColor("#50ffffff"));
             img_sub.setImageResource(R.mipmap.icon_subscription_s);
-            lin_follow.setBackground(getResources().getDrawable(R.drawable.anchor_personal));
+            lin_follow.setBackgroundResource(R.drawable.anchor_personal);
         } else {
             tvFollow.setText("订阅(" + s.data.album.subscriptions_count + ")");
             tvFollow.setTextColor(Color.parseColor("#ffffff"));
             img_sub.setImageResource(R.mipmap.icon_subscription_n);
-            lin_follow.setBackground(getResources().getDrawable(R.drawable.anchor_personal_n));
+            lin_follow.setBackgroundResource(R.drawable.anchor_personal_n);
         }
     }
 
@@ -266,19 +267,6 @@ public class AlbumsInfoMainFragment extends Fragment implements View.OnClickList
             tvTitle.setTextColor(Color.argb((int) 255, 22, 24, 26));
             ivBack.setImageResource(R.drawable.icon_back_black);
             ivMore.setImageResource(R.drawable.icon_chat_other_black);
-        }
-    }
-
-    // 关闭页面
-    private void closeFragment() {
-        if (getActivity() instanceof PlayerActivity) {
-            PlayerActivity.close();
-        } else if (getActivity() instanceof MineActivity) {
-            MineActivity.close();
-        } else if (getActivity() instanceof LookListActivity) {
-            LookListActivity.close();
-        } else if (getActivity() instanceof InterPhoneActivity) {
-            InterPhoneActivity.close();
         }
     }
 

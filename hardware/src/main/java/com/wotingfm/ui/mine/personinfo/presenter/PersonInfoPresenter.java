@@ -150,7 +150,7 @@ public class PersonInfoPresenter {
         Bundle bundle = new Bundle();
         bundle.putInt("type", 1);
         fragment.setArguments(bundle);
-        MineActivity.open(fragment);
+        activity.openFragment(fragment);
         fragment.setResultListener(new EditUserFragment.ResultListener() {
             @Override
             public void resultListener(boolean b, String name) {
@@ -171,7 +171,7 @@ public class PersonInfoPresenter {
         Bundle bundle = new Bundle();
         bundle.putInt("type", 2);
         fragment.setArguments(bundle);
-        MineActivity.open(fragment);
+        activity.openFragment(fragment);
         fragment.setResultListener(new EditUserFragment.ResultListener() {
             @Override
             public void resultListener(boolean b, String name) {
@@ -192,7 +192,7 @@ public class PersonInfoPresenter {
         Bundle bundle = new Bundle();
         bundle.putInt("type", 3);
         fragment.setArguments(bundle);
-        MineActivity.open(fragment);
+        activity.openFragment(fragment);
         fragment.setResultListener(new EditUserFragment.ResultListener() {
             @Override
             public void resultListener(boolean b, String name) {

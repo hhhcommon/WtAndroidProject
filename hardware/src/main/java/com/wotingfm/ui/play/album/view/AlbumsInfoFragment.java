@@ -2,7 +2,6 @@ package com.wotingfm.ui.play.album.view;
 
 import android.app.Dialog;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +17,7 @@ import com.wotingfm.common.utils.DialogUtils;
 import com.wotingfm.common.utils.GlideUtils;
 import com.wotingfm.common.utils.T;
 import com.wotingfm.common.view.FlowLayout;
+import com.wotingfm.ui.base.basefragment.BaseFragment;
 import com.wotingfm.ui.bean.AlbumInfo;
 import com.wotingfm.ui.bean.BaseResult;
 import com.wotingfm.ui.user.logo.LogoActivity;
@@ -30,11 +30,10 @@ import rx.schedulers.Schedulers;
 
 
 /**
- * Created by amine on 2017/6/14.
  * 专辑详情。，详情fragment
  */
 
-public class AlbumsInfoFragment extends Fragment implements View.OnClickListener {
+public class AlbumsInfoFragment extends BaseFragment implements View.OnClickListener {
 
     @BindView(R.id.labelContent)
     LinearLayout labelContent;

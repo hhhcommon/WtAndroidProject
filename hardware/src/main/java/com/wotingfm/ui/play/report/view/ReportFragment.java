@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.woting.commonplat.widget.LoadFrameLayout;
 import com.wotingfm.R;
+import com.wotingfm.ui.base.basefragment.BaseFragment;
 import com.wotingfm.ui.play.report.adapter.ReportAdapter;
 import com.wotingfm.ui.play.report.model.Reports;
 import com.wotingfm.ui.play.report.presenter.ReportPresenter;
@@ -27,7 +28,7 @@ import butterknife.ButterKnife;
  * 作者：xinLong on 2017/5/16 14:28
  * 邮箱：645700751@qq.com
  */
-public class ReportFragment extends Fragment implements View.OnClickListener {
+public class ReportFragment extends BaseFragment implements View.OnClickListener {
 
     @BindView(R.id.edContent)
     EditText edContent;
@@ -109,7 +110,7 @@ public class ReportFragment extends Fragment implements View.OnClickListener {
                 presenter.send(content);
                 break;
             case R.id.head_left_btn:
-                presenter.close();
+                closeFragment();
                 break;
         }
     }

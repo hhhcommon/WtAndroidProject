@@ -51,7 +51,7 @@ public class EditUserPresenter {
         if (checkData(name, introduce)) {
             if (GlobalStateConfig.test) {
                 setResult(name, introduce);
-                MineActivity.close();
+                activity.closeFragment();
             } else {
                 if (GlobalNetWorkConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
                     activity.dialogShow();
@@ -93,7 +93,7 @@ public class EditUserPresenter {
             Log.e("ret", String.valueOf(ret));
             if (ret == 0) {
                 setResult(name, introduce);
-                MineActivity.close();
+                activity.closeFragment();
             } else {
                 ToastUtils.show_always(activity.getActivity(), "修改失败，请稍后再试！");
             }

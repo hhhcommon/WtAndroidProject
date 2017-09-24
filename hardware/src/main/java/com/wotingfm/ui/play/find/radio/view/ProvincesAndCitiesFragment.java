@@ -13,6 +13,7 @@ import com.woting.commonplat.widget.LoadFrameLayout;
 import com.wotingfm.R;
 import com.wotingfm.common.net.RetrofitUtils;
 import com.wotingfm.ui.adapter.radioAdapter.ProvincesAdapter;
+import com.wotingfm.ui.base.basefragment.BaseFragment;
 import com.wotingfm.ui.bean.Provinces;
 import com.wotingfm.ui.intercom.main.view.InterPhoneActivity;
 import com.wotingfm.ui.mine.main.MineActivity;
@@ -31,7 +32,7 @@ import rx.schedulers.Schedulers;
 /**
  * 省市列表
  */
-public class ProvincesAndCitiesFragment extends Fragment implements View.OnClickListener {
+public class ProvincesAndCitiesFragment extends BaseFragment implements View.OnClickListener {
 
     @BindView(R.id.mRecyclerView)
     RecyclerView mRecyclerView;
@@ -130,36 +131,6 @@ public class ProvincesAndCitiesFragment extends Fragment implements View.OnClick
             case R.id.head_left_btn:
                 closeFragment();
                 break;
-        }
-    }
-
-    // 关闭页面
-    private void closeFragment() {
-        if (getActivity() instanceof PlayerActivity) {
-            PlayerActivity.close();
-        } else if (getActivity() instanceof MineActivity) {
-            MineActivity.close();
-        } else if (getActivity() instanceof LookListActivity) {
-            LookListActivity.close();
-        } else if (getActivity() instanceof InterPhoneActivity) {
-            InterPhoneActivity.close();
-        }
-    }
-
-    /**
-     * 关闭界面
-     *
-     * @param fragment
-     */
-    public void openFragment(Fragment fragment) {
-        if (getActivity() instanceof PlayerActivity) {
-            PlayerActivity.open(fragment);
-        } else if (getActivity() instanceof MineActivity) {
-            MineActivity.open(fragment);
-        } else if (getActivity() instanceof InterPhoneActivity) {
-            InterPhoneActivity.open(fragment);
-        } else if (getActivity() instanceof LookListActivity) {
-            LookListActivity.open(fragment);
         }
     }
 

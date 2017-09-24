@@ -162,7 +162,7 @@ public class BlueToothPresenter {
      */
     public void upDataName() {
         EditBlueToothNameFragment fragment = new EditBlueToothNameFragment();
-        MineActivity.open(fragment);
+        activity.openFragment(fragment);
         fragment.setResultListener(new EditBlueToothNameFragment.ResultListener() {
             @Override
             public void resultListener(boolean type, String name) {

@@ -9,6 +9,9 @@ import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -18,6 +21,7 @@ import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -79,16 +83,28 @@ import com.woting.commonplat.nim.permission.util.MPermissionUtil;
 import com.woting.commonplat.nim.video.NEVideoView;
 import com.woting.commonplat.nim.video.VideoPlayer;
 import com.woting.commonplat.nim.video.constant.VideoConstant;
+import com.woting.commonplat.utils.SequenceUUID;
 import com.wotingfm.R;
+import com.wotingfm.common.application.BSApplication;
+import com.wotingfm.common.net.RetrofitUtils;
 import com.wotingfm.common.utils.DialogUtils;
 import com.wotingfm.common.utils.T;
+import com.wotingfm.ui.bean.AnchorInfo;
 import com.wotingfm.ui.bean.LiveBean;
+import com.wotingfm.ui.bean.SinglesBase;
+import com.wotingfm.ui.intercom.scanning.activity.CaptureFragment;
+import com.wotingfm.ui.play.anchor.model.AnchorPersonalCenterModel;
 import com.wotingfm.ui.play.find.main.view.*;
+import com.wotingfm.ui.play.main.view.MenuDialog;
 import com.wotingfm.ui.play.search.main.view.SearchFragment;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
+import rx.schedulers.Schedulers;
 
 /**
  * Created by zhukkun on 1/5/17.
@@ -102,10 +118,7 @@ public class LiveRoomActivity extends LivePlayerBaseActivity implements VideoPla
     private NEVideoView videoView;
     private View closeBtn;
     private ImageButton likeBtn;
-    private ViewGroup liveFinishLayout;
-    private View liveFinishBtn;
-    private TextView finishTipText;
-    private TextView finishNameText;
+    private View liveFinishLayout;
     private TextView preparedText;
     private Button sendGiftBtn;
     private ImageButton switchBtn;
@@ -143,6 +156,10 @@ public class LiveRoomActivity extends LivePlayerBaseActivity implements VideoPla
     private AVChatCameraCapturer mVideoCapturer;
     private Dialog dialog;
     private View tv_edit;
+    private View lin_anchor;
+    private AnchorInfo anchor;
+    private static LiveRoomActivity context;
+    private TextView tv_close;
 
 
     /**
@@ -154,6 +171,7 @@ public class LiveRoomActivity extends LivePlayerBaseActivity implements VideoPla
         Intent intent = new Intent();
         intent.setClass(context, LiveRoomActivity.class);
         intent.putExtra(EXTRA_ROOM_ID, db.live_number);
+        intent.putExtra("anchor_id", db.owner.id);
         intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
         context.startActivity(intent);
     }
@@ -161,6 +179,7 @@ public class LiveRoomActivity extends LivePlayerBaseActivity implements VideoPla
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        context=this;
         registerAudienceObservers(true);
         findViews();
 //        EDialog();
@@ -168,6 +187,7 @@ public class LiveRoomActivity extends LivePlayerBaseActivity implements VideoPla
         updateRoomUI(true);
         enterRoom();
         requestBasicPermission(); // 申请APP基本权限.同意之后，请求拉流
+
     }
 
     private void registerAudienceObservers(boolean register) {
@@ -185,9 +205,9 @@ public class LiveRoomActivity extends LivePlayerBaseActivity implements VideoPla
 //        interactionBtn.setVisibility(View.GONE);
         likeBtn = findView(R.id.like_btn);
         switchBtn = findView(R.id.switch_btn);
-
+        lin_anchor = findViewById(R.id.lin_anchor);
         tv_edit = findView(R.id.tv_edit);
-
+        lin_anchor.setOnClickListener(buttonClickListener);
         tv_edit.setOnClickListener(buttonClickListener);
         closeBtn.setOnClickListener(buttonClickListener);
 //        interactionBtn.setOnClickListener(buttonClickListener);
@@ -214,13 +234,10 @@ public class LiveRoomActivity extends LivePlayerBaseActivity implements VideoPla
 //        audioInteractionLinkBtn.setOnClickListener(buttonClickListener);
 
         // 直播结束布局
-        liveFinishLayout = findView(R.id.live_finish_layout);
-        liveFinishBtn = findView(R.id.finish_close_btn);
-        finishTipText = findView(R.id.finish_tip_text);
-        finishNameText = findView(R.id.finish_master_name);
-        finishTipText.setText(R.string.loading);
+        liveFinishLayout = findView(R.id.re_finish);
+        tv_close = (TextView)findView(R.id.tv_close);
 
-        liveFinishBtn.setOnClickListener(buttonClickListener);
+        tv_close.setOnClickListener(buttonClickListener);
 
         preparedText = findView(R.id.prepared_text);
     }
@@ -231,6 +248,8 @@ public class LiveRoomActivity extends LivePlayerBaseActivity implements VideoPla
         super.parseIntent();
 //        roomId = getIntent().getStringExtra(EXTRA_ROOM_ID);
         roomId = "11352015";
+        String anchor_id = getIntent().getStringExtra("anchor_id");
+        getAnchorInfo(anchor_id);
     }
 
     @Override
@@ -397,13 +416,14 @@ public class LiveRoomActivity extends LivePlayerBaseActivity implements VideoPla
                     masterNick = result.getNick();
                     String nick = TextUtils.isEmpty(masterNick) ? result.getAccount() : masterNick;
                     masterNameText.setText(nick);
-                    finishNameText.setText(nick);
+//                    finishNameText.setText(nick);
                 }
             }
         });
     }
 
 
+    private AnchorDialog anchorDialog;
     private View.OnClickListener buttonClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
@@ -414,7 +434,7 @@ public class LiveRoomActivity extends LivePlayerBaseActivity implements VideoPla
                 case R.id.tv_edit:
                     com.woting.commonplat.nim.entertainment.activity.EditDialog.dialogShow();
                     break;
-                case R.id.finish_close_btn:
+                case R.id.tv_close:
                     NIMClient.getService(ChatRoomService.class).exitChatRoom(roomId);
                     clearChatRoom();
                     break;
@@ -455,6 +475,14 @@ public class LiveRoomActivity extends LivePlayerBaseActivity implements VideoPla
                 case R.id.audio_mode_link:
                     micApplyEnum = MicApplyEnum.AUDIO;
                     requestLivePermission();
+                    break;
+                case R.id.lin_anchor:
+                    if (anchorDialog == null) {
+                        anchorDialog = new AnchorDialog(context);
+                    }
+                    if (anchor != null)
+                        anchorDialog.setMenuData(anchor);
+                    anchorDialog.show();
                     break;
             }
         }
@@ -1292,7 +1320,6 @@ public class LiveRoomActivity extends LivePlayerBaseActivity implements VideoPla
     // 显示直播已结束布局
     private void showFinishLayout() {
         liveFinishLayout.setVisibility(View.VISIBLE);
-        finishTipText.setText(R.string.live_finish);
         inputPanel.collapse(true);
     }
 
@@ -1318,5 +1345,50 @@ public class LiveRoomActivity extends LivePlayerBaseActivity implements VideoPla
         if (dialog != null) dialog.dismiss();
     }
 
+    // 执行请求
+    private void getAnchorInfo(String uid) {
+        RetrofitUtils.getInstance().getAnchorInfo(uid)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Action1<AnchorInfo>() {
+                    @Override
+                    public void call(AnchorInfo o) {
+                        try {
+                            Log.e("获取主播信息返回数据", new GsonBuilder().serializeNulls().create().toJson(o));
+                            anchor = (AnchorInfo) o;
+                            //填充UI
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }, new Action1<Throwable>() {
+                    @Override
+                    public void call(Throwable throwable) {
+                        throwable.printStackTrace();
+                    }
+                });
+    }
+
+    /**
+     * 打开新的 Fragment
+     */
+    public static void open(Fragment frg) {
+        context.getSupportFragmentManager().beginTransaction()
+                .setCustomAnimations(
+                        R.anim.slide_right_in, R.anim.slide_left_out,
+                        R.anim.slide_left_in, R.anim.slide_right_out)
+                .add(R.id.audience_layout, frg)
+                .addToBackStack(SequenceUUID.getUUID())
+                .commit();
+    }
+
+    /**
+     * 关闭已经打开的 Fragment
+     */
+    public static void close() {
+        if (context != null && context.getSupportFragmentManager() != null) {
+            context.getSupportFragmentManager().popBackStackImmediate();
+        }
+    }
 
 }

@@ -16,6 +16,7 @@ import com.wotingfm.R;
 import com.wotingfm.common.config.GlobalStateConfig;
 import com.wotingfm.common.net.RetrofitUtils;
 import com.wotingfm.ui.adapter.radioAdapter.RadioAdapter;
+import com.wotingfm.ui.base.basefragment.BaseFragment;
 import com.wotingfm.ui.bean.ChannelsBean;
 import com.wotingfm.ui.bean.MessageEvent;
 import com.wotingfm.ui.intercom.main.view.InterPhoneActivity;
@@ -38,7 +39,7 @@ import rx.schedulers.Schedulers;
  * 国家台
  */
 
-public class CountryRadioFragment extends Fragment implements View.OnClickListener, OnLoadMoreListener, OnRefreshListener {
+public class CountryRadioFragment extends BaseFragment implements View.OnClickListener, OnLoadMoreListener, OnRefreshListener {
     @BindView(R.id.mRecyclerView)
     ARecyclerView mRecyclerView;
     @BindView(R.id.loadLayout)
@@ -176,16 +177,5 @@ public class CountryRadioFragment extends Fragment implements View.OnClickListen
         EventBus.getDefault().post(new MessageEvent(channelsBean, 1));
     }
 
-    // 关闭页面
-    private void closeFragment() {
-        if (getActivity() instanceof PlayerActivity) {
-            PlayerActivity.close();
-        } else if (getActivity() instanceof MineActivity) {
-            MineActivity.close();
-        } else if (getActivity() instanceof LookListActivity) {
-            LookListActivity.close();
-        } else if (getActivity() instanceof InterPhoneActivity) {
-            InterPhoneActivity.close();
-        }
-    }
+
 }

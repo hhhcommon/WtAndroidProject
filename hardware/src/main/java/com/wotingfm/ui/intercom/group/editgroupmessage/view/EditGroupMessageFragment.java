@@ -21,6 +21,7 @@ import com.wotingfm.common.utils.DialogUtils;
 import com.wotingfm.common.utils.GlideUtils;
 import com.wotingfm.common.view.pickview.LoopView;
 import com.wotingfm.common.view.pickview.OnItemSelectedListener;
+import com.wotingfm.ui.base.basefragment.BaseFragment;
 import com.wotingfm.ui.intercom.group.editgroupmessage.presenter.EditGroupMessagePresenter;
 import com.wotingfm.ui.intercom.main.view.InterPhoneActivity;
 
@@ -32,7 +33,7 @@ import java.util.Map;
  * 作者：xinLong on 2017/6/5 01:30
  * 邮箱：645700751@qq.com
  */
-public class EditGroupMessageFragment extends Fragment implements View.OnClickListener {
+public class EditGroupMessageFragment extends BaseFragment implements View.OnClickListener {
     private View rootView;
     private EditGroupMessagePresenter presenter;
     private ImageView image_headView;

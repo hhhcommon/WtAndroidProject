@@ -11,6 +11,7 @@ import android.widget.EditText;
 
 import com.wotingfm.R;
 import com.wotingfm.common.utils.DialogUtils;
+import com.wotingfm.ui.base.basefragment.BaseFragment;
 import com.wotingfm.ui.mine.feedback.presenter.FeedbackPresenter;
 import com.wotingfm.ui.mine.main.MineActivity;
 
@@ -19,7 +20,7 @@ import com.wotingfm.ui.mine.main.MineActivity;
  * 作者：xinLong on 2017/5/16 14:28
  * 邮箱：645700751@qq.com
  */
-public class FeedbackFragment extends Fragment implements View.OnClickListener {
+public class FeedbackFragment extends BaseFragment implements View.OnClickListener {
     private View rootView;
     private EditText edit_information, edit_feedback;
     private FeedbackPresenter presenter;
@@ -49,7 +50,7 @@ public class FeedbackFragment extends Fragment implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.head_left_btn:// 返回
-                MineActivity.close();
+                closeFragment();
                 break;
             case R.id.tv_commit:    // 提交
                 String information = edit_information.getText().toString(); // 联系方式

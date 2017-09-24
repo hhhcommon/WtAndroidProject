@@ -59,7 +59,7 @@ public class ConfigWIFIPresenter {
             boolean connectResult = model.ConnectWifi(config);
             if (connectResult) {
                 activity.setResult(true);
-                MineActivity.close();
+                activity.closeFragment();
             }
         } else {
             ToastUtils.show_always(activity.getActivity(), "密码不能为空");

@@ -23,6 +23,7 @@ import android.widget.TextView;
 import com.woting.commonplat.manager.PhoneMsgManager;
 import com.woting.commonplat.widget.TipView;
 import com.wotingfm.R;
+import com.wotingfm.ui.base.basefragment.BaseFragment;
 import com.wotingfm.ui.bean.AlbumsBean;
 import com.wotingfm.common.utils.DialogUtils;
 import com.wotingfm.common.utils.GlideUtils;
@@ -40,7 +41,7 @@ import java.util.List;
  * 作者：xinLong on 2017/6/5 01:30
  * 邮箱：645700751@qq.com
  */
-public class PersonMessageFragment extends Fragment implements View.OnClickListener, TipView.TipViewClick, ScrollViewListener {
+public class PersonMessageFragment extends BaseFragment implements View.OnClickListener, TipView.TipViewClick, ScrollViewListener {
     private View rootView;
     private TextView tv_send, tv_name, tv_introduce, tv_number, tv_address, tvTitle, tv_subNum, tv_focus;
     private LinearLayout lin_note;

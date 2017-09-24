@@ -24,6 +24,7 @@ import com.wotingfm.common.config.GlobalStateConfig;
 import com.wotingfm.common.utils.CommonUtils;
 import com.wotingfm.common.utils.DialogUtils;
 import com.wotingfm.common.view.ReportsDialog;
+import com.wotingfm.ui.base.basefragment.BaseFragment;
 import com.wotingfm.ui.bean.AnchorInfo;
 import com.wotingfm.ui.bean.MessageEvent;
 import com.wotingfm.ui.bean.SinglesBase;
@@ -50,7 +51,7 @@ import jp.wasabeef.glide.transformations.BlurTransformation;
  * 主播个人中心
  */
 
-public class AnchorPersonalCenterFragment extends Fragment implements View.OnClickListener {
+public class AnchorPersonalCenterFragment extends BaseFragment implements View.OnClickListener {
 
     @BindView(R.id.ivBack)
     ImageView ivBack;
@@ -176,13 +177,7 @@ public class AnchorPersonalCenterFragment extends Fragment implements View.OnCli
         anchorPersonalCenterInfoAdapter.setAlbumsMoreClick(new AnchorPersonalCenterInfoAdapter.AlbumsMoreClick() {
             @Override
             public void ItemClick(String albumsId) {
-                if (getActivity() instanceof PlayerActivity) {
-                    PlayerActivity.open(AlbumsInfoMainFragment.newInstance(albumsId));
-                } else if (getActivity() instanceof MineActivity) {
-                    MineActivity.open(AlbumsInfoMainFragment.newInstance(albumsId));
-                } else if (getActivity() instanceof LookListActivity) {
-                    LookListActivity.open(AlbumsInfoMainFragment.newInstance(albumsId));
-                }
+                openFragment(AlbumsInfoMainFragment.newInstance(albumsId));
             }
 
             @Override
@@ -205,7 +200,7 @@ public class AnchorPersonalCenterFragment extends Fragment implements View.OnCli
             @Override
             public void MoreClick(AnchorInfo.DataBeanXX.UserBean.DataBeanX s) {
                 AlbumsListMeFragment fragment = AlbumsListMeFragment.newInstance(uid, "全部专辑(" + s.total_count + ")");
-                presenter.openFragment(fragment);
+                openFragment(fragment);
             }
         });
 
@@ -215,7 +210,7 @@ public class AnchorPersonalCenterFragment extends Fragment implements View.OnCli
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.ivBack:
-                presenter.close();
+                closeFragment();
                 break;
             case R.id.ivMore:
                 if (TextUtils.isEmpty(uid)) return;

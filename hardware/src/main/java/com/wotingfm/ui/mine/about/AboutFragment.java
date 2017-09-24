@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.woting.commonplat.manager.PhoneMsgManager;
 import com.wotingfm.R;
+import com.wotingfm.ui.base.basefragment.BaseFragment;
 import com.wotingfm.ui.mine.main.MineActivity;
 
 /**
@@ -16,7 +17,7 @@ import com.wotingfm.ui.mine.main.MineActivity;
  * 作者：xinLong on 2017/5/16 14:28
  * 邮箱：645700751@qq.com
  */
-public class AboutFragment extends Fragment implements View.OnClickListener {
+public class AboutFragment extends BaseFragment implements View.OnClickListener {
     private View rootView;
 
     @Override
@@ -40,7 +41,7 @@ public class AboutFragment extends Fragment implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.head_left_btn:// 返回
-                MineActivity.close();
+                closeFragment();
                 break;
         }
     }

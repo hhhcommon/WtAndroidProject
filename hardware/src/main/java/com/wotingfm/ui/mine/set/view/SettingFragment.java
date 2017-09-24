@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.wotingfm.R;
 import com.wotingfm.common.utils.DialogUtils;
+import com.wotingfm.ui.base.basefragment.BaseFragment;
 import com.wotingfm.ui.mine.about.AboutFragment;
 import com.wotingfm.ui.mine.myfavorite.view.MyFavoriteFragment;
 import com.wotingfm.ui.mine.myfocus.view.MyFocusFragment;
@@ -30,7 +31,7 @@ import com.wotingfm.ui.user.preference.view.PreferenceFragment;
  * 作者：xinLong on 2017/5/16 14:28
  * 邮箱：645700751@qq.com
  */
-public class SettingFragment extends Fragment implements View.OnClickListener {
+public class SettingFragment extends BaseFragment implements View.OnClickListener {
     private View rootView;
     private SettingPresenter presenter;
     private Dialog dialog;
@@ -89,44 +90,44 @@ public class SettingFragment extends Fragment implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.head_left_btn:// 返回
-                MineActivity.close();
+                closeFragment();
                 break;
             case R.id.view_personal_info:// 个人信息
-                MineActivity.open(new PersonalInfoFragment());
+                openFragment(new PersonalInfoFragment());
                 break;
             case R.id.view_my_concern:// 我关注的
-                MineActivity.open(new MyFocusFragment());
+                openFragment(new MyFocusFragment());
                 break;
             case R.id.view_my_sub:// 我订阅的
                 /**
                  * 此处跳转传递参数，根据参数关闭的时候执行MineActivity.close();
                  */
-                MineActivity.open(MeSubscribeListFragment.newInstance());
+               openFragment(MeSubscribeListFragment.newInstance());
                 break;
             case R.id.view_like:// 我喜欢的
-                MineActivity.open(new MyFavoriteFragment());
+                openFragment(new MyFavoriteFragment());
                 break;
             case R.id.view_preference_setting:// 偏好设置
                 PreferenceFragment fragment = new PreferenceFragment();
                 Bundle bundle = new Bundle();
                 bundle.putString("fromType", "person");
                 fragment.setArguments(bundle);
-                MineActivity.open(fragment);
+                openFragment(fragment);
                 break;
             case R.id.view_message_settings:// 消息设置
-                MineActivity.open(new MessageSettingFragment());
+                openFragment(new MessageSettingFragment());
                 break;
             case R.id.view_clear_cache:// 清理缓存
                 clearDialogShow();
                 break;
             case R.id.view_account_security:// 账号安全
-                MineActivity.open(new AccountSecurityFragment());
+               openFragment(new AccountSecurityFragment());
                 break;
             case R.id.view_feedback:// 意见反馈
-                MineActivity.open(new FeedbackFragment());
+                openFragment(new FeedbackFragment());
                 break;
             case R.id.view_about:// 关于
-                MineActivity.open(new AboutFragment());
+               openFragment(new AboutFragment());
                 break;
             case R.id.tv_close:// 注销登录
                 LDialog.show();

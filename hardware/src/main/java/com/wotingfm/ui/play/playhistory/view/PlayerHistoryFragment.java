@@ -8,30 +8,18 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
-import android.widget.ImageView;
-
 import com.woting.commonplat.widget.LoadFrameLayout;
 import com.wotingfm.R;
-import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.config.GlobalStateConfig;
-import com.wotingfm.common.database.HistoryHelper;
-import com.wotingfm.common.utils.T;
-import com.wotingfm.ui.base.basefragment.BaseFragment;
 import com.wotingfm.ui.bean.MessageEvent;
 import com.wotingfm.ui.bean.Player;
 import com.wotingfm.ui.bean.SinglesBase;
-import com.wotingfm.ui.intercom.group.applygrouptype.presenter.ApplyGroupTypePresenter;
-import com.wotingfm.ui.intercom.main.view.InterPhoneActivity;
 import com.wotingfm.ui.play.main.PlayerActivity;
 import com.wotingfm.ui.play.playhistory.adapter.PlayerHistoryListAdapter;
 import com.wotingfm.ui.play.playhistory.presenter.PlayHistoryPresenter;
-
 import org.greenrobot.eventbus.EventBus;
-
 import java.util.List;
 
-import butterknife.BindView;
 
 /**
  * 播放历史

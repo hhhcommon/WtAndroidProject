@@ -10,6 +10,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.wotingfm.R;
+import com.wotingfm.ui.base.basefragment.BaseFragment;
 import com.wotingfm.ui.mine.fm.presenter.FMSetPresenter;
 import com.wotingfm.ui.mine.main.MineActivity;
 import com.wotingfm.ui.mine.fm.adapter.FMListAdapter;
@@ -21,7 +22,7 @@ import java.util.List;
  * 作者：xinLong on 2017/5/16 14:28
  * 邮箱：645700751@qq.com
  */
-public class FMSetFragment extends Fragment implements View.OnClickListener {
+public class FMSetFragment extends BaseFragment implements View.OnClickListener {
     private View rootView;
     private ListView fmList;
     private FMListAdapter adapter;
@@ -55,7 +56,7 @@ public class FMSetFragment extends Fragment implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.head_left_btn:// 返回
-                MineActivity.close();
+                closeFragment();
                 break;
         }
     }

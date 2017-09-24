@@ -16,6 +16,7 @@ import android.widget.TextView;
 import com.woting.commonplat.widget.TipView;
 import com.wotingfm.R;
 import com.wotingfm.common.utils.DialogUtils;
+import com.wotingfm.ui.base.basefragment.BaseFragment;
 import com.wotingfm.ui.intercom.main.contacts.model.Contact;
 import com.wotingfm.ui.intercom.main.view.InterPhoneActivity;
 import com.wotingfm.ui.mine.main.MineActivity;
@@ -33,7 +34,7 @@ import java.util.List;
  * 作者：xinLong on 2017/6/5 01:30
  * 邮箱：645700751@qq.com
  */
-public class MyFavoriteFragment extends Fragment implements View.OnClickListener {
+public class MyFavoriteFragment extends BaseFragment implements View.OnClickListener {
     private View rootView;
     private ListView lv_favorite;
     private MyFavoritePresenter presenter;
@@ -70,7 +71,7 @@ public class MyFavoriteFragment extends Fragment implements View.OnClickListener
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.head_left_btn:
-                MineActivity.close();
+                closeFragment();
                 break;
         }
     }

@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.woting.commonplat.widget.TipView;
 import com.wotingfm.R;
 import com.wotingfm.common.utils.DialogUtils;
+import com.wotingfm.ui.base.basefragment.BaseFragment;
 import com.wotingfm.ui.intercom.main.view.InterPhoneActivity;
 import com.wotingfm.ui.mine.main.MineActivity;
 import com.wotingfm.ui.mine.myfocus.adapter.MyFocusAdapter;
@@ -25,7 +26,7 @@ import java.util.List;
  * 作者：xinLong on 2017/6/5 01:30
  * 邮箱：645700751@qq.com
  */
-public class MyFocusFragment extends Fragment implements View.OnClickListener {
+public class MyFocusFragment extends BaseFragment implements View.OnClickListener {
     private View rootView;
     private ListView lv_focus;
     private MyFocusPresenter presenter;
@@ -66,7 +67,7 @@ public class MyFocusFragment extends Fragment implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.head_left_btn:
-                MineActivity.close();
+                closeFragment();
                 break;
             case R.id.tv_confirm:           // 确定
                 presenter.del(list, index);

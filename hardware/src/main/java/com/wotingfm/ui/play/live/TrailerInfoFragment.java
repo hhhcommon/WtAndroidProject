@@ -1,40 +1,50 @@
 package com.wotingfm.ui.play.live;
 
+import android.app.Dialog;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.ForegroundColorSpan;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.google.gson.GsonBuilder;
 import com.woting.commonplat.widget.GlideCircleTransform;
-import com.woting.commonplat.widget.LoadFrameLayout;
 import com.wotingfm.R;
 import com.wotingfm.common.application.BSApplication;
+import com.wotingfm.common.utils.DialogUtils;
+import com.wotingfm.ui.base.basefragment.BaseFragment;
 import com.wotingfm.ui.bean.TrailerInfo;
 import com.wotingfm.common.live.LiveManger;
 import com.wotingfm.common.net.RetrofitUtils;
 import com.wotingfm.common.utils.CommonUtils;
 import com.wotingfm.common.utils.T;
-import com.wotingfm.ui.base.basefragment.BaseFragment;
+import com.wotingfm.ui.intercom.main.view.InterPhoneActivity;
+import com.wotingfm.ui.mine.main.MineActivity;
 import com.wotingfm.ui.play.anchor.view.AnchorPersonalCenterFragment;
+import com.wotingfm.ui.play.find.main.view.LookListActivity;
+import com.wotingfm.ui.play.main.PlayerActivity;
 import com.wotingfm.ui.user.logo.LogoActivity;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 
 /**
- * Created by amine on 2017/7/11.
  * 预告详情
  */
 
-public class TrailerInfoFragment extends BaseFragment {
+public class TrailerInfoFragment extends BaseFragment implements View.OnClickListener {
     @BindView(R.id.tvTrailerTitle)
     TextView tvTrailerTitle;
     @BindView(R.id.tvTrailerContent)
@@ -49,8 +59,6 @@ public class TrailerInfoFragment extends BaseFragment {
     ImageView ivPhoto;
     @BindView(R.id.tvTrailerFollow)
     TextView tvTrailerFollow;
-    @BindView(R.id.loadLayout)
-    LoadFrameLayout loadLayout;
     @BindView(R.id.tvName)
     TextView tvName;
     @BindView(R.id.tvFens)
@@ -59,6 +67,15 @@ public class TrailerInfoFragment extends BaseFragment {
     ImageView ivBack;
     @BindView(R.id.relativeLable)
     RelativeLayout relativeLable;
+    @BindView(R.id.img_bg)
+    ImageView img_bg;
+    @BindView(R.id.re_body)
+    RelativeLayout re_body;
+
+    private String id;
+    private String userId;
+    private View rootView;
+    private Dialog dialog;
 
     public static TrailerInfoFragment newInstance(String id) {
         TrailerInfoFragment fragment = new TrailerInfoFragment();
@@ -68,20 +85,20 @@ public class TrailerInfoFragment extends BaseFragment {
         return fragment;
     }
 
-
-    private String id;
-    private String userId;
-
     @Override
-    protected int getLayoutResource() {
-        return R.layout.activity_trailer_info;
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        if (rootView == null) {
+            rootView = inflater.inflate(R.layout.activity_trailer_info, container, false);
+            rootView.setOnClickListener(this);
+            ButterKnife.bind(this, rootView);
+            initView();
+        }
+        return rootView;
     }
 
-    @Override
     public void initView() {
         Bundle bundle = getArguments();
-        if (bundle != null)
-            id = bundle.getString("id");
+        if (bundle != null) id = bundle.getString("id");
         userId = CommonUtils.getUserId();
         ivBack.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -89,14 +106,6 @@ public class TrailerInfoFragment extends BaseFragment {
                 closeFragment();
             }
         });
-        loadLayout.findViewById(R.id.btnTryAgain).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                loadLayout.showLoadingView();
-                refresh();
-            }
-        });
-        loadLayout.showLoadingView();
         refresh();
     }
 
@@ -104,10 +113,15 @@ public class TrailerInfoFragment extends BaseFragment {
         LiveManger.getInstance().trailerInfo(id, new LiveManger.TrailerInfoCallBack() {
             @Override
             public void trailerInfo(final TrailerInfo.DataBean.VoiceLiveBean voiceLiveBean) {
+                Log.e("预告详情返回数据", new GsonBuilder().serializeNulls().create().toJson(voiceLiveBean));
                 if (voiceLiveBean == null) {
-                    loadLayout.showErrorView();
+                    re_body.setVisibility(View.GONE);
                 } else {
-                    loadLayout.showContentView();
+                    Glide.with(BSApplication.getInstance()).load(voiceLiveBean.cover)// Glide
+                            .transform(new GlideCircleTransform(BSApplication.getInstance()))
+                            .error(R.mipmap.p)
+                            .placeholder(R.mipmap.p)
+                            .into(img_bg);
                     tvTrailerTitle.setText(voiceLiveBean.title);
                     tvTrailerContent.setText(voiceLiveBean.description);
                     if (voiceLiveBean.begin_at != null) {
@@ -170,14 +184,14 @@ public class TrailerInfoFragment extends BaseFragment {
     }
 
     private void followAnchor(String uid, final TrailerInfo.DataBean.VoiceLiveBean sw) {
-        showLodingDialog();
+        dialogShow();
         RetrofitUtils.getInstance().followAnchor(uid, sw.owner.id)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Action1<Object>() {
                     @Override
                     public void call(Object Object) {
-                        dissmisDialog();
+                        dialogCancel();
                         sw.owner.fans_count = sw.owner.fans_count + 1;
                         tvFens.setText("粉丝  " + sw.owner.fans_count);
                         sw.owner.had_followed = true;
@@ -187,20 +201,20 @@ public class TrailerInfoFragment extends BaseFragment {
                     @Override
                     public void call(Throwable throwable) {
                         T.getInstance().showToast("关注失败");
-                        dissmisDialog();
+                        dialogCancel();
                     }
                 });
     }
 
     private void unFollowAnchor(String uid, final TrailerInfo.DataBean.VoiceLiveBean sw) {
-        showLodingDialog();
+        dialogShow();
         RetrofitUtils.getInstance().unFollowAnchor(uid, sw.owner.id)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Action1<Object>() {
                     @Override
                     public void call(Object s) {
-                        dissmisDialog();
+                        dialogCancel();
                         sw.owner.fans_count = sw.owner.fans_count - 1;
                         tvFens.setText("粉丝  " + sw.owner.fans_count);
                         sw.owner.had_followed = false;
@@ -210,13 +224,13 @@ public class TrailerInfoFragment extends BaseFragment {
                     @Override
                     public void call(Throwable throwable) {
                         T.getInstance().showToast("取消关注失败");
-                        dissmisDialog();
+                        dialogCancel();
                     }
                 });
     }
 
     private void reservations(final TrailerInfo.DataBean.VoiceLiveBean voiceLiveBean) {
-        showLodingDialog();
+        dialogShow();
         RetrofitUtils.getInstance().reservations(voiceLiveBean.id)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -227,19 +241,19 @@ public class TrailerInfoFragment extends BaseFragment {
                         voiceLiveBean.reserved_count = voiceLiveBean.reserved_count + 1;
                         tvTrailerNumber.setText(voiceLiveBean.reserved_count + "人预约");
                         voiceLiveBean.had_reserved = true;
-                        dissmisDialog();
+                        dialogCancel();
                     }
                 }, new Action1<Throwable>() {
                     @Override
                     public void call(Throwable throwable) {
                         T.getInstance().showToast("预约失败");
-                        dissmisDialog();
+                        dialogCancel();
                     }
                 });
     }
 
     private void deleteReservations(final TrailerInfo.DataBean.VoiceLiveBean voiceLiveBean) {
-        showLodingDialog();
+        dialogShow();
         RetrofitUtils.getInstance().deleteReservations(voiceLiveBean.id)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -250,13 +264,13 @@ public class TrailerInfoFragment extends BaseFragment {
                         voiceLiveBean.reserved_count = voiceLiveBean.reserved_count - 1;
                         voiceLiveBean.had_reserved = false;
                         tvTrailerNumber.setText(voiceLiveBean.reserved_count + "人预约");
-                        dissmisDialog();
+                        dialogCancel();
                     }
                 }, new Action1<Throwable>() {
                     @Override
                     public void call(Throwable throwable) {
                         T.getInstance().showToast("取消预约失败");
-                        dissmisDialog();
+                        dialogCancel();
                     }
                 });
     }
@@ -285,5 +299,24 @@ public class TrailerInfoFragment extends BaseFragment {
         }
     }
 
+    /**
+     * 展示弹出框
+     */
+    public void dialogShow() {
+        dialog = DialogUtils.Dialog(this.getActivity());
+    }
+
+    /**
+     * 取消弹出框
+     */
+    public void dialogCancel() {
+        if (dialog != null) dialog.dismiss();
+    }
+
+
+    @Override
+    public void onClick(View v) {
+
+    }
 
 }

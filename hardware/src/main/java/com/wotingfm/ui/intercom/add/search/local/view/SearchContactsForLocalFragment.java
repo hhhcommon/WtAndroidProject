@@ -21,6 +21,7 @@ import android.widget.TextView;
 
 import com.woting.commonplat.widget.HeightListView;
 import com.wotingfm.R;
+import com.wotingfm.ui.base.basefragment.BaseFragment;
 import com.wotingfm.ui.intercom.add.search.local.adapter.GroupsAdapter;
 import com.wotingfm.ui.intercom.add.search.local.presenter.SearchContactsForLocalPresenter;
 import com.wotingfm.ui.intercom.main.contacts.adapter.ContactsAdapter;
@@ -36,7 +37,7 @@ import java.util.List;
  * 作者：xinLong on 2017/6/5 01:30
  * 邮箱：645700751@qq.com
  */
-public class SearchContactsForLocalFragment extends Fragment implements View.OnClickListener {
+public class SearchContactsForLocalFragment extends BaseFragment implements View.OnClickListener {
     private View rootView;
     private FragmentActivity context;
     private ListView listViewG, listViewP;

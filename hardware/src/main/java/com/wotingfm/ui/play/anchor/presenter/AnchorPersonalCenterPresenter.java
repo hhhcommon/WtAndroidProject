@@ -15,6 +15,7 @@ import com.wotingfm.ui.play.anchor.model.AnchorPersonalCenterModel;
 import com.wotingfm.ui.play.anchor.view.AlbumsListMeFragment;
 import com.wotingfm.ui.play.anchor.view.AnchorPersonalCenterFragment;
 import com.wotingfm.ui.play.find.main.view.LookListActivity;
+import com.wotingfm.ui.play.live.LiveRoomActivity;
 import com.wotingfm.ui.play.main.PlayerActivity;
 
 import rx.android.schedulers.AndroidSchedulers;
@@ -166,36 +167,7 @@ public class AnchorPersonalCenterPresenter {
         T.getInstance().showToast("取消关注成功");
     }
 
-    /**
-     * 关闭界面
-     */
-    public void close() {
-        if (activity.getActivity() instanceof PlayerActivity) {
-            PlayerActivity.close();
-        } else if (activity.getActivity() instanceof MineActivity) {
-            MineActivity.close();
-        } else if (activity.getActivity() instanceof InterPhoneActivity) {
-            InterPhoneActivity.close();
-        } else if (activity.getActivity() instanceof LookListActivity) {
-            LookListActivity.close();
-        }
-    }
 
-    /**
-     * 关闭界面
-     * @param fragment
-     */
-    public void openFragment(AlbumsListMeFragment fragment) {
-        if (activity.getActivity() instanceof PlayerActivity) {
-            PlayerActivity.open(fragment);
-        } else if (activity.getActivity() instanceof MineActivity) {
-            MineActivity.open(fragment);
-        } else if (activity.getActivity() instanceof InterPhoneActivity) {
-            InterPhoneActivity.open(fragment);
-        } else if (activity.getActivity() instanceof LookListActivity) {
-            LookListActivity.open(fragment);
-        }
-    }
     /**
      * 数据销毁
      */

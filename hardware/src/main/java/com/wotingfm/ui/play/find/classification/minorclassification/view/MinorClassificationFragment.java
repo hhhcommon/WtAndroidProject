@@ -16,6 +16,7 @@ import android.widget.TextView;
 import com.woting.commonplat.widget.LoadFrameLayout;
 import com.wotingfm.R;
 import com.wotingfm.common.net.RetrofitUtils;
+import com.wotingfm.ui.base.basefragment.BaseFragment;
 import com.wotingfm.ui.bean.ChannelsBean;
 import com.wotingfm.ui.intercom.main.view.InterPhoneActivity;
 import com.wotingfm.ui.mine.main.MineActivity;
@@ -38,7 +39,7 @@ import rx.schedulers.Schedulers;
  * 发现分类中的小分类
  */
 
-public class MinorClassificationFragment extends Fragment implements View.OnClickListener {
+public class MinorClassificationFragment extends BaseFragment implements View.OnClickListener {
     @BindView(R.id.tabs)
     TabLayout tabLayout;
     @BindView(R.id.viewPager)
@@ -191,18 +192,7 @@ public class MinorClassificationFragment extends Fragment implements View.OnClic
         }
     }
 
-    // 关闭页面
-    private void closeFragment() {
-        if (getActivity() instanceof PlayerActivity) {
-            PlayerActivity.close();
-        } else if (getActivity() instanceof MineActivity) {
-            MineActivity.close();
-        } else if (getActivity() instanceof LookListActivity) {
-            LookListActivity.close();
-        } else if (getActivity() instanceof InterPhoneActivity) {
-            InterPhoneActivity.close();
-        }
-    }
+
 
     /**
      * dpתpx

@@ -22,6 +22,7 @@ import com.wotingfm.common.utils.GlideUtils;
 import com.wotingfm.common.view.myscrollview.ObservableScrollView;
 import com.wotingfm.common.view.viewpager.CustomViewPager;
 import com.wotingfm.ui.base.baseadapter.MyFragmentPagerAdapter;
+import com.wotingfm.ui.base.basefragment.BaseFragment;
 import com.wotingfm.ui.base.baseinterface.ScrollViewListener;
 import com.wotingfm.ui.bean.RadioInfo;
 import com.wotingfm.ui.intercom.main.view.InterPhoneActivity;
@@ -46,7 +47,7 @@ import rx.schedulers.Schedulers;
  * 电台详情
  */
 
-public class RadioInfoFragment extends Fragment implements View.OnClickListener, ScrollViewListener {
+public class RadioInfoFragment extends BaseFragment implements View.OnClickListener, ScrollViewListener {
     @BindView(R.id.ivPhotoBg)
     ImageView ivPhotoBg;
     @BindView(R.id.ivPhoto)
@@ -336,20 +337,6 @@ public class RadioInfoFragment extends Fragment implements View.OnClickListener,
         }
     }
 
-    /**
-     * 关闭界面
-     */
-    public void closeFragment() {
-        if (this.getActivity() instanceof PlayerActivity) {
-            PlayerActivity.close();
-        } else if (this.getActivity() instanceof MineActivity) {
-            MineActivity.close();
-        } else if (this.getActivity() instanceof InterPhoneActivity) {
-            InterPhoneActivity.close();
-        } else if (this.getActivity() instanceof LookListActivity) {
-            LookListActivity.close();
-        }
-    }
 
     public void showContentView() {
         loadLayout.showContentView();

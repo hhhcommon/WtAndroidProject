@@ -23,6 +23,7 @@ import com.woting.commonplat.widget.TipView;
 import com.wotingfm.R;
 import com.wotingfm.common.utils.DialogUtils;
 import com.wotingfm.common.utils.ToastUtils;
+import com.wotingfm.ui.base.basefragment.BaseFragment;
 import com.wotingfm.ui.intercom.add.search.net.adapter.SearchContactsForGroupAdapter;
 import com.wotingfm.ui.intercom.add.search.net.adapter.SearchContactsForUserAdapter;
 import com.wotingfm.ui.intercom.add.search.net.presenter.SearchContactsForNetPresenter;
@@ -35,7 +36,7 @@ import java.util.List;
  * 作者：xinLong on 2017/6/5 01:30
  * 邮箱：645700751@qq.com
  */
-public class SearchContactsForNetFragment extends Fragment implements View.OnClickListener, TipView.TipViewClick {
+public class SearchContactsForNetFragment extends BaseFragment implements View.OnClickListener, TipView.TipViewClick {
     private View rootView;
     private FragmentActivity context;
     private LinearLayout lin_pos, lin_search;

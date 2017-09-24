@@ -16,6 +16,7 @@ import com.wotingfm.R;
 import com.wotingfm.common.config.GlobalStateConfig;
 import com.wotingfm.common.net.RetrofitUtils;
 import com.wotingfm.ui.adapter.albumsAdapter.AlbumsInfoProgramAdapter;
+import com.wotingfm.ui.base.basefragment.BaseFragment;
 import com.wotingfm.ui.bean.MessageEvent;
 import com.wotingfm.ui.bean.Player;
 import com.wotingfm.ui.bean.SinglesBase;
@@ -43,7 +44,7 @@ import rx.schedulers.Schedulers;
  * *专辑详情。节目fragment
  */
 
-public class ProgramInfoFragment extends Fragment implements View.OnClickListener {
+public class ProgramInfoFragment extends BaseFragment implements View.OnClickListener {
     @BindView(R.id.mRecyclerView)
     RecyclerView mRecyclerView;
     @BindView(R.id.loadLayout)
@@ -135,38 +136,6 @@ public class ProgramInfoFragment extends Fragment implements View.OnClickListene
                 DownloadSelectFragment fragment = DownloadSelectFragment.newInstance(albumsID);
                 openFragment(fragment);
                 break;
-        }
-    }
-
-    /**
-     * 关闭界面
-     */
-    public void closeFragment() {
-        if (this.getActivity() instanceof PlayerActivity) {
-            PlayerActivity.close();
-        } else if (this.getActivity() instanceof MineActivity) {
-            MineActivity.close();
-        } else if (this.getActivity() instanceof InterPhoneActivity) {
-            InterPhoneActivity.close();
-        } else if (this.getActivity() instanceof LookListActivity) {
-            LookListActivity.close();
-        }
-    }
-
-    /**
-     * 界面
-     *
-     * @param fragment
-     */
-    public void openFragment(DownloadSelectFragment fragment) {
-        if (this.getActivity() instanceof PlayerActivity) {
-            PlayerActivity.open(fragment);
-        } else if (this.getActivity() instanceof MineActivity) {
-            MineActivity.open(fragment);
-        } else if (this.getActivity() instanceof InterPhoneActivity) {
-            InterPhoneActivity.open(fragment);
-        } else if (this.getActivity() instanceof LookListActivity) {
-            LookListActivity.open(fragment);
         }
     }
 

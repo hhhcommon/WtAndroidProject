@@ -130,7 +130,7 @@ public class ModifyPasswordPresenter {
             int ret = js.getInt("ret");
             Log.e("ret", String.valueOf(ret));
             if (ret == 0) {
-                MineActivity.close();
+                activity.closeFragment();
                 ToastUtils.show_always(activity.getActivity(), "密码修改成功");
             } else {
                 String msg = js.getString("msg");

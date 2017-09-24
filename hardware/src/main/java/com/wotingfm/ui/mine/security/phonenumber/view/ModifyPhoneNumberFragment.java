@@ -19,6 +19,7 @@ import android.widget.TextView;
 
 import com.wotingfm.R;
 import com.wotingfm.common.utils.DialogUtils;
+import com.wotingfm.ui.base.basefragment.BaseFragment;
 import com.wotingfm.ui.mine.main.MineActivity;
 import com.wotingfm.ui.mine.security.phonenumber.presenter.ModifyPhoneNumberPresenter;
 import com.wotingfm.ui.user.logo.LogoActivity;
@@ -28,7 +29,7 @@ import com.wotingfm.ui.user.retrievepassword.presenter.RetrievePasswordPresenter
  * 修改手机号
  * Created by Administrator on 2017/6/16.
  */
-public class ModifyPhoneNumberFragment extends Fragment implements View.OnClickListener {
+public class ModifyPhoneNumberFragment extends BaseFragment implements View.OnClickListener {
     private View rootView;
     private TextView textSendVerificationCode;
     private ResultListener Listener;
@@ -75,7 +76,7 @@ public class ModifyPhoneNumberFragment extends Fragment implements View.OnClickL
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.head_left_btn:
-                MineActivity.close();
+                closeFragment();
                 break;
             case R.id.text_send_verification_code:
                 String userName = editOldPhone.getText().toString().trim();

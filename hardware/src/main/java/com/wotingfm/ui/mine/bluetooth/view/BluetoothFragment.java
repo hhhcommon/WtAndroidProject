@@ -16,6 +16,7 @@ import android.widget.TextView;
 import com.woting.commonplat.widget.HeightListView;
 import com.wotingfm.R;
 import com.wotingfm.common.utils.ToastUtils;
+import com.wotingfm.ui.base.basefragment.BaseFragment;
 import com.wotingfm.ui.mine.bluetooth.presenter.BlueToothPresenter;
 import com.wotingfm.ui.mine.main.MineActivity;
 import com.wotingfm.ui.mine.bluetooth.adapter.PairBluetoothAdapter;
@@ -29,7 +30,7 @@ import java.util.List;
  * 作者：xinLong on 2017/6/5 13:55
  * 邮箱：645700751@qq.com
  */
-public class BluetoothFragment extends Fragment implements View.OnClickListener {
+public class BluetoothFragment extends BaseFragment implements View.OnClickListener {
     private UserBluetoothAdapter userAdapter;
     private PairBluetoothAdapter pairAdapter;
     private ListView pairBluetoothList;                     // 已经配对过的
@@ -260,7 +261,7 @@ public class BluetoothFragment extends Fragment implements View.OnClickListener 
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.head_left_btn:// 返回
-                MineActivity.close();
+                closeFragment();
                 break;
             case R.id.bluetooth_set:// 蓝牙开关
                 presenter.BluetoothSet();

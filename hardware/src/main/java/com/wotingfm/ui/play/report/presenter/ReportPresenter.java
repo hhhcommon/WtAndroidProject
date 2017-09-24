@@ -132,7 +132,7 @@ public class ReportPresenter {
             @Override
             public void onSuccess(Object o) {
                 T.getInstance().showToast("举报成功");
-                close();
+                activity.closeFragment();
             }
 
             @Override
@@ -148,7 +148,7 @@ public class ReportPresenter {
             @Override
             public void onSuccess(Object o) {
                 T.getInstance().showToast("举报成功");
-                close();
+                activity.closeFragment();
             }
 
             @Override
@@ -156,18 +156,6 @@ public class ReportPresenter {
                 T.getInstance().showToast("举报失败");
             }
         });
-    }
-
-    public void close() {
-        if (activity.getActivity() instanceof PlayerActivity) {
-            PlayerActivity.close();
-        } else if (activity.getActivity() instanceof MineActivity) {
-            MineActivity.close();
-        } else if (activity.getActivity() instanceof InterPhoneActivity) {
-            InterPhoneActivity.close();
-        } else if (activity.getActivity() instanceof LookListActivity) {
-            LookListActivity.close();
-        }
     }
 
     /**
