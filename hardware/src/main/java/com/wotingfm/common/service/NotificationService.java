@@ -181,6 +181,7 @@ public class NotificationService extends Service {
                 break;
             case 13:// 13.群组有新的成员加入，给群内所有成员发送推送
                 ShowMsgQueue.add(assemblyData("13", "群组消息", msg));
+                context.sendBroadcast(new Intent(BroadcastConstants.GROUP_USER_CHANGE));
                 break;
         }
     }

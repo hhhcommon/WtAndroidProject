@@ -3,7 +3,6 @@ package com.wotingfm.ui.play.anchor.view;
 import android.app.Dialog;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -20,24 +19,17 @@ import com.woting.commonplat.widget.GlideCircleTransform;
 import com.woting.commonplat.widget.LoadFrameLayout;
 import com.wotingfm.R;
 import com.wotingfm.common.application.BSApplication;
-import com.wotingfm.common.config.GlobalStateConfig;
 import com.wotingfm.common.utils.CommonUtils;
 import com.wotingfm.common.utils.DialogUtils;
 import com.wotingfm.common.view.ReportsDialog;
 import com.wotingfm.ui.base.basefragment.BaseFragment;
 import com.wotingfm.ui.bean.AnchorInfo;
-import com.wotingfm.ui.bean.MessageEvent;
 import com.wotingfm.ui.bean.SinglesBase;
-import com.wotingfm.ui.mine.main.MineActivity;
 import com.wotingfm.ui.play.album.main.view.AlbumsInfoMainFragment;
 import com.wotingfm.ui.play.anchor.adapter.AnchorPersonalCenterInfoAdapter;
 import com.wotingfm.ui.play.anchor.presenter.AnchorPersonalCenterPresenter;
-import com.wotingfm.ui.play.find.main.view.LookListActivity;
-import com.wotingfm.ui.play.main.PlayerActivity;
 import com.wotingfm.ui.user.logo.LogoActivity;
 import com.zhy.adapter.recyclerview.wrapper.HeaderAndFooterWrapper;
-
-import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -267,18 +259,6 @@ public class AnchorPersonalCenterFragment extends BaseFragment implements View.O
             tvFollow.setText("关注");
             tvFollow.setBackgroundResource(R.drawable.anchor_personal);
         }
-    }
-
-    public void startMain(String albumsId) {
-        GlobalStateConfig.activityA = "A";
-        EventBus.getDefault().post(new MessageEvent("one"));
-        EventBus.getDefault().post(new MessageEvent("stop&" + albumsId));
-    }
-
-    public void startMain(SinglesBase singlesBase) {
-        GlobalStateConfig.activityA = "A";
-        EventBus.getDefault().post(new MessageEvent("one"));
-        EventBus.getDefault().post(new MessageEvent(singlesBase, 2));
     }
 
     public void showContentView() {

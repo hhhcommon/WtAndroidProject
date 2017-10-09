@@ -7,14 +7,17 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 import com.netease.nimlib.sdk.avchat.AVChatManager;
 import com.woting.commonplat.config.GlobalNetWorkConfig;
-import com.wotingfm.ui.bean.MessageEvent;
 import com.wotingfm.common.config.GlobalStateConfig;
 import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.common.manager.InterPhoneControl;
 import com.wotingfm.common.utils.CommonUtils;
 import com.wotingfm.common.utils.ToastUtils;
+import com.wotingfm.ui.bean.MessageEvent;
 import com.wotingfm.ui.intercom.alert.call.view.CallAlertActivity;
 import com.wotingfm.ui.intercom.group.groupnews.add.view.GroupNewsForAddFragment;
 import com.wotingfm.ui.intercom.main.chat.model.ChatModel;
@@ -27,9 +30,12 @@ import com.wotingfm.ui.intercom.person.personmessage.view.PersonMessageFragment;
 import com.wotingfm.ui.user.logo.LogoActivity;
 
 import org.greenrobot.eventbus.EventBus;
+import org.json.JSONObject;
+import org.json.JSONTokener;
 
 import java.util.ArrayList;
 import java.util.List;
+
 
 /**
  * 作者：xinLong on 2017/6/5 13:55
@@ -118,7 +124,7 @@ public class ChatPresenter {
                         // 此时的对讲状态是单对单
                         String n_id = _data.getID();// 本次id
                         String acc_id = _data.getACC_ID();// 本次acc_id
-                        activity.dialogShow(n_id, 1,acc_id);
+                        activity.dialogShow(n_id, 1, acc_id);
                     } else if (_t != null && !_t.equals("") && _t.equals("group")) {
                         // 退出组，关闭对讲页面群组数据
                         activity.getActivity().sendBroadcast(new Intent(BroadcastConstants.VIEW_GROUP_CLOSE));
@@ -129,7 +135,7 @@ public class ChatPresenter {
                 } else {
                     // 此时没有对讲状态
                     String n_id = _data.getID();
-                     callPerson(n_id, _data.getACC_ID());// 呼叫好友
+                    callPerson(n_id, _data.getACC_ID());// 呼叫好友
                 }
             } else if (type != null && !type.equals("") && type.equals("group")) {
                 // 组对讲
@@ -140,7 +146,7 @@ public class ChatPresenter {
                         // 此时的对讲状态是单对单
                         String n_id = _data.getID();// 本次id
                         String acc_id = _data.getACC_ID();// 本次acc_id
-                        activity.dialogShow(n_id, 2,acc_id);
+                        activity.dialogShow(n_id, 2, acc_id);
                     } else if (_t != null && !_t.equals("") && _t.equals("group")) {
                         // 此时的对讲状态是群组
                         activity.getActivity().sendBroadcast(new Intent(BroadcastConstants.VIEW_GROUP_CLOSE));
@@ -214,10 +220,10 @@ public class ChatPresenter {
             InterPhoneControl.quitRoomGroup(ChatPresenter.data.getID(), new InterPhoneControl.Listener() {
                 @Override
                 public void type(boolean b) {
-                    if(b){
-                        Log.e("退出组对讲","退出组成功");
-                    }else{
-                        Log.e("退出组对讲","退出组失败");
+                    if (b) {
+                        Log.e("退出组对讲", "退出组成功");
+                    } else {
+                        Log.e("退出组对讲", "退出组失败");
                     }
 
                 }
@@ -226,7 +232,7 @@ public class ChatPresenter {
     }
 
     // 呼叫好友
-    private void callPerson(final String id,final String accId) {
+    private void callPerson(final String id, final String accId) {
         if (id != null && !id.equals("")) {
             InterPhoneControl.call(accId, new InterPhoneControl.Listener() {
                 @Override
@@ -254,7 +260,7 @@ public class ChatPresenter {
     // 进入组成功后数据处理
     private void enterGroupOkData() {
         model.del(list.get(position).getID());// 删除跟本次id相关的数据
-        model.add(model.assemblyData(list.get(position), GlobalStateConfig.ok,""));// 把本次数据添加的数据库
+        model.add(model.assemblyData(list.get(position), GlobalStateConfig.ok, ""));// 把本次数据添加的数据库
         activity.getActivity().sendBroadcast(new Intent(BroadcastConstants.VIEW_INTER_PHONE_CHAT_OK));// 对讲主页界面，数据更新
     }
 
@@ -404,7 +410,8 @@ public class ChatPresenter {
             filter.addAction(BroadcastConstants.VIEW_INTER_PHONE_CHAT_OK);// 有新的对讲连接时，对讲界面数据更改
             filter.addAction(BroadcastConstants.PUSH_CHAT_CLOSE);// 无人在说话
             filter.addAction(BroadcastConstants.PUSH_CHAT_OPEN);// 有人在说话
-            filter.addAction(BroadcastConstants.PUSH_CHAT_GROUP_NUM);// // 群成员
+            filter.addAction(BroadcastConstants.PUSH_CHAT_GROUP_NUM);// // 群成员在线人数变化
+            filter.addAction(BroadcastConstants.GROUP_USER_CHANGE);// // 群成员变化
             activity.getActivity().registerReceiver(Receiver, filter);
         }
     }
@@ -450,12 +457,31 @@ public class ChatPresenter {
                 case BroadcastConstants.PUSH_CHAT_CLOSE:// 无人在说话
                     setViewChatClose();
                     break;
-                case BroadcastConstants.PUSH_CHAT_GROUP_NUM:// 群成员
+                case BroadcastConstants.PUSH_CHAT_GROUP_NUM:// 群成员在线人数
                     String num = intent.getStringExtra("num");
-                    activity.setGroupViewNum(num);
+                    activity.setGroupViewNumIn(num);
+                    break;
+                case BroadcastConstants.GROUP_USER_CHANGE:// 群成员
+                    if (data != null) {// 此时有对讲状态
+                        String _t = data.getTyPe().trim();
+                        if (_t != null && !_t.equals("") && _t.equals("group")) {
+                            String id = data.getID().trim();
+                            getGroupPerson(id);
+                        }
+                    }
                     break;
             }
         }
+    }
+
+    // 进入组后获取群成员、接收到群成员变化的消息后获取群成员
+    private void getGroupPerson(String id) {
+        model.getGroupPerson(id, new ChatModel.OnLoadInterface() {
+            @Override
+            public void mun(Object o) {
+                dealGroupPersonSuccess(o);
+            }
+        });
     }
 
     // 更改当前说话人界面类型
@@ -505,7 +531,7 @@ public class ChatPresenter {
 
                 String id = f.getID().trim();
                 if (id != null && !id.equals("")) {
-                    model.getGroupPerson(id);
+                    getGroupPerson(id);
                     Contact.group u = model.getGroup(id);// 根据库表的第一条数据的id得到对应的通讯录里边的群组数据
                     TalkHistory _d = model.assemblyDataForGroup(u, f);// 根据两条对应数据组装展示数据
                     activity.setGroupViewShow(_d);
@@ -518,6 +544,27 @@ public class ChatPresenter {
             } else {
                 Log.e("setViewForOK", "type类型为空");
             }
+        }
+    }
+
+    // 处理群成员返回的数据
+    private void dealGroupPersonSuccess(Object o) {
+        try {
+            String s = new GsonBuilder().serializeNulls().create().toJson(o);
+            JSONObject js = new JSONObject(s);
+            int ret = js.getInt("ret");
+            if (ret == 0) {
+                String msg = js.getString("data");
+                JSONTokener jsonParser = new JSONTokener(msg);
+                JSONObject arg1 = (JSONObject) jsonParser.nextValue();
+                String group = arg1.getString("users");
+                // 群成员
+                GlobalStateConfig.list_group_user = new Gson().fromJson(group, new TypeToken<List<Contact.user>>() {
+                }.getType());
+                activity.setGroupViewNum(GlobalStateConfig.list_group_user.size() + "");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 

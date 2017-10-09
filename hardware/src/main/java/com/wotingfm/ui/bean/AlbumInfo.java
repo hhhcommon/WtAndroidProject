@@ -25,6 +25,7 @@ public class AlbumInfo implements Serializable {
             public String id;
             public String introduction;
             public String lastest_news;
+            public String logo_url;
             public OwnerBean owner;
             public int subscriptions_count;
             public String title;

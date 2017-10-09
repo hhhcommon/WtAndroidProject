@@ -4,7 +4,6 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 
-
 import com.j256.ormlite.stmt.QueryBuilder;
 import com.wotingfm.ui.bean.Player;
 

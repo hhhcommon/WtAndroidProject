@@ -6,8 +6,6 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.ScrollView;
 
-import com.wotingfm.ui.intercom.main.contacts.model.Contact;
-
 /**
  * Created by amine on 2017/6/20.
  */

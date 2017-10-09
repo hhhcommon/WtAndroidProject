@@ -6,8 +6,6 @@ import com.woting.commonplat.gather.GatherData;
 import com.woting.commonplat.gather.model.DataModel;
 import com.woting.commonplat.utils.JsonEncloseUtils;
 
-import org.json.JSONObject;
-
 import java.util.ArrayList;
 
 /**

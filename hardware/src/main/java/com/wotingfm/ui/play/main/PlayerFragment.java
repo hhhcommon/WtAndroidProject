@@ -21,7 +21,6 @@ import com.bumptech.glide.Glide;
 import com.woting.commonplat.utils.DementionUtil;
 import com.wotingfm.R;
 import com.wotingfm.common.application.BSApplication;
-import com.wotingfm.common.config.GlobalStateConfig;
 import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.common.utils.TimeUtil;
 import com.wotingfm.common.utils.ToastUtils;
@@ -70,8 +69,6 @@ public class PlayerFragment extends Fragment implements View.OnClickListener {
     @BindView(R.id.txt_video_totaltime)// 总时长
             TextView txtVideoTotaltime;
 
-    @BindView(R.id.loadLayout)
-    RelativeLayout loadLayout;
     @BindView(R.id.mRecyclerView)
     RecyclerView mRecyclerView;
     @BindView(R.id.LoadingView)
@@ -332,9 +329,9 @@ public class PlayerFragment extends Fragment implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.ivPlayerCenter:
-                GlobalStateConfig.mineFromType = 1;
-                GlobalStateConfig.activityA = "C";
-                GlobalStateConfig.activityB = "B";
+//                GlobalStateConfig.mineFromType = 1;
+//                GlobalStateConfig.activityA = "C";
+//                GlobalStateConfig.activityB = "B";
                 EventBus.getDefault().post(new MessageEvent("three"));
                 //   MainActivity.changeThree();
                 Intent push = new Intent(BroadcastConstants.MINE_ACTIVITY_CHANGE);
@@ -344,8 +341,8 @@ public class PlayerFragment extends Fragment implements View.OnClickListener {
                 getActivity().sendBroadcast(push);
                 break;
             case R.id.ivPlayerFind:
-                GlobalStateConfig.mineFromType = 4;
-                GlobalStateConfig.activityA = "A";
+//                GlobalStateConfig.mineFromType = 4;
+//                GlobalStateConfig.activityA = "A";
                 EventBus.getDefault().post(new MessageEvent("four"));
                 Intent push1 = new Intent(BroadcastConstants.MINE_ACTIVITY_CHANGE);
                 Bundle bundle1 = new Bundle();
@@ -465,23 +462,14 @@ public class PlayerFragment extends Fragment implements View.OnClickListener {
         int type = messageEvent.getType();
         switch (type) {
             case 0:
-                if (!TextUtils.isEmpty(event) && "stop".equals(event)) {
+                if (!TextUtils.isEmpty(event) && "START".equals(event)) {
                     presenter.playPause();
                 } else if (!TextUtils.isEmpty(event) && event.contains("stop&")) {
                     presenter.playPause();
                     initData(event.split("stop&")[1], null, null, null, null);
-                } else if (!TextUtils.isEmpty(event) && "pause".equals(event)) {
+                } else if (!TextUtils.isEmpty(event) && "PAUSE".equals(event)) {
                     presenter.playPause();
                     ivPause.setImageResource(R.mipmap.music_play_icon_play);
-                } else if (!TextUtils.isEmpty(event) && "start".equals(event)) {
-                    presenter.start();
-                    ivPause.setImageResource(R.mipmap.music_play_icon_pause);
-                } else if (!TextUtils.isEmpty(event) && "step".equals(event)) {
-                    before();
-                } else if (!TextUtils.isEmpty(event) && "next".equals(event)) {
-                    next();
-                } else if (!TextUtils.isEmpty(event) && "stop_or_star".equals(event)) {
-                    pause();
                 }
                 break;
             case 1:
@@ -546,6 +534,7 @@ public class PlayerFragment extends Fragment implements View.OnClickListener {
                     s.id = channelsBean.id;
                     s.single_logo_url = channelsBean.image_url;
                     s.single_file_url = channelsBean.radio_url;
+                    s.had_liked = channelsBean.had_liked;
                     try {
                         s.album_title = channelsBean.play_bill.title;
                     } catch (Exception e) {

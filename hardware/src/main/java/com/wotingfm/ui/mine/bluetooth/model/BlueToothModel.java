@@ -2,7 +2,6 @@ package com.wotingfm.ui.mine.bluetooth.model;
 
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
-import android.bluetooth.BluetoothServerSocket;
 import android.bluetooth.BluetoothSocket;
 import android.os.Build;
 import android.os.Handler;
@@ -11,10 +10,7 @@ import android.util.Log;
 
 import com.google.gson.GsonBuilder;
 import com.woting.commonplat.utils.SequenceUUID;
-import com.wotingfm.common.constant.StringConstant;
-import com.wotingfm.common.net.upLoadImage;
 import com.wotingfm.common.utils.L;
-import com.wotingfm.common.utils.ToastUtils;
 
 import java.io.IOException;
 import java.lang.reflect.Method;

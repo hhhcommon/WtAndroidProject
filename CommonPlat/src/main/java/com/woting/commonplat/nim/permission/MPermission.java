@@ -6,7 +6,6 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.support.v4.app.Fragment;
 
-
 import com.woting.commonplat.nim.permission.annotation.OnMPermissionDenied;
 import com.woting.commonplat.nim.permission.annotation.OnMPermissionGranted;
 import com.woting.commonplat.nim.permission.annotation.OnMPermissionNeverAskAgain;

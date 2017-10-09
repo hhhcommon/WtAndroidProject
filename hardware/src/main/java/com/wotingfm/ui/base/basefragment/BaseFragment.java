@@ -1,12 +1,21 @@
 package com.wotingfm.ui.base.basefragment;
 
 import android.support.v4.app.Fragment;
+
+import com.wotingfm.ui.bean.ChannelsBean;
+import com.wotingfm.ui.bean.MessageEvent;
+import com.wotingfm.ui.bean.Selected;
+import com.wotingfm.ui.bean.SinglesBase;
+import com.wotingfm.ui.bean.SinglesDownload;
 import com.wotingfm.ui.intercom.main.view.InterPhoneActivity;
 import com.wotingfm.ui.mine.main.MineActivity;
+import com.wotingfm.ui.play.find.live.view.LiveRoomActivity;
 import com.wotingfm.ui.play.find.main.view.LookListActivity;
-import com.wotingfm.ui.play.live.LiveRoomActivity;
 import com.wotingfm.ui.play.main.PlayerActivity;
 
+import org.greenrobot.eventbus.EventBus;
+
+import java.util.List;
 
 
 public abstract class BaseFragment extends Fragment  {
@@ -49,4 +58,30 @@ public abstract class BaseFragment extends Fragment  {
             liveRoomActivity.open(fragment);
         }
     }
+
+    public void startMain(String albumsId) {
+        EventBus.getDefault().post(new MessageEvent("one"));
+        EventBus.getDefault().post(new MessageEvent("stop&" + albumsId));
+    }
+
+    public void startMain(SinglesBase singlesBase) {
+        EventBus.getDefault().post(new MessageEvent("one"));
+        EventBus.getDefault().post(new MessageEvent(singlesBase, 2));
+    }
+
+    public void startMain(ChannelsBean channelsBean) {
+        EventBus.getDefault().post(new MessageEvent("one"));
+        EventBus.getDefault().post(new MessageEvent(channelsBean, 1));
+    }
+
+    public void startMain(Selected.DataBeanX.DataBean  DataBean) {
+        EventBus.getDefault().post(new MessageEvent("one"));
+        EventBus.getDefault().post(new MessageEvent(DataBean, 4));
+    }
+
+    public void startMain(List<SinglesDownload> singlesDownloadsd) {
+        EventBus.getDefault().post(new MessageEvent("one"));
+        EventBus.getDefault().post(new MessageEvent(singlesDownloadsd, 3));
+    }
+
 }

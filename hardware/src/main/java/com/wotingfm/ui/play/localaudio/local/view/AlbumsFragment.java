@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -17,18 +16,15 @@ import android.widget.TextView;
 
 import com.woting.commonplat.widget.LoadFrameLayout;
 import com.wotingfm.R;
-import com.wotingfm.common.config.GlobalStateConfig;
 import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.common.utils.DialogUtils;
-import com.wotingfm.ui.bean.MessageEvent;
+import com.wotingfm.ui.base.basefragment.BaseFragment;
 import com.wotingfm.ui.play.localaudio.download.view.DownloadingFragment;
 import com.wotingfm.ui.play.localaudio.local.adapter.AlbumsDownloadAdapter;
 import com.wotingfm.ui.play.localaudio.local.presenter.AlbumsPresenter;
 import com.wotingfm.ui.play.localaudio.locallist.view.LocalListFragment;
 import com.wotingfm.ui.play.localaudio.model.FileInfo;
 import com.wotingfm.ui.play.main.PlayerActivity;
-
-import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,7 +40,7 @@ import butterknife.ButterKnife;
  * 邮箱：645700751@qq.com
  */
 
-public class AlbumsFragment extends Fragment implements View.OnClickListener {
+public class AlbumsFragment extends BaseFragment implements View.OnClickListener {
 
     @BindView(R.id.mRecyclerView)
     RecyclerView mRecyclerView;
@@ -187,12 +183,6 @@ public class AlbumsFragment extends Fragment implements View.OnClickListener {
                 break;
 
         }
-    }
-
-    public void startMain(String albumsId) {
-        GlobalStateConfig.activityA = "A";
-        EventBus.getDefault().post(new MessageEvent("one"));
-        EventBus.getDefault().post(new MessageEvent("stop&" + albumsId));
     }
 
     public void showContentView() {

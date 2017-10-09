@@ -1,7 +1,6 @@
 package com.wotingfm.ui.play.find.radio.view;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,18 +13,10 @@ import com.woting.commonplat.amine.OnLoadMoreListener;
 import com.woting.commonplat.amine.OnRefreshListener;
 import com.woting.commonplat.widget.LoadFrameLayout;
 import com.wotingfm.R;
-import com.wotingfm.common.config.GlobalStateConfig;
 import com.wotingfm.common.net.RetrofitUtils;
-import com.wotingfm.ui.adapter.radioAdapter.RadioAdapter;
 import com.wotingfm.ui.base.basefragment.BaseFragment;
 import com.wotingfm.ui.bean.ChannelsBean;
-import com.wotingfm.ui.bean.MessageEvent;
-import com.wotingfm.ui.intercom.main.view.InterPhoneActivity;
-import com.wotingfm.ui.mine.main.MineActivity;
-import com.wotingfm.ui.play.find.main.view.LookListActivity;
-import com.wotingfm.ui.play.main.PlayerActivity;
-
-import org.greenrobot.eventbus.EventBus;
+import com.wotingfm.ui.play.find.radio.adapter.RadioAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -189,9 +180,4 @@ public class ProvincesAndCitiesListRadioFragment extends BaseFragment implements
         }
     }
 
-    private void startMain(ChannelsBean channelsBean) {
-        GlobalStateConfig.activityA = "A";
-        EventBus.getDefault().post(new MessageEvent("one"));
-        EventBus.getDefault().post(new MessageEvent(channelsBean, 1));
-    }
 }

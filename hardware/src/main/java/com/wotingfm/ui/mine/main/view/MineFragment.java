@@ -3,7 +3,6 @@ package com.wotingfm.ui.mine.main.view;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,22 +13,21 @@ import android.widget.TextView;
 import com.woting.commonplat.utils.JsonEncloseUtils;
 import com.wotingfm.R;
 import com.wotingfm.common.application.BSApplication;
-import com.wotingfm.ui.base.basefragment.BaseFragment;
-import com.wotingfm.ui.bean.MessageEvent;
 import com.wotingfm.common.config.GlobalStateConfig;
 import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.common.utils.CommonUtils;
 import com.wotingfm.common.utils.GlideUtils;
+import com.wotingfm.ui.base.basefragment.BaseFragment;
+import com.wotingfm.ui.bean.MessageEvent;
 import com.wotingfm.ui.mine.bluetooth.view.BluetoothFragment;
 import com.wotingfm.ui.mine.fm.view.FMSetFragment;
+import com.wotingfm.ui.mine.main.presenter.MinePresenter;
 import com.wotingfm.ui.mine.message.notify.view.MsgNotifyFragment;
 import com.wotingfm.ui.mine.personinfo.view.PersonalInfoFragment;
 import com.wotingfm.ui.mine.qrcodes.EWMShowFragment;
 import com.wotingfm.ui.mine.set.view.SettingFragment;
 import com.wotingfm.ui.mine.wifi.view.WIFIFragment;
-import com.wotingfm.ui.mine.main.MineActivity;
-import com.wotingfm.ui.mine.main.presenter.MinePresenter;
 import com.wotingfm.ui.user.logo.LogoActivity;
 
 import org.greenrobot.eventbus.EventBus;
@@ -132,20 +130,14 @@ public class MineFragment extends BaseFragment implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.head_left_btn:// 返回
-                if (GlobalStateConfig.mineFromType == 1) {
-                    GlobalStateConfig.mineFromType = 0;
-                    GlobalStateConfig.activityA = "A";
-                    //  MainActivity.changeOne();
+                if (GlobalStateConfig.destination == 0) {
                     EventBus.getDefault().post(new MessageEvent("one"));
                     Intent push = new Intent(BroadcastConstants.MINE_ACTIVITY_CHANGE);
                     Bundle bundle = new Bundle();
                     bundle.putInt("viewType", 1);
                     push.putExtras(bundle);
                     context.sendBroadcast(push);
-                } else if (GlobalStateConfig.mineFromType == 2) {
-                    GlobalStateConfig.mineFromType = 0;
-                    GlobalStateConfig.activityB = "B";
-                    //  MainActivity.changeTwo();
+                } else if (GlobalStateConfig.destination == 1) {
                     EventBus.getDefault().post(new MessageEvent("two"));
                     Intent push = new Intent(BroadcastConstants.MINE_ACTIVITY_CHANGE);
                     Bundle bundle = new Bundle();

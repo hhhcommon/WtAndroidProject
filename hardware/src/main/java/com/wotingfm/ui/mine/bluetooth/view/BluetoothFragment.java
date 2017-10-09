@@ -3,7 +3,6 @@ package com.wotingfm.ui.mine.bluetooth.view;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,11 +16,10 @@ import com.woting.commonplat.widget.HeightListView;
 import com.wotingfm.R;
 import com.wotingfm.common.utils.ToastUtils;
 import com.wotingfm.ui.base.basefragment.BaseFragment;
-import com.wotingfm.ui.mine.bluetooth.presenter.BlueToothPresenter;
-import com.wotingfm.ui.mine.main.MineActivity;
 import com.wotingfm.ui.mine.bluetooth.adapter.PairBluetoothAdapter;
 import com.wotingfm.ui.mine.bluetooth.adapter.UserBluetoothAdapter;
 import com.wotingfm.ui.mine.bluetooth.model.BluetoothInfo;
+import com.wotingfm.ui.mine.bluetooth.presenter.BlueToothPresenter;
 
 import java.util.List;
 

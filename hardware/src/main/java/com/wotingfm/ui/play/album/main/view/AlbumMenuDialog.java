@@ -7,14 +7,15 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
 import com.wotingfm.R;
 import com.wotingfm.common.utils.CommonUtils;
 import com.wotingfm.ui.bean.AlbumInfo;
 import com.wotingfm.ui.intercom.main.view.InterPhoneActivity;
 import com.wotingfm.ui.mine.main.MineActivity;
 import com.wotingfm.ui.play.anchor.view.AnchorPersonalCenterFragment;
+import com.wotingfm.ui.play.find.live.view.LiveRoomActivity;
 import com.wotingfm.ui.play.find.main.view.LookListActivity;
-import com.wotingfm.ui.play.live.LiveRoomActivity;
 import com.wotingfm.ui.play.main.PlayerActivity;
 import com.wotingfm.ui.play.report.view.ReportFragment;
 import com.wotingfm.ui.user.logo.LogoActivity;

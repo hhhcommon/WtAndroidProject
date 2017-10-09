@@ -4,7 +4,6 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.wifi.ScanResult;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,10 +15,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.wotingfm.R;
-import com.wotingfm.common.utils.ToastUtils;
 import com.wotingfm.ui.base.basefragment.BaseFragment;
-import com.wotingfm.ui.intercom.main.contacts.adapter.NoAdapter;
-import com.wotingfm.ui.mine.main.MineActivity;
 import com.wotingfm.ui.mine.wifi.adapter.WiFiListAdapter;
 import com.wotingfm.ui.mine.wifi.presenter.WIFIPresenter;
 

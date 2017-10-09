@@ -7,10 +7,10 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.util.Log;
 
-import com.wotingfm.ui.bean.MessageEvent;
 import com.wotingfm.common.config.GlobalStateConfig;
 import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.common.utils.ToastUtils;
+import com.wotingfm.ui.bean.MessageEvent;
 import com.wotingfm.ui.intercom.group.groupchat.model.GroupChat;
 import com.wotingfm.ui.intercom.group.groupchat.model.GroupChatModel;
 import com.wotingfm.ui.intercom.group.groupchat.view.GroupChatFragment;
@@ -22,6 +22,7 @@ import com.wotingfm.ui.intercom.main.view.InterPhoneActivity;
 import org.greenrobot.eventbus.EventBus;
 
 import java.util.List;
+
 
 /**
  * 群聊控制中心

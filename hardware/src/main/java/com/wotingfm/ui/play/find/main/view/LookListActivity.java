@@ -6,7 +6,6 @@ import android.widget.Toast;
 
 import com.woting.commonplat.utils.SequenceUUID;
 import com.wotingfm.R;
-import com.wotingfm.ui.base.baseactivity.AppManager;
 import com.wotingfm.ui.base.baseactivity.BaseFragmentActivity;
 import com.wotingfm.ui.bean.MessageEvent;
 
@@ -25,7 +24,6 @@ public class LookListActivity extends BaseFragmentActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_look_list);
-        AppManager.getAppManager().addActivity(this);
         context = this;
         openOne(new LookListFragment());
     }

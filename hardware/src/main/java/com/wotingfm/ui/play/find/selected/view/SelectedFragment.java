@@ -1,12 +1,12 @@
 package com.wotingfm.ui.play.find.selected.view;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
@@ -17,14 +17,14 @@ import com.woting.commonplat.amine.OnRefreshListener;
 import com.woting.commonplat.widget.LoadFrameLayout;
 import com.wotingfm.R;
 import com.wotingfm.common.application.BSApplication;
-import com.wotingfm.common.config.GlobalStateConfig;
 import com.wotingfm.common.net.RetrofitUtils;
 import com.wotingfm.common.utils.ToastUtils;
-import com.wotingfm.ui.bean.MessageEvent;
+import com.wotingfm.ui.base.basefragment.BaseFragment;
 import com.wotingfm.ui.bean.Selected;
 import com.wotingfm.ui.play.find.selected.adapter.SelectedAdapter;
-import org.greenrobot.eventbus.EventBus;
+
 import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,7 +39,7 @@ import rx.schedulers.Schedulers;
  * 发现精选
  */
 
-public class SelectedFragment extends Fragment implements View.OnClickListener, OnLoadMoreListener, OnRefreshListener {
+public class SelectedFragment extends BaseFragment implements View.OnClickListener, OnLoadMoreListener, OnRefreshListener {
 
     @BindView(R.id.loadLayout)
     LoadFrameLayout loadLayout;
@@ -93,13 +93,6 @@ public class SelectedFragment extends Fragment implements View.OnClickListener, 
         });
         refresh();
     }
-
-    public void startMain(Selected.DataBeanX.DataBean  DataBean) {
-        GlobalStateConfig.activityA = "A";
-        EventBus.getDefault().post(new MessageEvent("one"));
-        EventBus.getDefault().post(new MessageEvent(DataBean, 4));
-    }
-
 
     @Override
     public void onClick(View v) {

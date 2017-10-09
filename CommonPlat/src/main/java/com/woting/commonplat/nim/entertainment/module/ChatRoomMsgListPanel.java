@@ -35,6 +35,7 @@ import com.woting.commonplat.nim.im.ui.dialog.EasyAlertDialog;
 import com.woting.commonplat.nim.im.ui.dialog.EasyAlertDialogHelper;
 import com.woting.commonplat.nim.im.ui.listview.AutoRefreshListView;
 import com.woting.commonplat.nim.im.ui.listview.ListViewUtil;
+import com.woting.commonplat.nim.im.ui.listview.MessageListView;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -53,7 +54,7 @@ public class ChatRoomMsgListPanel implements TAdapterDelegate {
     private Handler uiHandler;
 
     // message list view
-    private MessageListViewEx messageListView;
+    private MessageListView messageListView;
     private LinkedList<IMMessage> items;
     private MsgAdapter adapter;
 
@@ -93,7 +94,7 @@ public class ChatRoomMsgListPanel implements TAdapterDelegate {
         adapter = new MsgAdapter(container.activity, items, this);
         adapter.setEventListener(new MsgItemEventListener());
 
-        messageListView = (MessageListViewEx) rootView.findViewById(R.id.messageListView);
+        messageListView = (MessageListView) rootView.findViewById(R.id.messageListView);
         messageListView.requestDisallowInterceptTouchEvent(true);
 
         messageListView.setMode(AutoRefreshListView.Mode.START);

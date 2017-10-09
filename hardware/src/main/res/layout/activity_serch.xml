@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:app="http://schemas.android.com/apk/res-auto"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:background="@color/white"
-              android:orientation="vertical"
-              android:paddingTop="20dp">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical"
+    android:paddingTop="@dimen/padding_top">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -35,6 +34,7 @@
                 android:hint="请输入搜索内容"
                 android:maxLines="1"
                 android:singleLine="true"
+                android:imeOptions="actionSearch"
                 android:textColor="@color/black_head_word"
                 android:textColorHint="#959698"
                 android:textSize="12sp"/>

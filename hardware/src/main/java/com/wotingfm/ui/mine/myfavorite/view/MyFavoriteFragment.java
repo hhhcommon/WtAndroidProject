@@ -2,35 +2,24 @@ package com.wotingfm.ui.mine.myfavorite.view;
 
 import android.app.Dialog;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import com.woting.commonplat.widget.TipView;
 import com.wotingfm.R;
 import com.wotingfm.common.utils.DialogUtils;
 import com.wotingfm.ui.base.basefragment.BaseFragment;
-import com.wotingfm.ui.intercom.main.contacts.model.Contact;
-import com.wotingfm.ui.intercom.main.view.InterPhoneActivity;
-import com.wotingfm.ui.mine.main.MineActivity;
 import com.wotingfm.ui.mine.myfavorite.adapter.MyFavoriteAdapter;
 import com.wotingfm.ui.mine.myfavorite.model.Favorite;
 import com.wotingfm.ui.mine.myfavorite.presenter.MyFavoritePresenter;
-import com.wotingfm.ui.mine.myfocus.adapter.MyFocusAdapter;
-import com.wotingfm.ui.mine.myfocus.model.Focus;
-import com.wotingfm.ui.mine.myfocus.presenter.MyFocusPresenter;
 
 import java.util.List;
 
 /**
- * 删除组成员
+ * 我喜欢的
  * 作者：xinLong on 2017/6/5 01:30
  * 邮箱：645700751@qq.com
  */

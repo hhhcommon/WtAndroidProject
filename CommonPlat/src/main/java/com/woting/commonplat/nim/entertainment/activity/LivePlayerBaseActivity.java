@@ -460,8 +460,6 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
         }
         messageEditText = findView(R.id.editTextMessage);
 //
-//        inputBtn = findView(R.id.tv_edit);
-//        inputBtn.setOnClickListener(baseClickListener);
         inputPanel.hideInputPanel();
         inputPanel.collapse(true);
     }
@@ -622,11 +620,9 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
     // 聊天室信息相关界面
     protected void updateRoomUI(boolean isHide) {
         if (isHide) {
-//            controlContainer.setVisibility(View.GONE);
             roomOwnerLayout.setVisibility(View.GONE);
             roomNameLayout.setVisibility(View.GONE);
         } else {
-//            controlContainer.setVisibility(View.VISIBLE);
             roomOwnerLayout.setVisibility(View.VISIBLE);
             roomNameLayout.setVisibility(View.VISIBLE);
         }
@@ -722,7 +718,6 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
 
     @Override
     public void onInputPanelExpand() {
-//        controlContainer.setVisibility(View.GONE);
         if (fakeListText != null) {
             fakeListText.setVisibility(View.GONE);
         }
@@ -736,7 +731,6 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
     @Override
     public void shouldCollapseInputPanel() {
         inputPanel.collapse(false);
-//        controlContainer.setVisibility(View.VISIBLE);
         if (fakeListText != null) {
             fakeListText.setVisibility(View.VISIBLE);
         }

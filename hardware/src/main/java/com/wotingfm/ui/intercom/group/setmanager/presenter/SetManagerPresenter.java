@@ -6,14 +6,15 @@ import com.google.gson.Gson;
 import com.woting.commonplat.config.GlobalNetWorkConfig;
 import com.wotingfm.common.config.GlobalStateConfig;
 import com.wotingfm.common.utils.ToastUtils;
-import com.wotingfm.ui.intercom.group.setmanager.view.SetManagerFragment;
 import com.wotingfm.ui.intercom.group.setmanager.model.SetManagerModel;
+import com.wotingfm.ui.intercom.group.setmanager.view.SetManagerFragment;
 import com.wotingfm.ui.intercom.main.contacts.model.Contact;
 import com.wotingfm.ui.intercom.main.view.InterPhoneActivity;
 
 import org.json.JSONObject;
 
 import java.util.List;
+
 
 /**
  * 作者：xinLong on 2017/6/5 13:55

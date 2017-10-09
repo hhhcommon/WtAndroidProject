@@ -12,8 +12,8 @@ import android.widget.TextView;
 import com.wotingfm.R;
 import com.wotingfm.ui.intercom.main.view.InterPhoneActivity;
 import com.wotingfm.ui.mine.main.MineActivity;
+import com.wotingfm.ui.play.find.live.view.LiveRoomActivity;
 import com.wotingfm.ui.play.find.main.view.LookListActivity;
-import com.wotingfm.ui.play.live.LiveRoomActivity;
 import com.wotingfm.ui.play.main.PlayerActivity;
 import com.wotingfm.ui.play.report.view.ReportFragment;
 

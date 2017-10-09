@@ -4,23 +4,12 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 
-import com.wotingfm.common.net.RetrofitUtils;
 import com.wotingfm.common.utils.CommonUtils;
 import com.wotingfm.common.utils.L;
 import com.wotingfm.common.utils.T;
 import com.wotingfm.ui.bean.AnchorInfo;
-import com.wotingfm.ui.intercom.main.view.InterPhoneActivity;
-import com.wotingfm.ui.mine.main.MineActivity;
 import com.wotingfm.ui.play.anchor.model.AnchorPersonalCenterModel;
-import com.wotingfm.ui.play.anchor.view.AlbumsListMeFragment;
 import com.wotingfm.ui.play.anchor.view.AnchorPersonalCenterFragment;
-import com.wotingfm.ui.play.find.main.view.LookListActivity;
-import com.wotingfm.ui.play.live.LiveRoomActivity;
-import com.wotingfm.ui.play.main.PlayerActivity;
-
-import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action1;
-import rx.schedulers.Schedulers;
 
 /**
  * 作者：xinLong on 2017/6/5 13:55

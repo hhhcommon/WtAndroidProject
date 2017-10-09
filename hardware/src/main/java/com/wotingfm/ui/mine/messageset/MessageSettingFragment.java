@@ -2,8 +2,6 @@ package com.wotingfm.ui.mine.messageset;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,9 +12,7 @@ import android.widget.TextView;
 import com.wotingfm.R;
 import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.constant.StringConstant;
-import com.wotingfm.common.utils.StatusBarUtil;
 import com.wotingfm.ui.base.basefragment.BaseFragment;
-import com.wotingfm.ui.mine.main.MineActivity;
 
 /**
  * 消息设置

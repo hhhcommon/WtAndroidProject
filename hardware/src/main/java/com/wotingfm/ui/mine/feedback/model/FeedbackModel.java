@@ -2,15 +2,8 @@ package com.wotingfm.ui.mine.feedback.model;
 
 import android.util.Log;
 
-import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.wotingfm.common.application.BSApplication;
-import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.common.net.RetrofitUtils;
-import com.wotingfm.ui.mine.fm.model.FMInfo;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;

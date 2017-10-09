@@ -1,7 +1,6 @@
 package com.wotingfm.ui.play.find.radio.view;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -12,13 +11,9 @@ import com.woting.commonplat.config.GlobalAddressConfig;
 import com.woting.commonplat.widget.LoadFrameLayout;
 import com.wotingfm.R;
 import com.wotingfm.common.net.RetrofitUtils;
-import com.wotingfm.ui.adapter.radioAdapter.ProvincesAdapter;
+import com.wotingfm.ui.play.find.radio.adapter.ProvincesAdapter;
 import com.wotingfm.ui.base.basefragment.BaseFragment;
 import com.wotingfm.ui.bean.Provinces;
-import com.wotingfm.ui.intercom.main.view.InterPhoneActivity;
-import com.wotingfm.ui.mine.main.MineActivity;
-import com.wotingfm.ui.play.find.main.view.LookListActivity;
-import com.wotingfm.ui.play.main.PlayerActivity;
 
 import java.util.ArrayList;
 import java.util.List;

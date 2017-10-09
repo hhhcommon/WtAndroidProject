@@ -3,9 +3,7 @@ package com.wotingfm.ui.mine.bluetooth.presenter;
 import android.bluetooth.BluetoothAdapter;
 
 import com.wotingfm.common.utils.ToastUtils;
-import com.wotingfm.ui.intercom.main.view.InterPhoneActivity;
 import com.wotingfm.ui.mine.bluetooth.view.EditBlueToothNameFragment;
-import com.wotingfm.ui.mine.main.MineActivity;
 
 /**
  * 作者：xinLong on 2017/6/5 13:55

@@ -9,7 +9,6 @@ import com.woting.commonplat.config.GlobalNetWorkConfig;
 import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.common.utils.ToastUtils;
-import com.wotingfm.ui.intercom.main.contacts.model.Contact;
 import com.wotingfm.ui.mine.myfocus.model.Focus;
 import com.wotingfm.ui.mine.myfocus.model.MyFocusModel;
 import com.wotingfm.ui.mine.myfocus.view.MyFocusFragment;

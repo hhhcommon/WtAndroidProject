@@ -40,7 +40,6 @@ import android.view.ViewGroup.LayoutParams;
 import android.view.WindowManager;
 import android.widget.Toast;
 
-
 import com.netease.neliveplayer.NELivePlayer;
 import com.netease.neliveplayer.NEMediaInfo;
 import com.netease.neliveplayer.NEMediaPlayer;

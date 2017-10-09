@@ -2,7 +2,6 @@ package com.wotingfm.ui.mine.bluetooth.presenter;
 
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
-import android.bluetooth.BluetoothServerSocket;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -14,12 +13,10 @@ import android.widget.Toast;
 
 import com.google.gson.GsonBuilder;
 import com.wotingfm.ui.mine.bluetooth.model.BlueToothModel;
-import com.wotingfm.ui.mine.bluetooth.view.BluetoothFragment;
 import com.wotingfm.ui.mine.bluetooth.model.BluetoothInfo;
+import com.wotingfm.ui.mine.bluetooth.view.BluetoothFragment;
 import com.wotingfm.ui.mine.bluetooth.view.EditBlueToothNameFragment;
-import com.wotingfm.ui.mine.main.MineActivity;
 
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;

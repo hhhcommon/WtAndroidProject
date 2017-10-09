@@ -6,7 +6,7 @@ package com.wotingfm.ui.mine.myfavorite.model;
  */
 public class Favorite {
     private String id;//
-    private String liked_type;//
+    private String liked_type;//'single','radio'
     private String liked_id;// 1
     private String title;// 一口气读完美国史 第23集
     private String logo_url;//
@@ -14,6 +14,7 @@ public class Favorite {
     private String album_id;// 一口气读完美国史
     private String album_name;// 一口气读完美国史
     private String play_count;//
+    private String playing_title;// 电台正在直播的节目
 
     public String getAlbum_name() {
         return album_name;
@@ -85,5 +86,13 @@ public class Favorite {
 
     public void setPlay_count(String play_count) {
         this.play_count = play_count;
+    }
+
+    public String getPlaying_title() {
+        return playing_title;
+    }
+
+    public void setPlaying_title(String playing_title) {
+        this.playing_title = playing_title;
     }
 }

@@ -1,29 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_gravity="center"
+    android:layout_height="match_parent"
     android:gravity="center"
     android:orientation="horizontal">
 
     <View
         android:id="@+id/view"
         android:layout_width="33.5dp"
-        android:visibility="gone"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:visibility="gone" />
 
-
-
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <LinearLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/largeLabel"
-        android:layout_gravity="center"
+        android:layout_height="match_parent"
         android:gravity="center"
+        android:orientation="vertical"
         android:paddingLeft="16.5dp"
-        android:paddingRight="16.5dp"
-        android:orientation="vertical">
-
+        android:paddingRight="16.5dp">
 
         <ImageView
             android:id="@+id/ivPhoto"
@@ -32,43 +26,52 @@
             android:layout_gravity="center"
             android:scaleType="centerCrop" />
 
-        <TextView
-            android:id="@+id/tvTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="33dp"
-            android:ellipsize="end"
-            android:gravity="center"
-            android:maxWidth="220dp"
-            android:paddingLeft="12dp"
-            android:paddingRight="12dp"
-            android:singleLine="true"
-            android:text="AmineTitle"
-            android:textColor="#ffffff"
-            android:textSize="17sp" />
-
-        <TextView
-            android:id="@+id/tvContent"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:orientation="vertical"
             android:layout_marginTop="10dp"
-            android:ellipsize="end"
             android:gravity="center"
-            android:maxWidth="220dp"
-            android:paddingLeft="12dp"
-            android:paddingRight="12dp"
-            android:singleLine="true"
-            android:text="发现更多节目发现更多节目发现更多节目发现更多节目发现更多节目"
-            android:textColor="#50ffffff"
-            android:textSize="13sp" />
+            android:layout_weight="1">
+
+            <TextView
+                android:id="@+id/tvTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:ellipsize="end"
+                android:gravity="center"
+                android:maxWidth="220dp"
+                android:paddingLeft="12dp"
+                android:paddingRight="12dp"
+                android:singleLine="true"
+                android:text="AmineTitle"
+                android:textColor="#ffffff"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/tvContent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="9.3dp"
+                android:ellipsize="end"
+                android:gravity="center"
+                android:maxWidth="220dp"
+                android:paddingLeft="12dp"
+                android:paddingRight="12dp"
+                android:singleLine="true"
+                android:text="发现更多节目发现更多节目发现更多节目发现更多节目发现更多节目"
+                android:textColor="#50ffffff"
+                android:textSize="13sp" />
+        </LinearLayout>
+
     </LinearLayout>
 
 
     <View
         android:id="@+id/view2"
-        android:visibility="gone"
         android:layout_width="33.5dp"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:visibility="gone" />
 </LinearLayout>

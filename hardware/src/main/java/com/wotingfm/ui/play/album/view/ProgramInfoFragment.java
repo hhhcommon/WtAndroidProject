@@ -1,7 +1,6 @@
 package com.wotingfm.ui.play.album.view;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -13,18 +12,12 @@ import android.widget.TextView;
 
 import com.woting.commonplat.widget.LoadFrameLayout;
 import com.wotingfm.R;
-import com.wotingfm.common.config.GlobalStateConfig;
 import com.wotingfm.common.net.RetrofitUtils;
-import com.wotingfm.ui.adapter.albumsAdapter.AlbumsInfoProgramAdapter;
 import com.wotingfm.ui.base.basefragment.BaseFragment;
 import com.wotingfm.ui.bean.MessageEvent;
 import com.wotingfm.ui.bean.Player;
-import com.wotingfm.ui.bean.SinglesBase;
-import com.wotingfm.ui.intercom.main.view.InterPhoneActivity;
-import com.wotingfm.ui.mine.main.MineActivity;
+import com.wotingfm.ui.play.album.view.adapter.AlbumsInfoProgramAdapter;
 import com.wotingfm.ui.play.album.view.download.view.DownloadSelectFragment;
-import com.wotingfm.ui.play.find.main.view.LookListActivity;
-import com.wotingfm.ui.play.main.PlayerActivity;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -139,17 +132,7 @@ public class ProgramInfoFragment extends BaseFragment implements View.OnClickLis
         }
     }
 
-    private void startMain(String albumsId) {
-        GlobalStateConfig.activityA = "A";
-        EventBus.getDefault().post(new MessageEvent("one"));
-        EventBus.getDefault().post(new MessageEvent("stop&" + albumsId));
-    }
 
-    private void startMain(SinglesBase singlesBase) {
-        GlobalStateConfig.activityA = "A";
-        EventBus.getDefault().post(new MessageEvent("one"));
-        EventBus.getDefault().post(new MessageEvent(singlesBase, 2));
-    }
 
     private void refresh() {
         mPage = 1;

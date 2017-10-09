@@ -1,4 +1,4 @@
-package com.wotingfm.ui.adapter.radioAdapter;
+package com.wotingfm.ui.play.find.radio.adapter;
 
 import android.content.Context;
 import android.view.View;

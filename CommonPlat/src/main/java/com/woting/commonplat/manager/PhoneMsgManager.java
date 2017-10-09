@@ -10,6 +10,7 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Display;
 import android.view.WindowManager;
+
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 

@@ -7,11 +7,11 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.util.Log;
 
-import com.wotingfm.ui.bean.MessageEvent;
 import com.wotingfm.common.config.GlobalStateConfig;
 import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.common.manager.InterPhoneControl;
 import com.wotingfm.common.utils.ToastUtils;
+import com.wotingfm.ui.bean.MessageEvent;
 import com.wotingfm.ui.intercom.add.search.local.model.SearchContactsForLocalModel;
 import com.wotingfm.ui.intercom.add.search.local.view.SearchContactsForLocalFragment;
 import com.wotingfm.ui.intercom.alert.call.view.CallAlertActivity;
@@ -25,6 +25,8 @@ import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
+
+
 
 /**
  * 作者：xinLong on 2017/6/5 13:55

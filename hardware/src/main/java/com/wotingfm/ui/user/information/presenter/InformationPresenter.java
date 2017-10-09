@@ -25,10 +25,21 @@ import com.alibaba.sdk.android.oss.model.PutObjectRequest;
 import com.alibaba.sdk.android.oss.model.PutObjectResult;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.netease.nimlib.sdk.AbortableFuture;
+import com.netease.nimlib.sdk.NIMClient;
+import com.netease.nimlib.sdk.RequestCallback;
+import com.netease.nimlib.sdk.auth.AuthService;
+import com.netease.nimlib.sdk.auth.LoginInfo;
 import com.woting.commonplat.manager.FileManager;
+import com.woting.commonplat.nim.DemoCache;
+import com.woting.commonplat.nim.base.util.string.MD5;
+import com.woting.commonplat.nim.im.business.RegisterHttpClient;
+import com.woting.commonplat.nim.im.ui.dialog.DialogMaker;
 import com.woting.commonplat.utils.SequenceUUID;
 import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.constant.BroadcastConstants;
+import com.wotingfm.common.live.preference.Preferences;
+import com.wotingfm.common.net.RetrofitUtils;
 import com.wotingfm.common.net.upLoadImage;
 import com.wotingfm.common.utils.ToastUtils;
 import com.wotingfm.ui.photocut.PhotoCutActivity;
@@ -54,14 +65,15 @@ public class InformationPresenter {
     private final int TO_CAMERA = 6;
     private final int PHOTO_REQUEST_CUT = 7;    // 标识 跳转到图片裁剪界面
     private int Code;    // 标识
-    private String outputFilePath;
-    private String url;
+    private String outputFilePath,acc_id,pws,url,UUID;
     private MessageReceiver Receiver;
-    private String UUID;
 
     public InformationPresenter(InformationFragment activity) {
         this.activity = activity;
         this.model = new InformationModel();
+        Bundle bundle = activity.getArguments();
+        if (bundle != null) acc_id = bundle.getString("acc_id");
+        if (bundle != null) pws = bundle.getString("pws");
         setReceiver();
     }
 
@@ -96,8 +108,11 @@ public class InformationPresenter {
             if (ret == 0) {
                 model.saveImg(url);
                 model.saveName(name);
+                yxRegister(name);
+            }else{
+                jump();// 跳转到偏好设置界面
+
             }
-            jump();// 跳转到偏好设置界面
         } catch (Exception e) {
             e.printStackTrace();
             jump();// 跳转到偏好设置界面
@@ -122,7 +137,7 @@ public class InformationPresenter {
      */
     private boolean checkData(String name) {
         if (url == null || url.trim().equals("")) {
-            Toast.makeText(activity.getActivity(), "头像能为空", Toast.LENGTH_LONG).show();
+            Toast.makeText(activity.getActivity(), "头像不能为空", Toast.LENGTH_LONG).show();
             return false;
         }
         if (name == null || name.trim().equals("")) {
@@ -339,6 +354,71 @@ public class InformationPresenter {
                 setResults(resultCode, uri, path);
             }
         }
+    }
+    ///////////////////////////////////////
+    private AbortableFuture<LoginInfo> loginRequest;
+
+    private void onLoginDone() {
+        loginRequest = null;
+        DialogMaker.dismissProgressDialog();
+    }
+
+    private void saveLoginInfo(final String account, final String token) {
+        Preferences.saveUserAccount(account);
+        Preferences.saveUserToken(token);
+    }
+
+    // 云信的登录
+    private void loginYx(final String account, final String token) {
+        // 登录
+        loginRequest = NIMClient.getService(AuthService.class).login(new LoginInfo(account, tokenFromPassword(token)));
+        loginRequest.setCallback(new RequestCallback<LoginInfo>() {
+            @Override
+            public void onSuccess(LoginInfo param) {
+                onLoginDone();
+                DemoCache.setAccount(account);
+                saveLoginInfo(account, token);
+
+                // 发送登录广播通知所有界面
+                RetrofitUtils.INSTANCE = null;
+
+                // 发送登录广播通知所有界面
+                activity.getActivity().sendBroadcast(new Intent(BroadcastConstants.LOGIN));
+                jump();// 跳转到偏好设置界面
+            }
+
+            @Override
+            public void onFailed(int code) {
+                onLoginDone();
+                jump();// 跳转到偏好设置界面
+
+            }
+
+            @Override
+            public void onException(Throwable exception) {
+                onLoginDone();
+            }
+        });
+    }
+
+    // 云信的注册
+    private void yxRegister(String nickName){
+        RegisterHttpClient.getInstance().register(acc_id, nickName, pws, new RegisterHttpClient.ContactHttpCallback<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                loginYx(acc_id, pws);
+            }
+
+            @Override
+            public void onFailed(int code, String errorMsg) {
+                jump();// 跳转到偏好设置界面
+            }
+        });
+    }
+
+    // 密码加密
+    private String tokenFromPassword(String password) {
+        return MD5.getStringMD5(password);
     }
 
     /**

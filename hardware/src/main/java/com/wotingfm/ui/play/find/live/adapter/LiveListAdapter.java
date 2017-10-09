@@ -1,4 +1,4 @@
-package com.wotingfm.ui.adapter.findHome;
+package com.wotingfm.ui.play.find.live.adapter;
 
 import android.content.Context;
 import android.view.View;
@@ -8,10 +8,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 import com.woting.commonplat.utils.DementionUtil;
 import com.wotingfm.R;
-import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.utils.GlideUtils;
 import com.wotingfm.ui.bean.LiveBean;
 import com.zhy.adapter.recyclerview.CommonAdapter;

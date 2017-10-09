@@ -39,7 +39,6 @@ import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
 
-
 import com.woting.commonplat.R;
 import com.woting.commonplat.nim.base.util.ScreenUtil;
 import com.woting.commonplat.nim.base.util.log.LogUtil;

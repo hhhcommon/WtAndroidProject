@@ -117,6 +117,7 @@
                     android:textColor="#3cdcaf" />
 
                 <TextView
+                    android:id="@+id/tv_beginTime"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5.3dp"
@@ -134,7 +135,7 @@
             android:layout_marginTop="50dp"
             android:layout_weight="1">
 
-            <com.woting.commonplat.nim.entertainment.ui.MessageListViewEx
+            <com.woting.commonplat.nim.im.ui.listview.MessageListView
                 android:id="@+id/messageListView"
                 style="@style/list_view"
                 android:layout_width="match_parent"
@@ -189,24 +190,31 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:background="@color/transparent_10_black"
             android:gravity="center_horizontal"
             android:orientation="vertical">
 
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/padding_top" />
+
             <RelativeLayout
-                android:layout_width="90dp"
-                android:layout_height="90dp"
-                android:layout_marginTop="90dp">
+                android:layout_width="69.3dp"
+                android:layout_height="69.3dp"
+                android:layout_marginTop="52dp">
 
                 <ImageView
+                    android:id="@+id/img_anchor_head"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:src="@mipmap/test" />
             </RelativeLayout>
 
             <TextView
+                android:id="@+id/tv_anchor_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
+                android:layout_marginTop="10.7dp"
                 android:text="我听小辛"
                 android:textColor="@color/white"
                 android:textSize="16sp" />
@@ -214,97 +222,95 @@
 
             <TextView
                 android:id="@+id/tvTrailerFollow"
-                android:layout_width="110dp"
-                android:layout_height="32dp"
+                android:layout_width="60dp"
+                android:layout_height="26.7dp"
                 android:layout_marginTop="20dp"
                 android:background="@drawable/trailer_info_follow"
                 android:gravity="center"
                 android:lineSpacingExtra="0sp"
                 android:text="关注"
                 android:textColor="#ffffff"
-                android:textSize="13sp" />
+                android:textSize="13.3sp" />
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="73dp"
-                android:layout_marginLeft="72dp"
-                android:layout_marginRight="72dp"
-                android:layout_marginTop="74dp">
+                android:layout_height="60dp"
+                android:layout_marginLeft="40dp"
+                android:layout_marginRight="40dp"
+                android:layout_marginTop="68dp">
 
                 <TextView
                     android:id="@+id/tv_1"
                     android:layout_width="50dp"
                     android:layout_height="1dp"
                     android:layout_marginTop="13dp"
-                    android:background="@color/white" />
+                    android:layout_marginLeft="1dp"
+                    android:background="@color/transparent_90_white" />
 
                 <TextView
                     android:id="@+id/tv_2"
-                    android:layout_width="130dp"
-                    android:layout_height="26dp"
-                    android:layout_toRightOf="@+id/tv_1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
                     android:gravity="center"
                     android:text="直播已结束"
-                    android:textColor="@color/white"
-                    android:textStyle="bold" />
+                    android:textColor="#ff7e42"
+                    android:textSize="22sp" />
 
                 <TextView
                     android:id="@+id/tv_3"
                     android:layout_width="50dp"
                     android:layout_height="1dp"
+                    android:layout_marginRight="1dp"
+                    android:layout_alignParentRight="true"
                     android:layout_marginTop="13dp"
-                    android:layout_toRightOf="@+id/tv_2"
-                    android:background="@color/white" />
+                    android:background="@color/transparent_90_white" />
 
                 <TextView
                     android:layout_width="1dp"
-                    android:layout_height="60dp"
+                    android:layout_height="48dp"
                     android:layout_marginTop="13dp"
-                    android:background="@color/white" />
-
-                <TextView
-                    android:layout_width="1dp"
-                    android:layout_height="60dp"
-                    android:layout_marginTop="13dp"
-                    android:background="@color/white" />
+                    android:background="@color/transparent_90_white" />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
+                    android:layout_marginLeft="1dp"
+                    android:layout_marginRight="1dp"
                     android:layout_alignParentBottom="true"
-                    android:background="@color/white" />
+                    android:background="@color/transparent_90_white" />
 
                 <TextView
                     android:layout_width="1dp"
-                    android:layout_height="60dp"
+                    android:layout_height="48dp"
                     android:layout_alignParentRight="true"
                     android:layout_marginTop="13dp"
-                    android:background="@color/white" />
+                    android:background="@color/transparent_90_white" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/tv_2"
-                    android:layout_marginTop="15dp"
                     android:layout_centerHorizontal="true"
+                    android:layout_marginTop="5dp"
                     android:text="1000人观看"
                     android:textColor="@color/white"
-                    android:textSize="16sp" />
+                    android:textSize="13.3sp" />
             </RelativeLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:gravity="bottom"
-                android:layout_weight="1">
+                android:layout_weight="1"
+                android:gravity="bottom">
 
                 <TextView
                     android:id="@+id/tv_close"
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
-                    android:layout_marginBottom="20dp"
-                    android:layout_marginLeft="36dp"
-                    android:layout_marginRight="36dp"
+                    android:layout_marginBottom="13.3dp"
+                    android:layout_marginLeft="12dp"
+                    android:layout_marginRight="12dp"
                     android:background="@drawable/background_circle_live_edits"
                     android:gravity="center"
                     android:text="返回主页"

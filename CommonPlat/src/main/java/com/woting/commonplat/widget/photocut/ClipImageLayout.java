@@ -7,7 +7,9 @@ import android.net.Uri;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.widget.RelativeLayout;
+
 import com.woting.commonplat.manager.PhoneMsgManager;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 

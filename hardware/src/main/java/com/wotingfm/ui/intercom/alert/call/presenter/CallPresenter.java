@@ -4,9 +4,9 @@ import android.content.Intent;
 import android.util.Log;
 
 import com.netease.nimlib.sdk.avchat.AVChatManager;
-import com.wotingfm.ui.bean.MessageEvent;
 import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.common.service.AudioService;
+import com.wotingfm.ui.bean.MessageEvent;
 import com.wotingfm.ui.intercom.alert.call.model.CallModel;
 import com.wotingfm.ui.intercom.alert.call.view.CallAlertActivity;
 import com.wotingfm.ui.intercom.main.contacts.model.Contact;

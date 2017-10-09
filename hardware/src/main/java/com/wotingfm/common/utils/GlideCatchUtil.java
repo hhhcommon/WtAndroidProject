@@ -1,9 +1,11 @@
 package com.wotingfm.common.utils;
 
 import android.os.Looper;
+
 import com.bumptech.glide.Glide;
 import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.config.GlobalStateConfig;
+
 import java.io.File;
 
 /**

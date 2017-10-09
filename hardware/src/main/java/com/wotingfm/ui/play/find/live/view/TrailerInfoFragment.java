@@ -1,9 +1,8 @@
-package com.wotingfm.ui.play.live;
+package com.wotingfm.ui.play.find.live.view;
 
 import android.app.Dialog;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.ForegroundColorSpan;
@@ -20,18 +19,14 @@ import com.google.gson.GsonBuilder;
 import com.woting.commonplat.widget.GlideCircleTransform;
 import com.wotingfm.R;
 import com.wotingfm.common.application.BSApplication;
-import com.wotingfm.common.utils.DialogUtils;
-import com.wotingfm.ui.base.basefragment.BaseFragment;
-import com.wotingfm.ui.bean.TrailerInfo;
 import com.wotingfm.common.live.LiveManger;
 import com.wotingfm.common.net.RetrofitUtils;
 import com.wotingfm.common.utils.CommonUtils;
+import com.wotingfm.common.utils.DialogUtils;
 import com.wotingfm.common.utils.T;
-import com.wotingfm.ui.intercom.main.view.InterPhoneActivity;
-import com.wotingfm.ui.mine.main.MineActivity;
+import com.wotingfm.ui.base.basefragment.BaseFragment;
+import com.wotingfm.ui.bean.TrailerInfo;
 import com.wotingfm.ui.play.anchor.view.AnchorPersonalCenterFragment;
-import com.wotingfm.ui.play.find.main.view.LookListActivity;
-import com.wotingfm.ui.play.main.PlayerActivity;
 import com.wotingfm.ui.user.logo.LogoActivity;
 
 import butterknife.BindView;

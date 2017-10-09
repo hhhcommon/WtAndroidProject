@@ -44,7 +44,7 @@ public class ChatFragment extends Fragment implements ChatAdapter.IonSlidingView
     private ChatAdapter mAdapter;
     private ImageView img_url_group, img_person_group,img_url_person,img_person_person;
     private RelativeLayout re_group, re_person,re_back;
-    private TextView tv_groupName, tv_groupNum, tv_person_group, tv_person_person,tv_group_talked,tv_person_name,tv_person_talked,tv_line,tv_view_bg;
+    private TextView tv_groupName, tv_groupNum, tv_person_group, tv_person_person,tv_group_talked,tv_person_name,tv_person_talked,tv_line,tv_view_bg,tv_groupNum_in;
     private LinearLayout lin_back,lin_group_talking,lin_person_talking;
     private TipView tip_view;
     private Dialog confirmDialog;
@@ -88,6 +88,7 @@ public class ChatFragment extends Fragment implements ChatAdapter.IonSlidingView
         img_url_group.setOnClickListener(this);// 监听，跳转到群详情
         tv_groupName = (TextView) rootView.findViewById(R.id.tv_groupName);// 组名称
         tv_groupNum = (TextView) rootView.findViewById(R.id.tv_groupNum);
+        tv_groupNum_in = (TextView) rootView.findViewById(R.id.tv_groupNum_in);
         rootView.findViewById(R.id.img_close_group).setOnClickListener(this);// 退出组对讲按钮
         tv_group_talked = (TextView) rootView.findViewById(R.id.tv_group_talked);// 无人说话提示界面
         lin_group_talking = (LinearLayout) rootView.findViewById(R.id.lin_group_talking);//有人说话提示界面
@@ -246,7 +247,6 @@ public class ChatFragment extends Fragment implements ChatAdapter.IonSlidingView
             g_name = "未知";
         }
         tv_groupName.setText(g_name);// 群名称
-        setGroupViewNum(h.getGroupNum());
         if (h.getURL() != null && !h.getURL().equals("") &&h.getURL().startsWith("http")) {// 群头像
             GlideUtils.loadImageViewRoundCorners(h.getURL(), img_url_group, 150, 150);
         } else {
@@ -298,10 +298,17 @@ public class ChatFragment extends Fragment implements ChatAdapter.IonSlidingView
     }
 
     /**
+     * 设置群组在线成员数
+     */
+    public void setGroupViewNumIn(String num) {
+        tv_groupNum_in.setText("( "+num+" / ");
+    }
+
+    /**
      * 设置群组成员数
      */
     public void setGroupViewNum(String num) {
-        tv_groupNum.setText("("+num+")人");
+        tv_groupNum.setText(num+" 人)");
     }
 
     /**

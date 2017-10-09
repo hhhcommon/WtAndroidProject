@@ -12,11 +12,11 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.woting.commonplat.config.GlobalNetWorkConfig;
 import com.woting.commonplat.utils.JsonEncloseUtils;
-import com.wotingfm.ui.bean.MessageEvent;
 import com.wotingfm.common.config.GlobalStateConfig;
 import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.common.utils.BeanCloneUtil;
 import com.wotingfm.common.utils.ToastUtils;
+import com.wotingfm.ui.bean.MessageEvent;
 import com.wotingfm.ui.intercom.group.exitgroup.view.GroupExitFragment;
 import com.wotingfm.ui.intercom.group.groupmanage.GroupManageFragment;
 import com.wotingfm.ui.intercom.group.groupmumberadd.view.GroupNumberAddFragment;
@@ -41,6 +41,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 
 /**
  * 作者：xinLong on 2017/6/5 13:55

@@ -3,11 +3,11 @@ package com.wotingfm.ui.intercom.alert.receive.presenter;
 import android.content.Intent;
 import android.util.Log;
 
-import com.wotingfm.ui.bean.MessageEvent;
 import com.wotingfm.common.config.GlobalStateConfig;
 import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.common.service.AudioService;
 import com.wotingfm.common.utils.VibratorUtils;
+import com.wotingfm.ui.bean.MessageEvent;
 import com.wotingfm.ui.intercom.alert.receive.model.ReceiveModel;
 import com.wotingfm.ui.intercom.alert.receive.view.ReceiveAlertActivity;
 import com.wotingfm.ui.intercom.main.contacts.model.Contact;
@@ -15,6 +15,7 @@ import com.wotingfm.ui.intercom.main.contacts.model.Contact;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+
 
 /**
  * 作者：xinLong on 2017/6/5 13:55

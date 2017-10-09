@@ -120,8 +120,8 @@ public class FloatingWindowService extends Service {
 //		params.gravity= Gravity.BOTTOM|Gravity.RIGHT;
 //		floatView.setPadding(0,0,20,20);
         // 设置悬浮窗的长得宽
-        params.width = PhoneMsgManager.ScreenWidth / 6;
-        params.height = PhoneMsgManager.ScreenWidth / 6;
+        params.width = PhoneMsgManager.ScreenWidth / 10;
+        params.height = PhoneMsgManager.ScreenWidth / 10;
         // 设置悬浮窗的Touch监听
         floatView.setOnClickListener(new OnClickListener() {
             @Override
@@ -181,35 +181,32 @@ public class FloatingWindowService extends Service {
     }
 
     /// type 0 第一档位  1 第二档位
-    private void setView(int type) {
-        int viewType = 1;
-        String activityA = GlobalStateConfig.activityA;
-        String activityB = GlobalStateConfig.activityB;
+    private void setView(int viewType) {
+//        String activityA = GlobalStateConfig.activityA;
+//        String activityB = GlobalStateConfig.activityB;
 
-        if (type == 0) {
-            if (activityA.equals("A")) {
-                viewType = 1;
-            } else if (activityA.equals("B")) {
-                viewType = 2;
-            } else if (activityA.equals("C")) {
-                viewType = 3;
-            }
-        } else {
-            if (activityB.equals("A")) {
-                viewType = 1;
-            } else if (activityB.equals("B")) {
-                viewType = 2;
-            } else if (activityB.equals("C")) {
-                viewType = 3;
-            }
-        }
+//        if (type == 0) {
+//            if (activityA.equals("A")) {
+//                viewType = 1;
+//            } else if (activityA.equals("B")) {
+//                viewType = 2;
+//            } else if (activityA.equals("C")) {
+//                viewType = 3;
+//            }
+//        } else {
+//            if (activityB.equals("A")) {
+//                viewType = 1;
+//            } else if (activityB.equals("B")) {
+//                viewType = 2;
+//            } else if (activityB.equals("C")) {
+//                viewType = 3;
+//            }
+//        }
         sendBroadCast(viewType);
-        if (viewType == 1) {
+        if (viewType == 0) {
             lin_d.setBackgroundResource(R.mipmap.test_bb);
-        } else if (viewType == 2) {
+        } else if (viewType == 1) {
             lin_d.setBackgroundResource(R.mipmap.test_aa);
-        } else if (viewType == 3) {
-            lin_d.setBackgroundResource(R.mipmap.test_cc);
         }
     }
 
@@ -230,7 +227,7 @@ public class FloatingWindowService extends Service {
             if (action.equals(BroadcastConstants.MINE_ACTIVITY_CHANGE)) {
                 // 按钮切换-----档位切换广播
                 int viewType = intent.getIntExtra("viewType", 1);
-                if (viewType == 1 || viewType == 4) {
+                if (viewType == 1) {
                     lin_d.setBackgroundResource(R.mipmap.test_bb);
                 } else if (viewType == 2) {
                     lin_d.setBackgroundResource(R.mipmap.test_aa);

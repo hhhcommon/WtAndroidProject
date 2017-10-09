@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,17 +14,13 @@ import android.widget.ListView;
 
 import com.woting.commonplat.widget.LoadFrameLayout;
 import com.wotingfm.R;
-import com.wotingfm.common.config.GlobalStateConfig;
 import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.common.utils.DialogUtils;
-import com.wotingfm.ui.bean.MessageEvent;
-import com.wotingfm.ui.bean.SinglesDownload;
+import com.wotingfm.ui.base.basefragment.BaseFragment;
 import com.wotingfm.ui.play.localaudio.download.adapter.DownloadAdapter;
 import com.wotingfm.ui.play.localaudio.download.presenter.DownloadingPresenter;
 import com.wotingfm.ui.play.localaudio.model.FileInfo;
 import com.wotingfm.ui.play.main.PlayerActivity;
-
-import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,7 +34,7 @@ import butterknife.ButterKnife;
  * 邮箱：645700751@qq.com
  */
 
-public class DownloadingFragment extends Fragment implements View.OnClickListener {
+public class DownloadingFragment extends BaseFragment implements View.OnClickListener {
 
     @BindView(R.id.mRecyclerView)
     ListView mRecyclerView;
@@ -120,12 +115,6 @@ public class DownloadingFragment extends Fragment implements View.OnClickListene
                 presenter.itemClick(s);
             }
         });
-    }
-
-    private void startMain(List<SinglesDownload> singlesDownloadsd) {
-        GlobalStateConfig.activityA = "A";
-        EventBus.getDefault().post(new MessageEvent("one"));
-        EventBus.getDefault().post(new MessageEvent(singlesDownloadsd, 3));
     }
 
     @Override

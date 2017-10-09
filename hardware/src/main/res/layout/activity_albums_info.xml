@@ -31,14 +31,14 @@
     <RelativeLayout
         android:id="@+id/mRelativeLayout"
         android:layout_width="match_parent"
-        android:layout_height="65dp"
+        android:layout_height="wrap_content"
         android:background="#00FFFFFF">
 
         <ImageView
             android:id="@+id/ivBack"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="@dimen/padding_top"
             android:src="@drawable/icon_mine_img_close"  />
 
         <TextView
@@ -48,7 +48,7 @@
             android:layout_centerHorizontal="true"
             android:ellipsize="end"
             android:gravity="center"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="@dimen/padding_top"
             android:maxLength="20"
             android:singleLine="true"
             android:text="专辑"
@@ -59,7 +59,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="@dimen/padding_top"
             android:src="@drawable/icon_chat_other" />
     </RelativeLayout>
 </FrameLayout>

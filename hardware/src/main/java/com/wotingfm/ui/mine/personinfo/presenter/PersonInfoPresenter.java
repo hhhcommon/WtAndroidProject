@@ -9,6 +9,7 @@ import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.provider.MediaStore;
@@ -22,11 +23,9 @@ import com.alibaba.sdk.android.oss.internal.OSSAsyncTask;
 import com.alibaba.sdk.android.oss.model.ObjectMetadata;
 import com.alibaba.sdk.android.oss.model.PutObjectRequest;
 import com.alibaba.sdk.android.oss.model.PutObjectResult;
-import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.woting.commonplat.config.GlobalNetWorkConfig;
 import com.woting.commonplat.manager.FileManager;
-import com.woting.commonplat.utils.BitmapUtils;
 import com.woting.commonplat.utils.SequenceUUID;
 import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.config.GlobalStateConfig;
@@ -35,18 +34,8 @@ import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.common.net.upLoadImage;
 import com.wotingfm.common.utils.ToastUtils;
 import com.wotingfm.ui.intercom.group.editgroupmessage.model.AddressModel;
-import com.wotingfm.ui.intercom.group.editgroupmessage.model.EditGroupMessageModel;
-import com.wotingfm.ui.intercom.group.groupintroduce.view.EditGroupIntroduceFragment;
-import com.wotingfm.ui.intercom.group.groupname.view.EditGroupNameFragment;
 import com.wotingfm.ui.intercom.main.contacts.model.Contact;
-import com.wotingfm.ui.intercom.main.view.InterPhoneActivity;
-import com.wotingfm.ui.mine.editusermessage.model.EditUserModel;
 import com.wotingfm.ui.mine.editusermessage.view.EditUserFragment;
-import com.wotingfm.ui.mine.feedback.model.FeedbackModel;
-import com.wotingfm.ui.mine.fm.model.FMInfo;
-import com.wotingfm.ui.mine.fm.model.FMSetModel;
-import com.wotingfm.ui.mine.fm.view.FMSetFragment;
-import com.wotingfm.ui.mine.main.MineActivity;
 import com.wotingfm.ui.mine.personinfo.model.PersonInfoModel;
 import com.wotingfm.ui.mine.personinfo.view.PersonalInfoFragment;
 import com.wotingfm.ui.photocut.PhotoCutActivity;
@@ -63,8 +52,8 @@ import java.util.Map;
  */
 public class PersonInfoPresenter {
 
-    private  PersonalInfoFragment activity;
-    private  PersonInfoModel model;
+    private PersonalInfoFragment activity;
+    private PersonInfoModel model;
     private final int TO_GALLERY = 5;
     private final int TO_CAMERA = 6;
     private final int PHOTO_REQUEST_CUT = 7;    // 标识 跳转到图片裁剪界面
@@ -405,24 +394,29 @@ public class PersonInfoPresenter {
      * 拍照
      */
     public void camera() {
-        Intent intents = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        Uri outputFileUri;
-        String savePath = FileManager.getImageSaveFilePath(BSApplication.mContext);
-        FileManager.createDirectory(savePath);
-        String fileName = System.currentTimeMillis() + ".jpg";
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {//如果是7.0android系统
-            ContentValues contentValues = new ContentValues(1);
-            File file = new File(savePath, fileName);
-            outputFilePath = file.getAbsolutePath();
-            contentValues.put(MediaStore.Images.Media.DATA,outputFilePath);
-            outputFileUri=  activity.getActivity().getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,contentValues);
-        }else{
-            File file = new File(savePath, fileName);
-            outputFileUri = Uri.fromFile(file);
+        if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
+            Intent intents = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            Uri outputFileUri;
+            String savePath = FileManager.getImageSaveFilePath(BSApplication.mContext);
+            GlobalStateConfig.savePath=savePath;
+            FileManager.createDirectory(savePath);
+            String fileName = System.currentTimeMillis() + ".jpg";
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {//如果是7.0android系统
+                ContentValues contentValues = new ContentValues(1);
+                File file = new File(savePath, fileName);
+                outputFilePath = file.getAbsolutePath();
+                contentValues.put(MediaStore.Images.Media.DATA, outputFilePath);
+                outputFileUri = activity.getActivity().getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues);
+            } else {
+                File file = new File(savePath, fileName);
+                outputFileUri = Uri.fromFile(file);
+            }
+            intents.putExtra(MediaStore.EXTRA_OUTPUT, outputFileUri);
+            Code = TO_CAMERA;
+            activity.getActivity().startActivityForResult(intents, TO_CAMERA);
+        } else {
+            ToastUtils.show_always(activity.getActivity(), "请确认插入SD卡");
         }
-        intents.putExtra(MediaStore.EXTRA_OUTPUT, outputFileUri);
-        Code = TO_CAMERA;
-        activity.getActivity().startActivityForResult(intents, TO_CAMERA);
     }
 
 
@@ -617,6 +611,6 @@ public class PersonInfoPresenter {
             activity.getActivity().unregisterReceiver(Receiver);
             Receiver = null;
         }
-        model=null;
+        model = null;
     }
 }

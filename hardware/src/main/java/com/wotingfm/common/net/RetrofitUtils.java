@@ -53,7 +53,7 @@ import static com.wotingfm.common.net.RetrofitService.BASE_URL;
 
 public class RetrofitUtils {
 
-    private static final int DEFAULT_TIMEOUT = 20000;
+    private static final int DEFAULT_TIMEOUT = 40000;
     private RetrofitService retrofitService;
     public static RetrofitUtils INSTANCE;
     private OkHttpClient.Builder builder;
@@ -64,8 +64,6 @@ public class RetrofitUtils {
     }
 
     private void createService() {
-        builder = new OkHttpClient.Builder();
-        builder.connectTimeout(DEFAULT_TIMEOUT, TimeUnit.SECONDS);
         Retrofit retrofit = new Retrofit.Builder()
                 //设置OKHttpClient为网络客户端
                 .client(genericClient())
@@ -79,11 +77,20 @@ public class RetrofitUtils {
         retrofitService = retrofit.create(RetrofitService.class);
     }
 
+    private OkHttpClient.Builder getBuild(){
+        if(builder==null){
+            builder = new OkHttpClient.Builder();
+            builder.writeTimeout(DEFAULT_TIMEOUT, TimeUnit.SECONDS);
+            builder.readTimeout(DEFAULT_TIMEOUT, TimeUnit.SECONDS);
+            builder.connectTimeout(DEFAULT_TIMEOUT, TimeUnit.SECONDS);
+        }
+        return builder;
+    }
+
     private OkHttpClient genericClient() {
         final String _token = BSApplication.SharedPreferences.getString(StringConstant.TOKEN, null);
         if (!TextUtils.isEmpty(_token)) {
-            return new OkHttpClient.Builder()
-                    .addInterceptor(new Interceptor() {
+            return getBuild().addInterceptor(new Interceptor() {
                         @Override
                         public Response intercept(Chain chain) throws IOException {
 
@@ -105,11 +112,7 @@ public class RetrofitUtils {
                         }
                     }).build();
         } else {
-            if (builder == null) {
-                builder = new OkHttpClient.Builder();
-                builder.connectTimeout(DEFAULT_TIMEOUT, TimeUnit.SECONDS);
-            }
-            return builder.build();
+            return getBuild().build();
         }
     }
 
@@ -606,8 +609,8 @@ public class RetrofitUtils {
                 });
     }
 
-    public Observable<Object> postFollowUser(String pid) {
-        return retrofitService.followUsers(pid)
+    public Observable<Object> postFollowUser(String pid,String type) {
+        return retrofitService.followUsers(pid,type)
                 .map(new Func1<Object, Object>() {
                     @Override
                     public Object call(Object s) {
@@ -616,8 +619,8 @@ public class RetrofitUtils {
                 });
     }
 
-    public Observable<Object> postUnfollowUser(String pid) {
-        return retrofitService.unfollowUsers(pid)
+    public Observable<Object> postUnfollowUser(String pid,String type) {
+        return retrofitService.unfollowUsers(pid,type)
                 .map(new Func1<Object, Object>() {
                     @Override
                     public Object call(Object s) {

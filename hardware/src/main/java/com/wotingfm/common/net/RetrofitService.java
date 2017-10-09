@@ -49,9 +49,11 @@ public interface RetrofitService {
     //首页播放fm列表
     @GET("api/listenings/player")
     Observable<Player> getPlayerList(@Query("album_id") String album_id);
+
     //首页推荐逻辑
     @GET("api/listenings/player")
     Observable<Player> getPlayerList();
+
     //播放节目
     @GET("api/listenings/singles/{singleId}/plays")
     Observable<BaseResult> playSingles(@Path("singleId") String singleId);
@@ -160,8 +162,8 @@ public interface RetrofitService {
     Observable<BaseResult> submitNoFans(@Query("idol_id") String idol_id, @Query("user_id") String user_id);
 
     //喜欢（收藏）节目
-    @POST("api/listenings/singles/{id}/likes")
-    Observable<Object> followUsers(@Path("id") String id);
+    @POST("api/listenings/singles/{id}/likes/{type}")
+    Observable<Object> followUsers(@Path("id") String id, @Path("type") String type);
 
     //发布的专辑列表
     @GET("api/users/{id}/albums")
@@ -194,8 +196,8 @@ public interface RetrofitService {
     Observable<Object> reportsUser(@Path("userId") String userId, @Query("report_reason") String report_reason, @Query("content") String content);
 
     //取消喜欢（收藏）节目
-    @DELETE("api/listenings/singles/{id}/likes")
-    Observable<Object> unfollowUsers(@Path("id") String id);
+    @DELETE("api/listenings/singles/{id}/likes/{type}")
+    Observable<Object> unfollowUsers(@Path("id") String id, @Path("type") String type);
 
     //取消订阅专辑
     @DELETE("api/listenings/albums/{id}/subscriptions")

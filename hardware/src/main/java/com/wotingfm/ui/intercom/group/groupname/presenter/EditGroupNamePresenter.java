@@ -6,12 +6,13 @@ import com.google.gson.Gson;
 import com.woting.commonplat.config.GlobalNetWorkConfig;
 import com.wotingfm.common.config.GlobalStateConfig;
 import com.wotingfm.common.utils.ToastUtils;
-import com.wotingfm.ui.intercom.group.groupname.view.EditGroupNameFragment;
 import com.wotingfm.ui.intercom.group.groupname.model.EditGroupNameModel;
+import com.wotingfm.ui.intercom.group.groupname.view.EditGroupNameFragment;
 import com.wotingfm.ui.intercom.main.contacts.model.Contact;
 import com.wotingfm.ui.intercom.main.view.InterPhoneActivity;
 
 import org.json.JSONObject;
+
 
 /**
  * 作者：xinLong on 2017/6/5 13:55

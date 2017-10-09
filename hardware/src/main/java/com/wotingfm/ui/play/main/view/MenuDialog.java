@@ -203,7 +203,13 @@ public class MenuDialog extends Dialog implements View.OnClickListener {
     }
 
     private void followPlayer() {
-        RetrofitUtils.getInstance().postFollowUser(pdsBase.id)
+        String type;
+        if(pdsBase.is_radio){
+            type="radio";
+        }else{
+            type="single";
+        }
+        RetrofitUtils.getInstance().postFollowUser(pdsBase.id,type)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Action1<Object>() {
@@ -227,7 +233,13 @@ public class MenuDialog extends Dialog implements View.OnClickListener {
     }
 
     private void unfollowPlayer() {
-        RetrofitUtils.getInstance().postUnfollowUser(pdsBase.id)
+        String type;
+        if(pdsBase.is_radio){
+            type="radio";
+        }else{
+            type="single";
+        }
+        RetrofitUtils.getInstance().postUnfollowUser(pdsBase.id,type)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Action1<Object>() {

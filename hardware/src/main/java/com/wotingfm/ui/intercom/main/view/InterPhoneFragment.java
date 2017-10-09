@@ -18,7 +18,6 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.wotingfm.R;
-import com.wotingfm.common.config.GlobalStateConfig;
 import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.common.utils.CommonUtils;
 import com.wotingfm.ui.bean.MessageEvent;
@@ -221,9 +220,9 @@ public class InterPhoneFragment extends Fragment implements View.OnClickListener
                 addDialog.dismiss();
                 break;
             case R.id.img_person:
-                GlobalStateConfig.mineFromType = 2;
-                GlobalStateConfig.activityA = "A";
-                GlobalStateConfig.activityB = "C";
+//                GlobalStateConfig.mineFromType = 2;
+//                GlobalStateConfig.activityA = "A";
+//                GlobalStateConfig.activityB = "C";
               //  MainActivity.changeThree();
                 EventBus.getDefault().post(new MessageEvent("three"));
                 Intent push = new Intent(BroadcastConstants.MINE_ACTIVITY_CHANGE);

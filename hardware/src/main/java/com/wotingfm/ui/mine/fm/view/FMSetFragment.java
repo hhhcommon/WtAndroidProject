@@ -2,7 +2,6 @@ package com.wotingfm.ui.mine.fm.view;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,10 +10,9 @@ import android.widget.TextView;
 
 import com.wotingfm.R;
 import com.wotingfm.ui.base.basefragment.BaseFragment;
-import com.wotingfm.ui.mine.fm.presenter.FMSetPresenter;
-import com.wotingfm.ui.mine.main.MineActivity;
 import com.wotingfm.ui.mine.fm.adapter.FMListAdapter;
 import com.wotingfm.ui.mine.fm.model.FMInfo;
+import com.wotingfm.ui.mine.fm.presenter.FMSetPresenter;
 
 import java.util.List;
 

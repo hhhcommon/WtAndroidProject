@@ -1,4 +1,4 @@
-package com.wotingfm.ui.adapter.albumsAdapter;
+package com.wotingfm.ui.play.album.view.adapter;
 
 import android.content.Context;
 import android.view.View;

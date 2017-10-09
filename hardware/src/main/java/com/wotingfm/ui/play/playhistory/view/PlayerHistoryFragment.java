@@ -1,23 +1,21 @@
 package com.wotingfm.ui.play.playhistory.view;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
 import com.woting.commonplat.widget.LoadFrameLayout;
 import com.wotingfm.R;
-import com.wotingfm.common.config.GlobalStateConfig;
-import com.wotingfm.ui.bean.MessageEvent;
+import com.wotingfm.ui.base.basefragment.BaseFragment;
 import com.wotingfm.ui.bean.Player;
-import com.wotingfm.ui.bean.SinglesBase;
 import com.wotingfm.ui.play.main.PlayerActivity;
 import com.wotingfm.ui.play.playhistory.adapter.PlayerHistoryListAdapter;
 import com.wotingfm.ui.play.playhistory.presenter.PlayHistoryPresenter;
-import org.greenrobot.eventbus.EventBus;
+
 import java.util.List;
 
 
@@ -28,7 +26,7 @@ import java.util.List;
  * 邮箱：645700751@qq.com
  */
 
-public class PlayerHistoryFragment extends Fragment implements View.OnClickListener{
+public class PlayerHistoryFragment extends BaseFragment implements View.OnClickListener{
 
     private View rootView;
     private PlayHistoryPresenter presenter;
@@ -101,12 +99,6 @@ public class PlayerHistoryFragment extends Fragment implements View.OnClickListe
             case R.id.head_left_btn:
                 PlayerActivity.close();
                 break;}
-    }
-
-    public void startMain(SinglesBase singlesBase) {
-        GlobalStateConfig.activityA = "A";
-        EventBus.getDefault().post(new MessageEvent("one"));
-        EventBus.getDefault().post(new MessageEvent(singlesBase, 2));
     }
 
     @Override

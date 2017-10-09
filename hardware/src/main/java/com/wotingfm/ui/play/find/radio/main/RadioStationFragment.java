@@ -1,7 +1,6 @@
 package com.wotingfm.ui.play.find.radio.main;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,20 +15,15 @@ import com.woting.commonplat.amine.OnRefreshListener;
 import com.woting.commonplat.widget.LoadFrameLayout;
 import com.wotingfm.R;
 import com.wotingfm.common.application.BSApplication;
-import com.wotingfm.common.config.GlobalStateConfig;
 import com.wotingfm.common.net.RetrofitUtils;
 import com.wotingfm.common.utils.ToastUtils;
 import com.wotingfm.ui.adapter.findHome.RadioStationAdapter;
+import com.wotingfm.ui.base.basefragment.BaseFragment;
 import com.wotingfm.ui.bean.ChannelsBean;
-import com.wotingfm.ui.bean.MessageEvent;
-import com.wotingfm.ui.play.find.main.view.LookListActivity;
 import com.wotingfm.ui.play.find.radio.view.CountryRadioFragment;
 import com.wotingfm.ui.play.find.radio.view.LocalRadioFragment;
 import com.wotingfm.ui.play.find.radio.view.ProvincesAndCitiesFragment;
-import com.wotingfm.ui.play.main.PlayerActivity;
 import com.zhy.adapter.recyclerview.wrapper.HeaderAndFooterWrapper;
-
-import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,7 +39,7 @@ import rx.schedulers.Schedulers;
  * 发现电台
  */
 
-public class RadioStationFragment extends Fragment implements View.OnClickListener, OnLoadMoreListener, OnRefreshListener {
+public class RadioStationFragment extends BaseFragment implements View.OnClickListener, OnLoadMoreListener, OnRefreshListener {
 
     @BindView(R.id.mRecyclerView)
     ARecyclerView mRecyclerView;
@@ -126,25 +120,10 @@ public class RadioStationFragment extends Fragment implements View.OnClickListen
         }
     }
 
-    public void startMain(ChannelsBean channelsBean) {
-        GlobalStateConfig.activityA = "A";
-        EventBus.getDefault().post(new MessageEvent("one"));
-        EventBus.getDefault().post(new MessageEvent(channelsBean, 1));
-    }
-
-    private void openFragment(Fragment fragment) {
-        if (getActivity() instanceof PlayerActivity) {
-            PlayerActivity.open(fragment);
-        } else if (getActivity() instanceof LookListActivity) {
-            LookListActivity.open(fragment);
-        }
-    }
-
     @Override
     public void onRefresh() {
         refresh();
     }
-
 
     @Override
     public void onLoadMore(View loadMoreView) {

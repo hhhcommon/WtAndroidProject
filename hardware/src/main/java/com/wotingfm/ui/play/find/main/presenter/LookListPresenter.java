@@ -9,7 +9,7 @@ import android.support.v4.app.Fragment;
 
 import com.woting.commonplat.manager.VoiceRecognizer;
 import com.wotingfm.ui.play.find.classification.main.view.ClassificationFragment;
-import com.wotingfm.ui.play.find.live.LiveFragment;
+import com.wotingfm.ui.play.find.live.view.LiveFragment;
 import com.wotingfm.ui.play.find.main.view.LookListFragment;
 import com.wotingfm.ui.play.find.radio.main.RadioStationFragment;
 import com.wotingfm.ui.play.find.selected.view.SelectedFragment;

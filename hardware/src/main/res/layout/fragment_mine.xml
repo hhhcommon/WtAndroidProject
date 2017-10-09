@@ -177,6 +177,7 @@
             <RelativeLayout
                 android:id="@+id/setting"
                 style="@style/MineRelativeStyle"
+                android:layout_marginBottom="100dp"
                 android:layout_marginTop="20dp">
 
                 <ImageView
@@ -200,7 +201,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="44dp"
-        android:layout_marginTop="20dp">
+        android:layout_marginTop="@dimen/padding_top">
 
         <ImageView
             android:id="@+id/head_left_btn"

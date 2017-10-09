@@ -1,7 +1,6 @@
 package com.wotingfm.ui.play.search.fragment;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -15,14 +14,11 @@ import com.woting.commonplat.amine.OnLoadMoreListener;
 import com.woting.commonplat.amine.OnRefreshListener;
 import com.woting.commonplat.widget.LoadFrameLayout;
 import com.wotingfm.R;
-import com.wotingfm.common.config.GlobalStateConfig;
 import com.wotingfm.common.net.RetrofitUtils;
-import com.wotingfm.ui.play.search.adapter.ProgramSearchAdapter;
-import com.wotingfm.ui.bean.MessageEvent;
+import com.wotingfm.ui.base.basefragment.BaseFragment;
 import com.wotingfm.ui.bean.SerchList;
 import com.wotingfm.ui.bean.SinglesBase;
-
-import org.greenrobot.eventbus.EventBus;
+import com.wotingfm.ui.play.search.adapter.ProgramSearchAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,7 +33,7 @@ import rx.schedulers.Schedulers;
  * 节目列表
  */
 
-public class ProgramListFragment extends Fragment implements View.OnClickListener,OnLoadMoreListener, OnRefreshListener {
+public class ProgramListFragment extends BaseFragment implements View.OnClickListener,OnLoadMoreListener, OnRefreshListener {
     @BindView(R.id.mRecyclerView)
     ARecyclerView mRecyclerView;
     @BindView(R.id.loadLayout)
@@ -195,9 +191,4 @@ public class ProgramListFragment extends Fragment implements View.OnClickListene
 
     }
 
-    public void startMain(SinglesBase singlesBase) {
-        GlobalStateConfig.activityA = "A";
-        EventBus.getDefault().post(new MessageEvent("one"));
-        EventBus.getDefault().post(new MessageEvent(singlesBase, 2));
-    }
 }

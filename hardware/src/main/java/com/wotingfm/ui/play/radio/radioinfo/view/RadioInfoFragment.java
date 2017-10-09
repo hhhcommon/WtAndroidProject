@@ -25,10 +25,6 @@ import com.wotingfm.ui.base.baseadapter.MyFragmentPagerAdapter;
 import com.wotingfm.ui.base.basefragment.BaseFragment;
 import com.wotingfm.ui.base.baseinterface.ScrollViewListener;
 import com.wotingfm.ui.bean.RadioInfo;
-import com.wotingfm.ui.intercom.main.view.InterPhoneActivity;
-import com.wotingfm.ui.mine.main.MineActivity;
-import com.wotingfm.ui.play.find.main.view.LookListActivity;
-import com.wotingfm.ui.play.main.PlayerActivity;
 import com.wotingfm.ui.play.radio.fragment.view.RadioInfoTodayFragment;
 import com.wotingfm.ui.play.radio.fragment.view.RadioInfoTomorrowFragment;
 import com.wotingfm.ui.play.radio.fragment.view.RadioInfoYesterdayFragment;
@@ -322,7 +318,7 @@ public class RadioInfoFragment extends BaseFragment implements View.OnClickListe
     public void onScrollChanged(ObservableScrollView scrollView, int x, int dy, int oldx, int oldy) {
         if (dy <= 0) {   //设置标题的背景颜色
             mRelativeLayout.setBackgroundColor(Color.argb((int) 0, 255, 255, 255));
-            tvTitle.setTextColor(Color.argb((int) 0, 22, 24, 26));
+            tvTitle.setTextColor(getResources().getColor(R.color.white));
             ivBack.setImageResource(R.drawable.icon_mine_img_close);
         } else if (dy > 0 && dy <= height) { //滑动距离小于banner图的高度时，设置背景和字体颜色颜色透明度渐变
             float scale = (float) dy / height;

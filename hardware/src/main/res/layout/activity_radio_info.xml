@@ -16,6 +16,7 @@
         <com.wotingfm.common.view.myscrollview.ObservableScrollView
             android:id="@+id/mObservableScrollView"
             android:layout_width="match_parent"
+            android:scrollbars="none"
             android:layout_height="wrap_content">
 
             <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -89,14 +90,14 @@
     <RelativeLayout
         android:id="@+id/mRelativeLayout"
         android:layout_width="match_parent"
-        android:layout_height="65dp"
+        android:layout_height="wrap_content"
         android:background="#00FFFFFF">
 
         <ImageView
             android:id="@+id/ivBack"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="@dimen/padding_top"
             android:src="@drawable/icon_mine_img_close"  />
 
         <TextView
@@ -106,7 +107,8 @@
             android:layout_centerHorizontal="true"
             android:ellipsize="end"
             android:gravity="center"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="@dimen/padding_top"
+            android:textSize="17.3sp"
             android:maxLength="20"
             android:singleLine="true"
             android:text="电台"

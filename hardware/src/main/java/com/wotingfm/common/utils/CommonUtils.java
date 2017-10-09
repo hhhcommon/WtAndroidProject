@@ -1,6 +1,7 @@
 package com.wotingfm.common.utils;
 
 import android.content.SharedPreferences;
+
 import com.woting.commonplat.manager.PhoneMsgManager;
 import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.constant.StringConstant;

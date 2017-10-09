@@ -2,7 +2,6 @@ package com.wotingfm.ui.mine.security.main;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,7 +13,6 @@ import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.ui.base.basefragment.BaseFragment;
 import com.wotingfm.ui.mine.security.password.view.ModifyPasswordFragment;
 import com.wotingfm.ui.mine.security.phonenumber.view.ModifyPhoneNumberFragment;
-import com.wotingfm.ui.mine.main.MineActivity;
 
 /**
  * 账户安全

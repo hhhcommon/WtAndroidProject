@@ -14,7 +14,6 @@ import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.common.utils.CommonUtils;
 import com.wotingfm.common.utils.GlideCatchUtil;
 import com.wotingfm.common.utils.ToastUtils;
-import com.wotingfm.ui.mine.main.MineActivity;
 import com.wotingfm.ui.mine.set.model.SettingModel;
 import com.wotingfm.ui.mine.set.view.SettingFragment;
 

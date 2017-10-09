@@ -1,19 +1,12 @@
-package com.wotingfm.ui.play.live;
+package com.wotingfm.ui.play.find.live.view;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.graphics.Color;
-import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -25,21 +18,12 @@ import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.common.net.RetrofitUtils;
 import com.wotingfm.common.utils.T;
 import com.wotingfm.ui.bean.AnchorInfo;
-import com.wotingfm.ui.bean.MessageEvent;
-import com.wotingfm.ui.bean.SinglesBase;
-import com.wotingfm.ui.bean.TrailerInfo;
 import com.wotingfm.ui.intercom.main.view.InterPhoneActivity;
 import com.wotingfm.ui.mine.main.MineActivity;
 import com.wotingfm.ui.play.anchor.view.AnchorPersonalCenterFragment;
 import com.wotingfm.ui.play.find.main.view.LookListActivity;
 import com.wotingfm.ui.play.main.PlayerActivity;
-import com.wotingfm.ui.play.main.PlayerFragment;
-import com.wotingfm.ui.play.main.adapter.PlayerListAdapter;
 import com.wotingfm.ui.play.report.view.ReportFragment;
-
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
 
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
@@ -57,10 +41,11 @@ public class AnchorDialog extends Dialog implements View.OnClickListener {
     private boolean focus;
 
     public AnchorDialog(Context contexts) {
-        super(contexts);
+        super(contexts,R.style.MyDialogs);
         context = contexts;
         setContentView(R.layout.anchor_dialog);
-        getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        getWindow().setBackgroundDrawableResource(R.color.transparent_40_black);
+        getWindow().setLayout(PhoneMsgManager.ScreenWidth-80, ViewGroup.LayoutParams.WRAP_CONTENT);
         getWindow().setGravity(Gravity.CENTER);
         setCanceledOnTouchOutside(true);
         inItView();
@@ -119,10 +104,10 @@ public class AnchorDialog extends Dialog implements View.OnClickListener {
                 if(anchor != null){
                     if(focus){
                         String id=BSApplication.SharedPreferences.getString(StringConstant.USER_ID,"");
-                        followAnchor(id,anchor);
+                        unFollowAnchor(id,anchor);
                     }else{
                         String id=BSApplication.SharedPreferences.getString(StringConstant.USER_ID,"");
-                        unFollowAnchor(id,anchor);
+                        followAnchor(id,anchor);
                     }
                 }
                 break;

@@ -12,15 +12,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.wotingfm.R;
-import com.wotingfm.ui.bean.MessageEvent;
 import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.common.manager.InterPhoneControl;
 import com.wotingfm.common.utils.GlideUtils;
-import com.wotingfm.ui.base.baseactivity.BaseActivity;
+import com.wotingfm.ui.base.baseactivity.BaseFragmentActivity;
 import com.wotingfm.ui.intercom.alert.receive.presenter.ReceivePresenter;
 import com.wotingfm.ui.intercom.main.chat.presenter.ChatPresenter;
-
-import org.greenrobot.eventbus.EventBus;
 
 import static android.content.Intent.FLAG_ACTIVITY_REORDER_TO_FRONT;
 
@@ -30,7 +27,7 @@ import static android.content.Intent.FLAG_ACTIVITY_REORDER_TO_FRONT;
  * @author 辛龙
  *         2016年3月7日
  */
-public class ReceiveAlertActivity extends BaseActivity implements OnClickListener {
+public class ReceiveAlertActivity extends BaseFragmentActivity implements OnClickListener {
     private ImageView img_bg, img_url, img_close, img_ok;
     private TextView tv_name;
     private ReceivePresenter presenter;

@@ -32,6 +32,15 @@ public class InformationFragment extends Fragment implements View.OnClickListene
     private View rootView;
     private Dialog dialog, imgDialog;
 
+    public static InformationFragment newInstance(String acc_id,String pws) {
+        InformationFragment fragment = new InformationFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString("acc_id",acc_id);
+        bundle.putString("pws",pws);
+        fragment.setArguments(bundle);
+        return fragment;
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         if (rootView == null) {

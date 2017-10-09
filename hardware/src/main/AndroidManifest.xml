@@ -47,10 +47,6 @@
             android:theme="@style/AppTheme" />
 
         <!-- 直播页面  主播 -->
-        <activity
-            android:name="com.wotingfm.ui.play.live.LiveRoomActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme" />
 
         <activity
             android:name="com.woting.commonplat.nim.entertainment.activity.InputActivity"
@@ -81,11 +77,18 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
 
-        <!--  -->
+          <!--  -->
         <activity
             android:name=".ui.play.main.PlayerActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
+
+        <!--  -->
+        <activity
+            android:name="com.wotingfm.ui.play.find.live.view.LiveRoomActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" />
+
 
         <!--  -->
         <activity

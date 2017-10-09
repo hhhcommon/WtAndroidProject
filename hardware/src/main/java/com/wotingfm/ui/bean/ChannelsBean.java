@@ -10,5 +10,5 @@ public class ChannelsBean implements Serializable {
     public String radio_url;
     public String listen_count;
     public PlayBill play_bill;
-
+    public boolean had_liked;
 }

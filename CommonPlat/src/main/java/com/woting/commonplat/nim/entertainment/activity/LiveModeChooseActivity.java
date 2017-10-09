@@ -1,9 +1,9 @@
 package com.woting.commonplat.nim.entertainment.activity;
 
 import android.os.Bundle;
-
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+
 import com.woting.commonplat.R;
 import com.woting.commonplat.nim.base.ui.TActivity;
 

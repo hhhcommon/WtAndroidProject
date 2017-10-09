@@ -2,7 +2,6 @@ package com.wotingfm.ui.mine.personinfo.view;
 
 import android.app.Dialog;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
@@ -21,7 +20,6 @@ import com.wotingfm.common.utils.GlideUtils;
 import com.wotingfm.common.view.pickview.LoopView;
 import com.wotingfm.common.view.pickview.OnItemSelectedListener;
 import com.wotingfm.ui.base.basefragment.BaseFragment;
-import com.wotingfm.ui.mine.main.MineActivity;
 import com.wotingfm.ui.mine.personinfo.presenter.PersonInfoPresenter;
 
 import java.util.List;

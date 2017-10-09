@@ -2,23 +2,14 @@ package com.wotingfm.ui.mine.feedback.presenter;
 
 import android.util.Log;
 
-import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.woting.commonplat.config.GlobalNetWorkConfig;
 import com.wotingfm.common.config.GlobalStateConfig;
 import com.wotingfm.common.utils.ToastUtils;
-import com.wotingfm.ui.intercom.main.view.InterPhoneActivity;
-import com.wotingfm.ui.intercom.person.personnote.model.EditPersonNoteModel;
 import com.wotingfm.ui.mine.feedback.model.FeedbackModel;
 import com.wotingfm.ui.mine.feedback.view.FeedbackFragment;
-import com.wotingfm.ui.mine.fm.model.FMInfo;
-import com.wotingfm.ui.mine.fm.model.FMSetModel;
-import com.wotingfm.ui.mine.fm.view.FMSetFragment;
-import com.wotingfm.ui.mine.main.MineActivity;
 
 import org.json.JSONObject;
-
-import java.util.List;
 
 /**
  * 作者：xinLong on 2017/6/5 13:55

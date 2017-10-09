@@ -1,7 +1,6 @@
 package com.wotingfm.ui.base.model;
 
 import com.wotingfm.common.config.GlobalStateConfig;
-import com.wotingfm.common.utils.GetTestData;
 import com.wotingfm.ui.intercom.main.contacts.model.Contact;
 
 import java.util.List;

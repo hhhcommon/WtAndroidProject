@@ -3,7 +3,6 @@ package com.wotingfm.ui.mine.feedback.view;
 import android.app.Dialog;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,7 +12,6 @@ import com.wotingfm.R;
 import com.wotingfm.common.utils.DialogUtils;
 import com.wotingfm.ui.base.basefragment.BaseFragment;
 import com.wotingfm.ui.mine.feedback.presenter.FeedbackPresenter;
-import com.wotingfm.ui.mine.main.MineActivity;
 
 /**
  * 意见反馈

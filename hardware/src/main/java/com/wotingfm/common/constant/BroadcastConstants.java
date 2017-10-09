@@ -35,6 +35,9 @@ public class BroadcastConstants {
     // 重新获取群组
     public static final String GROUP_GET = "GROUP_GET";
 
+    // 群成员人数发生更改
+    public static final String GROUP_USER_CHANGE = "GROUP_USER_CHANGE";
+
     // 群组界面关闭
     public static final String VIEW_GROUP_CLOSE = "VIEW_GROUP_CLOSE";
 

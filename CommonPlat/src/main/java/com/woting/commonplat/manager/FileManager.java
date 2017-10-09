@@ -6,6 +6,7 @@ package com.woting.commonplat.manager;
  * 2016/12/28 11:21
  * 邮箱：645700751@qq.com
  */
+
 import android.content.ContentResolver;
 import android.content.Context;
 import android.net.Uri;
@@ -14,6 +15,7 @@ import android.os.ParcelFileDescriptor;
 import android.util.Log;
 
 import com.woting.commonplat.utils.ResourceUtil;
+
 import java.io.BufferedInputStream;
 import java.io.BufferedWriter;
 import java.io.ByteArrayOutputStream;

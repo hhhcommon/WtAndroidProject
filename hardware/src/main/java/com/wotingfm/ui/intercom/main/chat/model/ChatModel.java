@@ -475,7 +475,7 @@ public class ChatModel extends CommonModel {
      *
      * @param id 群id
      */
-    public void getGroupPerson(String id) {
+    public void getGroupPerson(String id,final OnLoadInterface listener) {
         try {
             RetrofitUtils.getInstance().getGroupPerson(id)
                     .subscribeOn(Schedulers.io())
@@ -485,8 +485,7 @@ public class ChatModel extends CommonModel {
                         public void call(Object o) {
                             try {
                                 Log.e("获取群成员返回数据", new GsonBuilder().serializeNulls().create().toJson(o));
-                                dealGroupPersonSuccess(o);
-                                //填充UI
+                                listener.mun(o);
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
@@ -503,23 +502,7 @@ public class ChatModel extends CommonModel {
         }
     }
 
-    // 处理群成员返回的数据
-    private void dealGroupPersonSuccess(Object o) {
-        try {
-            String s = new GsonBuilder().serializeNulls().create().toJson(o);
-            JSONObject js = new JSONObject(s);
-            int ret = js.getInt("ret");
-            if (ret == 0) {
-                String msg = js.getString("data");
-                JSONTokener jsonParser = new JSONTokener(msg);
-                JSONObject arg1 = (JSONObject) jsonParser.nextValue();
-                String group = arg1.getString("users");
-                // 群成员
-                GlobalStateConfig.list_group_user = new Gson().fromJson(group, new TypeToken<List<Contact.user>>() {
-                }.getType());
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    public interface OnLoadInterface {
+        void mun(Object o);
     }
 }

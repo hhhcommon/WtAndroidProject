@@ -33,7 +33,7 @@ public class RadioInfo implements Serializable {
             public String radio_url;
             public int subscribed_count;
             public String title;
-
+            public boolean had_liked;
         }
 
         public static class TodayBean implements Serializable {

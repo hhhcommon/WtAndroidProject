@@ -1,6 +1,7 @@
 package com.wotingfm.ui.main.model;
 
 import android.util.Log;
+
 import com.google.gson.GsonBuilder;
 import com.wotingfm.common.net.RetrofitUtils;
 import com.wotingfm.ui.base.model.UserInfo;

@@ -12,6 +12,7 @@ import com.netease.nimlib.sdk.auth.LoginInfo;
 import com.google.gson.GsonBuilder;
 import com.woting.commonplat.config.GlobalNetWorkConfig;
 import com.woting.commonplat.nim.DemoCache;
+import com.woting.commonplat.nim.base.util.string.MD5;
 import com.woting.commonplat.nim.im.ui.dialog.DialogMaker;
 import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.live.preference.Preferences;
@@ -98,13 +99,13 @@ public class LoginPresenter {
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     // 发送网络请求
-    private void send(String userName, String password) {
+    private void send(String userName, final String password) {
         activity.dialogShow();
         model.loadNews(userName, password, new LoginModel.OnLoadInterface() {
             @Override
             public void onSuccess(Object o) {
                 activity.dialogCancel();
-                dealSuccess(o);
+                dealSuccess(o,password);
             }
 
             @Override
@@ -116,7 +117,7 @@ public class LoginPresenter {
     }
 
     // 处理返回数据
-    private void dealSuccess(Object o) {
+    private void dealSuccess(Object o,String password) {
         try {
             String s = new GsonBuilder().serializeNulls().create().toJson(o);
             JSONObject js = new JSONObject(s);
@@ -140,7 +141,7 @@ public class LoginPresenter {
                 // 保存用户数据
                 if (ui != null) {
                     model.saveUserInfo(ui);
-                    loginYx(ui.optString("acc_id"), ui.optString("net_ease_token"));
+                    loginYx(ui.optString("acc_id"), password);
                 }
             } else {
                 String msg = js.getString("msg");
@@ -158,7 +159,7 @@ public class LoginPresenter {
 
     private void loginYx(final String account, final String token) {
         // 登录
-        loginRequest = NIMClient.getService(AuthService.class).login(new LoginInfo(account, token));
+        loginRequest = NIMClient.getService(AuthService.class).login(new LoginInfo(account, tokenFromPassword(token)));
         loginRequest.setCallback(new RequestCallback<LoginInfo>() {
             @Override
             public void onSuccess(LoginInfo param) {
@@ -167,11 +168,6 @@ public class LoginPresenter {
                 DemoCache.setAccount(account);
                 saveLoginInfo(account, token);
 
-                // 初始化消息提醒
-                NIMClient.toggleNotification(UserPreferences.getNotificationToggle());
-
-                // 初始化免打扰
-                NIMClient.updateStatusBarNotificationConfig(UserPreferences.getStatusConfig());
                 ToastUtils.show_always(activity.getActivity(), "登录成功");
                 // 发送登录广播通知所有界面
                 RetrofitUtils.INSTANCE = null;
@@ -194,6 +190,11 @@ public class LoginPresenter {
                 onLoginDone();
             }
         });
+    }
+
+    // 密码加密
+    private String tokenFromPassword(String password) {
+        return MD5.getStringMD5(password);
     }
 
     /*

@@ -51,64 +51,6 @@
 
             </TabHost>
 
-            <LinearLayout
-                android:id="@+id/largeLabel"
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:layout_gravity="bottom"
-                android:background="#16181a"
-                android:orientation="horizontal"
-                android:visibility="visible">
-
-                <TextView
-                    android:id="@+id/tv_1"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="上一曲"
-                    android:textColor="@color/white"/>
-
-                <TextView
-                    android:id="@+id/tv_2"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="暂/播"
-                    android:textColor="@color/white"/>
-
-                <TextView
-                    android:id="@+id/tv_3"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="下一曲"
-                    android:textColor="@color/white"/>
-
-                <TextView
-                    android:id="@+id/tv_4"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:background="#16181a"
-                    android:gravity="center"
-                    android:text="指令"
-                    android:textColor="@color/white"/>
-
-                <TextView
-                    android:id="@+id/tv_5"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1.5"
-                    android:background="#16181a"
-                    android:gravity="center"
-                    android:text="对讲"
-                    android:textColor="@color/white"/>
-
-            </LinearLayout>
-
         </LinearLayout>
 
     </FrameLayout>

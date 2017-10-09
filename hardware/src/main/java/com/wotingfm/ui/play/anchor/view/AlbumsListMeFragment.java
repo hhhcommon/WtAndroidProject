@@ -2,7 +2,6 @@ package com.wotingfm.ui.play.anchor.view;
 
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,16 +14,12 @@ import com.woting.commonplat.amine.OnLoadMoreListener;
 import com.woting.commonplat.amine.OnRefreshListener;
 import com.woting.commonplat.widget.LoadFrameLayout;
 import com.wotingfm.R;
-import com.wotingfm.common.config.GlobalStateConfig;
 import com.wotingfm.common.net.RetrofitUtils;
-import com.wotingfm.ui.adapter.albumsAdapter.AlbumsAdapter;
 import com.wotingfm.ui.base.basefragment.BaseFragment;
 import com.wotingfm.ui.bean.AlbumsBean;
 import com.wotingfm.ui.bean.MessageEvent;
-import com.wotingfm.ui.mine.main.MineActivity;
 import com.wotingfm.ui.play.album.main.view.AlbumsInfoMainFragment;
-import com.wotingfm.ui.play.find.main.view.LookListActivity;
-import com.wotingfm.ui.play.main.PlayerActivity;
+import com.wotingfm.ui.play.album.view.adapter.AlbumsAdapter;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -187,13 +182,6 @@ public class AlbumsListMeFragment extends BaseFragment implements View.OnClickLi
     @Override
     public void onRefresh() {
         refresh();
-    }
-
-    // 开始播放
-    private void startMain(String albumsId) {
-        GlobalStateConfig.activityA = "A";
-        EventBus.getDefault().post(new MessageEvent("one"));
-        EventBus.getDefault().post(new MessageEvent("stop&" + albumsId));
     }
 
     @Override

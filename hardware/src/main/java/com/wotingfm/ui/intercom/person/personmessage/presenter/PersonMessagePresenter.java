@@ -12,11 +12,11 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.woting.commonplat.config.GlobalNetWorkConfig;
-import com.wotingfm.ui.bean.AlbumsBean;
 import com.wotingfm.common.config.GlobalStateConfig;
 import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.common.manager.InterPhoneControl;
 import com.wotingfm.common.utils.ToastUtils;
+import com.wotingfm.ui.bean.AlbumsBean;
 import com.wotingfm.ui.intercom.alert.call.view.CallAlertActivity;
 import com.wotingfm.ui.intercom.main.chat.presenter.ChatPresenter;
 import com.wotingfm.ui.intercom.main.contacts.model.Contact;
@@ -31,7 +31,6 @@ import org.json.JSONObject;
 import org.json.JSONTokener;
 
 import java.util.List;
-
 
 /**
  * 好友信息的处理器

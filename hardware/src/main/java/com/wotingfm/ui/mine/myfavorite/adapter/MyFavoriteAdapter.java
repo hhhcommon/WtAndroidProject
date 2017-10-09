@@ -1,6 +1,7 @@
 package com.wotingfm.ui.mine.myfavorite.adapter;
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -78,10 +79,20 @@ public class MyFavoriteAdapter extends BaseAdapter {
             holder.tv_name.setText(lists.getTitle());//名
         }
 
-        if (lists.getAlbum_name() == null || lists.getAlbum_name().equals("")) {
-            holder.tv_introduce.setText("暂无专辑");//专辑
-        } else {
-            holder.tv_introduce.setText(lists.getAlbum_name());//专辑
+        if(!TextUtils.isEmpty(lists.getLiked_type())&&lists.getLiked_type().trim().equals("single")){
+            // 节目
+            if (lists.getAlbum_name() == null || lists.getAlbum_name().equals("")) {
+                holder.tv_introduce.setText("暂无专辑");//专辑
+            } else {
+                holder.tv_introduce.setText(lists.getAlbum_name());//专辑
+            }
+        }else{
+            // 电台
+            if (lists.getPlaying_title() == null || lists.getPlaying_title().equals("")) {
+                holder.tv_introduce.setText("直播中");// 正在直播的节目
+            } else {
+                holder.tv_introduce.setText(lists.getPlaying_title());// 正在直播的节目
+            }
         }
 
         if (lists.getPlay_count() == null || lists.getPlay_count().equals("")) {

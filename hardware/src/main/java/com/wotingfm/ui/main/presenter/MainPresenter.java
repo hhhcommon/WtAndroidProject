@@ -7,7 +7,6 @@ import android.content.IntentFilter;
 import android.graphics.Color;
 import android.text.TextUtils;
 import android.util.Log;
-import android.webkit.JavascriptInterface;
 import android.widget.Toast;
 
 import com.google.gson.GsonBuilder;
@@ -49,6 +48,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -61,6 +61,7 @@ public class MainPresenter extends BasePresenter implements AVChatStateObserver 
     private MainActivity activity;
     private Intent FloatingWindow;
     private Intent NS;
+    private List<String> group_user_in=new ArrayList<>();
 
     private NetWorkChangeReceiver netWorkChangeReceiver;
 
@@ -155,20 +156,12 @@ public class MainPresenter extends BasePresenter implements AVChatStateObserver 
             String action = intent.getAction();
             if (action.equals(BroadcastConstants.ACTIVITY_CHANGE)) {
                 // 按钮切换-----档位切换广播
-                int viewType = intent.getIntExtra("viewType", 1);
+                int viewType = intent.getIntExtra("viewType", 0);
                 Log.e("界面显示状态", viewType + "");
-                if (viewType == 1) {
+                if (viewType == 0) {
                     EventBus.getDefault().post(new MessageEvent("one"));
-                    //  mainActivity.changeOne();
-                } else if (viewType == 2) {
+                } else if (viewType == 1) {
                     EventBus.getDefault().post(new MessageEvent("two"));
-                    // mainActivity.changeTwo();
-                } else if (viewType == 3) {
-                    EventBus.getDefault().post(new MessageEvent("three"));
-                    // mainActivity.changeThree();
-                } else if (viewType == 4) {
-                    EventBus.getDefault().post(new MessageEvent("four"));
-                    // mainActivity.changeThree();
                 }
             } else if (action.equals(BroadcastConstants.VIEW_NOTIFY_SHOW)) {
                 String content = intent.getStringExtra("msg");  // 展示通知消息
@@ -293,6 +286,7 @@ public class MainPresenter extends BasePresenter implements AVChatStateObserver 
             } else if (event.contains("enterGroup&")) {
                 String room_id = event.split("enterGroup&")[1];
                 enterRoom(room_id);// 进入对讲房间
+                group_user_in.clear();
                 toggleSpeaker(true);
             } else if (event.equals("onDestroy")) {
                 exitRoom();
@@ -581,21 +575,6 @@ public class MainPresenter extends BasePresenter implements AVChatStateObserver 
         Log.e("app退出", "app退出");
     }
 
-    /**
-     * Java方法，人数监听
-     */
-    @JavascriptInterface
-    public void roomNumberListen(final String roomNumber) {
-        Log.e("群成员变化", "人数： " + roomNumber);
-        Intent intent = new Intent(BroadcastConstants.PUSH_CHAT_GROUP_NUM);
-        try {
-            intent.putExtra("num", roomNumber);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        activity.sendBroadcast(intent);
-    }
-
     /////////////////////////////////////////////////////////////////////////////////////////
     @Override
     public void onJoinedChannel(int code, String filePath, String fileName, int elapsed) {
@@ -607,6 +586,46 @@ public class MainPresenter extends BasePresenter implements AVChatStateObserver 
     public void onUserJoined(String account) {
         // 其他用户音视频服务器连接成功后 可以获取当前通话的用户帐号。
         Log.e("其他用户音视频服务器连接成功 ", "account:" + account);
+        add(account);
+    }
+
+    // 有人加入组
+    private void add(String account){
+        if(group_user_in!=null){
+            boolean b=false;
+            for(int i=0;i<group_user_in.size();i++){
+                String id=group_user_in.get(i);
+                if(account.equals(id)){
+                    b=true;
+                    break;
+                }
+            }
+            if(!b) group_user_in.add(account);
+        }else{
+            group_user_in=new ArrayList<>();
+            group_user_in.add(account);
+        }
+        sendGroupNum(String.valueOf(group_user_in.size()+1));
+    }
+
+    // 有人退出组
+    private void remove(String account){
+        if(group_user_in!=null){
+            group_user_in.remove(account);
+            sendGroupNum(String.valueOf(group_user_in.size()+1));
+        }
+    }
+
+    // 发送组人数变化
+    private void sendGroupNum(String roomNumber){
+        Intent intent = new Intent(BroadcastConstants.PUSH_CHAT_GROUP_NUM);
+        try {
+            intent.putExtra("num", roomNumber);
+            Log.e("人数",group_user_in.size()+"");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        activity.sendBroadcast(intent);
     }
 
     @Override
@@ -614,6 +633,7 @@ public class MainPresenter extends BasePresenter implements AVChatStateObserver 
         // 通话过程中，若有用户离开
         //  event   －1,用户超时离开  0,正常退出
         Log.e("通话过程中，有用户离开 ", "account:" + account + "   event:" + event);
+        remove(account);
     }
 
     @Override

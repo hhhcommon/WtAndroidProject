@@ -153,24 +153,30 @@ public class PlayerPresenter {
      * @param url
      */
     public void play(final String url) {
-        new Thread() {
-            @Override
-            public void run() {
-                // 需要执行的方法
-                // 执行完毕后给handler发送一个空消息
-                if (judgeUrl(url)) {
-                    Message msg = new Message();
-                    msg.obj = url;
-                    msg.what = 1;
-                    handler.sendMessage(msg);
-                } else {
-                    Message msg = new Message();
-                    msg.obj = url;
-                    msg.what = 0;
-                    handler.sendMessage(msg);
-                }
-            }
-        }.start();
+        if (!TextUtils.isEmpty(url)&&!url.contains("duotin")) {
+            PlayerService.play(playerType, url);
+        } else {
+            ToastUtils.show_always(activity.getActivity(), "当前节目播放地址出错");
+        }
+
+//        new Thread() {
+//            @Override
+//            public void run() {
+//                // 需要执行的方法
+//                // 执行完毕后给handler发送一个空消息
+//                if (judgeUrl(url)) {
+//                    Message msg = new Message();
+//                    msg.obj = url;
+//                    msg.what = 1;
+//                    handler.sendMessage(msg);
+//                } else {
+//                    Message msg = new Message();
+//                    msg.obj = url;
+//                    msg.what = 0;
+//                    handler.sendMessage(msg);
+//                }
+//            }
+//        }.start();
     }
 
 

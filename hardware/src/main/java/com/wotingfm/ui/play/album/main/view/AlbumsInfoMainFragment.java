@@ -27,14 +27,10 @@ import com.wotingfm.ui.base.basefragment.BaseFragment;
 import com.wotingfm.ui.base.baseinterface.NestedScrollViewListener;
 import com.wotingfm.ui.bean.AlbumInfo;
 import com.wotingfm.ui.bean.MessageEvent;
-import com.wotingfm.ui.intercom.main.view.InterPhoneActivity;
-import com.wotingfm.ui.mine.main.MineActivity;
 import com.wotingfm.ui.play.album.main.presenter.AlbumsInfoMainPresenter;
 import com.wotingfm.ui.play.album.view.AlbumsInfoFragment;
 import com.wotingfm.ui.play.album.view.ProgramInfoFragment;
 import com.wotingfm.ui.play.album.view.SimilarInfoFragment;
-import com.wotingfm.ui.play.find.main.view.LookListActivity;
-import com.wotingfm.ui.play.main.PlayerActivity;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -150,7 +146,7 @@ public class AlbumsInfoMainFragment extends BaseFragment implements View.OnClick
     public void setResultData(final AlbumInfo s) {
         tvTitle.setText(s.data.album.title);
         Glide.with(getActivity())
-                .load(s.data.album.owner.avatar)
+                .load(s.data.album.logo_url)
                 .placeholder(R.mipmap.oval_defut_other)
                 .error(R.mipmap.oval_defut_other)
                 .crossFade(1000)
@@ -158,7 +154,7 @@ public class AlbumsInfoMainFragment extends BaseFragment implements View.OnClick
                 .into(ivPhotoBg);
         String url=null;
         try {
-            url=s.data.album.owner.avatar;
+            url=s.data.album.logo_url;
         } catch (Exception e) {
             e.printStackTrace();
         }

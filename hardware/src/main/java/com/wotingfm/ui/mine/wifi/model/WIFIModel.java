@@ -6,6 +6,7 @@ import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.util.Log;
+
 import com.wotingfm.R;
 import com.wotingfm.ui.mine.wifi.view.WIFIFragment;
 

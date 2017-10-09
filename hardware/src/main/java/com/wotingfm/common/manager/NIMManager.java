@@ -3,13 +3,10 @@ package com.wotingfm.common.manager;
 import android.os.Environment;
 import android.text.TextUtils;
 import android.util.Log;
-import com.google.gson.GsonBuilder;
+
 import com.netease.nimlib.sdk.NIMClient;
-import com.netease.nimlib.sdk.Observer;
 import com.netease.nimlib.sdk.SDKOptions;
 import com.netease.nimlib.sdk.auth.LoginInfo;
-import com.netease.nimlib.sdk.avchat.AVChatManager;
-import com.netease.nimlib.sdk.avchat.model.AVChatData;
 import com.netease.nimlib.sdk.msg.MsgService;
 import com.woting.commonplat.nim.DemoCache;
 import com.woting.commonplat.nim.base.util.ScreenUtil;

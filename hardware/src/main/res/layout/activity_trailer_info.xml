@@ -14,7 +14,7 @@
         android:layout_height="match_parent"
         android:background="@color/transparent_10_black"
         android:orientation="vertical"
-        android:paddingTop="20dp">
+        android:paddingTop="@dimen/padding_top">
 
         <RelativeLayout
             android:layout_width="match_parent"

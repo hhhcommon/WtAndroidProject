@@ -38,9 +38,9 @@ public class GlobalStateConfig {
      * C：个人中心模块
      */
     public static int destination = 0;  // 此时所处的档位 0，第一个档位，1,第二个档位
-    public static int mineFromType = 0; // 个人中心跳转来源 0,关闭状态 ，1，第一个档位，2,第二个档位
-    public static String activityA = "A";// 第一个档位页面的展示状态
-    public static String activityB = "B";// 第二个档位页面的展示状态
+//    public static int mineFromType = 0; // 个人中心跳转来源 0,关闭状态 ，1，第一个档位，2,第二个档位
+//    public static String activityA = "A";// 第一个档位页面的展示状态
+//    public static String activityB = "B";// 第二个档位页面的展示状态
 
     /**
      * 数据库存储数据
@@ -82,4 +82,6 @@ public class GlobalStateConfig {
     public static String playingType ;  // 保存定时或定量上传的数据
     public static String listType ;  // 保存定时或定量上传的数据
     public static String currentTime ;  // 保存定时或定量上传的数据
+
+    public static String savePath;// 华为手机拍照的图片保存路径
 }

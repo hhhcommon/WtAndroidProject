@@ -7,7 +7,6 @@ import android.widget.Toast;
 
 import com.woting.commonplat.utils.SequenceUUID;
 import com.wotingfm.R;
-import com.wotingfm.ui.base.baseactivity.AppManager;
 import com.wotingfm.ui.base.baseactivity.BaseFragmentActivity;
 import com.wotingfm.ui.bean.MessageEvent;
 
@@ -29,7 +28,6 @@ public class PlayerActivity extends BaseFragmentActivity {
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);        // 透明状态栏
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);    // 透明导航栏
         setContentView(R.layout.fragment_main);
-        AppManager.getAppManager().addActivity(this);
         context=this;
         openMain(new PlayerFragment());
     }
@@ -71,6 +69,7 @@ public class PlayerActivity extends BaseFragmentActivity {
             close();
         }
     }
+
 
 //    @Override
 //    public void onBackPressed() {

@@ -1,6 +1,5 @@
-package com.wotingfm.ui.play.find.live;
+package com.wotingfm.ui.play.find.live.view;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -13,7 +12,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.gson.GsonBuilder;
 import com.netease.nimlib.sdk.AbortableFuture;
@@ -21,21 +19,18 @@ import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.RequestCallback;
 import com.netease.nimlib.sdk.auth.AuthService;
 import com.netease.nimlib.sdk.auth.LoginInfo;
+import com.woting.commonplat.nim.DemoCache;
 import com.woting.commonplat.nim.base.util.string.MD5;
 import com.woting.commonplat.widget.LoadFrameLayout;
 import com.wotingfm.R;
 import com.wotingfm.common.net.RetrofitUtils;
-import com.wotingfm.common.utils.CommonUtils;
 import com.wotingfm.common.utils.T;
 import com.wotingfm.common.view.BannerView;
-import com.wotingfm.ui.adapter.findHome.LiveListAdapter;
+import com.wotingfm.ui.play.find.live.adapter.LiveListAdapter;
 import com.wotingfm.ui.bean.HomeBanners;
 import com.wotingfm.ui.bean.LiveBean;
 import com.wotingfm.ui.play.find.main.view.LookListActivity;
-import com.wotingfm.ui.play.live.LiveRoomActivity;
-import com.wotingfm.ui.play.live.TrailerInfoFragment;
 import com.wotingfm.ui.play.main.PlayerActivity;
-import com.wotingfm.ui.user.logo.LogoActivity;
 import com.zhy.adapter.recyclerview.wrapper.HeaderAndFooterWrapper;
 
 import java.util.ArrayList;
@@ -83,30 +78,33 @@ public class LiveFragment extends Fragment implements View.OnClickListener,Swipe
             rootView.setOnClickListener(this);
             ButterKnife.bind(this, rootView);
             inItView();
-            //////////////////////////////////////////////////////////////////////////////////////// 测试代码
-            final String account = "13200000008";
-            final String token = tokenFromPassword("123456");
-            // 登录
-            AbortableFuture<LoginInfo> loginRequest = NIMClient.getService(AuthService.class).login(new LoginInfo(account, token));
-            loginRequest.setCallback(new RequestCallback<LoginInfo>() {
-                @Override
-                public void onSuccess(LoginInfo param) {
-                    T.getInstance().showToast("login success");
-                }
-
-                @Override
-                public void onFailed(int code) {
-                    T.getInstance().showToast("登录失败");
-                }
-
-                @Override
-                public void onException(Throwable exception) {
-                    T.getInstance().showToast("登录出异常");
-                }
-            });
-            ////////////////////////////////////////////////////////////////////////////////////////
+//            register();
         }
         return rootView;
+    }
+
+    private void register(){
+        final String account = "13200000008";
+        final String token = tokenFromPassword("123456");
+        // 登录
+        AbortableFuture<LoginInfo> loginRequest = NIMClient.getService(AuthService.class).login(new LoginInfo(account, token));
+        loginRequest.setCallback(new RequestCallback<LoginInfo>() {
+            @Override
+            public void onSuccess(LoginInfo param) {
+                T.getInstance().showToast("login success");
+                DemoCache.setAccount(account);
+            }
+
+            @Override
+            public void onFailed(int code) {
+                T.getInstance().showToast("登录失败");
+            }
+
+            @Override
+            public void onException(Throwable exception) {
+                T.getInstance().showToast("登录出异常");
+            }
+        });
     }
 
     //DEMO中使用 username 作为 NIM 的account ，md5(password) 作为 token

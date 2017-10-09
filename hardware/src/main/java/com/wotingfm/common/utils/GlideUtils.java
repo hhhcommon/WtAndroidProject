@@ -126,7 +126,7 @@ public class GlideUtils {
      */
     public static void loadImageViewRoundCornersMusic(Object path, ImageView mImageView, int width, int height) {
         Glide.with(BSApplication.mContext).load(path).error(R.mipmap.oval_defut_other)
-                .placeholder(R.drawable.background_group).crossFade(500).bitmapTransform(new RoundedCornersTransformation(BSApplication.mContext, 20, 0, RoundedCornersTransformation.CornerType.ALL)).override(width, height).into(mImageView);
+                .placeholder(R.drawable.background_group_ing).crossFade(500).bitmapTransform(new RoundedCornersTransformation(BSApplication.mContext, 20, 0, RoundedCornersTransformation.CornerType.ALL)).override(width, height).into(mImageView);
     }
 
     /**

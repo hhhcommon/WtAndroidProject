@@ -23,10 +23,11 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.woting.commonplat.manager.PhoneMsgManager;
 import com.woting.commonplat.widget.WaveLineView;
 import com.wotingfm.R;
 import com.wotingfm.common.application.BSApplication;
-import com.wotingfm.common.config.GlobalStateConfig;
+import com.wotingfm.common.service.PlayerService;
 import com.wotingfm.common.utils.NetUtils;
 import com.wotingfm.common.utils.T;
 import com.wotingfm.ui.bean.MessageEvent;
@@ -58,6 +59,8 @@ public class LookListFragment extends Fragment implements View.OnClickListener {
             ViewPager viewPager;
     @BindView(R.id.layout_main)
     RelativeLayout layout_main;
+    @BindView(R.id.re_headView)
+    RelativeLayout re_headView;
 
     private MyAdapter mAdapter;
     private Dialog voiceDialog;
@@ -67,6 +70,7 @@ public class LookListFragment extends Fragment implements View.OnClickListener {
     private LinearLayout lin_line_bg;
     private FrameLayout fragmentVideo;
     private View rootView;
+    private int type = 1;// 默认是暂停状态
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -108,8 +112,12 @@ public class LookListFragment extends Fragment implements View.OnClickListener {
                     mTabStripField.setAccessible(true);
 
                     LinearLayout mTabStrip = (LinearLayout) mTabStripField.get(tabLayout);
-
-                    int dp10 = dp2px(getContext(), 15);
+                    int dp10;
+                    if (PhoneMsgManager.ScreenWidth >= 700) {
+                        dp10 = dp2px(getContext(), 15);
+                    } else {
+                        dp10 = dp2px(getContext(), 10);
+                    }
 
                     for (int i = 0; i < mTabStrip.getChildCount(); i++) {
                         View tabView = mTabStrip.getChildAt(i);
@@ -138,7 +146,9 @@ public class LookListFragment extends Fragment implements View.OnClickListener {
                         tabView.setLayoutParams(params);
 
                         tabView.invalidate();
+
                     }
+                    re_headView.setVisibility(View.VISIBLE);
 
                 } catch (NoSuchFieldException e) {
                     e.printStackTrace();
@@ -148,14 +158,13 @@ public class LookListFragment extends Fragment implements View.OnClickListener {
 //                setIndicator(tabs,20,20);
             }
         });
+
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.ivClose:
-                GlobalStateConfig.mineFromType = 0;
-                GlobalStateConfig.activityA = "A";
                 EventBus.getDefault().post(new MessageEvent("one"));
                 break;
             case R.id.ivVoice:
@@ -202,6 +211,11 @@ public class LookListFragment extends Fragment implements View.OnClickListener {
                 }
                 switch (event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
+                        type = 1;
+                        if (PlayerService.isPlaying(1)) {
+                            type = 0;
+                            EventBus.getDefault().post(new MessageEvent("PAUSE"));
+                        }
                         tvTitle.setText("识别中...");
                         tvTitle.setTextColor(Color.parseColor("#cccccd"));
                         lin_line_bg.setVisibility(View.GONE);
@@ -210,7 +224,6 @@ public class LookListFragment extends Fragment implements View.OnClickListener {
                         waveLineView.startAnim();
                         presenter.setAudioVoice();
                         presenter.startVoice();
-                        EventBus.getDefault().post(new MessageEvent("pause"));
                         break;
                     case MotionEvent.ACTION_CANCEL:
                     case MotionEvent.ACTION_UP:
@@ -221,7 +234,9 @@ public class LookListFragment extends Fragment implements View.OnClickListener {
                         lin_line_bg.setVisibility(View.VISIBLE);
                         tvTitle.setTextColor(Color.parseColor("#16181a"));
                         tvTitle.setText("点击切换文字搜索");
-                        EventBus.getDefault().post(new MessageEvent("start"));
+                        if (type == 0) {
+                            EventBus.getDefault().post(new MessageEvent("START"));
+                        }
                         break;
                 }
                 return true;

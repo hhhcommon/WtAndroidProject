@@ -2,7 +2,6 @@ package com.wotingfm.ui.play.radio.fragment.view;
 
 import android.app.Dialog;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -10,16 +9,13 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.wotingfm.R;
-import com.wotingfm.common.config.GlobalStateConfig;
 import com.wotingfm.common.net.RetrofitUtils;
 import com.wotingfm.common.utils.DialogUtils;
 import com.wotingfm.common.utils.T;
+import com.wotingfm.ui.base.basefragment.BaseFragment;
 import com.wotingfm.ui.bean.ChannelsBean;
-import com.wotingfm.ui.bean.MessageEvent;
 import com.wotingfm.ui.bean.RadioInfo;
 import com.wotingfm.ui.play.radio.fragment.adapter.RadioTodayAdapter;
-
-import org.greenrobot.eventbus.EventBus;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -32,7 +28,7 @@ import rx.schedulers.Schedulers;
  * 电台详情，今天
  */
 
-public class RadioInfoTodayFragment extends Fragment implements View.OnClickListener{
+public class RadioInfoTodayFragment extends BaseFragment implements View.OnClickListener{
 
     @BindView(R.id.mRecyclerView)
     RecyclerView mRecyclerView;
@@ -80,6 +76,7 @@ public class RadioInfoTodayFragment extends Fragment implements View.OnClickList
                     c.desc = dataBean.channel.desc;
                     c.radio_url = singlesBean.fileUrl;
                     c.title = singlesBean.title;
+                    c.had_liked = dataBean.channel.had_liked;
                     startMain(c);
                 }
 
@@ -142,12 +139,6 @@ public class RadioInfoTodayFragment extends Fragment implements View.OnClickList
     @Override
     public void onClick(View v) {
 
-    }
-
-    public void startMain(ChannelsBean channelsBean) {
-        GlobalStateConfig.activityA = "A";
-        EventBus.getDefault().post(new MessageEvent("one"));
-        EventBus.getDefault().post(new MessageEvent(channelsBean, 1));
     }
 
     /**

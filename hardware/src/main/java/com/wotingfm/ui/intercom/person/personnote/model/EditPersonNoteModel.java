@@ -2,14 +2,11 @@ package com.wotingfm.ui.intercom.person.personnote.model;
 
 import android.util.Log;
 
-import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.common.net.RetrofitUtils;
-import com.wotingfm.ui.base.baseactivity.BaseActivity;
 import com.wotingfm.ui.base.model.UserInfo;
-
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.schedulers.Schedulers;

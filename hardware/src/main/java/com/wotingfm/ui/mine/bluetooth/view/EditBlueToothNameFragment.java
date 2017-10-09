@@ -1,16 +1,15 @@
 package com.wotingfm.ui.mine.bluetooth.view;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+
 import com.wotingfm.R;
 import com.wotingfm.ui.base.basefragment.BaseFragment;
 import com.wotingfm.ui.mine.bluetooth.presenter.EditBlueToothPresenter;
-import com.wotingfm.ui.mine.main.MineActivity;
 
 /**
  * 设置蓝牙名称

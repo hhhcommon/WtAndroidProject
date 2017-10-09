@@ -1,7 +1,6 @@
 package com.wotingfm.ui.play.search.fragment;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -15,14 +14,11 @@ import com.woting.commonplat.amine.OnLoadMoreListener;
 import com.woting.commonplat.amine.OnRefreshListener;
 import com.woting.commonplat.widget.LoadFrameLayout;
 import com.wotingfm.R;
-import com.wotingfm.common.config.GlobalStateConfig;
 import com.wotingfm.common.net.RetrofitUtils;
 import com.wotingfm.ui.adapter.findHome.RadioStationAdapter;
+import com.wotingfm.ui.base.basefragment.BaseFragment;
 import com.wotingfm.ui.bean.ChannelsBean;
-import com.wotingfm.ui.bean.MessageEvent;
 import com.wotingfm.ui.bean.SerchList;
-
-import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,7 +33,7 @@ import rx.schedulers.Schedulers;
  * 电台
  */
 
-public class RadioStationListFragment extends Fragment implements View.OnClickListener, OnLoadMoreListener, OnRefreshListener {
+public class RadioStationListFragment extends BaseFragment implements View.OnClickListener, OnLoadMoreListener, OnRefreshListener {
 
     @BindView(R.id.mRecyclerView)
     ARecyclerView mRecyclerView;
@@ -198,9 +194,4 @@ public class RadioStationListFragment extends Fragment implements View.OnClickLi
 
     }
 
-    private void startMain(ChannelsBean channelsBean) {
-        GlobalStateConfig.activityA = "A";
-        EventBus.getDefault().post(new MessageEvent("one"));
-        EventBus.getDefault().post(new MessageEvent(channelsBean, 1));
-    }
 }

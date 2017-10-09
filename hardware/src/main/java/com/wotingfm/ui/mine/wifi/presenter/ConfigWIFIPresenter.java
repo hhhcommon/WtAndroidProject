@@ -3,11 +3,8 @@ package com.wotingfm.ui.mine.wifi.presenter;
 import android.net.wifi.WifiConfiguration;
 
 import com.wotingfm.common.utils.ToastUtils;
-import com.wotingfm.ui.mine.main.MineActivity;
 import com.wotingfm.ui.mine.wifi.model.ConfigWIFIModel;
 import com.wotingfm.ui.mine.wifi.view.ConfigWIFIFragment;
-
-import java.util.List;
 
 /**
  * 作者：xinLong on 2017/6/5 13:55

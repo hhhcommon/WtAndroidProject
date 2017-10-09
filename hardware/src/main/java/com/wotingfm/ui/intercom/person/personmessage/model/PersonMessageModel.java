@@ -4,11 +4,11 @@ import android.util.Log;
 
 import com.google.gson.GsonBuilder;
 import com.wotingfm.common.application.BSApplication;
-import com.wotingfm.ui.bean.AlbumsBean;
 import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.common.net.RetrofitUtils;
 import com.wotingfm.common.utils.CommonUtils;
 import com.wotingfm.common.utils.GetTestData;
+import com.wotingfm.ui.bean.AlbumsBean;
 import com.wotingfm.ui.intercom.main.chat.dao.SearchTalkHistoryDao;
 import com.wotingfm.ui.intercom.main.chat.model.DBTalkHistory;
 import com.wotingfm.ui.intercom.main.contacts.model.Contact;
@@ -19,6 +19,7 @@ import java.util.List;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.schedulers.Schedulers;
+
 
 /**
  * 好友信息的数据中心

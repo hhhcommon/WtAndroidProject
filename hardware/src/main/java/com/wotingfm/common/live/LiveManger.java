@@ -1,9 +1,9 @@
 package com.wotingfm.common.live;
-import com.woting.commonplat.nim.DemoCache;
-import com.wotingfm.ui.bean.CLive;
-import com.wotingfm.ui.bean.TrailerInfo;
+
 import com.wotingfm.common.net.RetrofitUtils;
 import com.wotingfm.common.utils.T;
+import com.wotingfm.ui.bean.CLive;
+import com.wotingfm.ui.bean.TrailerInfo;
 
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
