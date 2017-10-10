@@ -12,8 +12,6 @@ import com.wotingfm.common.manager.NIMManager;
 import com.wotingfm.common.net.RetrofitUtils;
 import com.wotingfm.common.service.PlayerService;
 
-import cn.finalteam.okhttpfinal.OkHttpFinal;
-import cn.finalteam.okhttpfinal.OkHttpFinalConfiguration;
 import cn.jpush.android.api.JPushInterface;
 
 /**
@@ -34,8 +32,8 @@ public class BSApplication extends MultiDexApplication {
         //SDK初始化(启动后台服务，若已经存在用户登录信息，SDK将自动登录)
         SpeechUtility.createUtility(this, "appid=56275014");// 初始化讯飞
 
-        OkHttpFinalConfiguration.Builder builder = new OkHttpFinalConfiguration.Builder();
-        OkHttpFinal.getInstance().init(builder.build());
+//        OkHttpFinalConfiguration.Builder builder = new OkHttpFinalConfiguration.Builder();
+//        OkHttpFinal.getInstance().init(builder.build());
 
         NetWorkManager.checkNetworkStatus(this);  // 获取网络状态
 
