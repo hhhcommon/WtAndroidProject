@@ -18,12 +18,8 @@ import com.wotingfm.R;
 import com.wotingfm.common.net.RetrofitUtils;
 import com.wotingfm.ui.base.basefragment.BaseFragment;
 import com.wotingfm.ui.bean.ChannelsBean;
-import com.wotingfm.ui.intercom.main.view.InterPhoneActivity;
-import com.wotingfm.ui.mine.main.MineActivity;
 import com.wotingfm.ui.play.find.classification.minorclassification.SubcategoryFragment;
 import com.wotingfm.ui.play.find.classification.minorclassification.adapter.MinorClassificationAdapter;
-import com.wotingfm.ui.play.find.main.view.LookListActivity;
-import com.wotingfm.ui.play.main.PlayerActivity;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;

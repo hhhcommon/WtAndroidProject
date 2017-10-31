@@ -2,7 +2,6 @@ package com.wotingfm.ui.play.album.view.download.view;
 
 import android.app.Dialog;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -23,11 +22,7 @@ import com.wotingfm.common.utils.DialogUtils;
 import com.wotingfm.ui.base.basefragment.BaseFragment;
 import com.wotingfm.ui.play.album.view.download.adapter.DownloadSelectAdapter;
 import com.wotingfm.ui.bean.Player;
-import com.wotingfm.ui.intercom.main.view.InterPhoneActivity;
-import com.wotingfm.ui.mine.main.MineActivity;
 import com.wotingfm.ui.play.album.view.download.presenter.DownloadSelectPresenter;
-import com.wotingfm.ui.play.find.main.view.LookListActivity;
-import com.wotingfm.ui.play.main.PlayerActivity;
 
 import java.util.ArrayList;
 import java.util.List;

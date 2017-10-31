@@ -5,10 +5,6 @@ import android.os.Handler;
 import android.text.TextUtils;
 
 import com.wotingfm.common.utils.T;
-import com.wotingfm.ui.intercom.main.view.InterPhoneActivity;
-import com.wotingfm.ui.mine.main.MineActivity;
-import com.wotingfm.ui.play.find.main.view.LookListActivity;
-import com.wotingfm.ui.play.main.PlayerActivity;
 import com.wotingfm.ui.play.report.model.ReportModel;
 import com.wotingfm.ui.play.report.model.Reports;
 import com.wotingfm.ui.play.report.view.ReportFragment;
@@ -85,7 +81,7 @@ public class ReportPresenter {
             T.getInstance().showToast("请选择举报原因");
             return;
         }
-        if ("REPORT_ALBUM".equals(type)) {
+        if ("REPORT_ALBUM".equals(type)||"REPORT_SINGLE".equals(type)) {
             reportsPlayer(report_reason, news);
         } else if ("REPORT_USER".equals(type)) {
             reportsPersonal(report_reason, news);

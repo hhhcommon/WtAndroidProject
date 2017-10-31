@@ -77,7 +77,7 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
 
-          <!--  -->
+        <!--  -->
         <activity
             android:name=".ui.play.main.PlayerActivity"
             android:screenOrientation="portrait"
@@ -260,8 +260,8 @@
 
         <!-- 我听-->
         <!--<meta-data-->
-            <!--android:name="com.netease.nim.appKey"-->
-            <!--android:value="14fb7ad37a6489960435071dd1b0c837" />-->
+        <!--android:name="com.netease.nim.appKey"-->
+        <!--android:value="14fb7ad37a6489960435071dd1b0c837" />-->
 
         <!-- 互动直播-->
         <meta-data
@@ -270,13 +270,13 @@
 
         <!-- 即时通讯-->
         <!--<meta-data-->
-            <!--android:name="com.netease.nim.appKey"-->
-            <!--android:value="45c6af3c98409b18a84451215d0bdd6e" />-->
+        <!--android:name="com.netease.nim.appKey"-->
+        <!--android:value="45c6af3c98409b18a84451215d0bdd6e" />-->
 
         <!-- 最新-->
         <!--<meta-data-->
-            <!--android:name="com.netease.nim.appKey"-->
-            <!--android:value="8de5b697f835b3f8908278042ee05a19" />-->
+        <!--android:name="com.netease.nim.appKey"-->
+        <!--android:value="8de5b697f835b3f8908278042ee05a19" />-->
 
         <uses-library
             android:name="com.google.android.maps"

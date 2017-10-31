@@ -71,8 +71,6 @@ public class PlayerFragment extends Fragment implements View.OnClickListener {
 
     @BindView(R.id.mRecyclerView)
     RecyclerView mRecyclerView;
-    @BindView(R.id.LoadingView)
-    LinearLayout mLoadingView;
 
     @BindView(R.id.ivBefore)// 上一首
             ImageView ivBefore;
@@ -500,6 +498,9 @@ public class PlayerFragment extends Fragment implements View.OnClickListener {
             case 2005:// 下拉刷新
                 presenter.getRecommendedList(0);
                 break;
+            case 3001:
+                pause();
+                break;
         }
     }
 
@@ -604,6 +605,7 @@ public class PlayerFragment extends Fragment implements View.OnClickListener {
             singLesBeans.get(i).isPlay = false;
         }
         singlesBase.isPlay = true;
+        EventBus.getDefault().post(new MessageEvent(4001));
     }
 
     // 执行播放

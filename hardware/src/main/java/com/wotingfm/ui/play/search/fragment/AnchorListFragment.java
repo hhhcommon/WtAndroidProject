@@ -19,11 +19,7 @@ import com.wotingfm.common.net.RetrofitUtils;
 import com.wotingfm.ui.base.basefragment.BaseFragment;
 import com.wotingfm.ui.bean.SerchList;
 import com.wotingfm.ui.bean.UserBean;
-import com.wotingfm.ui.intercom.main.view.InterPhoneActivity;
-import com.wotingfm.ui.mine.main.MineActivity;
 import com.wotingfm.ui.play.anchor.view.AnchorPersonalCenterFragment;
-import com.wotingfm.ui.play.find.main.view.LookListActivity;
-import com.wotingfm.ui.play.main.PlayerActivity;
 import com.wotingfm.ui.play.search.adapter.UsersSearchAdapter;
 
 import java.util.ArrayList;

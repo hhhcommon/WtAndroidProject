@@ -156,7 +156,7 @@ public class PlayerPresenter {
         if (!TextUtils.isEmpty(url)&&!url.contains("duotin")) {
             PlayerService.play(playerType, url);
         } else {
-            ToastUtils.show_always(activity.getActivity(), "当前节目播放地址出错");
+            ToastUtils.show_always(activity.getContext(), "当前节目播放地址出错");
         }
 
 //        new Thread() {
@@ -191,7 +191,7 @@ public class PlayerPresenter {
             if (msg.what == 1) {
                 PlayerService.play(playerType, url);
             } else {
-                ToastUtils.show_always(activity.getActivity(), "当前节目播放地址出错");
+                ToastUtils.show_always(activity.getContext(), "当前节目播放地址出错");
             }
         }
     };
@@ -514,13 +514,13 @@ public class PlayerPresenter {
                     }
                     activity.setData(singLesBeans, 1);
                 } else {
-                    ToastUtils.show_always(activity.getActivity(), "抱歉，没有查询到您想要的内容");
+                    ToastUtils.show_always(activity.getContext(), "抱歉，没有查询到您想要的内容");
                 }
             }
 
             @Override
             public void onFailure(String msg) {
-                ToastUtils.show_always(activity.getActivity(), "抱歉，没有查询到您想要的内容");
+                ToastUtils.show_always(activity.getContext(), "抱歉，没有查询到您想要的内容");
             }
         });
     }
